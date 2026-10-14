@@ -15,6 +15,7 @@
     :focus-visible{outline:3px solid #7598da;outline-offset:4px}
     .shell{max-width:1200px;margin:auto;padding:0 40px}
     .shell.site-header{padding-top:28px}.site-header h1{margin:0;text-align:center;font-size:clamp(36px,5vw,48px)}.site-header .title-link{display:inline-flex;align-items:center;gap:16px;font-family:"Manrope",sans-serif;font-weight:700;color:#202020;letter-spacing:-0.025em}.site-logo{width:100px;height:auto;border-radius:6px}
+    .site-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px 40px;padding-bottom:12px}.github-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #c7d0df;border-radius:8px;background:#fff;color:var(--ink);font-size:14px;font-weight:600;text-decoration:none}.github-link:hover{border-color:var(--accent);color:var(--accent)}.github-link svg{flex-shrink:0;fill:currentColor}
     #count{display:inline-flex;align-items:center;height:40px;white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted)}
     .filters{margin:12px 0 16px;font-size:13px}.filters label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
     .filters select,.filters input[type="search"]{font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid #c7d0df;border-radius:6px;padding:9px 12px;min-height:40px;min-width:0;width:100%}
@@ -82,7 +83,7 @@
   </style>
 </head>
 <body>
-  <header class="shell site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="data:image/png;base64,__LOGO_DATA__" width="1254" height="1254" alt=""></a></h1></header>
+  <header class="shell site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="data:image/png;base64,__LOGO_DATA__" width="1254" height="1254" alt=""></a></h1><a id="github-link" class="github-link" href="#"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>Details on GitHub</a></header>
   <main class="shell">
     <div id="catalog">
     <form id="filters" class="filters" aria-label="Filter setups">
@@ -101,6 +102,7 @@
   <script id="catalog-data" type="application/json">__CATALOG_DATA__</script>
   <script>
     const data = JSON.parse(document.getElementById('catalog-data').textContent);
+    document.getElementById('github-link').href = data.repository_url + '/blob/main/README.md';
     const make = (tag, text, className) => {
       const element = document.createElement(tag);
       if (text !== undefined) element.textContent = text;

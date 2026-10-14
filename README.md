@@ -3,6 +3,8 @@
 <h3 align="center">Discovering new results in mathematical optimization.<br>
 More than 25 new results so far—and more to come.</h3>
 
+<p align="center"><a href="https://k3nfalt.github.io/longtails/"><strong>Explore the results on our website →</strong></a></p>
+
 ## Preliminaries: Setup and Complexity
 
 LongTails is a framework for **automatic research in mathematical optimization**.
@@ -96,7 +98,7 @@ Tyurin's bound counts gradient queries and is specialized to the same initial di
 Ignoring logarithmic factors, we improve Tyurin's **$L_1R$ term to $(L_1R)^{2/3}$** and remove Vankov et al.'s **$(1+\nu)$ factor**.
 Achieving this complexity using only gradient queries was an open problem.
 
-Explore more [setups](LongTails/Setups/) and [complexity bounds](LongTails/Theorems/) in the repository and $\color{red}{\text{TODOwebsite}}$.
+Explore more [setups](LongTails/Setups/) and [complexity bounds](LongTails/Theorems/) in the repository and on our [website](https://k3nfalt.github.io/longtails/).
 
 ## How to Use It?
 
