@@ -1,0 +1,118 @@
+{
+  "setup": "LongTails.Setups.NearZeroSumGames",
+  "searched_at": "2026-10-14T13:26:28.466026+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{16777216 \\cdot L}{\\min\\left\\{ \\mu, \\nu \\right\\}} \\cdot \\sqrt{\\frac{\\min\\left\\{ \\mu, \\nu \\right\\} + \\delta}{\\mu + \\nu + \\delta}} \\cdot \\log\\left(2 + \\frac{D^{2}}{\\varepsilon}\\right) \\cdot \\log\\left(2 + \\frac{524288 \\cdot L^{2} \\cdot D^{2}}{\\left(\\min\\left\\{ \\mu, \\nu \\right\\}\\right)^{2} \\cdot \\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NearZeroSumGames.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈16777216 * p.L / min p.μ p.ν * √((min p.μ p.ν + p.δ) / (p.μ + p.ν + p.δ)) * Real.log (2 + p.D ^ 2 / p.ε) *\n      Real.log (2 + 524288 * p.L ^ 2 * p.D ^ 2 / (min p.μ p.ν ^ 2 * p.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{16777216 \\cdot L}{\\min\\left\\{ \\mu, \\nu \\right\\}} \\cdot \\sqrt{\\frac{\\min\\left\\{ \\mu, \\nu \\right\\} + \\delta}{\\mu + \\nu + \\delta}} \\cdot \\log\\left(2 + \\frac{D^{2}}{\\varepsilon}\\right) \\cdot \\log\\left(2 + \\frac{524288 \\cdot L^{2} \\cdot D^{2}}{\\left(\\min\\left\\{ \\mu, \\nu \\right\\}\\right)^{2} \\cdot \\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NearZeroSumGames.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈16777216 * p.L / min p.μ p.ν * √((min p.μ p.ν + p.δ) / (p.μ + p.ν + p.δ)) * Real.log (2 + p.D ^ 2 / p.ε) *\n      Real.log (2 + 524288 * p.L ^ 2 * p.D ^ 2 / (min p.μ p.ν ^ 2 * p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.NearZeroSumOwnGradients",
+      "namespace": "LongTails.Setups.NearZeroSumGames",
+      "setup": "LongTails.Setups.NearZeroSumGames",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NearZeroSumGames.spec OracleTemplate.NearZeroSum.OwnGradients.budget",
+      "theorem": "OracleTemplate.NearZeroSum.OwnGradients.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NearZeroSumOwnGradients",
+      "theorem": "OracleTemplate.NearZeroSum.OwnGradients.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Each player's cost is convex in its own decision variable; g is jointly convex on X×Y. X and Y are compact convex sets.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "For every fixed y, h(·,y) is μ-strongly convex on X; for every fixed x, -h(x,·) is ν-strongly convex on Y. Consequently, the players' own-variable costs have respective strong convexity moduli μ and ν, with 0<μ,ν≤L.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: spec.admissible StrongConvexOn clauses; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Two-player general-sum Nash equilibrium problem with costs h+g for the x-player and g-h for the y-player. The zero-sum component h is strongly convex-concave, and the shared coupling g is jointly convex. An equilibrium exists.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: Problem, IsEquilibrium, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A feasible query z returns exactly (H_x(z)+G_x(z), -H_y(z)+G_y(z)), the combined vector of players' own gradients. Separate H and G evaluations, cross-player gradients, and function values are not supplied. Replies are independent of call index and seed.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: ownGradient and spec.admissible Sum.inl answer clause."
+      },
+      {
+        "label": "proximal",
+        "details": "A query at any ambient point returns its exact Euclidean projection onto X×Y. Projection queries and own-gradient queries each consume one call from the same fixed oracle budget.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: spec.Query, spec.admissible projection inequality and Sum.inr answer clause; LongTails/Template.lean: execute and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E and F are finite-dimensional real inner-product spaces; the product uses the Euclidean ℓ₂ norm.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: Public.finiteE, Public.finiteF, Public.innerE, Public.innerF, Space."
+      },
+      {
+        "label": "other",
+        "details": "Near-zero-sum structure is quantified by the jointly convex coupling's gradient Lipschitz constant δ, where 0≤δ≤L. Both H+G and H-G are L-Lipschitz on the domain. The product domain has diameter at most D>0 and contains the supplied initial point. Spaces, sets, L, μ, ν, δ, D, ε, x0, and y0 are public; h, g, and the witnessing gradient and projection maps are hidden.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: Public, Problem, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "There exists an equilibrium zstar such that the returned point satisfies ‖output-zstar‖²≤ε in the product Euclidean norm, with ε>0.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to X×Y.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: domain and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the squared-distance bound hold almost surely under the joint algorithm-seed and oracle-seed law, for a single equilibrium chosen outside the almost-sure quantifier. The oracle budget is fixed rather than expected.",
+        "evidence": "LongTails/Setups/NearZeroSumGames.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup specializes convex Nash games through a shared jointly convex coupling with a separate smoothness parameter δ, while exposing only combined own gradients and counting projections in the same oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NearZeroSum.OwnGradients.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NearZeroSumOwnGradients",
+          "theorem": "OracleTemplate.NearZeroSum.OwnGradients.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
