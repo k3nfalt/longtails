@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex",
+  "searched_at": "2026-10-04T15:38:11.109088+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{\\varepsilon}} + \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\right\\rceil_{+} \\right\\} \\cdot \\max\\left\\{ 1, \\left\\lceil \\tau \\cdot \\left(\\frac{256 \\cdot L \\cdot R^{2}}{\\varepsilon} + 64 \\cdot \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)^{\\frac{1}{\\beta}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  max 1 ⌈√(32 * q.L * q.R ^ 2 / q.ε) + (256 * q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))⌉₊ *\n    max 1 ⌈q.τ * (256 * q.L * q.R ^ 2 / q.ε + 64 * (256 * q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) ^ (1 / q.β)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{\\varepsilon}} + \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\right\\rceil_{+} \\right\\} \\cdot \\max\\left\\{ 1, \\left\\lceil \\tau \\cdot \\left(\\frac{256 \\cdot L \\cdot R^{2}}{\\varepsilon} + 64 \\cdot \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)^{\\frac{1}{\\beta}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  max 1 ⌈√(32 * q.L * q.R ^ 2 / q.ε) + (256 * q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))⌉₊ *\n    max 1 ⌈q.τ * (256 * q.L * q.R ^ 2 / q.ε + 64 * (256 * q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) ^ (1 / q.β)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedHeavyTailedMarkovConvex",
+      "namespace": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex",
+      "setup": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedMarkovSmoothAndConvex.spec OracleTemplate.HeavyTailedMarkovGradient.budget",
+      "theorem": "OracleTemplate.HeavyTailedMarkovGradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedHeavyTailedMarkovConvex",
+      "theorem": "OracleTemplate.HeavyTailedMarkovGradient.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ with globally L-Lipschitz gradient, L>0. A global minimizer x⋆ exists with ‖x0−x⋆‖≤R, R≥0; strong convexity is not required.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns g(x,Zk) along one stationary, exogenous Markov trajectory. For every fixed x, ∫g(x,z)π(dz)=∇f(x). Conditional unbiasedness at adaptive queries is not assumed. Replies contain only gradient vectors; every oracle call advances the trajectory index.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: pathLaw and spec.admissible oracle equality and stationary-gradient identity; LongTails/Template.lean: execute and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "markov_dependence",
+        "details": "Z0∼π and κπ=π. For every integer t≥0, ∫sup_{A measurable}|κ^t(z,A)−π(A)|π(dz)≤(1+t/τ)^−β, where τ>0 and β>0. This is stationary-average polynomial total-variation mixing, without a uniform-over-states mixing assumption.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: mixingDistance, pathLaw, and spec.admissible invariance and mixing inequality."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For all x, ∫‖g(x,z)−∇f(x)‖^α π(dz)≤σ^α, with σ≥0 and 1<α≤2. The central moment bound is stationary and uniform in x; for α<2, finite variance is not required.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.valid and spec.admissible central-moment integrability and inequality."
+      },
+      {
+        "label": "other",
+        "details": "E is a complete, second-countable real Hilbert space with its Borel measurable structure; finite dimensionality is not required. All Params, including L,R,σ,α,τ,β,ε and x0, are public. The objective f and oracle witnesses g,κ,π are hidden. Algorithms may randomize independently of the oracle and must use a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: Params, spec.Public, spec.publicInput, and spec.admissible existential witnesses; LongTails/Template.lean: Algorithm and Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output X with integrable objective gap f(X)−f(x⋆) for some global minimizer x⋆. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[f(X)−f(x⋆)]≤ε, ε>0, under the joint product law of algorithm randomness and the stationary Markov oracle trajectory.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.successful and spec.valid; LongTails/Template.lean: Convergence product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth convex optimization is classical, but this formulation combines stationary finite-α-moment gradient noise with stationary-average polynomial Markov mixing in a potentially infinite-dimensional Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HeavyTailedMarkovGradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedHeavyTailedMarkovConvex",
+          "theorem": "OracleTemplate.HeavyTailedMarkovGradient.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

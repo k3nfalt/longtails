@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Optimization with Bounded Scalar Oracles}
+We consider minimizing a convex, $H$-Lipschitz function $f:\mathbb{R}\to\mathbb{R}$ on $[a,b]$, where $a\leq b$ and $H>0$. The initial point $x^0\in[a,b]$ satisfies $|x^0-x^\star|\leq R$ for some constrained minimizer $x^\star$ and $R\geq0$. Each oracle call returns a scalar bounded in absolute value by $H$, whose conditional mean given past oracle randomness is a subgradient on the interval. Oracle randomness may be dependent. Given $\varepsilon>0$, success requires a measurable output $\bar{x}\in[a,b]$ for every realization, with integrable objective gap and $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in[a,b]} f(x).
+\]
+The public inputs are $(a,b,H,R,\varepsilon,x^0)$, with the ranges stated above. The objective and oracle satisfy the following conditions.
+
+\begin{assumption}[Convexity and Lipschitz continuity]
+For every $x,y\in[a,b]$ and $t\in[0,1]$,
+\begin{align*}
+f((1-t)x+ty) &\leq (1-t)f(x)+tf(y),\\
+|f(x)-f(y)| &\leq H|x-y|.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Attainment and initial distance]
+There exists $x^\star\in[a,b]$ such that
+\begin{align*}
+f(x^\star) &\leq f(x) \qquad\text{for every }x\in[a,b],\\
+|x^0-x^\star| &\leq R.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Bounded conditional subgradients]
+Let $(\zeta_n)_{n\geq0}$ denote the oracle randomness with joint probability law $\mathbb{Q}$, and let $\mathcal{F}_n=\sigma(\zeta_0,\ldots,\zeta_{n-1})$, with $\mathcal{F}_0$ trivial. At call $n$, a query $x\in\mathbb{R}$ receives the scalar reply $g_n(x,\zeta_n)$. For each $n$, the reply map $g_n$ is jointly measurable in the query and its random argument.
+
+For every $\mathcal{F}_n$-measurable query $X_n$ taking values in $[a,b]$ for every realization, set
+\[
+G_n=g_n(X_n,\zeta_n).
+\]
+The following conditions hold $\mathbb{Q}$-almost surely, with the second holding simultaneously for all $y\in[a,b]$:
+\begin{align*}
+|G_n| &\leq H,\\
+f(X_n)+\mathbb{E}_{\mathbb{Q}}[G_n\mid\mathcal{F}_n](y-X_n)
+&\leq f(y).
+\end{align*}
+\end{assumption}
+
+The objective is accessed through this oracle, and each scalar reply costs one oracle call. Queries may be adaptive and may lie anywhere in $\mathbb{R}$; the boundedness and subgradient guarantees apply to queries in $[a,b]$. Any internal algorithm randomness is independent of the oracle randomness. The algorithm is selected using only the public inputs, and its call budget $K\in\mathbb{N}$ may depend on their full tuple.
+
+After $K$ calls, the algorithm returns a measurable real-valued output $\bar{x}$. Let $\mathbb{P}$ denote the joint law of the algorithm and oracle randomness. Success requires $\bar{x}(\omega)\in[a,b]$ for every realization $\omega$, integrability of $f(\bar{x})-f(x^\star)$ under $\mathbb{P}$, and
+\[
+\int \bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)\,d\mathbb{P}(\omega)
+\leq\varepsilon.
+\]
+Here $x^\star$ may be any constrained minimizer, since all such minimizers have the same objective value.
+\end{document}

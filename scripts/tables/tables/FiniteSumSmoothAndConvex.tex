@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-sum convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/FiniteSumSmoothAndConvex.lean}{Finite\allowbreak{}Sum\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteSumSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Let $F=n^{-1}\sum_{i=1}^{n}f_i$ on a real Hilbert space $E$ with a measurable-space structure. Each $f_i$ is convex with $L$-Lipschitz gradient; $n\ge1$, $L>0$, $R\ge0$, and $\varepsilon>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. One oracle call returns one exact component gradient. The target is a measurable output $\widehat x$ with integrable gap and $\mathbb{E}[F(\widehat x)-F(x_\star)]\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedFiniteSumConvex.md}{(review)}
+& $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
+& --- & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/SvrgConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+n\log\!\left(1+\frac{LR^2}{\varepsilon}\right)+\frac{LR^2}{\varepsilon}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+VRADA \citep[Thm.~1]{fscSongJiangMa2020V4}\newline Stated on $E=\mathbb{R}^d$; composite term $=0$.
+& $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
+& \textbf{(1)}: Matches known rate; formalized Hilbert-space proof.
+& i) \textbf{(1)}, \textbf{(2)}: no composite term.\newline ii) \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{nLR^2/\varepsilon}$ for $LR^2/\varepsilon\gg n$. \\
+\midrule
+SVRG++ \citep[Thm.~4.1]{fscAllenZhuYuan2016V3}\newline Stated on $E=\mathbb{R}^d$; $\Psi=0$.
+& $\mathcal{O}\!\left(n[1+\log_+(\Delta/\varepsilon)]+\frac{LR^2}{\varepsilon}\right)$\newline Gap tuning: $m_0=\lceil LR^2/\Delta\rceil$, $0<\varepsilon\le\Delta$.
+& \textbf{(2)}: Matches known rate for $\Delta\asymp LR^2$; formalized Hilbert-space proof.
+& \textbf{(2)}: $n\log(1+LR^2/\varepsilon)$ instead of gap-tuned $n[1+\log_+(\Delta/\varepsilon)]$; no composite term. \\
+\midrule
+Katyusha + AdaptReg \citep[arXiv v6, Cor.~3.5]{fscAllenZhu2018V6}\newline Stated on $E=\mathbb{R}^d$; $\psi=0$.
+& $\mathcal{O}\!\left(n[1+\log_+(\Delta/\varepsilon)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$\newline $0<\varepsilon\le\Delta$; reduction costs included.
+& \textbf{(2)}: No established improvement.
+& \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{nLR^2/\varepsilon}$; up to $\sqrt{LR^2/(n\varepsilon)}$ slower for $LR^2/\varepsilon\gg n$. \\
+\midrule
+ANITA \citep[Cor.~1]{fscLi2022V3}\newline Stated on $E=\mathbb{R}^d$.
+& $\mathcal{O}\!\left(\begin{aligned}&n\!\left[1+\min\!\left\{\log_+\!\frac{LR^2}{\varepsilon\sqrt n},\log\sqrt n\right\}\right]\\&{}+\sqrt{nLR^2/\varepsilon}\end{aligned}\right)$\newline Expected component-gradient calls.
+& \textbf{(1)}: for large $n$, conditional gain for $\sqrt n\log n\lesssim (LR^2/\varepsilon)\lesssim n\log^2n$; factor $\log n/\log\log n$ at $LR^2/\varepsilon=n$, already attained by VRADA.
+& i) \textbf{(1)}: for large $n$, $n\log\log n$ instead of $n$ for $LR^2/\varepsilon\le\sqrt n$.\newline ii) \textbf{(1)}: epoch average instead of last iterate. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\Delta=F(x_0)-F(x_\star)\le LR^2/2$; $m_0$ is the initial epoch-length parameter; $\log_+u=\log\max\{1,u\}$; $\log_+0=0$. Costs count all component gradients, including full-gradient refreshes; fixed budgets unless marked expected. Expectations are over sampled indices.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

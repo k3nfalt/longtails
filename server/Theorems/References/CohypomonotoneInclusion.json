@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.CohypomonotoneInclusion",
+  "searched_at": "2026-10-04T15:35:26.625504+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 + \\left(2 \\cdot \\left\\lceil \\frac{2}{1 - \\rho \\cdot L} \\cdot \\log\\left(\\frac{16}{1 - \\rho \\cdot L}\\right) \\right\\rceil_{+} + 3\\right) \\cdot \\left\\lceil \\frac{16 \\cdot L \\cdot R}{\\left(1 - \\rho \\cdot L\\right) \\cdot \\varepsilon} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.CohypomonotoneInclusion.spec.Params → ℕ",
+        "value": "fun q =>\n  2 + (2 * ⌈2 / (1 - q.ρ * q.L) * Real.log (16 / (1 - q.ρ * q.L))⌉₊ + 3) * ⌈16 * q.L * q.R / ((1 - q.ρ * q.L) * q.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 + \\left(2 \\cdot \\left\\lceil \\frac{2}{1 - \\rho \\cdot L} \\cdot \\log\\left(\\frac{16}{1 - \\rho \\cdot L}\\right) \\right\\rceil_{+} + 3\\right) \\cdot \\left\\lceil \\frac{16 \\cdot L \\cdot R}{\\left(1 - \\rho \\cdot L\\right) \\cdot \\varepsilon} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.CohypomonotoneInclusion.spec.Params → ℕ",
+          "value": "fun q =>\n  2 + (2 * ⌈2 / (1 - q.ρ * q.L) * Real.log (16 / (1 - q.ρ * q.L))⌉₊ + 3) * ⌈16 * q.L * q.R / ((1 - q.ρ * q.L) * q.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.MultiStepAnchoredCohypomonotone",
+      "namespace": "LongTails.Setups.CohypomonotoneInclusion",
+      "setup": "LongTails.Setups.CohypomonotoneInclusion",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CohypomonotoneInclusion.spec OracleTemplate.CohypomonotoneInclusion.budget",
+      "theorem": "OracleTemplate.CohypomonotoneInclusion.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MultiStepAnchoredCohypomonotone",
+      "theorem": "OracleTemplate.CohypomonotoneInclusion.result",
+      "references": "- Yang Cai, Argyris Oikonomou, Weiqiang Zheng. [Accelerated Algorithms for Constrained Nonconvex-Nonconcave Min-Max Optimization and Comonotone Inclusion](https://arxiv.org/pdf/2206.05248v2). 2022 preprint (v2); published at ICML 2024. Complexity: $O(1+LR/\\varepsilon)$ exact operator evaluations and monotone-operator resolvent calls, including initialization, for the accelerated splitting method (composite-FEG), with $0\\leq\\rho L\\leq1/4$ and step size $3/(4L)$, obtaining $\\|F(x)+\\xi\\|\\leq\\varepsilon$ for some $\\xi\\in A(x)$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Solve the possibly nonmonotone operator inclusion 0 ∈ F(x)+A(x), where F:E→E is L-Lipschitz, A:E→Set E is monotone, and F+A is globally ρ-cohypomonotone. No objective function or saddle structure is required.",
+        "evidence": "LongTails/Setups/CohypomonotoneInclusion.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Exact resolvent queries Jγ(z) for any γ>0, satisfying (z−Jγ(z))/γ ∈ A(Jγ(z)). Each resolvent query counts separately as one oracle call.",
+        "evidence": "LongTails/Setups/CohypomonotoneInclusion.lean: spec.Query and resolvent clauses in spec.admissible; LongTails/Template.lean: execute."
+      },
+      {
+        "label": "other",
+        "details": "Exact evaluations of F(x), independent of call index and oracle seed; F is a general operator, not necessarily a gradient. Each evaluation counts as one oracle call.",
+        "evidence": "LongTails/Setups/CohypomonotoneInclusion.lean: spec.Query and first equality in spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "For all u∈(F+A)(x) and v∈(F+A)(y), ⟨u−v,x−y⟩≥−ρ‖u−v‖², with L>0, ρ≥0 and ρL<1. A solution x⋆ satisfies ‖x0−x⋆‖≤R. E is an arbitrary real inner-product space; completeness and finite dimensionality are not assumed. E, L, ρ and x0 are public; R≥0 and ε>0 are hidden parameters used in the execution budget.",
+        "evidence": "LongTails/Setups/CohypomonotoneInclusion.lean: Public, Params, spec.publicInput, spec.valid and spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual requirement holds almost surely under the execution probability measure, within a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/CohypomonotoneInclusion.lean: spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The output x must admit a witness ξ∈A(x) with the unsquared inclusion residual ‖F(x)+ξ‖≤ε. The witness need not be returned; no averaging or best-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/CohypomonotoneInclusion.lean: spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This is a structured nonmonotone inclusion formulation with global cohypomonotonicity and ρL<1, exact split operator/resolvent access, and a witness-based residual guarantee in an arbitrary real inner-product space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CohypomonotoneInclusion.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MultiStepAnchoredCohypomonotone",
+          "theorem": "OracleTemplate.CohypomonotoneInclusion.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

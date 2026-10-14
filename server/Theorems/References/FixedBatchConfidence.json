@@ -1,0 +1,61 @@
+{
+  "setup": "LongTails.Setups.FixedBatchConfidence",
+  "searched_at": "2026-10-04T15:34:48.047270+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [],
+  "results": [],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex quadratic minimization: f(x)=½ E[⟨a,x−u⟩²], with minimum f(u)=0. The covariance may be singular; no positive lower eigenvalue or strong convexity is required.",
+        "evidence": "LongTails/Setups/FixedBatchConfidence.lean: Model.population; spec.Query; spec.Output."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,a)=⟨a,x−u⟩a using a fresh IID sample. This is an unbiased gradient of f. Only the gradient vector is returned; neither the sample a nor a function value is provided. L and x0 are public; R, ε, δ, u, and the sampling distribution are hidden.",
+        "evidence": "LongTails/Setups/FixedBatchConfidence.lean: Public; Params; spec.publicInput; spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is exactly two-dimensional real Euclidean space with its standard inner product.",
+        "evidence": "LongTails/Setups/FixedBatchConfidence.lean: Space."
+      },
+      {
+        "label": "other",
+        "details": "Realizable least squares with bounded features: ‖a‖²≤L almost surely. Every sample loss has the common minimizer u, so stochastic gradients vanish at u. Sample Hessians aaᵀ have operator norm at most L, and f is L-smooth. The gradient noise is state-dependent, with E‖g(x,a)−∇f(x)‖²≤2Lf(x); no globally uniform variance bound is assumed. The initial point satisfies ‖x0−u‖≤R. Valid parameters obey L,R,ε>0 and 0<δ<1.",
+        "evidence": "LongTails/Setups/FixedBatchConfidence.lean: Model.bounded; Model.radius; Model.population; spec.admissible; spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must be measurable and satisfy f(output)−f(u)≤ε outside the allowed failure event, for some global minimizer u. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/FixedBatchConfidence.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(output)−f(u)>ε)≤δ, equivalently success probability at least 1−δ. In Template.Convergence, this probability includes algorithm randomness and oracle randomness.",
+        "evidence": "LongTails/Setups/FixedBatchConfidence.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is realizable population least-squares minimization with bounded IID features, stochastic gradients, and a high-probability objective-gap target, an established stochastic optimization formulation. Least-squares stochastic approximation is treated in [Bach and Moulines (2013)](https://papers.nips.cc/paper/2013/file/7fe1f8abaad094e0b5cb1b01d712f708-Paper.pdf). No proved results or extracted budgets were supplied, so no complexity comparison is reported."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "missing_theorem",
+      "theorems": [],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "not_assessed",
+      "results": []
+    }
+  }
+}

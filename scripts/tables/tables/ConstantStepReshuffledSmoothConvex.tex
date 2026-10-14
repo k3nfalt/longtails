@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Constant-step random reshuffling: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/ConstantStepReshuffledSmoothConvex.lean}{Constant\allowbreak{}Step\allowbreak{}Reshuffled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:ConstantStepReshuffledSmoothConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, $F=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, has convex components with $L_i$-Lipschitz gradients, $0\le L_i\le L_{\max}$ and $n^{-1}\sum_i L_i\le L_{\mathrm{avg}}$, where $0<L_{\mathrm{avg}}\le L_{\max}$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $n^{-1}\sum_i\|\nabla f_i(x_\star)\|^2\le\sigma^2$, with $R,\sigma\ge0$. Exact component gradients are queried. Target: $\mathbb{E}[F(\widehat x)-F(x_\star)]\le\varepsilon$, $\varepsilon>0$; \textbf{(1)} uses the raw final iterate after fresh uniform reshuffling each epoch and a constant positive step.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ReshuffledConstantStepLastIterate.lean}{Reshuffled\allowbreak{}Constant\allowbreak{}Step\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ReshuffledConstantStepLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(n+(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\Lambda\right)$ & --- & --- \\
+\midrule[1.2pt]
+RR, averaged output \citep[Cor.~1]{Liu2026RRv1}\newline $E=\mathbb{R}^d$
+& $\begin{aligned}\mathcal{O}\!\Bigl(&n+L_{\max}R^2/\varepsilon\\&+\min\left\{\frac{\sigma^2R^2}{\varepsilon^2},\frac{\sqrt{nL_{\mathrm{avg}}}\,\sigma R^2}{\varepsilon^{3/2}}\right\}\Bigr)\end{aligned}$
+& \textbf{(1)}: Raw last iterate instead of averaging all inner iterates; method-specific analysis.
+& \textbf{(1)}: Extra $\Lambda$; loses the better noise branch when $\varepsilon<\sigma^2/(nL_{\mathrm{avg}})$; logarithmically smaller step cap. \\
+\midrule
+RR, small step \citep[Thm.~C.1]{LiuZhou2024Shufflev3}\newline $E=\mathbb{R}^d$, $\psi=0$
+& $\mathcal{O}\!\left(n+\left[\frac{n\sqrt{L_{\mathrm{avg}}L_{\max}}R^2}{\varepsilon}\right.\right.$\newline $\left.\left.{}+\frac{\sqrt{nL_{\mathrm{avg}}}\,\sigma R^2}{\varepsilon^{3/2}}\right]\sqrt h\right)$
+& \textbf{(1)}: i) Deterministic term improves if $\Lambda\ll n\sqrt{L_{\mathrm{avg}}/L_{\max}}$.\newline ii) Noise term improves if $\varepsilon\gg\sigma^2\Lambda^2/(nL_{\mathrm{avg}})$.
+& \textbf{(1)}: Loses $L_{\mathrm{avg}}$ sensitivity; worse noise term if $\varepsilon\ll\sigma^2\Lambda^2/(nL_{\mathrm{avg}}h)$. \\
+\midrule
+VRADA \citep[Thm.~1]{SongJiangMa2021VRADAv4}\newline $E=\mathbb{R}^d$, $l=0$
+& $\mathcal{O}\!\left(n[1+\log(1+\log n)]+\sqrt{nL_{\max}R^2/\varepsilon}\right)$
+& \textbf{(1)}: At most a $1+\log(1+\log n)$ factor gain in the initialization-dominated regime $(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\Lambda\lesssim n$.
+& \textbf{(1)}: Needs $\sigma$; adds $\sigma^2R^2\Lambda/\varepsilon^2$; $L_{\max}R^2\Lambda/\varepsilon$ instead of $\sqrt{nL_{\max}R^2/\varepsilon}$, worse for $L_{\max}R^2/\varepsilon\ge n$. \\
+\midrule
+IID SGD \citep[Thm.~2]{AttiaEtAl2025Lastv2}\newline Derived bound; $E=\mathbb{R}^d$, uniform component sampling
+& $\mathcal{O}\!\left(1+(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\ell\right)$
+& \textbf{(1)}: Multi-epoch RR analysis; no established complexity improvement.
+& \textbf{(1)}: Additive $n$; $\Lambda$ instead of $\ell$; reshuffling access instead of IID sampling. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count all component-gradient calls, including full-gradient evaluations; RR: random reshuffling; IID: independent, identically distributed. $\Lambda=(1+\log n)(1+\log(n+2+L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2))$, $\ell=1+\log(2+L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)$, $h=1+\log\!\left(2+\sqrt{L_{\mathrm{avg}}L_{\max}}R^2/\varepsilon+\sqrt{L_{\mathrm{avg}}/n}\,\sigma R^2/\varepsilon^{3/2}\right)$. $l,\psi$: composite regularizers in the cited formulations. $\lesssim$ suppresses universal factors; $\ll,\gg$ denote asymptotic separation.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,127 @@
+{
+  "setup": "LongTails.Setups.ZerothOrderSmoothAndConvex",
+  "searched_at": "2026-10-04T17:56:42.683818+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil 64 \\cdot d \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{512 \\cdot L \\cdot d^{2} \\cdot R^{2} \\cdot \\sigma}{\\varepsilon^{2}} + \\frac{256 \\cdot L \\cdot d^{2} \\cdot R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{3}} + 1 \\right\\rceil_{+} \\right\\} \\cdot 2",
+        "type": "LongTails.Setups.ZerothOrderSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  max 1\n      ⌈64 * ↑q.d * √(q.L * q.R ^ 2 / q.ε) + 512 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ / q.ε ^ 2 +\n            256 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ ^ 2 / q.ε ^ 3 +\n          1⌉₊ *\n    2"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil 64 \\cdot d \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{512 \\cdot L \\cdot d^{2} \\cdot R^{2} \\cdot \\sigma}{\\varepsilon^{2}} + \\frac{256 \\cdot L \\cdot d^{2} \\cdot R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{3}} + 1 \\right\\rceil_{+} \\right\\} \\cdot 2",
+          "type": "LongTails.Setups.ZerothOrderSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  max 1\n      ⌈64 * ↑q.d * √(q.L * q.R ^ 2 / q.ε) + 512 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ / q.ε ^ 2 +\n            256 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ ^ 2 / q.ε ^ 3 +\n          1⌉₊ *\n    2"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedTwoPointZerothOrderConvex",
+      "namespace": "LongTails.Setups.ZerothOrderSmoothAndConvex",
+      "setup": "LongTails.Setups.ZerothOrderSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ZerothOrderSmoothAndConvex.spec OracleTemplate.ZerothOrder.AcceleratedTwoPointZerothOrderConvex.budget",
+      "theorem": "OracleTemplate.ZerothOrder.AcceleratedTwoPointZerothOrderConvex.result"
+    },
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil 128 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{32768 \\cdot L \\cdot d \\cdot R^{2} \\cdot \\sigma}{\\varepsilon^{2}} + \\frac{8192 \\cdot L \\cdot d^{2} \\cdot R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{3}} + 1 \\right\\rceil_{+} \\right\\} \\cdot \\left(2 \\cdot d\\right)",
+        "type": "LongTails.Setups.ZerothOrderSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  max 1\n      ⌈128 * √(q.L * q.R ^ 2 / q.ε) + 32768 * q.L * ↑q.d * q.R ^ 2 * q.σ / q.ε ^ 2 +\n            8192 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ ^ 2 / q.ε ^ 3 +\n          1⌉₊ *\n    (2 * q.d)"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil 128 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{32768 \\cdot L \\cdot d \\cdot R^{2} \\cdot \\sigma}{\\varepsilon^{2}} + \\frac{8192 \\cdot L \\cdot d^{2} \\cdot R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{3}} + 1 \\right\\rceil_{+} \\right\\} \\cdot \\left(2 \\cdot d\\right)",
+          "type": "LongTails.Setups.ZerothOrderSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  max 1\n      ⌈128 * √(q.L * q.R ^ 2 / q.ε) + 32768 * q.L * ↑q.d * q.R ^ 2 * q.σ / q.ε ^ 2 +\n            8192 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ ^ 2 / q.ε ^ 3 +\n          1⌉₊ *\n    (2 * q.d)"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedZerothOrderConvex",
+      "namespace": "LongTails.Setups.ZerothOrderSmoothAndConvex",
+      "setup": "LongTails.Setups.ZerothOrderSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ZerothOrderSmoothAndConvex.spec OracleTemplate.ZerothOrder.AcceleratedZerothOrderConvex.budget",
+      "theorem": "OracleTemplate.ZerothOrder.AcceleratedZerothOrderConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedTwoPointZerothOrderConvex",
+      "theorem": "OracleTemplate.ZerothOrder.AcceleratedTwoPointZerothOrderConvex.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.AcceleratedZerothOrderConvex",
+      "theorem": "OracleTemplate.ZerothOrder.AcceleratedZerothOrderConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ with globally L-Lipschitz gradient. A global minimizer x⋆ exists with ‖x₀−x⋆‖≤R. Parameters satisfy d>0, L>0, R≥0, σ≥0, and ε>0; strong convexity is not required.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: spec.valid and spec.admissible, including ConvexOn, HasGradientAt, the gradient Lipschitz inequality, and the minimizer-radius condition."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "Each query x returns one scalar g(x,Z), with E[g(x,Z)]=f(x). Successive calls use fresh independent identically distributed seeds. The oracle provides no gradients or control over the seed, including no shared-seed evaluation pairs. All Params, including d,L,R,σ,ε,x₀, are public; f,g and the seed distributions are hidden. The budgets count individual function evaluations and are fixed.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: spec.Public, publicInput, Query, Reply, and admissible oracle representation and independence conditions; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every x, the function-value error is unbiased and satisfies E[(g(x,Z)−f(x))²]≤σ². Its distribution may depend on x. Only a second-moment bound is required; no almost-sure bound, tail bound, or smoothness of sample functions g(·,Z) is assumed.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: spec.admissible, the integral equality, squared-error integrability, and variance inequality."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a complete real inner-product space linearly isometric to ℝᵈ with its Euclidean norm, where d is a positive integer.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: Point, Params, spec.valid, and the Nonempty linear-isometry condition in spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output X is an E-valued measurable random point with integrable objective gap and E[f(X)−f(x⋆)]≤ε for a global minimizer x⋆. No last-iterate or distance guarantee is required.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over the product of algorithm randomness and oracle-seed randomness.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: spec.successful integral inequality; LongTails/Template.lean: Convergence product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is a standard finite-dimensional smooth convex stochastic zeroth-order formulation with independent unbiased function evaluations, uniformly bounded variance, a known initial-distance bound, and expected objective-gap accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ZerothOrder.AcceleratedTwoPointZerothOrderConvex.result",
+        "OracleTemplate.ZerothOrder.AcceleratedZerothOrderConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedTwoPointZerothOrderConvex",
+          "theorem": "OracleTemplate.ZerothOrder.AcceleratedTwoPointZerothOrderConvex.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.AcceleratedZerothOrderConvex",
+          "theorem": "OracleTemplate.ZerothOrder.AcceleratedZerothOrderConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

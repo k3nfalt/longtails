@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Fast Douglas--Rachford comparison for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/DouglasRachfordSmoothConvex.lean}{Douglas\allowbreak{}Rachford\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:DouglasRachfordSmoothConvex}
+\parbox{\linewidth}{\footnotesize Real Hilbert space $E$; differentiable convex $f:E\to\mathbb{R}$ with $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\frac L2\|y-x\|^2$; convex $C\subseteq E$ and $g:E\to\mathbb{R}$ convex on $C$. Exact proximal minimizers of $f$ on $E$ and $g$ on $C$ are available at fixed $\gamma$. A minimizer $x_\star\in C$ exists with $\|w_1-w_\star\|\le R$. Parameters: $L,R,\varepsilon>0$, $0<\lambda\le1$, $0<4\gamma L\le\lambda$. Target: the returned last iterate $y_N\in C$ satisfies $F(y_N)-F(x_\star)\le\varepsilon$ deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedDouglasRachfordConvex.lean}{Accelerated\allowbreak{}Douglas\allowbreak{}Rachford\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedDouglasRachfordConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ proximal calls, counting both calls per iteration.
+& --- & --- \\
+\midrule[1.2pt]
+Fast DRS \citep[Thm.~5]{drPSB2014v2}\newline Special case: quadratic $f$, $E=\mathbb{R}^n$, closed $h$.
+& $\mathcal{O}\!\left(1+\frac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ proximal calls; $0<\gamma<1/L$, $\lambda=\frac{1-\gamma L}{1+\gamma L}$.
+& \textbf{(1)}: Scope: nonquadratic smooth $f$ for the same iteration. Matches known rate on the quadratic overlap.
+& \textbf{(1)}: needs $\gamma\le\lambda/(4L)$; excludes the baseline's optimal $\gamma=(\sqrt2-1)/L$. \\
+\midrule
+Accelerated DRS conjecture \citep[Conjecture~4]{drAZ2025v2}\newline $E=\mathbb{R}^n$, closed $h$.
+& No proved budget; conjectured accelerated order for $0<\gamma\le1/L$, $0<\lambda\le1$.
+& \textbf{(1)}: proves accelerated order for PSB momentum under $4\gamma L\le\lambda$.
+& \textbf{(1)}: does not settle $\lambda/(4L)<\gamma\le1/L$ or momentum $k/(k+3)$. \\
+\midrule
+FDR on the dual \citep[Thm.~1]{drCJRA2026v2}\newline $E=\mathbb{R}^n$, closed $h$; $f^*$ is $(1/L)$-strongly convex.
+& No budget for the stated objective target; the guarantee concerns squared dual distance, using varying proximal parameters.
+& \textbf{(1)}: i) single fixed $\gamma$;\newline ii) primal objective accuracy instead of dual distance. Rates not comparable.
+& --- \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $F=f+g$ on $C$; $h=g+\iota_C$, with $\iota_C=0$ on $C$ and $+\infty$ elsewhere; $w_\star=x_\star+\gamma\nabla f(x_\star)$; $R$ bounds $\|w_1-w_\star\|$; $N$ is the iteration count; DRS = Douglas--Rachford splitting; PSB = the fast DRS iteration in \citep{drPSB2014v2}; $f^*$ is the convex conjugate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

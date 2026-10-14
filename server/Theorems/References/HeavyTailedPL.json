@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedPL",
+  "searched_at": "2026-10-12T08:04:22.908057+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 44 \\cdot \\frac{L}{\\mu} \\cdot \\sqrt{\\frac{\\Delta}{\\varepsilon}} + \\frac{1024 \\cdot \\sigma^{2} \\cdot \\left(\\frac{L}{\\mu} + \\log\\left(\\frac{3}{\\delta}\\right)\\right)}{\\mu \\cdot \\varepsilon} + \\left(\\left(64 \\cdot \\left(\\frac{L}{\\mu}\\right)^{2} \\cdot \\left(\\frac{\\nu}{\\sigma}\\right)^{2} \\cdot \\log\\left(\\frac{3}{\\delta}\\right)\\right)^{q} \\cdot \\left(\\frac{3}{\\delta}\\right)^{2}\\right)^{\\frac{1}{q - 2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedPL.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈44 * (p.L / p.μ) * √(p.Δ / p.ε) + 1024 * p.σ ^ 2 * (p.L / p.μ + Real.log (3 / p.δ)) / (p.μ * p.ε) +\n      ((64 * (p.L / p.μ) ^ 2 * (p.ν / p.σ) ^ 2 * Real.log (3 / p.δ)) ^ p.q * (3 / p.δ) ^ 2) ^ (p.q - 2)⁻¹⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 44 \\cdot \\frac{L}{\\mu} \\cdot \\sqrt{\\frac{\\Delta}{\\varepsilon}} + \\frac{1024 \\cdot \\sigma^{2} \\cdot \\left(\\frac{L}{\\mu} + \\log\\left(\\frac{3}{\\delta}\\right)\\right)}{\\mu \\cdot \\varepsilon} + \\left(\\left(64 \\cdot \\left(\\frac{L}{\\mu}\\right)^{2} \\cdot \\left(\\frac{\\nu}{\\sigma}\\right)^{2} \\cdot \\log\\left(\\frac{3}{\\delta}\\right)\\right)^{q} \\cdot \\left(\\frac{3}{\\delta}\\right)^{2}\\right)^{\\frac{1}{q - 2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedPL.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈44 * (p.L / p.μ) * √(p.Δ / p.ε) + 1024 * p.σ ^ 2 * (p.L / p.μ + Real.log (3 / p.δ)) / (p.μ * p.ε) +\n      ((64 * (p.L / p.μ) ^ 2 * (p.ν / p.σ) ^ 2 * Real.log (3 / p.δ)) ^ p.q * (3 / p.δ) ^ 2) ^ (p.q - 2)⁻¹⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HeavyTailedPLLastIterate",
+      "namespace": "LongTails.Setups.HeavyTailedPL",
+      "setup": "LongTails.Setups.HeavyTailedPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedPL.spec OracleTemplate.HeavyTailedPL.budget",
+      "theorem": "OracleTemplate.HeavyTailedPL.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HeavyTailedPLLastIterate",
+      "theorem": "OracleTemplate.HeavyTailedPL.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Nonconvex objectives satisfying the global PL inequality are permitted; convexity and strong convexity are not required.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Globally differentiable, bounded-below objective with L-Lipschitz gradient and 2μ(f(x)−inf f)≤‖∇f(x)‖² everywhere; 0<μ≤L and f(x₀)−inf f≤Δ, with Δ≥0.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns g(x,ξ) using a fresh IID seed. The oracle is jointly measurable, integrable, and unbiased: E[g(x,ξ)]=∇f(x). One returned gradient counts as one oracle call.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central q-th moment bound E‖g(x,ξ)−∇f(x)‖^q≤ν^q, with q>2 and ν>0, separately from the variance bound. Polynomial-tail distributions are allowed; exponential moments are not required.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: Params, spec.valid, and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform central second-moment bound E‖g(x,ξ)−∇f(x)‖²≤σ² for every x, with σ>0.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is a second-countable real Hilbert space with its Borel measurable structure; finite dimension is not required. Only E,L,μ,x₀ are public. Noise parameters σ,ν,q, initialization bound Δ, accuracy ε, and confidence δ are hidden. Allowed algorithms use a fixed positive step-size schedule and return the last SGD iterate; the schedule can depend only on public input.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: Public, Params, spec.publicInput, and spec.allowedAlgorithm; LongTails/Template.lean: Convergence; LongTails/Algorithms/ScheduledSgd.lean: method."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "A measurable output must satisfy f(output)−inf f≤ε, with ε>0. Under the allowed algorithm restriction, the output is the last iterate after execution with the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: spec.successful and spec.allowedAlgorithm; LongTails/Algorithms/ScheduledSgd.lean: method.output; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(output)−inf f>ε)≤δ, where 0<δ<1. Probability is taken over the algorithm and oracle seeds.",
+        "evidence": "LongTails/Setups/HeavyTailedPL.lean: spec.valid and spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth PL optimization with finite-moment stochastic gradients is established, but this setup adds a specialized information restriction: a positive SGD schedule using only public L,μ,x₀ must provide high-probability last-iterate accuracy while noise, initialization, accuracy, and confidence parameters remain hidden."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HeavyTailedPL.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HeavyTailedPLLastIterate",
+          "theorem": "OracleTemplate.HeavyTailedPL.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

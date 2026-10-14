@@ -1,0 +1,91 @@
+{
+  "setup": "LongTails.Setups.SmoothNonconvex",
+  "searched_at": "2026-10-04T17:53:49.823450+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{2 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.SmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => max 1 ⌈2 * p.L * p.Δ / p.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{2 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.SmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => max 1 ⌈2 * p.L * p.Δ / p.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GdNonconvex",
+      "namespace": "LongTails.Setups.SmoothNonconvex",
+      "setup": "LongTails.Setups.SmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothNonconvex.spec OracleTemplate.NonconvexGradient.budget",
+      "theorem": "OracleTemplate.NonconvexGradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GdNonconvex",
+      "theorem": "OracleTemplate.NonconvexGradient.result",
+      "references": "- Yurii Nesterov. [Introductory Lectures on Convex Programming, Volume I: Basic Course](https://hengshuaiyao.github.io/papers/nesterov03.pdf). 1998 preprint, 2 July version; book publication 2004. Complexity: $O(1+L\\Delta/\\varepsilon^2)$ exact-gradient oracle calls using constant-step gradient descent and the best queried iterate, with $\\|\\nabla f(x)\\|^2\\le\\varepsilon^2$.\n- Saeed Ghadimi and Guanghui Lan. [Stochastic First- and Zeroth-Order Methods for Nonconvex Stochastic Programming](https://arxiv.org/pdf/1309.5549v1). 2013, arXiv v1; journal publication 2013. Complexity: $O(1+L\\Delta/\\varepsilon^2)$ exact-gradient oracle calls for randomized stochastic gradient with zero oracle variance, with a fixed call cap and $\\mathbb E\\|\\nabla f(x_R)\\|^2\\le\\varepsilon^2$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f:E→ℝ; convexity is not required. The gradient is globally L-Lipschitz, and there exists a global lower bound lower with f(x0)−lower≤Δ. Parameters satisfy L>0, Δ≥0, ε>0.",
+        "evidence": "LongTails/Setups/SmoothNonconvex.lean: spec.Instance, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query x∈E returns the exact gradient of f at x for every call index and oracle seed. No function values or noisy gradient information are supplied.",
+        "evidence": "LongTails/Setups/SmoothNonconvex.lean: spec.Query, spec.Reply, first conjunct of spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E is an arbitrary complete real inner-product space with a measurable-space structure; finite dimensionality is not assumed. E, L, Δ, ε and x0 are public. The objective and its witnessing lower bound are hidden.",
+        "evidence": "LongTails/Setups/SmoothNonconvex.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The output is a point in E satisfying E[‖gradient f(output)‖²]≤ε². The output must be measurable and its squared gradient norm integrable; no last-iterate requirement is specified.",
+        "evidence": "LongTails/Setups/SmoothNonconvex.lean: spec.Output, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is an expectation under the product of the algorithm's seed law and the oracle's seed law, with a fixed worst-case oracle-call budget.",
+        "evidence": "LongTails/Setups/SmoothNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth lower-bounded nonconvex optimization with exact gradients and expected squared-gradient stationarity is a standard formulation; the setup permits general real Hilbert spaces."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NonconvexGradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GdNonconvex",
+          "theorem": "OracleTemplate.NonconvexGradient.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

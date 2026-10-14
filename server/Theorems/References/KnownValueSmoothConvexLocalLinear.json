@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.KnownValueSmoothConvexLocalLinear",
+  "searched_at": "2026-10-12T07:53:02.768903+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot \\left(\\left\\lceil \\sqrt{\\frac{10 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.KnownValueSmoothConvexLocalLinear.spec.Params → ℕ",
+        "value": "fun p => 3 * (⌈√(10 * p.L * p.R ^ 2 / p.ε)⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot \\left(\\left\\lceil \\sqrt{\\frac{10 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.KnownValueSmoothConvexLocalLinear.spec.Params → ℕ",
+          "value": "fun p => 3 * (⌈√(10 * p.L * p.R ^ 2 / p.ε)⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.SplitBroxKnownValue",
+      "namespace": "LongTails.Setups.KnownValueSmoothConvexLocalLinear",
+      "setup": "LongTails.Setups.KnownValueSmoothConvexLocalLinear",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.KnownValueSmoothConvexLocalLinear.spec OracleTemplate.SplitBrox.budget",
+      "theorem": "OracleTemplate.SplitBrox.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SplitBroxKnownValue",
+      "theorem": "OracleTemplate.SplitBrox.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a differentiable convex objective over a nonempty closed convex set C in a real Hilbert space. On C, f satisfies the quadratic upper model with public L > 0. A minimizer xstar exists with ‖x0 − xstar‖ ≤ R.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: Public, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "At each feasible query x, the oracle returns the exact gradient ∇f(x), for every call index and seed.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: spec.admissible, .inl oracle-answer equality."
+      },
+      {
+        "label": "function_value",
+        "details": "The same feasible-point query returns the exact value f(x) together with its gradient.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: spec.admissible, .inl oracle-answer equality."
+      },
+      {
+        "label": "linear_minimization",
+        "details": "For feasible x, any r ≥ 0, and any direction g, return an exact minimizer of ⟨g,v⟩ over v ∈ C with ‖v − x‖ ≤ r. Value-gradient queries and local linear-minimization queries share one fixed budget of 3(⌈√(10LR²/ε)⌉ + 1) calls.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: spec.admissible, .inr oracle condition; supplied OracleTemplate.SplitBrox.result budget; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Public information comprises the real Hilbert space, L > 0, R ≥ 0, ε > 0, feasible x0, and the exact optimum value fstar. The objective f and constraint set C are hidden. The set may be unbounded; R bounds distance to one minimizer rather than the diameter of C. Smoothness inequalities are required only for pairs in C. Local linear minimizers must exist for every admissible query; no oracle-error or independence assumption is needed.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: Public, Instance, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a feasible point output ∈ C satisfying f(output) − f(xstar) ≤ ε, where xstar minimizes f on C and f(xstar) = fstar.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound hold almost surely under the joint algorithm-seed and oracle-seed probability measure, after the fixed oracle budget.",
+        "evidence": "LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth constrained convex optimization is classical, but exact access to linear minimization over arbitrary local ball intersections, combined with a publicly known optimum value and Hilbert-space geometry, defines a specialized oracle formulation. No repository implementation or proof was inspected; the literature search does not certify novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SplitBrox.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SplitBroxKnownValue",
+          "theorem": "OracleTemplate.SplitBrox.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

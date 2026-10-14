@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__PROJECT_NAME__</title>
+  <link rel="icon" type="image/png" href="data:image/png;base64,__ICON_DATA__">
+  <style>
+    __FONT_FACES__
+    :root{color-scheme:light;--paper:#eeeeee;--ink:#111111;--muted:#637083;--line:#e3e7ed;--accent:#3157a3;--serif:"TeX Gyre Termes",serif;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:inherit}a,summary{touch-action:manipulation}::selection{background:#dce7ff}
+    :focus-visible{outline:3px solid #7598da;outline-offset:4px}
+    .shell{max-width:1200px;margin:auto;padding:0 40px}
+    .shell.site-header{padding-top:28px}.site-header h1{margin:0;text-align:center;font-size:clamp(36px,5vw,48px)}.site-header .title-link{display:inline-flex;align-items:center;gap:16px;font-family:"Manrope",sans-serif;font-weight:700;color:#202020;letter-spacing:-0.025em}.site-logo{width:100px;height:auto;border-radius:6px}
+    #count{display:inline-flex;align-items:center;height:40px;white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted)}
+    .filters{margin:12px 0 16px;font-size:13px}.filters label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
+    .filters select,.filters input[type="search"]{font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid #c7d0df;border-radius:6px;padding:9px 12px;min-height:40px;min-width:0;width:100%}
+    .filters select{appearance:none;padding-right:38px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%23545f70' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+    .filter-bar{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.filter-search{flex:1;min-width:180px}
+    .filter-bar input,.filter-bar select{height:40px;min-height:40px;font-size:14px;line-height:20px}
+    .empty-results{color:var(--muted);padding:12px 0 36px}.layout{padding-bottom:48px}
+    article{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:36px;overflow:hidden;scroll-margin-top:24px;box-shadow:0 2px 8px #0000000a}
+    .card-body{padding:48px 72px}
+
+    .card-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid #ddd}
+    .card-top h1,.card-top h2{flex:1;min-width:0}
+    .metadata{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0;font-size:12px;padding:4px 0}
+    #setups article{margin-bottom:20px}#setups .card-body{padding:24px 32px}#setups .card-top{margin-bottom:16px;padding-bottom:10px}
+    #setups .description-title{justify-content:flex-start;margin-bottom:12px}#setups .description-title>h2{text-align:left;font-size:22px}
+    #setups .description{font-size:16px}#setups .description p{text-align:left;hyphens:none}
+    #setups .budgets{margin-top:16px;padding-top:16px}#setups .budgets h3{margin-bottom:10px}#setups .entry-link{margin-top:12px}
+    .detail .card-top h1{margin:0;padding:0;border:0}
+    .number{flex-shrink:0;font:12px/1.5 var(--mono);font-variant-numeric:tabular-nums;color:#666}
+
+    h1,h2,h3{color:var(--ink)}h1{overflow-wrap:anywhere;font-size:32px;line-height:1.25;letter-spacing:-1.1px;font-weight:650;margin:0 0 28px}
+    h2{font-size:23px;line-height:1.35;letter-spacing:-.55px;overflow-wrap:anywhere;font-weight:650;margin:0 0 18px}.card-top h2{margin:0;font:14px/1.5 var(--mono);letter-spacing:0;color:#555}
+    .title-link{text-decoration:none;transition:color .15s}.title-link:hover{color:var(--accent)}
+    .card-top .title-link{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+    .description-title{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 16px;margin-bottom:16px}
+    .description-title>h1,.description-title>h2,.description-title>h3{font:700 24px/1.3 var(--serif);letter-spacing:0;text-align:center;margin:0}
+    .description-toggle>summary{cursor:pointer;font-size:13px;color:var(--muted);width:fit-content;padding:6px 0}
+    .description-toggle>summary:hover{color:var(--accent)}
+    .description-toggle[open]>summary{margin-bottom:20px}
+    .description{min-width:0;font:18px/1.4 var(--serif);color:var(--ink);overflow-wrap:break-word}
+    .description p{margin:0 0 .75em;text-align:justify;hyphens:auto}.description p:last-child{margin-bottom:0}
+    .description h2,.description h3{font-family:var(--serif);font-weight:700;letter-spacing:0;margin:1.3em 0 .65em;font-size:21px}
+    .description h2:first-child{margin:0 0 1em;text-align:center;font-size:24px}
+    .description .assumption{margin:1em 0;break-inside:avoid}
+    .description strong{font-weight:700;color:#171717}
+    math{font-family:"Latin Modern Math",math;font-size:1em;font-weight:400}
+    .description math[display="block"]{display:block;max-width:100%;overflow-x:auto;margin:.7em 0;padding:5px 0;text-align:center;scrollbar-width:thin}
+    .description a{color:var(--accent);text-underline-offset:3px}
+    .entry-link{justify-self:start;align-self:end;display:inline-flex;align-items:center;margin-top:24px;text-decoration:none;font-size:13px;font-weight:600;color:var(--accent);padding:7px 0;border-bottom:1px solid #cdd8eb}
+    .entry-link:hover{border-color:var(--accent)}
+    .budgets{min-width:0;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}.budgets h3{font:700 19px/1.4 var(--serif);letter-spacing:0;color:var(--ink);margin:0 0 18px}
+    .budget{margin-bottom:22px}.budget:last-child,.budget:has(+.comparison){margin-bottom:0}.budget-name{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:10px;color:#394960}
+    .budget-formula{padding:12px 0;background:#fff;overflow-x:auto;font-size:18px;scrollbar-width:thin;scrollbar-color:#c7d0df transparent}
+    .budget-formula p{margin:0}.budget-formula math{margin:0;text-align:center}.budget-formula math+math{margin-top:16px}
+    .budgets>p{font-size:14px;color:var(--muted);padding:0;margin:0}
+    .budget summary,.references-empty{font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.budget summary{cursor:pointer}.budget summary:hover{color:var(--accent)}.budget summary::marker{font-size:10px;color:#8a98ab}
+    .comparison{margin-top:0}.comparison>summary{cursor:pointer;font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.comparison>summary:hover{color:var(--accent)}.comparison-scroll{overflow-x:auto;font-size:14px;line-height:1.6}.comparison table{width:100%!important;min-width:900px;border-collapse:collapse;margin:16px 0}.comparison th,.comparison td{padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}.comparison th{background:#f3f6fb}.comparison td p{margin:0 0 8px}.comparison a{color:var(--accent)}.comparison .references{margin-top:20px;font-size:13px}.comparison .csl-entry{margin-bottom:10px}
+    .theorem-name{font:11px/1.7 var(--mono);overflow-wrap:anywhere;color:var(--muted);margin:4px 0 10px}
+    .references-text{font-size:14px;line-height:1.65;overflow-wrap:anywhere}.references-text p{margin:0 0 .8em}.references-text p:last-child{margin-bottom:0}.references-text a{color:var(--accent);text-underline-offset:3px}.references-text math[display="block"]{overflow-x:auto;max-width:100%}
+    pre{margin:0;padding:24px;background:#182234;color:#e4eaf5;overflow:auto;font:12px/1.9 var(--mono);tab-size:2;scrollbar-width:thin}
+    .budget pre{border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere;padding:18px;font-size:12px}
+    .detail{padding:36px 0 60px;max-width:100%;margin:auto}.back{display:inline-block;margin-bottom:24px;font-size:13px;color:var(--muted);text-decoration:none}.back:hover{color:var(--accent)}
+    .detail h1{font:14px/1.5 var(--mono);letter-spacing:0;color:#555;padding-bottom:12px;border-bottom:1px solid #ddd}
+    .detail .card-body{padding:48px 72px}.detail .budgets{margin-top:36px;border-top:1px solid var(--line);padding-top:28px}
+    .source-heading{font-size:16px;letter-spacing:0;margin:32px 0 8px}.path{font:11px/1.7 var(--mono);color:var(--muted);overflow-wrap:anywhere}
+    .source-title{background:#182234;color:#a6b7d1;padding:20px 24px 0;font:11px/1.7 var(--mono);overflow-wrap:anywhere}
+    .framework>p{color:var(--muted)}.eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+    footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:11px;line-height:1.8;color:#738094}
+    [hidden]{display:none!important}
+    @media(max-width:960px){.shell{padding:0 28px}.card-top{margin-bottom:22px;padding-bottom:20px}.entry-link{margin-top:20px}}
+    @media(max-width:560px){.shell{padding:0 14px}.shell.site-header{padding-top:22px}.filter-search{flex-basis:100%;min-width:0}.filters input[type="search"],.filters select{font-size:16px}.card-body,.detail .card-body,#setups .card-body{padding:22px 18px}.card-top{gap:10px}h2{font-size:20px}h1{font-size:28px}.number{font-size:11px;padding:2px 5px}.budget-formula{padding:16px 12px;font-size:17px}article{border-radius:12px}.detail{padding-top:24px}.description{font-size:16px}.description p{text-align:left;hyphens:none}pre{padding:18px;font-size:11px}}
+    @media(max-width:380px){.filter-bar{gap:8px}.filters select{font-size:14px}}
+    @page{size:A4;margin:20mm}
+    @media print{body{background:white}.shell{max-width:none;padding:0}article{box-shadow:none;border:0}.card-body,.detail .card-body{padding:0}.description{font-size:10pt;line-height:1.1}.budget-formula{overflow:visible}footer,.entry-link,.back{display:none}}
+  </style>
+</head>
+<body>
+  <header class="shell site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="data:image/png;base64,__LOGO_DATA__" width="1254" height="1254" alt=""></a></h1></header>
+  <main class="shell">
+    <div id="catalog">
+    <form id="filters" class="filters" aria-label="Filter setups">
+      <div class="filter-bar">
+        <label class="filter-search"><input id="filter-search" type="search" aria-label="Search setups" placeholder="Search setups, tags, descriptions…"></label>
+        <label><select id="sort-order" aria-label="Sort setups"><option value="category">Sort: category</option><option value="newest">Modified: newest first</option><option value="oldest">Modified: oldest first</option></select></label>
+        <span id="count" role="status" aria-live="polite"></span>
+      </div>
+    </form>
+    <div class="layout"><section id="setups" aria-label="Setup collection"></section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
+    </div>
+    <section id="detail" class="detail" hidden aria-label="Setup details"></section>
+    <section class="framework detail" id="framework" hidden><a class="back" href="#">← All setups</a><div class="eyebrow">Shared definitions</div><h2>The oracle framework</h2><p>Every setup uses the same definitions of an algorithm, an oracle, and convergence.</p><div id="framework-source"></div></section>
+  </main>
+  <footer><div class="shell">Source: LongTails/Setups · Descriptions summarize the specifications; the Lean source gives the full assumptions. Listing a setup does not assert a convergence result.</div></footer>
+  <script id="catalog-data" type="application/json">__CATALOG_DATA__</script>
+  <script>
+    const data = JSON.parse(document.getElementById('catalog-data').textContent);
+    const make = (tag, text, className) => {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    };
+    function descriptionView(html, compact = false) {
+      const container = make('div', undefined, 'description');
+      container.innerHTML = html;
+      for (const equation of container.querySelectorAll('math[display="block"]')) {
+        equation.tabIndex = 0;
+        equation.setAttribute('aria-label', 'Display equation');
+      }
+      const toggle = make('details', undefined, 'description-toggle');toggle.open = !compact;
+      const summary = make('summary', compact ? 'Expand description' : 'Collapse description');
+      toggle.addEventListener('toggle', () => {
+        summary.textContent = toggle.open ? 'Collapse description' : 'Expand description';
+      });
+      const section = make('div', undefined, 'description-section');
+      const title = container.querySelector('h1, h2, h3');
+      const heading = make('div', undefined, 'description-title');
+      if (title) heading.append(title);
+      section.append(heading);
+      const opening = container.querySelector('p');
+      if (opening) {
+        const preview = make('div', undefined, 'description');
+        preview.append(opening);
+        section.append(preview);
+      }
+      if (!container.children.length) return section;
+      toggle.append(summary, container);
+      section.append(toggle);
+      return section;
+    }
+    function sourceLink(path, label = path.split('/').pop(), className) {
+      const link = make('a', label, className);
+      link.href = data.repository_url + '/blob/main/' + path.split('/').map(encodeURIComponent).join('/');
+      return link;
+    }
+    function sourceView(path, source) {
+      const filename = path.split('/').pop();
+      const container = make('div');
+      const title = make('div', undefined, 'source-title');title.append(sourceLink(path));
+      container.append(title);
+      const pre = make('pre');pre.tabIndex = 0;pre.setAttribute('aria-label', filename);
+      pre.append(make('code', source));
+      container.append(pre);return container;
+    }
+    function budgetsView(setup) {
+      const section = make('section', undefined, 'budgets');
+      section.append(make('h3', 'Oracle-call bounds'));
+      if (!setup.theorems.length) section.append(make('p', 'No proved budget is currently listed for this setup.'));
+      for (const theorem of setup.theorems) {
+        const entry = make('div', undefined, 'budget');
+        const filename = theorem.module.split('.').pop() + '.lean';
+        const title = make('div', undefined, 'budget-name');
+        title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
+        if (theorem.reviewPath) title.append(' ', sourceLink(theorem.reviewPath, '(review)'));
+        entry.append(title);
+        if (theorem.formulaHtml) {
+          const formula = make('div', undefined, 'budget-formula');
+          formula.innerHTML = theorem.formulaHtml;
+          formula.tabIndex = 0;formula.setAttribute('aria-label', 'Proved budget formula');
+          entry.append(formula);
+        }
+        if (theorem.referencesHtml === '') {
+          entry.append(make('div', 'Relevant Previous Results: No matching prior reference found.', 'references-empty'));
+        } else {
+          const references = make('details');
+          references.append(make('summary', 'Relevant Previous Results'));
+          const text = make('div', undefined, 'references-text');
+          if (theorem.referencesHtml) {
+            text.innerHTML = theorem.referencesHtml;
+            for (const link of text.querySelectorAll('a')) {
+              if (!/^https?:\/\//i.test(link.getAttribute('href') || '')) link.removeAttribute('href');
+            }
+          } else {
+            text.textContent = 'References have not been researched yet.';
+          }
+          references.append(text);entry.append(references);
+        }
+        section.append(entry);
+      }
+      if (setup.comparisonHtml) {
+        const comparison = make('details', undefined, 'comparison');
+        comparison.append(make('summary', 'Table'));
+        const content = make('div', undefined, 'comparison-scroll');
+        content.tabIndex = 0;content.setAttribute('role', 'region');
+        content.setAttribute('aria-label', 'Comparison table and references');
+        comparison.addEventListener('toggle', () => {
+          if (comparison.open && !content.hasChildNodes()) content.innerHTML = setup.comparisonHtml;
+        });
+        content.addEventListener('click', event => {
+          const link = event.target.closest('a[href^="#"]');
+          if (!link) return;
+          event.preventDefault();
+          const target = content.querySelector('#' + CSS.escape(link.getAttribute('href').slice(1)));
+          if (target) target.scrollIntoView();
+        });
+        comparison.append(content);section.append(comparison);
+      }
+      return section;
+    }
+    function catalogLabel(value) {
+      return ({pl: 'PL', classical: 'Classical', non_standard: 'Non-standard',
+        needs_review: 'Needs review', exported_theorem: 'Yes',
+        missing_theorem: 'No', match: 'Matching prior result',
+        related: 'Related prior result', unresolved_comparison: 'No qualifying prior result verified',
+        not_assessed: 'Not assessed'}[value] || String(value || 'Unknown').replaceAll('_', ' '));
+    }
+    function metadataView(setup) {
+      const row = make('div', undefined, 'metadata');
+      row.setAttribute('aria-label', 'Last modified');
+      if (setup.modifiedAt) {
+        const date = new Date(setup.modifiedAt);
+        const time = make('time', 'Modified: ' + date.toLocaleDateString());
+        time.dateTime = setup.modifiedAt;time.title = date.toLocaleString();row.append(time);
+      }
+      return row;
+    }
+
+    const cards = data.setups.map((setup, i) => {
+      setup.descriptionText = new DOMParser().parseFromString(setup.descriptionHtml || '', 'text/html').body.textContent;
+      const card = make('article');card.id = setup.id;
+      const body = make('div', undefined, 'card-body');
+      const top = make('div', undefined, 'card-top');
+      top.append(make('span', String(i + 1).padStart(2, '0'), 'number'));
+      const heading = make('h2');
+      const titleLink = sourceLink('LongTails/Setups/' + setup.filename, setup.title, 'title-link');
+      heading.append(titleLink);
+      if (setup.stale) heading.append(' [stale]');
+      top.append(heading);body.append(top, descriptionView(setup.descriptionHtml, true));
+      body.append(metadataView(setup), budgetsView(setup));
+      card.append(body);
+      document.getElementById('setups').append(card);
+      return {setup, card};
+    });
+    document.getElementById('framework-source').append(sourceView('LongTails/Template.lean', data.template));
+    function catalogValues(setup, key) {
+      const value = setup.catalog?.[key];
+      if (Array.isArray(value)) return value.map(item => item.label);
+      const status = key === 'setup_category' ? value?.label : value?.status;
+      return status ? [status] : [];
+    }
+    function matchesSearch(setup, query) {
+      const keywords = [setup.title || '', setup.filename || '', setup.descriptionText || '', ...Object.entries(setup.catalog || {}).flatMap(([key, value]) =>
+        Array.isArray(value) ? value.flatMap(item => [item.label, catalogLabel(item.label), item.details]) :
+          catalogValues(setup, key).flatMap(value => [value, catalogLabel(value)]))]
+        .join(' ').replace(/[_-]/g, ' ').toLowerCase();
+      return query.replace(/[_-]/g, ' ').trim().toLowerCase().split(/\s+/).every(word => keywords.includes(word));
+    }
+    function compareSetups(a, b, order) {
+      if (order === 'newest' || order === 'oldest') {
+        const dateA = Date.parse(a.modifiedAt), dateB = Date.parse(b.modifiedAt);
+        if (Number.isFinite(dateA) !== Number.isFinite(dateB)) return Number.isFinite(dateA) ? -1 : 1;
+        const difference = order === 'newest' ? dateB - dateA : dateA - dateB;
+        if (difference) return difference;
+      } else {
+        const categories = ['classical', 'non_standard', 'needs_review'];
+        const rank = setup => {const i = categories.indexOf(setup.catalog?.setup_category?.label);return i < 0 ? 3 : i;};
+        const difference = rank(a) - rank(b);
+        if (difference) return difference;
+      }
+      return a.title.localeCompare(b.title);
+    }
+    function applyFilters() {
+      let visible = 0;
+      const query = document.getElementById('filter-search').value;
+      const order = document.getElementById('sort-order').value;
+      const sorted = [...cards].sort((a, b) => compareSetups(a.setup, b.setup, order));
+      for (const {setup, card} of sorted) {
+        document.getElementById('setups').append(card);
+        card.hidden = !matchesSearch(setup, query);
+        if (!card.hidden) visible++;
+      }
+      document.getElementById('count').textContent = `${visible} of ${data.setups.length} setups`;
+      document.getElementById('empty-results').hidden = visible > 0;
+    }
+    const filters = document.getElementById('filters');
+    filters.addEventListener('input', applyFilters);
+    filters.addEventListener('submit', event => event.preventDefault());
+    applyFilters();
+    function route() {
+      const [id, section] = location.hash.slice(1).split('/');
+      const setup = data.setups.find(s => s.id === id);
+      const detail = document.getElementById('detail');detail.replaceChildren();
+      document.getElementById('catalog').hidden = Boolean(setup) || id === 'framework';
+      document.getElementById('framework').hidden = id !== 'framework';
+      detail.hidden = !setup;
+      if (setup) {
+        const back = make('a', '← All setups', 'back');back.href = '#';
+        const article = make('article');const body = make('div', undefined, 'card-body');
+        const top = make('div', undefined, 'card-top');
+        const heading = make('h1');heading.append(sourceLink('LongTails/Setups/' + setup.filename, setup.title, 'title-link'));
+        if (setup.stale) heading.append(' [stale]');
+        top.append(heading);
+        body.append(top, descriptionView(setup.descriptionHtml), metadataView(setup), budgetsView(setup));
+        body.append(make('h2', 'Lean specification', 'source-heading'), sourceLink('LongTails/Setups/' + setup.filename, 'LongTails/Setups/' + setup.filename, 'path'));
+        article.append(body, sourceView('LongTails/Setups/' + setup.filename, setup.source));detail.append(back, article);
+      }
+      document.title = data.project_name;
+      if (setup?.comparisonHtml && section === 'comparison') {
+        const comparison = detail.querySelector('.comparison');
+        comparison.open = true;comparison.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+    window.addEventListener('hashchange', route);route();
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Optimization with Heavy-Tailed Markov Gradients}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$, with Lipschitz continuous gradient and a global minimizer $x^\star$ within a prescribed distance of an initial point $x^0\in E$. Each oracle call returns a stochastic gradient driven by a stationary Markov chain with averaged polynomial total-variation mixing. The oracle is unbiased under the stationary law, with a uniformly bounded centered moment of prescribed order in $(1,2]$. Given $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+
+The optimization problem is
+\begin{equation}
+\label{eq:problem}
+\min_{x\in E} f(x),
+\end{equation}
+where the norm on $E$ is induced by its inner product. The public inputs are $E$, a measurable sample space $\Omega$, the initial point $x^0$, and the parameters
+\begin{equation}
+\begin{aligned}
+L&>0, & R&\geq 0, & \sigma&\geq 0,\\
+1<\alpha&\leq 2, & \tau&>0, & \beta&>0, & \varepsilon&>0.
+\end{aligned}
+\end{equation}
+The admissible objectives and oracle access satisfy the following conditions.
+
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is differentiable everywhere on $E$, and, for every $x,y\in E$ and $s\in[0,1]$,
+\begin{align}
+f((1-s)x+sy)&\leq (1-s)f(x)+sf(y),\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Attainment and initial distance]
+There exists $x^\star\in E$ such that
+\begin{align}
+f(x^\star)&\leq f(x) \qquad \text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Stationary Markov sampling and mixing]
+Let $\mathcal{F}$ be the sigma-algebra on $\Omega$. There exist a Markov transition kernel $\kappa$ on $\Omega$ and a probability measure $\pi$ such that the oracle samples form a Markov chain $(Z_k)_{k\geq 0}$ with initial law $\pi$ and transition kernel $\kappa$. The measure $\pi$ is invariant:
+\begin{equation}
+\int_\Omega \kappa(z,A)\,\pi(dz)=\pi(A)
+\qquad (A\in\mathcal{F}).
+\end{equation}
+For each integer $t\geq 0$, define
+\begin{equation}
+\begin{aligned}
+d_t(z)&=\sup_{A\in\mathcal{F}}
+\bigl|\kappa^t(z,A)-\pi(A)\bigr|,\\
+\kappa^0(z,\cdot)&=\delta_z.
+\end{aligned}
+\end{equation}
+Thus total variation uses the supremum over measurable sets convention. Each $d_t$ is integrable under $\pi$, and
+\begin{equation}
+\int_\Omega d_t(z)\,\pi(dz)
+\leq \left(1+\frac{t}{\tau}\right)^{-\beta}
+\qquad (t\geq 0).
+\end{equation}
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients and heavy-tailed noise]
+There exists a jointly measurable map $g:E\times\Omega\to E$. At call $k$, a query $x\in E$ returns the vector $g(x,Z_k)$. For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\pi$, the function $\|g(x,\cdot)-\nabla f(x)\|^\alpha$ is integrable under $\pi$, and
+\begin{align}
+\int_\Omega g(x,z)\,\pi(dz)&=\nabla f(x),\\
+\int_\Omega \|g(x,z)-\nabla f(x)\|^\alpha\,\pi(dz)
+&\leq \sigma^\alpha.
+\end{align}
+These identities concern the stationary law at fixed query points; they do not assert conditional unbiasedness at adaptive queries.
+\end{assumption}
+
+The objective is accessed through this oracle, with queries chosen adaptively anywhere in $E$. Each returned vector costs one oracle call and uses the next chain sample; discarded replies also count toward the budget. Any internal algorithm randomness is independent of the entire oracle chain. The algorithm is selected using only the public inputs specified above; $f$, $g$, $\kappa$, and $\pi$ are not supplied as additional inputs. A call budget $K\in\mathbb{N}$ may depend on the full public parameter tuple.
+
+After $K$ calls, the algorithm returns a measurable point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, success requires that $\omega\mapsto f(\bar{x}(\omega))-f(x^\star)$ be integrable under $\mathbb{P}$ and that
+\begin{equation}
+\label{eq:accuracy}
+\int \bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)\,\mathbb{P}(d\omega)
+\leq \varepsilon.
+\end{equation}
+All global minimizers have the same objective value, so the minimizer witnessing the initial distance bound may be used in \eqref{eq:accuracy}.
+\end{document}

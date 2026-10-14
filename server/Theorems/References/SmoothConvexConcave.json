@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.SmoothConvexConcave",
+  "searched_at": "2026-10-04T17:51:42.990577+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\max\\left\\{ 1, \\left\\lceil \\frac{2 \\cdot L \\cdot D^{2}}{\\varepsilon} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.SmoothConvexConcave.spec.Params → ℕ",
+        "value": "fun q => 2 * max 1 ⌈2 * q.L * q.D ^ 2 / q.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\max\\left\\{ 1, \\left\\lceil \\frac{2 \\cdot L \\cdot D^{2}}{\\varepsilon} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.SmoothConvexConcave.spec.Params → ℕ",
+          "value": "fun q => 2 * max 1 ⌈2 * q.L * q.D ^ 2 / q.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SmoothConvexConcave",
+      "namespace": "LongTails.Setups.SmoothConvexConcave",
+      "setup": "LongTails.Setups.SmoothConvexConcave",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothConvexConcave.spec OracleTemplate.SaddlePoint.budget",
+      "theorem": "OracleTemplate.SaddlePoint.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SmoothConvexConcave",
+      "theorem": "OracleTemplate.SaddlePoint.result",
+      "references": "- Arkadi Nemirovski. [Prox-Method with Rate of Convergence O(1/t) for Variational Inequalities with Lipschitz Continuous Monotone Operators and Smooth Convex-Concave Saddle Point Problems](https://www2.isye.gatech.edu/~nemirovs/SIOPT_MP_2004.pdf). 2004. Complexity: $O(1+LD^2/\\varepsilon)$ exact saddle-gradient oracle calls; Mirror-Prox, two calls per iteration, deterministic saddle gap at most $\\varepsilon$.\n- Axel Böhm, Michael Sedlmayer, Ernö Robert Csetnek, Radu Ioan Boţ. [Two Steps at a Time—Taking GAN Training in Stride with Tseng’s Method](https://arxiv.org/pdf/2006.09033v1). 2020 preprint, version 1; published 2022. Complexity: $O(1+LD^2/\\varepsilon)$ exact saddle-gradient oracle calls for deterministic saddle gap at most $\\varepsilon$; forward-backward-forward uses two calls per iteration, and its past-gradient variant uses one per iteration plus one initialization call.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "saddle_point",
+        "details": "Minimize in x and maximize in y a differentiable convex-concave function φ over X×Y; no strong convexity or strong concavity is assumed.",
+        "evidence": "LongTails/Setups/SmoothConvexConcave.lean: spec.admissible, gap"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query z=(x,y) returns (∇xφ(x,y),−∇yφ(x,y)) exactly. Gradient uniqueness removes dependence on call index and oracle seed; no function values are supplied.",
+        "evidence": "LongTails/Setups/SmoothConvexConcave.lean: spec.Query, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E and F are complete real inner-product spaces, with no finite-dimensional restriction. X and Y are nonempty compact convex sets; the product-domain diameter is at most D≥0. The saddle-gradient map is globally L-Lipschitz, with L>0. All parameters, spaces and constraint sets are public; φ is the hidden instance. The target ε>0 is public. Only oracle calls are budgeted, with fixed cost O(1+LD²/ε); other operations are unrestricted.",
+        "evidence": "LongTails/Setups/SmoothConvexConcave.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.valid, spec.admissible; LongTails/Template.lean: Setup.allowedAlgorithm, Convergence; supplied OracleTemplate.SaddlePoint.result budget"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "saddle_point_gap",
+        "details": "The measurable output z satisfies E[sup(y∈Y)φ(z.1,y)−inf(x∈X)φ(x,z.2)]≤ε, and this gap is integrable. No last-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/SmoothConvexConcave.lean: gap, spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "The gap bound is in expectation under the joint algorithm and oracle seed law; deterministic accuracy is not required.",
+        "evidence": "LongTails/Setups/SmoothConvexConcave.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The output belongs to X×Y almost surely; this probability guarantee applies to feasibility.",
+        "evidence": "LongTails/Setups/SmoothConvexConcave.lean: spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the standard smooth convex-concave constrained saddle-point formulation with an exact Lipschitz first-order oracle and expected primal-dual gap accuracy, stated in real Hilbert spaces."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SaddlePoint.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SmoothConvexConcave",
+          "theorem": "OracleTemplate.SaddlePoint.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

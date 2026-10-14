@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.BoundedScalarConvex",
+  "searched_at": "2026-10-04T15:39:54.276646+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{25 \\cdot H^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.BoundedScalarConvex.spec.Params → ℕ",
+        "value": "fun q => max 1 ⌈25 * q.H ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{25 \\cdot H^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.BoundedScalarConvex.spec.Params → ℕ",
+          "value": "fun q => max 1 ⌈25 * q.H ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.BoundedScalarConvex",
+      "namespace": "LongTails.Setups.BoundedScalarConvex",
+      "setup": "LongTails.Setups.BoundedScalarConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BoundedScalarConvex.spec OracleTemplate.BoundedScalarConvex.budget",
+      "theorem": "OracleTemplate.BoundedScalarConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BoundedScalarConvex",
+      "theorem": "OracleTemplate.BoundedScalarConvex.result",
+      "references": "- Angelia Nedić and Soomin Lee. [On Stochastic Subgradient Mirror-Descent Algorithm with Weighted Averaging](https://arxiv.org/pdf/1307.1879v1). 2014; consulted 2013 preprint v1. Complexity: $O(1+D^2(C^2+\\nu^2)/\\varepsilon^2)$ fixed stochastic subgradient calls for expected objective gap $\\le\\varepsilon$, using Euclidean mirror descent with weighted averaging. Here $D$ is the feasible-set diameter, $C$ bounds mean subgradients, and $\\nu^2$ bounds conditional error second moments; on $[\\mathrm{lower},\\mathrm{upper}]\\cap[x_0-R,x_0+R]$, $D\\le2R$ and $C,\\nu\\le H$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a convex, H-Lipschitz function on the nonempty closed interval [lower, upper] in ℝ. A minimizer xstar exists with |x0−xstar|≤R. No differentiability or strong convexity is required.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A stochastic subgradient oracle returns a scalar G_n at an adapted feasible query x_n. Almost surely |G_n|≤H, and E[G_n | past_n] supports f throughout the feasible interval. Function values and exact subgradients are not supplied.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: IsBoundedSubgradientOracle; spec.Query and spec.Reply."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The almost-sure reply bound implies E[G_n² | past_n]≤H² and E[(G_n−E[G_n | past_n])² | past_n]≤H².",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: IsBoundedSubgradientOracle, absolute reply bound."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The decision space is one-dimensional Euclidean space ℝ, with absolute-value distance.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: spec.Query, spec.Output, and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The joint seed law may have arbitrary temporal dependence; neither independence nor mixing is assumed. Conditional subgradient validity is required for every past-measurable feasible query. All parameters lower, upper, H>0, R≥0, ε>0, and feasible x0 are public; f and the oracle law are hidden.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: past, IsBoundedSubgradientOracle, Params, spec.Public, spec.publicInput, and spec.valid; LongTails/Template.lean: Oracle.law."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output has an integrable objective gap f(output)−f(xstar), whose expectation is at most ε for an interval minimizer xstar.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output must be measurable and belong to [lower, upper] for every realization.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee averages over algorithm randomness and the joint oracle seed law. Oracle cost is bounded by the fixed extracted budget max(1, ceil(25H²R²/ε²)) on every execution.",
+        "evidence": "LongTails/Setups/BoundedScalarConvex.lean: spec.successful; LongTails/Template.lean: Convergence and execute; supplied result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Constrained Lipschitz convex minimization with bounded stochastic subgradient replies, conditional subgradient validity, and expected objective-gap accuracy is a standard stochastic approximation formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.BoundedScalarConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BoundedScalarConvex",
+          "theorem": "OracleTemplate.BoundedScalarConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

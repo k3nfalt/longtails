@@ -1,0 +1,46 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Exact Derivatives}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ on a real Banach space $E$. Its Fr\'echet derivative $Df(x)\in E^*$, where $E^*$ is the continuous dual with its operator norm, is $L$-Lipschitz for $L>0$. A given point $x^0\in E$ satisfies $f(x^0)-\ell\leq\Delta$ for a global lower bound $\ell\in\mathbb{R}$ and $\Delta\geq0$. Each oracle call returns the exact derivative. Given $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable squared derivative norm satisfying $\mathbb{E}\|Df(\bar{x})\|_{E^*}^2\leq\varepsilon^2$, where expectation is over all algorithm and oracle randomness.
+
+The underlying optimization problem is
+\begin{equation}
+\label{eq:problem}
+\inf_{x\in E} f(x).
+\end{equation}
+The space $E$ is equipped with a measurable structure for defining random outputs. The admissible objectives and oracle access satisfy the following conditions.
+
+\begin{assumption}[Fr\'echet differentiability and smoothness]
+The function $f$ is Fr\'echet differentiable at every point of $E$, and its derivative satisfies
+\begin{equation}
+\|Df(x)-Df(y)\|_{E^*}\leq L\|x-y\|_E
+\qquad \text{for all }x,y\in E.
+\end{equation}
+\end{assumption}
+
+\begin{assumption}[Lower bound and initial gap]
+There exists $\ell\in\mathbb{R}$ such that
+\begin{align}
+\ell &\leq f(x) \qquad \text{for every }x\in E,\\
+f(x^0)-\ell &\leq\Delta.
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Exact-derivative access]
+At every call index and every query point $x\in E$, the oracle returns the continuous linear functional $Df(x):E\to\mathbb{R}$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, with adaptive queries permitted anywhere in $E$. The full parameter tuple $(E,L,\Delta,\varepsilon,x^0)$ is public and may be used to select the algorithm. An externally specified call budget $K\in\mathbb{N}$ may depend on this same tuple.
+
+After $K$ calls, the algorithm returns $\bar{x}:\Omega\to E$, where $(\Omega,\mathbb{P})$ carries the joint probability law of algorithm and oracle randomness. Success requires $\bar{x}$ to be measurable, the map $\omega\mapsto\|Df(\bar{x}(\omega))\|_{E^*}^2$ to be integrable with respect to $\mathbb{P}$, and
+\begin{equation}
+\label{eq:accuracy}
+\int_{\Omega}\|Df(\bar{x}(\omega))\|_{E^*}^2\,d\mathbb{P}(\omega)
+\leq\varepsilon^2.
+\end{equation}
+\end{document}

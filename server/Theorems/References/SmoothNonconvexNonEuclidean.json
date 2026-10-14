@@ -1,0 +1,56 @@
+{
+  "setup": "LongTails.Setups.SmoothNonconvexNonEuclidean",
+  "searched_at": "2026-10-04T17:49:30.804316+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [],
+  "results": [],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained optimization of an everywhere Fréchet differentiable function f:E→ℝ; convexity is not required. The derivative satisfies ‖Df(x)−Df(y)‖≤L‖x−y‖. There exists a global lower bound lower with f(x0)−lower≤Δ. All parameters, including E, L>0, Δ≥0, ε>0, and x0, are public; f is the instance.",
+        "evidence": "LongTails/Setups/SmoothNonconvexNonEuclidean.lean: Params; spec.Public, publicInput, Instance, valid, admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns the exact Fréchet derivative Df(x), a continuous linear functional E→ℝ. Exactness holds for every call index and seed by uniqueness of the derivative. No function values or oracle errors are supplied.",
+        "evidence": "LongTails/Setups/SmoothNonconvexNonEuclidean.lean: spec.Query, Reply, and first two conjuncts of admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "non_euclidean_geometry",
+        "details": "E is an arbitrary complete real normed space with a measurable-space structure, potentially infinite dimensional. No inner product or additional geometric assumption is imposed. Smoothness and stationarity use the operator norm on the dual space E*.",
+        "evidence": "LongTails/Setups/SmoothNonconvexNonEuclidean.lean: Params.normedE, linearE, completeE, measurableE; spec.Reply, admissible, successful."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The output X takes values in E and must satisfy E[‖Df(X)‖²]≤ε², using the continuous-linear-functional operator norm. X must be measurable and its squared derivative norm integrable.",
+        "evidence": "LongTails/Setups/SmoothNonconvexNonEuclidean.lean: spec.Output and successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is an expectation under the supplied probability measure P. In Convergence, P is the product of the algorithm and oracle seed laws; no deterministic or almost-sure accuracy guarantee is required.",
+        "evidence": "LongTails/Setups/SmoothNonconvexNonEuclidean.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation requires smooth nonconvex stationarity over arbitrary real Banach spaces, with dual-valued derivative access and no additional geometry. This generality extends beyond the usual Euclidean or Hilbert-space benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "missing_theorem",
+      "theorems": [],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "not_assessed",
+      "results": []
+    }
+  }
+}

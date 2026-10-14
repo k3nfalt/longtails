@@ -1,0 +1,37 @@
+# Novelty assessment: accelerated high-probability SGD under gap-dependent curvature and strong growth
+
+[`GapStrongGrowth.result`](../../LongTails/Theorems/GapSmoothStrongGrowthHighProbability.lean) ([setup](../../LongTails/Setups/GapSmoothStrongGrowth.lean), [algorithm](../../LongTails/Algorithms/GapStrongGrowthAccelerated.lean)) proves the following. Take a convex differentiable f on a separable Hilbert space with a minimizer x⋆ such that f(y) ≤ f(x)+⟨∇f(x),y−x⟩+(H₀+H₁F(x))‖y−x‖² whenever (2√3+√6)√H₁‖y−x‖ ≤ 1, where F = f−f⋆. Suppose an IID, unbiased oracle satisfies E‖g−∇f‖² ≤ (ρ−1)‖∇f‖². Then a single run of a batched, clipped accelerated method with no restarts, projections or function values returns a **last iterate** x_N with P(F(x_N) > ε) ≤ δ.
+
+**Proved budget** (from `budget`; R ≥ ‖x₀−x⋆‖, Δ ≥ F(x₀), 0 < ε ≤ Δ, 0 < δ < 1, ρ ≥ 1, H₀,H₁ ≥ 0):
+
+  K = O( ⌈ρ⌉ · log(e/δ) · [ (1+R√H₁)·log(1+Δ/ε) + R√(H₀/ε) ] ) gradient-sample calls.
+
+In the code, ⌈ρ⌉ is the batch size and the constant is 2²⁷.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Lobanov–Dvinskikh–Gasnikov, [arXiv:2609.33415v1](https://arxiv.org/abs/2609.33415) (Sep 27 2026, preprint, prior), Thm 9, specialized to p=2, σ₀=σ₂=0, σ₁²=ρ−1, Q=B(x₀,R) so D ≤ 2R (projection is closed-form) | Õ_δ[S + R(√(H₀/ε)+√H₁J_H) + (ρ−1)R²(H₀/ε+H₁J_H)] → O(⌈ρ⌉log(e/δ)[(1+R√H₁)log(1+Δ/ε)+R√(H₀/ε)]); S=⌈log₂(Δ/ε)⌉, J_H=min{S,⌈log₂⁺(H₁Δ/H₀)⌉} | Noise term ε⁻¹ → ε⁻¹ᐟ²: a speedup of order (ρ−1)R√(H₀/ε)/(ρ log(e/δ)) when R√(H₀/ε) ≫ ρlog(e/δ)/(ρ−1), up to Thm 9's hidden logs. Also (ρ−1)R²H₁J_H → ρR√H₁ log(Δ/ε)log(e/δ) when R√H₁ ≫ log(Δ/ε)log(e/δ)/J_H | None: the same smoothness model (identical r_H). Thm 9's noise model is broader. | None: both return a final iterate with high probability and no function values | Only pure strong growth with IID samples and p=2. Thm 9 also covers additive σ₀, gap noise σ₂, heavy tails p<2 and martingale noise. When ρ−1 ≲ 1/(R√(H₀/ε)), the result is worse by a log(1/δ) factor and by log(Δ/ε) versus J_H on the H₁ term. |
+| Dvinskikh–Gasnikov–Lobanov–Latypov, [arXiv:2609.06555v1](https://arxiv.org/abs/2609.06555) (Sep 6 2026, preprint, prior), App. I, Thm 7 (convex, strong growth) | Õ(ρ(1+3L₁R̄) + ρ(1+L₀R̄²/ε)³) → the bound above with H₀≍L₀ and H₁≍L₁² (the note’s mapping via their Lemma 6; consistent with the standard convex (L₀,L₁) gradient bound, but not re-derived here) | ε⁻³ → ε⁻¹ᐟ² in the accuracy term | Almost-sure SGC ‖∇f_ξ‖² ≤ ρ‖∇f‖² with each f_ξ convex and (L₀,L₁)-smooth → second-moment SGC with no samplewise regularity. Remark 14 there leaves this case open. | None | That theorem uses the component-gradient oracle. Under its stronger hypotheses, the classes are nested. |
+| H₁=0 special case only (L=2H₀): Vaswani–Bach–Schmidt, [AISTATS 2019](http://proceedings.mlr.press/v89/vaswani19a/vaswani19a.pdf), Thm 2. A high-probability conversion uses AGNES ([Gupta–Wojtowytsch, arXiv:2410.08395v3](https://arxiv.org/abs/2410.08395), Thm 15) inside proxBoost ([Davis–Drusvyatskiy, COLT 2020](https://proceedings.mlr.press/v125/davis20a.html)) | Expected: ρR√(L/ε). Via Markov: ρR√(L/(εδ)). Via proxBoost (note's derivation; structure checked, constants not): O(ρR√(L/ε)·log(LR²/ε)·log(log(LR²/ε)/δ)) → O(ρ log(e/δ) R√(L/ε)) | Versus Markov: a factor √(1/δ)/log(e/δ). Versus proxBoost: only a log(LR²/ε) factor, which is not a rate change. | None: same class | Expected → high probability is not new, given proxBoost | The selected result needs batch ⌈ρ⌉; the comparison is otherwise the same |
+
+**Reductions and mechanism.** Batching Thm 9's oracle does not help: it divides σ₁² by b and multiplies the calls by b. Its own gap-noise route gives σ₂² ≍ (ρ−1)H₀ under the model, which still costs (ρ−1)R²H₀/ε. Thm 9's text says that the optimal σ₁ dependence "remains open". I found no reduction that yields the ε⁻¹ᐟ² noise term when H₁>0. The note's example f = e^{ax₁}−ax₁−1+(x₁+x₂)²/R² shows that substituting a ball-smoothness constant into AGNES and proxBoost loses e^{aR/2}; I did not re-verify the constants. Proof ancestry: Nesterov estimate sequences, the clipping bias and exponential-supermartingale arguments of [Nguyen et al., NeurIPS 2023](https://papers.nips.cc/paper_files/paper/2023/file/4c454d34f3a4c8d6b4ca85a918e5d7ba-Paper-Conference.pdf), and stopped-energy localization. The new step is keeping a gradient-squared negative drift that absorbs both the multiplicative noise and the exponential correction inside the gap-curvature region. [Mishkin et al., arXiv:2404.02378v2](https://arxiv.org/abs/2404.02378) claims √ρ dependence, but it carries an authors' "significant theoretical bug" warning. The thinning argument in 2609.33415 (Lemma 16) also indicates that linear ρ dependence is necessary, so I use it nowhere. Within the repository, the (L₀,L₁) theorems (e.g. [FiniteVarianceGeneralizedAcceleratedConvex](../../LongTails/Theorems/FiniteVarianceGeneralizedAcceleratedConvex.lean)) assume uniform additive variance, a noise class incomparable with this one, and no other repository theorem treats strong growth.
+
+**Search coverage.** On 2026-10-07 UTC I searched arXiv and the AISTATS, COLT and NeurIPS proceedings. I read the theorem statements of 2609.33415 (Thm 9, Thm 15, Lemma 16), 2609.06555 (App. I: Assumption 7, Thm 7, Remark 14), VBS 2019 (Thm 2), the Mishkin et al. version history, and Gupta–Wojtowytsch Thm 15. I did not verify the proxBoost composition constants or the NeurIPS 2026 abstracts listed in the note. The result was introduced in commit 769d38e on 2026-10-05, after both September preprints. The companion note's description of these sources matches what I read. The note does not claim the H₁=0 rate is new, and that disclaimer is correct.
+
+## Conclusion
+
+**Yes: for pure strong-growth noise with H₁>0, the proved complexity is polynomially better than every checked prior guarantee.**
+
+The strongest direct competitor is Theorem 9 of Lobanov–Dvinskikh–Gasnikov (September 2026). It covers the same gap-curvature class with a broader noise model, but its multiplicative-noise term is not accelerated:
+
+| | calls (high probability, up to logs) |
+|---|---|
+| 2609.33415, Thm 9 | R√(H₀/ε) + R√H₁·J_H + (ρ−1)R²(H₀/ε + H₁J_H) |
+| this result | ρ·log(1/δ)·[(1+R√H₁)log(Δ/ε) + R√(H₀/ε)] |
+
+The gain holds whenever R√(H₀/ε) ≫ ρlog(1/δ)/(ρ−1), for example at fixed ρ = 2 and small ε. It loses only near-deterministic oracles (ρ−1 ≲ 1/(R√(H₀/ε))) and anything with additive or heavy-tailed noise, which it does not cover. It also replaces the almost-sure, componentwise strong growth required by the ε⁻³ bound of Dvinskikh et al. with second moments only.
+
+This comparison establishes a gain over the checked baselines. It does not establish literature priority, because the field is moving fast and a few announced papers could not be read. For H₁=0 the rate is classical (Vaswani–Bach–Schmidt, plus proxBoost for confidence), so the contribution is specific to gap-dependent curvature. No lower bound shows the ρ·log(1/δ) multiplicative form is optimal. What can be claimed: the first checked accelerated, log-confidence, last-iterate guarantee for (H₀,H₁) gap-smooth convex objectives under second-moment strong growth, improving the stochastic term from ε⁻¹ to ε⁻¹ᐟ².
+
+**Verdict: SUBSTANTIVE NOVELTY SUPPORTED**
+**Confidence: medium**

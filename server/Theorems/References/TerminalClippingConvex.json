@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.TerminalClippingConvex",
+  "searched_at": "2026-10-08T07:44:35.359839+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot T",
+        "type": "LongTails.Setups.TerminalClippingConvex.spec.Params → ℕ",
+        "value": "fun p => 2 * p.T"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot T",
+          "type": "LongTails.Setups.TerminalClippingConvex.spec.Params → ℕ",
+          "value": "fun p => 2 * p.T"
+        }
+      ],
+      "module": "LongTails.Theorems.ClippedBgLastIterate",
+      "namespace": "LongTails.Setups.TerminalClippingConvex",
+      "setup": "LongTails.Setups.TerminalClippingConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.TerminalClippingConvex.spec OracleTemplate.TerminalClipping.budget",
+      "theorem": "OracleTemplate.TerminalClipping.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ClippedBgLastIterate",
+      "theorem": "OracleTemplate.TerminalClipping.result",
+      "references": "- Justin Domke, Guillaume Garrigos, and Robert Gower. [Provable convergence guarantees for black-box variational inference](https://papers.nips.cc/paper/2023/file/d0bcff6425bbf850ec87d5327a965db9-Paper-Conference.pdf). 2023. Complexity: $O(1+(BR^2+G^2/B)^2/\\varepsilon^2)$ stochastic-gradient and projection calls, with a fixed budget, for $\\mathbb E[f(\\bar x)-f^*]\\le\\varepsilon$ using weighted-average projected SGD.\n- Ahmet Alacaoglu, Yura Malitsky, and Stephen J. Wright. [Towards Weaker Variance Assumptions for Stochastic Optimization](https://arxiv.org/html/2504.09951v2). 2025 preprint; version 2, July 2026. Complexity: $O(1+(BR^2+G^2/B)^2/\\varepsilon^2)$ stochastic-subgradient and projection calls, with a fixed budget, for $\\mathbb E[f(\\bar x)-f^*]\\le\\varepsilon$ using projected Halpern iteration with weighted averaging.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a measurable convex function on a nonempty closed convex domain C in Euclidean space. A minimizer x* exists with ||x0-x*||≤R. Neither differentiability, smoothness, strong convexity, nor boundedness of C is required.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Stochastic subgradient oracle g(x,ξ): its mean satisfies f(x)-f(y)≤⟨E[g(x,ξ)],x-y⟩ for every x,y∈C. Oracle seeds are IID; individual replies need not be subgradients.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: Query.subgradient and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "proximal",
+        "details": "Exact Euclidean projection onto C, equivalently the proximal operator of its indicator. Each projection query counts as one oracle call, as does each stochastic subgradient query.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: Query.projection and spec.admissible projection inequalities; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Only finite second moments are imposed: E||g(x,ξ)||²≤B²||x-x0||²+G² for x∈C. Heavy-tailed replies are permitted; no exponential-tail or uniform variance bound is assumed.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: spec.admissible integrability and second-moment conditions."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Ambient space is R^d with its Euclidean inner product and norm; d is public.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: Vector and Public.d."
+      },
+      {
+        "label": "other",
+        "details": "The second-moment growth is anchored at x0. Public information is d,x0,B,G,δ,T; R,ε and the sample space are hidden. B,G>0, R≥0, ε>0, 0<δ<1, T≥1, and [2^20(BR²+G²/B)log(8/δ)]²≤Tε².",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: Public, Params, spec.publicInput, spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable output x with f(x)-f(x*)≤ε on the success event. The specification does not require a last iterate or forbid averaging.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: spec.successful; LongTails/Template.lean: Setup.allowedAlgorithm."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output must belong to C for every seed, including outcomes outside the objective-accuracy success event.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(output)-f(x*)>ε)≤δ, under the joint algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Convex stochastic optimization with projections is classical, but the anchored, distance-dependent second-moment bound, hidden solution radius, and high-probability guarantee form a meaningful variant of standard uniformly bounded-moment formulations."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.TerminalClipping.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ClippedBgLastIterate",
+          "theorem": "OracleTemplate.TerminalClipping.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

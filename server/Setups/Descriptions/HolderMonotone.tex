@@ -1,0 +1,46 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Exact-Oracle Monotone Root Finding}
+We seek a zero of a monotone operator $F:E\to E$ on a finite-dimensional real inner product space $E$. Its regularity satisfies $\|F(x)-F(y)\|\leq L\|x-y\|+H\|x-y\|^\alpha$ for all $x,y\in E$, with hidden constants $L,H\geq0$ and $\alpha\in(0,1]$. A given point $x^0\in E$ lies within a hidden radius $R$ of a zero $x^\star$. The algorithm receives only $E$, $x^0$, a scale $r_0$ with $0<r_0\leq R$, and an accuracy $\varepsilon>0$. Each oracle call returns the exact vector $F(x)$. The required output $\bar{x}\in E$ satisfies $\|F(\bar{x})\|\leq\varepsilon$ almost surely.
+
+The root-finding problem is
+\[
+\text{find }x\in E\text{ such that }F(x)=0,
+\]
+where the norm is induced by the inner product on $E$. The admissible operators and oracle access satisfy the following conditions.
+
+\begin{assumption}[Monotonicity and mixed regularity]
+For every $x,y\in E$,
+\begin{align*}
+\langle F(x)-F(y),x-y\rangle &\geq 0,\\
+\|F(x)-F(y)\| &\leq L\|x-y\|+H\|x-y\|^\alpha.
+\end{align*}
+The regularity parameters satisfy $L,H\geq0$ and $0<\alpha\leq1$.
+\end{assumption}
+
+\begin{assumption}[Zero and initial radius]
+There exists $x^\star\in E$ such that
+\begin{align*}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq R.
+\end{align*}
+The supplied scale and accuracy satisfy $0<r_0\leq R$ and $\varepsilon>0$.
+\end{assumption}
+
+\begin{assumption}[Exact operator access]
+At every call index and every query point $x\in E$, the oracle returns $F(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The operator is accessed through this oracle, with adaptive queries permitted anywhere in $E$. The algorithm is selected using only the public inputs $(E,x^0,r_0,\varepsilon)$; the parameters $(L,H,\alpha,R)$ are hidden. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,x^0,r_0,\varepsilon,L,H,\alpha,R)$.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required residual accuracy is
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\qquad \mathbb{P}\text{-almost surely}.
+\]
+\end{document}

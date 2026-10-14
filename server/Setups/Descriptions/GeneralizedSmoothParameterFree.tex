@@ -1,0 +1,47 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Parameter-Free Generalized Smooth Convex Optimization}
+We consider minimizing a convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is differentiable and satisfies $\|D(\nabla f)(x)\|_{\mathrm{op}}\leq L_0+L_1\|\nabla f(x)\|$ for every $x\in E$, with hidden constants $L_0>0$ and $L_1\geq0$. An initial point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for some global minimizer $x^\star$, where $R,\Delta>0$. Each oracle call returns the exact gradient. Only $E$, $x^0$, and a scalar $h_0>0$ are public. For a hidden tolerance $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under the joint randomness law.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where the norm on $E$ is induced by its inner product and $E$ may be infinite dimensional. The admissible objectives and oracle access satisfy the following conditions.
+
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is differentiable everywhere on $E$, its gradient $\nabla f:E\to E$ is Fr\'echet differentiable everywhere, and, for every $x,y\in E$ and $t\in[0,1]$,
+\begin{align*}
+f((1-t)x+ty) &\leq (1-t)f(x)+tf(y),\\
+\|D(\nabla f)(x)\|_{\mathrm{op}} &\leq L_0+L_1\|\nabla f(x)\|.
+\end{align*}
+Here $D(\nabla f)(x):E\to E$ denotes the bounded linear Fr\'echet derivative, and $\|\cdot\|_{\mathrm{op}}$ is its operator norm.
+\end{assumption}
+
+\begin{assumption}[Attainment and initialization]
+There exists a single point $x^\star\in E$ satisfying all three conditions
+\begin{align*}
+f(x^\star) &\leq f(x) \qquad \text{for every }x\in E,\\
+\|x^0-x^\star\| &\leq R,\\
+f(x^0)-f(x^\star) &\leq\Delta.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Exact-gradient access]
+At every call index and every query point $x\in E$, the oracle returns $\nabla f(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, with adaptive queries permitted anywhere in $E$. The algorithm is selected using only the public inputs $(E,x^0,h_0)$. The parameters $(L_0,L_1,R,\Delta,\varepsilon)$ are not supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,x^0,h_0,L_0,L_1,R,\Delta,\varepsilon)$.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires the existence of a global minimizer $x^\star$ such that
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\qquad \mathbb{P}\text{-almost surely}.
+\]
+Since all global minimizers have the same objective value, the minimizer witnessing the initialization conditions may also be used in this accuracy criterion.
+\end{document}

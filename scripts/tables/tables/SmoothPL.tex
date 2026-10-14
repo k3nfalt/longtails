@@ -1,0 +1,27 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth PL optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SmoothPL.lean}{Smooth\allowbreak{}PL}.}\label{tab:SmoothPL}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space $E$, $f:E\to\mathbb{R}$ is differentiable with $L$-Lipschitz gradient and a global minimizer $x_\star$. Assume $f(x_0)-f(x_\star)\le\Delta$, $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ for every $x$, $0<\mu\le L$, $\Delta\ge0$, and $\varepsilon>0$. The oracle returns exact gradients. Target: $f(x_K)-f(x_\star)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GdPL.lean}{Gd\allowbreak{}PL} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GdPL.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Gradient descent \citep[Thm.~1]{SmoothPLKarimi2020v4}\newline Stated on $\mathbb{R}^d$
+& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right)$
+& \textbf{(1)}: i) Matches known rate.\newline ii) Hilbert-space formalization; classical proof is dimension-independent.\newline iii) Deterministic first-order optimality up to constants for $L/\mu>C$, $\varepsilon\le\Delta/16$ \citep[Thms.~2--3]{SmoothPLYue2023v2}.
+& \textbf{(1)}: needs a supplied $\Delta$ for its stopping budget. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} PL: Polyak--\L{}ojasiewicz; $L$: gradient Lipschitz constant; $\mu$: PL constant; $\Delta$: initial objective-gap bound; $\varepsilon$: target gap; $x_K$: gradient-descent iterate with step $1/L$; $C$: universal constant. Costs count exact-gradient calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

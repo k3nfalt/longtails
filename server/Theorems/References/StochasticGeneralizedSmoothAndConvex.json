@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex",
+  "searched_at": "2026-10-04T17:53:29.635700+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil 16384 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\min\\left\\{ \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right), \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}} \\right\\}\\right) \\right\\rceil_{+} + \\left\\lceil \\frac{1073741824 \\cdot \\sigma^{2} \\cdot R^{2} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "type": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  if p.Δ ≤ p.ε then 0\n  else\n    2 *\n        ⌈16384 *\n            (1 + √(p.L0 * p.R ^ 2 / p.ε) +\n              min (↑⌈(p.L1 * p.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * p.Δ / p.ε))\n                (Real.log (4 + 4 * p.Δ / p.ε) + (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)))⌉₊ +\n      ⌈1073741824 * p.σ ^ 2 * p.R ^ 2 * Real.log (Real.exp 1 / p.δ) / p.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil 16384 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\min\\left\\{ \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right), \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}} \\right\\}\\right) \\right\\rceil_{+} + \\left\\lceil \\frac{1073741824 \\cdot \\sigma^{2} \\cdot R^{2} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "type": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  if p.Δ ≤ p.ε then 0\n  else\n    2 *\n        ⌈16384 *\n            (1 + √(p.L0 * p.R ^ 2 / p.ε) +\n              min (↑⌈(p.L1 * p.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * p.Δ / p.ε))\n                (Real.log (4 + 4 * p.Δ / p.ε) + (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)))⌉₊ +\n      ⌈1073741824 * p.σ ^ 2 * p.R ^ 2 * Real.log (Real.exp 1 / p.δ) / p.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticGeneralizedAcceleratedConvex",
+      "namespace": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex",
+      "setup": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticGeneralizedSmoothAndConvex.spec OracleTemplate.StochasticGeneralized.budget",
+      "theorem": "OracleTemplate.StochasticGeneralized.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticGeneralizedAcceleratedConvex",
+      "theorem": "OracleTemplate.StochasticGeneralized.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ. A minimizer x⋆ exists with ‖x0−x⋆‖≤R and f(x0)−f(x⋆)≤Δ; R,Δ>0.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using a fresh IID seed. The jointly measurable oracle is unbiased, E[g(x,ξ)]=∇f(x), with E‖g(x,ξ)−∇f(x)‖²≤σ². Only gradient samples are supplied. All setup parameters, including L0,L1,R,Δ,σ,ε,δ,x0, are public; f and the sampling laws are hidden. Cost counts every gradient sample within a fixed budget.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID, IsLightTailGradient, spec.Public, spec.publicInput and spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.IsStochasticGradient; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is differentiable everywhere and ‖D(∇f)(x)‖≤L0+L1‖∇f(x)‖ for every x, with L0>0 and L1≥0.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: spec.admissible and spec.valid."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform additive noise bound E‖g(x,ξ)−∇f(x)‖²≤σ² for every x, with σ≥0.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IsLightTailGradient and spec.valid; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance."
+      },
+      {
+        "label": "other",
+        "details": "Norm light-tail condition E exp(‖g(x,ξ)−∇f(x)‖²/σ²)≤e at every x, with integrability explicitly required. Seeds are measurable, mutually independent, and identically distributed. E is a real complete inner-product space with Borel measurable structure and second-countable topology; no finite-dimensional restriction is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IsLightTailGradient.exponential_integrable, IsLightTailGradient.exponential, IID and Params; LongTails/Setups/GeneralizedSmoothAndConvex.lean: GeneralizedAccelerated.Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output X satisfying f(X)−f(x⋆)≤ε with the specified probability, for some global minimizer x⋆; ε>0. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: spec.successful, spec.Output and spec.valid."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(X)−f(x⋆)>ε)≤δ, where 0<δ<1. Probability includes both algorithm randomization and oracle seeds; the oracle-call budget is fixed for every seed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: spec.successful and spec.valid; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This convex stochastic optimization formulation combines gradient-dependent generalized smoothness with IID norm-light-tailed additive noise and a high-probability objective-gap requirement in a potentially infinite-dimensional Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticGeneralized.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticGeneralizedAcceleratedConvex",
+          "theorem": "OracleTemplate.StochasticGeneralized.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

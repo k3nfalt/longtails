@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic convex optimization under generalized smoothness: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space with its Borel structure, differentiable gradient, and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. IID samples drive a jointly measurable, unbiased gradient oracle $g$, with $\mathbb{E}\|g(x)-\nabla f(x)\|^2\le\sigma^2$ and, for $\sigma>0$, $\mathbb{E}\exp(\|g(x)-\nabla f(x)\|^2/\sigma^2)\le e$; $\sigma=0$ denotes exact gradients. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: measurable $\widehat x$ with $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$. Costs count individual stochastic-gradient samples, including all batches.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/StochasticGeneralizedAcceleratedConvex.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&1+R\sqrt{L_0/\varepsilon} +\min\{\lceil q^{2/3}\rceil\ell,\\&\qquad\ell+(q\ell)^{2/3}\} +\sigma^2R^2\lambda/\varepsilon^2\end{aligned}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+ARC-SG \citep[Thms.~1, 3]{sgscDvinskikh2026v1}\par $E=\mathbb{R}^d$; supplied $\Delta$
+& $\mathcal{O}\!\left(\begin{aligned}&\Bigl[1+q+(1+q)^{1/2}R\sqrt{L_0/\varepsilon}\\&+(1+q)^3\sigma^2R^2/\varepsilon^2\\&+(1+q)^3\sigma^2L_1^2/L_0^2\Bigr]\operatorname{polylog} U\end{aligned}\right)$
+& i) \textbf{(1)}: removes $(1+q)^{1/2}$ optimization and $(1+q)^3$ noise factors, plus burn-in; polynomial term gains for $q\gg1$.\newline ii) \textbf{(1)}: Hilbert-space scope; no ball projections.
+& \textbf{(1)}: $\ell+(q\ell)^{2/3}$ can exceed $q$ through logarithms when $\ell^2\gtrsim q$; no uniform dominance. \\
+\midrule
+RCSAG \citep[Thm.~9]{ldg2026heavyv1}\par Contemporaneous; $E=\mathbb{R}^d$, $Q=B(x_0,R)$, $p=2$, $\sigma_0=\sigma$, $\sigma_1=\sigma_2=0$
+& Derived bound:\par $\mathcal{O}\!\left(\begin{aligned}&\bigl(\ell+R\sqrt{L_0/\varepsilon}+tJ\\&\quad+\sigma^2R^2/\varepsilon^2\bigr) \cdot[1+\log(\ell/\delta)]\end{aligned}\right)$
+& \textbf{(1)}: curvature $tJ\to\ell+(q\ell)^{2/3}$. For $\sigma=0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2/q^{4/3}$, $q\to\infty$: $q\log q\to q^{2/3}(\log q)^{2/3}$, apart from confidence/phase logarithms.
+& \textbf{(1)}: needs light tails and batching; prior allows finite $p$th moments and gradient/gap-dependent noise. Can lose logarithms when $L_1^2\Delta\lesssim L_0$, $\ell^2\gg q$. \\
+\midrule
+Clipped SGD \citep[Thm.~1]{sgscGaash2025v2}\par $E=\mathbb{R}^d$
+& $\mathcal{O}\!\left(1+(L_0R^2/\varepsilon+q^2)h+\sigma^2R^2h^3/\varepsilon^2\right)$\par Includes two samples per step.
+& i) \textbf{(1)}: $L_0R^2/\varepsilon\to R\sqrt{L_0/\varepsilon}$ when $\sigma^2\lambda\le L_0\varepsilon$; curvature $q^2\to\ell+(q\ell)^{2/3}$ when smaller.\newline ii) \textbf{(1)}: noise logarithm $h^3\to\lambda$.\newline iii) \textbf{(1)}: Hilbert-space scope; stopped iterate instead of averaging.
+& \textbf{(1)}: needs $\Delta$ in addition and batching. Noise-dominated gain is logarithmic; curvature gain depends on $\ell$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=L_1R$, $\ell=1+\log(1+\Delta/\varepsilon)$, $\lambda=1+\log(1/\delta)$, $J=\min\{\ell,1+\log(1+L_1^2\Delta/L_0)\}$, $h=1+\log\bigl((1+L_0R^2/\varepsilon+q^2+\sigma^2R^2/\varepsilon^2)/\delta\bigr)$. RCSAG reduction: $H_0=\mathcal{O}\!(L_0)$, $H_1=\mathcal{O}\!(L_1^2)$. For ARC-SG, $U=2+q+L_1^2\Delta/L_0+L_0R^2/\varepsilon+1/\delta$; $\operatorname{polylog} U$ denotes the unspecified polynomial logarithmic factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

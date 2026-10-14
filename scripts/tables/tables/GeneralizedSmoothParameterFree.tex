@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Parameter-free generalized-smooth convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/GeneralizedSmoothParameterFree.lean}{Generalized\allowbreak{}Smooth\allowbreak{}Parameter\allowbreak{}Free}.}\label{tab:GeneralizedSmoothParameterFree}
+\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a real Hilbert space, with differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ everywhere; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. Here $L_0,R,\Delta,\varepsilon,h_0>0$ and $L_1\ge0$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$. In \textbf{(1)}, updates receive only $(x_0,h_0)$; the stopping budget depends on $L_0,L_1,R,\Delta,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/BacktrackingGeneralizedAccelerated.lean}{Backtracking\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/BacktrackingGeneralizedAccelerated.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned} &\sqrt{L_0R^2/\varepsilon}\\ &+(1+q)\log\bigl(2+q+(L_0h_0)^{-1}\\ &\qquad+L_0h_0+L_1^2\Delta/L_0 +L_1^2\Delta h_0\bigr)\end{aligned}\right)$\par Gradient calls, including rejected trials.
+& --- & --- \\
+\midrule[1.2pt]
+Accelerated GRAAL \citep[Cor.~3]{gspfBorodichKovalev2025v2}\par $E=\mathbb{R}^d$, $L_1>0$; $L_0\eta_0e^q\le1$.
+& $\mathcal{O}\!\left(1+\sqrt{L_0R^2/\varepsilon}+q^3 +(1+q^2)s\right)$\par Gradient and function-value calls.
+& i) \textbf{(1)}: gradients only; any $h_0>0$.\newline ii) \textbf{(1)}: startup $\mathcal{O}\!(q^2+ts)$ instead of $\mathcal{O}\!(q^3+q^2s)$, for $q\ge1$, $h_0=\eta_0$, $L_1^2\Delta/L_0\le e^q$; total gain regime $\varepsilon\gtrsim L_0R^2/q^6$. Same order when $q\lesssim1$ or accuracy dominates.
+& --- \\
+\midrule
+AGD \citep[arXiv v2, Thm.~4.3]{gspfTyurin2026}\par $E=\mathbb{R}^d$; $R=\|x_0-x_\star\|$, $\bar R=R$, $\Gamma_0=2\Delta/R^2$.
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt{L_0R^2/\varepsilon}\\ &+q\log\bigl(2+\min\{L_1^2\Delta/L_0, \Delta/\varepsilon\}\bigr)\\ &+\log\bigl(2+\Delta/(L_0R^2)\bigr)\end{aligned}\right)$\par Gradient calls.
+& \textbf{(1)}: no $L_0,L_1,R,\Delta$ in updates; matches the leading accuracy rate.
+& \textbf{(1)}: extra startup and step-mismatch overhead $\begin{aligned}\mathcal{O}\!\Bigl(&(1+q)\\&\cdot\log\bigl(2+q+L_0h_0\\&\quad+(L_0h_0)^{-1}\bigr)\Bigr)\end{aligned}$. Loses the $\Delta/\varepsilon$ logarithmic shortcut when $L_1>0$, $\varepsilon>L_0/L_1^2$. \\
+\midrule
+AGMsDR \citep[Thm.~6.2]{gspfVankovEtAl2025v3}\par $E=\mathbb{R}^d$; $\Delta=f(x_0)-f(x_\star)$, $0<\varepsilon\le\Delta$; exact one-dimensional minimization.
+& $\mathcal{O}\!\left((\nu+1)\!\left[\begin{aligned}&1+\sqrt{L_0R^2/\varepsilon}\\ &+\lceil q^{2/3}\rceil\log(2+\Delta/\varepsilon)\end{aligned}\right]\right)$\par First-order calls, including searches.
+& i) \textbf{(1)}: no $L_0,L_1$ or exact minimization; gradients only.\newline ii) \textbf{(1)}: $\varepsilon$-independent startup logarithm.
+& \textbf{(1)}: loses the $q^{2/3}$ startup power. Total rates not comparable: $\nu$ has no bound in the setup parameters. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=L_1R$; $s=\log(1/(L_0\eta_0))$, with $\eta_0$ the GRAAL initial step; $h_0$ is the initial trial step in \textbf{(1)}; $\nu$ bounds first-order calls per exact one-dimensional search. First-order calls return function values and gradients. $\bar R,\Gamma_0$ are AGD input parameters; $\log$ is natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,137 @@
+{
+  "setup": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
+  "searched_at": "2026-10-07T14:31:27.894307+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(2^{22} \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) + \\frac{2^{47} \\cdot \\sigma^{2} \\cdot R^{2} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2}}{\\varepsilon^{2}}\\right) \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(2 ^ 22 *\n          (1 + √(p.L0 * p.R ^ 2 / p.ε) + Real.log (4 + 4 * p.Δ / p.ε) +\n            (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) +\n        2 ^ 47 * p.σ ^ 2 * p.R ^ 2 * Real.log (Real.exp 1 / p.δ) ^ 2 / p.ε ^ 2) *\n      Real.log (Real.exp 1 * (1 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + Real.log (4 + 4 * p.Δ / p.ε)) / p.δ)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(2^{22} \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) + \\frac{2^{47} \\cdot \\sigma^{2} \\cdot R^{2} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2}}{\\varepsilon^{2}}\\right) \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈(2 ^ 22 *\n          (1 + √(p.L0 * p.R ^ 2 / p.ε) + Real.log (4 + 4 * p.Δ / p.ε) +\n            (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) +\n        2 ^ 47 * p.σ ^ 2 * p.R ^ 2 * Real.log (Real.exp 1 / p.δ) ^ 2 / p.ε ^ 2) *\n      Real.log (Real.exp 1 * (1 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + Real.log (4 + 4 * p.Δ / p.ε)) / p.δ)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FiniteVarianceGeneralizedAcceleratedConvex",
+      "namespace": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
+      "setup": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec OracleTemplate.RobustGeneralized.FiniteVarianceGeneralizedAcceleratedConvex.budget",
+      "theorem": "OracleTemplate.RobustGeneralized.FiniteVarianceGeneralizedAcceleratedConvex.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{21} \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) + 2^{40} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right) + \\frac{2^{48} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2}}{\\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)}} + \\frac{2^{21} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right)}{\\log\\left(\\exp\\left(1\\right) + \\frac{\\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) \\cdot \\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)}}{2^{26} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} + \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) \\cdot \\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)} \\cdot \\exp\\left(-28 \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right)\\right)}\\right)} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 21 *\n            (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                Real.log (4 + 4 * p.Δ / p.ε) +\n              (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) +\n          2 ^ 40 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) * Real.log (Real.exp 1 / p.δ) +\n        2 ^ 48 *\n                Real.log\n                  (Real.exp 1 *\n                      (1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                          p.L1 * p.R +\n                        Real.log (4 + 4 * p.Δ / p.ε)) /\n                    p.δ) *\n              (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n            Real.log (Real.exp 1 / p.δ) ^ 2 /\n          √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) +\n      2 ^ 21 *\n            Real.log\n              (Real.exp 1 *\n                  (1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                      p.L1 * p.R +\n                    Real.log (4 + 4 * p.Δ / p.ε)) /\n                p.δ) *\n          (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n              Real.log (4 + 4 * p.Δ / p.ε) +\n            (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) /\n        Real.log\n          (Real.exp 1 +\n            (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                    Real.log (4 + 4 * p.Δ / p.ε) +\n                  (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) *\n                √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) /\n              (2 ^ 26 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) * Real.log (Real.exp 1 / p.δ) ^ 2 +\n                (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                        Real.log (4 + 4 * p.Δ / p.ε) +\n                      (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) *\n                    √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) *\n                  Real.exp\n                    (-28 *\n                      Real.log\n                        (Real.exp 1 *\n                            (1 +\n                                  (p.L0 * p.R ^ 2 / p.ε +\n                                    Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                                p.L1 * p.R +\n                              Real.log (4 + 4 * p.Δ / p.ε)) /\n                          p.δ))))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{21} \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) + 2^{40} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right) + \\frac{2^{48} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2}}{\\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)}} + \\frac{2^{21} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right)}{\\log\\left(\\exp\\left(1\\right) + \\frac{\\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) \\cdot \\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)}}{2^{26} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} + \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) \\cdot \\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)} \\cdot \\exp\\left(-28 \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right)\\right)}\\right)} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 21 *\n            (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                Real.log (4 + 4 * p.Δ / p.ε) +\n              (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) +\n          2 ^ 40 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) * Real.log (Real.exp 1 / p.δ) +\n        2 ^ 48 *\n                Real.log\n                  (Real.exp 1 *\n                      (1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                          p.L1 * p.R +\n                        Real.log (4 + 4 * p.Δ / p.ε)) /\n                    p.δ) *\n              (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n            Real.log (Real.exp 1 / p.δ) ^ 2 /\n          √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) +\n      2 ^ 21 *\n            Real.log\n              (Real.exp 1 *\n                  (1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                      p.L1 * p.R +\n                    Real.log (4 + 4 * p.Δ / p.ε)) /\n                p.δ) *\n          (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n              Real.log (4 + 4 * p.Δ / p.ε) +\n            (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) /\n        Real.log\n          (Real.exp 1 +\n            (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                    Real.log (4 + 4 * p.Δ / p.ε) +\n                  (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) *\n                √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) /\n              (2 ^ 26 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) * Real.log (Real.exp 1 / p.δ) ^ 2 +\n                (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                        Real.log (4 + 4 * p.Δ / p.ε) +\n                      (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) *\n                    √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) *\n                  Real.exp\n                    (-28 *\n                      Real.log\n                        (Real.exp 1 *\n                            (1 +\n                                  (p.L0 * p.R ^ 2 / p.ε +\n                                    Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                                p.L1 * p.R +\n                              Real.log (4 + 4 * p.Δ / p.ε)) /\n                          p.δ))))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AdaptiveRobustGeneralizedAcceleratedConvex",
+      "namespace": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
+      "setup": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec OracleTemplate.RobustGeneralized.AdaptiveRobustGeneralizedAcceleratedConvex.budget",
+      "theorem": "OracleTemplate.RobustGeneralized.AdaptiveRobustGeneralizedAcceleratedConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FiniteVarianceGeneralizedAcceleratedConvex",
+      "theorem": "OracleTemplate.RobustGeneralized.FiniteVarianceGeneralizedAcceleratedConvex.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.AdaptiveRobustGeneralizedAcceleratedConvex",
+      "theorem": "OracleTemplate.RobustGeneralized.AdaptiveRobustGeneralizedAcceleratedConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex minimization of f:E→ℝ with an attained minimum. Some minimizer x⋆ satisfies ‖x0−x⋆‖≤R and f(x0)−f(x⋆)≤Δ.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using a fresh IID seed. The jointly measurable oracle is unbiased, E[g(x,ξ)]=∇f(x), and satisfies E‖g(x,ξ)−∇f(x)‖²≤σ² uniformly in x. Only gradient samples are returned; function values are unavailable.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.Query, Reply, admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.IsStochasticGradient."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient exists everywhere and is Fréchet differentiable, with ‖D(∇f)(x)‖≤L0+L1‖∇f(x)‖ for every x. L0>0 and L1≥0; no global Lipschitz-gradient bound is required.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.valid and admissible."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Finite-variance heavy-tailed gradient noise is permitted. The imported IsLightTailGradient condition is not imposed by this setup.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.IsStochasticGradient."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform additive central second-moment bound σ², with σ≥0. There is no exponential-moment or almost-sure noise bound.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.admissible invokes StochasticGradient.IsStochasticGradient; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance_integrable and variance."
+      },
+      {
+        "label": "other",
+        "details": "E is a real complete inner-product space with its Borel measurable structure and second-countable topology; finite dimensionality is not required. All parameters are public, including x0, L0, L1, R, Δ, σ, ε and δ. The objective, sampling law and oracle map are hidden. R,Δ,ε>0 and 0<δ<1.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: GeneralizedAccelerated.Public; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: Params; LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.Public, publicInput, valid and admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable point-valued output x̂ with f(x̂)−f(x⋆)≤ε on the success event, for a global minimizer x⋆. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(x̂)−f(x⋆)>ε)≤δ under the joint algorithm and oracle randomness. The extracted budget is a fixed bound on total individual oracle calls, valid for every seed realization.",
+        "evidence": "LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean: RobustGeneralized.spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines gradient-dependent generalized smoothness with merely finite-variance stochastic gradients and a high-probability objective-gap guarantee in a potentially infinite-dimensional Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RobustGeneralized.AdaptiveRobustGeneralizedAcceleratedConvex.result",
+        "OracleTemplate.RobustGeneralized.FiniteVarianceGeneralizedAcceleratedConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FiniteVarianceGeneralizedAcceleratedConvex",
+          "theorem": "OracleTemplate.RobustGeneralized.FiniteVarianceGeneralizedAcceleratedConvex.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.AdaptiveRobustGeneralizedAcceleratedConvex",
+          "theorem": "OracleTemplate.RobustGeneralized.AdaptiveRobustGeneralizedAcceleratedConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

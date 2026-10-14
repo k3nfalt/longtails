@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.RelativeErrorSmoothConvex",
+  "searched_at": "2026-10-04T17:49:06.240092+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 7 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\left(1 - \\alpha\\right) \\cdot \\varepsilon}} + \\frac{11 \\cdot \\alpha^{2} \\cdot L \\cdot R^{2}}{\\left(1 - \\alpha\\right) \\cdot \\varepsilon} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.RelativeErrorSmoothConvex.spec.Params → ℕ",
+        "value": "fun p => ⌈7 * √(p.L * p.R ^ 2 / ((1 - p.α) * p.ε)) + 11 * p.α ^ 2 * p.L * p.R ^ 2 / ((1 - p.α) * p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 7 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\left(1 - \\alpha\\right) \\cdot \\varepsilon}} + \\frac{11 \\cdot \\alpha^{2} \\cdot L \\cdot R^{2}}{\\left(1 - \\alpha\\right) \\cdot \\varepsilon} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.RelativeErrorSmoothConvex.spec.Params → ℕ",
+          "value": "fun p => ⌈7 * √(p.L * p.R ^ 2 / ((1 - p.α) * p.ε)) + 11 * p.α ^ 2 * p.L * p.R ^ 2 / ((1 - p.α) * p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedRelativeErrorConvex",
+      "namespace": "LongTails.Setups.RelativeErrorSmoothConvex",
+      "setup": "LongTails.Setups.RelativeErrorSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RelativeErrorSmoothConvex.spec OracleTemplate.RelativeErrorConvex.budget",
+      "theorem": "OracleTemplate.RelativeErrorConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedRelativeErrorConvex",
+      "theorem": "OracleTemplate.RelativeErrorConvex.result",
+      "references": "- Nikita Kornilov, Eduard Gorbunov, Mohammad Alkousa, Fedor Stonyakin, Pavel Dvurechensky, Alexander Gasnikov. [Intermediate Gradient Methods with Relative Inexactness](https://arxiv.org/html/2310.00506v1). 2023 (preprint v1; published 2025). Complexity: $O(1+\\max\\{\\sqrt{LR^2/\\varepsilon},\\alpha^{1/3}(LR^2/\\varepsilon)^{2/3},\\alpha LR^2/\\varepsilon\\})$ fixed relative-error gradient oracle calls for $f(y^N)-f^*\\le\\varepsilon$, provided $\\varepsilon\\ge C\\alpha^2LR^2$, with sufficiently large universal $C$; Intermediate Similar Triangle Method with $p=2$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization of f:E→ℝ. The objective satisfies the global quadratic smoothness inequality with public L>0 and has a minimizer xstar satisfying ‖x0−xstar‖≤R, where R≥0 is public.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.admissible, spec.valid, Public."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "A query x∈E returns g∈E satisfying ‖g−∇f(x)‖≤α‖∇f(x)‖ for every call index and seed. Only gradient information is supplied; function values are unavailable. The public error parameter satisfies 0≤α<1.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible, spec.valid."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "Arbitrary bias and dependence between oracle calls are permitted; no unbiasedness, independence, or distributional noise restriction is imposed beyond the uniform relative-error bound.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.admissible; LongTails/Template.lean: Oracle.answer and Oracle.law."
+      },
+      {
+        "label": "relative_error",
+        "details": "The error bound is pointwise relative to the true gradient norm, uniformly over all x, call indices k, and seeds. Errors vanish at stationary points.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.admissible oracle-error conjunct."
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary real Hilbert space, with no finite-dimensional restriction. E, x0, L, α, R, and ε are public because Params=Public and publicInput is the identity; f and its minimizer are hidden.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Setups/RelativeErrorSmoothConvex.lean: Public, spec.Params, spec.Public, spec.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return one point output∈E satisfying f(output)−f(xstar)≤ε for a global minimizer xstar, with public ε>0.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.Output, spec.successful, spec.valid."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law. The oracle-call budget is fixed and must hold for every seed.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth convex minimization is classical, but this formulation uses a uniformly bounded relative-error gradient oracle permitting arbitrary bias and dependence, with an almost-sure guarantee in an arbitrary Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RelativeErrorConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedRelativeErrorConvex",
+          "theorem": "OracleTemplate.RelativeErrorConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

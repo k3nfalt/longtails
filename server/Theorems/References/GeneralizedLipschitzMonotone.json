@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.GeneralizedLipschitzMonotone",
+  "searched_at": "2026-10-04T15:37:10.600380+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left(\\left\\lceil \\frac{11 \\cdot L0 \\cdot R}{\\varepsilon} + \\left(27 \\cdot L1 \\cdot R + 4\\right) \\cdot \\log\\left(1 + \\frac{8 \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot R}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right)",
+        "type": "LongTails.Setups.GeneralizedLipschitzMonotone.spec.Params → ℕ",
+        "value": "fun q => 2 * (⌈11 * q.L0 * q.R / q.ε + (27 * q.L1 * q.R + 4) * Real.log (1 + 8 * (q.L0 + q.L1 * q.G) * q.R / q.ε)⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(\\left\\lceil \\frac{11 \\cdot L0 \\cdot R}{\\varepsilon} + \\left(27 \\cdot L1 \\cdot R + 4\\right) \\cdot \\log\\left(1 + \\frac{8 \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot R}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right)",
+          "type": "LongTails.Setups.GeneralizedLipschitzMonotone.spec.Params → ℕ",
+          "value": "fun q => 2 * (⌈11 * q.L0 * q.R / q.ε + (27 * q.L1 * q.R + 4) * Real.log (1 + 8 * (q.L0 + q.L1 * q.G) * q.R / q.ε)⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.AnchoredGeneralizedMonotone",
+      "namespace": "LongTails.Setups.GeneralizedLipschitzMonotone",
+      "setup": "LongTails.Setups.GeneralizedLipschitzMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedLipschitzMonotone.spec OracleTemplate.GeneralizedMonotone.budget",
+      "theorem": "OracleTemplate.GeneralizedMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AnchoredGeneralizedMonotone",
+      "theorem": "OracleTemplate.GeneralizedMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone root finding: find an approximate zero of a continuous operator F:E→E satisfying ⟨F(x)−F(y),x−y⟩≥0. E is an arbitrary real inner-product space; completeness and finite dimensionality are not required. No objective or saddle function is specified.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMonotone.lean: Public.E, Public.linearE, spec.Instance, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact operator-value oracle: every query x returns F(x), for every call index and seed. There is no oracle error or sample dependence. Each evaluation counts as one oracle call under a fixed budget.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMonotone.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y and every M bounding ‖F‖ throughout their line segment, ‖F(x)−F(y)‖≤(L0+L1M)‖x−y‖. L0>0 and L1≥0 are public parameters.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMonotone.lean: Public.L0, Public.L1, spec.valid, segment-bound clause of spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The initial point x0 is public. Hidden parameters G≥0 and R≥0 satisfy ‖F(x0)‖≤G and guarantee a zero xstar with ‖x0−xstar‖≤R. The tolerance ε>0 is also hidden: the algorithm constructor receives only E, L0, L1, and x0, while the execution budget may depend on G, R, and ε.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMonotone.lean: Public, Params, spec.publicInput, spec.valid, final clauses of spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm and budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound must hold almost surely under the joint algorithm-seed and oracle-seed law. The oracle-call budget holds for every seed.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMonotone.lean: spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The returned point must satisfy the unsquared operator residual bound ‖F(output)‖≤ε. No averaging, best-iterate selection, or distance-to-solution requirement is imposed.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMonotone.lean: spec.Output, spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Monotone root finding is established, but this setup replaces global Lipschitz continuity with an operator-magnitude-dependent segment condition and requires a constructor independent of the hidden radius, initial residual bound, and tolerance."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GeneralizedMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AnchoredGeneralizedMonotone",
+          "theorem": "OracleTemplate.GeneralizedMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.StochasticCohypomonotoneInclusion",
+  "searched_at": "2026-10-09T07:49:00.402044+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{2^{53}}{\\left(1 - 2 \\cdot \\rho \\cdot L\\right)^{8}} \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R}{\\varepsilon}\\right) + \\log\\left(\\frac{2}{1 - 2 \\cdot \\rho \\cdot L}\\right)\\right)^{4} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.StochasticCohypomonotoneInclusion.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 53 / (1 - 2 * q.ρ * q.L) ^ 8 * (1 + q.L * q.R / q.ε + q.σ ^ 2 / q.ε ^ 2) *\n      (1 + Real.log (2 + q.L * q.R / q.ε) + Real.log (2 / (1 - 2 * q.ρ * q.L))) ^ 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{2^{53}}{\\left(1 - 2 \\cdot \\rho \\cdot L\\right)^{8}} \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R}{\\varepsilon}\\right) + \\log\\left(\\frac{2}{1 - 2 \\cdot \\rho \\cdot L}\\right)\\right)^{4} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.StochasticCohypomonotoneInclusion.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 53 / (1 - 2 * q.ρ * q.L) ^ 8 * (1 + q.L * q.R / q.ε + q.σ ^ 2 / q.ε ^ 2) *\n      (1 + Real.log (2 + q.L * q.R / q.ε) + Real.log (2 / (1 - 2 * q.ρ * q.L))) ^ 4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RegularizedProxExtragradientCohypomonotone",
+      "namespace": "LongTails.Setups.StochasticCohypomonotoneInclusion",
+      "setup": "LongTails.Setups.StochasticCohypomonotoneInclusion",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticCohypomonotoneInclusion.spec OracleTemplate.StochasticCohypomonotone.budget",
+      "theorem": "OracleTemplate.StochasticCohypomonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RegularizedProxExtragradientCohypomonotone",
+      "theorem": "OracleTemplate.StochasticCohypomonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Solve 0 ∈ F(x) + G(x), where F is L-Lipschitz, G is monotone, and F+G is globally ρ-cohypomonotone: ⟨u−v,x−y⟩ ≥ −ρ‖u−v‖² for u∈(F+G)(x), v∈(F+G)(y). Require L>0, ρ≥0, and 2ρL<1. A solution x★ satisfies ‖x0−x★‖≤R. No objective or saddle-point representation is required.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: spec.Instance, spec.valid, spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Exact resolvent access Jγ(z) for every γ>0, satisfying (z−Jγ(z))/γ ∈ G(Jγ(z)). Each stochastic operator evaluation and each resolvent evaluation counts as one oracle call. The extracted budget bounds a fixed total number of calls.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: reply, spec.Query, spec.admissible; LongTails/Template.lean: execute, Convergence"
+      },
+      {
+        "label": "other",
+        "details": "Stochastic operator evaluations g(x,ω), with E[g(x,ω)]=F(x) and E‖g(x,ω)−F(x)‖²≤σ². Each call receives a fresh IID seed; same-seed evaluations at multiple points are not provided. F, G, g, and the sampling law are hidden; Params, including L, ρ, R, σ, ε, and x0, are public.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: reply, spec.Public, spec.publicInput, spec.admissible; LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-moment noise bound σ²≥0, unbiasedness, joint measurability, and integrability. No light-tail or samplewise smoothness condition is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator.measurable, integrable, unbiased, variance_integrable, variance; LongTails/Setups/StochasticCohypomonotoneInclusion.lean: spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure; no dimension-dependent bound is assumed.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: Params.innerE, Params.finiteE, Params.borelE"
+      },
+      {
+        "label": "other",
+        "details": "Global cohypomonotonicity applies to the entire sum F+G, including all graph elements of G, with margin 1−2ρL>0. Oracle seeds are independent and identically distributed. R bounds distance to an existing solution rather than the diameter of a bounded domain.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: spec.valid, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The returned certificate must satisfy a∈G(x) for every outcome, rather than only in expectation or almost surely.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "E‖F(x)+a‖≤ε under the joint algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "other",
+        "details": "Return a measurable pair (x,a) with integrable first-power inclusion residual ‖F(x)+a‖. The target is ε>0; no squared-residual, objective-gap, or last-iterate condition is specified.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean: spec.Output, spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A structured inclusion formulation combining global cohypomonotonicity of the sum, IID stochastic operator access, exact resolvents, and an explicitly feasible residual certificate. No repository implementations or proofs were inspected; the absence of a qualifying verified citation is not a novelty claim."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticCohypomonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RegularizedProxExtragradientCohypomonotone",
+          "theorem": "OracleTemplate.StochasticCohypomonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

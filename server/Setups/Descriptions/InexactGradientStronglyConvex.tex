@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strongly Convex Inexact-Gradient Optimization}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with smoothness constant $L$ and strong convexity constant $\mu$. An initial point $x^0\in E$ is within distance $R$ of a global minimizer $x^\star$. Each oracle query at $x\in E$ returns a vector $g\in E$ satisfying $\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|+\delta$, where $\alpha$ and $\delta$ bound relative and additive error. The required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely, where $\varepsilon$ is the prescribed accuracy. Only $E,L,\mu,\alpha$, and $x^0$ are public inputs.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where $E$ may be infinite dimensional and $\|\cdot\|$ is induced by its inner product $\langle\cdot,\cdot\rangle$. The parameters, objective, and oracle satisfy the following conditions.
+
+\begin{assumption}[Parameter admissibility]
+The parameters satisfy
+\[
+\begin{aligned}
+0<\mu\leq L,\qquad &0\leq\alpha<1,\\
+\delta\geq0,\qquad R\geq0,\qquad &\varepsilon>0,
+\end{aligned}
+\]
+and the additive error is compatible with the requested accuracy through
+\[
+136\delta^2\leq\mu(1-\alpha)^2\varepsilon.
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness and strong convexity]
+The function $f$ is differentiable everywhere on $E$, with gradient $\nabla f(x)$ at each $x\in E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{L}{2}\|y-x\|^2,\\
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Inexact-gradient access]
+At every call index $k\in\{0,1,2,\ldots\}$ and query point $x\in E$, the oracle returns a vector $g_k(x)\in E$. For every realization of its randomness,
+\[
+\|g_k(x)-\nabla f(x)\|
+\leq\alpha\|\nabla f(x)\|+\delta.
+\]
+Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, with queries chosen adaptively anywhere in $E$. The algorithm is selected using only the public inputs $(E,L,\mu,\alpha,x^0)$; the parameters $\delta,R$, and $\varepsilon$ are not supplied to it. An externally specified call budget $K\in\{0,1,2,\ldots\}$ may depend on the full parameter tuple $(E,L,\mu,\alpha,x^0,\delta,R,\varepsilon)$.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a global minimizer $x^\star$ such that
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\qquad\mathbb{P}\text{-almost surely}.
+\]
+The minimizer witnessing the initial distance bound can be used here, since all global minimizers have the same objective value.
+\end{document}

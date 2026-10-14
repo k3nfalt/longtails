@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.CoordinateSmoothStronglyConvex",
+  "searched_at": "2026-10-04T15:33:36.128288+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left(\\sum_{i=0}^{d-1} \\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{L\\left(i\\right)}{\\mu}} \\right\\rceil_{+} \\right\\}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{2 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right)",
+        "type": "LongTails.Setups.CoordinateSmoothStronglyConvex.spec.Params → ℕ",
+        "value": "fun p => (2 * ∑ i, max 1 ⌈√(p.L i / p.μ)⌉₊) * Nat.clog 2 ⌈2 * p.Δ / p.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(\\sum_{i=0}^{d-1} \\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{L\\left(i\\right)}{\\mu}} \\right\\rceil_{+} \\right\\}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{2 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right)",
+          "type": "LongTails.Setups.CoordinateSmoothStronglyConvex.spec.Params → ℕ",
+          "value": "fun p => (2 * ∑ i, max 1 ⌈√(p.L i / p.μ)⌉₊) * Nat.clog 2 ⌈2 * p.Δ / p.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedCoordinateStronglyConvex",
+      "namespace": "LongTails.Setups.CoordinateSmoothStronglyConvex",
+      "setup": "LongTails.Setups.CoordinateSmoothStronglyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CoordinateSmoothStronglyConvex.spec OracleTemplate.AcceleratedCoordinate.budget",
+      "theorem": "OracleTemplate.AcceleratedCoordinate.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedCoordinateStronglyConvex",
+      "theorem": "OracleTemplate.AcceleratedCoordinate.result",
+      "references": "- Zeyuan Allen-Zhu, Zheng Qu, Peter Richtárik, Yang Yuan. [Even Faster Accelerated Coordinate Descent Using Non-Uniform Sampling](https://arxiv.org/pdf/1512.09103v3). 2016 (ICML; full preprint v3, May 2016; first preprint December 2015). Complexity: $O((\\sum_{i=1}^{d}\\sqrt{L_i/\\mu})(1+\\log(\\Delta/\\varepsilon)))$ fixed exact coordinate-gradient oracle calls for $\\mathbb E[f(y_T)-f(x^*)]\\le\\varepsilon$, using NU_ACDM, when $0<\\varepsilon<\\Delta$; initialization requires no oracle calls, and zero calls suffice when $\\varepsilon\\ge\\Delta$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization over R^d, with an attained global minimum.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: spec.Instance and spec.admissible gradient, strong-convexity, and minimizer clauses."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "For all x,y, f(y) ≥ f(x)+⟨∇f(x),y−x⟩+(μ/2)‖y−x‖², with μ>0.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: spec.valid and spec.admissible strong-convexity clause."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "coordinate_gradient",
+        "details": "A query (i,x) returns exactly ∇f(x)_i. Replies are independent of call index and oracle seed; there is no oracle error. Each scalar coordinate derivative counts as one call.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: spec.Query, spec.Reply, and spec.admissible oracle-answer equality; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean R^d with d≥1 and its standard inner product and norm.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: Params.d, Params.nonzero, and spec.Instance."
+      },
+      {
+        "label": "other",
+        "details": "Known coordinate smoothness bounds satisfy L_i≥μ: f(x+t e_i)≤f(x)+t∇f(x)_i+(L_i/2)t². All parameters d,L,μ,Δ,ε,x0 are public, with Δ≥0 and ε>0. A minimizer x* satisfies f(x0)−f(x*)≤Δ; f is hidden.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible coordinate-smoothness and initialization clauses."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output X lies in R^d and satisfies E[f(X)−f(x*)]≤ε for a global minimizer x*. The output must be measurable and its objective gap integrable.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over the product of algorithm and oracle seed laws. Oracle cost is bounded for every seed by the supplied fixed budget.",
+        "evidence": "LongTails/Setups/CoordinateSmoothStronglyConvex.lean: spec.successful integral inequality; LongTails/Template.lean: Convergence seed-product measure and per-seed call bound."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Finite-dimensional strongly convex minimization with known coordinate smoothness, exact coordinate derivatives, and expected objective-gap accuracy is a standard coordinate-descent formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AcceleratedCoordinate.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedCoordinateStronglyConvex",
+          "theorem": "OracleTemplate.AcceleratedCoordinate.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

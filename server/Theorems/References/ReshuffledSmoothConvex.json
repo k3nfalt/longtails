@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.ReshuffledSmoothConvex",
+  "searched_at": "2026-10-04T17:48:19.583907+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "n \\cdot \\left\\lceil \\frac{384 \\cdot \\sqrt{Lavg \\cdot Lmax} \\cdot R^{2}}{\\varepsilon} + 30 \\cdot \\sigma \\cdot R^{2} \\cdot \\sqrt{\\frac{Lavg}{n \\cdot \\varepsilon^{3}}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.ReshuffledSmoothConvex.spec.Params → ℕ",
+        "value": "fun p => p.n * ⌈384 * √(p.Lavg * p.Lmax) * p.R ^ 2 / p.ε + 30 * p.σ * p.R ^ 2 * √(p.Lavg / (↑p.n * p.ε ^ 3))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "n \\cdot \\left\\lceil \\frac{384 \\cdot \\sqrt{Lavg \\cdot Lmax} \\cdot R^{2}}{\\varepsilon} + 30 \\cdot \\sigma \\cdot R^{2} \\cdot \\sqrt{\\frac{Lavg}{n \\cdot \\varepsilon^{3}}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.ReshuffledSmoothConvex.spec.Params → ℕ",
+          "value": "fun p => p.n * ⌈384 * √(p.Lavg * p.Lmax) * p.R ^ 2 / p.ε + 30 * p.σ * p.R ^ 2 * √(p.Lavg / (↑p.n * p.ε ^ 3))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ReshuffledLinearDecayLastIterate",
+      "namespace": "LongTails.Setups.ReshuffledSmoothConvex",
+      "setup": "LongTails.Setups.ReshuffledSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ReshuffledSmoothConvex.spec OracleTemplate.ReshuffledConvex.budget",
+      "theorem": "OracleTemplate.ReshuffledConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ReshuffledLinearDecayLastIterate",
+      "theorem": "OracleTemplate.ReshuffledConvex.result",
+      "references": "- Zijian Liu. [Random Reshuffling Dominates Stochastic Gradient Descent](https://arxiv.org/html/2606.32005v1). 2026 preprint, v1 (June 30). Complexity: $O\\!\\left(n+\\widehat L R^2/\\varepsilon+\\min\\{\\sigma^2R^2/\\varepsilon^2,\\sqrt{n\\overline L}\\,\\sigma R^2/\\varepsilon^{3/2}\\}\\right)$ exact component-gradient calls, with a fixed budget, for Random Reshuffling's averaged output satisfying $\\mathbb E[f(\\bar x)-f_*]\\le\\varepsilon$. Here $\\overline L=n^{-1}\\sum_i L_i\\le Lavg$ and $\\widehat L=\\max_i L_i\\le\\min\\{Lmax,nLavg\\}$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of convex differentiable components and their convex average on a real Hilbert space; strong convexity is not required.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: Params and spec.admissible, component ConvexOn clause."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is f(x)=n⁻¹∑ᵢ fᵢ(x), with n≥1.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: Params.nonzero and spec.Instance; LongTails/Setups/FiniteSumSmoothAndConvex.lean: FiniteSum.objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every reply is an exact component gradient for every call index and seed; there is no additive, relative, biased, or stochastic oracle error.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.admissible, HasGradientAt clause."
+      },
+      {
+        "label": "component_gradient",
+        "details": "A query supplies a component index i and point x and receives ∇fᵢ(x). Each such evaluation counts as one oracle call.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.Query, spec.Reply and spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "At an objective minimizer x*, n⁻¹∑ᵢ‖∇fᵢ(x*)‖²≤σ². This bounds component heterogeneity at the minimizer, not oracle noise or variance uniformly over x.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.admissible, final existential clause."
+      },
+      {
+        "label": "other",
+        "details": "Component smoothness constants ℓᵢ are nonnegative, satisfy ℓᵢ≤Lmax and n⁻¹∑ᵢℓᵢ≤Lavg, and globally bound gradient Lipschitz continuity. A minimizer satisfies ‖x0−x*‖≤R. All Params are public, including n, Lavg, Lmax, R, σ, ε and x0; ℓᵢ and x* are existential witnesses. Validity requires 0<Lavg≤Lmax, R≥0, σ≥0 and ε>0. E is a complete real inner-product space with its Borel measurable structure, without a finite-dimensional restriction. Allowed algorithms belong to the family specified by reshuffledGradient.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: Params; spec.Public, publicInput, valid, admissible and allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return one E-valued measurable point X with integrable objective gap f(X)−f(x*) and expected gap at most ε.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is ∫[f(X)−f(x*)] dP≤ε under the joint algorithm and oracle seed law. The oracle-call budget is fixed and holds for every seed.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth convex finite-sum minimization with exact component gradients, variance at a minimizer, and expected objective-gap accuracy is an established optimization benchmark. Separate component smoothness bounds and a Hilbert-space formulation refine this standard setup."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ReshuffledConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ReshuffledLinearDecayLastIterate",
+          "theorem": "OracleTemplate.ReshuffledConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

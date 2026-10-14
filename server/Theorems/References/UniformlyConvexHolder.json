@@ -1,0 +1,66 @@
+{
+  "setup": "LongTails.Setups.UniformlyConvexHolder",
+  "searched_at": "2026-10-08T07:41:46.000818+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [],
+  "results": [],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Constrained minimization of a convex differentiable function f over a nonempty compact convex set C. The gradient is L-Lipschitz on C, with L>0. Strong convexity of f is not assumed.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: spec.admissible; UniformlyConvexSet."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query Sum.inl x returns ∇f(x) for every x∈C, at every call index and every seed. There is no gradient error or stochastic noise assumption; responses must be exact.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: spec.Query and spec.admissible, HasGradientAt clause."
+      },
+      {
+        "label": "linear_minimization",
+        "details": "A query Sum.inr g returns an exact minimizer of ⟨g,x⟩ over C for every direction g, call index, and seed. Selection among minimizers may vary. Each gradient or linear-minimization query counts as one oracle call.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: spec.admissible, Sum.inr clause; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: Public.innerE and Public.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "C has diameter at most D>0 and is uniformly convex with parameters a>0 and q>3: tx+(1−t)y+a t(1−t)‖x−y‖^q z∈C for x,y∈C, t∈[0,1], and ‖z‖≤1. A global Hölder error bound holds: for every x∈C there exists y∈argmin_C f with ‖x−y‖≤c(f(x)−f*)^(1/r), where c>0 and r>2. Public information consists of E, L, and a feasible x0; D,a,q,c,r,ε are not public algorithm inputs.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: UniformlyConvexSet; Public; Params; spec.publicInput; spec.valid; spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must belong to C and satisfy f(output)−f*≤ε, where ε>0 and f* is attained on C.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε objective-gap guarantee must hold almost surely under the output probability law, rather than merely in expectation.",
+        "evidence": "LongTails/Setups/UniformlyConvexHolder.lean: spec.successful, ∀ᵐ ω clause."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This specializes smooth constrained convex optimization through the joint assumptions of power-type uniform convexity of the feasible set with q>3 and a global Hölder error bound with r>2. These geometric and growth restrictions distinguish it from the basic smooth convex benchmark. No proved results or budgets were supplied, so no rate comparison was performed."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "missing_theorem",
+      "theorems": [],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "not_assessed",
+      "results": []
+    }
+  }
+}

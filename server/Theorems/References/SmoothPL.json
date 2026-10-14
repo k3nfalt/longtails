@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.SmoothPL",
+  "searched_at": "2026-10-04T17:52:24.355704+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{L}{\\mu} \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.SmoothPL.spec.Params → ℕ",
+        "value": "fun p => ⌈p.L / p.μ * Real.log (1 + p.Δ / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{L}{\\mu} \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.SmoothPL.spec.Params → ℕ",
+          "value": "fun p => ⌈p.L / p.μ * Real.log (1 + p.Δ / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GdPL",
+      "namespace": "LongTails.Setups.SmoothPL",
+      "setup": "LongTails.Setups.SmoothPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothPL.spec OracleTemplate.PLGradient.budget",
+      "theorem": "OracleTemplate.PLGradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GdPL",
+      "theorem": "OracleTemplate.PLGradient.result",
+      "references": "- B. T. Polyak. [Gradient methods for minimizing functionals](https://www.mathnet.ru/php/getFT.phtml?jrnid=zvmmf&paperid=7813&what=fullt). 1963 (Russian original). Complexity: $O(\\lceil (L/\\mu)\\log(\\Delta/\\varepsilon)\\rceil)$ exact-gradient oracle calls for $0<\\varepsilon<\\Delta$, and zero calls when $\\Delta\\le\\varepsilon$; fixed-step gradient descent gives $f(x_K)-f^*\\le\\varepsilon$ with a fixed budget.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The admissible class permits nonconvex objectives: global smoothness and the PL inequality are required, without convexity.",
+        "evidence": "LongTails/Setups/SmoothPL.lean: PLGradient.spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Unconstrained minimization with an attained global minimum and global PL inequality 2μ(f(x)−f(xstar)) ≤ ‖∇f(x)‖². Parameters satisfy 0<μ≤L, Δ≥0, ε>0, and f(x0)−f(xstar)≤Δ.",
+        "evidence": "LongTails/Setups/SmoothPL.lean: PLGradient.spec.valid and admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every query x returns the exact gradient of f at x for every call index and oracle seed. No function-value information or oracle error is supplied.",
+        "evidence": "LongTails/Setups/SmoothPL.lean: PLGradient.spec.Query, Reply, and admissible, requiring HasGradientAt f (oracle.answer k x seed) x."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space, potentially infinite dimensional. The gradient is globally L-Lipschitz. E, L, and x0 are public; μ, Δ, and ε are hidden from the algorithm constructor, although they determine the fixed execution budget.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Setups/SmoothPL.lean: PLGradient.Params, spec.publicInput, and admissible; LongTails/Template.lean: Convergence.makeAlgorithm and budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(xstar)≤ε for some global minimizer xstar. No gradient-norm or distance requirement is imposed.",
+        "evidence": "LongTails/Setups/SmoothPL.lean: PLGradient.spec.Output and successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap requirement holds almost surely under the output probability law, which in Convergence uses the product of algorithm and oracle seed laws.",
+        "evidence": "LongTails/Setups/SmoothPL.lean: PLGradient.spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth unconstrained PL minimization with exact gradients, an initial objective-gap bound, and objective-gap accuracy is an established standard formulation, including its Hilbert-space version."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.PLGradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GdPL",
+          "theorem": "OracleTemplate.PLGradient.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "setup": "LongTails.Setups.BoundedCompositeSaddle",
+  "searched_at": "2026-10-07T14:33:14.714104+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "4 \\cdot \\left\\lceil \\left(\\frac{11 \\cdot R \\cdot \\left(L \\cdot R + M\\right)}{\\varepsilon}\\right)^{\\frac{4}{3}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.BoundedCompositeSaddle.spec.Params → ℕ",
+        "value": "fun p => 4 * ⌈(11 * p.R * (p.L * p.R + p.M) / p.ε) ^ (4 / 3)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "4 \\cdot \\left\\lceil \\left(\\frac{11 \\cdot R \\cdot \\left(L \\cdot R + M\\right)}{\\varepsilon}\\right)^{\\frac{4}{3}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.BoundedCompositeSaddle.spec.Params → ℕ",
+          "value": "fun p => 4 * ⌈(11 * p.R * (p.L * p.R + p.M) / p.ε) ^ (4 / 3)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ArrowHurwiczBoundedSaddle",
+      "namespace": "LongTails.Setups.BoundedCompositeSaddle",
+      "setup": "LongTails.Setups.BoundedCompositeSaddle",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BoundedCompositeSaddle.spec OracleTemplate.ArrowHurwicz.ArrowHurwiczBoundedSaddle.budget",
+      "theorem": "OracleTemplate.ArrowHurwicz.ArrowHurwiczBoundedSaddle.result"
+    },
+    {
+      "budget": {
+        "latex": "4 \\cdot \\left\\lceil \\frac{200 \\cdot R \\cdot \\left(L \\cdot R + M\\right)}{\\varepsilon} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.BoundedCompositeSaddle.spec.Params → ℕ",
+        "value": "fun p => 4 * ⌈200 * p.R * (p.L * p.R + p.M) / p.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "4 \\cdot \\left\\lceil \\frac{200 \\cdot R \\cdot \\left(L \\cdot R + M\\right)}{\\varepsilon} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.BoundedCompositeSaddle.spec.Params → ℕ",
+          "value": "fun p => 4 * ⌈200 * p.R * (p.L * p.R + p.M) / p.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ArrowHurwiczUniformRate",
+      "namespace": "LongTails.Setups.BoundedCompositeSaddle",
+      "setup": "LongTails.Setups.BoundedCompositeSaddle",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BoundedCompositeSaddle.spec OracleTemplate.ArrowHurwicz.ArrowHurwiczUniformRate.budget",
+      "theorem": "OracleTemplate.ArrowHurwicz.ArrowHurwiczUniformRate.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ArrowHurwiczBoundedSaddle",
+      "theorem": "OracleTemplate.ArrowHurwicz.ArrowHurwiczBoundedSaddle.result",
+      "references": "- Antonin Chambolle, Thomas Pock. [A First-Order Primal-Dual Algorithm for Convex Problems with Applications to Imaging](https://doi.org/10.1007/s10851-010-0251-1). 2011 (online publication 2010). Complexity: $O(1+LR^2/\\varepsilon)$ fixed exact operator and proximal oracle calls for a feasible averaged pair with uniform saddle gap at most $\\varepsilon$, using primal–dual hybrid gradient; one call each to $K$, $K^*$, and the two proximal maps per iteration, with no initialization calls.\n- Antonin Chambolle, Thomas Pock. [On the ergodic convergence rates of a first-order primal–dual algorithm](https://doi.org/10.1007/s10107-015-0957-3). 2016 (online publication 2015; author manuscript HAL v2, September 28, 2015, used). Complexity: $O(1+LR^2/\\varepsilon)$ fixed exact operator and proximal oracle calls for a feasible averaged pair with uniform saddle gap at most $\\varepsilon$, using their primal–dual algorithm with squared-norm proximity; one call each to $K$, $K^*$, and the two proximal maps per iteration, with no initialization calls.",
+      "match_status": "related"
+    },
+    {
+      "module": "LongTails.Theorems.ArrowHurwiczUniformRate",
+      "theorem": "OracleTemplate.ArrowHurwicz.ArrowHurwiczUniformRate.result",
+      "references": "- Antonin Chambolle and Thomas Pock. [A First-Order Primal-Dual Algorithm for Convex Problems with Applications to Imaging](https://optimization-online.org/wp-content/uploads/2010/06/2646.pdf). 2011 (May 2010 preprint used). Complexity: $O(1+LR^2/\\varepsilon)$ total exact proximal and $K,K^*$ oracle calls for uniform saddle gap at most $\\varepsilon$, using their extrapolated primal-dual algorithm; fixed cost, two proximal calls and two operator applications per iteration.\n- Antonin Chambolle and Thomas Pock. [On the ergodic convergence rates of a first-order primal-dual algorithm](https://optimization-online.org/wp-content/uploads/2014/09/4532.pdf). 2016 (October 30, 2014 preprint used). Complexity: $O(1+LR^2/\\varepsilon)$ total exact proximal and $K,K^*$ oracle calls for uniform saddle gap at most $\\varepsilon$, using their primal-dual algorithm with squared-norm proximity; fixed cost, two proximal calls and two operator applications per iteration.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Both g on X and h on Y are convex; the objective is convex in x and concave in y. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: spec.valid, spec.admissible, objective."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Find an approximate saddle point of Φ(x,y)=g(x)+⟨y,Kx⟩−h(y) over X×Y.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: objective, spec.successful."
+      },
+      {
+        "label": "composite",
+        "details": "A bounded bilinear coupling is combined with possibly nonsmooth convex terms accessed through separate constrained proximal maps.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: Problem, objective, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Exact minimizers of ηg(x)+‖x−a‖²/2 over X and ηh(y)+‖y−b‖²/2 over Y are available for every center and every η>0. Each query counts as one oracle call.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: spec.Query, spec.admissible; LongTails/Template.lean: execute, Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Exact applications of K and its adjoint are separate oracle queries. All four reply types are independent of the call index and oracle seed; no function-value or subgradient oracle is supplied.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: spec.Query, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E and F are real inner-product spaces, without completeness or finite-dimensionality assumptions. X and Y are convex, nonempty, and contained in radius-R balls; closedness is not explicitly assumed. Exact proximal minimizers and an everywhere-defined adjoint are explicitly required. Public information includes X,Y,x0,y0,R,L,M,ε, with R,L,ε>0 and M≥0. The hidden instance satisfies ‖K‖≤L and g,h are M-Lipschitz on their respective feasible sets. The permitted algorithm family is specified by spec.allowedAlgorithm.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: Public, Problem, spec.publicInput, spec.valid, spec.admissible, spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "saddle_point_gap",
+        "details": "The output (x̄,ȳ) must satisfy Φ(x̄,y)−Φ(x,ȳ)≤ε simultaneously for every x∈X and y∈Y.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned pair must belong to X×Y.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the uniform ε saddle-gap bound hold almost surely under the joint algorithm and oracle seed law. The oracle-call budget is a fixed bound holding for every seed.",
+        "evidence": "LongTails/Setups/BoundedCompositeSaddle.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the standard bounded convex-concave bilinear composite saddle problem with exact proximal and linear-operator access and a uniform saddle-gap criterion. Its formulation allows general inner-product spaces and explicitly assumes proximal solvability."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ArrowHurwicz.ArrowHurwiczBoundedSaddle.result",
+        "OracleTemplate.ArrowHurwicz.ArrowHurwiczUniformRate.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ArrowHurwiczBoundedSaddle",
+          "theorem": "OracleTemplate.ArrowHurwicz.ArrowHurwiczBoundedSaddle.result",
+          "match_status": "related"
+        },
+        {
+          "module": "LongTails.Theorems.ArrowHurwiczUniformRate",
+          "theorem": "OracleTemplate.ArrowHurwicz.ArrowHurwiczUniformRate.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

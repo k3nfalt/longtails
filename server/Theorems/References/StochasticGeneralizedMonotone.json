@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.StochasticGeneralizedMonotone",
+  "searched_at": "2026-10-08T07:43:32.902495+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{60} \\cdot \\left(1 + \\frac{L0 \\cdot R}{\\varepsilon} + \\left(L1 \\cdot R\\right)^{2} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{L0 \\cdot R}{\\varepsilon} + L1 \\cdot R\\right)\\right)^{3} \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{L0 \\cdot R}{\\varepsilon} + L1 \\cdot R}{\\delta}\\right)\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.StochasticGeneralizedMonotone.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 60 * (1 + p.L0 * p.R / p.ε + (p.L1 * p.R) ^ 2 + p.σ ^ 2 / p.ε ^ 2) *\n        (1 + Real.log (2 + p.L0 * p.R / p.ε + p.L1 * p.R)) ^ 3 *\n      (1 + Real.log ((2 + p.L0 * p.R / p.ε + p.L1 * p.R) / p.δ))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{60} \\cdot \\left(1 + \\frac{L0 \\cdot R}{\\varepsilon} + \\left(L1 \\cdot R\\right)^{2} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{L0 \\cdot R}{\\varepsilon} + L1 \\cdot R\\right)\\right)^{3} \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{L0 \\cdot R}{\\varepsilon} + L1 \\cdot R}{\\delta}\\right)\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.StochasticGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 60 * (1 + p.L0 * p.R / p.ε + (p.L1 * p.R) ^ 2 + p.σ ^ 2 / p.ε ^ 2) *\n        (1 + Real.log (2 + p.L0 * p.R / p.ε + p.L1 * p.R)) ^ 3 *\n      (1 + Real.log ((2 + p.L0 * p.R / p.ε + p.L1 * p.R) / p.δ))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticGeneralizedMonotone",
+      "namespace": "LongTails.Setups.StochasticGeneralizedMonotone",
+      "setup": "LongTails.Setups.StochasticGeneralizedMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticGeneralizedMonotone.spec\n  OracleTemplate.StochasticGeneralizedMonotone.budget",
+      "theorem": "OracleTemplate.StochasticGeneralizedMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticGeneralizedMonotone",
+      "theorem": "OracleTemplate.StochasticGeneralizedMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone root finding: find an approximate zero of a continuous operator F:E→E satisfying ⟨F(x)−F(y),x−y⟩≥0. A zero xstar exists with ‖x0−xstar‖≤R. No objective, potential representation, or strong monotonicity is assumed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Stochastic operator evaluations g(x,ξ), with E[g(x,ξ)]=F(x) and E[‖g(x,ξ)−F(x)‖²]≤σ² for every x. Each call uses a fresh IID seed and returns one vector; no sample reuse or samplewise regularity is provided. L0,L1,x0,R,σ,ε,δ are public; F, g, and the sampling law are hidden.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: Params, IsStochasticOperator, spec.Public, spec.publicInput, and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Oracle and execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For all x,y,M, if ‖F(x+θ(y−x))‖≤M for every θ∈[0,1], then ‖F(x)−F(y)‖≤(L0+L1 M)‖x−y‖. Public L0,L1≥0; global ordinary Lipschitz continuity and differentiability are not required.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: spec.valid and the segment-bound clause in spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform central second-moment bound σ² with σ≥0, unbiased evaluations, and IID sampling. No exponential-moment or almost-sure noise bound is imposed, so finite-variance heavy-tailed noise is permitted.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator.unbiased, variance_integrable, variance, and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional complete real inner-product space with its Borel measurable structure. No dimension bound is supplied.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: Params.finiteE, completeE, measurableE, borelE, and countableE; LongTails/Setups/GeneralizedLipschitzMonotone.lean: GeneralizedMonotone.Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "high_probability",
+        "details": "P(‖F(X)‖>ε)≤δ for public 0<δ<1, under the joint algorithm and oracle randomness. The supplied oracle-call budget is fixed, not an expected cost.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: spec.successful and spec.valid; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "other",
+        "details": "Operator residual norm: return a measurable point X∈E satisfying ‖F(X)‖≤ε on the success event, with ε>0. This is an unsquared operator norm, not an objective gap or an assumed gradient norm; no last-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: spec.Output, spec.valid, and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Monotone root finding with operator-norm-dependent Lipschitz control, finite-variance stochastic evaluations, and a high-probability residual guarantee is a meaningful variant of the classical globally Lipschitz formulation. No repository proofs or implementations were inspected; the literature outcome does not certify novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticGeneralizedMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticGeneralizedMonotone",
+          "theorem": "OracleTemplate.StochasticGeneralizedMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.MomentumLipschitzConvex",
+  "searched_at": "2026-10-06T06:16:48.096151+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{100 \\cdot G^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + \\left\\lceil 4 \\cdot \\left(\\frac{\\beta}{1 - \\beta}\\right)^{2} \\cdot \\left(1 + \\log\\left(\\frac{1}{1 - \\beta}\\right)\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.MomentumLipschitzConvex.spec.Params → ℕ",
+        "value": "fun q => ⌈100 * q.G ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊ + ⌈4 * (q.β / (1 - q.β)) ^ 2 * (1 + Real.log (1 / (1 - q.β)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{100 \\cdot G^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + \\left\\lceil 4 \\cdot \\left(\\frac{\\beta}{1 - \\beta}\\right)^{2} \\cdot \\left(1 + \\log\\left(\\frac{1}{1 - \\beta}\\right)\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.MomentumLipschitzConvex.spec.Params → ℕ",
+          "value": "fun q => ⌈100 * q.G ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊ + ⌈4 * (q.β / (1 - q.β)) ^ 2 * (1 + Real.log (1 / (1 - q.β)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ConstantMomentumLastIterate",
+      "namespace": "LongTails.Setups.MomentumLipschitzConvex",
+      "setup": "LongTails.Setups.MomentumLipschitzConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MomentumLipschitzConvex.spec OracleTemplate.MomentumConvex.budget",
+      "theorem": "OracleTemplate.MomentumConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ConstantMomentumLastIterate",
+      "theorem": "OracleTemplate.MomentumConvex.result",
+      "references": "- A. S. Nemirovskii and D. B. Yudin. [Cesari Convergence of the Gradient Method of Approximating Saddle Points of Convex-Concave Functions](https://cs.uwaterloo.ca/~y328yu/classics/Cesari.pdf). 1978. Complexity: $O(1+G^2R^2/\\varepsilon^2)$ fixed stochastic subgradient calls for expected objective gap $\\le\\varepsilon$, using averaged projected iterates on a radius-$R$ ball.\n- Daniela Angela Parletta, Andrea Paudice, and Saverio Salzo. [An Improved Analysis of the Clipped Stochastic subGradient Method under Heavy-Tailed Noise](https://arxiv.org/pdf/2410.00573v2). 2024 preprint; version used: April 2025, v2. Complexity: $O(1+G^2R^2/\\varepsilon^2)$ fixed stochastic subgradient calls for expected last-iterate objective gap $\\le\\varepsilon$, with moment order $p=2$, batch size one, base stepsize $R/G$, and base clipping parameter $G$, for $R>0$.\n- Prateek Jain, Dheeraj Nagaraj, and Praneeth Netrapalli. [Making the Last Iterate of SGD Information Theoretically Optimal](https://arxiv.org/pdf/1904.12443v2). 2019, COLT; full analysis: May 2019 preprint, v2. Complexity: $O(1+G^2D^2/\\varepsilon^2)$ fixed stochastic subgradient calls for expected last-iterate objective gap $\\le\\varepsilon$, using projected SGD with epochwise decreasing stepsizes; $D$ is the feasible-set diameter.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a real-valued convex function f on a real separable Hilbert space E. A global minimizer xstar exists with ||x0-xstar||≤R. Neither smoothness nor strong convexity is assumed.",
+        "evidence": "LongTails/Setups/MomentumLipschitzConvex.lean: Params; spec.admissible, ConvexOn and minimizer-existence clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns grad(ξ,x). Independent samples ξ follow the hidden law M.law. The mean g(x)=Eξ[grad(ξ,x)] belongs to ∂f(x); individual replies need not themselves be subgradients. Only the vector reply is available.",
+        "evidence": "LongTails/Setups/MomentumLipschitzConvex.lean: Model; spec.Query, spec.Reply, and spec.admissible, infinitePi oracle law and mean-subgradient inequality."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform total second-moment bound Eξ||grad(ξ,x)||²≤G² for every x, including integrability. Consequently Eξ||grad(ξ,x)-g(x)||²≤G². Almost-sure boundedness and higher moments are not required.",
+        "evidence": "LongTails/Setups/MomentumLipschitzConvex.lean: spec.admissible, squared-norm integrability and second-moment bound."
+      },
+      {
+        "label": "other",
+        "details": "E is complete, real, and second-countable with its Borel measurable structure. G>0, R≥0, ε>0, x0, and β∈[0,1) are public; f, grad, and the sampling law are hidden. Permitted algorithms are restricted to constantMomentumSgd β γ N x0 for some γ and N. The initial-distance bound and mean-subgradient moment bound imply that f is G-Lipschitz.",
+        "evidence": "LongTails/Setups/MomentumLipschitzConvex.lean: Params; Model; spec.Public, spec.publicInput, spec.valid, spec.allowedAlgorithm, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The E-valued output must have an integrable objective gap f(output)-f(xstar) for a global minimizer xstar, with its expectation at most ε. The successful predicate contains no separate averaging or iterate-selection requirement; the output is constrained through the permitted algorithm family.",
+        "evidence": "LongTails/Setups/MomentumLipschitzConvex.lean: spec.Output, spec.successful, and spec.allowedAlgorithm."
+      },
+      {
+        "label": "expected",
+        "details": "E[f(output)-f(xstar)]≤ε under the product of the algorithm's randomness and the independent oracle-sample law. Oracle cost is bounded by the supplied deterministic budget for every seed realization.",
+        "evidence": "LongTails/Setups/MomentumLipschitzConvex.lean: spec.successful; LongTails/Template.lean: Convergence, product probability measure and per-seed call-count bound."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Convex stochastic subgradient optimization with independent samples, bounded second moments, a known initial-distance bound, and expected objective accuracy is a standard formulation. The permitted momentum family restricts the algorithms used to solve it."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.MomentumConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ConstantMomentumLastIterate",
+          "theorem": "OracleTemplate.MomentumConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

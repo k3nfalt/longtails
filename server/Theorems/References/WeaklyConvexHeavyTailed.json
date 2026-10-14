@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.WeaklyConvexHeavyTailed",
+  "searched_at": "2026-10-09T07:50:34.983109+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil \\frac{288 \\cdot \\rho \\cdot \\Delta \\cdot \\left(G^{2} + \\sigma^{\\alpha} \\cdot \\left(4 \\cdot G + 4 \\cdot \\sigma \\cdot \\left(\\frac{4 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{1}{\\alpha - 1}}\\right)^{2 - \\alpha}\\right)}{\\varepsilon^{4}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.WeaklyConvexHeavyTailed.spec.Params → ℕ",
+        "value": "fun q =>\n  2 *\n    ⌈288 * q.ρ * q.Δ * (q.G ^ 2 + q.σ ^ q.α * (4 * q.G + 4 * q.σ * (4 * q.σ / q.ε) ^ (1 / (q.α - 1))) ^ (2 - q.α)) /\n        q.ε ^ 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil \\frac{288 \\cdot \\rho \\cdot \\Delta \\cdot \\left(G^{2} + \\sigma^{\\alpha} \\cdot \\left(4 \\cdot G + 4 \\cdot \\sigma \\cdot \\left(\\frac{4 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{1}{\\alpha - 1}}\\right)^{2 - \\alpha}\\right)}{\\varepsilon^{4}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.WeaklyConvexHeavyTailed.spec.Params → ℕ",
+          "value": "fun q =>\n  2 *\n    ⌈288 * q.ρ * q.Δ * (q.G ^ 2 + q.σ ^ q.α * (4 * q.G + 4 * q.σ * (4 * q.σ / q.ε) ^ (1 / (q.α - 1))) ^ (2 - q.α)) /\n        q.ε ^ 4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.WeaklyConvexClippedSubgradient",
+      "namespace": "LongTails.Setups.WeaklyConvexHeavyTailed",
+      "setup": "LongTails.Setups.WeaklyConvexHeavyTailed",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.WeaklyConvexHeavyTailed.spec OracleTemplate.WeaklyConvexHeavyTailed.budget",
+      "theorem": "OracleTemplate.WeaklyConvexHeavyTailed.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.WeaklyConvexClippedSubgradient",
+      "theorem": "OracleTemplate.WeaklyConvexHeavyTailed.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Constrained, possibly nonsmooth, ρ-weakly convex minimization on a nonempty closed convex domain D. A selected vector v(x) satisfies f(y) ≥ f(x) + ⟨v(x),y−x⟩ − (ρ/2)‖y−x‖² for all x,y∈D. Convexity of f is not required.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: spec.admissible, weak-convexity inequality and domain conditions."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Stochastic subgradient queries return g(x,ω), with E[g(x,ω)]=v(x). Oracle seeds are independent and identically distributed. Only subgradient and projection queries are available.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: Query; spec.admissible, oracle.answer, IID and unbiasedness conditions. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: StochasticGeneralized.IID."
+      },
+      {
+        "label": "other",
+        "details": "Exact Euclidean projection onto D is available as an oracle query. Projection and stochastic subgradient queries each count as one call in the fixed total oracle budget.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: Query.projection and spec.admissible projection conditions. LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central-moment bound E‖g(x,ω)−v(x)‖^α ≤ σ^α, where 1<α≤2 and σ≥0. For α<2, finite variance is not required. The underlying oracle is unbiased.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: spec.valid and spec.admissible, integrability, unbiasedness and α-moment conditions."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure; no dimension factor appears in the supplied budget.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: Params.normedE, Params.innerE, Params.finiteE and Params.borelE."
+      },
+      {
+        "label": "other",
+        "details": "The selected mean subgradient satisfies ‖v(x)‖≤G. A finite lower bound lower satisfies f(x0)−lower≤Δ. All parameters, including ρ>0, G>0, σ≥0, 1<α≤2, Δ≥0, ε>0 and x0∈D, are public. The objective, domain, oracle maps and sampling laws are hidden. No bounded-domain assumption is imposed.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: Params, Instance, spec.Public, spec.publicInput, spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "For the constrained proximal minimizer prox(x)∈argmin_{y∈D}{f(y)+ρ‖y−x‖²}, require E[(2ρ)²‖X−prox(X)‖²]≤ε², with integrability. This is squared Moreau-envelope gradient accuracy at smoothing parameter 1/(2ρ). Proximal minimizers must exist, and the criterion applies to every map satisfying IsProx.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: proxObj, IsProx and spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output X must be measurable and belong to D for every realization.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The accuracy bound holds in expectation over algorithm randomness and oracle seeds under their product probability law, using a fixed oracle budget.",
+        "evidence": "LongTails/Setups/WeaklyConvexHeavyTailed.lean: spec.successful integral bound. LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines constrained weakly convex Moreau-envelope stationarity with an unbiased subgradient oracle whose central moment may have order below two, permitting infinite variance."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.WeaklyConvexHeavyTailed.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.WeaklyConvexClippedSubgradient",
+          "theorem": "OracleTemplate.WeaklyConvexHeavyTailed.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

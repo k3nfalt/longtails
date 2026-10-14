@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.StochasticHessianNcsc",
+  "searched_at": "2026-10-08T07:44:51.989153+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10^{6} \\cdot \\left(1 + \\frac{L}{\\mu}\\right)^{2} \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{\\rho \\cdot \\varepsilon \\cdot \\left(1 + \\frac{L}{\\mu}\\right)}{L^{2}}\\right) \\cdot \\left(\\frac{\\left(1 + \\frac{L}{\\mu}\\right) \\cdot \\Delta}{\\varepsilon} \\cdot \\sqrt{\\frac{40 \\cdot \\rho \\cdot \\left(1 + \\frac{L}{\\mu}\\right)}{\\varepsilon} + \\frac{L^{2}}{\\varepsilon^{2} + 20 \\cdot \\sigma^{2}}} + 1 + \\frac{\\sigma}{\\varepsilon} + \\log\\left(1 + \\frac{G^{2}}{\\mu^{2}} \\cdot \\left(\\frac{40 \\cdot \\rho \\cdot \\left(1 + \\frac{L}{\\mu}\\right)}{\\varepsilon} + \\frac{L^{2}}{\\varepsilon^{2} + 20 \\cdot \\sigma^{2}}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.StochasticHessianNcsc.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈10 ^ 6 * (1 + q.L / q.μ) ^ 2 * (1 + q.σ ^ 2 / q.ε ^ 2) * (1 + q.ρ * q.ε * (1 + q.L / q.μ) / q.L ^ 2) *\n      ((1 + q.L / q.μ) * q.Δ / q.ε * √(40 * q.ρ * (1 + q.L / q.μ) / q.ε + q.L ^ 2 / (q.ε ^ 2 + 20 * q.σ ^ 2)) + 1 +\n          q.σ / q.ε +\n        Real.log (1 + q.G ^ 2 / q.μ ^ 2 * (40 * q.ρ * (1 + q.L / q.μ) / q.ε + q.L ^ 2 / (q.ε ^ 2 + 20 * q.σ ^ 2))))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10^{6} \\cdot \\left(1 + \\frac{L}{\\mu}\\right)^{2} \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{\\rho \\cdot \\varepsilon \\cdot \\left(1 + \\frac{L}{\\mu}\\right)}{L^{2}}\\right) \\cdot \\left(\\frac{\\left(1 + \\frac{L}{\\mu}\\right) \\cdot \\Delta}{\\varepsilon} \\cdot \\sqrt{\\frac{40 \\cdot \\rho \\cdot \\left(1 + \\frac{L}{\\mu}\\right)}{\\varepsilon} + \\frac{L^{2}}{\\varepsilon^{2} + 20 \\cdot \\sigma^{2}}} + 1 + \\frac{\\sigma}{\\varepsilon} + \\log\\left(1 + \\frac{G^{2}}{\\mu^{2}} \\cdot \\left(\\frac{40 \\cdot \\rho \\cdot \\left(1 + \\frac{L}{\\mu}\\right)}{\\varepsilon} + \\frac{L^{2}}{\\varepsilon^{2} + 20 \\cdot \\sigma^{2}}\\right)\\right)\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.StochasticHessianNcsc.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈10 ^ 6 * (1 + q.L / q.μ) ^ 2 * (1 + q.σ ^ 2 / q.ε ^ 2) * (1 + q.ρ * q.ε * (1 + q.L / q.μ) / q.L ^ 2) *\n      ((1 + q.L / q.μ) * q.Δ / q.ε * √(40 * q.ρ * (1 + q.L / q.μ) / q.ε + q.L ^ 2 / (q.ε ^ 2 + 20 * q.σ ^ 2)) + 1 +\n          q.σ / q.ε +\n        Real.log (1 + q.G ^ 2 / q.μ ^ 2 * (40 * q.ρ * (1 + q.L / q.μ) / q.ε + q.L ^ 2 / (q.ε ^ 2 + 20 * q.σ ^ 2))))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HessianNcscImplicitTransport",
+      "namespace": "LongTails.Setups.StochasticHessianNcsc",
+      "setup": "LongTails.Setups.StochasticHessianNcsc",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticHessianNcsc.spec OracleTemplate.HessianNcsc.budget",
+      "theorem": "OracleTemplate.HessianNcsc.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HessianNcscImplicitTransport",
+      "theorem": "OracleTemplate.HessianNcsc.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective may be nonconvex in x. The minimization target is Φ(x)=max_y f(x,y), with Φ(x0)−inf_x Φ(x)≤Δ.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.admissible imposes no convexity in x and requires ∀ x y, ∃ y', f x0 y − f x y' ≤ Δ."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Unconstrained nonconvex–strongly concave minimax optimization over E×F: f(x,·) is μ-strongly concave for every x, with 0<μ≤L.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.Instance, spec.valid, and the strong-concavity inequality in spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at (x,y) returns a jointly sampled pair (ox,oy) with expectation (∇x f,∇y f). Calls use fresh IID seeds. The oracle supplies neither Hessians nor function values, and provides no mechanism to reuse a seed at multiple query points. All Params, including L, μ, ρ, σ, Δ, G, ε, x0 and y0, are public; f and the oracle witnesses are hidden.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.Public, spec.publicInput, spec.Query, spec.Reply, and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: StochasticGeneralized.IID; LongTails/Template.lean: Oracle, Algorithm, execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform joint variance bound E[‖ox(z,ξ)−∇x f(z)‖²+‖oy(z,ξ)−∇y f(z)‖²]≤σ², with σ>0. Independence is across calls; the two components within a reply may be dependent. No samplewise smoothness or tail bound is assumed.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.valid and the IID, unbiasedness, integrability, and variance clauses in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E and F are finite-dimensional real inner-product spaces with their Borel measurable structures; the domains are unrestricted.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: Params.innerE, Params.finiteE, Params.borelE, Params.innerF, Params.finiteF, Params.borelF, and spec.Instance."
+      },
+      {
+        "label": "other",
+        "details": "The joint gradient is globally L-Lipschitz in the product Euclidean norm, and its derivative is globally ρ-Lipschitz in operator norm, with ρ>0. These are properties of the population objective. Initialization satisfies ‖∇y f(x0,y0)‖≤G, G≥0, and the value-function gap is bounded by Δ≥0.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.valid and the HasFDerivAt, joint gradient Lipschitz, derivative Lipschitz, gap, and initial gy-bound clauses in spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable x-valued output X with integrable ‖∇Φ(X)‖ and E‖∇Φ(X)‖≤ε, ε>0. This is the first power of the norm. Success also requires existence of a global maximizing selection ys and the guarantee for every such selection, with Φ(x)=f(x,ys(x)).",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the independent product of algorithm randomness and the IID oracle-seed law. The extracted budget is a fixed total number of individual gradient-pair oracle calls, not an expected stopping cost.",
+        "evidence": "LongTails/Setups/StochasticHessianNcsc.lean: spec.successful; LongTails/Template.lean: Convergence, execute, and _run."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established stochastic nonconvex–strongly concave minimax formulation with population gradient and Hessian Lipschitz regularity, an unbiased IID bounded-variance gradient oracle, and expected value-function stationarity. Repository implementations and proofs were not inspected; no qualifying verified reference is not a novelty claim."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HessianNcsc.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HessianNcscImplicitTransport",
+          "theorem": "OracleTemplate.HessianNcsc.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

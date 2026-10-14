@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.HolderMonotone",
+  "searched_at": "2026-10-04T15:40:56.395827+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 40 \\cdot \\left(\\frac{16 \\cdot L \\cdot R}{\\varepsilon} + 2 \\cdot \\left(\\frac{8 \\cdot H \\cdot R^{\\alpha}}{\\varepsilon}\\right)^{\\frac{1}{\\alpha}} + \\log_{2}\\left(\\frac{R}{r0}\\right) + 2\\right) \\cdot \\log\\left(\\frac{\\left(\\frac{32 \\cdot L \\cdot R}{\\varepsilon} + 4 \\cdot \\left(\\frac{8 \\cdot H \\cdot R^{\\alpha}}{\\varepsilon}\\right)^{\\frac{1}{\\alpha}} + 4\\right) \\cdot R}{r0}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.HolderMonotone.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈40 * (16 * q.L * q.R / q.ε + 2 * (8 * q.H * q.R ^ q.α / q.ε) ^ (1 / q.α) + Real.logb 2 (q.R / q.r0) + 2) *\n      Real.log ((32 * q.L * q.R / q.ε + 4 * (8 * q.H * q.R ^ q.α / q.ε) ^ (1 / q.α) + 4) * q.R / q.r0)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 40 \\cdot \\left(\\frac{16 \\cdot L \\cdot R}{\\varepsilon} + 2 \\cdot \\left(\\frac{8 \\cdot H \\cdot R^{\\alpha}}{\\varepsilon}\\right)^{\\frac{1}{\\alpha}} + \\log_{2}\\left(\\frac{R}{r0}\\right) + 2\\right) \\cdot \\log\\left(\\frac{\\left(\\frac{32 \\cdot L \\cdot R}{\\varepsilon} + 4 \\cdot \\left(\\frac{8 \\cdot H \\cdot R^{\\alpha}}{\\varepsilon}\\right)^{\\frac{1}{\\alpha}} + 4\\right) \\cdot R}{r0}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.HolderMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈40 * (16 * q.L * q.R / q.ε + 2 * (8 * q.H * q.R ^ q.α / q.ε) ^ (1 / q.α) + Real.logb 2 (q.R / q.r0) + 2) *\n      Real.log ((32 * q.L * q.R / q.ε + 4 * (8 * q.H * q.R ^ q.α / q.ε) ^ (1 / q.α) + 4) * q.R / q.r0)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.UniversalHolderMonotone",
+      "namespace": "LongTails.Setups.HolderMonotone",
+      "setup": "LongTails.Setups.HolderMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HolderMonotone.spec OracleTemplate.HolderMonotone.budget",
+      "theorem": "OracleTemplate.HolderMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.UniversalHolderMonotone",
+      "theorem": "OracleTemplate.HolderMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone operator root finding: F:E→E satisfies ⟨F(x)−F(y),x−y⟩≥0, and some xstar satisfies F(xstar)=0 and ‖x0−xstar‖≤R. No scalar objective or saddle representation is assumed.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact full operator evaluations: querying x returns F(x) for every call index and oracle seed. No oracle error, stochastic noise, or derivative information is supplied. The complexity counts all such evaluations with a fixed budget valid for every seed.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute and Convergence"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "L, H, and α are hidden parameters. The algorithm receives only E, x0, r0, and ε through Public.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: Public, Params, and spec.publicInput; LongTails/Template.lean: Convergence.makeAlgorithm"
+      },
+      {
+        "label": "generalized_smoothness",
+        "details": "Global mixed Lipschitz–Hölder continuity: ‖F(x)−F(y)‖≤L‖x−y‖+H‖x−y‖^α, with L,H≥0 and 0<α≤1.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: spec.valid and spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm; no dimension bound is supplied.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: Public.normedE, Public.linearE, and Public.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "The solution-distance upper bound R is hidden. The public scale r0 satisfies 0<r0≤R but is not assumed to lower-bound the actual distance to a zero. Accuracy ε>0 is public.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: Public, Params, spec.valid, spec.publicInput, and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual criterion must hold almost surely under the joint algorithm-seed and oracle-seed distribution. Algorithm randomization is permitted.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: spec.successful; LongTails/Template.lean: Algorithm.law and Convergence"
+      },
+      {
+        "label": "other",
+        "details": "The output is a single point x∈E satisfying the unsquared operator residual criterion ‖F(x)‖≤ε. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/HolderMonotone.lean: spec.Output and spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The underlying monotone root problem is established, but this formulation combines a mixed global Lipschitz–Hölder modulus with hidden continuity parameters and a hidden solution-radius bound, while requiring an almost-sure operator residual guarantee under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HolderMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.UniversalHolderMonotone",
+          "theorem": "OracleTemplate.HolderMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

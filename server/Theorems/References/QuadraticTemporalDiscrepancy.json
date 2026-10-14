@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.QuadraticTemporalDiscrepancy",
+  "searched_at": "2026-10-04T15:42:46.344860+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) + \\frac{8 \\cdot D}{\\sqrt{\\mu \\cdot \\varepsilon}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.QuadraticTemporalDiscrepancy.spec.Params → ℕ",
+        "value": "fun p => 2 * max 1 ⌈√(p.L / p.μ) * Real.log (1 + 8 * p.Δ / p.ε) + 8 * p.D / √(p.μ * p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) + \\frac{8 \\cdot D}{\\sqrt{\\mu \\cdot \\varepsilon}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.QuadraticTemporalDiscrepancy.spec.Params → ℕ",
+          "value": "fun p => 2 * max 1 ⌈√(p.L / p.μ) * Real.log (1 + 8 * p.Δ / p.ε) + 8 * p.D / √(p.μ * p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.TemporalAcceleratedQuadratic",
+      "namespace": "LongTails.Setups.QuadraticTemporalDiscrepancy",
+      "setup": "LongTails.Setups.QuadraticTemporalDiscrepancy",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuadraticTemporalDiscrepancy.spec OracleTemplate.TemporalDiscrepancy.budget",
+      "theorem": "OracleTemplate.TemporalDiscrepancy.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.TemporalAcceleratedQuadratic",
+      "theorem": "OracleTemplate.TemporalDiscrepancy.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of f(x)=‖A(x−xstar)‖²/2 on a real Hilbert space; f(xstar)=0.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: Instance, objective, spec.Query, spec.Output; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The operator bounds μ‖v‖²≤‖Av‖²≤L‖v‖² imply μ-strong convexity and L-Lipschitz continuity of the gradient A* A(x−xstar). Parameters satisfy 0<μ≤L, D≥0, Δ≥0, ε>0, and f(x0)≤Δ.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: exactGradient, spec.valid, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Quadratic objectives with a bounded linear operator A and hidden minimizer xstar; no finite-dimensional restriction is imposed.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: Instance, objective; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public.E, normedE, linearE, completeE."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "Each call k at x returns A* A(x−xstar)+e_k. The additive error is independent of the query and oracle seed. Only gradient vectors are supplied. E, L, μ and x0 are public; D, Δ and ε determine the evaluation budget but are not algorithm inputs. A, xstar and the error sequence are hidden. Oracle cost is a fixed number of sequential calls.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: Public, Params, Instance, spec.publicInput, spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "Errors may be arbitrary nonzero deterministic offsets subject to the cumulative discrepancy bound; no zero-mean condition is imposed.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: spec.admissible, equality quantified over every k, x and seed."
+      },
+      {
+        "label": "temporal_discrepancy",
+        "details": "There exists one error sequence satisfying ‖Σ_{k=0}^{n−1}e_k‖≤D for every n. This controls signed cumulative errors, without requiring individual errors to decay, independence, unbiasedness, or a Markov model.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−f(xstar)=‖A(output−xstar)‖²/2≤ε.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: objective, spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap requirement holds almost surely under the joint algorithm and oracle seed law after the prescribed fixed call budget.",
+        "evidence": "LongTails/Setups/QuadraticTemporalDiscrepancy.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Strongly convex quadratic minimization is classical, but the query-independent additive oracle errors with uniformly bounded signed cumulative sums constitute an unusual temporal error model."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.TemporalDiscrepancy.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.TemporalAcceleratedQuadratic",
+          "theorem": "OracleTemplate.TemporalDiscrepancy.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

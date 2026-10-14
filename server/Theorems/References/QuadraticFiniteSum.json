@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.QuadraticFiniteSum",
+  "searched_at": "2026-10-04T17:51:50.936017+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "n \\cdot \\left\\lceil \\left(\\frac{64 \\cdot L}{\\mu} + \\frac{128 \\cdot L \\cdot \\sqrt{L} \\cdot G}{n \\cdot \\mu^{2} \\cdot \\sqrt{\\varepsilon}} + 8 \\cdot \\left(\\frac{L^{3} \\cdot G^{2}}{n \\cdot \\mu^{4} \\cdot \\varepsilon}\\right)^{\\frac{1}{3}}\\right) \\cdot \\log\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.QuadraticFiniteSum.spec.Params → ℕ",
+        "value": "fun p =>\n  p.n *\n    ⌈(64 * p.L / p.μ + 128 * p.L * √p.L * p.G / (↑p.n * p.μ ^ 2 * √p.ε) +\n          8 * (p.L ^ 3 * p.G ^ 2 / (↑p.n * p.μ ^ 4 * p.ε)) ^ (1 / 3)) *\n        Real.log (1 + p.L * p.R ^ 2 / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "n \\cdot \\left\\lceil \\left(\\frac{64 \\cdot L}{\\mu} + \\frac{128 \\cdot L \\cdot \\sqrt{L} \\cdot G}{n \\cdot \\mu^{2} \\cdot \\sqrt{\\varepsilon}} + 8 \\cdot \\left(\\frac{L^{3} \\cdot G^{2}}{n \\cdot \\mu^{4} \\cdot \\varepsilon}\\right)^{\\frac{1}{3}}\\right) \\cdot \\log\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.QuadraticFiniteSum.spec.Params → ℕ",
+          "value": "fun p =>\n  p.n *\n    ⌈(64 * p.L / p.μ + 128 * p.L * √p.L * p.G / (↑p.n * p.μ ^ 2 * √p.ε) +\n          8 * (p.L ^ 3 * p.G ^ 2 / (↑p.n * p.μ ^ 4 * p.ε)) ^ (1 / 3)) *\n        Real.log (1 + p.L * p.R ^ 2 / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RandomReshufflingQuadratic",
+      "namespace": "LongTails.Setups.QuadraticFiniteSum",
+      "setup": "LongTails.Setups.QuadraticFiniteSum",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuadraticFiniteSum.spec OracleTemplate.QuadraticFiniteSum.budget",
+      "theorem": "OracleTemplate.QuadraticFiniteSum.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RandomReshufflingQuadratic",
+      "theorem": "OracleTemplate.QuadraticFiniteSum.result",
+      "references": "- B. T. Polyak. [Some methods of speeding up the convergence of iteration methods](https://doi.org/10.1016/0041-5553(64)90137-5). 1964. Complexity: $O(n(L/\\mu)\\log(LR^2/\\varepsilon))$ exact component-gradient calls using the full-gradient method for objective gap at most $\\varepsilon$, counting $n$ component calls per iteration; $0<\\varepsilon<LR^2/2$.\n- James W. Daniel. [The Conjugate Gradient Method for Linear and Nonlinear Operator Equations](https://doi.org/10.1137/0704002). 1967. Complexity: $O(n[1+\\sqrt{L/\\mu}\\log(LR^2/\\varepsilon)])$ exact component-gradient calls using conjugate gradients for objective gap at most $\\varepsilon$, including initialization and component queries implementing operator products; $0<\\varepsilon<LR^2/2$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of an L-smooth quadratic objective on a complete real Hilbert space. Individual quadratic components may be nonconvex, but their average is convex.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: Params, objective, spec.admissible."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The average operator satisfies ⟨x,(n⁻¹∑ᵢAᵢ)x⟩ ≥ μ‖x‖² for every x, so the objective is μ-strongly convex. Parameters satisfy 0<μ≤L.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "f(x)=n⁻¹∑ᵢ[⟨x,Aᵢx⟩/2+⟨bᵢ,x⟩], with n≥1. Each Aᵢ is a bounded symmetric linear operator with ‖Aᵢ‖≤L.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: Params.n, Instance, objective, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query chooses any component i and point x and returns exactly Aᵢx+bᵢ. Replies have no error, noise, or dependence on call index or seed. All Params, including n,L,μ,R,G,ε,x0 and the ambient space, are public; Aᵢ and bᵢ are hidden. Oracle budgets count individual component queries and are fixed for every seed.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: spec.Public, spec.publicInput, spec.Query, spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Quadratic components may have indefinite Hessians; only their average must be positive definite. A minimizer x⋆ exists with ∑ᵢ(Aᵢx⋆+bᵢ)=0, ‖x0−x⋆‖≤R, and maxᵢ‖Aᵢx⋆+bᵢ‖≤G, where R,G≥0 are public. The gradient bound holds at the minimizer, not globally. No finite-dimensionality or separability assumption is imposed.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: Params, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable Hilbert-space-valued output X whose objective gap relative to a global minimizer is integrable and satisfies E[f(X)−f(x⋆)]≤ε, with ε>0. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is an expectation under the product of the algorithm and oracle seed laws. Algorithmic randomization is permitted despite exact oracle replies.",
+        "evidence": "LongTails/Setups/QuadraticFiniteSum.lean: spec.successful; LongTails/Template.lean: Algorithm.law, Oracle.law, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Strongly convex quadratic finite-sum minimization with exact component gradients, an initial-distance bound, and expected objective-gap accuracy is an established optimization formulation, including variants permitting nonconvex components."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.QuadraticFiniteSum.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RandomReshufflingQuadratic",
+          "theorem": "OracleTemplate.QuadraticFiniteSum.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

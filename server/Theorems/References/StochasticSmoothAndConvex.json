@@ -1,0 +1,127 @@
+{
+  "setup": "LongTails.Setups.StochasticSmoothAndConvex",
+  "searched_at": "2026-10-04T17:56:02.710660+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{16 \\cdot L \\cdot R^{2}}{\\varepsilon}} + \\frac{64 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.StochasticSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q => max 1 ⌈√(16 * q.L * q.R ^ 2 / q.ε) + 64 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{16 \\cdot L \\cdot R^{2}}{\\varepsilon}} + \\frac{64 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.StochasticSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q => max 1 ⌈√(16 * q.L * q.R ^ 2 / q.ε) + 64 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedStochasticConvex",
+      "namespace": "LongTails.Setups.StochasticSmoothAndConvex",
+      "setup": "LongTails.Setups.StochasticSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticSmoothAndConvex.spec OracleTemplate.StochasticGradient.AcceleratedStochasticConvex.budget",
+      "theorem": "OracleTemplate.StochasticGradient.AcceleratedStochasticConvex.result"
+    },
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{4 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{4 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.StochasticSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q => max 1 ⌈4 * q.L * q.R ^ 2 / q.ε + 4 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{4 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{4 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.StochasticSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q => max 1 ⌈4 * q.L * q.R ^ 2 / q.ε + 4 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SgdConvex",
+      "namespace": "LongTails.Setups.StochasticSmoothAndConvex",
+      "setup": "LongTails.Setups.StochasticSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticSmoothAndConvex.spec OracleTemplate.StochasticGradient.SgdConvex.budget",
+      "theorem": "OracleTemplate.StochasticGradient.SgdConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedStochasticConvex",
+      "theorem": "OracleTemplate.StochasticGradient.AcceleratedStochasticConvex.result",
+      "references": "- Guanghui Lan. [Efficient Methods for Stochastic Composite Optimization](https://bpb-us-e1.wpmucdn.com/sites.gatech.edu/dist/f/330/files/2016/02/OPT_SA4.pdf?bid=330). 2008 (21 June author preprint; journal version titled An optimal method for stochastic composite optimization, 2012, online 2011). Complexity: $O(1+\\sqrt{LR^2/\\varepsilon}+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls, fixed cost, for expected objective gap at most $\\varepsilon$; AC-SA specialized to a Euclidean ball of radius $R$ containing a minimizer.\n- Andrei Kulunchakov and Julien Mairal. [Estimate Sequences for Stochastic Composite Optimization: Variance Reduction, Acceleration, and Robustness to Noise](https://jmlr.org/papers/volume21/19-073/19-073.pdf). 2020. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon}+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls, fixed cost including one initialization call, for expected objective gap at most $\\varepsilon$; proximal accelerated SGD.",
+      "match_status": "related"
+    },
+    {
+      "module": "LongTails.Theorems.SgdConvex",
+      "theorem": "OracleTemplate.StochasticGradient.SgdConvex.result",
+      "references": "- Anatoli Juditsky, Arkadi Nemirovski, and Claire Tauvel. [Solving Variational Inequalities with Stochastic Mirror-Prox Algorithm](https://www.isye.gatech.edu/~nemirovs/SMP.pdf). 2011 (2 June 2008 author preprint used). Complexity: $O(1+LR^2/\\varepsilon+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls, fixed cost counting both calls per Mirror-Prox iteration, for expected objective gap at most $\\varepsilon$ in its convex-minimization specialization on a Euclidean ball of radius $R$.\n- Guanghui Lan. [Efficient Methods for Stochastic Composite Optimization](https://bpb-us-e1.wpmucdn.com/sites.gatech.edu/dist/f/330/files/2016/02/OPT_SA4.pdf?bid=330). 2008 (21 June author preprint; journal version titled An optimal method for stochastic composite optimization, 2012, online 2011). Complexity: $O(1+LR^2/\\varepsilon+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls, fixed cost, for expected objective gap at most $\\varepsilon$; robust mirror-descent stochastic approximation specialized to a Euclidean ball of radius $R$ containing a minimizer.\n- Andrei Kulunchakov and Julien Mairal. [Estimate Sequences for Stochastic Composite Optimization: Variance Reduction, Acceleration, and Robustness to Noise](https://jmlr.org/papers/volume21/19-073/19-073.pdf). 2020. Complexity: $O(1+LR^2/\\varepsilon+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls, fixed cost, for expected objective gap at most $\\varepsilon$; averaged proximal SGD with a fixed horizon.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ with globally L-Lipschitz gradient. A global minimizer xstar exists with ‖x0−xstar‖≤R. Parameters satisfy L>0, R≥0, σ≥0, and ε>0; strong convexity is not required.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns G(x,ω)∈E, with E[G(x,ω)]=∇f(x) and E[‖G(x,ω)−∇f(x)‖²]≤σ². The oracle is jointly measurable and has the stated first- and second-moment integrability. Fresh seeds are independent and identically distributed across calls. Only gradient vectors are returned; objective values are unavailable.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.measurable, integrable, unbiased, variance_integrable, variance; spec.admissible oracle law and answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform centered second-moment bound E[‖G(x,ω)−∇f(x)‖²]≤σ² for every x. No almost-sure noise bound or exponential-tail assumption is imposed; σ=0 is permitted.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance_integrable and variance; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "E is a real complete, second-countable Hilbert space with its Borel measurable structure; finite dimensionality is not required. All Params, including L, R, σ, ε, and x0, are public. The objective, seed distribution, and oracle map are hidden. Oracle seeds have an infinite product law, giving independent samples across calls.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: Params; spec.Public, publicInput, Instance, and admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is an E-valued measurable random point. For a global minimizer xstar, f(output)−f(xstar) must be integrable and have expectation at most ε. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over the product of algorithm randomness and oracle randomness. Each supplied budget bounds the number of oracle calls for every seed realization; it is a fixed budget rather than an expected-cost bound.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the standard smooth convex stochastic first-order optimization formulation with independent unbiased gradients, uniformly bounded variance, a known initial-distance bound, and expected objective-gap accuracy, stated in a separable Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticGradient.AcceleratedStochasticConvex.result",
+        "OracleTemplate.StochasticGradient.SgdConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedStochasticConvex",
+          "theorem": "OracleTemplate.StochasticGradient.AcceleratedStochasticConvex.result",
+          "match_status": "related"
+        },
+        {
+          "module": "LongTails.Theorems.SgdConvex",
+          "theorem": "OracleTemplate.StochasticGradient.SgdConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Sample-gradient complexity for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SampledSmoothConvex.lean}{Sampled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:SampledSmoothConvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space with its Borel $\sigma$-algebra, let $f(x)=\int F_\xi(x)\,dp(\xi)$, with $p$ a probability law and IID samples. Each $F_\xi$ is convex and differentiable with $L$-Lipschitz gradient; sample gradients are jointly measurable and losses are integrable at every point. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\int\|\nabla F_\xi(x_\star)\|^2\,dp(\xi)\le\sigma^2<\infty$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. Target: $\mathbb{E}[f(x_T)-f(x_\star)]\le\varepsilon$ for the last iterate.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/LinearDecaySgdLastIterate.lean}{Linear\allowbreak{}Decay\allowbreak{}Sgd\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/LinearDecaySgdLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+SHB-IMA \citep[Thm.~G.1, Cor.~G.2]{sebbouh2021sampledv2}\newline Finite-dimensional case
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+& i) \textbf{(1)}: Matches known rate with plain SGD.\newline ii) \textbf{(1)}: Scope: extends the statement to separable Hilbert spaces; method-specific priority unresolved.
+& --- \\
+\midrule
+Constant-step SGD\newline \citep[Thm.~2]{attia2025sampledv2}: $\mathbb{R}^d$;\newline \citep[Thm.~3.1]{garrigos2025sampledv1}: Hilbert space; Derived bound (tuned)
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\ell\!\left(\frac{LR^2}{\varepsilon}\right)+\frac{\sigma^2R^2}{\varepsilon^2}\ell\!\left(\frac{\sigma R}{\varepsilon}\right)\right)$
+& i) \textbf{(1)}: Rate: removes logarithms for plain SGD when $LR^2/\varepsilon$ or $\sigma R/\varepsilon$ grows; no problem-class rate improvement.\newline ii) \textbf{(1)}: Scope: extends the Euclidean statement to Hilbert spaces.
+& \textbf{(1)} needs $\sigma$; the Hilbert-space Cor.~3.4 alternative avoids $\sigma$ in its steps, but loses the interpolation rate. \\
+\midrule
+Linear-decay SGD \citep[Thm.~3.4]{liu2026sampledv4}\newline Common case: $\mathbb{R}^d$, unconstrained, noncomposite, uniform variance $\sigma_u^2<\infty$
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma_u^2R^2}{\varepsilon^2}\right)$
+& i) \textbf{(1)}: Scope: needs variance only at $x_\star$, permitting $\sigma_u=\infty$.\newline ii) \textbf{(1)}: Rate on overlap ($\sigma\le\sigma_u$): replaces $\sigma_u^2$ by $\sigma^2$ in the noise term; matches at equal noise.
+& \textbf{(1)} needs per-sample convexity and smoothness; lacks composite/constrained scope and high-probability guarantees (available there under sub-Gaussian noise). \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual sample-gradient calls. $T$: horizon; $\ell(t)=1+\log(1+t)$ for $t\ge0$; $\sigma_u^2\ge\sup_x\mathbb{E}\|\nabla F_\xi(x)-\nabla f(x)\|^2$. SGD: stochastic gradient descent; SHB-IMA: stochastic heavy ball in iterate-moving-average form.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

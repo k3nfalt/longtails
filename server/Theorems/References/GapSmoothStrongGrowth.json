@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.GapSmoothStrongGrowth",
+  "searched_at": "2026-10-06T06:13:51.357266+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 134217728 \\cdot \\left(1 + \\log\\left(\\frac{1}{\\delta}\\right)\\right) \\cdot \\left(\\left(1 + R \\cdot \\sqrt{H1}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) + R \\cdot \\sqrt{\\frac{H0}{\\varepsilon}}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil \\rho \\right\\rceil_{+}",
+        "type": "LongTails.Setups.GapSmoothStrongGrowth.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈134217728 * (1 + Real.log (1 / p.δ)) * ((1 + p.R * √p.H1) * Real.log (1 + p.Δ / p.ε) + p.R * √(p.H0 / p.ε))⌉₊ *\n    ⌈p.ρ⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 134217728 \\cdot \\left(1 + \\log\\left(\\frac{1}{\\delta}\\right)\\right) \\cdot \\left(\\left(1 + R \\cdot \\sqrt{H1}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) + R \\cdot \\sqrt{\\frac{H0}{\\varepsilon}}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil \\rho \\right\\rceil_{+}",
+          "type": "LongTails.Setups.GapSmoothStrongGrowth.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈134217728 * (1 + Real.log (1 / p.δ)) * ((1 + p.R * √p.H1) * Real.log (1 + p.Δ / p.ε) + p.R * √(p.H0 / p.ε))⌉₊ *\n    ⌈p.ρ⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GapSmoothStrongGrowthHighProbability",
+      "namespace": "LongTails.Setups.GapSmoothStrongGrowth",
+      "setup": "LongTails.Setups.GapSmoothStrongGrowth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GapSmoothStrongGrowth.spec OracleTemplate.GapStrongGrowth.budget",
+      "theorem": "OracleTemplate.GapStrongGrowth.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GapSmoothStrongGrowthHighProbability",
+      "theorem": "OracleTemplate.GapStrongGrowth.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of an everywhere differentiable convex function f:E→ℝ on a second-countable real Hilbert space. A minimizer x⋆ exists with ‖x0−x⋆‖≤R and f(x0)−f(x⋆)≤Δ; strong convexity is not required.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: Params; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using a fresh IID sample. The jointly measurable oracle is unbiased, E[g(x,ξ)]=∇f(x), with integrable squared error. Only stochastic gradients are supplied; function values and f⋆ are unavailable.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: IsStrongGrowthOracle; spec.Query, spec.Reply, and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y with (2√3+√6)√H1‖y−x‖≤1, f(y)≤f(x)+⟨∇f(x),y−x⟩+[H0+H1(f(x)−f(x⋆))]‖y−x‖². H0,H1≥0; no second derivatives or global gradient Lipschitz bound are required.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: GapUpperModel; spec.valid and spec.admissible."
+      },
+      {
+        "label": "relative_error",
+        "details": "Mean-square strong-growth noise: E‖g(x,ξ)−∇f(x)‖²≤(ρ−1)‖∇f(x)‖², with ρ≥1. This is a relative variance bound, not a pointwise error bound; no bounded-support or exponential-tail condition is imposed.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: IsStrongGrowthOracle.variance, integrable_variance, and unbiased; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters, including H0,H1,R,Δ,ρ,ε,δ,x0 and the ambient space, are public. R,Δ>0, 0<ε≤Δ, and 0<δ<1. The objective, minimizer, sampling law, and oracle map are hidden. Geometry is Hilbert-space geometry without a finite-dimensional restriction; samples are independent and identically distributed.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: Params; spec.Public, publicInput, valid, and admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output x̂ satisfying f(x̂)−f(x⋆)≤ε for a global minimizer x⋆. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(x̂)−f(x⋆)>ε)≤δ under the joint algorithm and oracle randomness. Oracle cost is bounded for every realization by the supplied fixed budget, including every individual sample call.",
+        "evidence": "LongTails/Setups/GapSmoothStrongGrowth.lean: spec.successful. LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a local optimality-gap-dependent smoothness model with an IID unbiased strong-growth oracle having only second-moment control, and requires high-probability objective accuracy under a fixed gradient-only budget in a Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GapStrongGrowth.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GapSmoothStrongGrowthHighProbability",
+          "theorem": "OracleTemplate.GapStrongGrowth.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

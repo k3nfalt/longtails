@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.SampledSmoothConvex",
+  "searched_at": "2026-10-04T17:50:43.881473+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{48 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{324 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.SampledSmoothConvex.spec.Params → ℕ",
+        "value": "fun q => ⌈48 * q.L * q.R ^ 2 / q.ε + 324 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{48 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{324 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.SampledSmoothConvex.spec.Params → ℕ",
+          "value": "fun q => ⌈48 * q.L * q.R ^ 2 / q.ε + 324 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.LinearDecaySgdLastIterate",
+      "namespace": "LongTails.Setups.SampledSmoothConvex",
+      "setup": "LongTails.Setups.SampledSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SampledSmoothConvex.spec OracleTemplate.SampledConvex.budget",
+      "theorem": "OracleTemplate.SampledConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LinearDecaySgdLastIterate",
+      "theorem": "OracleTemplate.SampledConvex.result",
+      "references": "- Benjamin Grimmer. [Convergence Rates for Deterministic and Stochastic Subgradient Methods Without Lipschitz Continuity](https://arxiv.org/pdf/1712.04104v3). 2019 (publication; preprint v3, 2018; first preprint, 2017). Complexity: $O(1+LR^2/\\varepsilon+\\sigma^2R^2/\\varepsilon^2)$ sampled-gradient oracle calls for expected objective gap at most $\\varepsilon$ of an averaged SGD iterate.\n- Othmane Sebbouh, Robert M. Gower, Aaron Defazio. [Almost sure convergence rates for Stochastic Gradient Descent and Stochastic Heavy Ball](https://proceedings.mlr.press/v134/sebbouh21a/sebbouh21a.pdf). 2021 (publication; initial preprint, 2020). Complexity: $O(1+LR^2/\\varepsilon+\\sigma^2R^2/\\varepsilon^2)$ sampled-gradient oracle calls for expected objective gap at most $\\varepsilon$ of the stochastic heavy-ball terminal iterate.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of f(x)=Eξ[loss(ξ,x)]. Every sampled loss is convex and differentiable with L-Lipschitz gradient. A minimizer xstar exists with ‖x0−xstar‖≤R. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: objective; spec.admissible, ConvexOn, HasGradientAt, gradient Lipschitz inequality, and minimizer clause."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns grad(ξ,x), the exact gradient of a sampled loss, using a fresh independent ξ with the hidden model's probability law. Replies contain only gradients. The sample-gradient expectation equals the objective gradient under the supplied smoothness and integrability conditions.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: Model; spec.Query, spec.Reply; spec.admissible, infinitePi oracle law and answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Only the second moment at one minimizer is bounded: Eξ‖grad(ξ,xstar)‖²≤σ². No uniform variance or gradient-norm bound is assumed away from the minimizer; σ=0 is permitted.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: spec.admissible, minimizer integrability and second-moment clauses; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is a second-countable complete real Hilbert space, potentially infinite-dimensional. Samples are independent and identically distributed. E, Ξ, L>0, R≥0, σ≥0, ε>0, and x0 are public; the sampling law, losses, gradients, and minimizer are hidden. Samplewise smoothness uses the same public L.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: Params; Model; spec.Public, publicInput, valid, and admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The measurable output must have integrable objective gap f(output)−f(xstar), with expectation at most ε for an objective minimizer xstar.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: spec.successful, minimizer, Integrable, and integral inequality."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over the output probability law. Oracle cost is a fixed worst-case call budget, not an expected stopping-time cost.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence, per-seed call-count inequality and product probability law."
+      },
+      {
+        "label": "other",
+        "details": "For some integer T, the output law must equal the law of xT from x{k+1}=xk−η(T−k)/T·grad(ξk,xk), where η=R/(8LR+σ√T) and ξk are independent samples. This is an exact terminal-iterate distribution requirement.",
+        "evidence": "LongTails/Setups/SampledSmoothConvex.lean: scale; path; spec.successful, equality of mapped probability measures."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The objective and sampled-gradient noise assumptions form an established stochastic convex optimization model, but success additionally requires the exact output distribution of a prescribed linearly decaying terminal-iterate trajectory."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SampledConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LinearDecaySgdLastIterate",
+          "theorem": "OracleTemplate.SampledConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

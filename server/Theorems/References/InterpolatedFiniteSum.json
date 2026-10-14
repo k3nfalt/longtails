@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.InterpolatedFiniteSum",
+  "searched_at": "2026-10-04T17:51:33.313442+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "m \\cdot \\left\\lceil \\frac{m^{3} \\cdot L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.InterpolatedFiniteSum.spec.Params → ℕ",
+        "value": "fun q => q.m * ⌈↑q.m ^ 3 * q.L * q.R ^ 2 / q.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "m \\cdot \\left\\lceil \\frac{m^{3} \\cdot L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.InterpolatedFiniteSum.spec.Params → ℕ",
+          "value": "fun q => q.m * ⌈↑q.m ^ 3 * q.L * q.R ^ 2 / q.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CyclicGradientInterpolation",
+      "namespace": "LongTails.Setups.InterpolatedFiniteSum",
+      "setup": "LongTails.Setups.InterpolatedFiniteSum",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.InterpolatedFiniteSum.spec OracleTemplate.CyclicInterpolation.budget",
+      "theorem": "OracleTemplate.CyclicInterpolation.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CyclicGradientInterpolation",
+      "theorem": "OracleTemplate.CyclicInterpolation.result",
+      "references": "- Julien Mairal. [Optimization with First-Order Surrogate Functions](https://proceedings.mlr.press/v28/mairal13.pdf). 2013. Complexity: $O(m+mLR^2/\\varepsilon)$ fixed component-gradient calls, including initialization; MISO achieves expected average objective gap at most $\\varepsilon$.\n- Konstantin Mishchenko, Ahmed Khaled, Peter Richtárik. [Random Reshuffling: Simple Analysis with Vast Improvements](https://papers.nips.cc/paper_files/paper/2020/file/c8cc6e90ccbff44c9cee23611711cdc4-Supplemental.pdf). 2020. Complexity: $O(m\\lceil LR^2/\\varepsilon\\rceil)$ fixed component-gradient calls under interpolation; deterministic Incremental Gradient achieves average objective gap at most $\\varepsilon$ at the average of epoch endpoints.\n- Sharan Vaswani, Francis Bach, Mark Schmidt. [Fast and Faster Convergence of SGD for Over-Parameterized Models and an Accelerated Perceptron](https://proceedings.mlr.press/v89/vaswani19a/vaswani19a.pdf). 2019. Complexity: $O(1+LR^2/\\varepsilon)$ fixed component-gradient calls under interpolation; constant-step SGD achieves expected average objective gap at most $\\varepsilon$ at an averaged output.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of convex differentiable component functions on a complete real inner-product space; strong convexity is not required.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: Public.E and its instances; spec.admissible, ConvexOn clause."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is F(x) = (1/m) Σ_i f_i(x), with m ≥ 1.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: Public.m, Public.nonzero; spec.Instance and spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Only exact component gradients are supplied; function values and full gradients are not oracle replies. Each query counts as one oracle call.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: spec.Query and spec.Reply; LongTails/Template.lean: execute and Convergence."
+      },
+      {
+        "label": "component_gradient",
+        "details": "A query (i,x) returns the exact gradient of f_i at x. Exactness holds for every call index and oracle seed; no oracle error or sampling dependence is imposed.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: spec.Query, spec.Reply; spec.admissible, HasGradientAt clause."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Interpolation: there exists a common global minimizer xstar of every component with ‖x0−xstar‖ ≤ R. Every component gradient is globally L-Lipschitz. The ambient space is an arbitrary real Hilbert space. Public information comprises E, m, L and x0; R and ε are hidden parameters. Validity requires L > 0, R ≥ 0 and ε > 0. The allowed algorithm is restricted by equality to cyclicGradient m L x0.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: Public, Params, spec.publicInput, spec.valid, spec.admissible and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is one point x satisfying (1/m) Σ_i [f_i(x)−f_i(xstar)] ≤ ε for a common global minimizer xstar. No averaging requirement is stated in successful.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The ε objective-gap inequality must hold almost surely under the output law, rather than merely in expectation. The oracle-call budget is fixed and bounds calls for every seed.",
+        "evidence": "LongTails/Setups/InterpolatedFiniteSum.lean: spec.successful, ∀ᵐ clause; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth convex finite-sum optimization with exact component gradients and interpolation is an established formulation. This setup states it in a real Hilbert space with an almost-sure objective-gap criterion."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CyclicInterpolation.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CyclicGradientInterpolation",
+          "theorem": "OracleTemplate.CyclicInterpolation.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

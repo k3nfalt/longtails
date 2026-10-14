@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Composite finite-sum strongly convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/CompositeFiniteSumStronglyConvex.lean}{Composite\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Strongly\allowbreak{}Convex}.}\label{tab:CompositeFiniteSumStronglyConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $F=\frac1n\sum_{i=1}^n f_i+\psi$, with convex differentiable $L$-smooth components and an everywhere finite $\mu$-strongly convex regularizer. Exact component-gradient and proximal oracles are available. A minimizer $x_\star$ exists with $F(x_0)-F(x_\star)\le\Delta$; $n\ge1$, $L,\mu,\varepsilon>0$, $\Delta\ge0$. Target: $\mathbb{E}[F(\widetilde x_S)-F(x_\star)]\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/KatyushaCompositeStronglyConvex.lean}{Katyusha\allowbreak{}Composite\allowbreak{}Strongly\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/KatyushaCompositeStronglyConvex.md}{(review)}
+& $\mathcal{O}\!\left((n+\sqrt{nL/\mu})\log(1+\Delta/\varepsilon)\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Katyusha \citep[Thm.~2.1, Option~I]{AllenZhu2018KatyushaComposite}
+\newline Restriction: $E=\mathbb{R}^d$.
+& $\mathcal{O}\!\left((n+\sqrt{nL/\mu})\log(1+\Delta/\varepsilon)\right)$
+& \textbf{(1)}: Matches known rate on $\mathbb{R}^d$; Lean formalization with explicit deterministic call budget.\newline Scope: Hilbert-space formulation.
+& \textbf{(1)}: Excludes extended-valued regularizers, including indicator constraints; larger universal budget constants. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $n$: component count; $L$: component smoothness; $\mu$: regularizer strong-convexity modulus; $\Delta$: initial objective-gap bound; $\varepsilon$: target expected gap; $\widetilde x_S$: final weighted epoch snapshot. Complexity counts component-gradient plus proximal calls, including full-gradient refreshes; $\log$ is the natural logarithm.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Constant-Step Reshuffled Finite-Sum Optimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n\geq1$ and the differentiable convex components $f_i:E\to\mathbb{R}$ have gradient Lipschitz constants bounded individually by $L_{\max}>0$ and on average by $L_{\mathrm{avg}}>0$. An initial point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for a global minimizer $x^\star$, with $R\geq0$ and $n^{-1}\sum_i\|\nabla f_i(x^\star)\|^2\leq\sigma^2$ for $\sigma\geq0$. Each query $(i,x)$ returns $\nabla f_i(x)$. Constant-step reshuffled gradient updates must return $\bar{x}\in E$ with expected gap $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $\varepsilon>0$ and expectation is over all randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x),
+\]
+where $E$ may be infinite dimensional, its norm is induced by its inner product, and measurability on $E$ is understood with respect to its Borel sigma-algebra. The public inputs are
+\[
+(E,n,L_{\mathrm{avg}},L_{\max},R,\sigma,\varepsilon,x^0),
+\]
+with parameter ranges
+\[
+n\in\mathbb{N},\quad n\geq1,\quad
+0<L_{\mathrm{avg}}\leq L_{\max},\quad
+R\geq0,\quad \sigma\geq0,\quad \varepsilon>0.
+\]
+The component functions are accessed through the oracle under the following conditions.
+
+\begin{assumption}[Component convexity and smoothness]
+Each $f_i$ is differentiable everywhere on $E$. There exist component constants $\ell_1,\ldots,\ell_n$ such that
+\begin{align*}
+0\leq\ell_i&\leq L_{\max},\qquad i=1,\ldots,n,\\
+\frac1n\sum_{i=1}^n\ell_i&\leq L_{\mathrm{avg}}.
+\end{align*}
+For every $i$, every $x,y\in E$, and every $a\in[0,1]$,
+\begin{align*}
+f_i((1-a)x+ay)&\leq(1-a)f_i(x)+af_i(y),\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq\ell_i\|x-y\|.
+\end{align*}
+The individual constants $\ell_i$ are not supplied to the algorithm.
+\end{assumption}
+
+\begin{assumption}[Attainment and component gradients]
+There exists $x^\star\in E$ satisfying
+\begin{align*}
+F(x^\star)&\leq F(x)\qquad\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+\frac1n\sum_{i=1}^n\|\nabla f_i(x^\star)\|^2&\leq\sigma^2.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Exact component-gradient access]
+At every call index, a query $(i,x)\in\{1,\ldots,n\}\times E$ returns the exact vector $\nabla f_i(x)\in E$ for every realization of the oracle randomness. Each query costs one oracle call. Algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+The permitted algorithm uses a single constant step size $\eta>0$ and a number $H\in\mathbb{N}$ of randomized epochs, both selected using only the public inputs. It draws independent uniform permutations $\pi_0,\ldots,\pi_{H-1}$ of $\{1,\ldots,n\}$. For every subsequent epoch $e\geq H$, it uses the identity permutation $\pi_e(i)=i$. At call $t\in\mathbb{N}$, its epoch, position, component index, and update are
+\begin{align*}
+e_t&=\lfloor t/n\rfloor,\qquad j_t=t\bmod n,\\
+i_t&=\pi_{e_t}(j_t+1),\\
+x^{t+1}&=x^t-\eta\nabla f_{i_t}(x^t).
+\end{align*}
+Thus each complete epoch queries every component once, at the current iterate, and costs $n$ oracle calls. Queries are unrestricted points of $E$.
+
+An externally specified budget $K\in\mathbb{N}$ may depend on the full public parameter tuple. Execution makes $K$ component-gradient calls and returns the last iterate $\bar{x}=x^K$, including when $K$ ends partway through an epoch. The number $H$ of randomized epochs and the call budget $K$ need not coincide.
+
+Let $\mathbb{P}$ denote the joint probability law of algorithm and oracle randomness on an outcome space $\Omega$, and write $\bar{x}:\Omega\to E$ for the output. Success requires that $\bar{x}$ be measurable, that its objective gap be integrable, and that
+\[
+\int_{\Omega}\bigl(F(\bar{x}(\omega))-F(x^\star)\bigr)
+\,\mathrm{d}\mathbb{P}(\omega)\leq\varepsilon.
+\]
+The minimizer witnessing the initial-distance and component-gradient bounds can be used here, since all global minimizers have the same objective value.
+\end{document}

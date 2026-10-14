@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Relative-error convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/RelativeErrorSmoothConvex.lean}{Relative\allowbreak{}Error\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:RelativeErrorSmoothConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space $E$, $f$ is differentiable and convex, with $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\frac L2\|y-x\|^2$, $L>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$, $R\ge0$. Every oracle reply obeys $\|g-\nabla f(x)\|\le\alpha\|\nabla f(x)\|$, $0\le\alpha<1$, and may depend on the call index and seed. Target: $f(x_N)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, for every seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedRelativeErrorConvex.lean}{Accelerated\allowbreak{}Relative\allowbreak{}Error\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedRelativeErrorConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{(1-\alpha)\varepsilon}}+\frac{\alpha^2LR^2}{(1-\alpha)\varepsilon}\right)$ & --- & --- \\
+\midrule[1.2pt]
+Regularized RE-AGM \citep[Thm.~7.2, v1]{vasinGasnikov2026RelativeV1}; Derived bound, $E=\mathbb{R}^n$
+& $\begin{aligned}\mathcal{O}\!\Bigl(&[\sqrt{LR^2/\varepsilon}+\alpha LR^2/\varepsilon]\\&\cdot[1+\log(LR^2/\varepsilon)]\Bigr)\end{aligned}$\par $(LR^2/\varepsilon)>1$, $0\le\alpha\le1/3$
+& i) \textbf{(1)}: $\alpha^2LR^2/\varepsilon$ instead of $\alpha LR^2/\varepsilon$; removes $1+\log (LR^2/\varepsilon)$ on this range.\newline ii) \textbf{(1)}: $\alpha<1$ instead of $\alpha\le1/3$.\newline iii) \textbf{(1)}: $\begin{gathered}(LR^2/\varepsilon)^{3/4}[1+\log(LR^2/\varepsilon)]\\{}\to\sqrt{LR^2/\varepsilon}\end{gathered}$ at $\alpha=(LR^2/\varepsilon)^{-1/4}\le1/3$.
+& --- \\
+\midrule
+Regularized GD \citep[Thm.~7.1, v1]{vasinGasnikov2026RelativeV1}; $E=\mathbb{R}^n$
+& $\mathcal{O}\!\left(\frac{(1+\alpha)^2LR^2}{(1-\alpha)^6\varepsilon}[1+\log(LR^2/\varepsilon)]\right)$\par $(LR^2/\varepsilon)>1$, $0\le\alpha<1/2$
+& i) \textbf{(1)}: $\sqrt{LR^2/\varepsilon}+\alpha^2LR^2/\varepsilon$ instead of $(LR^2/\varepsilon)(1+\log (LR^2/\varepsilon))$ on this range.\newline ii) \textbf{(1)}: $\alpha<1$ instead of $\alpha<1/2$.
+& --- \\
+\midrule
+ISTM, $p=2$ \citep[Thm.~3.1, v1]{kornilovEtAl2023RelativeV1}; $E=\mathbb{R}^n$
+& $\mathcal{O}\!(1+\sqrt{LR^2/\varepsilon})$\par Certified accuracy requires $\alpha\lesssim (LR^2/\varepsilon)^{-1/2}$; bound has floor $\mathcal{O}\!(\alpha^2LR^2)$.
+& i) \textbf{(1)}: matches known rate on this range.\newline ii) \textbf{(1)}: accelerated range extends to $\alpha\lesssim (LR^2/\varepsilon)^{-1/4}$ for $(LR^2/\varepsilon)>1$, $\alpha\le1/3$.\newline iii) \textbf{(1)}: arbitrary accuracy for every $\alpha<1$.
+& --- \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L$ is the quadratic upper-bound constant, $R$ the initial-distance bound, $\alpha$ the relative-error bound. Costs count individual inexact-gradient calls. $\lesssim$ denotes an inequality up to a universal constant, sufficiently small in admissibility conditions; GD denotes gradient descent; RE-AGM denotes relative-error accelerated gradient method; ISTM denotes intermediate similar triangle method.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

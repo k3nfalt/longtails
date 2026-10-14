@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.SlidingGeneralizedSmooth",
+  "searched_at": "2026-10-09T07:48:40.880872+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "8 \\cdot \\left\\lceil 20 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + \\left(6 + 320 \\cdot L1 \\cdot R\\right) \\cdot \\log\\left(2 + \\left(3 + 240 \\cdot L1 \\cdot R\\right) \\cdot \\sqrt{\\frac{\\Delta}{L0 \\cdot R^{2}}}\\right) \\right\\rceil_{+} + \\left\\lceil \\frac{768 \\cdot M^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.SlidingGeneralizedSmooth.spec.Params → ℕ",
+        "value": "fun q =>\n  8 *\n      ⌈20 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n          (6 + 320 * q.L1 * q.R) * Real.log (2 + (3 + 240 * q.L1 * q.R) * √(q.Δ / (q.L0 * q.R ^ 2)))⌉₊ +\n    ⌈768 * q.M ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "8 \\cdot \\left\\lceil 20 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + \\left(6 + 320 \\cdot L1 \\cdot R\\right) \\cdot \\log\\left(2 + \\left(3 + 240 \\cdot L1 \\cdot R\\right) \\cdot \\sqrt{\\frac{\\Delta}{L0 \\cdot R^{2}}}\\right) \\right\\rceil_{+} + \\left\\lceil \\frac{768 \\cdot M^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.SlidingGeneralizedSmooth.spec.Params → ℕ",
+          "value": "fun q =>\n  8 *\n      ⌈20 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n          (6 + 320 * q.L1 * q.R) * Real.log (2 + (3 + 240 * q.L1 * q.R) * √(q.Δ / (q.L0 * q.R ^ 2)))⌉₊ +\n    ⌈768 * q.M ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GeneralizedGradientSliding",
+      "namespace": "LongTails.Setups.SlidingGeneralizedSmooth",
+      "setup": "LongTails.Setups.SlidingGeneralizedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SlidingGeneralizedSmooth.spec OracleTemplate.GeneralizedSliding.budget",
+      "theorem": "OracleTemplate.GeneralizedSliding.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GeneralizedGradientSliding",
+      "theorem": "OracleTemplate.GeneralizedSliding.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F=f+h over a convex set Q. The function f is convex and continuously differentiable on the whole ambient space. The supporting-subgradient inequalities at every point of Q imply that h is convex on Q. A minimizer exists; strong convexity is not required.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: objective and spec.admissible."
+      },
+      {
+        "label": "composite",
+        "details": "The objective separates a differentiable generalized-smooth term f and a potentially nonsmooth term h accessed through bounded subgradients.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: Instance, objective, Query, and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A gradient query at any x returns exactly ∇f(x), for every call index and oracle seed. No function values are supplied.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: Query.gradient and the first conjunct of spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Additional queries return a valid supporting subgradient of h at u∈Q with norm at most M, or an exact metric projection onto Q. Subgradient selections may vary with call index and seed but always satisfy the stated inequalities. Gradient, subgradient, and projection queries each count as one oracle call.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: Query.subgradient, Query.project, and spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Whenever ‖∇f(x+θ(y−x))‖≤B for all θ∈[0,1], the gradient satisfies ‖∇f(x)−∇f(y)‖≤(L0+L1 B)‖x−y‖. Here L0>0 and L1≥0; global Lipschitz continuity of the gradient is not assumed.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: spec.valid and the segment-gradient condition in spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space. Public inputs include x0, L0, L1, M, R, Δ, G, and ε, with M,G≥0 and R,Δ,ε>0. Hidden instance data include f,h,Q, and ∇f. Some minimizer xstar satisfies ‖x0−xstar‖≤R, F(x0)−F(xstar)≤Δ, and ‖∇f(xstar)‖≤G. No bounded diameter of Q is assumed. Algorithms must respect a separate gradient-call cap for every seed, reply sequence, and execution prefix.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: Public, Instance, spec.valid, the minimizer clause of spec.admissible, gradientBudget, and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x∈Q satisfying F(x)−F(xstar)≤ε for a minimizer xstar of F over Q.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε objective-gap bound hold almost surely under the joint law of the algorithm seed and oracle seeds. The total oracle budget is fixed, rather than an expected-cost bound.",
+        "evidence": "LongTails/Setups/SlidingGeneralizedSmooth.lean: spec.successful; LongTails/Template.lean: Algorithm.law, Oracle.law, and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The convex composite formulation uses gradient-dependent generalized smoothness, a public gradient bound at a constrained composite minimizer, arbitrary Hilbert-space geometry, and a separate uniform gradient-call restriction."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GeneralizedSliding.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GeneralizedGradientSliding",
+          "theorem": "OracleTemplate.GeneralizedSliding.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,78 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Regret Matching in Potential Games}
+We consider a two-player game with $m,n\geq 1$ actions and payoff matrices $G_1,G_2\in\mathbb{R}^{m\times n}$, whose unilateral payoff differences agree with those of a bounded nonnegative potential matrix. Strategies are probability vectors in $\mathbb{R}^m$ and $\mathbb{R}^n$. Each oracle call returns both players' exact payoff vectors against the queried strategies. Given $\varepsilon>0$, the prescribed regret-matching procedure must return strategies $(\bar{x},\bar{y})$ for which neither player can improve its expected payoff by more than $\varepsilon$ through any unilateral pure-action deviation, for every realization. Only $m,n,\varepsilon$ are public inputs.
+
+Write
+\[
+\Delta_d=\left\{z\in\mathbb{R}^d:
+ z_a\geq 0\text{ for all }a,\quad \sum_{a=1}^d z_a=1\right\}.
+\]
+The problem is to find an approximate Nash equilibrium of the game in which both players maximize their own payoffs. For $(x,y)\in\Delta_m\times\Delta_n$, define
+\begin{align*}
+U_1(x,y)&=\sum_{i=1}^m\sum_{j=1}^n x_i(G_1)_{ij}y_j,\\
+U_2(x,y)&=\sum_{i=1}^m\sum_{j=1}^n x_i(G_2)_{ij}y_j.
+\end{align*}
+The admissible games and oracle access satisfy the following conditions.
+
+\begin{assumption}[Parameters and public information]
+The action counts $m,n$ are positive integers, and the accuracy and potential bound satisfy $\varepsilon>0$ and $B>0$. The algorithm receives only $(m,n,\varepsilon)$; the payoff matrices and $B$ are not supplied to it.
+\end{assumption}
+
+\begin{assumption}[Bounded exact potential]
+There exists a matrix $P\in\mathbb{R}^{m\times n}$ such that, for every admissible choice of indices,
+\begin{align*}
+0&\leq P_{ij}\leq B,\\
+(G_1)_{ij}-(G_1)_{i'j}&=P_{ij}-P_{i'j},\\
+(G_2)_{ij}-(G_2)_{ij'}&=P_{ij}-P_{ij'}.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Exact payoff-vector access]
+At every call index and every query $(x,y)\in\mathbb{R}^m\times\mathbb{R}^n$, the oracle returns $(u,v)\in\mathbb{R}^m\times\mathbb{R}^n$, where
+\begin{align*}
+u_i&=\sum_{j=1}^n(G_1)_{ij}y_j,\\
+v_j&=\sum_{i=1}^m(G_2)_{ij}x_i.
+\end{align*}
+These identities hold for every realization of the oracle randomness. Returning the pair of vectors costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The algorithm is restricted to the prescribed simultaneous regret-matching procedure with nonnegative truncation. For $Q\in\mathbb{R}^d$, define its strategy by
+\[
+s_d(Q)_a=
+\begin{cases}
+Q_a\big/\displaystyle\sum_{b=1}^d Q_b,
+ &\displaystyle\sum_{b=1}^d Q_b>0,\\
+1/d,&\displaystyle\sum_{b=1}^d Q_b\leq 0.
+\end{cases}
+\]
+Initialize $Q_1^0=0\in\mathbb{R}^m$ and $Q_2^0=0\in\mathbb{R}^n$, and initialize the retained output to the uniform strategy pair. At call $t$, query
+\[
+(x^t,y^t)=\bigl(s_m(Q_1^t),s_n(Q_2^t)\bigr)
+\]
+and let $(u^t,v^t)$ be the oracle reply. The instantaneous deviation gains and simultaneous updates are
+\begin{align*}
+r_{1,i}^t&=u_i^t-\sum_{a=1}^m x_a^t u_a^t,\\
+r_{2,j}^t&=v_j^t-\sum_{b=1}^n y_b^t v_b^t,\\
+Q_{1,i}^{t+1}&=\max\{Q_{1,i}^t+r_{1,i}^t,0\},\\
+Q_{2,j}^{t+1}&=\max\{Q_{2,j}^t+r_{2,j}^t,0\}.
+\end{align*}
+The retained output is replaced by $(x^t,y^t)$ precisely when $r_{1,i}^t\leq\varepsilon$ for every $i$ and $r_{2,j}^t\leq\varepsilon$ for every $j$; otherwise it is kept.
+
+An externally specified budget $K\in\mathbb{N}$ may depend on $(m,n,\varepsilon,B)$. After $K$ calls, the output $(\bar{x},\bar{y})$ is the most recently retained strategy pair, with the uniform pair returned if no queried pair passed the test, including when $K=0$. Success requires, for every realization,
+\[
+(\bar{x},\bar{y})\in\Delta_m\times\Delta_n
+\]
+and
+\begin{align*}
+\max_{1\leq i\leq m}\sum_{j=1}^n(G_1)_{ij}\bar{y}_j
+-U_1(\bar{x},\bar{y})&\leq\varepsilon,\\
+\max_{1\leq j\leq n}\sum_{i=1}^m\bar{x}_i(G_2)_{ij}
+-U_2(\bar{x},\bar{y})&\leq\varepsilon.
+\end{align*}
+\end{document}

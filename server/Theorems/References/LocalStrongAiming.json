@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.LocalStrongAiming",
+  "searched_at": "2026-10-04T15:42:02.463133+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.LocalStrongAiming.spec.Params → ℕ",
+        "value": "fun p => ⌈2 * √(p.L / p.μ) * Real.log (1 + 2 * p.Δ / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.LocalStrongAiming.spec.Params → ℕ",
+          "value": "fun p => ⌈2 * √(p.L / p.μ) * Real.log (1 + 2 * p.Δ / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.LocalStrongAimingNesterov",
+      "namespace": "LongTails.Setups.LocalStrongAiming",
+      "setup": "LongTails.Setups.LocalStrongAiming",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.LocalStrongAiming.spec OracleTemplate.NearestAiming.budget",
+      "theorem": "OracleTemplate.NearestAiming.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LocalStrongAimingNesterov",
+      "theorem": "OracleTemplate.NearestAiming.result",
+      "references": "- Kanan Gupta and Stephan Wojtowytsch. [Nesterov acceleration in benignly non-convex landscapes](https://arxiv.org/html/2410.08395v3). 2025, ICLR; preprint 2024, version used: v3. Complexity: $O(1+\\sqrt{L/\\mu}\\log(1+\\Delta/\\varepsilon))$ fixed exact-gradient calls for Nesterov acceleration to achieve $f(x_n)-f^*\\le\\varepsilon$.\n- Julien Hermant, Jean-François Aujol, Charles Dossal, Lorick Huang, and Aude Rondepierre. [Continuized Nesterov Acceleration for Non-Convex Optimization](https://arxiv.org/html/2512.16533v2). 2025 preprint, version used: v2, revised 2026. Complexity: $O\\!\\left(\\frac{\\sqrt{L/\\mu}}{1-\\varphi(\\mu/L)^{1/4}}\\log(1+\\Delta/\\varepsilon)\\right)$ expected exact-gradient calls for continuized Nesterov acceleration to achieve $\\mathbb E[f(x_t)-f^*]\\le\\varepsilon$, in the comparable regime $0<\\mu/L\\le1/16$; $\\varphi=(1+\\sqrt5)/2$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable function on a finite-dimensional real inner-product space. Convexity is not required, and negative curvature is permitted. The global minimizer set M is nonempty and need not be a singleton.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: spec.Instance and spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "The nearest-minimizer strong aiming inequality implies the local PL inequality ‖∇f(x)‖² ≥ 2μ(f(x)−f*) whenever dist(x,M)<r. No global PL condition is imposed.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: spec.admissible, final nearest-minimizer inequality."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every oracle answer is an exact gradient at the queried point, for every call index and seed. There is no oracle error or sampling dependence to control. Each execution step counts one gradient call.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: spec.admissible, HasGradientAt oracle condition; LongTails/Template.lean: _run and execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a complete, finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: Public.finiteE; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public."
+      },
+      {
+        "label": "other",
+        "details": "On U={x:dist(x,M)<r}, the gradient is L-Lipschitz; f(y)≥f(x)+⟨∇f(x),y−x⟩−√(μL)‖y−x‖² for all x,y∈U; and f(x)−f*+(μ/2)‖x−z‖²≤⟨∇f(x),x−z⟩ for every nearest minimizer z. No uniqueness, affine geometry, or smoothness of the minimizer projection is assumed. Initialization satisfies dist(x0,M)<r and f(x0)−f*≤Δ, with 0<μ≤L, r>0, Δ≥0, 256Δ≤μr², and ε>0. E, L, μ, and x0 are public; r, Δ, and ε are hidden parameters.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: Public, Params, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output point must satisfy f(output)−f(xstar)≤ε for a global minimizer xstar. No averaging or gradient-norm criterion is required.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the supplied output probability measure. Oracle cost is bounded by a fixed budget for every seed.",
+        "evidence": "LongTails/Setups/LocalStrongAiming.lean: spec.successful, ∀ᵐ clause; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines local nearest-minimizer strong aiming, a condition-number-dependent weak convexity bound, and a quantitative initialization condition without imposing convexity or regular projection geometry."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NearestAiming.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LocalStrongAimingNesterov",
+          "theorem": "OracleTemplate.NearestAiming.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

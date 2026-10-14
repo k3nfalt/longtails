@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Convex Relative-Error Optimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with smoothness constant $L>0$. A given initial point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for some global minimizer $x^\star$, where $R\geq0$. Each oracle call at $x\in E$ returns a vector $g\in E$ satisfying $\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|$ for every realization, with $0\leq\alpha<1$. Given $\varepsilon>0$, the required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. The quantities $(E,L,x^0,\alpha,R,\varepsilon)$ are public algorithm inputs.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where $E$ may be infinite dimensional and its norm is induced by its inner product. The objective and oracle satisfy the following conditions.
+
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is differentiable everywhere on $E$, with gradient $\nabla f(x)$ at each $x\in E$. For every $x,y\in E$,
+\begin{align*}
+f(x)+\langle\nabla f(x),y-x\rangle &\leq f(y),\\
+f(y) &\leq f(x)+\langle\nabla f(x),y-x\rangle\\
+&\quad+\frac{L}{2}\|y-x\|^2.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Attainment and initial distance]
+There exists $x^\star\in E$ such that
+\begin{align*}
+f(x^\star) &\leq f(x) \qquad \text{for every }x\in E,\\
+\|x^0-x^\star\| &\leq R.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Relative-error gradient access]
+At each call index $k\in\{0,1,2,\ldots\}$ and query point $x\in E$, the oracle returns a vector $g_k(x)\in E$. For every realization of its randomness,
+\[
+\|g_k(x)-\nabla f(x)\|
+\leq\alpha\|\nabla f(x)\|.
+\]
+Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, with queries chosen adaptively anywhere in $E$. The algorithm is selected using only the public tuple $(E,L,x^0,\alpha,R,\varepsilon)$. An externally specified call budget $K\in\{0,1,2,\ldots\}$ may depend on this tuple.
+
+After $K$ calls, the algorithm returns a point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires the existence of a global minimizer $x^\star$ such that
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\qquad \mathbb{P}\text{-almost surely}.
+\]
+Since all global minimizers have the same objective value, the minimizer witnessing the initial distance bound may also witness this accuracy requirement.
+\end{document}

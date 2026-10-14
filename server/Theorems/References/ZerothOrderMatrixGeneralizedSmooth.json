@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth",
+  "searched_at": "2026-10-07T14:22:46.611234+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\log_{2}\\left(\\frac{1}{\\delta}\\right) \\right\\rceil_{+} \\cdot \\left(4 \\cdot \\left\\lceil 510 \\cdot \\sqrt{\\frac{d \\cdot \\left(r + 1\\right) \\cdot L0 \\cdot R^{2}}{\\varepsilon}} + 1300 \\cdot \\left(r + 1 + L1 \\cdot R \\cdot \\sqrt{d \\cdot \\left(r + 1\\right)}\\right) \\cdot \\log\\left(\\exp\\left(1\\right) + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right)",
+        "type": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈Real.logb 2 (1 / q.δ)⌉₊ *\n    (4 *\n        ⌈510 * √(↑q.d * (q.r + 1) * q.L0 * q.R ^ 2 / q.ε) +\n            1300 * (q.r + 1 + q.L1 * q.R * √(↑q.d * (q.r + 1))) * Real.log (Real.exp 1 + 8 * q.Δ / q.ε)⌉₊ +\n      1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\log_{2}\\left(\\frac{1}{\\delta}\\right) \\right\\rceil_{+} \\cdot \\left(4 \\cdot \\left\\lceil 510 \\cdot \\sqrt{\\frac{d \\cdot \\left(r + 1\\right) \\cdot L0 \\cdot R^{2}}{\\varepsilon}} + 1300 \\cdot \\left(r + 1 + L1 \\cdot R \\cdot \\sqrt{d \\cdot \\left(r + 1\\right)}\\right) \\cdot \\log\\left(\\exp\\left(1\\right) + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right)",
+          "type": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈Real.logb 2 (1 / q.δ)⌉₊ *\n    (4 *\n        ⌈510 * √(↑q.d * (q.r + 1) * q.L0 * q.R ^ 2 / q.ε) +\n            1300 * (q.r + 1 + q.L1 * q.R * √(↑q.d * (q.r + 1))) * Real.log (Real.exp 1 + 8 * q.Δ / q.ε)⌉₊ +\n      1)"
+        }
+      ],
+      "module": "LongTails.Theorems.ZerothOrderMatrixGeneralizedAccelerated",
+      "namespace": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth",
+      "setup": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth.spec OracleTemplate.MatrixGeneralizedZO.budget",
+      "theorem": "OracleTemplate.MatrixGeneralizedZO.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ZerothOrderMatrixGeneralizedAccelerated",
+      "theorem": "OracleTemplate.MatrixGeneralizedZO.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f: ℝ^d → ℝ with differentiable gradient and an attained global minimum. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: spec.admissible, ConvexOn, HasGradientAt, Differentiable, and IsMinOn conditions."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "A query at any x ∈ ℝ^d returns exactly f(x), independently of call index and oracle seed. No gradient or matrix oracle is supplied. The budget counts individual function evaluations and is bounded for every seed.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: spec.Query, spec.Reply, and spec.admissible oracle equality; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "There exists a fixed hidden symmetric positive-definite H with H ≼ I and tr(H) ≤ r. Writing ‖g‖_{H⁻¹} = √⟨H⁻¹g,g⟩, the certificate condition is equivalent to c ≥ ‖∇f(x)‖_{H⁻¹}. The derivative satisfies |⟨D∇f(x)v,w⟩| ≤ (L0 + L1‖∇f(x)‖_{H⁻¹})‖v‖_H‖w‖_H for all x,v,w. Here L0 > 0 and L1 ≥ 0.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: Certifies; spec.valid and spec.admissible matrix and derivative conditions."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Smoothness uses the hidden matrix norm ‖v‖_H and its dual gradient norm. The matrix obeys μI ≼ H ≼ I for some hidden μ > 0, with public trace bound r > 0. Neither H nor μ is supplied to the algorithm; the initial distance bound uses the Euclidean norm.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: Params, spec.Public, spec.publicInput, and existential H and μ in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace ℝ (Fin d), with public integer dimension d > 0.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: Point, Params.d, and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Public inputs are d, L0, L1, r, R, Δ, ε, δ, and x0. A common global minimizer xstar satisfies ‖x0 − xstar‖ ≤ R and f(x0) − f(xstar) ≤ Δ, with R, Δ > 0. The minimizer and optimal value are not supplied.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: Params, spec.Public, spec.publicInput, spec.valid, and final existential clause of spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable point-valued output x with f(x) − f(xstar) ≤ ε on the success event, where ε > 0 and xstar is a global minimizer.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "high_probability",
+        "details": "The probability of f(output) − f(xstar) > ε is at most δ, with 0 < δ < 1. Probability is taken over the algorithm and oracle seed laws; exact oracle replies do not eliminate possible algorithmic randomness.",
+        "evidence": "LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean: spec.successful; LongTails/Template.lean: Convergence product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines exact function-value access with gradient-dependent smoothness in a hidden matrix geometry and a public trace bound. These are substantive additional structural conditions beyond classical smooth convex zeroth-order optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.MatrixGeneralizedZO.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ZerothOrderMatrixGeneralizedAccelerated",
+          "theorem": "OracleTemplate.MatrixGeneralizedZO.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

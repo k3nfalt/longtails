@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.StochasticConvexQuadratic",
+  "searched_at": "2026-10-04T17:54:49.200788+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 + \\left\\lceil 4 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{65536 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.StochasticConvexQuadratic.spec.Params → ℕ",
+        "value": "fun q => 3 + ⌈4 * √(q.L * q.R ^ 2 / q.ε) + 65536 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "3 + \\left\\lceil 4 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{65536 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.StochasticConvexQuadratic.spec.Params → ℕ",
+          "value": "fun q => 3 + ⌈4 * √(q.L * q.R ^ 2 / q.ε) + 65536 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticChebyshevQuadratic",
+      "namespace": "LongTails.Setups.StochasticConvexQuadratic",
+      "setup": "LongTails.Setups.StochasticConvexQuadratic",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticConvexQuadratic.spec OracleTemplate.StochasticConvexQuadratic.budget",
+      "theorem": "OracleTemplate.StochasticConvexQuadratic.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticChebyshevQuadratic",
+      "theorem": "OracleTemplate.StochasticConvexQuadratic.result",
+      "references": "- Guanghui Lan. [Efficient Methods for Stochastic Composite Optimization](https://optimization-online.org/wp-content/uploads/2008/08/2061.pdf). 2008 (June 21 preprint; journal version published online 2011, issue 2012). Complexity: $O(1+\\sqrt{LR^2/\\varepsilon}+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls using AC-SA on a Euclidean ball of radius $R$, for expected objective gap at most $\\varepsilon$.\n- Saeed Ghadimi and Guanghui Lan. [Optimal Stochastic Approximation Algorithms for Strongly Convex Stochastic Composite Optimization I: A Generic Algorithmic Framework](https://optimization-online.org/wp-content/uploads/2010/07/2669.pdf). 2012 (June 15 revised preprint; original preprint 2010). Complexity: $O(1+\\sqrt{LR^2/\\varepsilon}+\\sigma^2R^2/\\varepsilon^2)$ stochastic-gradient oracle calls using AC-SA, including its general convex case, for expected objective gap at most $\\varepsilon$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex quadratics f(x)=c+‖A(x−u)‖²/2, with globally L-Lipschitz gradient. A minimizer x* exists with ‖x0−x*‖≤R. Singular A is permitted; strong convexity is not required.",
+        "evidence": "LongTails/Setups/StochasticConvexQuadratic.lean: StochasticConvexQuadratic.spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ), with E[g(x,ξ)]=∇f(x) and E‖g(x,ξ)−∇f(x)‖²≤σ² uniformly in x. Seeds are independent and identically distributed across calls. Only gradient vectors are returned; f, A, u, c, and the sampling law are hidden.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.unbiased, variance, measurable, integrable, variance_integrable; StochasticGradient.spec.admissible, including Measure.infinitePi."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The squared Euclidean norm of the centered oracle error has expectation at most σ² at every query. No almost-sure error bound or exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance_integrable and variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real Hilbert space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/StochasticConvexQuadratic.lean: Params.finiteE; LongTails/Setups/StochasticSmoothAndConvex.lean: Params.normedE, linearE, completeE, borelE."
+      },
+      {
+        "label": "other",
+        "details": "L>0, R≥0, σ≥0, ε>0 and x0 are public. Admissible algorithms are deterministic batched SGD with prescribed nonnegative step sizes and positive integer batch sizes; each batch queries a fixed point, and the output is the current point.",
+        "evidence": "LongTails/Setups/StochasticConvexQuadratic.lean: spec.Public, publicInput, allowedAlgorithm; BatchedSGD.algorithm; LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.spec.valid and Params."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output X must be measurable, its objective gap integrable, and E[f(X)−f(x*)]≤ε for some global minimizer x*. The prescribed algorithm outputs its current point rather than an average of past points.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.spec.successful; LongTails/Setups/StochasticConvexQuadratic.lean: spec.successful and BatchedSGD.algorithm.output."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over the oracle's independent seed sequence. Oracle cost has a fixed deterministic budget, counting every individual sample in every batch.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.spec.successful and admissible; LongTails/Template.lean: execute, _run, and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Finite-dimensional smooth convex quadratic optimization with independent unbiased bounded-variance gradients and expected objective-gap accuracy is a classical benchmark, here restricted to prescribed batched SGD."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticConvexQuadratic.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticChebyshevQuadratic",
+          "theorem": "OracleTemplate.StochasticConvexQuadratic.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

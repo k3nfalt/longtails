@@ -1,0 +1,48 @@
+\begin{table}[tp]
+\centering
+\caption{Component-gradient complexity for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SimilarFiniteSumQuasar.lean}{Similar\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Quasar}.}\label{tab:SimilarFiniteSumQuasar}
+\parbox{\linewidth}{\footnotesize
+Let $F=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space, with differentiable $f_i$, exact component gradients, $L$-Lipschitz $\nabla F$, and $\delta$-Lipschitz $\nabla f_i-\nabla F$.
+For a global minimizer $x_\star$, assume $F(x_0)-F(x_\star)\le\Delta$,
+$F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2\le F(x_\star)$,
+$\frac{\gamma\mu}{2(2-\gamma)}\|x-x_\star\|^2\le F(x)-F(x_\star)$, and
+$F(y)\ge F(x)+\langle\nabla F(x),y-x\rangle-\frac{\gamma\sqrt{\mu L}}{2}\|y-x\|^2$ for all $x,y$.
+Here $n\ge1$, $0<\mu\le L$, $0<\gamma\le1$, $\delta,\Delta\ge0$, $384\delta^2\le\gamma^3\mu^2$, and $\varepsilon>0$; tuning uses $L,\mu,\gamma,\delta,\Delta,\varepsilon$.
+Target: $F(\widehat x)-F(x_\star)\le\varepsilon$ pathwise.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/CachedSimilarQuasar.lean}{Cached\allowbreak{}Similar\allowbreak{}Quasar} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/CachedSimilarQuasar.md}{(review)}
+& $\mathcal{O}\!\left(n+\frac{n\ell}{\log(\gamma^3\mu^2/\delta^2)}+\frac{\sqrt{L/\mu}}{\gamma}\ell\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Full-gradient NAG \citep[Thm.~2]{hermant2026v3cached}; $E=\mathbb{R}^d$
+& $\mathcal{O}\!\left(\frac{n}{\gamma}\sqrt{\frac L\mu}\,\ell\right)$
+& \textbf{(1)}: Rate: multiplicative $n\gamma^{-1}\sqrt{L/\mu}$ becomes additive for $n\ge2$; similarity reduces full-gradient refreshes.
+& \textbf{(1)}: needs finite-sum similarity $384\delta^2\le\gamma^3\mu^2$ and knowledge of $\delta$ in addition. \\
+\midrule
+Extragradient sliding \citep[Thm.~3]{kovalev2022v1cached}; Derived bound, $E=\mathbb{R}^d$, $\gamma=1$, $F$ $\mu$-strongly convex
+& $\mathcal{O}\!\left(\left(n+\sqrt{\frac L\mu}\right)\left[1+\log\!\left(1+\frac{L\Delta}{\mu\varepsilon}\right)\right]\right)$\par
+$q=f_1$, $p=F-f_1$, $L_p=\mu$; all inner gradient calls counted.
+& i) \textbf{(1)}: Scope: nonconvex strongly quasar-convex $F$, including $\gamma<1$.\newline
+ ii) \textbf{(1)}: On overlap, accuracy-dependent $n$-term gains $\log(\mu^2/\delta^2)$ for $\delta\ll\mu$; removes $L/\mu$ inside accuracy logarithm.
+& \textbf{(1)}: restricted similarity range; baseline also permits $\mu\le\delta\le L$ with convex components. Gains on overlap are logarithmic only. \\
+\midrule
+Full-gradient acceleration \citep[Thm.~1]{hinder2020cached}; $E=\mathbb{R}^d$
+& $\mathcal{O}\!\left(\frac n\gamma\sqrt{\frac L\mu}\left[1+\log\!\left(\frac L{\gamma\mu}\right)\right]\ell\right)$\par
+Component-value and component-gradient calls, including searches.
+& i) \textbf{(1)}: On stated subclass, additive rather than multiplicative $n$ dependence; no $1+\log(L/(\gamma\mu))$ search factor.\newline
+ ii) \textbf{(1)}: no function values.
+& \textbf{(1)}: needs lower-curvature and similarity bounds; baseline needs neither. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $n$: number of components; $L$: average smoothness; $\mu,\gamma$: strong-quasar parameters; $\delta$: gradient similarity; $\Delta$: initial gap bound; $\varepsilon$: target gap; $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$. The reciprocal $1/\log(\gamma^3\mu^2/\delta^2)$ is $0$ at $\delta=0$. Costs count individual component-gradient calls unless specified otherwise.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

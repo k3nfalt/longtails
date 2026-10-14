@@ -1,0 +1,71 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Convex--Concave Saddle Points}
+We consider a payoff $\varphi:E\times F\to\mathbb{R}$ on real Hilbert spaces $E$ and $F$, convex in its first argument and concave in its second on nonempty compact convex sets $X\subseteq E$ and $Y\subseteq F$. Their product has diameter at most $D\geq0$ in the maximum product norm. Each oracle call, anywhere in $E\times F$, returns the exact signed gradient $G(x,y)=(\nabla_x\varphi(x,y),-\nabla_y\varphi(x,y))$, which is globally $L$-Lipschitz for $L>0$. Given $\varepsilon>0$, success requires a measurable output $(\bar{x},\bar{y})\in X\times Y$ almost surely, with integrable gap and $\mathbb{E}[\sup_{y\in Y}\varphi(\bar{x},y)-\inf_{x\in X}\varphi(x,\bar{y})]\leq\varepsilon$, where expectation is over algorithm and oracle randomness.
+
+The saddle-point problem is
+\begin{equation}
+\label{eq:problem}
+\min_{x\in X}\max_{y\in Y}\varphi(x,y).
+\end{equation}
+The spaces may be infinite dimensional and are equipped with measurable structures. On their product, we use
+\begin{equation}
+\|(x,y)\|=\max\{\|x\|_E,\|y\|_F\}.
+\end{equation}
+The feasible sets, payoff, and oracle satisfy the following conditions.
+
+\begin{assumption}[Feasible geometry]
+The sets $X$ and $Y$ are nonempty, compact, and convex, and their product satisfies
+\begin{equation}
+\|z-w\|\leq D
+\qquad\text{for all }z,w\in X\times Y.
+\end{equation}
+\end{assumption}
+
+\begin{assumption}[Convexity and concavity]
+For every $x,x'\in X$, $y,y'\in Y$, and $t\in[0,1]$,
+\begin{align}
+\varphi((1-t)x+tx',y)
+&\leq (1-t)\varphi(x,y)+t\varphi(x',y),\\
+\varphi(x,(1-t)y+ty')
+&\geq (1-t)\varphi(x,y)+t\varphi(x,y').
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Smooth exact-gradient oracle]
+Both partial Fr\'echet gradients exist at every point of $E\times F$. At every call index, for every realization of oracle randomness, a query $z=(x,y)\in E\times F$ returns
+\begin{equation}
+G(z)=\bigl(\nabla_x\varphi(x,y),-\nabla_y\varphi(x,y)\bigr).
+\end{equation}
+This signed gradient satisfies
+\begin{equation}
+\|G(z)-G(w)\|\leq L\|z-w\|
+\qquad\text{for all }z,w\in E\times F.
+\end{equation}
+Each query returns both components and costs one oracle call. Any internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+The payoff is accessed through this oracle. Queries may be adaptive and may lie outside $X\times Y$. All parameters $(E,F,L,D,\varepsilon,X,Y)$ are public inputs. An externally specified call budget $K\in\mathbb{N}$ may depend on this full tuple.
+
+After $K$ calls, the algorithm returns $\bar{z}=(\bar{x},\bar{y})$. For $z=(x,y)\in X\times Y$, define the saddle-point gap by
+\begin{equation}
+\operatorname{Gap}(z)
+=\sup_{v\in Y}\varphi(x,v)-\inf_{u\in X}\varphi(u,y).
+\end{equation}
+Writing $\mathbb{P}$ for the joint probability law of algorithm and oracle randomness, the output must be measurable, and success requires
+\begin{equation}
+\label{eq:accuracy}
+\begin{aligned}
+\bar{z}(\omega)&\in X\times Y
+&&\text{for }\mathbb{P}\text{-almost every }\omega,\\
+\operatorname{Gap}(\bar{z}(\cdot))&\in L^1(\mathbb{P}),\\
+\int \operatorname{Gap}(\bar{z}(\omega))\,d\mathbb{P}(\omega)
+&\leq\varepsilon.
+\end{aligned}
+\end{equation}
+\end{document}

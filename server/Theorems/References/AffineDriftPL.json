@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.AffineDriftPL",
+  "searched_at": "2026-10-04T15:33:36.544242+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{L}{\\mu} \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left(d + 2\\right)",
+        "type": "LongTails.Setups.AffineDriftPL.spec.Params → ℕ",
+        "value": "fun p => ⌈p.L / p.μ * Real.log (1 + 2 * p.Δ / p.ε)⌉₊ * (p.d + 2)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{L}{\\mu} \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left(d + 2\\right)",
+          "type": "LongTails.Setups.AffineDriftPL.spec.Params → ℕ",
+          "value": "fun p => ⌈p.L / p.μ * Real.log (1 + 2 * p.Δ / p.ε)⌉₊ * (p.d + 2)"
+        }
+      ],
+      "module": "LongTails.Theorems.DriftCorrectedGD",
+      "namespace": "LongTails.Setups.AffineDriftPL",
+      "setup": "LongTails.Setups.AffineDriftPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AffineDriftPL.spec OracleTemplate.AffineDriftPL.budget",
+      "theorem": "OracleTemplate.AffineDriftPL.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DriftCorrectedGD",
+      "theorem": "OracleTemplate.AffineDriftPL.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Nonconvex objectives are permitted: global PL and L-Lipschitz gradient are required, but convexity is not.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Unconstrained differentiable objective with an attained global minimum and global PL inequality 2μ(f(x)−f(xstar)) ≤ ‖∇f(x)‖². The initial objective gap is at most Δ.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.admissible, final conjunct."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "Each sequential call k queries x and returns the scalar f(x)+a(q)+b(q)r+e(k,x), where q=⌊k/(d+2)⌋ and r=k mod (d+2). The reply is independent of the oracle seed. All scalar calls count toward the fixed budget.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "Residual function-value errors satisfy |e(k,x)| ≤ ν uniformly over calls and points, without unbiasedness, independence, or stochastic moment assumptions. Valid parameters obey 4dLν ≤ με.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.admissible residual bound and spec.valid."
+      },
+      {
+        "label": "affine_drift",
+        "details": "Unknown arbitrary intercept a(q) and slope b(q) within each aligned block of d+2 sequential calls. Neither coefficient is bounded, and both can change arbitrarily between blocks.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.admissible, existential a, b, e."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain, queries, and output lie in d-dimensional real Euclidean space, with d>0.",
+        "evidence": "LongTails/Setups/ZerothOrderSmoothAndConvex.lean: ZerothOrder.Point; LongTails/Setups/AffineDriftPL.lean: spec.Instance, spec.Query, spec.Output, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The gradient is globally L-Lipschitz, with 0<μ≤L and ε>0. Public algorithm inputs are d, L, μ, ε, and x0; Δ≥0 and ν≥0 are hidden parameters. Drift coefficients and residual errors are not supplied to the algorithm.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: Public, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a single point whose latent objective gap satisfies f(output)−f(xstar) ≤ ε for a global minimizer xstar.",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the execution probability law. Oracle cost is bounded for every seed by the fixed budget ⌈(L/μ)log(1+2Δ/ε)⌉(d+2).",
+        "evidence": "LongTails/Setups/AffineDriftPL.lean: spec.successful; LongTails/Template.lean: Convergence; supplied extracted budget for OracleTemplate.AffineDriftPL.result."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth PL minimization uses a sequential function-value oracle with arbitrary blockwise affine temporal drift and uniformly bounded residual errors constrained by the target accuracy. This structured observation model is an unusual variant of standard zeroth-order optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AffineDriftPL.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DriftCorrectedGD",
+          "theorem": "OracleTemplate.AffineDriftPL.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

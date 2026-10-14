@@ -1,0 +1,54 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth convex optimization with noisy function values: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/ZerothOrderSmoothAndConvex.lean}{Zeroth\allowbreak{}Order\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:ZerothOrderSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$, where $E$ is linearly isometric to $\mathbb{R}^d$, with $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. Each value query uses a fresh IID seed $\xi\sim p$; the jointly measurable oracle satisfies $\int g(x,z)\,dp(z)=f(x)$ and $\int(g(x,z)-f(x))^2\,dp(z)\le\sigma^2$, with integrable values and squared errors. Known parameters: $d\ge1$, $L,\varepsilon>0$, $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedTwoPointZerothOrderConvex.lean}{Accelerated\allowbreak{}Two\allowbreak{}Point\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedTwoPointZerothOrderConvex.md}{(review)}
+& $\mathcal{O}\!\Bigl(1+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+\sigma/\varepsilon)\Bigr)$ & --- & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedZerothOrderConvex.lean}{Accelerated\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedZerothOrderConvex.md}{(review)}
+& $\mathcal{O}\!\Bigl(d+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+d\sigma/\varepsilon)\Bigr)$ & --- & --- \\
+\midrule[1.2pt]
+Derived bound: retuned two-point SGD \citep[Prop.~7]{zoBachPerchet2016}
+& $\begin{aligned}&\mathcal{O}\!\bigl(1+dLR^2/\varepsilon +d^2LR^2\sigma^2/\varepsilon^3\\&\quad+d^2LR^2\min\{\sigma/\varepsilon^2,\\&\hspace{75pt}d\sigma^2/\varepsilon^3\}\bigr)\end{aligned}$
+& \textbf{(1)}: $\mathcal{O}\!(dLR^2/\varepsilon)\to\mathcal{O}\!(d\sqrt{LR^2/\varepsilon})$ if $LR^2/\varepsilon\ge1$, $\sigma\le\varepsilon/(d\sqrt{LR^2/\varepsilon})$. Matches order for $LR^2/\varepsilon\ge1$, $\sigma\ge\varepsilon/d$.
+& \textbf{(2)}: $d^3$ instead of $d^2$ in the $LR^2\sigma^2/\varepsilon^3$ term. \\
+\midrule
+Derived bound: box-smoothed AC-SA \citep[Cor.~3]{zoLan2008}
+& $\mathcal{O}\!\Bigl(d+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+d\sigma/\varepsilon)\Bigr)$
+& i) \textbf{(1)}: $d^2$ instead of $d^3$ in the $LR^2\sigma^2/\varepsilon^3$ term.\newline ii) \textbf{(2)}: matches known rate; Lean formalization.
+& --- \\
+\midrule
+Two-point SGD \citep[Prop.~7]{zoBachPerchet2016}; untuned in $\sigma$
+& $\mathcal{O}\!\bigl(d^2+(d^2/\varepsilon^3)\cdot(LR^2+\sigma^2/(LR^2))^3\bigr)$\par $R>0$; rescaled bound.
+& \textbf{(2)}: for $LR^2/\varepsilon\ge1$: at $\sigma=0$, $\displaystyle \mathcal{O}\!(d^2(LR^2/\varepsilon)^3) {}\to\mathcal{O}\!(d\sqrt{LR^2/\varepsilon})$; improved bound for $\sigma\le LR^2/\sqrt d$.
+& \textbf{(2)}: needs $\sigma$ for tuning; up to factor $d$ worse near $\sigma=LR^2$, within $\begin{gathered}LR^2/\sqrt d<\sigma\\{}<d^{1/4}LR^2\end{gathered}$. \\
+\midrule
+Accelerated random search \citep[Thm.~9]{zoNesterovSpokoiny2017}; exact values ($\sigma=0$)
+& $\mathcal{O}\!(1+d\sqrt{LR^2/\varepsilon})$
+& \textbf{(1)}, \textbf{(2)}: Scope: permits independent finite-variance value noise; match noiseless rate for $LR^2/\varepsilon\ge1$.
+& --- \\
+\midrule
+\citep[Thm.~1]{zoLattimoreGyorgy2023v1}; globally Lipschitz $f$, sub-Gaussian noise
+& High-probability regret; not comparable to expected-gap oracle complexity.
+& \textbf{(1)}, \textbf{(2)}: finite variance suffices; no global Lipschitz bound on $f$ (quadratics included).
+& \textbf{(1)}, \textbf{(2)}: require smoothness; expected-gap guarantee rather than high-probability regret. \\
+\midrule
+\citep[Thm.~4(b)]{zoLoginov2026v1}; $V=L$ (subsequent); additional H\"older smoothness $\beta>2$
+& $\mathcal{O}\!\left(d+\frac{dLR^2}{\varepsilon}+\frac{d^2LR^2\sigma^2}{\varepsilon^3}\right)$\par Centered-noise restriction.
+& i) \textbf{(1)}, \textbf{(2)}: no $\beta>2$ assumption.\newline ii) \textbf{(1)}: $\mathcal{O}\!(dLR^2/\varepsilon)\to\mathcal{O}\!(d\sqrt{LR^2/\varepsilon})$ if $LR^2/\varepsilon\ge1$, $\sigma\le\varepsilon/(d\sqrt{LR^2/\varepsilon})$.
+& \textbf{(1)}, \textbf{(2)}: require unbiased noise; do not cover the baseline's admissible systematic and adversarial errors. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d$ is dimension, $L$ the gradient Lipschitz bound, $R$ the initial-distance bound, $\sigma^2$ the value-noise variance bound, and $\varepsilon$ the target gap. Costs count individual value queries, including all batches: two per two-point step and $2d$ per coordinate step. AC-SA: accelerated stochastic approximation; SGD: stochastic gradient descent. $\beta$ is the additional H\"older smoothness order; $V$ is the value-smoothing curvature bound.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

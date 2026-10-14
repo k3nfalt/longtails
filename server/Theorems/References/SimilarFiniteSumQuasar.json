@@ -1,0 +1,116 @@
+{
+  "setup": "LongTails.Setups.SimilarFiniteSumQuasar",
+  "searched_at": "2026-10-04T17:47:36.920974+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(n + \\left\\lceil \\frac{2 \\cdot \\sqrt{\\frac{L}{\\mu}}}{\\gamma} \\cdot \\log\\left(1 + \\frac{1}{\\frac{48 \\cdot \\delta^{2}}{\\gamma^{3} \\cdot \\mu^{2}} + \\frac{\\gamma \\cdot \\varepsilon}{16 \\cdot \\left(\\gamma \\cdot \\varepsilon + 2 \\cdot \\Delta\\right)}}\\right) \\right\\rceil_{+}\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon}\\right)}{\\log\\left(\\frac{1}{2 \\cdot \\left(\\frac{48 \\cdot \\delta^{2}}{\\gamma^{3} \\cdot \\mu^{2}} + \\frac{\\gamma \\cdot \\varepsilon}{16 \\cdot \\left(\\gamma \\cdot \\varepsilon + 2 \\cdot \\Delta\\right)}\\right)}\\right)} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.SimilarFiniteSumQuasar.spec.Params → ℕ",
+        "value": "fun p =>\n  (p.n +\n      ⌈2 * √(p.L / p.μ) / p.γ *\n          Real.log (1 + 1 / (48 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2) + p.γ * p.ε / (16 * (p.γ * p.ε + 2 * p.Δ))))⌉₊) *\n    ⌈Real.log (1 + 2 * p.Δ / (p.γ * p.ε)) /\n        Real.log (1 / (2 * (48 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2) + p.γ * p.ε / (16 * (p.γ * p.ε + 2 * p.Δ)))))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(n + \\left\\lceil \\frac{2 \\cdot \\sqrt{\\frac{L}{\\mu}}}{\\gamma} \\cdot \\log\\left(1 + \\frac{1}{\\frac{48 \\cdot \\delta^{2}}{\\gamma^{3} \\cdot \\mu^{2}} + \\frac{\\gamma \\cdot \\varepsilon}{16 \\cdot \\left(\\gamma \\cdot \\varepsilon + 2 \\cdot \\Delta\\right)}}\\right) \\right\\rceil_{+}\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon}\\right)}{\\log\\left(\\frac{1}{2 \\cdot \\left(\\frac{48 \\cdot \\delta^{2}}{\\gamma^{3} \\cdot \\mu^{2}} + \\frac{\\gamma \\cdot \\varepsilon}{16 \\cdot \\left(\\gamma \\cdot \\varepsilon + 2 \\cdot \\Delta\\right)}\\right)}\\right)} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.SimilarFiniteSumQuasar.spec.Params → ℕ",
+          "value": "fun p =>\n  (p.n +\n      ⌈2 * √(p.L / p.μ) / p.γ *\n          Real.log (1 + 1 / (48 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2) + p.γ * p.ε / (16 * (p.γ * p.ε + 2 * p.Δ))))⌉₊) *\n    ⌈Real.log (1 + 2 * p.Δ / (p.γ * p.ε)) /\n        Real.log (1 / (2 * (48 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2) + p.γ * p.ε / (16 * (p.γ * p.ε + 2 * p.Δ)))))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CachedSimilarQuasar",
+      "namespace": "LongTails.Setups.SimilarFiniteSumQuasar",
+      "setup": "LongTails.Setups.SimilarFiniteSumQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SimilarFiniteSumQuasar.spec OracleTemplate.SimilarQuasar.budget",
+      "theorem": "OracleTemplate.SimilarQuasar.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CachedSimilarQuasar",
+      "theorem": "OracleTemplate.SimilarQuasar.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Nonconvex objectives and components are permitted; neither global convexity nor strong convexity is required.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.admissible, lower-curvature and minimizer inequalities."
+      },
+      {
+        "label": "pl",
+        "details": "Strong quasar-convexity implies ‖∇F(x)‖²≥2γ²μ(F(x)−F(x*)).",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.admissible, strong quasar-convexity inequality."
+      },
+      {
+        "label": "quasar",
+        "details": "F is (γ,μ)-strongly quasar-convex relative to a global minimizer x*: γ(F(x)−F(x*))≤⟨∇F(x),x−x*⟩−γμ‖x−x*‖²/2, with 0<γ≤1 and 0<μ≤L.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.valid and spec.admissible, existential minimizer clause."
+      },
+      {
+        "label": "finite_sum",
+        "details": "Unconstrained minimization of F(x)=(1/n)∑ᵢ fᵢ(x), with n≥1 and differentiable components.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.Instance and spec.admissible; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i,x) returns exactly ∇fᵢ(x), independently of call index and oracle seed. Each component evaluation counts as one call; computing ∇F(x) directly requires n calls. No function-value or proximal oracle is supplied.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.Query, spec.Reply and spec.admissible, oracle-answer equality; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "For every component and all x,y, ‖(∇fᵢ−∇F)(x)−(∇fᵢ−∇F)(y)‖≤δ‖x−y‖. Here δ≥0 and 384δ²≤γ³μ². This bounds spatial variation of gradient discrepancies, not their magnitude; interpolation and bounded sampling variance are not assumed.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.valid and spec.admissible, component discrepancy inequality."
+      },
+      {
+        "label": "quadratic_growth",
+        "details": "For the specified global minimizer, F(x)−F(x*)≥γμ‖x−x*‖²/[2(2−γ)]. Initialization satisfies F(x₀)−F(x*)≤Δ, with Δ≥0.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.admissible, existential minimizer clause."
+      },
+      {
+        "label": "other",
+        "details": "F has L-Lipschitz gradient and lower curvature −γ√(μL): F(y)≥F(x)+⟨∇F(x),y−x⟩−γ√(μL)‖y−x‖²/2. The ambient space is an arbitrary real Hilbert space. E,L,x₀,n,μ,γ,δ,Δ,ε are public; the component functions and minimizer are hidden.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: Params, spec.Public, spec.publicInput and spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point x satisfies F(x)−F(x*)≤ε for a global minimizer x*, with ε>0.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap inequality holds almost surely under the joint algorithm and oracle seed law, within a fixed public oracle-call budget.",
+        "evidence": "LongTails/Setups/SimilarFiniteSumQuasar.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines strongly quasar-convex finite-sum optimization with uniformly small component-gradient discrepancy variation, a parameter-dependent lower-curvature restriction, Hilbert-space geometry, and almost-sure accuracy under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SimilarQuasar.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CachedSimilarQuasar",
+          "theorem": "OracleTemplate.SimilarQuasar.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

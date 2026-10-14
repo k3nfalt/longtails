@@ -1,0 +1,132 @@
+{
+  "setup": "LongTails.Setups.FiniteSumSmoothAndConvex",
+  "searched_at": "2026-10-04T15:39:28.610983+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot n \\cdot \\left(\\operatorname{clog}_{2}\\left(\\operatorname{clog}_{2}\\left(n\\right)\\right) + \\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{n \\cdot \\varepsilon}} \\right\\rceil_{+}\\right)",
+        "type": "LongTails.Setups.FiniteSumSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q => 3 * q.n * (Nat.clog 2 (Nat.clog 2 q.n) + ⌈√(32 * q.L * q.R ^ 2 / (↑q.n * q.ε))⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot n \\cdot \\left(\\operatorname{clog}_{2}\\left(\\operatorname{clog}_{2}\\left(n\\right)\\right) + \\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{n \\cdot \\varepsilon}} \\right\\rceil_{+}\\right)",
+          "type": "LongTails.Setups.FiniteSumSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q => 3 * q.n * (Nat.clog 2 (Nat.clog 2 q.n) + ⌈√(32 * q.L * q.R ^ 2 / (↑q.n * q.ε))⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedFiniteSumConvex",
+      "namespace": "LongTails.Setups.FiniteSumSmoothAndConvex",
+      "setup": "LongTails.Setups.FiniteSumSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumSmoothAndConvex.spec OracleTemplate.FiniteSum.AcceleratedFiniteSumConvex.budget",
+      "theorem": "OracleTemplate.FiniteSum.AcceleratedFiniteSumConvex.result"
+    },
+    {
+      "budget": {
+        "latex": "n \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{17 \\cdot L \\cdot R^{2}}{2 \\cdot \\varepsilon} \\right\\rceil_{+}\\right) + \\left\\lceil \\frac{68 \\cdot L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.FiniteSumSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q => q.n * Nat.clog 2 ⌈17 * q.L * q.R ^ 2 / (2 * q.ε)⌉₊ + ⌈68 * q.L * q.R ^ 2 / q.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "n \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{17 \\cdot L \\cdot R^{2}}{2 \\cdot \\varepsilon} \\right\\rceil_{+}\\right) + \\left\\lceil \\frac{68 \\cdot L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.FiniteSumSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q => q.n * Nat.clog 2 ⌈17 * q.L * q.R ^ 2 / (2 * q.ε)⌉₊ + ⌈68 * q.L * q.R ^ 2 / q.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SvrgConvex",
+      "namespace": "LongTails.Setups.FiniteSumSmoothAndConvex",
+      "setup": "LongTails.Setups.FiniteSumSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumSmoothAndConvex.spec OracleTemplate.FiniteSum.SvrgConvex.budget",
+      "theorem": "OracleTemplate.FiniteSum.SvrgConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedFiniteSumConvex",
+      "theorem": "OracleTemplate.FiniteSum.AcceleratedFiniteSumConvex.result",
+      "references": "- Chaobing Song, Yong Jiang, Yi Ma. [Variance Reduction via Accelerated Dual Averaging for Finite-Sum Optimization](https://proceedings.neurips.cc/paper_files/paper/2020/file/093b60fd0557804c8ba0cbf1453da22f-Paper.pdf). 2020. Complexity: $O(n[1+\\log\\log(4\\min\\{n,\\max\\{1,LR^2/\\varepsilon\\}\\})]+\\sqrt{nLR^2/\\varepsilon})$ component-gradient calls, including initialization and full gradients; VRADA, fixed budget, expected objective gap at most $\\varepsilon$.",
+      "match_status": "related"
+    },
+    {
+      "module": "LongTails.Theorems.SvrgConvex",
+      "theorem": "OracleTemplate.FiniteSum.SvrgConvex.result",
+      "references": "- Zeyuan Allen-Zhu, Yang Yuan. [Improved SVRG for Non-Strongly-Convex or Sum-of-Non-Convex Objectives](https://proceedings.mlr.press/v48/allen-zhub16.pdf). 2016. Complexity: $O(n\\log(2+LR^2/\\varepsilon)+LR^2/\\varepsilon)$ component-gradient calls, including full gradients; SVRG++, fixed budget, expected objective gap at most $\\varepsilon$, for $0<\\varepsilon<LR^2/2$.\n- Pooria Joulani, András György, Csaba Szepesvári. [A modular analysis of adaptive (non-)convex optimization: Optimism, composite objectives, variance reduction, and variational bounds](https://sites.ualberta.ca/~szepesva/papers/TCS2020.pdf). 2020 (online publication 2019). Complexity: $O(n\\log(2+LR^2/\\varepsilon)+LR^2/\\varepsilon)$ component-gradient calls, including full gradients; generic SVRG with doubled epochs, fixed budget, expected objective gap at most $\\varepsilon$, for $0<\\varepsilon<LR^2/2$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of convex components and their convex average; strong convexity is not required.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: spec.admissible, ConvexOn ℝ Set.univ for every component."
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x) = (1/n) Σ_i f_i(x), with positive integer n.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective; Params.n; spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Replies are exact for every call index and oracle seed. There is no oracle error or sampling noise assumption.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: spec.admissible, ∀ k seed i x, HasGradientAt."
+      },
+      {
+        "label": "component_gradient",
+        "details": "Each query selects an index i and point x and returns the exact gradient ∇f_i(x). One selected component gradient counts as one oracle call.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: spec.Query, spec.Reply, spec.admissible.HasGradientAt; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E is an arbitrary complete real inner-product space with a measurable-space structure; finite dimensionality is not required. Every component has globally L-Lipschitz gradient. A minimizer xstar exists with ‖x0−xstar‖≤R. E, n, L, R, ε and x0 are public; the component functions and minimizer are hidden. Valid parameters satisfy L>0, R≥0 and ε>0.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: Params; spec.Public, publicInput, valid and admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a measurable E-valued point, its objective gap is integrable, and its expected gap from a global minimizer is at most ε. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[F(output)−F(xstar)]≤ε under the product of algorithm and oracle seed laws, with a fixed oracle budget valid for every seed.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: spec.successful integral; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the standard smooth convex finite-sum component-gradient benchmark with expected objective accuracy, stated in a general real Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.FiniteSum.AcceleratedFiniteSumConvex.result",
+        "OracleTemplate.FiniteSum.SvrgConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedFiniteSumConvex",
+          "theorem": "OracleTemplate.FiniteSum.AcceleratedFiniteSumConvex.result",
+          "match_status": "related"
+        },
+        {
+          "module": "LongTails.Theorems.SvrgConvex",
+          "theorem": "OracleTemplate.FiniteSum.SvrgConvex.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

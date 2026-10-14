@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.QuasarSignedBias",
+  "searched_at": "2026-10-04T15:43:41.822962+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{R^{2} \\cdot \\left(M^{2} + 2 \\cdot M \\cdot B\\right)}{\\tau^{2} \\cdot \\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.QuasarSignedBias.spec.Params → ℕ",
+        "value": "fun p => max 1 ⌈p.R ^ 2 * (p.M ^ 2 + 2 * p.M * p.B) / (p.τ ^ 2 * p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{R^{2} \\cdot \\left(M^{2} + 2 \\cdot M \\cdot B\\right)}{\\tau^{2} \\cdot \\varepsilon^{2}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.QuasarSignedBias.spec.Params → ℕ",
+          "value": "fun p => max 1 ⌈p.R ^ 2 * (p.M ^ 2 + 2 * p.M * p.B) / (p.τ ^ 2 * p.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.QuasarSignedBias",
+      "namespace": "LongTails.Setups.QuasarSignedBias",
+      "setup": "LongTails.Setups.QuasarSignedBias",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuasarSignedBias.spec OracleTemplate.QuasarSignedBias.budget",
+      "theorem": "OracleTemplate.QuasarSignedBias.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.QuasarSignedBias",
+      "theorem": "OracleTemplate.QuasarSignedBias.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The quasar condition permits nonconvex objectives; convexity is not required.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "Unconstrained differentiable τ-quasar-convex minimization: a global minimizer xstar satisfies τ(f(x)−f(xstar)) ≤ ⟨∇f(x),x−xstar⟩ for every x, with 0<τ≤1 and ‖x0−xstar‖≤R.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.admissible minimizer clause; spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "Each query x returns the exact value f(x), together with an inexact gradient, in one oracle call.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.Query, spec.Reply, spec.admissible oracle-answer clause; LongTails/Template.lean: execute."
+      },
+      {
+        "label": "inexact_gradient",
+        "details": "Call k returns ∇f(x)+b(k+1)−b(k). The hidden sequence b is independent of the query and oracle seed, with b(0)=0 and ‖b(k)‖≤B.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.admissible oracle-answer clause."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "The additive gradient errors are deterministic and need not be unbiased, vanish, or satisfy a pointwise relative-error bound. B≥0.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.admissible oracle-answer clause; spec.valid."
+      },
+      {
+        "label": "temporal_discrepancy",
+        "details": "Errors e_k=b(k+1)−b(k) telescope: ‖Σ_{k=0}^{n−1}e_k‖≤B for every n, and ‖Σ_{k=m}^{n−1}e_k‖≤2B. Errors may persist and cancel across calls; no independence or mixing assumption is imposed.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.admissible bounded-sequence clause."
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary real Hilbert space. Gradients exist everywhere and satisfy ‖∇f(x)‖≤M, with M>0; Lipschitz continuity of the gradient is not assumed. E, M, B, R≥0, τ, ε>0, and x0 are public, while f, b, and the minimizer are hidden.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: Params; spec.Public, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Output one point in E satisfying f(output)−f(xstar)≤ε for a global minimizer xstar; no prescribed iterate or averaging requirement.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law, within the fixed budget max{1,⌈R²(M²+2MB)/(τ²ε²)⌉} oracle calls.",
+        "evidence": "LongTails/Setups/QuasarSignedBias.lean: spec.successful; LongTails/Template.lean: Convergence; supplied OracleTemplate.QuasarSignedBias.result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Quasar-convex minimization is combined with an unusual deterministic, query-independent telescoping gradient-error model with uniformly bounded cumulative discrepancy, exact function values, and an almost-sure guarantee in an arbitrary real Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.QuasarSignedBias.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.QuasarSignedBias",
+          "theorem": "OracleTemplate.QuasarSignedBias.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Optimization with Growing Oracle Moments}
+We consider minimizing a measurable function $f:\mathbb{R}^d\to\mathbb{R}$, convex on a closed convex set $C$, with the Euclidean norm $\|\cdot\|$. The initial point $x^0\in C$ satisfies $\|x^0-x^\star\|\leq R$ for a minimizer $x^\star\in C$ and $R\geq0$. Each oracle call returns either an exact projection onto $C$ or an independently sampled, possibly heavy-tailed vector whose mean is a subgradient on $C$ and whose second moment at $x\in C$ is at most $B^2\|x-x^0\|^2+G^2$, where $B,G>0$. Given $\varepsilon>0$ and $\delta\in(0,1)$, success requires a measurable feasible output $\bar{x}$ with $\mathbb{P}(f(\bar{x})-f(x^\star)>\varepsilon)\leq\delta$, where $\mathbb{P}$ includes oracle and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+The dimension $d\in\{0,1,2,\ldots\}$ and the tuple $(x^0,B,G,\delta,R,\varepsilon)$ are public inputs. Inner products are Euclidean. The objective and feasible set are accessed through the oracle described below.
+
+\begin{assumption}[Convexity and attainment]
+The set $C\subseteq\mathbb{R}^d$ is closed and convex, $x^0\in C$, and $f$ is Borel measurable. For every $x,y\in C$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
+\]
+There exists $x^\star\in C$ satisfying
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in C,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Projection access]
+A projection query at $x\in\mathbb{R}^d$ returns $\Pi_C(x)$ deterministically. The map $\Pi_C:\mathbb{R}^d\to\mathbb{R}^d$ is Borel measurable and satisfies, for every $x\in\mathbb{R}^d$ and $u\in C$,
+\[
+\begin{aligned}
+\Pi_C(x)&\in C,\\
+\langle x-\Pi_C(x),u-\Pi_C(x)\rangle&\leq0.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent stochastic access]
+There is a measurable sample space $\Omega$, a probability measure $\nu$ on $\Omega$, and a jointly measurable map
+\[
+g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d.
+\]
+Under a probability law $P$ on $\Omega^{\mathbb{N}}$, the coordinate samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. At call index $k$, a stochastic subgradient query at $x$ returns $g(x,\xi_k)$. Internal algorithm randomness is independent of the entire sample sequence. The sample space, sampling laws, and map $g$ are not public inputs.
+\end{assumption}
+
+\begin{assumption}[Mean subgradients and moment growth]
+For every $x\in C$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, and $\|g(x,\cdot)\|^2$ is integrable. Its mean
+\[
+m(x):=\int_{\Omega}g(x,\omega)\,\nu(d\omega)
+\]
+satisfies, for every $x,y\in C$,
+\[
+f(x)-f(y)\leq\langle m(x),x-y\rangle.
+\]
+The second moment obeys, for every $x\in C$,
+\[
+\int_{\Omega}\|g(x,\omega)\|^2\,\nu(d\omega)
+\leq B^2\|x-x^0\|^2+G^2.
+\]
+\end{assumption}
+
+Queries may be adaptive and may use either oracle operation at any point in $\mathbb{R}^d$; the subgradient and moment guarantees apply on $C$. Each operation costs one oracle call, including every projection query. The algorithm is selected using only the public inputs and is run for an externally specified budget $K\in\mathbb{N}$, counting both kinds of calls.
+
+The returned point $\bar{x}$ must be measurable and belong to $C$ for every realization of the randomness. Under the joint law $\mathbb{P}$, success requires
+\[
+\mathbb{P}\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)
+\leq\delta.
+\]
+Here $x^\star$ may be the minimizer witnessing the initial distance bound, since all minimizers over $C$ have the same objective value.
+\end{document}

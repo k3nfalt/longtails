@@ -1,0 +1,122 @@
+{
+  "setup": "LongTails.Setups.SmoothAndConvex",
+  "searched_at": "2026-10-04T17:54:55.725401+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.SmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q => max 1 ⌈√(2 * q.L * q.R ^ 2 / q.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.SmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q => max 1 ⌈√(2 * q.L * q.R ^ 2 / q.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedConvex",
+      "namespace": "LongTails.Setups.SmoothAndConvex",
+      "setup": "LongTails.Setups.SmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothAndConvex.spec OracleTemplate.Gradient.AcceleratedConvex.budget",
+      "theorem": "OracleTemplate.Gradient.AcceleratedConvex.result"
+    },
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{L \\cdot R^{2}}{2 \\cdot \\varepsilon} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.SmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q => max 1 ⌈q.L * q.R ^ 2 / (2 * q.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{L \\cdot R^{2}}{2 \\cdot \\varepsilon} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.SmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q => max 1 ⌈q.L * q.R ^ 2 / (2 * q.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GdConvex",
+      "namespace": "LongTails.Setups.SmoothAndConvex",
+      "setup": "LongTails.Setups.SmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothAndConvex.spec OracleTemplate.Gradient.GdConvex.budget",
+      "theorem": "OracleTemplate.Gradient.GdConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedConvex",
+      "theorem": "OracleTemplate.Gradient.AcceleratedConvex.result",
+      "references": "- Yu. E. Nesterov. [A method of solving a convex programming problem with convergence rate O(1/k²)](https://www.mathnet.ru/eng/dan/v269/i3/p543). 1983. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ fixed exact-gradient oracle calls for $f(x)-f^*\\le\\varepsilon$, using known-$L$ accelerated gradient in Hilbert space; no function-value calls.",
+      "match_status": "match"
+    },
+    {
+      "module": "LongTails.Theorems.GdConvex",
+      "theorem": "OracleTemplate.Gradient.GdConvex.result",
+      "references": "- Yu. E. Nesterov. [A method of solving a convex programming problem with convergence rate O(1/k²)](https://www.mathnet.ru/eng/dan/v269/i3/p543). 1983. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ fixed exact-gradient oracle calls for $f(x)-f^*\\le\\varepsilon$, using known-$L$ accelerated gradient in Hilbert space; no function-value calls.\n- Amir Beck and Marc Teboulle. [A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems](https://doi.org/10.1137/080716542). 2009. Complexity: $O(1+LR^2/\\varepsilon)$ fixed exact-gradient oracle calls for $f(x)-f^*\\le\\varepsilon$ in $\\mathbb R^n$, using constant-step ISTA with $g\\equiv0$ (gradient descent); no function-value calls.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a globally convex differentiable function f:E→ℝ, with an attained global minimum. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: LongTails.Setups.SmoothAndConvex.spec.admissible, ConvexOn ℝ Set.univ f and the existential IsMinOn condition."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x∈E returns ∇f(x), exactly, for every call index and oracle seed. Gradient uniqueness makes the reply independent of those indices and seeds. Function values are not supplied. Execution makes one gradient call per iteration with a fixed budget.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.Query, spec.Reply and spec.admissible.HasGradientAt condition; LongTails/Template.lean: _run, execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E is an arbitrary real Hilbert space. The gradient is globally L-Lipschitz, with L>0. A global minimizer xstar satisfies ‖x0−xstar‖≤R, where R≥0. E, L and x0 are public; R and ε>0 are hidden parameters used to specify the execution budget and success criterion. No dimension bound or bounded feasible domain is imposed.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Public, Params, spec.publicInput, spec.valid and spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm receives S.Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(xstar)≤ε for an attained global minimizer xstar. No distance or gradient-norm accuracy is required.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap inequality holds almost surely under the execution's joint algorithm-seed and oracle-seed law. Success is not stated in expectation, and algorithms may be randomized.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.successful, ∀ᵐ ω ∂P; LongTails/Template.lean: Algorithm.law, Oracle.law and Convergence product measure."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the standard smooth convex minimization benchmark with an exact gradient oracle, known smoothness constant, initial distance bound and objective-gap accuracy, formulated in a real Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.Gradient.AcceleratedConvex.result",
+        "OracleTemplate.Gradient.GdConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedConvex",
+          "theorem": "OracleTemplate.Gradient.AcceleratedConvex.result",
+          "match_status": "match"
+        },
+        {
+          "module": "LongTails.Theorems.GdConvex",
+          "theorem": "OracleTemplate.Gradient.GdConvex.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

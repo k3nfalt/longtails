@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.QuasarAmortizedLMO",
+  "searched_at": "2026-10-04T15:41:54.427859+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\max\\left\\{ 1, \\left\\lceil \\frac{\\frac{6 \\cdot L \\cdot D^{2}}{\\tau^{2}} + \\frac{2 \\cdot \\Gamma}{\\tau}}{\\varepsilon} \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.QuasarAmortizedLMO.spec.Params → ℕ",
+        "value": "fun p => 2 * max 1 ⌈(6 * p.L * p.D ^ 2 / p.τ ^ 2 + 2 * p.Γ / p.τ) / p.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\max\\left\\{ 1, \\left\\lceil \\frac{\\frac{6 \\cdot L \\cdot D^{2}}{\\tau^{2}} + \\frac{2 \\cdot \\Gamma}{\\tau}}{\\varepsilon} \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.QuasarAmortizedLMO.spec.Params → ℕ",
+          "value": "fun p => 2 * max 1 ⌈(6 * p.L * p.D ^ 2 / p.τ ^ 2 + 2 * p.Γ / p.τ) / p.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.QuasarAmortizedLMO",
+      "namespace": "LongTails.Setups.QuasarAmortizedLMO",
+      "setup": "LongTails.Setups.QuasarAmortizedLMO",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuasarAmortizedLMO.spec OracleTemplate.QuasarAmortizedLMO.budget",
+      "theorem": "OracleTemplate.QuasarAmortizedLMO.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.QuasarAmortizedLMO",
+      "theorem": "OracleTemplate.QuasarAmortizedLMO.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Objectives may be nonconvex; convexity is required of C, but not of f. The gradient is globally L-Lipschitz, with L ≥ 0.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "Constrained τ-quasar-convex minimization: a minimizer xstar ∈ C exists and τ(f(x) − f(xstar)) ≤ ⟪∇f(x), x − xstar⟫ for every x ∈ C, with 0 < τ ≤ 1.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.admissible, final conjunct; spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query Sum.inl x returns ∇f(x) exactly at every call index and for every oracle seed. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.Query and spec.admissible, gradient-answer conjunct."
+      },
+      {
+        "label": "linear_minimization",
+        "details": "At call index 2k + 1, a query Sum.inr v returns s ∈ C satisfying ⟪v, s⟫ ≤ ⟪v, u⟫ + δk for every u ∈ C. The nonnegative additive errors satisfy ∑_{k<n} δk ≤ Γ for every n.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.admissible, existential δ conjunct."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "LMO errors are arbitrary additive optimization errors with a uniform cumulative budget Γ ≥ 0. The guarantee holds for every direction and seed; no unbiasedness, independence, or distributional noise condition is imposed.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.admissible, existential δ conjunct; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "E is a real Hilbert space without a finite-dimensional restriction. C is convex, contains x0, and has diameter at most D ≥ 0; closedness and compactness are not required. E, L, x0, and τ are public; C, D, Γ, and ε are hidden setup parameters. The extracted fixed total budget is O(1 + LD²/(τ²ε) + Γ/(τε)), counting both query types.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Setups/QuasarAmortizedLMO.lean: Public, Params, spec.publicInput and spec.valid; LongTails/Template.lean: Convergence and execute; supplied extracted result budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must belong to C and satisfy f(output) − f(xstar) ≤ ε for a minimizer xstar ∈ C, with ε > 0.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε objective-gap bound hold almost surely under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/QuasarAmortizedLMO.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines constrained smooth quasar-convex optimization in a general Hilbert space with an LMO whose arbitrary additive errors have a hidden cumulative budget, and requires almost-sure accuracy within a fixed total oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.QuasarAmortizedLMO.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.QuasarAmortizedLMO",
+          "theorem": "OracleTemplate.QuasarAmortizedLMO.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

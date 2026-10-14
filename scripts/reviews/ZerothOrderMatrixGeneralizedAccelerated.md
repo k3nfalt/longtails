@@ -1,0 +1,37 @@
+# Novelty assessment: ZerothOrderMatrixGeneralizedAccelerated
+
+The [theorem](../../LongTails/Theorems/ZerothOrderMatrixGeneralizedAccelerated.lean) ([setup](../../LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean), [algorithm](../../LongTails/Algorithms/MatrixGeneralizedZO.lean)) covers a convex `C²` function `f` on `ℝᵈ` with a minimizer `x*`. The class requires an unknown self-adjoint `H` with `0 ≺ H ≼ I`, `tr H ≤ r`, and `∇²f(x) ≼ (L₀ + L₁·‖∇f(x)‖_{H⁻¹})·H`. Using only exact function values, the algorithm runs `⌈log₂(1/δ)⌉` independent accelerated random-sign runs with no line search and keeps the run output with the smallest function value. That output `x̂` satisfies `P[f(x̂) − f* > ε] ≤ δ`.
+
+**Proved complexity.** Here `d` is the dimension, `r` is an upper bound on `tr H`, `L₀, L₁` are the smoothness constants, `R ≥ ‖x₀−x*‖`, `Δ ≥ f(x₀)−f*`, `ε` is the target accuracy and `δ ∈ (0,1)` is the failure probability. The budget `⌈log₂(1/δ)⌉·(4K+1)`, with `K = ⌈510√(d(r+1)L₀R²/ε) + 1300(r+1+L₁R√(d(r+1)))·log(e+8Δ/ε)⌉`, gives
+
+  `O( log(2/δ)·[ √(d(r+1)L₀R²/ε) + (r + 1 + L₁R√(d(r+1)))·log(e + Δ/ε) ] )` function values.
+
+`μ_H` does not appear in the bound. The bound stays positive when `ε ≥ Δ`.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Finite differences + Tyurin AGD ([arXiv:2508.06884](https://arxiv.org/abs/2508.06884) v2 2026-05-21; ICML 2026 per PDF header), Thm 4.3 with `Γ₀ = 2Δ/R²`, `R̄ = R`; **prior**. Applies only through the Euclidean class `‖∇²f‖ ≤ L₀ + L₁ᴱ‖∇f‖`, with `L₁ᴱ = L₁` if `H = I` and `L₁ᴱ ≤ L₁/√μ_H` in general | `(d+1)·[√(L₀R²/ε) + L₁ᴱR·log⁺min{2L₁ᴱ²Δ/L₀, 2Δ/ε} + log⁺(2Δ/(L₀R²))]` → the bound above | Leading term `d → √(d(r+1))·⌈log₂(1/δ)⌉`. This is a gain whenever `⌈log₂(1/δ)⌉ < √(d/(r+1))`. Example: `d = 10⁶`, `r = 10`, `δ = 10⁻²` gives about 43× (taking `L₁ᴱ = L₁`, which favors the baseline). The `L₁` term gains when `√(d/(r+1)) > ⌈log₂(1/δ)⌉·log(e+Δ/ε)/log min{L₁²Δ/L₀, Δ/ε}` | None as a class. Euclidean `(L₀,L₁)` is the case `H = I`, `r = d`, and every instance here is Euclidean `(L₀, L₁/√μ_H)` | **Worse output**: Tyurin is deterministic, this result holds with probability `1−δ` | When `r ≍ d`, this result is worse by a factor `log(1/δ)` and by the logarithm ratio. It needs `r` to be known. The finite-difference reduction is my own and is not verified, because Tyurin assumes exact gradients |
+| Lobanov ([arXiv:2608.04884](https://arxiv.org/abs/2608.04884) v1, 2026-08-05), Thms 6/8, coordinate acceleration under `(H₀,H₁)` gap smoothness; **prior**. Applies only to diagonal `H` | Not comparable in function-value units. Both theorems use partial derivatives, exact 1-D segment minimization, known `f*`, the level-set radius `R̃ ≥ R`, and restarts, with a guarantee in expectation. My unverified translation (`H₀,ᵢ ≈ L₀hᵢ`, `H₁,ᵢ ≈ L₁²hᵢ`) gives about `d·R̃(√(L₀/ε) + L₁ log(Δ/ε))` for Thm 6 (uniform) and about `R̃(Σ√(L₀hᵢ)/√ε + L₁Σ√hᵢ·log(Δ/ε))` for Thm 8 (importance sampling, needs the `hᵢ`) | Not comparable: the segment-search cost has no bound. Against Thm 6, `d → √(d(r+1))`. Thm 8 can be smaller by up to `√d` (`Σ√hᵢ ≤ √(dr)`) but needs `H` to be known | Diagonal `H` (coordinate-aligned) → arbitrary unknown `H` | `H` known (Thm 8) → unknown. `f*` and `R̃` known → `R` and `Δ` known. Expectation → probability `1−δ` | **Oracle gain:** partial derivatives + exact line search + `f*` → function values only |
+| Omiya–Poirion–Takeda RS-NAG ([arXiv:2605.00740](https://arxiv.org/abs/2605.00740) v1, 2026-05-01), Thm 3.3 + Prop. 5.2 (Haar, sketch dimension 1); **prior**. Applies only to the special case `L₁ = 0` | `√(d(r+2)L₀R²/ε)` directional derivatives, in expectation → `log(2/δ)·[√(d(r+1)L₀R²/ε) + (r+1)log(e+Δ/ε)]` | None: same order. Boosting by Markov's inequality and best-of-`log(1/δ)` runs gives RS-NAG the same `log(1/δ)` factor | Only `∇²f ≼ L₀H` → adds the gradient-dependent `L₁` term | None after boosting | This result uses function values instead of directional derivatives. It adds `(r+1)log(e+Δ/ε)` |
+
+**Reduction check and ancestry.** Freezing the curvature on the `2R`-ball and running RS-NAG gives a leading term `√(dr·L₀e^{Θ(L₁R)}R²/ε)`. A restart composition is a more plausible route: on each gap level `Δₛ`, apply RS-NAG with matrix constant `(2L₀ + 5L₁²Δₛ)H`, which follows from dual-norm cocoercivity. Its sum matches this bound, but it needs the randomized momentum points to stay in the sublevel set, which no checked source supplies. Lobanov guarantees this with exact segment minimization, and only for coordinates. The new mechanism (`locality` and the lag term in the potential, [`MatrixGeneralizedStep`](../../LongTails/Proofs/MatrixGeneralizedStep.lean)) certifies locality from the potential alone. RS-NAG and Nesterov–Stich supply the `√(d·tr H)` variance accounting, and Tyurin and Vankov et al. supply the `(L₀,L₁)` acceleration template. I checked only the Lean statement and the proof structure. I did not run a build.
+
+**Search coverage (2026-10-07).** I searched arXiv, OpenReview and proceedings for zeroth-order/coordinate/subspace acceleration under `(L₀,L₁)`, `(H₀,H₁)` and matrix smoothness, including Yue et al. 2023, Ye–Chang–Chen 2025, Lobanov et al. 2412.17050/2501.18198 and Kovalev–Stonyakin 2607.26969. I did not open Ye–Luo ([2602.01627](https://arxiv.org/abs/2602.01627)) beyond Assumption 1 and its remarks, which are nonconvex and non-accelerated. The result was introduced in commit `a8aea4a` (2026-10-06), and I found no later competing paper. The companion note has three discrepancies. It calls the RS-NAG line of work "concurrent", but its arXiv v1 predates this result by five months. It omits Lobanov 2608.04884. Its Tyurin row drops the additive `log(Δ/(L₀R²))` term.
+
+**Conclusion**
+
+**Yes, when `tr H ≪ d`: the proved zeroth-order complexity beats every checked applicable method by about `√(d/r)`.** The strongest end-to-end baseline is Tyurin's near-optimal `(L₀,L₁)` acceleration with finite-difference gradients.
+
+| | leading term | `L₁` start-up |
+|---|---|---|
+| FD + Tyurin | `d√(L₀R²/ε)` | `d·L₁R·log min{L₁²Δ/L₀, Δ/ε}` |
+| this result (× `log(1/δ)`) | `√(dr)·√(L₀R²/ε)` | `√(dr)·L₁R·log(Δ/ε)` |
+
+The gain survives when `log(1/δ) < √(d/r)`, for example about 43× at `d = 10⁶`, `r = 10`, `δ = 10⁻²`. The result loses when `r ≈ d`, where the extra `log(1/δ)` factor and the probabilistic output make it worse, and against Tyurin's logarithm when `ε < L₀/L₁²`.
+
+The `L₁ = 0` case is not new, because RS-NAG (May 2026) already gives `√(dr·L₀R²/ε)`. Lobanov (August 2026) obtains the analogous generalized-smooth rate only for coordinate-aligned `H`, and needs exact line searches and `f*`. A restart composition would also give this rate, but it lacks a proof that the randomized momentum points stay local. This proof supplies that step.
+
+The class has thin independent motivation: one nonconvex preprint and a Poisson-GLM example with decaying spectrum. The comparisons also rest on an unverified finite-difference reduction. The contribution that can be claimed is the first checked accelerated zeroth-order guarantee with `√(d·tr H)` dimension dependence under gradient-dependent `(L₀,L₁)` curvature, without knowing `H`.
+
+**Verdict: SUBSTANTIVE NOVELTY SUPPORTED**
+**Confidence: medium**

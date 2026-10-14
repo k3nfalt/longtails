@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Cohypomonotone Inclusion with Resolvent Access}
+We seek $x\in E$ satisfying $0\in F(x)+A(x)$ in a real inner product space $E$, where $F:E\to E$ is $L$-Lipschitz, $A:E\rightrightarrows E$ is monotone, and $F+A$ is $\rho$-cohypomonotone, with $L>0$, $\rho\geq0$, and $\rho L<1$. The initial point $x^0\in E$ is within distance $R\geq0$ of a solution $x^\star$. Each call returns either $F(x)$ or $J_\gamma(z)$ exactly, where $J_\gamma$ is a resolvent of $A$ for $\gamma>0$. For $\varepsilon>0$, the output $\bar{x}\in E$ must almost surely admit $\xi\in A(\bar{x})$ with $\|F(\bar{x})+\xi\|\leq\varepsilon$. Only $(E,L,\rho,x^0)$ are public inputs.
+
+The inclusion problem is
+\[
+\text{find }x\in E\text{ such that }0\in F(x)+A(x),
+\]
+where $F(x)+A(x)=\{F(x)+a:a\in A(x)\}$. The space $E$ may be infinite dimensional, and its norm is induced by its inner product; completeness is not required. The admissible operators and oracle satisfy the following conditions.
+
+\begin{assumption}[Lipschitz continuity and monotonicity]
+For every $x,y\in E$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+For every $a\in A(x)$ and $b\in A(y)$,
+\[
+\langle a-b,x-y\rangle\geq0.
+\]
+\end{assumption}
+
+\begin{assumption}[Cohypomonotonicity]
+For every $x,y\in E$, $a\in A(x)$, and $b\in A(y)$, the sum operator satisfies
+\[
+\begin{aligned}
+\langle (F(x)+a)-(F(y)+b),x-y\rangle
+&\geq -\rho\|(F(x)+a)-(F(y)+b)\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Solution and initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+-F(x^\star)&\in A(x^\star),\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact operator and resolvent access]
+There exists a map $J:\mathbb{R}\times E\to E$, written $J_\gamma(z)=J(\gamma,z)$, such that, for every $z\in E$ and $\gamma>0$,
+\[
+\gamma^{-1}\bigl(z-J_\gamma(z)\bigr)\in A\bigl(J_\gamma(z)\bigr).
+\]
+The oracle accepts either an operator query $x\in E$ or a resolvent query $(\gamma,z)\in\mathbb{R}\times E$, and returns $F(x)$ or $J_\gamma(z)$, respectively. These replies hold at every call index and for every realization of oracle randomness. Each query of either type costs one oracle call. Resolvent queries with $\gamma\leq0$ are permitted, but the displayed inclusion constrains only positive $\gamma$. Any internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+Queries may be chosen adaptively anywhere in their respective domains. The algorithm is selected using only $(E,L,\rho,x^0)$; the distance bound $R$ and tolerance $\varepsilon$ are not supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,\rho,x^0,R,\varepsilon)$ and counts both query types.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, the required accuracy is
+\[
+\exists\,\xi\in A(\bar{x})\quad
+\|F(\bar{x})+\xi\|\leq\varepsilon
+\qquad \mathbb{P}\text{-almost surely}.
+\]
+The witness $\xi$ may depend on the realized output and is not itself required as an algorithm output.
+\end{document}

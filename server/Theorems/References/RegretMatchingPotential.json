@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.RegretMatchingPotential",
+  "searched_at": "2026-10-04T17:47:19.840525+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{20000 \\cdot B^{2} \\cdot \\left(m + n\\right)^{4}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1",
+        "type": "LongTails.Setups.RegretMatchingPotential.spec.Params → ℕ",
+        "value": "fun q => ⌈20000 * q.B ^ 2 * (↑q.m + ↑q.n) ^ 4 / q.ε ^ 2⌉₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{20000 \\cdot B^{2} \\cdot \\left(m + n\\right)^{4}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1",
+          "type": "LongTails.Setups.RegretMatchingPotential.spec.Params → ℕ",
+          "value": "fun q => ⌈20000 * q.B ^ 2 * (↑q.m + ↑q.n) ^ 4 / q.ε ^ 2⌉₊ + 1"
+        }
+      ],
+      "module": "LongTails.Theorems.RegretMatchingPotential",
+      "namespace": "LongTails.Setups.RegretMatchingPotential",
+      "setup": "LongTails.Setups.RegretMatchingPotential",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RegretMatchingPotential.spec OracleTemplate.RegretMatchingPotential.budget",
+      "theorem": "OracleTemplate.RegretMatchingPotential.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RegretMatchingPotential",
+      "theorem": "OracleTemplate.RegretMatchingPotential.result",
+      "references": "- Dov Monderer and Lloyd S. Shapley. [Potential Games](https://doi.org/10.1006/game.1996.0044). 1996. Complexity: $O(1+B/\\varepsilon)$ paired payoff-vector oracle calls for ε-improvement dynamics to obtain a pure ε-Nash equilibrium, including the final check; deterministic worst-case cost.\n- Ioannis Anagnostides, Emanuel Tewolde, Brian Hu Zhang, Ioannis Panageas, Vincent Conitzer, and Tuomas Sandholm. [Convergence of Regret Matching in Potential Games and Constrained Optimization](https://proceedings.iclr.cc/paper_files/paper/2026/file/b0b932e3b588a8e25c395433dbff769f-Paper-Conference.pdf). 2026 (preprint 2025; published version used). Complexity: $O(1+\\max\\{m,n\\}B^2/\\varepsilon^2)$ paired payoff-vector oracle calls for ε-lazy alternating discounted regret matching⁺ with fixed discount factor $1/2$, obtaining an ε-Nash equilibrium; deterministic worst-case cost including initialization and equilibrium checks.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The mixed potential Φ(x,y)=xᵀPy on Δ_m×Δ_n is bilinear and need not be jointly concave; its negative therefore permits nonconvex constrained optimization.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: spec.admissible permits arbitrary P with entries in [0,B]; spec.successful specifies mixed strategies."
+      },
+      {
+        "label": "other",
+        "details": "Finite two-player exact-potential game with payoff matrices G₁,G₂ ∈ ℝ^{m×n}. A common potential matrix P reproduces every unilateral payoff difference. The target is an ε-Nash equilibrium, without a zero-sum assumption.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: spec.Instance, spec.admissible, spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact full-information payoff-vector oracle: one call at any real vectors (x,y) returns (G₁y,G₂ᵀx). Replies are independent of call index and seed. No potential values or payoff matrices are directly supplied. Public parameters are m,n,ε; B is hidden.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: Public, Params, spec.publicInput, spec.Query, spec.Reply, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Positive integers m,n define finite action sets and strategy spaces ℝ^m×ℝ^n; feasible outputs lie in Δ_m×Δ_n.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: Public, spec.valid, spec.Output, spec.successful."
+      },
+      {
+        "label": "other",
+        "details": "There exists P with 0≤Pᵢⱼ≤B, B>0, such that G₁ᵢⱼ−G₁ᵢ′ⱼ=Pᵢⱼ−Pᵢ′ⱼ and G₂ᵢⱼ−G₂ᵢⱼ′=Pᵢⱼ−Pᵢⱼ′. Thus the potential range is at most B, while strategically irrelevant payoff offsets need not be bounded by B.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: Params.B, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "Both output vectors are coordinatewise nonnegative and each sums exactly to one.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every ω, including every algorithm and oracle seed realization, rather than only in expectation or almost surely. The oracle-call budget is a fixed worst-case bound.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: spec.successful begins ∀ ω; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "For ε>0, the returned strategy pair satisfies max_i(G₁y)ᵢ−xᵀG₁y≤ε and max_j(G₂ᵀx)ⱼ−xᵀG₂y≤ε. This is an ε-Nash equilibrium of the output pair.",
+        "evidence": "LongTails/Setups/RegretMatchingPotential.lean: spec.valid, spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Approximate Nash equilibrium computation in finite exact-potential games with exact full payoff-vector feedback is an established standard formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RegretMatchingPotential.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RegretMatchingPotential",
+          "theorem": "OracleTemplate.RegretMatchingPotential.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

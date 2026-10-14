@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Cohypomonotone Operator Inclusions}
+We seek a zero of $F+A$ on a finite-dimensional real inner product space $E$, where $F:E\to E$ is Lipschitz and $A:E\rightrightarrows E$ is monotone. The sum is $\rho$-cohypomonotone: $\langle u-v,x-y\rangle\geq-\rho\|u-v\|^2$ for $u\in(F+A)(x)$ and $v\in(F+A)(y)$, where $(F+A)(x)=\{F(x)+a:a\in A(x)\}$ and $\rho\geq0$. A given point $x^0\in E$ has bounded distance to a solution. Each oracle call returns either an unbiased finite-variance estimate of $F$ using an independent sample or an exact resolvent selection of $A$. For $\varepsilon>0$, success requires a measurable pair $(\bar{x},\bar{a})\in E\times E$ with $\bar{a}\in A(\bar{x})$ for every outcome and integrable residual satisfying $\mathbb{E}\|F(\bar{x})+\bar{a}\|\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+
+The inclusion problem is
+\[
+0\in F(x)+A(x),\qquad x\in E,
+\]
+with norm induced by the inner product on $E$. The public inputs are $E$, a measurable sample space $\Omega$, the initial point $x^0$, and parameters
+\[
+L>0,\qquad \rho,R,\sigma\geq0,\qquad
+2\rho L<1,\qquad \varepsilon>0.
+\]
+The instance consists of $F$ and $A$, accessed through the oracle specified below. The admissible instances satisfy four conditions.
+
+\begin{assumption}[Lipschitz continuity and cohypomonotonicity]
+For every $x,y\in E$ and every $a\in A(x)$ and $b\in A(y)$,
+\begin{align*}
+\|F(x)-F(y)\|&\leq L\|x-y\|,\\
+\langle a-b,x-y\rangle&\geq0,\\
+\langle (F(x)+a)-(F(y)+b),x-y\rangle
+&\geq-\rho\|(F(x)+a)-(F(y)+b)\|^2.
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Solution and initial distance]
+There exists $x^\star\in E$ such that
+\[
+-F(x^\star)\in A(x^\star),\qquad
+\|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact resolvent access]
+The oracle has a deterministic map $J:\mathbb{R}\times E\to E$ satisfying, for every $\gamma>0$ and $z\in E$,
+\[
+\frac{z-J(\gamma,z)}{\gamma}\in A(J(\gamma,z)).
+\]
+A resolvent query $(\gamma,z)\in\mathbb{R}\times E$ returns $J(\gamma,z)$. Such queries are permitted for every real $\gamma$; the displayed inclusion is required only for positive $\gamma$.
+\end{assumption}
+
+\begin{assumption}[Independent stochastic operator access]
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the function $g(x,\cdot)$ is Bochner integrable and the squared error is integrable, with
+\begin{align*}
+\int_\Omega g(x,\omega)\,p(d\omega)&=F(x),\\
+\int_\Omega\|g(x,\omega)-F(x)\|^2\,p(d\omega)&\leq\sigma^2.
+\end{align*}
+The oracle sample sequence $(\xi_k)_{k\geq0}$ has a probability law $P$ on $\Omega^{\mathbb{N}}$. Its coordinate maps are measurable, mutually independent, and each has law $p$. At call index $k$, a stochastic query $x\in E$ returns $g(x,\xi_k)$.
+\end{assumption}
+
+At each call the algorithm chooses either a stochastic query $x\in E$ or a resolvent query $(\gamma,z)\in\mathbb{R}\times E$; each costs one oracle call. Queries may be chosen adaptively throughout these domains. Call indices advance for both query types, so the sample indexed by a resolvent call is unused. Any internal algorithm randomness is independent of the entire oracle sample sequence. The algorithm is selected using the public inputs, and an externally specified budget $K\in\mathbb{N}$ may depend on the full public parameter tuple.
+
+After $K$ calls, the algorithm returns $(\bar{x},\bar{a})\in E\times E$. Let $\mathbb{P}$ denote the joint law of its internal randomness and the oracle sample sequence. The output pair must be measurable, and $\bar{a}\in A(\bar{x})$ must hold for every outcome. The residual norm must be integrable under $\mathbb{P}$, and the required accuracy is
+\[
+\int\|F(\bar{x})+\bar{a}\|\,d\mathbb{P}
+\leq\varepsilon.
+\]
+\end{document}

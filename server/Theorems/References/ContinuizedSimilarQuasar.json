@@ -1,0 +1,142 @@
+{
+  "setup": "LongTails.Setups.ContinuizedSimilarQuasar",
+  "searched_at": "2026-10-04T15:33:19.220609+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot n + \\left\\lceil 2560 \\cdot \\left(n + \\frac{\\sqrt{\\frac{L}{\\mu}}}{\\gamma} + \\frac{\\left(\\frac{n \\cdot \\delta}{\\mu}\\right)^{\\frac{2}{3}}}{\\gamma^{\\frac{4}{3}}}\\right) \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.ContinuizedSimilarQuasar.spec.Params → ℕ",
+        "value": "fun p =>\n  2 * p.n +\n    ⌈2560 * (↑p.n + √(p.L / p.μ) / p.γ + (↑p.n * p.δ / p.μ) ^ (2 / 3) / p.γ ^ (4 / 3)) *\n        Real.log (1 + 2 * p.Δ / (p.γ * p.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot n + \\left\\lceil 2560 \\cdot \\left(n + \\frac{\\sqrt{\\frac{L}{\\mu}}}{\\gamma} + \\frac{\\left(\\frac{n \\cdot \\delta}{\\mu}\\right)^{\\frac{2}{3}}}{\\gamma^{\\frac{4}{3}}}\\right) \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.ContinuizedSimilarQuasar.spec.Params → ℕ",
+          "value": "fun p =>\n  2 * p.n +\n    ⌈2560 * (↑p.n + √(p.L / p.μ) / p.γ + (↑p.n * p.δ / p.μ) ^ (2 / 3) / p.γ ^ (4 / 3)) *\n        Real.log (1 + 2 * p.Δ / (p.γ * p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.MovementSimilarQuasar",
+      "namespace": "LongTails.Setups.ContinuizedSimilarQuasar",
+      "setup": "LongTails.Setups.ContinuizedSimilarQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ContinuizedSimilarQuasar.spec\n  OracleTemplate.ContinuizedSimilarQuasar.Movement.budget",
+      "theorem": "OracleTemplate.ContinuizedSimilarQuasar.Movement.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left(n + \\max\\left\\{ 1, \\left\\lceil \\frac{8 \\cdot \\sqrt{\\frac{L}{\\mu}}}{\\gamma} + \\frac{4096 \\cdot \\delta^{2}}{\\gamma^{3} \\cdot \\mu^{2}} \\right\\rceil_{+} \\right\\}\\right) \\cdot \\max\\left\\{ 1, \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right) \\right\\}",
+        "type": "LongTails.Setups.ContinuizedSimilarQuasar.spec.Params → ℕ",
+        "value": "fun p =>\n  (p.n + max 1 ⌈8 * √(p.L / p.μ) / p.γ + 4096 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2)⌉₊) *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(n + \\max\\left\\{ 1, \\left\\lceil \\frac{8 \\cdot \\sqrt{\\frac{L}{\\mu}}}{\\gamma} + \\frac{4096 \\cdot \\delta^{2}}{\\gamma^{3} \\cdot \\mu^{2}} \\right\\rceil_{+} \\right\\}\\right) \\cdot \\max\\left\\{ 1, \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right) \\right\\}",
+          "type": "LongTails.Setups.ContinuizedSimilarQuasar.spec.Params → ℕ",
+          "value": "fun p =>\n  (p.n + max 1 ⌈8 * √(p.L / p.μ) / p.γ + 4096 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2)⌉₊) *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.ContinuizedSimilarQuasar",
+      "namespace": "LongTails.Setups.ContinuizedSimilarQuasar",
+      "setup": "LongTails.Setups.ContinuizedSimilarQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ContinuizedSimilarQuasar.spec OracleTemplate.ContinuizedSimilarQuasar.budget",
+      "theorem": "OracleTemplate.ContinuizedSimilarQuasar.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ContinuizedSimilarQuasar",
+      "theorem": "OracleTemplate.ContinuizedSimilarQuasar.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.MovementSimilarQuasar",
+      "theorem": "OracleTemplate.ContinuizedSimilarQuasar.Movement.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective and components may be nonconvex; neither convexity nor strong convexity is required.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "F is (γ, μ)-strongly quasar-convex relative to a global minimizer x⋆: F(x⋆) ≥ F(x) + ⟨∇F(x), x⋆−x⟩/γ + μ‖x−x⋆‖²/2, with 0 < γ ≤ 1 and 0 < μ ≤ L.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.valid and the minimizer clause in spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "Minimize F(x) = (1/n)∑ᵢ fᵢ(x), with n ≥ 1 and differentiable components.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.Instance and spec.admissible; LongTails/Setups/SimilarFiniteSumQuasar.lean: Params.nonzero; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i, x) returns exactly ∇fᵢ(x), for every call index and oracle seed. Each component-gradient evaluation counts as one oracle call; a full gradient costs n calls. Function values are not supplied.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.Query, spec.Reply, and oracle equality in spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "Centered component gradients satisfy (1/n)∑ᵢ‖(∇fᵢ(x)−∇F(x))−(∇fᵢ(y)−∇F(y))‖² ≤ δ²‖x−y‖² for all x,y, with δ ≥ 0. This is an average squared-norm condition, without a small-δ restriction, interpolation requirement, or bound on component gradients at x⋆.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.valid and averaged gradient-similarity clause in spec.admissible."
+      },
+      {
+        "label": "quadratic_growth",
+        "details": "F(x)−F(x⋆) ≥ γμ‖x−x⋆‖²/[2(2−γ)] for every x, relative to the same minimizer appearing in strong quasar convexity.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: final clause in spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space. Only the average objective must have L-Lipschitz gradient; componentwise L-smoothness is not assumed. The initial gap satisfies F(x₀)−F(x⋆) ≤ Δ. All parameters, including E, n, L, μ, γ, δ, Δ, ε, and x₀, are public; the component functions and minimizer are hidden.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Setups/SimilarFiniteSumQuasar.lean: Params; LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.Public, spec.publicInput, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return an E-valued output X with an integrable objective gap and E[F(X)−F(x⋆)] ≤ ε for some global minimizer x⋆, where ε > 0.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is in expectation under the algorithm and oracle seed law. The supplied convergence framework requires a fixed oracle-call budget valid for every seed; success is not required almost surely.",
+        "evidence": "LongTails/Setups/ContinuizedSimilarQuasar.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This formulation combines strong quasar convexity allowing nonconvexity with average squared centered-gradient similarity, smoothness only of the average objective, and arbitrary Hilbert-space geometry."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ContinuizedSimilarQuasar.result",
+        "OracleTemplate.ContinuizedSimilarQuasar.Movement.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ContinuizedSimilarQuasar",
+          "theorem": "OracleTemplate.ContinuizedSimilarQuasar.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.MovementSimilarQuasar",
+          "theorem": "OracleTemplate.ContinuizedSimilarQuasar.Movement.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

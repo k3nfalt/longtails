@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.RelativeDiscrepancyPL",
+  "searched_at": "2026-10-04T17:47:49.492329+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{4 \\cdot L}{3 \\cdot \\mu} \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\max\\left\\{ 1, \\left\\lceil 2 \\cdot D \\right\\rceil_{+} \\right\\}",
+        "type": "LongTails.Setups.RelativeDiscrepancyPL.spec.Params → ℕ",
+        "value": "fun p => ⌈4 * p.L / (3 * p.μ) * Real.log (1 + p.Δ / p.ε)⌉₊ * max 1 ⌈2 * p.D⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{4 \\cdot L}{3 \\cdot \\mu} \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\max\\left\\{ 1, \\left\\lceil 2 \\cdot D \\right\\rceil_{+} \\right\\}",
+          "type": "LongTails.Setups.RelativeDiscrepancyPL.spec.Params → ℕ",
+          "value": "fun p => ⌈4 * p.L / (3 * p.μ) * Real.log (1 + p.Δ / p.ε)⌉₊ * max 1 ⌈2 * p.D⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.DiscrepancyBatchedGD",
+      "namespace": "LongTails.Setups.RelativeDiscrepancyPL",
+      "setup": "LongTails.Setups.RelativeDiscrepancyPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RelativeDiscrepancyPL.spec OracleTemplate.RelativeDiscrepancyPL.budget",
+      "theorem": "OracleTemplate.RelativeDiscrepancyPL.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DiscrepancyBatchedGD",
+      "theorem": "OracleTemplate.RelativeDiscrepancyPL.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Nonconvex objectives are permitted; convexity is not required.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Globally differentiable, L-smooth objectives with an attained global minimum f* and global PL inequality 2μ(f(x)−f*)≤‖∇f(x)‖². Parameters satisfy 0<μ≤L, Δ≥0, ε>0, and f(x0)−f*≤Δ.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "A query x at call index k returns g_k(x)∈E, independently of oracle seeds. Only this vector is supplied; exact gradients and function values are not available. Every reply counts as one oracle call.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.Query, spec.Reply and spec.admissible; LongTails/Template.lean: Oracle.answer, execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "Oracle errors may be deterministic and biased. No unbiasedness, independence, variance bound or Markov model is assumed.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.admissible, O.answer k x seed = g k x."
+      },
+      {
+        "label": "relative_error",
+        "details": "The discrepancy scales with the true gradient norm. Single-call errors obey ‖g_k(x)−∇f(x)‖≤D‖∇f(x)‖; a length-n block average has relative error at most D/n. D need not be less than one.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "temporal_discrepancy",
+        "details": "For every fixed x, starting index s and block length n, ‖Σ_{i=0}^{n−1}(g_{s+i}(x)−∇f(x))‖≤D‖∇f(x)‖, where D≥0. The bound is uniform in block length and start; it concerns repeated queries at the same point, not sums along changing iterates.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.admissible, quantified block-sum inequality."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space, without a finite-dimensional restriction. E, L, x0 and D are public; μ, Δ and ε are hidden from the algorithm constructor and determine the externally supplied execution budget.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Setups/RelativeDiscrepancyPL.lean: Public, Params and spec.publicInput; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−f(x*)≤ε for an attained global minimizer x*. No averaging or particular iterate selection is required.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law. The oracle-call budget is fixed and bounds the cost for every seed.",
+        "evidence": "LongTails/Setups/RelativeDiscrepancyPL.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth PL minimization is standard, but the seed-independent, time-indexed oracle with uniformly bounded relative discrepancy over every consecutive block is an unusual oracle model."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RelativeDiscrepancyPL.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DiscrepancyBatchedGD",
+          "theorem": "OracleTemplate.RelativeDiscrepancyPL.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

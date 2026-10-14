@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.UncalibratedSharp",
+  "searched_at": "2026-10-04T17:54:22.542285+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{\\left(G + \\rho\\right)^{2} \\cdot \\left(\\alpha + \\beta\\right)^{2}}{4 \\cdot \\left(\\mu - \\rho\\right)^{2} \\cdot \\alpha \\cdot \\beta} \\cdot \\log\\left(1 + \\frac{G^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.UncalibratedSharp.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(p.G + p.ρ) ^ 2 * (p.α + p.β) ^ 2 / (4 * (p.μ - p.ρ) ^ 2 * p.α * p.β) * Real.log (1 + p.G ^ 2 * p.R ^ 2 / p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{\\left(G + \\rho\\right)^{2} \\cdot \\left(\\alpha + \\beta\\right)^{2}}{4 \\cdot \\left(\\mu - \\rho\\right)^{2} \\cdot \\alpha \\cdot \\beta} \\cdot \\log\\left(1 + \\frac{G^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.UncalibratedSharp.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈(p.G + p.ρ) ^ 2 * (p.α + p.β) ^ 2 / (4 * (p.μ - p.ρ) ^ 2 * p.α * p.β) * Real.log (1 + p.G ^ 2 * p.R ^ 2 / p.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RobustPolyak",
+      "namespace": "LongTails.Setups.UncalibratedSharp",
+      "setup": "LongTails.Setups.UncalibratedSharp",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.UncalibratedSharp.spec OracleTemplate.UncalibratedSharp.budget",
+      "theorem": "OracleTemplate.UncalibratedSharp.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RobustPolyak",
+      "theorem": "OracleTemplate.UncalibratedSharp.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a globally G-Lipschitz function. The existence of a global affine supporting subgradient at every point implies convexity. Differentiability and gradient smoothness are not required.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.admissible, Lipschitz inequality and ∀ y, f x + ⟪g, y - x⟫ ≤ f y."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "The vector reply is γ(g + e), where g is a supporting subgradient with ‖g‖ ≤ G, ‖e‖ ≤ ρ, and γ > 0 is unknown and unrestricted. The additive error bound applies before rescaling. Conditions hold for every call, query, and seed; unbiasedness, independence, and diminishing errors are not assumed.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.admissible, quantified γ, g, e and O.answer equality."
+      },
+      {
+        "label": "other",
+        "details": "Each call jointly returns (γr, γ(g + e)), with the same unknown scale in both coordinates and α(f(x) - f(u)) ≤ r ≤ β(f(x) - f(u)). The scalar is a rescaled multiplicative estimate of the optimality gap, rather than an ordinary function evaluation.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.Reply and spec.admissible, bounds on r and O.answer k x seed."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "Persistent adversarial subgradient perturbations are allowed, bounded by ρ < μ before the unknown common rescaling. No centering or probabilistic noise condition is imposed.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.valid and spec.admissible, ∀ k x seed and ‖e‖ ≤ ρ."
+      },
+      {
+        "label": "relative_error",
+        "details": "The unscaled scalar gap estimate lies between α and β times the true gap, with 0 < α ≤ β. This is multiplicative gap uncertainty, not a pointwise relative subgradient-error assumption.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.valid and spec.admissible, α and β bounds on r."
+      },
+      {
+        "label": "sharpness",
+        "details": "A minimizer u satisfies μ‖x - u‖ ≤ f(x) - f(u) globally, with 0 ≤ ρ < μ ≤ G. Consequently u is unique. The initial point satisfies ‖x0 - u‖ ≤ R.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.valid and spec.admissible, minimizer, initial-radius, and sharp-growth clauses."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real normed inner-product space; completeness and finite dimension are not required. Public information comprises E, μ, ρ, α, β, and x0. G, R, and ε are hidden from algorithm construction. The common positive oracle scale may vary across calls, queries, and seeds without bounds.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: Public, Params, spec.publicInput, and spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return one point with f(output) - f(u) ≤ ε, where ε > 0 and u is a global minimizer.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law. Oracle calls have a fixed upper budget for every seed realization.",
+        "evidence": "LongTails/Setups/UncalibratedSharp.lean: spec.successful, ∀ᵐ ω; LongTails/Template.lean: Convergence, product seed measure and ∀ seed call-count bound."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Sharp Lipschitz convex minimization is established, but the coupled oracle combines persistent bounded subgradient errors, multiplicative gap uncertainty, and unrestricted unknown common rescaling, with hidden Lipschitz, radius, and accuracy parameters."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.UncalibratedSharp.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RobustPolyak",
+          "theorem": "OracleTemplate.UncalibratedSharp.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

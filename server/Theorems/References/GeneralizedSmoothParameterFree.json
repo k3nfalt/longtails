@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothParameterFree",
+  "searched_at": "2026-10-04T15:37:55.260696+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil 5 + 4 \\cdot \\sqrt{\\frac{32 \\cdot L0 \\cdot R^{2}}{\\varepsilon}} + 26 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(1 + \\left(2 + 13 \\cdot L1 \\cdot R\\right)^{2} \\cdot \\left(2 + \\frac{1}{64 \\cdot L0 \\cdot h0} + 16 \\cdot L0 \\cdot h0 + \\frac{5 \\cdot L1^{2} \\cdot \\Delta}{4 \\cdot L0} + 80 \\cdot L1^{2} \\cdot \\Delta \\cdot h0\\right)\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.GeneralizedSmoothParameterFree.spec.Params → ℕ",
+        "value": "fun q =>\n  2 *\n    ⌈5 + 4 * √(32 * q.L0 * q.R ^ 2 / q.ε) +\n        26 * (1 + q.L1 * q.R) *\n          Real.log\n            (1 +\n              (2 + 13 * q.L1 * q.R) ^ 2 *\n                (2 + 1 / (64 * q.L0 * q.h0) + 16 * q.L0 * q.h0 + 5 * q.L1 ^ 2 * q.Δ / (4 * q.L0) +\n                  80 * q.L1 ^ 2 * q.Δ * q.h0))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil 5 + 4 \\cdot \\sqrt{\\frac{32 \\cdot L0 \\cdot R^{2}}{\\varepsilon}} + 26 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(1 + \\left(2 + 13 \\cdot L1 \\cdot R\\right)^{2} \\cdot \\left(2 + \\frac{1}{64 \\cdot L0 \\cdot h0} + 16 \\cdot L0 \\cdot h0 + \\frac{5 \\cdot L1^{2} \\cdot \\Delta}{4 \\cdot L0} + 80 \\cdot L1^{2} \\cdot \\Delta \\cdot h0\\right)\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.GeneralizedSmoothParameterFree.spec.Params → ℕ",
+          "value": "fun q =>\n  2 *\n    ⌈5 + 4 * √(32 * q.L0 * q.R ^ 2 / q.ε) +\n        26 * (1 + q.L1 * q.R) *\n          Real.log\n            (1 +\n              (2 + 13 * q.L1 * q.R) ^ 2 *\n                (2 + 1 / (64 * q.L0 * q.h0) + 16 * q.L0 * q.h0 + 5 * q.L1 ^ 2 * q.Δ / (4 * q.L0) +\n                  80 * q.L1 ^ 2 * q.Δ * q.h0))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.BacktrackingGeneralizedAccelerated",
+      "namespace": "LongTails.Setups.GeneralizedSmoothParameterFree",
+      "setup": "LongTails.Setups.GeneralizedSmoothParameterFree",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothParameterFree.spec OracleTemplate.ParameterFreeGeneralized.budget",
+      "theorem": "OracleTemplate.ParameterFreeGeneralized.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BacktrackingGeneralizedAccelerated",
+      "theorem": "OracleTemplate.ParameterFreeGeneralized.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex minimization of f:E→ℝ with an attained global minimum. Some minimizer xstar satisfies ‖x0−xstar‖≤R and f(x0)−f(xstar)≤Δ; R,Δ>0. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: spec.admissible, ConvexOn and existential IsMinOn conditions."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x∈E returns exactly ∇f(x), for every call index and oracle seed. Replies contain no function values or Hessians. There is no oracle error or noise; seed dependence cannot change the unique gradient. The budget counts every gradient query and is fixed, rather than expected.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: spec.Query, spec.Reply, spec.admissible HasGradientAt condition; LongTails/Template.lean: execute, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "Only E, its real Hilbert-space structure, x0, and an arbitrary h0>0 are public. L0,L1,R,Δ,ε are hidden from algorithm construction; they specify admissibility, accuracy, and the external execution budget.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: Public, Params, spec.publicInput; LongTails/Template.lean: Convergence.makeAlgorithm and budget."
+      },
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient map is Fréchet differentiable everywhere and satisfies ‖D(∇f)(x)‖≤L0+L1‖∇f(x)‖, with L0>0 and L1≥0. No global gradient Lipschitz constant is assumed when L1>0.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: spec.valid and spec.admissible Differentiable and fderiv conditions."
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary complete real inner-product space, including infinite-dimensional Hilbert spaces. Initialization bounds concern one common minimizer; no bounded domain, bounded solution set, or globally bounded gradient is required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: Public.normedE, Public.linearE, Public.completeE and spec.admissible existential minimizer condition."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(xstar)≤ε for a global minimizer xstar, with ε>0.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: spec.Output, spec.valid, spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm-seed and oracle-seed law. The successful predicate does not require a deterministic algorithm.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothParameterFree.lean: spec.successful ∀ᵐ condition; LongTails/Template.lean: Convergence product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines gradient-dependent curvature, hidden smoothness and initialization parameters, gradient-only information, and arbitrary Hilbert-space geometry. These are meaningful variants of the usual known-L smooth convex benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ParameterFreeGeneralized.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BacktrackingGeneralizedAccelerated",
+          "theorem": "OracleTemplate.ParameterFreeGeneralized.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

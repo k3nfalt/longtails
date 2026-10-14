@@ -1,0 +1,116 @@
+{
+  "setup": "LongTails.Setups.CompositeGeneralizedParameterFree",
+  "searched_at": "2026-10-09T07:48:51.628467+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot \\left\\lceil 4 + 61 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + \\left(35 + 1067 \\cdot L1 \\cdot R\\right) \\cdot \\log\\left(1 + \\left(12 + 400 \\cdot L1 \\cdot R\\right) \\cdot \\left(1 + \\frac{1}{\\sqrt{\\left(L0 + L1 \\cdot G\\right) \\cdot h0}} + L1 \\cdot \\sqrt{\\frac{\\Delta}{L0 + L1 \\cdot G}}\\right)\\right) + 4 \\cdot \\log\\left(\\frac{5}{2} + \\frac{1}{16 \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot h0} + \\frac{22 \\cdot L1^{2} \\cdot \\Delta}{L0 + L1 \\cdot G}\\right) + 2 \\cdot \\log\\left(2 \\cdot \\left(\\left(1 + h0 \\cdot \\left(40 \\cdot \\left(L0 + L1 \\cdot G\\right) + 400 \\cdot L1^{2} \\cdot \\Delta\\right)\\right) \\cdot \\left(8 \\cdot \\left(1 + 32 \\cdot L1 \\cdot R\\right)^{2} + 200 \\cdot L1^{2} \\cdot R^{2}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.CompositeGeneralizedParameterFree.spec.Params → ℕ",
+        "value": "fun q =>\n  3 *\n    ⌈4 + 61 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n            (35 + 1067 * q.L1 * q.R) *\n              Real.log\n                (1 +\n                  (12 + 400 * q.L1 * q.R) *\n                    (1 + 1 / √((q.L0 + q.L1 * q.G) * q.h0) + q.L1 * √(q.Δ / (q.L0 + q.L1 * q.G)))) +\n          4 * Real.log (5 / 2 + 1 / (16 * (q.L0 + q.L1 * q.G) * q.h0) + 22 * q.L1 ^ 2 * q.Δ / (q.L0 + q.L1 * q.G)) +\n        2 *\n          Real.log\n            (2 *\n              ((1 + q.h0 * (40 * (q.L0 + q.L1 * q.G) + 400 * q.L1 ^ 2 * q.Δ)) *\n                (8 * (1 + 32 * q.L1 * q.R) ^ 2 + 200 * q.L1 ^ 2 * q.R ^ 2)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot \\left\\lceil 4 + 61 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + \\left(35 + 1067 \\cdot L1 \\cdot R\\right) \\cdot \\log\\left(1 + \\left(12 + 400 \\cdot L1 \\cdot R\\right) \\cdot \\left(1 + \\frac{1}{\\sqrt{\\left(L0 + L1 \\cdot G\\right) \\cdot h0}} + L1 \\cdot \\sqrt{\\frac{\\Delta}{L0 + L1 \\cdot G}}\\right)\\right) + 4 \\cdot \\log\\left(\\frac{5}{2} + \\frac{1}{16 \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot h0} + \\frac{22 \\cdot L1^{2} \\cdot \\Delta}{L0 + L1 \\cdot G}\\right) + 2 \\cdot \\log\\left(2 \\cdot \\left(\\left(1 + h0 \\cdot \\left(40 \\cdot \\left(L0 + L1 \\cdot G\\right) + 400 \\cdot L1^{2} \\cdot \\Delta\\right)\\right) \\cdot \\left(8 \\cdot \\left(1 + 32 \\cdot L1 \\cdot R\\right)^{2} + 200 \\cdot L1^{2} \\cdot R^{2}\\right)\\right)\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.CompositeGeneralizedParameterFree.spec.Params → ℕ",
+          "value": "fun q =>\n  3 *\n    ⌈4 + 61 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n            (35 + 1067 * q.L1 * q.R) *\n              Real.log\n                (1 +\n                  (12 + 400 * q.L1 * q.R) *\n                    (1 + 1 / √((q.L0 + q.L1 * q.G) * q.h0) + q.L1 * √(q.Δ / (q.L0 + q.L1 * q.G)))) +\n          4 * Real.log (5 / 2 + 1 / (16 * (q.L0 + q.L1 * q.G) * q.h0) + 22 * q.L1 ^ 2 * q.Δ / (q.L0 + q.L1 * q.G)) +\n        2 *\n          Real.log\n            (2 *\n              ((1 + q.h0 * (40 * (q.L0 + q.L1 * q.G) + 400 * q.L1 ^ 2 * q.Δ)) *\n                (8 * (1 + 32 * q.L1 * q.R) ^ 2 + 200 * q.L1 ^ 2 * q.R ^ 2)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.BacktrackingCompositeGeneralized",
+      "namespace": "LongTails.Setups.CompositeGeneralizedParameterFree",
+      "setup": "LongTails.Setups.CompositeGeneralizedParameterFree",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CompositeGeneralizedParameterFree.spec OracleTemplate.CompositeParameterFree.budget",
+      "theorem": "OracleTemplate.CompositeParameterFree.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BacktrackingCompositeGeneralized",
+      "theorem": "OracleTemplate.CompositeParameterFree.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(x)=f(x)+ψ(x) over a convex set Q. The function f is convex on the whole space, and ψ is convex on Q. A minimizer xstar∈Q exists; strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: objective; spec.admissible, ConvexOn assumptions and minimizer existence."
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines a continuously differentiable convex term f with a potentially nonsmooth convex term ψ and a constraint Q, accessed through an exact quadratic proximal minimization oracle.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: Instance; objective; proxObjective; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A gradient query at any x returns ∇f(x) exactly, independently of query index and oracle seed. No function-value query is available.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: Query.gradient; spec.admissible, gradient-answer equality and HasGradientAt."
+      },
+      {
+        "label": "proximal",
+        "details": "For a>0, a query (a,z,v) returns an exact minimizer over Q of ‖u−z‖²/(2a)+⟨v,u−z⟩+ψ(u). Each gradient or proximal query counts as one oracle call; the budget is fixed and bounds calls for every seed.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: Query.prox; proxObjective; spec.admissible. LongTails/Template.lean: execute; Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "Only the real Hilbert space E, starting point x0, and positive initial scale h0 are public. L0,L1,R,Δ,G,ε are hidden; algorithm construction cannot depend on them, although the externally imposed oracle budget can.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: Public; Params; spec.publicInput; spec.valid. LongTails/Template.lean: Convergence.makeAlgorithm and budget."
+      },
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y,M, if ‖∇f(x+θ(y−x))‖≤M throughout θ∈[0,1], then ‖∇f(x)−∇f(y)‖≤(L0+L1 M)‖x−y‖. Here L0>0 and L1≥0; the gradient is continuous. Global Lipschitz smoothness and twice differentiability are not required.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: spec.valid; spec.admissible, Continuous and segment-conditioned gradient inequality."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary complete real inner-product space, with no finite-dimensional restriction. The starting point lies in Q, and some minimizer satisfies ‖x0−xstar‖≤R, F(x0)−F(xstar)≤Δ, and ‖∇f(xstar)‖≤G, where R,Δ>0 and G≥0. The smooth-term gradient at the composite minimizer may be nonzero.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: Public.normedE, Public.linearE, Public.completeE; spec.valid; spec.admissible, final minimizer clause."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "For ε>0, the returned point must satisfy F(output)−F(xstar)≤ε for a minimizer xstar∈Q.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: spec.valid; spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to Q.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: spec.successful, output membership."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε objective-gap bound hold almost surely under the joint algorithm-seed and oracle-seed law. Deterministic accuracy is not required by the specification.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedParameterFree.lean: spec.successful, ∀ᵐ clause. LongTails/Template.lean: Convergence, product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This is a meaningful variant of convex composite optimization combining gradient-dependent segment smoothness, arbitrary Hilbert-space geometry, exact gradient and proximal access without function values, hidden problem parameters, and an almost-sure objective-gap guarantee under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CompositeParameterFree.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BacktrackingCompositeGeneralized",
+          "theorem": "OracleTemplate.CompositeParameterFree.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

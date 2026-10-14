@@ -1,0 +1,127 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothAndConvex",
+  "searched_at": "2026-10-04T15:38:16.994724+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil 4096 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\min\\left\\{ \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right), \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}} \\right\\}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "type": "LongTails.Setups.GeneralizedSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  if q.Δ ≤ q.ε then 0\n  else\n    2 *\n      ⌈4096 *\n          (1 + √(q.L0 * q.R ^ 2 / q.ε) +\n            min (↑⌈(q.L1 * q.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * q.Δ / q.ε))\n              (Real.log (4 + 4 * q.Δ / q.ε) + (q.L1 * q.R * Real.log (4 + 4 * q.Δ / q.ε)) ^ (2 / 3)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil 4096 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\min\\left\\{ \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right), \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}} \\right\\}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "type": "LongTails.Setups.GeneralizedSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  if q.Δ ≤ q.ε then 0\n  else\n    2 *\n      ⌈4096 *\n          (1 + √(q.L0 * q.R ^ 2 / q.ε) +\n            min (↑⌈(q.L1 * q.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * q.Δ / q.ε))\n              (Real.log (4 + 4 * q.Δ / q.ε) + (q.L1 * q.R * Real.log (4 + 4 * q.Δ / q.ε)) ^ (2 / 3)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GeneralizedSelfNormalizedConvex",
+      "namespace": "LongTails.Setups.GeneralizedSmoothAndConvex",
+      "setup": "LongTails.Setups.GeneralizedSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothAndConvex.spec\n  OracleTemplate.GeneralizedAccelerated.SelfNormalized.budget",
+      "theorem": "OracleTemplate.GeneralizedAccelerated.SelfNormalized.result"
+    },
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil 4096 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "type": "LongTails.Setups.GeneralizedSmoothAndConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  if q.Δ ≤ q.ε then 0\n  else 2 * ⌈4096 * (1 + √(q.L0 * q.R ^ 2 / q.ε) + ↑⌈(q.L1 * q.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * q.Δ / q.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil 4096 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "type": "LongTails.Setups.GeneralizedSmoothAndConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  if q.Δ ≤ q.ε then 0\n  else 2 * ⌈4096 * (1 + √(q.L0 * q.R ^ 2 / q.ε) + ↑⌈(q.L1 * q.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * q.Δ / q.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GeneralizedAcceleratedConvex",
+      "namespace": "LongTails.Setups.GeneralizedSmoothAndConvex",
+      "setup": "LongTails.Setups.GeneralizedSmoothAndConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothAndConvex.spec OracleTemplate.GeneralizedAccelerated.budget",
+      "theorem": "OracleTemplate.GeneralizedAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GeneralizedSelfNormalizedConvex",
+      "theorem": "OracleTemplate.GeneralizedAccelerated.SelfNormalized.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.GeneralizedAcceleratedConvex",
+      "theorem": "OracleTemplate.GeneralizedAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a convex real-valued function on a complete real inner-product space E. A global minimizer xstar exists with ‖x0 − xstar‖ ≤ R and f(x0) − f(xstar) ≤ Δ. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: Public; spec.admissible, ConvexOn and minimizer clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query x ∈ E returns exactly ∇f(x) for every call index and oracle seed. No function values or Hessians are returned. Gradient uniqueness eliminates any seed-dependent gradient error; no sampling or independence assumption is needed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.Query, spec.Reply and spec.admissible, HasGradientAt clause; LongTails/Template.lean: Oracle.answer and execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient map is Fréchet differentiable everywhere and satisfies ‖D(∇f)(x)‖ ≤ L0 + L1‖∇f(x)‖ for every x ∈ E, with L0 > 0 and L1 ≥ 0. Continuity of its derivative is not explicitly required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.valid and spec.admissible, Differentiable and fderiv clauses."
+      },
+      {
+        "label": "other",
+        "details": "E may be an infinite-dimensional real Hilbert space. E, L0, L1, R, Δ and x0 are public, with R > 0 and Δ > 0. The objective and minimizer are hidden. ε > 0 is excluded from publicInput, so the algorithm is independent of ε, while its prescribed execution budget depends on ε.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: Public, Params, spec.publicInput and spec.valid; LongTails/Template.lean: Convergence.makeAlgorithm and budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output) − f(xstar) ≤ ε for a global minimizer xstar. No gradient-norm or distance accuracy is required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "One global minimizer xstar witnesses the objective-gap guarantee almost surely under the joint algorithm and oracle seed law. Oracle cost is bounded by the prescribed budget for every seed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.successful, ∃ xstar and ∀ᵐ clauses; LongTails/Template.lean: Convergence, seedwise cost bound and product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup uses gradient-dependent curvature rather than a uniform Lipschitz-gradient bound, permits arbitrary real Hilbert spaces, and requires an accuracy-independent algorithm with a fixed seedwise oracle budget and almost-sure objective-gap accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GeneralizedAccelerated.SelfNormalized.result",
+        "OracleTemplate.GeneralizedAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GeneralizedSelfNormalizedConvex",
+          "theorem": "OracleTemplate.GeneralizedAccelerated.SelfNormalized.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.GeneralizedAcceleratedConvex",
+          "theorem": "OracleTemplate.GeneralizedAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

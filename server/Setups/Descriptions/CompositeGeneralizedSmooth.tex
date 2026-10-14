@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Composite Convex Generalized-Smooth Optimization}
+We consider minimizing $F=f+\psi$ over a convex set $Q$ in a real Hilbert space $E$, where $f:E\to\mathbb{R}$ is convex with continuous gradient and $\psi:E\to\mathbb{R}$ is convex on $Q$. Gradient variation is controlled by the largest gradient norm along each segment. A feasible initial point $x^0$ has bounded distance and objective gap to a minimizer $x^\star\in Q$, whose gradient norm is also bounded. Each oracle call returns an exact gradient or an exact minimizer of a quadratic proximal subproblem. For $\varepsilon>0$, the required output $\bar{x}$ satisfies $\bar{x}\in Q$ and $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely.
+
+The optimization problem is
+\[
+\min_{x\in Q} F(x), \qquad F(x)=f(x)+\psi(x).
+\]
+The space $E$ is complete, with norm induced by its real inner product, and may be infinite dimensional. The setup parameters satisfy
+\[
+L_0>0,\qquad L_1\geq0,\qquad R>0,\qquad
+\Delta>0,\qquad G\geq0,\qquad \varepsilon>0.
+\]
+The public inputs are $(E,L_0,L_1,R,\Delta,x^0)$. The bound $G$ and target accuracy $\varepsilon$ are not supplied to the algorithm. The functions, feasible set, and oracle maps satisfy the following conditions.
+
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is convex and differentiable everywhere on $E$, and its gradient $\nabla f:E\to E$ is continuous. For every $x,y\in E$ and every $M\in\mathbb{R}$,
+\[
+\begin{aligned}
+&\|\nabla f(x+\theta(y-x))\|\leq M
+\quad\text{for every }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
+\|\nabla f(x)-\nabla f(y)\|
+\leq (L_0+L_1M)\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Feasible composite structure]
+The set $Q\subseteq E$ is convex, and $\psi$ is real-valued on $E$ and convex on $Q$. Thus, for every $x,y\in Q$ and $t\in[0,1]$,
+\[
+\psi((1-t)x+ty)\leq(1-t)\psi(x)+t\psi(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and initialization]
+The initial point satisfies $x^0\in Q$. There exists a single minimizer $x^\star\in Q$ satisfying all of the following conditions:
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta,\\
+\|\nabla f(x^\star)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact gradient and proximal access]
+A gradient query at any $x\in E$ returns $\nabla f(x)\in E$. A proximal query with arguments $a\in\mathbb{R}$ and $z,v\in E$ returns a fixed value $\operatorname{prox}(a,z,v)\in E$. For every $a>0$ and every $z,v\in E$, this value satisfies
+\[
+\begin{aligned}
+\operatorname{prox}(a,z,v)&\in Q,\\
+\operatorname{prox}(a,z,v)&\in\underset{u\in Q}{\operatorname{argmin}}
+\left\{
+\frac{\|u-z\|^2}{2a}
++\langle v,u-z\rangle+\psi(u)
+\right\}.
+\end{aligned}
+\]
+For $a\leq0$, the map remains defined, but no feasibility or minimization condition is imposed. Both query types return their specified values at every call index and for every realization of oracle randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+The instance is accessed through these two query types. Queries may be adaptive, and gradient query points and proximal arguments $z,v$ may lie anywhere in $E$. The algorithm is selected using only the public inputs. An externally specified total call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L_0,L_1,R,\Delta,x^0,G,\varepsilon)$ and counts both gradient and proximal queries.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, success requires the existence of a minimizer $x^\star\in Q$ such that
+\[
+\bar{x}\in Q
+\quad\text{and}\quad
+F(\bar{x})-F(x^\star)\leq\varepsilon
+\qquad\mathbb{P}\text{-almost surely}.
+\]
+The minimizer is fixed independently of the realization of randomness. Since all minimizers over $Q$ have the same objective value, the minimizer witnessing the initialization bounds can also witness this accuracy requirement.
+\end{document}

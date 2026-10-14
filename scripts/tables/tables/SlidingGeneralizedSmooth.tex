@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Gradient sliding under generalized smoothness: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SlidingGeneralizedSmooth.lean}{Sliding\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:SlidingGeneralizedSmooth}
+\parbox{\linewidth}{\footnotesize Minimize $F=f+h$ over convex $Q$ in a real Hilbert space. The convex differentiable $f$ has continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$ on the whole space. Exact gradients, exact projections onto $Q$, and arbitrary valid subgradients of $h$ on $Q$ of norm at most $M$ are available. For $x_0\in Q$ and a minimizer $x_\star\in Q$, $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$; $L_0,R,\Delta,\varepsilon>0$ and $L_1,M,G\ge0$. Target: a feasible computable point with $F(x)-F(x_\star)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GeneralizedGradientSliding.lean}{Generalized\allowbreak{}Gradient\allowbreak{}Sliding} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GeneralizedGradientSliding.md}{(review)}
+& Total: $\mathcal{O}\!\left(\sqrt{(L_0+L_1G)R^2/\varepsilon}+B+M^2R^2/\varepsilon^2\right)$\newline
+$\nabla f$: $\mathcal{O}\!\left(\sqrt{(L_0+L_1G)R^2/\varepsilon}+B\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Gradient sliding \citep[Cor.~1(a)]{sgsLan2016v2}\newline Derived bound: $E=\mathbb{R}^d$, $X=Q\cap\overline B(x_0,2R)$, Euclidean geometry, no extra proximal term
+& Total: $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+e^{3L_1R/2}\sqrt{(L_0+L_1G)R^2/\varepsilon}\\&{}+M^2R^2/\varepsilon^2\end{aligned}\right)$\newline
+$\nabla f$: $\mathcal{O}\!\left(1+e^{3L_1R/2}\sqrt{(L_0+L_1G)R^2/\varepsilon}\right)$; projections onto $X$
+& i) \textbf{(1)}: generalized-smooth sliding; polynomial constants.\newline
+ ii) \textbf{(1)}: removes $e^{3L_1R/2}$ for $L_1R\gg1$ when the square-root term dominates $B$; total gain requires dominance over $M^2R^2/\varepsilon^2$.\newline
+ iii) \textbf{(1)}: only $\Pi_Q$ for arbitrary $Q$; $Q=E$ has closed-form ball projection.
+& \textbf{(1)}: matched leading rate for $L_1R\lesssim1$; at $L_1=0$, adds $\log(1+\sqrt{\Delta/(L_0R^2)})$. Scope excludes Bregman geometry, extra simple prox terms, stochastic subgradients. \\
+\midrule
+Normalized subgradient \citep[Thm.~2]{sgsGrimmer2019v3}\newline Derived bound: $E=\mathbb{R}^d$
+& Total: $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+(G+M)^2R^2/\varepsilon^2\\&{}+(L_0+L_1G)R^2/\varepsilon+L_1^2R^2\end{aligned}\right)$\newline
+Same order for $\nabla f$; includes subgradients, $\Pi_Q$, and $F$ values selecting the best iterate
+& i) \textbf{(1)}: $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ gradients, fixed parameters with $G+M>0$.\newline
+ ii) \textbf{(1)}: computable output without $F$ values.\newline
+ iii) \textbf{(1)}: $M^2$ instead of $(G+M)^2$ in the nonsmooth term; gain for $G\gg M$ only if saved terms dominate $B$ and shared costs. For $Q=E$, $G\le M$: matched nonsmooth order.
+& i) \textbf{(1)}: needs $L_0,L_1,M,\Delta,\varepsilon$ in addition to $R$ in updates; $G$ only in gradient cap.\newline
+ ii) \textbf{(1)}: $B$ can exceed $L_1^2R^2$ when $L_1R\gtrsim1$ and $\log(\Delta/(L_0R^2))\gtrsim L_1R$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $B=(1+L_1R)\bigl[1+\log\bigl(1+(1+L_1R)\sqrt{\Delta/(L_0R^2)}\bigr)\bigr]$; $\Pi_Q$ is Euclidean projection; $\overline B(x,r)$ is a closed ball. Total cost counts every listed primitive oracle call; $\nabla f$ denotes gradient-call cost. $\gg$ denotes a dominating-term regime; $\gtrsim$ and $\lesssim$ suppress universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

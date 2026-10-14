@@ -1,0 +1,38 @@
+# Novelty assessment: AdaptiveEntropicHeavyTailConvex
+
+[`result`](../../LongTails/Theorems/AdaptiveEntropicHeavyTailConvex.lean) proves the following for convex `f` on the simplex Δ_d with an ambient gradient that is `L`-Lipschitz from ℓ₁ to ℓ∞ on Δ_d, and an unbiased IID oracle with `E‖g−∇f‖∞^p ≤ σ^p`, `1<p≤2`. The [algorithm](../../LongTails/Algorithms/AdaptiveEntropic.lean) is accelerated entropic dual averaging with median-centred, top-K-thresholded clipping. Its updates receive only `d, L, δ`. After `N` calls it returns `y_T` with `P(f(y_T)−f* > ε) ≤ δ` ([setup](../../LongTails/Setups/AdaptiveHeavyTailSimplex.lean)).
+
+**Proved complexity.** Let `q = p/(p−1)`. The relevant quantities are dimension `d`, ℓ₁/ℓ∞ smoothness `L`, noise level `σ`, accuracy `ε` and failure probability `δ`:
+
+N = O( log(1/δ) + √( L·log(d/δ)/ε · [log(1/δ) + log(2 + L·log(d/δ)/ε)] ) + log(d/δ)·(2³⁸σ/ε)^q ).
+
+This is the Lean `budget` with only numerical constants outside `q` dropped. The factor 2^{38q} is not uniform as `p↓1`. There is no initial-gap term because the start is uniform and the entropy radius is `log d`. The theorem fixes the horizon. Without knowing `p` or `σ`, the updates achieve, for each `T`, `f(y_T)−f* ≤ 2²⁴[L·log(d/δ)·log(T/δ)/T² + σ(log(d/δ)/T)^{1/q}]` ([guarantee](../../LongTails/Proofs/AdaptiveEntropicGuarantee.lean)). The budget itself uses `p, σ, ε`.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Nguyen–Nguyen–Ene–Nguyen, [NeurIPS 2023 / arXiv 2304.01119v2, Thm 4.1](https://arxiv.org/abs/2304.01119) (Clipped-ASMD). **Special case: needs ∇f(x*)=0.** | With `R₁² ≤ 2 log d` (entropy, uniform start), `γ=log(1/δ)`: `γ√(L log d/ε) + γ(σ√log d/ε)^q` → N above | Stochastic term: `log(1/δ)(log d)^{q/2}` → `log(d/δ)·2^{38q}`, a smaller order for fixed `p<2` as `d→∞`. With the proved constants, the gain only appears once `(log d)^{q/2−1}` exceeds about `2^{38q}`. Deterministic term: better when `log(1/δ) ≳ log(L/ε)`, worse by `√log(L/ε)` at constant δ | `∇f(x*)=0` (an unconstrained minimizer) → any constrained minimizer, including boundary optima with an unbounded gradient | `p, σ, δ, T` in the updates → only `δ` (with `d, L`). The stopping budget still needs `p, σ, ε`. Same output criterion (last accelerated aggregate, probability ≥ 1−δ) | Stationary IID oracle (theirs: conditional moments). Requires an ambient gradient. Only the simplex (theirs: any Bregman setup) |
+| Same paper, Thm 3.1 (Clipped-SMD with a geometric-median `g₀` pilot of `O(log 1/δ)` calls). Covers the full class | `γ[L log d + √log d(‖∇f(x₀)‖∞+σ)]/ε + γ(σ√log d/ε)^q` → N | Deterministic term `1/ε` → `1/√ε` (up to logs). Removes the `‖∇f(x₀)‖∞` term. Stochastic term as in row 1 | None (same class) | Known `p, σ, δ, T` → unknown in the updates. Their output is an average; this one is the accelerated aggregate | Extra `log(L/ε)` inside the square root. Huge `q`-dependent constant |
+| Gorbunov et al., [ICML 2024, Thm 2.7 / F.2](https://arxiv.org/abs/2310.01860) (Prox-clipped-SSTM-shift, `n=1`). **Euclidean constants** | `Õ(√(L₂R²/ε) + (σ₂R/ε)^q·log(1/δ))` plus a term in `ζ* ≥ ‖∇f(x*)‖₂`. Worst-case conversion: `L₂ ≤ dL`, `σ₂ ≤ √d σ`, `R ≤ √2` → N | Not comparable in general. Under the worst-case conversion: `√(dL/ε)`, `d^{q/2}` → `log d` factors. When ℓ₂ and ℓ∞ constants coincide, theirs is better by about `log d` | Incomparable classes (Euclidean versus ℓ₁/ℓ∞ geometry) | Known `σ, p, R, ζ*, δ, K` → unknown `p, σ` in the updates | Theirs allows a general composite Ψ and an unbounded domain |
+| Liu, [arXiv 2606.00520v1, Thm 3.3](https://arxiv.org/abs/2606.00520) (ASMD, May 2026). Bound on `E[gap^{p/2}]` only | Markov: `δ^{-1/p}√(L log d/ε) + δ^{-2/(p-1)}(σ√log d/ε)^q` → N | `poly(1/δ)` → `log(1/δ)` | None | High-probability guarantee. Its optimal tuning needs `σ`. Its unknown-`p` variant is slower and needs `p>4/3` | Liu needs no ambient-gradient or simplex restriction |
+
+**Reduction check and proof ancestry.** I found no published theorem that combines high-probability `log(1/δ)` confidence, an accelerated deterministic term, and updates that do not use `(p, σ)`. Running a grid over guesses of `(p, σ)` does not settle this, because the oracle returns only gradients, so there is no function value to pick the winner. The companion note sketches a proxBoost + UniXGrad + median composition reaching the same goal with extra polylog factors (`(log d)^{3q/2}` and powers of `log(L/ε)`). That composition is unpublished and I did not verify it. If it holds, this result's advantage over a routine composition shrinks to polylogarithmic factors. Proof ancestry: entropic accelerated dual averaging (Nesterov 2005; Lan's AC-SA), clipping-bias and variance bounds (Gorbunov 2020; [Nguyen 2023](https://arxiv.org/abs/2304.01119)), top-K filtering ([van Erven et al., COLT 2021](https://proceedings.mlr.press/v134/vanerven21a/vanerven21a.pdf)), and median centring. The new step is the predictable empirical threshold with paired-reply variation, which replaces the known-σ clipping schedule.
+
+**Search coverage (2026-10-07).** I searched arXiv, ICML/NeurIPS/COLT proceedings and Google-style queries on heavy-tailed accelerated, clipped and tail-index-free methods. I read the theorem text of Nguyen 2023 and Gorbunov 2024 directly. I checked Liu 2606.00520, [He–Li–Lu 2510.11676v2](https://arxiv.org/abs/2510.11676) (Euclidean, known parameters, `poly(1/δ)`) and [Liu 2508.07473](https://arxiv.org/abs/2508.07473) (AdaGrad without knowing `p`, in expectation, not accelerated) only through fetched summaries. Not assessed: [Lobanov–Dvinskikh–Gasnikov 2609.33415](https://arxiv.org/abs/2609.33415) (27 Sep 2026, restarts, (H₀,H₁)-smoothness) and the two NeurIPS 2026 titles the note names; I could not locate "AcceleGrad#". The result entered the repository on 2026-10-01 (`aaf391e`). The note's citations check out, including the `∇f(x*)=0` requirement in Thm 4.1.
+
+## Conclusion
+
+**Yes, mainly through adaptivity and scope: it is the first checked accelerated high-probability guarantee whose updates need neither the tail index nor the noise level, on constrained simplex problems.** The closest baseline is Nguyen et al.'s Clipped-ASMD. That method needs `∇f(x*)=0` and must be given `p, σ, δ, T`.
+
+| | stochastic term | deterministic term |
+|---|---|---|
+| Nguyen Thm 4.1 (special case) | `log(1/δ)(√log d·σ/ε)^q` | `log(1/δ)√(L log d/ε)` |
+| This result | `log(d/δ)(2³⁸σ/ε)^q` | `√(L log(d/δ)·log(L log d/(εδ))/ε)` |
+
+The dimension gain in the stochastic term is real in order for fixed `p<2`. With the proved constants, however, it only appears for astronomically large `d`. At constant δ, the deterministic term is slightly worse. On the full class, the published competitors need `(p, σ)` and either lose acceleration (Thm 3.1) or require Euclidean constants (Gorbunov 2024).
+
+The comparison establishes a removed assumption (`∇f(x*)=0`) and removed update information (`p, σ`), with high-probability `log(1/δ)` confidence. The stopping budget still needs `p, σ, ε`. Priority is less certain. An unverified composition of standard tools (confidence boosting with an adaptive accelerated method) might achieve similar adaptivity with only extra polylog factors, and two NeurIPS 2026 papers remain unread.
+
+The contribution that can be claimed is a tail-index- and noise-level-free accelerated entropic method for heavy-tailed noise with a `log(1/δ)` high-probability guarantee on the simplex. It is not a better rate exponent.
+
+**Verdict: SUBSTANTIVE NOVELTY SUPPORTED**
+**Confidence: medium**

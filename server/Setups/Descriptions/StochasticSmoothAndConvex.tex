@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Convex Stochastic-Gradient Optimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$, with $L$-Lipschitz gradient, where $L>0$. The initial point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for some global minimizer $x^\star$, where $R\geq0$. Each oracle call at $x\in E$ returns an unbiased random gradient with expected squared error at most $\sigma^2$, where $\sigma\geq0$, using an independent sample. Given $\varepsilon>0$, success requires a measurable output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+
+The optimization problem is
+\begin{equation}
+\label{eq:problem}
+\min_{x\in E} f(x),
+\end{equation}
+where $E$ may be infinite dimensional and its norm is induced by its inner product. Let $\Omega$ be a measurable sample space. The admissible objectives and stochastic-gradient oracles satisfy the following conditions.
+
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is differentiable everywhere on $E$, and, for every $x,y\in E$ and $t\in[0,1]$,
+\begin{align}
+f((1-t)x+ty) &\leq (1-t)f(x)+tf(y),\\
+\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|.
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Attainment and initial distance]
+There exists $x^\star\in E$ such that
+\begin{align}
+f(x^\star) &\leq f(x) \qquad \text{for every }x\in E,\\
+\|x^0-x^\star\| &\leq R.
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Unbiasedness and bounded variance]
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and the scalar map $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^2$ is integrable with respect to $p$, with
+\begin{align}
+\int_\Omega g(x,\omega)\,p(d\omega)
+&=\nabla f(x),\\
+\int_\Omega \|g(x,\omega)-\nabla f(x)\|^2\,p(d\omega)
+&\leq\sigma^2.
+\end{align}
+\end{assumption}
+
+\begin{assumption}[Independent stochastic-gradient access]
+At call $k\in\{0,1,2,\ldots\}$, a query $x\in E$ returns the vector $g(x,\xi_k)$, where the samples $(\xi_k)_{k\geq0}$ are independent with common law $p$. Each reply costs one oracle call. Any internal algorithm randomness is independent of the entire sample sequence.
+\end{assumption}
+
+The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The public inputs are the spaces $E$ and $\Omega$, the constants $L,R,\sigma,\varepsilon$, and the initial point $x^0$; the objective $f$, the oracle map $g$, the sampling law $p$, and a minimizer are not supplied as public inputs. An externally specified budget $K\in\mathbb{N}$ may depend on the full public parameter tuple.
+
+After $K$ calls, the algorithm returns a point in $E$. Let $\mathbb{P}$ denote the joint probability law of the algorithm and oracle randomness on a measurable space $\mathcal{W}$, and write the output as $\bar{x}:\mathcal{W}\to E$. Success requires $\bar{x}$ to be measurable and a global minimizer $x^\star$ for which $w\mapsto f(\bar{x}(w))-f(x^\star)$ is $\mathbb{P}$-integrable and
+\begin{equation}
+\label{eq:accuracy}
+\int_{\mathcal{W}}
+\bigl(f(\bar{x}(w))-f(x^\star)\bigr)\,\mathbb{P}(dw)
+\leq\varepsilon.
+\end{equation}
+All global minimizers have the same objective value, so the minimizer witnessing the initial distance bound may also be used in \eqref{eq:accuracy}.
+\end{document}

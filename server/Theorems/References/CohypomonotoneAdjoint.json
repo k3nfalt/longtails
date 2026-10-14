@@ -1,0 +1,129 @@
+{
+  "setup": "LongTails.Setups.CohypomonotoneAdjoint",
+  "searched_at": "2026-10-12T10:26:43.051059+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(\\frac{4 \\cdot L \\cdot R}{\\left(1 + \\rho \\cdot L\\right) \\cdot \\varepsilon} + 2\\right) \\cdot \\left(5 + 8 \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot \\log\\left(11 + 10 \\cdot \\rho \\cdot L\\right)\\right) + \\frac{128 \\cdot \\left(1 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot L_2 \\cdot R \\cdot \\left(4 + \\log\\left(1 + \\frac{4 \\cdot L \\cdot R}{\\varepsilon}\\right)\\right)^{2}}{L} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.CohypomonotoneAdjoint.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(4 * q.L * q.R / ((1 + q.ρ * q.L) * q.ε) + 2) * (5 + 8 * (2 + 2 * q.ρ * q.L) ^ 2 * Real.log (11 + 10 * q.ρ * q.L)) +\n      128 * (1 + 2 * q.ρ * q.L) ^ 2 * (2 + 2 * q.ρ * q.L) ^ 2 * q.L₂ * q.R *\n          (4 + Real.log (1 + 4 * q.L * q.R / q.ε)) ^ 2 /\n        q.L⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(\\frac{4 \\cdot L \\cdot R}{\\left(1 + \\rho \\cdot L\\right) \\cdot \\varepsilon} + 2\\right) \\cdot \\left(5 + 8 \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot \\log\\left(11 + 10 \\cdot \\rho \\cdot L\\right)\\right) + \\frac{128 \\cdot \\left(1 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot L_2 \\cdot R \\cdot \\left(4 + \\log\\left(1 + \\frac{4 \\cdot L \\cdot R}{\\varepsilon}\\right)\\right)^{2}}{L} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.CohypomonotoneAdjoint.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈(4 * q.L * q.R / ((1 + q.ρ * q.L) * q.ε) + 2) * (5 + 8 * (2 + 2 * q.ρ * q.L) ^ 2 * Real.log (11 + 10 * q.ρ * q.L)) +\n      128 * (1 + 2 * q.ρ * q.L) ^ 2 * (2 + 2 * q.ρ * q.L) ^ 2 * q.L₂ * q.R *\n          (4 + Real.log (1 + 4 * q.L * q.R / q.ε)) ^ 2 /\n        q.L⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AdjointAnchoredCohypomonotone",
+      "namespace": "LongTails.Setups.CohypomonotoneAdjoint",
+      "setup": "LongTails.Setups.CohypomonotoneAdjoint",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CohypomonotoneAdjoint.spec OracleTemplate.CohypomonotoneAdjoint.AdjointAnchoredCohypomonotone.budget",
+      "theorem": "OracleTemplate.CohypomonotoneAdjoint.AdjointAnchoredCohypomonotone.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(\\frac{4 \\cdot L \\cdot R}{\\left(1 + \\rho \\cdot L\\right) \\cdot \\varepsilon} + 2\\right) \\cdot \\left(3 + 8 \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right) \\cdot \\log\\left(22 + 20 \\cdot \\rho \\cdot L\\right)\\right) + \\frac{324 \\cdot \\left(1 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right)^{3} \\cdot \\log\\left(11 + 10 \\cdot \\rho \\cdot L\\right) \\cdot L_2 \\cdot R \\cdot \\left(4 + \\log\\left(1 + \\frac{4 \\cdot L \\cdot R}{\\varepsilon}\\right)\\right)^{2}}{L} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CohypomonotoneAdjoint.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(4 * q.L * q.R / ((1 + q.ρ * q.L) * q.ε) + 2) * (3 + 8 * (2 + 2 * q.ρ * q.L) * Real.log (22 + 20 * q.ρ * q.L)) +\n      324 * (1 + 2 * q.ρ * q.L) ^ 2 * (2 + 2 * q.ρ * q.L) ^ 3 * Real.log (11 + 10 * q.ρ * q.L) * q.L₂ * q.R *\n          (4 + Real.log (1 + 4 * q.L * q.R / q.ε)) ^ 2 /\n        q.L⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(\\frac{4 \\cdot L \\cdot R}{\\left(1 + \\rho \\cdot L\\right) \\cdot \\varepsilon} + 2\\right) \\cdot \\left(3 + 8 \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right) \\cdot \\log\\left(22 + 20 \\cdot \\rho \\cdot L\\right)\\right) + \\frac{324 \\cdot \\left(1 + 2 \\cdot \\rho \\cdot L\\right)^{2} \\cdot \\left(2 + 2 \\cdot \\rho \\cdot L\\right)^{3} \\cdot \\log\\left(11 + 10 \\cdot \\rho \\cdot L\\right) \\cdot L_2 \\cdot R \\cdot \\left(4 + \\log\\left(1 + \\frac{4 \\cdot L \\cdot R}{\\varepsilon}\\right)\\right)^{2}}{L} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CohypomonotoneAdjoint.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈(4 * q.L * q.R / ((1 + q.ρ * q.L) * q.ε) + 2) * (3 + 8 * (2 + 2 * q.ρ * q.L) * Real.log (22 + 20 * q.ρ * q.L)) +\n      324 * (1 + 2 * q.ρ * q.L) ^ 2 * (2 + 2 * q.ρ * q.L) ^ 3 * Real.log (11 + 10 * q.ρ * q.L) * q.L₂ * q.R *\n          (4 + Real.log (1 + 4 * q.L * q.R / q.ε)) ^ 2 /\n        q.L⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AdjointAcceleratedCohypomonotone",
+      "namespace": "LongTails.Setups.CohypomonotoneAdjoint",
+      "setup": "LongTails.Setups.CohypomonotoneAdjoint",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CohypomonotoneAdjoint.spec OracleTemplate.CohypomonotoneAdjoint.AdjointAcceleratedCohypomonotone.budget",
+      "theorem": "OracleTemplate.CohypomonotoneAdjoint.AdjointAcceleratedCohypomonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdjointAnchoredCohypomonotone",
+      "theorem": "OracleTemplate.CohypomonotoneAdjoint.AdjointAnchoredCohypomonotone.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.AdjointAcceleratedCohypomonotone",
+      "theorem": "OracleTemplate.CohypomonotoneAdjoint.AdjointAcceleratedCohypomonotone.result",
+      "references": "- Sucheol Lee and Donghwan Kim. [Fast Extra Gradient Methods for Smooth Structured Nonconvex-Nonconcave Minimax Problems](https://papers.nips.cc/paper/2021/file/be767243ca8f574c740fb4c26cc6dceb-Paper.pdf). 2021. Complexity: $O(1+LR/((1-2\\rho L)\\varepsilon))$ exact operator evaluations using FEG, including initialization, for $\\|F(x_k)\\|\\leq\\varepsilon$; comparable regime $0\\leq\\rho L\\leq1/20$.\n- Yang Cai, Argyris Oikonomou, and Weiqiang Zheng. [Accelerated Algorithms for Constrained Nonconvex-Nonconcave Min-Max Optimization and Comonotone Inclusion](https://arxiv.org/html/2206.05248v6). 2024 (ICML publication; preprint initially 2022; version v6 used). Complexity: $O(1+LR/\\varepsilon)$ exact operator evaluations using composite-EAG with the additional operator set to zero, including initialization, for $\\|F(x_k)\\|\\leq\\varepsilon$ and $0\\leq\\rho L\\leq1/20$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained nonlinear root finding for a globally cohypomonotone operator F:E→E. A zero xstar exists with ‖x0−xstar‖≤R. No scalar objective or saddle representation is required.",
+        "evidence": "LongTails/Setups/CohypomonotoneAdjoint.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One exact oracle returns either F(x) or the adjoint derivative product J(x)*w. Both query types consume one call from the same fixed budget. Replies are exact for every call index and seed.",
+        "evidence": "LongTails/Setups/CohypomonotoneAdjoint.lean: spec.Query and the first three clauses of spec.admissible; LongTails/Template.lean: execute and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space; the norm and derivative operator norm use this geometry.",
+        "evidence": "LongTails/Setups/CohypomonotoneAdjoint.lean: Public.normedE, Public.linearE, and Public.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "F is differentiable everywhere, ‖F(x)−F(y)‖≤L‖x−y‖, and ‖J(x)−J(y)‖≤L₂‖x−y‖. Global cohypomonotonicity requires ⟨F(x)−F(y),x−y⟩≥−ρ‖F(x)−F(y)‖², with no upper restriction on ρL. Valid parameters satisfy L>0, L₂≥0, ρ≥0, R≥0, ε>0. E,L,L₂,ρ,x0 are public; R and ε are hidden from the algorithm constructor, and xstar is existential.",
+        "evidence": "LongTails/Setups/CohypomonotoneAdjoint.lean: Public, Params, spec.publicInput, spec.valid, and spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound must hold almost surely under the joint law of algorithm and oracle seeds after execution with the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/CohypomonotoneAdjoint.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "other",
+        "details": "The returned point must satisfy the unsquared operator residual bound ‖F(output)‖≤ε. No averaging, best-iterate, or last-iterate output restriction is specified.",
+        "evidence": "LongTails/Setups/CohypomonotoneAdjoint.lean: spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Cohypomonotone root finding with unrestricted ρL, a globally Lipschitz derivative, exact adjoint derivative products, and hidden radius and accuracy parameters is a meaningful specialized oracle formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CohypomonotoneAdjoint.AdjointAcceleratedCohypomonotone.result",
+        "OracleTemplate.CohypomonotoneAdjoint.AdjointAnchoredCohypomonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdjointAnchoredCohypomonotone",
+          "theorem": "OracleTemplate.CohypomonotoneAdjoint.AdjointAnchoredCohypomonotone.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.AdjointAcceleratedCohypomonotone",
+          "theorem": "OracleTemplate.CohypomonotoneAdjoint.AdjointAcceleratedCohypomonotone.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

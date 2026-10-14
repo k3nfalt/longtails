@@ -1,0 +1,44 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth convex minimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SmoothAndConvex.lean}{Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:SmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$ on a real Hilbert space, with an exact $L$-Lipschitz gradient oracle, $L>0$, and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$, $R\ge0$. Target: $f(x_K)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, deterministically (hence almost surely).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedConvex.lean}{Accelerated\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$ & --- & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GdConvex.lean}{Gd\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GdConvex.md}{(review)}
+& $\mathcal{O}\!(1+LR^2/\varepsilon)$ & --- & --- \\
+\midrule[1.2pt]
+Nesterov acceleration \citep[Cor.~4.9]{SmoothConvexASTv4}
+& $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$
+& \textbf{(1)}: Matches known rate; Lean formalization. Hilbert-space extension of the dimension-free Euclidean argument.
+& \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{LR^2/\varepsilon}$; asymptotically worse as $LR^2/\varepsilon\to\infty$. \\
+\midrule
+Classical GD, step $1/L$ \citep[Eq.~(3.1)]{SmoothConvexDTv1}
+& $\mathcal{O}\!(1+LR^2/\varepsilon)$; stated on $\mathbb{R}^d$
+& i) \textbf{(2)}: Matches known rate; Lean formalization.\newline ii) \textbf{(1)}: Classical acceleration replaces $LR^2/\varepsilon$ by $\sqrt{LR^2/\varepsilon}$ as $LR^2/\varepsilon\to\infty$.
+& --- \\
+\midrule
+Sharp GD, step $1/L$ \citep[Thm.~3.1]{SmoothConvexDTv1}
+& $\mathcal{O}\!(1+LR^2/\varepsilon)$; stated on $\mathbb{R}^d$
+& \textbf{(2)}: Matches known rate; no established improvement.
+& \textbf{(2)}: About twice the certified calls when $LR^2/\varepsilon\gg1$, on $\mathbb{R}^d$. \\
+\midrule
+OGM \citep[Cor.~4.6]{SmoothConvexASTv4}
+& $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$; stated on $\mathbb{R}^d$
+& \textbf{(1)}, \textbf{(2)}: No established improvement.
+& On $\mathbb{R}^d$, $LR^2/\varepsilon\gg1$: i) \textbf{(1)}: About $\sqrt2$ times the certified calls.\newline ii) \textbf{(2)}: Linear instead of square-root dependence on $LR^2/\varepsilon$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $R$: initial-distance bound; $\varepsilon$: objective-gap tolerance; $K$: iteration count; $d$: dimension. All costs count exact gradient evaluations. GD: gradient descent; OGM: optimized gradient method.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

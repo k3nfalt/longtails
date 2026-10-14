@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.BlockSmoothConvexConcave",
+  "searched_at": "2026-10-04T15:35:07.536379+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil \\frac{180 \\cdot \\gamma^{4} \\cdot \\delta^{4} \\cdot \\left(\\max\\left\\{ Lx, Ly \\right\\} + Lxy\\right)^{2} \\cdot R^{2}}{\\left(\\gamma - 1\\right)^{3} \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.BlockSmoothConvexConcave.spec.Params → ℕ",
+        "value": "fun q => 2 * ⌈180 * q.γ ^ 4 * q.δ ^ 4 * (max q.Lx q.Ly + q.Lxy) ^ 2 * q.R ^ 2 / ((q.γ - 1) ^ 3 * q.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil \\frac{180 \\cdot \\gamma^{4} \\cdot \\delta^{4} \\cdot \\left(\\max\\left\\{ Lx, Ly \\right\\} + Lxy\\right)^{2} \\cdot R^{2}}{\\left(\\gamma - 1\\right)^{3} \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.BlockSmoothConvexConcave.spec.Params → ℕ",
+          "value": "fun q => 2 * ⌈180 * q.γ ^ 4 * q.δ ^ 4 * (max q.Lx q.Ly + q.Lxy) ^ 2 * q.R ^ 2 / ((q.γ - 1) ^ 3 * q.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AlexGdaConvexConcave",
+      "namespace": "LongTails.Setups.BlockSmoothConvexConcave",
+      "setup": "LongTails.Setups.BlockSmoothConvexConcave",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BlockSmoothConvexConcave.spec OracleTemplate.BlockSaddle.budget",
+      "theorem": "OracleTemplate.BlockSaddle.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AlexGdaConvexConcave",
+      "theorem": "OracleTemplate.BlockSaddle.result",
+      "references": "- G. M. Korpelevich. [The Extragradient Method for Finding Saddle Points and Other Problems](https://cs.uwaterloo.ca/~y328yu/classics/extragrad.pdf). 1976; English translation 1977. Complexity: $O(1+(\\max\\{L_x,L_y\\}+L_{xy})^2R^2/\\varepsilon^2)$ fixed exact partial-gradient calls for joint gradient norm at most $\\varepsilon$, using extragradient with best-iterate selection; four partial-gradient calls per iteration, no additional initialization calls, and zero calls when $R=0$.\n- Taeho Yoon and Ernest K. Ryu. [Accelerated Algorithms for Smooth Convex-Concave Minimax Problems with O(1/k²) Rate on Squared Gradient Norm](https://proceedings.mlr.press/v139/yoon21d/yoon21d.pdf). 2021. Complexity: $O(1+(\\max\\{L_x,L_y\\}+L_{xy})R/\\varepsilon)$ fixed exact partial-gradient calls for last-iterate joint gradient norm at most $\\varepsilon$, using extra anchored gradient; four partial-gradient calls per iteration and no additional initialization calls.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "The objective is convex in x for every fixed y and concave in y for every fixed x; strong convexity and strong concavity are not required.",
+        "evidence": "LongTails/Setups/BlockSmoothConvexConcave.lean: spec.admissible, ConvexOn and ConcaveOn conditions."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Unconstrained minimization–maximization on E × F, with an existing global saddle point (xs,ys).",
+        "evidence": "LongTails/Setups/BlockSmoothConvexConcave.lean: spec.Instance and spec.admissible, saddle-point inequalities."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query requests either gx(x,y)=∇x f(x,y) or gy(x,y)=∇y f(x,y). Replies are exact and independent of call index and oracle seed. Evaluating both partial gradients costs two oracle calls.",
+        "evidence": "LongTails/Setups/BlockSmoothConvexConcave.lean: spec.Query, spec.Reply and spec.admissible, oracle.answer equalities and HasGradientAt conditions; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E and F are arbitrary complete real inner-product spaces. Globally, gx is Lx-Lipschitz in x and Lxy-Lipschitz in y; gy is Ly-Lipschitz in y and Lxy-Lipschitz in x. All three constants are nonnegative, with Lx+Lxy>0 and Ly+Lxy>0. A saddle point satisfies ‖x0−xs‖²+‖y0−ys‖²≤R². Spaces, smoothness constants, x0,y0,γ,δ are public; R≥0 and ε>0 are hidden from algorithm construction. Valid parameters require 1<γ≤2 and δ≥1. The allowed family is specified through alexGda with positive α,β.",
+        "evidence": "LongTails/Setups/BlockSmoothConvexConcave.lean: Public, Params, spec.publicInput, spec.valid, spec.admissible and spec.allowedAlgorithm; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The returned pair (x,y) must satisfy ‖∇x f(x,y)‖²+‖∇y f(x,y)‖²≤ε². No objective-gap, distance, averaging, or last-iterate requirement is imposed by successful.",
+        "evidence": "LongTails/Setups/BlockSmoothConvexConcave.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The squared joint-gradient bound holds almost surely under the joint algorithm-seed and oracle-seed law. The oracle-call budget holds for every seed.",
+        "evidence": "LongTails/Setups/BlockSmoothConvexConcave.lean: spec.successful, ∀ᵐ condition; LongTails/Template.lean: Convergence, product probability law and ∀ seed cost bound."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth unconstrained convex–concave saddle optimization with exact first-order information and a gradient-residual accuracy criterion is an established formulation, including Hilbert-space versions and separate block smoothness bounds."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.BlockSaddle.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AlexGdaConvexConcave",
+          "theorem": "OracleTemplate.BlockSaddle.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

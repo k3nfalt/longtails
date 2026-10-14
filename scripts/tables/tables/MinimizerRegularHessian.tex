@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-gradient optimization with minimizer-anchored Hessian regularity: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/MinimizerRegularHessian.lean}{Minimizer\allowbreak{}Regular\allowbreak{}Hessian}.}\label{tab:MinimizerRegularHessian}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space of finite dimension $d\ge1$, $f$ and $\nabla f$ are differentiable, $f$ is $\mu$-strongly convex, and $\nabla f$ is $L$-Lipschitz. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\|\nabla^2 f(x)-\nabla^2 f(x_\star)\|\le M\|x-x_\star\|$ for every $x$. Parameters $0<\mu\le L$, $M\ge0$, $R>0$, and $\varepsilon>0$ are known. Count exact gradient calls; target $f(\widehat x)-f(x_\star)\le\varepsilon$ deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SpectralGradientQuadraticConvergence.lean}{Spectral\allowbreak{}Gradient\allowbreak{}Quadratic\allowbreak{}Convergence} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/SpectralGradientQuadraticConvergence.md}{(review)}
+& $\begin{aligned}\mathcal{O}\!\Bigl(&\kappa\Bigl[1+\log\!\Bigl(1 +\frac{(d+1)^2(2\kappa)^{2d}MLR}{\mu^2}\Bigr)\Bigr]\\&+d[1+\log(1+\ell)]\Bigr)\end{aligned}$
+& --- & --- \\
+\midrule[1.2pt]
+Derived bound: AGD warmup \citep[Thm.~3.18]{Bubeck2015MinimizerHessian} + forward-difference Newton
+& $\mathcal{O}\!\left(\begin{gathered}\sqrt{\kappa}\!\left[1+\log\!\left(1+\frac{\sqrt{d\kappa}MR}{\mu}\right)\right]\\ {}+d[1+\log(1+\ell)]\end{gathered}\right)$\newline
+$d+1$ calls per Newton step; $M=0$: $\mathcal{O}\!(d)$.
+& \textbf{(1)}: global quadratic windows using scalar gradient steps; priority unresolved. No established problem-class improvement.
+& \textbf{(1)}: at least $\sqrt\kappa$ larger warmup bound; matched quadratic-phase order. Symmetric fitting and eigenvalue computations remain necessary. \\
+\midrule
+AGD \citep[Thm.~3.18]{Bubeck2015MinimizerHessian}
+& $\mathcal{O}\!\left(1+\sqrt\kappa\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right)$
+& \textbf{(1)}: $\log\log(1/\varepsilon)$ instead of $\log(1/\varepsilon)$ accuracy dependence for fixed $d,L,\mu,M,R$ as $\varepsilon\to0$.
+& \textbf{(1)}: needs anchored Hessian regularity, finite $d$, and known $M,R$; can cost more at moderate accuracy. \\
+\midrule
+Silver step sizes \citep[Thm.~1.1]{AltschulerParrilo2023SilverV1MinimizerHessian}
+& $\mathcal{O}\!\left(1+\kappa^{\log_{1+\sqrt2}2}\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right)$
+& \textbf{(1)}: $\log\log(1/\varepsilon)$ instead of $\log(1/\varepsilon)$ accuracy dependence within scalar gradient steps, for fixed $d,L,\mu,M,R$ as $\varepsilon\to0$.
+& \textbf{(1)}: needs anchored Hessian regularity, finite $d$, known $M,R$, symmetric fitting, and eigendecomposition; no uniform cost improvement. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d=\dim E$, $\kappa=L/\mu$, $\ell=\log(1+L^2R^2/(\mu\varepsilon))$; $\log$ is natural; Hessian norms are operator norms. AGD: accelerated gradient descent. Costs count gradient queries, including all probing and finite-difference queries, not matrix computations.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

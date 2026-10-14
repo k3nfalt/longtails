@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic smooth convex minimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{Stochastic\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra; $\nabla f$ is $L$-Lipschitz. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. IID samples $\xi\sim p$ provide a jointly measurable, integrable oracle $g$ with $\mathbb{E}g(x,\xi)=\nabla f(x)$ and integrable squared error $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\mathbb{E}[f(\widehat x)-f(x_\star)]\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedStochasticConvex.lean}{Accelerated\allowbreak{}Stochastic\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedStochasticConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & --- & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/SgdConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & --- & --- \\
+\midrule[1.2pt]
+AC-SA \citep[Prop.~7, (4.10)--(4.11)]{sscGhadimiLan2012}
+\par Finite-dimensional, unconstrained specialization
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+& i) \textbf{(1)}: Matches known rate.\newline ii) \textbf{(2)}: Matches when $\sigma^2\ge L\varepsilon$.\newline iii) \textbf{(1)}, \textbf{(2)}: Hilbert-space Lean formalizations; dimension-free classical analysis.
+& i) \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{LR^2/\varepsilon}$; worse deterministic term when $LR^2/\varepsilon>1$.\newline ii) \textbf{(1)}, \textbf{(2)}: No high-probability guarantee; baseline additionally requires light-tailed noise and finite domain radius. \\
+\midrule
+Stochastic mirror descent \citep[Thm.~6.3 and proof]{sscBubeck2015v2}
+\par Derived bound: Euclidean unconstrained case, finite-dimensional
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$\par Uses initial distance $\|x_0-x_\star\|\le R$ in the telescoping bound.
+& i) \textbf{(2)}: Matches known rate; Lean formalization.\newline ii) \textbf{(1)}: $\sqrt{LR^2/\varepsilon}$ instead of $LR^2/\varepsilon$ when $LR^2/\varepsilon>1$; unchanged noise term can mask gain.
+& --- \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls; $L$ is smoothness, $R$ the initial-distance bound, $\sigma^2$ the variance bound, and $\varepsilon$ the expected-gap tolerance. $\mathbb{E}$ denotes expectation over the independent samples.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

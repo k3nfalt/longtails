@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.AdaptiveHeavyTailSimplex",
+  "searched_at": "2026-10-04T15:35:11.169750+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 256 \\cdot \\log\\left(\\frac{100}{\\delta}\\right) + 67108864 \\cdot \\sqrt{\\frac{L \\cdot \\left(\\log\\left(2 \\cdot d\\right) + \\log\\left(\\frac{100}{\\delta}\\right)\\right)}{\\varepsilon} \\cdot \\left(\\log\\left(\\frac{100}{\\delta}\\right) + \\log\\left(2 + \\frac{L \\cdot \\left(\\log\\left(2 \\cdot d\\right) + \\log\\left(\\frac{100}{\\delta}\\right)\\right)}{\\varepsilon}\\right)\\right)} + 4 \\cdot \\left(\\log\\left(2 \\cdot d\\right) + \\log\\left(\\frac{100}{\\delta}\\right)\\right) \\cdot \\left(\\frac{274877906944 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.AdaptiveHeavyTailSimplex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈256 * Real.log (100 / p.δ) +\n        67108864 *\n          √(p.L * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) / p.ε *\n              (Real.log (100 / p.δ) + Real.log (2 + p.L * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) / p.ε))) +\n      4 * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) * (274877906944 * p.σ / p.ε) ^ (p.p / (p.p - 1))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 256 \\cdot \\log\\left(\\frac{100}{\\delta}\\right) + 67108864 \\cdot \\sqrt{\\frac{L \\cdot \\left(\\log\\left(2 \\cdot d\\right) + \\log\\left(\\frac{100}{\\delta}\\right)\\right)}{\\varepsilon} \\cdot \\left(\\log\\left(\\frac{100}{\\delta}\\right) + \\log\\left(2 + \\frac{L \\cdot \\left(\\log\\left(2 \\cdot d\\right) + \\log\\left(\\frac{100}{\\delta}\\right)\\right)}{\\varepsilon}\\right)\\right)} + 4 \\cdot \\left(\\log\\left(2 \\cdot d\\right) + \\log\\left(\\frac{100}{\\delta}\\right)\\right) \\cdot \\left(\\frac{274877906944 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.AdaptiveHeavyTailSimplex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈256 * Real.log (100 / p.δ) +\n        67108864 *\n          √(p.L * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) / p.ε *\n              (Real.log (100 / p.δ) + Real.log (2 + p.L * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) / p.ε))) +\n      4 * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) * (274877906944 * p.σ / p.ε) ^ (p.p / (p.p - 1))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AdaptiveEntropicHeavyTailConvex",
+      "namespace": "LongTails.Setups.AdaptiveHeavyTailSimplex",
+      "setup": "LongTails.Setups.AdaptiveHeavyTailSimplex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AdaptiveHeavyTailSimplex.spec OracleTemplate.AdaptiveHeavyTailSimplex.budget",
+      "theorem": "OracleTemplate.AdaptiveHeavyTailSimplex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdaptiveEntropicHeavyTailConvex",
+      "theorem": "OracleTemplate.AdaptiveHeavyTailSimplex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a differentiable convex function over Δ_d = {x ∈ ℝ^d : x_i ≥ 0, ∑_i x_i = 1}, with d ≥ 2 and an attained minimum. Smoothness is ‖∇f(x) − ∇f(y)‖∞ ≤ L‖x − y‖₁ for all x,y ∈ Δ_d, with L > 0.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: simplex, Public.hd, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x ∈ Δ_d returns a full vector g(x,ξ) ∈ ℝ^d using a fresh IID seed. The oracle is unbiased: E[g(x,ξ)] = ∇f(x). No function-value oracle is supplied. Each reply counts as one oracle call.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central-moment bound E[‖g(x,ξ) − ∇f(x)‖∞^p] ≤ σ^p for every x ∈ Δ_d, where 1 < p ≤ 2 and σ ≥ 0. Finite variance is not required when p < 2.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: dualNorm, spec.valid, and the moment-integrability and moment-bound clauses of spec.admissible."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The simplex has ℓ₁ primal geometry and ℓ∞ dual geometry. Both gradient smoothness and the oracle-noise moment use these norms. No mirror map is prescribed by the setup.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: oneNorm, dualNorm, simplex, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝ^d, represented by EuclideanSpace ℝ (Fin d), with d ≥ 2.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: Vector and Public.hd."
+      },
+      {
+        "label": "other",
+        "details": "Only d, L, and δ are public algorithm inputs. The moment exponent p, noise scale σ, target accuracy ε, and seed space Ω are hidden. One algorithm determined by the public inputs must satisfy the guarantee when externally run for the parameter-dependent fixed budget. Seeds are independent and identically distributed.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: Public, Params, spec.publicInput, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Convergence.makeAlgorithm and budget execution."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable simplex-valued output X satisfying f(X) − min_{x∈Δ_d} f(x) ≤ ε on the success event, with ε > 0. The output need not be a queried iterate.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: spec.Output, spec.valid, spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(X) − f(x⋆) > ε) ≤ δ for a simplex minimizer x⋆, where 0 < δ < 1. Probability includes algorithm randomness and IID oracle randomness; oracle cost is bounded by a fixed budget for every seed.",
+        "evidence": "LongTails/Setups/AdaptiveHeavyTailSimplex.lean: spec.successful; LongTails/Template.lean: Convergence and the product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines smooth simplex optimization in ℓ₁/ℓ∞ geometry with finite-p-moment gradient noise and a high-probability fixed-budget guarantee, while withholding p, σ, and ε from the algorithm's public inputs."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AdaptiveHeavyTailSimplex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdaptiveEntropicHeavyTailConvex",
+          "theorem": "OracleTemplate.AdaptiveHeavyTailSimplex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

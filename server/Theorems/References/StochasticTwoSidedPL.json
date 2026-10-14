@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.StochasticTwoSidedPL",
+  "searched_at": "2026-10-06T06:15:21.791357+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "4 \\cdot \\left\\lceil \\frac{2^{18} \\cdot L^{2}}{\\mux \\cdot \\muy} \\cdot \\left(3 + \\frac{2^{24} \\cdot L \\cdot \\sigma^{2}}{\\mux \\cdot \\muy \\cdot \\varepsilon}\\right) \\cdot \\left(2 + \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+} + 2",
+        "type": "LongTails.Setups.StochasticTwoSidedPL.spec.Params → ℕ",
+        "value": "fun p =>\n  4 *\n      ⌈2 ^ 18 * p.L ^ 2 / (p.μx * p.μy) * (3 + 2 ^ 24 * p.L * p.σ ^ 2 / (p.μx * p.μy * p.ε)) *\n          (2 + Real.log (1 + p.Δ / p.ε))⌉₊ +\n    2"
+      },
+      "budgets": [
+        {
+          "latex": "4 \\cdot \\left\\lceil \\frac{2^{18} \\cdot L^{2}}{\\mux \\cdot \\muy} \\cdot \\left(3 + \\frac{2^{24} \\cdot L \\cdot \\sigma^{2}}{\\mux \\cdot \\muy \\cdot \\varepsilon}\\right) \\cdot \\left(2 + \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+} + 2",
+          "type": "LongTails.Setups.StochasticTwoSidedPL.spec.Params → ℕ",
+          "value": "fun p =>\n  4 *\n      ⌈2 ^ 18 * p.L ^ 2 / (p.μx * p.μy) * (3 + 2 ^ 24 * p.L * p.σ ^ 2 / (p.μx * p.μy * p.ε)) *\n          (2 + Real.log (1 + p.Δ / p.ε))⌉₊ +\n    2"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticTwoSidedPLSmoothedAgda",
+      "namespace": "LongTails.Setups.StochasticTwoSidedPL",
+      "setup": "LongTails.Setups.StochasticTwoSidedPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticTwoSidedPL.spec OracleTemplate.StochasticTwoSidedPL.budget",
+      "theorem": "OracleTemplate.StochasticTwoSidedPL.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticTwoSidedPLSmoothedAgda",
+      "theorem": "OracleTemplate.StochasticTwoSidedPL.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective may be nonconvex in x and nonconcave in y; neither convexity nor concavity is required. Both partial gradients are globally L-Lipschitz with respect to the sum of the two variable norms.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: spec.admissible, partial-gradient smoothness and PL inequalities."
+      },
+      {
+        "label": "pl",
+        "details": "Uniform two-sided PL inequalities: 2μx(f(x,y)−f(x′,y)) ≤ ‖∇x f(x,y)‖² and 2μy(f(x,y′)−f(x,y)) ≤ ‖∇y f(x,y)‖² for all x,x′,y,y′. Public parameters satisfy 0 < μx,μy ≤ L.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: spec.admissible and spec.valid."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Unconstrained minimax optimization min_x Φ(x), where Φ(x)=max_y f(x,y). Every inner maximization is attained. The output is a pair (x,y).",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: maxValue, minimaxValue, spec.admissible inner-attainment condition, and spec.Output."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call requests either an x-gradient sample or a y-gradient sample at a supplied pair. Samples are unbiased, with independent identically distributed seeds across calls. No function values, sample-index access, or reuse of a seed across queries is supplied. Oracle cost counts every partial-gradient call under a fixed budget.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: spec.Query, spec.Reply, spec.admissible oracle answer and infinitePi law, IsUnbiasedOracle.unbiased; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For each partial-gradient oracle and every query z, E‖Gx(z,ω)−∇x f(z)‖² ≤ σ² and E‖Gy(z,ω)−∇y f(z)‖² ≤ σ². Measurability, integrability, and integrability of the squared errors are required; σ ≥ 0 is public.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: IsUnbiasedOracle fields and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The primal space E is a finite-dimensional real inner-product space. The dual space F is a complete, second-countable real inner-product space and may be infinite-dimensional. Both have Borel measurable structures.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: Params.finiteE, Params.linearE, Params.linearF, Params.completeF, Params.countableF, Params.borelE, and Params.borelF."
+      },
+      {
+        "label": "other",
+        "details": "All Params are public, including L, μx, μy, σ, Δ, ε and the starting pair. The objective and oracle witnesses are hidden. Initialization satisfies 2Φ(x0)−Φ*−f(x0,y0)+‖∇x f(x0,y0)‖²/L ≤ Δ, with Δ ≥ 0 and ε > 0.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.valid, and spec.admissible initialization inequality."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned pair (x̂,ŷ) must satisfy E[(Φ(x̂)−Φ*)+(Φ(x̂)−f(x̂,ŷ))] ≤ ε, where Φ*=inf_x Φ(x). This controls the sum of primal objective suboptimality and inner-maximization suboptimality, rather than a gradient norm or distance.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: spec.successful, maxValue, and minimaxValue."
+      },
+      {
+        "label": "expected",
+        "details": "The output must be measurable and its combined gap integrable. The ε guarantee is in expectation over algorithm randomness and the independent oracle-seed sequence; no high-probability or almost-sure accuracy guarantee is required.",
+        "evidence": "LongTails/Setups/StochasticTwoSidedPL.lean: spec.successful; LongTails/Template.lean: Convergence product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth two-sided PL minimax optimization with unbiased independent bounded-variance gradient samples and expected objective-gap accuracy is an established problem formulation. The Hilbert-space dual and augmented initialization bound specify its scope without changing the underlying benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticTwoSidedPL.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticTwoSidedPLSmoothedAgda",
+          "theorem": "OracleTemplate.StochasticTwoSidedPL.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

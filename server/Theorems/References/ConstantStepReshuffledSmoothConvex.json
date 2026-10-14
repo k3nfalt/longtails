@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.ConstantStepReshuffledSmoothConvex",
+  "searched_at": "2026-10-06T06:12:29.582400+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "n \\cdot \\left\\lceil 1 + \\frac{32768 \\cdot \\left(1 + \\log\\left(n\\right)\\right) \\cdot \\left(Lmax \\cdot \\varepsilon + \\sigma^{2}\\right) \\cdot R^{2} \\cdot \\left(1 + \\log\\left(n + 2 + \\frac{\\left(Lmax \\cdot \\varepsilon + \\sigma^{2}\\right) \\cdot R^{2}}{\\varepsilon^{2}}\\right)\\right)}{n \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.ConstantStepReshuffledSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  p.n *\n    ⌈1 +\n        32768 * (1 + Real.log ↑p.n) * (p.Lmax * p.ε + p.σ ^ 2) * p.R ^ 2 *\n            (1 + Real.log (↑p.n + 2 + (p.Lmax * p.ε + p.σ ^ 2) * p.R ^ 2 / p.ε ^ 2)) /\n          (↑p.n * p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "n \\cdot \\left\\lceil 1 + \\frac{32768 \\cdot \\left(1 + \\log\\left(n\\right)\\right) \\cdot \\left(Lmax \\cdot \\varepsilon + \\sigma^{2}\\right) \\cdot R^{2} \\cdot \\left(1 + \\log\\left(n + 2 + \\frac{\\left(Lmax \\cdot \\varepsilon + \\sigma^{2}\\right) \\cdot R^{2}}{\\varepsilon^{2}}\\right)\\right)}{n \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.ConstantStepReshuffledSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  p.n *\n    ⌈1 +\n        32768 * (1 + Real.log ↑p.n) * (p.Lmax * p.ε + p.σ ^ 2) * p.R ^ 2 *\n            (1 + Real.log (↑p.n + 2 + (p.Lmax * p.ε + p.σ ^ 2) * p.R ^ 2 / p.ε ^ 2)) /\n          (↑p.n * p.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ReshuffledConstantStepLastIterate",
+      "namespace": "LongTails.Setups.ConstantStepReshuffledSmoothConvex",
+      "setup": "LongTails.Setups.ConstantStepReshuffledSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ConstantStepReshuffledSmoothConvex.spec\n  OracleTemplate.ConstantStepReshuffledConvex.budget",
+      "theorem": "OracleTemplate.ConstantStepReshuffledConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ReshuffledConstantStepLastIterate",
+      "theorem": "OracleTemplate.ConstantStepReshuffledConvex.result",
+      "references": "- Zijian Liu. [Random Reshuffling Dominates Stochastic Gradient Descent](https://arxiv.org/html/2606.32005v1). 2026 (preprint v1, 30 June). Complexity: $O\\!\\left(n+\\frac{L_{\\max}R^2}{\\varepsilon}+\\min\\left\\{\\frac{\\sigma^2R^2}{\\varepsilon^2},\\frac{\\sqrt{nL_{\\mathrm{avg}}}\\,\\sigma R^2}{\\varepsilon^{3/2}}\\right\\}\\right)$ exact component-gradient oracle calls, with fixed cost, for constant-step random reshuffling achieving expected objective gap at most $\\varepsilon$ at an averaged output.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of F(x) = (1/n)∑ᵢ fᵢ(x), with every component convex and a minimizer x⋆ satisfying ‖x₀−x⋆‖ ≤ R.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: ReshuffledConvex.spec.admissible; LongTails/Setups/FiniteSumSmoothAndConvex.lean: FiniteSum.objective."
+      },
+      {
+        "label": "finite_sum",
+        "details": "There are n ≥ 1 component functions on a complete real Hilbert space E.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: ReshuffledConvex.Params and spec.Instance."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every reply is the exact component gradient, for every call index and oracle seed. There is no oracle error.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.admissible, HasGradientAt condition."
+      },
+      {
+        "label": "component_gradient",
+        "details": "A query specifies a component index i and a point x; one oracle call returns ∇fᵢ(x).",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.Query, spec.Reply, and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "At a minimizer satisfying the initial-distance bound, (1/n)∑ᵢ ‖∇fᵢ(x⋆)‖² ≤ σ². This bounds component-gradient heterogeneity at that minimizer, without imposing a uniform variance bound elsewhere.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.admissible, final existential condition."
+      },
+      {
+        "label": "other",
+        "details": "Component gradients have Lipschitz constants ℓᵢ ≥ 0 with ℓᵢ ≤ Lmax and (1/n)∑ᵢ ℓᵢ ≤ Lavg. Valid parameters satisfy 0 < Lavg ≤ Lmax, R ≥ 0, σ ≥ 0, and ε > 0. Algorithms are restricted to reshuffledGradient with a positive constant step size. All Params, including E, n, Lavg, Lmax, R, σ, ε, and x₀, are public; the component functions are hidden.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible; LongTails/Setups/ConstantStepReshuffledSmoothConvex.lean: spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is the final point of the permitted constant-step reshuffledGradient algorithm. Its objective gap F(output)−F(x⋆) must be integrable and have expectation at most ε; the output must be measurable.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.successful; LongTails/Setups/ConstantStepReshuffledSmoothConvex.lean: spec.allowedAlgorithm; supplied LongTails/Algorithms/ReshuffledGradient.lean: reshuffledGradient.output."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation under the product of the algorithm and oracle seed laws. The oracle-call budget is fixed and bounded for every seed.",
+        "evidence": "LongTails/Setups/ReshuffledSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth convex finite-sum optimization with exact component gradients, random reshuffling, heterogeneity measured at a minimizer, and expected objective-gap accuracy is an established formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ConstantStepReshuffledConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ReshuffledConstantStepLastIterate",
+          "theorem": "OracleTemplate.ConstantStepReshuffledConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

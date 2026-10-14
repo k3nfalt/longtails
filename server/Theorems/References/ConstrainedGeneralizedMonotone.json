@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.ConstrainedGeneralizedMonotone",
+  "searched_at": "2026-10-12T08:03:29.993025+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(\\left\\lceil \\frac{16 \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot \\left(1 + 8 \\cdot L1 \\cdot R\\right) \\cdot R}{\\varepsilon} + \\left(132 \\cdot L1 \\cdot R \\cdot \\left(1 + L1 \\cdot R\\right) + 4\\right) \\cdot \\log\\left(2 + \\frac{8 \\cdot R \\cdot \\left(L0 + 2 \\cdot L1 \\cdot G0\\right)}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.ConstrainedGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  2 *\n    (⌈16 * (q.L0 + q.L1 * q.G) * (1 + 8 * q.L1 * q.R) * q.R / q.ε +\n          (132 * q.L1 * q.R * (1 + q.L1 * q.R) + 4) * Real.log (2 + 8 * q.R * (q.L0 + 2 * q.L1 * q.G0) / q.ε)⌉₊ +\n      1)"
+        },
+        {
+          "latex": "\\left\\lceil \\frac{16 \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot \\left(1 + 8 \\cdot L1 \\cdot R\\right) \\cdot R}{\\varepsilon} + \\left(132 \\cdot L1 \\cdot R \\cdot \\left(1 + L1 \\cdot R\\right) + 4\\right) \\cdot \\log\\left(2 + \\frac{8 \\cdot R \\cdot \\left(L0 + 2 \\cdot L1 \\cdot G0\\right)}{\\varepsilon}\\right) \\right\\rceil_{+} + 1",
+          "oracle": 1,
+          "type": "LongTails.Setups.ConstrainedGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈16 * (q.L0 + q.L1 * q.G) * (1 + 8 * q.L1 * q.R) * q.R / q.ε +\n        (132 * q.L1 * q.R * (1 + q.L1 * q.R) + 4) * Real.log (2 + 8 * q.R * (q.L0 + 2 * q.L1 * q.G0) / q.ε)⌉₊ +\n    1"
+        }
+      ],
+      "module": "LongTails.Theorems.ConstrainedGeneralizedMonotone",
+      "namespace": "LongTails.Setups.ConstrainedGeneralizedMonotone",
+      "setup": "LongTails.Setups.ConstrainedGeneralizedMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ConstrainedGeneralizedMonotone.spec OracleTemplate.ConstrainedMonotone.budget",
+      "theorem": "OracleTemplate.ConstrainedMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ConstrainedGeneralizedMonotone",
+      "theorem": "OracleTemplate.ConstrainedMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Constrained monotone variational inequality: find xstar ∈ X satisfying ⟨F(xstar), w − xstar⟩ ≥ 0 for every w ∈ X. X is convex; F is continuous and globally monotone. No objective function, strong monotonicity, or saddle representation is assumed.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Oracle 1 returns an exact Euclidean metric projection P(z) onto X, characterized by P(z) ∈ X and ⟨z − P(z), w − P(z)⟩ ≤ 0 for every w ∈ X. Operator evaluations and projections have separate fixed call budgets.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: spec.admissible, second conjunct; LongTails/Template.lean: execute and Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 0 returns the exact operator value F(x) at any ambient-space query x. Answers are independent of the call index and seed; F need not be a gradient.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: spec.admissible, first conjunct."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "L0 > 0 and L1 ≥ 0. For every x, y and M, a bound ‖F(x + θ(y − x))‖ ≤ M throughout θ ∈ [0,1] implies ‖F(x) − F(y)‖ ≤ (L0 + L1 M)‖x − y‖. This is norm-dependent segment smoothness, with no global Lipschitz constant assumed.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: spec.valid and segment-bound conjunct of spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real inner-product space; completeness and finite dimension are not assumed. Public information consists of E, L0, L1, and feasible x0. Hidden budget parameters satisfy R > 0, G ≥ 0, G0 ≥ 0, ε > 0; some VI solution obeys ‖x0 − xstar‖ ≤ R and ‖F(xstar)‖ ≤ G, while ‖F(x0)‖ ≤ G0. X need not be bounded.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: Public, Params, spec.publicInput, spec.valid, and final conjuncts of spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to X.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε residual certificate must hold almost surely under the joint algorithm-seed and oracle-seed probability law.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: spec.successful, ∀ᵐ quantifier; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The returned point x admits a normal-cone certificate ξ with ⟨ξ, w − x⟩ ≤ 0 for all w ∈ X and ‖F(x) + ξ‖ ≤ ε. The criterion is an unsquared norm residual for F + N_X, rather than a VI gap or the norm of F alone.",
+        "evidence": "LongTails/Setups/ConstrainedGeneralizedMonotone.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The monotone VI formulation and exact projection oracle are established, but norm-dependent segment smoothness, hidden solution-scale bounds, and an almost-sure normal-cone residual guarantee form a meaningful variant of the usual globally Lipschitz VI benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ConstrainedMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ConstrainedGeneralizedMonotone",
+          "theorem": "OracleTemplate.ConstrainedMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

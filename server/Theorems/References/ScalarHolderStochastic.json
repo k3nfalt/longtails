@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.ScalarHolderStochastic",
+  "searched_at": "2026-10-04T17:47:40.092521+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{\\frac{200}{p - 1}} \\cdot \\left(1 + \\frac{1}{\\nu}\\right) \\cdot \\left(1 + \\frac{H^{\\frac{1}{1 + \\nu}} \\cdot \\Delta^{\\frac{\\nu}{1 + \\nu}}}{\\varepsilon} + \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} \\cdot \\log\\left(2 + \\frac{H^{\\frac{1}{1 + \\nu}} \\cdot \\Delta^{\\frac{\\nu}{1 + \\nu}}}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.ScalarHolderStochastic.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ (200 / (q.p - 1)) * (1 + 1 / q.ν) *\n      (1 + q.H ^ (1 / (1 + q.ν)) * q.Δ ^ (q.ν / (1 + q.ν)) / q.ε +\n        (q.σ / q.ε) ^ (q.p / (q.p - 1)) * Real.log (2 + q.H ^ (1 / (1 + q.ν)) * q.Δ ^ (q.ν / (1 + q.ν)) / q.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{\\frac{200}{p - 1}} \\cdot \\left(1 + \\frac{1}{\\nu}\\right) \\cdot \\left(1 + \\frac{H^{\\frac{1}{1 + \\nu}} \\cdot \\Delta^{\\frac{\\nu}{1 + \\nu}}}{\\varepsilon} + \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} \\cdot \\log\\left(2 + \\frac{H^{\\frac{1}{1 + \\nu}} \\cdot \\Delta^{\\frac{\\nu}{1 + \\nu}}}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.ScalarHolderStochastic.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ (200 / (q.p - 1)) * (1 + 1 / q.ν) *\n      (1 + q.H ^ (1 / (1 + q.ν)) * q.Δ ^ (q.ν / (1 + q.ν)) / q.ε +\n        (q.σ / q.ε) ^ (q.p / (q.p - 1)) * Real.log (2 + q.H ^ (1 / (1 + q.ν)) * q.Δ ^ (q.ν / (1 + q.ν)) / q.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ScalarHolderHeavyTailStationarity",
+      "namespace": "LongTails.Setups.ScalarHolderStochastic",
+      "setup": "LongTails.Setups.ScalarHolderStochastic",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ScalarHolderStochastic.spec OracleTemplate.ScalarHolderStochastic.budget",
+      "theorem": "OracleTemplate.ScalarHolderStochastic.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ScalarHolderHeavyTailStationarity",
+      "theorem": "OracleTemplate.ScalarHolderStochastic.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f: ℝ → ℝ, permitting nonconvexity. A global lower bound ℓ exists with f(x0) − ℓ ≤ Δ; attainment of the infimum is not required.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns only g(x, ξ), with fresh IID seeds and E[g(x, ξ)] = f′(x). The oracle is jointly measurable and integrable. All parameters H, ν, Δ, σ, p, ε, x0 are public; f and the oracle distribution are hidden. Oracle cost is a fixed budget counting every individual gradient reply, including batch samples.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.Public, spec.publicInput, spec.Query, spec.Reply, spec.admissible, IsGradientOracle; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Global Hölder continuity of the derivative: |f′(x) − f′(y)| ≤ H|x − y|^ν, with H > 0 and 0 < ν ≤ 1.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central moment bound E[|g(x, ξ) − f′(x)|^p] ≤ σ^p, with 1 < p ≤ 2 and σ ≥ 0. Finite variance is not required when p < 2.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: IsGradientOracle.moment_integrable, IsGradientOracle.moment and spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain, gradient replies, and output are scalar real numbers; dimension is exactly one.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.Instance, spec.Query, spec.Reply and spec.Output."
+      },
+      {
+        "label": "other",
+        "details": "Oracle seeds are independent and identically distributed across calls; adaptively chosen query points share no reusable sample access.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.admissible oracle construction; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID.independent and IID.marginal; LongTails/Template.lean: execute."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable scalar output X satisfying |f′(X)| ≤ ε; the criterion uses the absolute derivative, without squaring, and imposes no particular iterate selection.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(|f′(X)| > ε) ≤ 1/3, hence success probability at least 2/3, over the joint algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/ScalarHolderStochastic.lean: spec.successful; LongTails/Template.lean: Convergence joint product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines unrestricted scalar nonconvex stationarity, global Hölder derivative regularity, and IID unbiased noise controlled only by a central p-th moment. This is a meaningful specialized variant of standard stochastic stationarity benchmarks."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ScalarHolderStochastic.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ScalarHolderHeavyTailStationarity",
+          "theorem": "OracleTemplate.ScalarHolderStochastic.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

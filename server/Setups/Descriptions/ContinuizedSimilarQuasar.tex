@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Similar Finite-Sum Quasar Optimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n$ is a positive integer and each $f_i:E\to\mathbb{R}$ is differentiable. The possibly nonconvex objective has a Lipschitz gradient, satisfies strong quasar convexity and quadratic growth about a global minimizer $x^\star$, and has bounded initial objective gap. Component-gradient deviations from the full gradient satisfy a mean-square Lipschitz bound. Each oracle call returns one exact component gradient. For $\varepsilon>0$, the required output $\bar{x}\in E$ has integrable objective gap and satisfies $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, with expectation over all algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The space $E$ may be infinite dimensional, with norm $\|\cdot\|$ induced by its inner product $\langle\cdot,\cdot\rangle$. The public inputs are $E$, $n$, an initial point $x^0\in E$, and the parameters $L,\mu,\gamma,\delta,\Delta,\varepsilon\in\mathbb{R}$, whose ranges are
+\[
+\begin{aligned}
+0<\mu&\leq L, & 0<\gamma&\leq 1,\\
+\delta&\geq 0, & \Delta&\geq 0, & \varepsilon&>0.
+\end{aligned}
+\]
+The component functions are accessed through the oracle described below and satisfy the following conditions.
+
+\begin{assumption}[Differentiability and objective smoothness]
+Each $f_i$ is differentiable everywhere on $E$. The average gradient is
+\[
+\nabla F(x)=\frac{1}{n}\sum_{i=1}^n\nabla f_i(x),
+\]
+and, for every $x,y\in E$,
+\[
+\|\nabla F(x)-\nabla F(y)\|\leq L\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Mean-square gradient similarity]
+Writing $d_i(x)=\nabla f_i(x)-\nabla F(x)$, the gradient deviations satisfy, for every $x,y\in E$,
+\[
+\frac{1}{n}\sum_{i=1}^n\|d_i(x)-d_i(y)\|^2
+\leq\delta^2\|x-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and quasar geometry]
+There exists a common point $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) \qquad\text{for every }x\in E,\\
+F(x^0)-F(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+For every $x\in E$, this minimizer also satisfies the strong quasar-convexity and quadratic-growth inequalities
+\[
+\begin{aligned}
+\gamma F(x)+\langle\nabla F(x),x^\star-x\rangle
++\frac{\gamma\mu}{2}\|x^\star-x\|^2
+&\leq\gamma F(x^\star),\\
+\frac{\gamma\mu}{2(2-\gamma)}\|x-x^\star\|^2
+&\leq F(x)-F(x^\star).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact component-gradient access]
+A query consists of an index $i\in\{1,\ldots,n\}$ and a point $x\in E$. At every call index and for every realization of oracle randomness, its reply is exactly $\nabla f_i(x)\in E$. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+Queries may be chosen adaptively anywhere in $E$. The algorithm is selected using the full public tuple $(E,n,L,x^0,\mu,\gamma,\delta,\Delta,\varepsilon)$. A call budget $K\in\mathbb{N}$ may depend on this tuple and counts all component-gradient queries.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Let $\mathbb{P}$ denote the joint law of the independent algorithm and oracle randomness, and write $\bar{x}(\omega)$ for the resulting output. Success requires a global minimizer $x^\star$ such that the scalar function $\omega\mapsto F(\bar{x}(\omega))-F(x^\star)$ is integrable with respect to $\mathbb{P}$ and
+\[
+\int \bigl(F(\bar{x}(\omega))-F(x^\star)\bigr)\,d\mathbb{P}(\omega)
+\leq\varepsilon.
+\]
+Since global minimizers have the same objective value, the minimizer witnessing the geometric conditions may also be used in this accuracy criterion.
+\end{document}

@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.InexactGradientStronglyConvex",
+  "searched_at": "2026-10-04T15:40:32.418969+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(8 \\cdot \\sqrt{\\frac{L}{\\mu \\cdot \\left(1 - \\alpha\\right)}} + \\frac{32 \\cdot \\alpha^{2} \\cdot L}{\\mu \\cdot \\left(1 - \\alpha\\right)}\\right) \\cdot \\log\\left(1 + \\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.InexactGradientStronglyConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(8 * √(p.L / (p.μ * (1 - p.α))) + 32 * p.α ^ 2 * p.L / (p.μ * (1 - p.α))) * Real.log (1 + 2 * p.L * p.R ^ 2 / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(8 \\cdot \\sqrt{\\frac{L}{\\mu \\cdot \\left(1 - \\alpha\\right)}} + \\frac{32 \\cdot \\alpha^{2} \\cdot L}{\\mu \\cdot \\left(1 - \\alpha\\right)}\\right) \\cdot \\log\\left(1 + \\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.InexactGradientStronglyConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈(8 * √(p.L / (p.μ * (1 - p.α))) + 32 * p.α ^ 2 * p.L / (p.μ * (1 - p.α))) * Real.log (1 + 2 * p.L * p.R ^ 2 / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedInexactStronglyConvex",
+      "namespace": "LongTails.Setups.InexactGradientStronglyConvex",
+      "setup": "LongTails.Setups.InexactGradientStronglyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.InexactGradientStronglyConvex.spec OracleTemplate.InexactGradient.budget",
+      "theorem": "OracleTemplate.InexactGradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedInexactStronglyConvex",
+      "theorem": "OracleTemplate.InexactGradient.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable, globally L-smooth convex function f:E→ℝ, with an attained minimum.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.admissible, gradient existence, upper quadratic inequality, lower quadratic inequality, and minimizer existence."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "Global μ-strong convexity: f(y)≥f(x)+⟪∇f(x),y−x⟫+(μ/2)‖y−x‖², with 0<μ≤L. A minimizer xstar satisfies ‖x0−xstar‖≤R.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "A query x∈E returns g∈E satisfying ‖g−∇f(x)‖≤α‖∇f(x)‖+δ for every call index and seed. Only gradient vectors are returned; function values are unavailable. The budget counts individual calls and holds for every seed.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.Query, spec.Reply, and spec.admissible; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "Errors may be biased and vary with the call index, query, and seed. No unbiasedness, independence, or mixing condition is imposed; the error bound holds pointwise for all seeds.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.admissible; LongTails/Template.lean: Oracle.answer and Oracle.law."
+      },
+      {
+        "label": "relative_error",
+        "details": "Combined relative and absolute norm error, with 0≤α<1 and δ≥0. The accuracy regime requires 136δ²≤μ(1−α)²ε.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.valid and spec.admissible oracle-error inequality."
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary complete real inner-product space, without a finite-dimensional restriction. E, L, x0, μ, and α are public; δ, R, and ε are hidden from the algorithm constructor, although the execution budget depends on them.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Setups/InexactGradientStronglyConvex.lean: Public, Params, and spec.publicInput; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(xstar)≤ε for a global minimizer xstar, with ε>0.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.Output, spec.valid, and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap requirement holds almost surely under the joint algorithm and oracle seed law, within a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/InexactGradientStronglyConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The standard smooth strongly convex objective is paired with a combined relative-plus-absolute oracle-error bound allowing arbitrary dependence, a noise-dependent accuracy regime, and hidden error, radius, and accuracy parameters."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.InexactGradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedInexactStronglyConvex",
+          "theorem": "OracleTemplate.InexactGradient.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

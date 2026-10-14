@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.DouglasRachfordSmoothConvex",
+  "searched_at": "2026-10-04T15:36:46.089959+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil \\sqrt{\\frac{2 \\cdot R^{2}}{lam \\cdot \\gamma \\cdot \\varepsilon}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.DouglasRachfordSmoothConvex.spec.Params → ℕ",
+        "value": "fun q => 2 * ⌈√(2 * q.R ^ 2 / (q.lam * q.γ * q.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil \\sqrt{\\frac{2 \\cdot R^{2}}{lam \\cdot \\gamma \\cdot \\varepsilon}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.DouglasRachfordSmoothConvex.spec.Params → ℕ",
+          "value": "fun q => 2 * ⌈√(2 * q.R ^ 2 / (q.lam * q.γ * q.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedDouglasRachfordConvex",
+      "namespace": "LongTails.Setups.DouglasRachfordSmoothConvex",
+      "setup": "LongTails.Setups.DouglasRachfordSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.DouglasRachfordSmoothConvex.spec OracleTemplate.DouglasRachford.budget",
+      "theorem": "OracleTemplate.DouglasRachford.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedDouglasRachfordConvex",
+      "theorem": "OracleTemplate.DouglasRachford.result",
+      "references": "- Panagiotis Patrinos, Lorenzo Stella, Alberto Bemporad. [Douglas-Rachford Splitting: Complexity Estimates and Accelerated Variants](https://arxiv.org/pdf/1407.6723v2). 2014 (CDC publication; September 2014 preprint v2 used). Complexity: $O(1+R\\sqrt{(1+\\gamma L)/(\\gamma(1-\\gamma L)\\varepsilon)})$ exact proximal-oracle calls using fast Douglas–Rachford, counting both proximal evaluations per iteration, for objective gap $\\le\\varepsilon$; $0<\\gamma L<1$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize f(x)+g(x) over convex C in a real Hilbert space. The function f is differentiable and globally convex; g is convex on C. A constrained minimizer exists.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: Public; spec.admissible; objective."
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines a globally L-smooth convex function f with a possibly nonsmooth convex term g restricted to C.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: objective; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Exact proximal minimizers at the fixed public parameter γ: proxF minimizes f(x)+‖x−w‖²/(2γ) over E; proxG minimizes g(y)+‖y−v‖²/(2γ) over C and returns a feasible point. Exactness holds for every call index and seed. No direct gradient or function-value queries are supplied.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: Query; spec.admissible. LongTails/Template.lean: execute; Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "L is hidden from the algorithm, while γ and λ are public and certify L≤λ/(4γ). Valid parameters satisfy L,γ,R,ε>0 and 0<λ≤1. R and ε are also hidden; the execution budget may depend on them.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: Public; Params; spec.publicInput; spec.valid. LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Initialization is bounded relative to a shifted minimizer: for some constrained minimizer x*, ‖w1−(x*+γ∇f(x*))‖≤R. E may be infinite-dimensional. Closedness of C and lower semicontinuity of g are not explicitly required; exact proximal minimizers must exist for every query.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: Public; spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point satisfies f(output)+g(output)−f(x*)−g(x*)≤ε for a constrained minimizer x*. No averaging or particular iterate is prescribed.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point belongs to C.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε objective-gap bound hold almost surely under the joint algorithm and oracle seed law, within a fixed worst-case oracle budget.",
+        "evidence": "LongTails/Setups/DouglasRachfordSmoothConvex.lean: spec.successful. LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is standard smooth composite convex minimization with exact proximal access in Hilbert space, a shifted-solution initialization bound, and a feasible objective-gap target."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.DouglasRachford.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedDouglasRachfordConvex",
+          "theorem": "OracleTemplate.DouglasRachford.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

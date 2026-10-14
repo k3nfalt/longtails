@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Constant-momentum stochastic optimization under the \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/MomentumLipschitzConvex.lean}{Momentum\allowbreak{}Lipschitz\allowbreak{}Convex} setup.}\label{tab:MomentumLipschitzConvex}
+\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space with its Borel $\sigma$-algebra; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. The jointly measurable oracle $g(x,\xi)$ uses IID samples, with $\mathbb{E} g(x,\xi)\in\partial f(x)$ and integrable squared norm satisfying $\mathbb{E}\|g(x,\xi)\|^2\le G^2$. Given $G>0$, $R\ge0$, $0\le\beta<1$, and $\varepsilon>0$, the target is $\mathbb{E}[f(x_N)-f(x_\star)]\le\varepsilon$ for the last iterate of constant EMA momentum.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ConstantMomentumLastIterate.lean}{Constant\allowbreak{}Momentum\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ConstantMomentumLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}+\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Linear-decay SGD \citep[Thm.~3.4]{liu2026lastv4momentum}\par $E=\mathbb{R}^d$; unconstrained specialization
+& $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}\right)$
+& \textbf{(1)}: Matches known rate for fixed $\beta$; no established complexity improvement.
+& \textbf{(1)}: i) Adds $\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}$.\newline ii) No constrained/composite guarantee. \\
+\midrule
+FTRL-SGDM \citep[Cor.~1]{li2022momentumalt}\par $E=\mathbb{R}^d$; increasing momentum
+& $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}\right)$
+& \textbf{(1)}: Log-free constant-EMA analysis with affine decay; priority unresolved. No rate gain over increasing momentum; polynomial-step lower bounds do not cover this schedule.
+& \textbf{(1)}: i) Adds $\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}$.\newline ii) Needs horizon $N$; baseline is anytime. \\
+\midrule
+Schedule-Free SGD \citep[Thm.~1]{defazio2024roadmomentum}\par $E=\mathbb{R}^d$; convex, $G$-Lipschitz sample losses
+& $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}\right)$\par Expected gap of averaged sequence $x_N$, not query sequence $y_N$.
+& \textbf{(1)}: Scope: second-moment oracle bound instead of samplewise Lipschitz losses. On the overlap, no complexity gain.
+& \textbf{(1)}: On the samplewise Lipschitz overlap, adds $\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}$; baseline has no momentum burn-in. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $G$: oracle second-moment scale; $R$: initial-distance bound; $\varepsilon$: expected objective-gap tolerance; $N$: number of stochastic subgradient calls; EMA: exponential moving average; FTRL: follow the regularized leader. Each iteration uses one oracle call; $\log$ is natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

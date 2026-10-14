@@ -1,0 +1,111 @@
+{
+  "setup": "LongTails.Setups.CompositeGeneralizedSmooth",
+  "searched_at": "2026-10-04T15:33:42.210833+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot \\left\\lceil 10 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + \\left(6 + 128 \\cdot L1 \\cdot R\\right) \\cdot \\log\\left(2 + \\left(3 + 96 \\cdot L1 \\cdot R\\right) \\cdot \\sqrt{\\frac{\\Delta}{L0 \\cdot R^{2}}}\\right) \\right\\rceil_{+}",
+        "type": "LongTails.Setups.CompositeGeneralizedSmooth.spec.Params → ℕ",
+        "value": "fun q =>\n  3 *\n    ⌈10 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n        (6 + 128 * q.L1 * q.R) * Real.log (2 + (3 + 96 * q.L1 * q.R) * √(q.Δ / (q.L0 * q.R ^ 2)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot \\left\\lceil 10 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + \\left(6 + 128 \\cdot L1 \\cdot R\\right) \\cdot \\log\\left(2 + \\left(3 + 96 \\cdot L1 \\cdot R\\right) \\cdot \\sqrt{\\frac{\\Delta}{L0 \\cdot R^{2}}}\\right) \\right\\rceil_{+}",
+          "type": "LongTails.Setups.CompositeGeneralizedSmooth.spec.Params → ℕ",
+          "value": "fun q =>\n  3 *\n    ⌈10 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n        (6 + 128 * q.L1 * q.R) * Real.log (2 + (3 + 96 * q.L1 * q.R) * √(q.Δ / (q.L0 * q.R ^ 2)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CompositeGeneralizedAccelerated",
+      "namespace": "LongTails.Setups.CompositeGeneralizedSmooth",
+      "setup": "LongTails.Setups.CompositeGeneralizedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CompositeGeneralizedSmooth.spec OracleTemplate.CompositeGeneralized.budget",
+      "theorem": "OracleTemplate.CompositeGeneralized.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CompositeGeneralizedAccelerated",
+      "theorem": "OracleTemplate.CompositeGeneralized.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F=f+ψ over a convex set Q. The differentiable function f is convex on the entire ambient space, and ψ is convex on Q. A minimizer exists; strong convexity is not required.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: objective; spec.admissible convexity and minimizer clauses."
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines a continuously differentiable convex component f with a potentially nonsmooth convex component ψ and the constraint x∈Q.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: Instance; objective; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A gradient query at any x returns ∇f(x) exactly, independently of the call index and oracle seed. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: Query.gradient; spec.admissible gradient-answer and HasGradientAt clauses."
+      },
+      {
+        "label": "proximal",
+        "details": "For every a>0 and z,v, an exact proximal query returns a minimizer over Q of ‖u−z‖²/(2a)+⟨v,u−z⟩+ψ(u). Each gradient or proximal query counts as one oracle call within a fixed budget.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: Query.prox; proxObjective; spec.admissible proximal clauses. LongTails/Template.lean: execute; Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "L0>0 and L1≥0. For any segment [x,y] on which ‖∇f‖≤M, ‖∇f(x)−∇f(y)‖≤(L0+L1M)‖x−y‖. The gradient is continuous; twice differentiability and global Lipschitz continuity of the gradient are not assumed.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: spec.valid; spec.admissible gradient-continuity and segment-smoothness clauses."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space. Public information comprises E,L0,L1,R,Δ,x0, with R,Δ>0. Some minimizer x⋆ satisfies ‖x0−x⋆‖≤R, F(x0)−F(x⋆)≤Δ, and ‖∇f(x⋆)‖≤G, where G≥0 may be nonzero. G and ε>0 are hidden from algorithm construction; neither Q nor ψ is supplied explicitly as public input.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: Public; Params; spec.publicInput; spec.valid; spec.admissible minimizer clause. LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point satisfies F(output)−F(x⋆)≤ε for a minimizer x⋆ of F over Q.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point belongs to Q.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the ε objective-gap bound hold almost surely under the joint algorithm and oracle seed law. Algorithm randomization is permitted; the oracle-call budget is fixed and holds for every seed.",
+        "evidence": "LongTails/Setups/CompositeGeneralizedSmooth.lean: spec.successful almost-everywhere clause. LongTails/Template.lean: Algorithm; Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Composite convex proximal optimization is standard, but this formulation uses gradient-dependent segment smoothness in an arbitrary Hilbert space, permits a nonzero smooth-component gradient at a composite minimizer, and hides G and ε from algorithm construction."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CompositeGeneralized.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CompositeGeneralizedAccelerated",
+          "theorem": "OracleTemplate.CompositeGeneralized.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

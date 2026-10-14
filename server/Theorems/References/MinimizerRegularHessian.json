@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.MinimizerRegularHessian",
+  "searched_at": "2026-10-04T15:43:48.982846+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{2 \\cdot L}{\\mu} \\cdot \\log\\left(2 + \\frac{8 \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right)^{2} \\cdot \\left(\\frac{4 \\cdot L^{2}}{\\mu^{2}}\\right)^{\\dim_{\\mathbb{R}}\\left(E\\right)} \\cdot M \\cdot L \\cdot R}{\\mu^{2}}\\right) \\right\\rceil_{+} + 2 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\log\\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\mu \\cdot \\varepsilon}\\right)\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.MinimizerRegularHessian.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 * p.L / p.μ *\n        Real.log\n          (2 +\n            8 * (↑(Module.finrank ℝ p.E) + 1) ^ 2 * (4 * p.L ^ 2 / p.μ ^ 2) ^ Module.finrank ℝ p.E * p.M * p.L * p.R /\n              p.μ ^ 2)⌉₊ +\n    2 * Module.finrank ℝ p.E * ⌈Real.log (1 + Real.log (1 + p.L ^ 2 * p.R ^ 2 / (p.μ * p.ε))) / Real.log 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{2 \\cdot L}{\\mu} \\cdot \\log\\left(2 + \\frac{8 \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right)^{2} \\cdot \\left(\\frac{4 \\cdot L^{2}}{\\mu^{2}}\\right)^{\\dim_{\\mathbb{R}}\\left(E\\right)} \\cdot M \\cdot L \\cdot R}{\\mu^{2}}\\right) \\right\\rceil_{+} + 2 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\log\\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\mu \\cdot \\varepsilon}\\right)\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.MinimizerRegularHessian.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 * p.L / p.μ *\n        Real.log\n          (2 +\n            8 * (↑(Module.finrank ℝ p.E) + 1) ^ 2 * (4 * p.L ^ 2 / p.μ ^ 2) ^ Module.finrank ℝ p.E * p.M * p.L * p.R /\n              p.μ ^ 2)⌉₊ +\n    2 * Module.finrank ℝ p.E * ⌈Real.log (1 + Real.log (1 + p.L ^ 2 * p.R ^ 2 / (p.μ * p.ε))) / Real.log 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SpectralGradientQuadraticConvergence",
+      "namespace": "LongTails.Setups.MinimizerRegularHessian",
+      "setup": "LongTails.Setups.MinimizerRegularHessian",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MinimizerRegularHessian.spec OracleTemplate.SpectralGradient.budget",
+      "theorem": "OracleTemplate.SpectralGradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SpectralGradientQuadraticConvergence",
+      "theorem": "OracleTemplate.SpectralGradient.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: spec.admissible, global strong-convexity inequality."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "Globally μ-strongly convex with L-Lipschitz gradient; 0<μ≤L. Both f and its gradient are differentiable.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns exactly ∇f(x), for every call index and seed. No function values, Hessians, or Hessian-vector products are supplied. E, L, x₀, μ, M, R, and ε are public. The budget bounds all oracle calls for every seed.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: Params, spec.Public, spec.publicInput, spec.Query, spec.Reply, and spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a nontrivial finite-dimensional real Hilbert space, with dimension d=finrank ℝ E≥1.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: Params.finiteE and Params.nontrivialE; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public inner-product and completeness fields."
+      },
+      {
+        "label": "other",
+        "details": "There exists a minimizer x⋆ with ‖x₀−x⋆‖≤R and ‖D(∇f)(x)−D(∇f)(x⋆)‖op≤M‖x−x⋆‖ for every x. This regularity compares the Hessian only with its value at the minimizer; pairwise Lipschitz continuity is not required. M≥0 and R>0 are public, while x⋆ is hidden.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: Params, spec.publicInput, spec.valid, and the final existential clause of spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(x⋆)≤ε for a global minimizer x⋆, with ε>0.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: spec.Output, spec.valid, and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint law of algorithm and oracle seeds; deterministic output is not required.",
+        "evidence": "LongTails/Setups/MinimizerRegularHessian.lean: spec.successful, almost-everywhere quantifier; LongTails/Template.lean: Convergence, product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth strongly convex exact-gradient formulation is classical, but the additional Hessian regularity is centered only at the minimizer rather than imposed between arbitrary points."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SpectralGradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SpectralGradientQuadraticConvergence",
+          "theorem": "OracleTemplate.SpectralGradient.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

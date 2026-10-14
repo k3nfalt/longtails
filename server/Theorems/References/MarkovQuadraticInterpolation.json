@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.MarkovQuadraticInterpolation",
+  "searched_at": "2026-10-04T15:41:17.421504+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{10000000000000000 \\cdot L \\cdot R^{2}}{\\alpha \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
+        "type": "LongTails.Setups.MarkovQuadraticInterpolation.spec.Params → ℕ",
+        "value": "fun q => ⌈10000000000000000 * q.L * q.R ^ 2 / (q.α * q.ε)⌉₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{10000000000000000 \\cdot L \\cdot R^{2}}{\\alpha \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
+          "type": "LongTails.Setups.MarkovQuadraticInterpolation.spec.Params → ℕ",
+          "value": "fun q => ⌈10000000000000000 * q.L * q.R ^ 2 / (q.α * q.ε)⌉₊ + 1"
+        }
+      ],
+      "module": "LongTails.Theorems.MarkovQuadraticLastIterate",
+      "namespace": "LongTails.Setups.MarkovQuadraticInterpolation",
+      "setup": "LongTails.Setups.MarkovQuadraticInterpolation",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MarkovQuadraticInterpolation.spec OracleTemplate.MarkovQuadratic.budget",
+      "theorem": "OracleTemplate.MarkovQuadratic.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MarkovQuadraticLastIterate",
+      "theorem": "OracleTemplate.MarkovQuadratic.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex quadratic minimization: f(x)-f(u)=½⟨x-u,H̄(x-u)⟩, where H̄=Σ_i π_i H_i and 0≤H_i≤LI. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: Model.symmetric, Model.positive, Model.smooth, Model.population."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The population objective is a finite, probability-weighted sum of quadratic component losses. The number of components m, weights π, operators H_i, and common minimizer u are hidden.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: Model.population and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns H_i(x-u), with i sampled along an exogenous finite-state Markov chain. Its stationary mean is ∇f(x), but conditional unbiasedness is not assumed. The oracle returns only the gradient vector; component indices and transition information are hidden.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: pathLaw."
+      },
+      {
+        "label": "component_gradient",
+        "details": "Replies are exact gradients of the sampled quadratic components. The algorithm cannot select the component; consecutive calls advance the Markov trajectory.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: spec.admissible, answer; LongTails/Template.lean: execute and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "markov_dependence",
+        "details": "The chain has invariant distribution π and arbitrary initial distribution μ. Its transition kernel satisfies κ(i,{j})≥απ({j}) for every i,j, with public 0<α≤1. Reversibility and stationary initialization are not required.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: Public.α, Model.stationary, Model.refresh, spec.valid, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Exact interpolation: every component gradient vanishes at the same hidden u. Each H_i is bounded, self-adjoint and positive semidefinite, with 0≤⟨x,H_i x⟩≤L‖x‖². The ambient space is a complete real Hilbert space with its Borel measurable structure and second-countable topology. E,L,x0,α are public; R and ε are hidden analysis parameters, with L>0, R≥0, ε>0 and ‖x0-u‖≤R.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: Public, Params, Model.symmetric, Model.positive, Model.smooth, Model.radius, spec.publicInput, spec.valid; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must be measurable and have integrable excess objective value relative to a global minimizer u. No last-iterate or averaging restriction is imposed by successful.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[f(output)-f(u)]≤ε under the joint algorithm and oracle randomness. Oracle cost is bounded for every seed by the fixed budget ⌈10¹⁶LR²/(αε)⌉+1.",
+        "evidence": "LongTails/Setups/MarkovQuadraticInterpolation.lean: spec.successful; LongTails/Template.lean: Convergence; supplied extracted budget for OracleTemplate.MarkovQuadratic.result."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Convex quadratic interpolation is combined with a hidden Markov component-gradient oracle, arbitrary chain initialization, and a public one-step stationary minorization parameter in a potentially infinite-dimensional Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.MarkovQuadratic.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MarkovQuadraticLastIterate",
+          "theorem": "OracleTemplate.MarkovQuadratic.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

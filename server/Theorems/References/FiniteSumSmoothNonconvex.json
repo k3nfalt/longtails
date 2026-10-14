@@ -1,0 +1,101 @@
+{
+  "setup": "LongTails.Setups.FiniteSumSmoothNonconvex",
+  "searched_at": "2026-10-04T15:37:19.348153+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "5 \\cdot n + \\left\\lceil \\frac{20 \\cdot \\sqrt{n} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "type": "LongTails.Setups.FiniteSumSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => 5 * p.n + ⌈20 * √↑p.n * p.L * p.Δ / p.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "5 \\cdot n + \\left\\lceil \\frac{20 \\cdot \\sqrt{n} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "type": "LongTails.Setups.FiniteSumSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => 5 * p.n + ⌈20 * √↑p.n * p.L * p.Δ / p.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RecursiveGradientNonconvex",
+      "namespace": "LongTails.Setups.FiniteSumSmoothNonconvex",
+      "setup": "LongTails.Setups.FiniteSumSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumSmoothNonconvex.spec OracleTemplate.NonconvexFiniteSum.budget",
+      "theorem": "OracleTemplate.NonconvexFiniteSum.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RecursiveGradientNonconvex",
+      "theorem": "OracleTemplate.NonconvexFiniteSum.result",
+      "references": "- Cong Fang, Chris Junchi Li, Zhouchen Lin, Tong Zhang. [SPIDER: Near-Optimal Non-Convex Optimization via Stochastic Path-Integrated Differential Estimator](https://papers.neurips.cc/paper_files/paper/2018/file/1543843a4723ed2ab08e18053ae6dc5b-Paper.pdf). 2018. Complexity: $O(n+\\sqrt n L\\Delta/\\varepsilon^2)$ exact component-gradient calls, including initialization and batches, with fixed cost; SPIDER-SFO obtains $\\mathbb E\\|\\nabla F(X)\\|\\le\\varepsilon$.\n- Lam M. Nguyen, Marten van Dijk, Dzung T. Phan, Phuong Ha Nguyen, Tsui-Wei Weng, Jayant R. Kalagnanam. [Finite-Sum Smooth Optimization with SARAH](https://arxiv.org/pdf/1901.07648v2). 2019 preprint, version 2. Complexity: $O(n+\\sqrt n L\\Delta/\\varepsilon^2)$ exact component-gradient calls, including full-gradient initialization, refreshes, and paired evaluations, with fixed cost; modified SARAH obtains $\\mathbb E\\|\\nabla F(X)\\|^2\\le\\varepsilon^2$.\n- Zhize Li, Hongyan Bao, Xiangliang Zhang, Peter Richtárik. [PAGE: A Simple and Optimal Probabilistic Gradient Estimator for Nonconvex Optimization](https://proceedings.mlr.press/v139/li21a.html). 2021. Complexity: $O(n+\\sqrt n L\\Delta/\\varepsilon^2)$ expected exact component-gradient calls, including initialization, refresh batches, and paired evaluations; PAGE obtains $\\mathbb E\\|\\nabla F(X)\\|^2\\le\\varepsilon^2$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization permits nonconvex components and objectives. F has a global lower bound lower with F(x0)−lower≤Δ; no minimizer or convexity is required.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: spec.admissible"
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x)=(1/n)Σ_i f_i(x), with n≥1.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: Params.nonzero and spec.Instance; LongTails/Setups/FiniteSumSmoothAndConvex.lean: FiniteSum.objective"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every reply is an exact component gradient, for every call index and oracle seed. There is no oracle error or stochastic noise assumption; algorithmic randomization is allowed.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: spec.admissible; LongTails/Template.lean: Algorithm and Oracle"
+      },
+      {
+        "label": "component_gradient",
+        "details": "A query chooses any component i and point x and receives ∇f_i(x). Each individual evaluation counts as one oracle call.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute and Convergence"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Average squared smoothness: (1/n)Σ_i‖∇f_i(x)−∇f_i(y)‖²≤L²‖x−y‖². A common componentwise L-Lipschitz bound is not required. The ambient space is an arbitrary complete real inner-product space. All parameters E,n,L,Δ,ε,x0 are public, with L>0, Δ≥0, ε>0.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "Output X∈E must be measurable, its squared objective-gradient norm integrable, and E‖∇F(X)‖²≤ε². No last-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: spec.Output and spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation under the joint algorithm and oracle seed law. Oracle cost is bounded for every seed by the prescribed fixed budget.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the established smooth nonconvex finite-sum stationarity benchmark with exact component gradients and average squared smoothness, formulated in a general Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NonconvexFiniteSum.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RecursiveGradientNonconvex",
+          "theorem": "OracleTemplate.NonconvexFiniteSum.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

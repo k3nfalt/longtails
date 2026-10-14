@@ -1,0 +1,61 @@
+{
+  "setup": "LongTails.Setups.SmoothAndConvexUnknownL",
+  "searched_at": "2026-10-04T17:47:53.514951+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [],
+  "results": [],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex differentiable minimization of f:E→ℝ on a real Hilbert space. The gradient is globally L-Lipschitz, L>0. A minimizer x⋆ exists with ‖x0−x⋆‖≤R, R≥0.",
+        "evidence": "LongTails/Setups/SmoothAndConvexUnknownL.lean: Public; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns exactly ∇f(x), for every call index and oracle seed. Only gradients are supplied; function values are unavailable. The oracle has no gradient error or noise.",
+        "evidence": "LongTails/Setups/SmoothAndConvexUnknownL.lean: spec.Query, spec.Reply, and HasGradientAt clause in spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "The algorithm receives only E, its real Hilbert-space structure, and x0. The parameters L>0, R≥0, and ε>0 are hidden from the algorithm constructor; a convergence budget may depend on them.",
+        "evidence": "LongTails/Setups/SmoothAndConvexUnknownL.lean: Public, Params, spec.publicInput, spec.valid; LongTails/Template.lean: Convergence.makeAlgorithm and budget."
+      },
+      {
+        "label": "other",
+        "details": "E is a complete real inner-product space, with no finite-dimensional restriction. A minimizer lies within distance R of the public initial point x0.",
+        "evidence": "LongTails/Setups/SmoothAndConvexUnknownL.lean: Public.completeE, Public.linearE, and minimizer-distance clause in spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(x⋆)≤ε, ε>0, for an existing global minimizer x⋆.",
+        "evidence": "LongTails/Setups/SmoothAndConvexUnknownL.lean: spec.Output, spec.valid, spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap bound holds almost surely under the specified output probability law. Algorithms may be randomized; deterministic success is not required.",
+        "evidence": "LongTails/Setups/SmoothAndConvexUnknownL.lean: spec.successful; LongTails/Template.lean: Algorithm.law and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth convex minimization with an exact gradient oracle, a bounded initial distance to a minimizer, and unknown smoothness is an established standard formulation. No proved results or complexity budgets were supplied."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "missing_theorem",
+      "theorems": [],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "not_assessed",
+      "results": []
+    }
+  }
+}

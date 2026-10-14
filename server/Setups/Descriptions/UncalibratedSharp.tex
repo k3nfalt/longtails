@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Sharp Optimization with Uncalibrated Oracles}
+We consider minimizing a globally Lipschitz function $f:E\to\mathbb{R}$ on a real inner product space $E$. A global minimizer $x^\star$ satisfies a uniform linear growth bound, and the initial point $x^0\in E$ has bounded distance to it. Each oracle call returns a scalar estimate of the objective gap and a perturbed supporting subgradient, both multiplied by the same unknown positive scale. The gap estimate has positive multiplicative bounds, and the perturbation bound is strictly smaller than the linear growth coefficient. For $\varepsilon>0$, the required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where $\|\cdot\|$ is the norm induced by the inner product on $E$. The public inputs are $(E,\mu,\rho,\alpha,\beta,x^0)$. The remaining parameters are the Lipschitz bound $G$, initial distance bound $R$, and target accuracy $\varepsilon$, with ranges
+\[
+\begin{aligned}
+0 &\leq \rho < \mu \leq G,\\
+0 &< \alpha \leq \beta,\\
+R &\geq 0, \qquad \varepsilon>0.
+\end{aligned}
+\]
+The objective and oracle satisfy the following conditions.
+
+\begin{assumption}[Global Lipschitz continuity]
+For every $x,y\in E$,
+\[
+|f(x)-f(y)|\leq G\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and sharp growth]
+There exists $x^\star\in E$ such that, for every $x\in E$,
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x),\\
+\|x^0-x^\star\|&\leq R,\\
+\mu\|x-x^\star\|&\leq f(x)-f(x^\star).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Supporting subgradients and bounded perturbations]
+At every call index, query point $x\in E$, and realization of the oracle randomness, there exist vectors $g,e\in E$ satisfying
+\[
+\begin{aligned}
+\|g\|&\leq G, \qquad \|e\|\leq\rho,\\
+f(x)+\langle g,y-x\rangle&\leq f(y)
+\qquad\text{for every }y\in E.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Common uncalibrated scale]
+For each call and realization, the oracle returns a pair $(s,v)\in\mathbb{R}\times E$ of the form
+\[
+\begin{aligned}
+(s,v)&=(\gamma r,\gamma(g+e)), \qquad \gamma>0,\\
+\alpha\bigl(f(x)-f(x^\star)\bigr)&\leq r
+\leq\beta\bigl(f(x)-f(x^\star)\bigr),
+\end{aligned}
+\]
+where $g,e$ satisfy the supporting and perturbation conditions above and $x^\star$ is the minimizer witnessing sharp growth. The quantities $\gamma,r,g,e$ may depend on the call index, query point, and oracle realization; only $(s,v)$ is returned. Each pair costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only the public inputs; $G$, $R$, and $\varepsilon$ are not supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,\mu,\rho,\alpha,\beta,x^0,G,R,\varepsilon)$.
+
+After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\qquad \mathbb{P}\text{-almost surely}.
+\]
+\end{document}

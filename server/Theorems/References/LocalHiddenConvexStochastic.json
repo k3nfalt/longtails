@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.LocalHiddenConvexStochastic",
+  "searched_at": "2026-10-12T10:20:16.001883+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 300000 \\cdot \\left(\\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\log\\left(300000 \\cdot \\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.LocalHiddenConvexStochastic.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈300000 * (√(q.L * q.R ^ 2 / q.ε) + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2) *\n      Real.log (300000 * (2 + q.L * q.R ^ 2 / q.ε + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2)) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 300000 \\cdot \\left(\\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\log\\left(300000 \\cdot \\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.LocalHiddenConvexStochastic.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈300000 * (√(q.L * q.R ^ 2 / q.ε) + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2) *\n      Real.log (300000 * (2 + q.L * q.R ^ 2 / q.ε + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2)) ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HiddenConvexAcceleratedStochastic",
+      "namespace": "LongTails.Setups.LocalHiddenConvexStochastic",
+      "setup": "LongTails.Setups.LocalHiddenConvexStochastic",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.LocalHiddenConvexStochastic.spec OracleTemplate.LocalHiddenConvex.budget",
+      "theorem": "OracleTemplate.LocalHiddenConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HiddenConvexAcceleratedStochastic",
+      "theorem": "OracleTemplate.LocalHiddenConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a globally differentiable, L-smooth objective F that may be nonconvex. A global minimizer xstar satisfies ‖xstar−x0‖≤R. Convexity of F itself and strong convexity are not required.",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: spec.admissible, gradient smoothness and global-minimizer clauses."
+      },
+      {
+        "label": "other",
+        "details": "Local hidden convexity: F=H∘c on ball(x0,3R), where H is convex and differentiable on an open convex set U. For x∈closedBall(x0,2R), c(x)∈U and Dc(x)=J(x).",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: Instance and spec.admissible, composition, ConvexOn, DifferentiableAt, and HasFDerivAt clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns g(x,ξ)∈E with Eξ[g(x,ξ)]=∇F(x) and Eξ‖g(x,ξ)−∇F(x)‖²≤σ² for every x. Fresh seeds are independent with a common probability law. The oracle supplies gradients only; function values, c, H, and J are unavailable. The supplied budget counts individual oracle replies and is a fixed call cap.",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: spec.Query, spec.Reply, and spec.admissible oracle construction; LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.IsStochasticGradient; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform variance bound σ²≥0 on the squared norm of the unbiased gradient error, with joint measurability and the stated integrability conditions. No almost-sure error bound, tail bound, or sample-gradient smoothness is assumed.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: StochasticGradient.IsStochasticGradient.measurable, integrable, unbiased, variance_integrable, and variance; LongTails/Setups/LocalHiddenConvexStochastic.lean: spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional complete real inner-product space with its Borel measurable structure and second-countable topology. No dimension bound is supplied.",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: Public.finiteE, Public.linearE, Public.completeE, Public.borelE, and Public.countableE."
+      },
+      {
+        "label": "other",
+        "details": "The hidden Jacobian satisfies ‖J(x)v‖≥μ‖v‖ and ‖J(x)−J(y)‖≤LJ‖x−y‖ on closedBall(x0,2R), with μ>0, LJ≥0, and 32LJ R≤μ. Public information includes L>0, R>0, σ≥0, and x0. The structural parameters μ,LJ and target ε>0 are hidden from the algorithm constructor; ε can determine the execution budget.",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: Public, Params, spec.publicInput, spec.valid, and spec.admissible Jacobian clauses; LongTails/Template.lean: Convergence.makeAlgorithm and execute."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued point X with integrable objective gap F(X)−F(xstar), where xstar is a global minimizer. No feasibility region or particular iterate is imposed on the output.",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[F(X)−F(xstar)]≤ε, with expectation over the joint algorithm and oracle randomness. No high-probability or almost-sure accuracy guarantee is required.",
+        "evidence": "LongTails/Setups/LocalHiddenConvexStochastic.lean: spec.successful integral inequality; LongTails/Template.lean: Convergence product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines stochastic gradient access with a hidden convex representation available only locally, quantitative control of its Jacobian variation, and structural parameters withheld from the algorithm."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.LocalHiddenConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HiddenConvexAcceleratedStochastic",
+          "theorem": "OracleTemplate.LocalHiddenConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

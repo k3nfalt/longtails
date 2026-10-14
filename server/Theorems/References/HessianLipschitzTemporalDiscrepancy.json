@@ -1,0 +1,106 @@
+{
+  "setup": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy",
+  "searched_at": "2026-10-04T15:38:51.029299+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ \\left\\lceil 10^{9} \\cdot \\left(\\sqrt{\\frac{L}{\\mu}} \\cdot \\left(1 + \\frac{M \\cdot D}{\\mu^{2}}\\right) + \\frac{D}{\\sqrt{\\mu \\cdot \\varepsilon}} + 1\\right) \\cdot \\log\\left(2 + \\frac{\\Delta}{\\varepsilon} + \\frac{M^{2} \\cdot \\Delta}{\\mu^{3}}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "type": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy.spec.Params → ℕ",
+        "value": "fun p =>\n  if p.Δ ≤ p.ε then 0\n  else\n    ⌈10 ^ 9 * (√(p.L / p.μ) * (1 + p.M * p.D / p.μ ^ 2) + p.D / √(p.μ * p.ε) + 1) *\n        Real.log (2 + p.Δ / p.ε + p.M ^ 2 * p.Δ / p.μ ^ 3)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & \\Delta \\leq \\varepsilon \\\\ \\left\\lceil 10^{9} \\cdot \\left(\\sqrt{\\frac{L}{\\mu}} \\cdot \\left(1 + \\frac{M \\cdot D}{\\mu^{2}}\\right) + \\frac{D}{\\sqrt{\\mu \\cdot \\varepsilon}} + 1\\right) \\cdot \\log\\left(2 + \\frac{\\Delta}{\\varepsilon} + \\frac{M^{2} \\cdot \\Delta}{\\mu^{3}}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "type": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy.spec.Params → ℕ",
+          "value": "fun p =>\n  if p.Δ ≤ p.ε then 0\n  else\n    ⌈10 ^ 9 * (√(p.L / p.μ) * (1 + p.M * p.D / p.μ ^ 2) + p.D / √(p.μ * p.ε) + 1) *\n        Real.log (2 + p.Δ / p.ε + p.M ^ 2 * p.Δ / p.μ ^ 3)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.NonlinearTemporalAcceleration",
+      "namespace": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy",
+      "setup": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HessianLipschitzTemporalDiscrepancy.spec\n  OracleTemplate.NonlinearTemporalDiscrepancy.budget",
+      "theorem": "OracleTemplate.NonlinearTemporalDiscrepancy.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NonlinearTemporalAcceleration",
+      "theorem": "OracleTemplate.NonlinearTemporalDiscrepancy.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "The global strong-convexity inequality implies convexity on all of E.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: spec.admissible, strong-convexity inequality."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "Unconstrained minimization of a twice continuously differentiable, μ-strongly convex function f:E→ℝ, with 0<μ≤L. A global minimizer xstar exists and f(x0)−f(xstar)≤Δ.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "Call k at any query x returns ∇f(x)+e_k. The hidden error sequence depends only on the call index, not on the query or oracle seed. Only gradient vectors are returned; function values and Hessians are unavailable.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: spec.Query, spec.Reply and spec.admissible, O.answer equality."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "temporal_discrepancy",
+        "details": "A single hidden sequence e:ℕ→E satisfies ‖Σ_{k=0}^{n−1}e_k‖≤D for every n, with D≥0. Errors may persist and cancel across calls; no independence, unbiasedness, stationarity or Markov assumption is imposed.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: spec.admissible, bounded prefix sums of e."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional complete real inner-product space, with its induced norm. No dimension bound is supplied.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: Params.finiteE and Params.toGradientPublic; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public."
+      },
+      {
+        "label": "other",
+        "details": "The gradient is globally L-Lipschitz, and its derivative is globally M-Lipschitz in operator norm, with M≥0. All parameters E,L,x0,μ,M,D,Δ,ε are public; f, its minimizer and the error sequence are hidden. Δ≥0 and ε>0.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: Params, spec.Public, spec.publicInput, spec.valid and spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Gradient.Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x∈E satisfying f(x)−f(xstar)≤ε for a global minimizer xstar. The criterion applies to the output point, without a prescribed iterate or averaging rule.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law. The extracted budget bounds oracle calls for every seed; it is a fixed budget, not an expected cost. When Δ≤ε, the budget is zero.",
+        "evidence": "LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean: spec.successful; LongTails/Template.lean: Convergence and execute; supplied extracted result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines smooth strongly convex minimization with Lipschitz Hessians and a query-independent additive oracle error sequence whose vector prefix sums are uniformly bounded. This temporal cancellation model is an unusual oracle assumption."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NonlinearTemporalDiscrepancy.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NonlinearTemporalAcceleration",
+          "theorem": "OracleTemplate.NonlinearTemporalDiscrepancy.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
