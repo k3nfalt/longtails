@@ -106,6 +106,8 @@ Explore more [setups](LongTails/Setups/) and [complexity bounds](LongTails/Theor
 
 ## Contribute
 
+You're welcome to use our framework to check your ideas locally. If you'd like to contribute your results, please follow the steps below.
+
 If you add or remove Lean modules, run `lake exe mk_all --lib LongTails` to update the import index. Then run `./lint.sh` to check formatting, build the code, and run the linters. Once lint and the Comparator audit both pass, open a pull request explaining the setup, bound, and contribution.
 
 ## Tutorial
