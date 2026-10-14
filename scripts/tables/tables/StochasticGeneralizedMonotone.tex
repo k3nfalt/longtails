@@ -16,19 +16,19 @@ All samples, batches and repetitions included. & --- & --- \\
 Accumulative regularization \citep[Thm.~2.2]{sgmJiLanZhu2026v1} &
 $\begin{gathered}\mathcal{O}\!\left(\left[1+\tfrac{L_0R}{\varepsilon}\right](1+\log\ell_0)\right.\\[-2pt]\left.{}+\tfrac{\sigma^2}{\varepsilon^2}\ell_0^3(1+\log\ell_0)^2\right)\end{gathered}$\par
 Special case $L_1=0$, $0<\varepsilon\le L_0R$; stochastic calls for $\mathbb{E}\|F(X)\|^2\le\varepsilon^2$. &
-i) \textbf{(1)}: Scope: permits $L_1>0$.\newline ii) \textbf{(1)}: High probability under finite variance.\newline iii) \textbf{(1)}: Matches polynomial accuracy dependence at $L_1=0$. &
-\textbf{(1)}: Extra logarithmic overhead at $L_1=0$; covers roots only, not constrained VIs. \\
+i) \textbf{(1)}: scope: permits $L_1>0$.\newline ii) \textbf{(1)}: High probability under finite variance.\newline iii) \textbf{(1)}: Matches polynomial accuracy dependence at $L_1=0$. &
+\textbf{(1)}: extra logarithmic overhead at $L_1=0$; covers roots only, not constrained VIs. \\
 \midrule
 Clipped Korpelevich \citep[Thm.~4.4]{sgmVankovNedicSankar2025v2} &
 No comparable residual budget: expected squared-distance guarantee, with two stochastic calls per iteration.\par
 Restricted to $p$-quasi-sharp operators ($p\ge2$, $\mu>0$) and $0<\alpha\le\tfrac12$ for rates. &
 i) \textbf{(1)}: No quasi-sharpness.\newline ii) \textbf{(1)}: Residual guarantee at $\alpha=1$; high probability instead of expected distance. Rates not comparable. &
-\textbf{(1)}: Requires monotonicity; excludes the baseline's constrained and structured non-monotone problems. \\
+\textbf{(1)}: requires monotonicity; excludes the baseline's constrained and structured non-monotone problems. \\
 \midrule
 Anchored extragradient \citep{sgmAnchoredRepository2026} &
 $\begin{gathered}\mathcal{O}\!\left(1+\tfrac{L_0R}{\varepsilon}\right.\\[-2pt]\left.{}+(1+L_1R)\log\!\left[1+\tfrac{(L_0+L_1G)R}{\varepsilon}\right]\right)\end{gathered}$\par
 Exact calls; special case $\sigma=0$, $L_0>0$, $\|F(x_0)\|\le G$. &
-i) \textbf{(1)}: Scope permits $\sigma>0$.\newline ii) \textbf{(1)}: No initial-residual bound $G$ in stopping budget. &
+i) \textbf{(1)}: scope permits $\sigma>0$.\newline ii) \textbf{(1)}: No initial-residual bound $G$ in stopping budget. &
 \textbf{(1)} at $\sigma=0$: quadratic $L_1R$ term and extra logarithms; loses the anytime deterministic last-iterate guarantee; needs $R,\sigma,\varepsilon,\delta$ in updates. \\
 \bottomrule
 \end{tabularx}

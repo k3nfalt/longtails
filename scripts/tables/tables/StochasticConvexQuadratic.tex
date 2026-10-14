@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticConvexQuadratic.lean}{Stochastic\allowbreak{}Convex\allowbreak{}Quadratic}.}\label{tab:StochasticConvexQuadratic}
-\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, minimize the convex quadratic $f(x)=c+\|A(x-u)\|^2/2$, with linear $A$, $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. The jointly measurable oracle uses IID samples, is unbiased, and has variance at most $\sigma^2$, with integrable gradients and squared errors. Parameters $L,\varepsilon>0$, $R,\sigma\ge0$ and $x_0$ are known. The allowed family is predetermined nonnegative scalar-step batched SGD. Target: $\mathbb{E}[f(\widehat x)-f(x_\star)]\le\varepsilon$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner product space, minimize the convex quadratic $f(x)=c+\|A(x-u)\|^2/2$, with linear $A$, $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. The jointly measurable oracle uses IID samples, is unbiased, and has variance at most $\sigma^2$, with integrable gradients and squared errors. Parameters $L,\varepsilon>0$, $R,\sigma\ge0$ and $x_0$ are known. The allowed family is predetermined nonnegative scalar-step batched SGD. Target: $\mathbb{E}[f(\widehat x)-f(x_\star)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -15,12 +15,12 @@
 AC-SA \citep[Prop.~7]{scqGhadimiLan2012}
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
 & i) \textbf{(1)}: Matches known rate.\newline ii) Method-specific: logarithm-free scalar-step analysis; removes naive Chebyshev batching's $\log^2 T$ overhead. Priority unresolved; no oracle or tuning advantage.
-& \textbf{(1)}: Quadratics only versus general smooth convex objectives; larger constants; intermediate iterates can grow exponentially. \\
+& \textbf{(1)}: quadratics only versus general smooth convex objectives; larger constants; intermediate iterates can grow exponentially. \\
 \midrule
 RSAG \citep[Cor.~3(b), (3.22)]{scqGhadimiLan2013v1}
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
 & i) \textbf{(1)}: Matches known rate.\newline ii) Fixed-index last iterate instead of random-index output; AC-SA already provides fixed-index accuracy.
-& \textbf{(1)}: Quadratics only versus general smooth convex objectives. \\
+& \textbf{(1)}: quadratics only versus general smooth convex objectives. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

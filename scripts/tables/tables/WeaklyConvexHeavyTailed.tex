@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Weakly convex optimization with heavy-tailed noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeaklyConvexHeavyTailed.lean}{Weakly\allowbreak{}Convex\allowbreak{}Heavy\allowbreak{}Tailed}.}\label{tab:WeaklyConvexHeavyTailed}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $X$ is closed and convex, $x_0\in X$, and $f(y)\ge f(x)+\langle v(x),y-x\rangle-\frac{\rho}{2}\|y-x\|^2$ for $x,y\in X$, with $\|v(x)\|\le G$. A lower bound $\ell\le f|_X$ satisfies $f(x_0)-\ell\le\Delta$. The jointly measurable oracle uses IID samples, with $\mathbb{E} g(x,\xi)=v(x)$ and $\mathbb{E}\|g(x,\xi)-v(x)\|^\alpha\le\sigma^\alpha$ (the corresponding integrability holds); exact projection onto $X$ is available. Here $\rho,G,\varepsilon>0$, $\sigma,\Delta\ge0$, and $1<\alpha\le2$. Target: $\mathbb{E}\|2\rho(x_J-\widehat x_J)\|^2\le\varepsilon^2$ for a uniformly sampled iterate.}\par\smallskip
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner product space, $X$ is closed and convex, $x_0\in X$, and $f(y)\ge f(x)+\langle v(x),y-x\rangle-\frac{\rho}{2}\|y-x\|^2$ for $x,y\in X$, with $\|v(x)\|\le G$. A lower bound $\ell\le f|_X$ satisfies $f(x_0)-\ell\le\Delta$. The jointly measurable oracle uses IID samples, with $\mathbb{E} g(x,\xi)=v(x)$ and $\mathbb{E}\|g(x,\xi)-v(x)\|^\alpha\le\sigma^\alpha$ (the corresponding integrability holds); exact projection onto $X$ is available. Here $\rho,G,\varepsilon>0$, $\sigma,\Delta\ge0$, and $1<\alpha\le2$. Target: $\mathbb{E}\|2\rho(x_J-\widehat x_J)\|^2\le\varepsilon^2$ for a uniformly sampled iterate.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -16,7 +16,7 @@
 Clip-SGD \citep[Thm.~5, Eq.~(27)]{wchtZhu2025v1}; $\eta_0=1$, batch size $1$. Requires bounded all subgradients, attained minimum, $X\subset\operatorname{int}(\operatorname{dom}f)$
 & $\begin{aligned}\mathcal{O}\!\Bigl(1&+\frac{(\Delta+G+\rho)^2G^2}{\varepsilon^4}\\&+\Bigl(\frac{(\Delta+G+\rho)\sigma}{\varepsilon^2}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr)\end{aligned}$
 & \textbf{(1)}: Noise exponent $\frac{3\alpha-2}{\alpha-1}$ instead of $\frac{2\alpha}{\alpha-1}$; smaller noise term if $\sigma>0$ and $\varepsilon^{(2-\alpha)/(\alpha-1)}<\frac{(\Delta+G+\rho)^{\alpha/(\alpha-1)}}{\rho\Delta}$ ($\Delta>0$). Method-specific gain for $\alpha<2$; none in the exponent at $\alpha=2$.
-& \textbf{(1)}: Needs $\rho,\Delta,\varepsilon$ in addition for tuning. Expectation only; baseline also gives high-probability bounds. Deterministic coefficients not comparable: baseline coefficient is dimensionally inhomogeneous. \\
+& \textbf{(1)}: needs $\rho,\Delta,\varepsilon$ in addition for tuning. Expectation only; baseline also gives high-probability bounds. Deterministic coefficients not comparable: baseline coefficient is dimensionally inhomogeneous. \\
 \midrule
 Derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; $X=\mathbb{R}^d$, closed-form ball projection
 & $\mathcal{O}\!\Bigl(\Bigl(1+\frac{\rho\Delta}{\varepsilon^2}\Bigr) \cdot\Bigl[1+\frac{G^2}{\varepsilon^2}+\Bigl(\frac{\sigma}{\varepsilon}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr]\Bigr)$

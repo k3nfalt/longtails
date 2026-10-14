@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Bounded composite saddle problems: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedCompositeSaddle.lean}{Bounded\allowbreak{}Composite\allowbreak{}Saddle}.}\label{tab:BoundedCompositeSaddle}
-\parbox{\linewidth}{\footnotesize Convex sets $X,Y$ in real inner-product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The continuous linear map $K$ satisfies $\|K\|\le L$; $g,h$ are convex and $M$-Lipschitz on their respective sets. Assume $R,L,\varepsilon>0$, $M\ge0$, and exact adjoint and constrained proximal oracles. For $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$, the target is deterministic feasibility and $\sup_{x\in X,y\in Y}[\Phi(\bar x_T,y)-\Phi(x,\bar y_T)]\le\varepsilon$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Convex sets $X,Y$ in real inner product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The continuous linear map $K$ satisfies $\|K\|\le L$; $g,h$ are convex and $M$-Lipschitz on their respective sets. Assume $R,L,\varepsilon>0$, $M\ge0$, and exact adjoint and constrained proximal oracles. For $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$, the target is deterministic feasibility and $\sup_{x\in X,y\in Y}[\Phi(\bar x_T,y)-\Phi(x,\bar y_T)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -25,7 +25,7 @@ Arrow--Hurwicz \citep[\S3.2, Eq.~(20)]{BCSChambollePock2010}\newline Derived bou
 \midrule
 AltGDA \citep[Thm.~1, v1]{BCSNanEtAl2026}\newline Matrix games only
 & $\mathcal{O}\!\left(1+\frac{L}{\delta\varepsilon}\right)$\newline $X,Y$ probability simplices; $g=h=0$, $R=1$, $M=0$; $\eta=\delta/(2\sqrt{2}L)$.
-& i) \textbf{(1)}, \textbf{(2)}: Scope: general bounded convex sets and Lipschitz composite terms.\newline ii) \textbf{(1)}: $L/\varepsilon$ instead of $L/(\delta\varepsilon)$; step needs only $L$.\newline iii) \textbf{(2)}: no $\delta$ tuning; faster when $\delta\ll(\varepsilon/L)^{1/3}$ and $L/\varepsilon\gg1$.
+& i) \textbf{(1)}, \textbf{(2)}: scope: general bounded convex sets and Lipschitz composite terms.\newline ii) \textbf{(1)}: $L/\varepsilon$ instead of $L/(\delta\varepsilon)$; step needs only $L$.\newline iii) \textbf{(2)}: no $\delta$ tuning; faster when $\delta\ll(\varepsilon/L)^{1/3}$ and $L/\varepsilon\gg1$.
 & \textbf{(2)}: worse when $\delta\gg(\varepsilon/L)^{1/3}$.\newline \textbf{(1)}: larger numerical constants can offset gains for large $\delta$. \\
 \bottomrule
 \end{tabularx}

@@ -22,13 +22,13 @@ Target: $F(\widehat x)-F(x_\star)\le\varepsilon$ pathwise.}\par\smallskip
 \midrule[1.2pt]
 Full-gradient NAG \citep[Thm.~2]{hermant2026v3cached}; $E=\mathbb{R}^d$
 & $\mathcal{O}\!\left(\frac{n}{\gamma}\sqrt{\frac L\mu}\,\ell\right)$
-& \textbf{(1)}: Rate: multiplicative $n\gamma^{-1}\sqrt{L/\mu}$ becomes additive for $n\ge2$; similarity reduces full-gradient refreshes.
+& \textbf{(1)}: rate: multiplicative $n\gamma^{-1}\sqrt{L/\mu}$ becomes additive for $n\ge2$; similarity reduces full-gradient refreshes.
 & \textbf{(1)}: needs finite-sum similarity $384\delta^2\le\gamma^3\mu^2$ and knowledge of $\delta$ in addition. \\
 \midrule
 Extragradient sliding \citep[Thm.~3]{kovalev2022v1cached}; Derived bound, $E=\mathbb{R}^d$, $\gamma=1$, $F$ $\mu$-strongly convex
 & $\mathcal{O}\!\left(\left(n+\sqrt{\frac L\mu}\right)\left[1+\log\!\left(1+\frac{L\Delta}{\mu\varepsilon}\right)\right]\right)$\par
 $q=f_1$, $p=F-f_1$, $L_p=\mu$; all inner gradient calls counted.
-& i) \textbf{(1)}: Scope: nonconvex strongly quasar-convex $F$, including $\gamma<1$.\newline
+& i) \textbf{(1)}: scope: nonconvex strongly quasar-convex $F$, including $\gamma<1$.\newline
  ii) \textbf{(1)}: On overlap, accuracy-dependent $n$-term gains $\log(\mu^2/\delta^2)$ for $\delta\ll\mu$; removes $L/\mu$ inside accuracy logarithm.
 & \textbf{(1)}: restricted similarity range; baseline also permits $\mu\le\delta\le L$ with convex components. Gains on overlap are logarithmic only. \\
 \midrule

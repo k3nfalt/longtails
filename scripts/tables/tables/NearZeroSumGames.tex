@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Near-zero-sum games: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NearZeroSumGames.lean}{Near\allowbreak{}Zero\allowbreak{}Sum\allowbreak{}Games}.}\label{tab:NearZeroSumGames}
+\parbox{\linewidth}{\footnotesize Compact convex strategy sets $X,Y$ in finite-dimensional real inner product spaces, with feasible initial point and $\operatorname{diam}(X\times Y)\le D$. Players minimize $h+g$ and $g-h$; $h$ is $\mu$-strongly convex in $x$ and $\nu$-strongly concave in $y$, and $g$ is jointly convex. On the domain, gradients of $h\pm g$ are $L$-Lipschitz and $\nabla g$ is $\delta$-Lipschitz, with $0<\mu,\nu\le L$, $0\le\delta\le L$, and $D,\varepsilon>0$. An equilibrium exists. Available oracles return players' own-gradient field and exact projection. Target: feasible $z_{\rm out}$ with $\|z_{\rm out}-z_\star\|^2\le\varepsilon$ almost surely for an equilibrium $z_\star$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NearZeroSumOwnGradients.lean}{Near\allowbreak{}Zero\allowbreak{}Sum\allowbreak{}Own\allowbreak{}Gradients} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NearZeroSumOwnGradients.md}{(review)}
+& $\mathcal{O}\!\left(\frac{L}{m}\sqrt{\frac{m+\delta}{\mu+\nu+\delta}}\,\ell q\right)$\newline Total $F$ and projection calls
+& --- & --- \\
+\midrule[1.2pt]
+ICL \citep[Thm.~1]{nzsLuoStichChatterjee2025v1}
+& $\mathcal{O}\!\left(\frac{L}{m}\sqrt{\frac{m+\delta}{M+\delta}}\,\ell q\right)$\newline Full-gradient queries; $0<\varepsilon\le D^2$; projections uncounted
+& \textbf{(1)}: Matches known rate; own gradients instead of full utility gradients; no separate $\nabla g$ or saddle gradient of $h$.
+& --- \\
+\midrule
+Extragradient bound \citep[Prop.~1]{nzsLuoStichChatterjee2025v1}
+& $\mathcal{O}\!\left(\frac{L}{m}\ell\right)$\newline $F$ and projection calls
+& \textbf{(1)}: rate gain when $\frac{m+\delta}{M+\delta}q^2\ll1$; for $\delta=m$, $L=M=\kappa m$, $\kappa\ell$ becomes $\sqrt{\kappa}\ell q$.
+& \textbf{(1)}: extra factor $q$ when $M\asymp m$ or $\delta\gtrsim M$; needs separate $\mu,\nu,\delta$ and the decomposition structure. \\
+\midrule
+Zero-sum baseline \citep[Prop.~2]{nzsLuoStichChatterjee2025v1}
+& $\mathcal{O}\!\left(\frac{L}{\sqrt{\mu\nu}}\ell\right)$\newline Gradient queries; $\delta=0$; projections uncounted
+& \textbf{(1)}: scope extends from $\delta=0$ (affine $g$) to $\delta>0$.
+& \textbf{(1)}: extra factor $q$ on the $\delta=0$ overlap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $m=\min\{\mu,\nu\}$, $M=\max\{\mu,\nu\}$; $\log_+t=\max\{0,\log t\}$; $\ell=1+\log_+(D^2/\varepsilon)$, $q=1+\log_+(L^2D^2/(m^2\varepsilon))$; $F=(\nabla_x(h+g),\nabla_y(g-h))$; $\kappa=L/m$ in the stated example.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Exact-value optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean}{Zeroth\allowbreak{}Order\allowbreak{}Matrix\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:ZerothOrderMatrixGeneralizedSmooth}
-\parbox{\linewidth}{\footnotesize Convex $f:\mathbb{R}^d\to\mathbb{R}$ has a differentiable gradient and a minimizer $x_\star$, with $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. An unknown symmetric matrix satisfies $0\prec H\preceq I$, $\operatorname{tr}H\le r$, and $\nabla^2 f(x)\preceq(L_0+L_1\|\nabla f(x)\|_{H^{-1}})H$. Here $d\ge1$, $L_0,r,R,\Delta,\varepsilon>0$, $L_1\ge0$, and $0<\delta<1$. Our oracle returns exact function values; the target is $\mathbb{P}[f(\widehat x)-f(x_\star)>\varepsilon]\le\delta$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Convex $f:\mathbb{R}^d\to\mathbb{R}$ has a differentiable gradient and a minimizer $x_\star$, with $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. An unknown symmetric matrix satisfies $0\prec H\preceq I$, $\operatorname{tr}H\le r$, and $\nabla^2 f(x)\preceq(L_0+L_1\|\nabla f(x)\|_{H^{-1}})H$. Here $d\ge1$, $L_0,r,R,\Delta,\varepsilon>0$, $L_1\ge0$, and $0<\delta<1$. The oracle returns exact function values; the target is $\mathbb{P}[f(\widehat x)-f(x_\star)>\varepsilon]\le\delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -20,17 +20,17 @@ AGD \citep[Thm.~4.3]{Tyurin2026GeneralizedV2}
 \midrule
 RS-NAG, Derived bound \citep[Thm.~3.3, Prop.~5.2]{zomgsOmiya2026v1}\par $L_1=0$, $d\ge2$; one-dimensional Haar sketches.
 & $\mathcal{O}\!\left(b\left[1+\sqrt{d(r+1)L_0R^2/\varepsilon}\right]\right)$\par Directional-derivative and value calls. Independent trials, one selection value per trial; target probability $1-\delta$.
-& i) \textbf{(1)}: Scope: permits $L_1>0$.\newline ii) \textbf{(1)}: values replace directional derivatives.\newline iii) \textbf{(1)}: matches leading rate at $L_1=0$.
+& i) \textbf{(1)}: scope: permits $L_1>0$.\newline ii) \textbf{(1)}: values replace directional derivatives.\newline iii) \textbf{(1)}: matches leading rate at $L_1=0$.
 & \textbf{(1)}: adds $b(r+1)\ell$ at $L_1=0$. \\
 \midrule
 Coordinate acceleration \citep[Thm.~8]{zomgsLobanov2026v1}\par Coordinate gap-smooth local model; finite initial level-set radius.
 & No comparable function-value bound. Partial derivatives, values, and exact segment minimizations; expected objective accuracy.
-& On the common setup, \textbf{(1)}:\newline i) values only, no segment minimization;\newline ii) no $f^*$, level-set radius, or coordinate curvature inputs.
+& On the common setup, \textbf{(1)}:\newline i) values only, no segment minimization;\newline ii) no $f_\star$, level-set radius, or coordinate curvature inputs.
 & --- \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $b=1+\log(1/\delta)$; $\ell=\log(e+\Delta/\varepsilon)$; $\log_+t=\log\max\{1,t\}$; $f^*=f(x_\star)$; $\|v\|_{H^{-1}}=\sqrt{v^\top H^{-1}v}$; $\mu_H=\lambda_{\min}(H)$; $L_1^{\mathrm E}=L_1/\sqrt{\mu_H}$ is a valid Euclidean generalized-smoothness coefficient. The level-set radius is $\sup_{f(x)\le f(x_0)}\|x-x_\star\|$.
+\item[] \textbf{Abbr:} $b=1+\log(1/\delta)$; $\ell=\log(e+\Delta/\varepsilon)$; $\log_+t=\max\{0,\log t\}$; $f_\star=f(x_\star)$; $\|v\|_{H^{-1}}=\sqrt{v^\top H^{-1}v}$; $\mu_H=\lambda_{\min}(H)$; $L_1^{\mathrm E}=L_1/\sqrt{\mu_H}$ is a valid Euclidean generalized-smoothness coefficient. The level-set radius is $\sup_{f(x)\le f(x_0)}\|x-x_\star\|$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
