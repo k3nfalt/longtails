@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Local acceleration under strong aiming: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LocalStrongAiming.lean}{Local\allowbreak{}Strong\allowbreak{}Aiming}.}\label{tab:LocalStrongAiming}
-\parbox{\linewidth}{\footnotesize Let $f:E\to\mathbb{R}$ be differentiable on a finite-dimensional real inner-product space, with nonempty minimizer set $M$. For all $x,y\in U_r$, assume $\|\nabla f(x)-\nabla f(y)\|\le L\|x-y\|$ and $f(y)\ge f(x)+\langle\nabla f(x),y-x\rangle-\sqrt{\mu L}\|y-x\|^2$. For every $x\in U_r$ and every nearest $z\in M$, assume $f(x)-f^*+\frac{\mu}{2}\|x-z\|^2\le\langle\nabla f(x),x-z\rangle$. Require $0<\mu\le L$, $r>0$, $x_0\in U_r$, and $f(x_0)-f^*\le\Delta\le\mu r^2/256$, with $\Delta\ge0$. Exact gradients; target $f(x_K)-f^*\le\varepsilon$, $\varepsilon>0$. Updates use $L,\mu$; the horizon additionally uses $\Delta,\varepsilon$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Let $f:E\to\mathbb{R}$ be differentiable on a finite-dimensional real inner product space, with nonempty minimizer set $M$. For all $x,y\in U_r$, assume $\|\nabla f(x)-\nabla f(y)\|\le L\|x-y\|$ and $f(y)\ge f(x)+\langle\nabla f(x),y-x\rangle-\sqrt{\mu L}\|y-x\|^2$. For every $x\in U_r$ and every nearest $z\in M$, assume $f(x)-f_\star+\frac{\mu}{2}\|x-z\|^2\le\langle\nabla f(x),x-z\rangle$. Require $0<\mu\le L$, $r>0$, $x_0\in U_r$, and $f(x_0)-f_\star\le\Delta\le\mu r^2/256$, with $\Delta\ge0$. Exact gradients; target $f(x_K)-f_\star\le\varepsilon$, $\varepsilon>0$. Updates use $L,\mu$; the horizon additionally uses $\Delta,\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -15,13 +15,13 @@
 \midrule[1.2pt]
 NAG \citep[Thm.~11]{lsaGuptaWojtowytsch2025v3}\newline Affine $M$; global assumptions
 & $\mathcal{O}\!\left(1+\sqrt{L/\mu}\log(1+\Delta/\varepsilon)\right)$\newline Global strong aiming and smoothness; quadratic lower-model coefficient $\le\sqrt{\mu L}/2$.
-& i) \textbf{(1)}: Scope: curved, nonconvex $M$; only tube assumptions.\newline ii) \textbf{(1)}: Matches known rate on the overlap.
-& \textbf{(1)}: Local initialization $x_0\in U_r$, $\Delta\le\mu r^2/256$; prior guarantee is global. \\
+& i) \textbf{(1)}: scope: curved, nonconvex $M$; only tube assumptions.\newline ii) \textbf{(1)}: Matches known rate on the overlap.
+& \textbf{(1)}: local initialization $x_0\in U_r$, $\Delta\le\mu r^2/256$; prior guarantee is global. \\
 \midrule
 Continuized NAG \citep[Thm.~20, Cor.~23]{lsaHermantEtAl2026v2}\newline Convex $M$ with $C^2$ boundary
 & $\mathcal{O}\!\left(1+\frac{\sqrt{L/\mu}}{a}\log(1+\Delta/\varepsilon)\right)$\newline Constant-probability gap accuracy; exact gradients. Global smoothness and strong aiming; $\mu/L<\bigl((1+\sqrt5)/2\bigr)^{-4}$.
-& i) \textbf{(1)}: Scope: nonconvex $M$, no boundary regularity.\newline ii) \textbf{(1)}: Deterministic last-iterate guarantee instead of randomized accuracy; different criteria preclude a rate comparison.
-& \textbf{(1)}: Needs weak convexity and local initialization; prior guarantee is global without a weak-convexity bound. \\
+& i) \textbf{(1)}: scope: nonconvex $M$, no boundary regularity.\newline ii) \textbf{(1)}: Deterministic last-iterate guarantee instead of randomized accuracy; different criteria preclude a rate comparison.
+& \textbf{(1)}: needs weak convexity and local initialization; prior guarantee is global without a weak-convexity bound. \\
 \midrule
 NAG \citep[Thm.~2.2]{lsaFengYuan2026v1}\newline $C^2$ objectives; local PL
 & No explicit budget in $(L,\mu,\Delta,\varepsilon)$. Distance contraction $1-2\sqrt{\mu}/\sqrt{3L+\mu}+\delta$; implicit prefactor and basin, sufficiently small $\delta>0$.
@@ -30,7 +30,7 @@ NAG \citep[Thm.~2.2]{lsaFengYuan2026v1}\newline $C^2$ objectives; local PL
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $f^*=\min f$; $M=\operatorname{argmin}f$; $U_r=\{x:d(x,M)<r\}$; $d(x,M)=\inf_{z\in M}\|x-z\|$; $\Delta$ bounds the initial gap; $L$ is the gradient Lipschitz constant; $\mu$ is the strong-aiming constant (the PL constant in the PL row); $K$ counts gradient calls; $a=1-\frac{1+\sqrt5}{2}(\mu/L)^{1/4}$; PL means $\|\nabla f\|^2\ge2\mu(f-f^*)$ locally; $\delta$ is asymptotic rate slack; NAG denotes Nesterov accelerated gradient. Costs count individual exact-gradient calls.
+\item[] \textbf{Abbr:} $f_\star=\min f$; $M=\operatorname{argmin}f$; $U_r=\{x:d(x,M)<r\}$; $d(x,M)=\inf_{z\in M}\|x-z\|$; $\Delta$ bounds the initial gap; $L$ is the gradient Lipschitz constant; $\mu$ is the strong-aiming constant (the PL constant in the PL row); $K$ counts gradient calls; $a=1-\frac{1+\sqrt5}{2}(\mu/L)^{1/4}$; PL means $\|\nabla f\|^2\ge2\mu(f-f_\star)$ locally; $\delta$ is asymptotic rate slack; NAG denotes Nesterov accelerated gradient. Costs count individual exact-gradient calls.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
