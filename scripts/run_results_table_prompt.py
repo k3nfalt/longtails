@@ -12,6 +12,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from threading import Event, Lock
+from urllib.parse import urlsplit
 
 HEADER = "\\begingroup\n"
 FOOTER = "\\endgroup\n"
@@ -217,54 +218,18 @@ def main(argv=None):
         if not theorems:
             print("No reviewed theorems to process.", flush=True)
             return 0
-        catalog_path = scripts.parent / "server/index.html"
+        sys.path.insert(0, str(scripts.parent))
+        from run_comparator import inspect
+
         try:
-            catalog = json.loads(
-                re.search(
-                    r'<script id="catalog-data" type="application/json">(.*?)</script>',
-                    catalog_path.read_text(encoding="utf-8"),
-                    re.DOTALL,
-                )[1]
-            )
-            membership = {}
-            for setup in catalog["setups"]:
-                for theorem in setup.get("theorems", []):
-                    name = theorem["module"].split(".")[-1]
-                    setup_name = theorem["setup"].split(".")[-1]
-                    if name in membership and membership[name] != setup_name:
-                        raise ValueError(f"ambiguous setup for {name}")
-                    membership[name] = setup_name
-        except (OSError, ValueError, KeyError, TypeError) as error:
-            parser.error(
-                f"cannot read exact setup mapping from {catalog_path}: {error}"
-            )
-        unpublished = [
-            p.stem
-            for p in theorems
-            if p.stem not in membership
-            and not (
-                scripts.parent / f"server/Theorems/Descriptions/{p.stem}.tex"
-            ).is_file()
-        ]
-        if unpublished:
-            print(
-                "WARNING: skipping results without a catalog entry or server theorem link: "
-                + ", ".join(unpublished),
-                file=sys.stderr,
-                flush=True,
-            )
-            theorems = [p for p in theorems if p.stem not in unpublished]
-        unmapped = [p.stem for p in theorems if p.stem not in membership]
-        if unmapped:
-            parser.error(
-                "catalog lacks setup mappings; rebuild it for: " + ", ".join(unmapped)
-            )
+            metadata = inspect(theorems, os.environ.copy())
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            parser.error(f"cannot inspect theorem setups: {error}")
         groups = {}
-        for theorem in theorems:
-            groups.setdefault(membership[theorem.stem], []).append(theorem)
-        if not groups:
-            print("No published reviewed setups to process.", flush=True)
-            return 0
+        for theorem in metadata:
+            setup = theorem["setup"].removesuffix(".spec").split(".")[-1]
+            path = scripts.parent.joinpath(*theorem["module"].split(".")).with_suffix(".lean")
+            groups.setdefault(setup, []).append(path)
         if args.setups:
             unknown = set(args.setups) - groups.keys()
             if unknown:
@@ -296,8 +261,24 @@ def main(argv=None):
                 return 0
         for name in groups:
             if not (scripts.parent / f"LongTails/Setups/{name}.lean").is_file():
-                parser.error(f"missing setup file for {name}; rebuild the catalog")
-        repository_url = catalog["repository_url"].rstrip("/") + "/blob/main/"
+                parser.error(f"missing setup file for {name}")
+        try:
+            origin = subprocess.run(
+                ["git", "remote", "get-url", "origin"],
+                cwd=scripts.parent,
+                text=True,
+                capture_output=True,
+                check=True,
+            ).stdout.strip()
+            if origin.startswith("git@github.com:"):
+                origin = "ssh://git@github.com/" + origin.split(":", 1)[1]
+            url = urlsplit(origin)
+            path = url.path.rstrip("/").removesuffix(".git").strip("/")
+            if url.hostname != "github.com" or len(path.split("/")) != 2:
+                raise ValueError("Expected origin to be a GitHub repository URL")
+            repository_url = "https://github.com/" + path + "/blob/main/"
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            parser.error(f"cannot determine repository URL: {error}")
     output = args.output_dir.expanduser().resolve()
     if output.exists() and not output.is_dir():
         parser.error("--output-dir must be a directory")
