@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 EXTRACTOR = (
     (ROOT / "tools/ConvergenceMetadata.lean").read_text()
     + r"""
+set_option format.width 120
 open Lean Meta Elab Command
 
 private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
@@ -111,7 +112,7 @@ def generate_descriptions(rows, commit, regenerate_all=False):
 def extract_theorems(paths):
     modules = {".".join(path.relative_to(ROOT).with_suffix("").parts) for path in paths}
     program = "\n".join(f"import {module}" for module in sorted(modules))
-    program += "\nimport BudgetLatex\nset_option format.width 120\n" + EXTRACTOR
+    program += "\nimport BudgetLatex\n" + EXTRACTOR
     result = subprocess.run(
         ["lake", "env", "lean", "--stdin"],
         cwd=ROOT,
