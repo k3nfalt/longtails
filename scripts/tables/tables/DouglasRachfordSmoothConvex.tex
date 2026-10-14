@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Fast Douglas--Rachford comparison for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/DouglasRachfordSmoothConvex.lean}{Douglas\allowbreak{}Rachford\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:DouglasRachfordSmoothConvex}
+\caption{Fast Douglas--Rachford comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DouglasRachfordSmoothConvex.lean}{Douglas\allowbreak{}Rachford\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:DouglasRachfordSmoothConvex}
 \parbox{\linewidth}{\footnotesize Real Hilbert space $E$; differentiable convex $f:E\to\mathbb{R}$ with $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\frac L2\|y-x\|^2$; convex $C\subseteq E$ and $g:E\to\mathbb{R}$ convex on $C$. Exact proximal minimizers of $f$ on $E$ and $g$ on $C$ are available at fixed $\gamma$. A minimizer $x_\star\in C$ exists with $\|w_1-w_\star\|\le R$. Parameters: $L,R,\varepsilon>0$, $0<\lambda\le1$, $0<4\gamma L\le\lambda$. Target: the returned last iterate $y_N\in C$ satisfies $F(y_N)-F(x_\star)\le\varepsilon$ deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedDouglasRachfordConvex.lean}{Accelerated\allowbreak{}Douglas\allowbreak{}Rachford\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedDouglasRachfordConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedDouglasRachfordConvex.lean}{Accelerated\allowbreak{}Douglas\allowbreak{}Rachford\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedDouglasRachfordConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ proximal calls, counting both calls per iteration.
 & --- & --- \\
 \midrule[1.2pt]

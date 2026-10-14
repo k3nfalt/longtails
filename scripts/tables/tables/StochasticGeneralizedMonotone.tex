@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic generalized-Lipschitz monotone root finding: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Monotone}.}\label{tab:StochasticGeneralizedMonotone}
+\caption{Stochastic generalized-Lipschitz monotone root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Monotone}.}\label{tab:StochasticGeneralizedMonotone}
 \parbox{\linewidth}{\footnotesize A continuous monotone map $F:E\to E$ on a finite-dimensional real Hilbert space satisfies $\|F(x)-F(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|F(z)\|)\|x-y\|$ and has a root $x_\star$ with $\|x_0-x_\star\|\le R$. The jointly measurable oracle uses IID samples, with integrable $g(x,\xi)$ and squared error, $\mathbb{E} g(x,\xi)=F(x)$, and $\mathbb{E}\|g(x,\xi)-F(x)\|^2\le\sigma^2$. Here $L_0,L_1,R,\sigma\ge0$, $\varepsilon>0$, and $0<\delta<1$. Target: $\mathbb{P}(\|F(X)\|>\varepsilon)\le\delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/StochasticGeneralizedMonotone.md}{(review)} &
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedMonotone.md}{(review)} &
 $\begin{gathered}\mathcal{O}\!\left(\left[1+\tfrac{L_0R}{\varepsilon}+(L_1R)^2+\tfrac{\sigma^2}{\varepsilon^2}\right]\right.\\[-2pt]\left.{}\cdot\ell^3[\ell+\log(1/\delta)]\right)\end{gathered}$\par
 All samples, batches and repetitions included. & --- & --- \\
 \midrule[1.2pt]

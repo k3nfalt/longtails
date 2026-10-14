@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Heavy-tailed stochastic optimization on the simplex: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/AdaptiveHeavyTailSimplex.lean}{Adaptive\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Simplex}.}\label{tab:AdaptiveHeavyTailSimplex}
+\caption{Heavy-tailed stochastic optimization on the simplex: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdaptiveHeavyTailSimplex.lean}{Adaptive\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Simplex}.}\label{tab:AdaptiveHeavyTailSimplex}
 \parbox{\linewidth}{\footnotesize On $\Delta_d=\{x\in\mathbb{R}^d:x\ge0,\ \sum_i x_i=1\}$, $d\ge2$, let $f:\mathbb{R}^d\to\mathbb{R}$ be convex on $\Delta_d$, differentiable there, with a constrained minimizer $x_\star$ and $\|\nabla f(x)-\nabla f(y)\|_\infty\le L\|x-y\|_1$ for $x,y\in\Delta_d$, $L>0$. The jointly measurable oracle uses IID samples, is integrable and unbiased, and satisfies $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|_\infty^p\le\sigma^p$, $1<p\le2$, $\sigma\ge0$. Target: $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$, $\varepsilon>0$, $0<\delta<1$. Costs count individual stochastic-gradient calls.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AdaptiveEntropicHeavyTailConvex.lean}{Adaptive\allowbreak{}Entropic\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AdaptiveEntropicHeavyTailConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveEntropicHeavyTailConvex.lean}{Adaptive\allowbreak{}Entropic\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveEntropicHeavyTailConvex.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&\gamma+\sqrt{\frac{Lb}{\varepsilon}\left[\gamma+\log\!\left(2+\frac{Lb}{\varepsilon}\right)\right]}\\[-1pt]&{}+b\left(\frac{2^{38}\sigma}{\varepsilon}\right)^q\end{aligned}\right)$
 & --- & --- \\
 \midrule[1.2pt]

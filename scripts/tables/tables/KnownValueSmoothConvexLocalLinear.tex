@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Known-value smooth convex optimization with an exact local linear oracle: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean}{Known\allowbreak{}Value\allowbreak{}Smooth\allowbreak{}Convex\allowbreak{}Local\allowbreak{}Linear}.}\label{tab:KnownValueSmoothConvexLocalLinear}
+\caption{Known-value smooth convex optimization with an exact local linear oracle: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean}{Known\allowbreak{}Value\allowbreak{}Smooth\allowbreak{}Convex\allowbreak{}Local\allowbreak{}Linear}.}\label{tab:KnownValueSmoothConvexLocalLinear}
 \parbox{\linewidth}{\footnotesize A closed convex set $C$ in a real Hilbert space, $x_0\in C$, and a differentiable objective satisfying, for $x,y\in C$, $f(x)+\langle\nabla f(x),y-x\rangle\le f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\tfrac L2\|y-x\|^2$. Known inputs: $L>0$, $R\ge0$, $\varepsilon>0$, and the exact minimum $f_\star=f(x_\star)$, with $x_\star\in\arg\min_C f$ and $\|x_0-x_\star\|\le R$. Exact value--gradient and point-only local linear oracles are supplied. Target: a feasible output $y$ with $f(y)-f_\star\le\varepsilon$ almost surely; \textbf{(1)} guarantees its last primal iterate for every seed and oracle tie-breaking.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SplitBroxKnownValue.lean}{Split\allowbreak{}Brox\allowbreak{}Known\allowbreak{}Value} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews/SplitBroxKnownValue.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SplitBroxKnownValue.lean}{Split\allowbreak{}Brox\allowbreak{}Known\allowbreak{}Value} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SplitBroxKnownValue.md}{(review)}
 & $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$ total value--gradient and local-linear calls, including rejected trials
 & --- & --- \\
 \midrule[1.2pt]

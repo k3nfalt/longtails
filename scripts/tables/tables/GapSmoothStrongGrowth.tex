@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Gap-dependent smoothness with strong-growth noise: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/GapSmoothStrongGrowth.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth}.}\label{tab:GapSmoothStrongGrowth}
+\caption{Gap-dependent smoothness with strong-growth noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GapSmoothStrongGrowth.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth}.}\label{tab:GapSmoothStrongGrowth}
 \parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a separable real Hilbert space; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $F(x_0)\le\Delta$, where $F=f-f(x_\star)$. For $(2\sqrt3+\sqrt6)\sqrt{H_1}\|y-x\|\le1$, assume $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+(H_0+H_1F(x))\|y-x\|^2$. The jointly measurable oracle, sampled IID, satisfies $\mathbb{E} g(x,\xi)=\nabla f(x)$ and $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le(\rho-1)\|\nabla f(x)\|^2$, with integrable gradients and squared errors. Parameters: $H_0,H_1\ge0$, $R,\Delta>0$, $\rho\ge1$, $0<\varepsilon\le\Delta$, $0<\delta<1$. Target: $\mathbb{P}(F(\widehat x)>\varepsilon)\le\delta$. Costs count individual stochastic-gradient samples, including all batches and trials.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GapSmoothStrongGrowthHighProbability.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth\allowbreak{}High\allowbreak{}Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GapSmoothStrongGrowthHighProbability.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GapSmoothStrongGrowthHighProbability.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth\allowbreak{}High\allowbreak{}Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GapSmoothStrongGrowthHighProbability.md}{(review)}
 & $\mathcal{O}\!\left(\rho c\left[(1+R\sqrt{H_1})\ell+R\sqrt{H_0/\varepsilon}\right]\right)$
 & --- & --- \\
 \midrule[1.2pt]

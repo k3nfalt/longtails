@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Gradient sliding under generalized smoothness: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SlidingGeneralizedSmooth.lean}{Sliding\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:SlidingGeneralizedSmooth}
+\caption{Gradient sliding under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SlidingGeneralizedSmooth.lean}{Sliding\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:SlidingGeneralizedSmooth}
 \parbox{\linewidth}{\footnotesize Minimize $F=f+h$ over convex $Q$ in a real Hilbert space. The convex differentiable $f$ has continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$ on the whole space. Exact gradients, exact projections onto $Q$, and arbitrary valid subgradients of $h$ on $Q$ of norm at most $M$ are available. For $x_0\in Q$ and a minimizer $x_\star\in Q$, $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$; $L_0,R,\Delta,\varepsilon>0$ and $L_1,M,G\ge0$. Target: a feasible computable point with $F(x)-F(x_\star)\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GeneralizedGradientSliding.lean}{Generalized\allowbreak{}Gradient\allowbreak{}Sliding} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GeneralizedGradientSliding.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedGradientSliding.lean}{Generalized\allowbreak{}Gradient\allowbreak{}Sliding} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedGradientSliding.md}{(review)}
 & Total: $\mathcal{O}\!\left(\sqrt{(L_0+L_1G)R^2/\varepsilon}+B+M^2R^2/\varepsilon^2\right)$\newline
 $\nabla f$: $\mathcal{O}\!\left(\sqrt{(L_0+L_1G)R^2/\varepsilon}+B\right)$
 & --- & --- \\

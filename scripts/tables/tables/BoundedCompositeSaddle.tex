@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Bounded composite saddle problems: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/BoundedCompositeSaddle.lean}{Bounded\allowbreak{}Composite\allowbreak{}Saddle}.}\label{tab:BoundedCompositeSaddle}
+\caption{Bounded composite saddle problems: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedCompositeSaddle.lean}{Bounded\allowbreak{}Composite\allowbreak{}Saddle}.}\label{tab:BoundedCompositeSaddle}
 \parbox{\linewidth}{\footnotesize Convex sets $X,Y$ in real inner-product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The continuous linear map $K$ satisfies $\|K\|\le L$; $g,h$ are convex and $M$-Lipschitz on their respective sets. Assume $R,L,\varepsilon>0$, $M\ge0$, and exact adjoint and constrained proximal oracles. For $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$, the target is deterministic feasibility and $\sup_{x\in X,y\in Y}[\Phi(\bar x_T,y)-\Phi(x,\bar y_T)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,9 +9,9 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Uniform\allowbreak{}Rate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ArrowHurwiczUniformRate.md}{(review)} & $\mathcal{O}\!\left(1+\frac{LR^2+MR}{\varepsilon}\right)$ & --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Uniform\allowbreak{}Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)} & $\mathcal{O}\!\left(1+\frac{LR^2+MR}{\varepsilon}\right)$ & --- & --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Bounded\allowbreak{}Saddle} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ArrowHurwiczBoundedSaddle.md}{(review)} & $\mathcal{O}\!\left(1+\left(\frac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$ & --- & --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Bounded\allowbreak{}Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)} & $\mathcal{O}\!\left(1+\left(\frac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$ & --- & --- \\
 \midrule[1.2pt]
 PDHG \citep[Eq.~(16)]{BCSChambollePock2010}\newline Derived bound
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\right)$\newline Exact proximal queries; $\tau=\sigma=1/(2L)$; bounded comparators; inner-product-space extension.

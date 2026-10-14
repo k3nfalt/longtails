@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic smooth convex minimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{Stochastic\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticSmoothAndConvex}
+\caption{Stochastic smooth convex minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{Stochastic\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra; $\nabla f$ is $L$-Lipschitz. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. IID samples $\xi\sim p$ provide a jointly measurable, integrable oracle $g$ with $\mathbb{E}g(x,\xi)=\nabla f(x)$ and integrable squared error $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\mathbb{E}[f(\widehat x)-f(x_\star)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,10 +9,10 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedStochasticConvex.lean}{Accelerated\allowbreak{}Stochastic\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedStochasticConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedStochasticConvex.lean}{Accelerated\allowbreak{}Stochastic\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedStochasticConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & --- & --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/SgdConvex.md}{(review)}
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SgdConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & --- & --- \\
 \midrule[1.2pt]
 AC-SA \citep[Prop.~7, (4.10)--(4.11)]{sscGhadimiLan2012}

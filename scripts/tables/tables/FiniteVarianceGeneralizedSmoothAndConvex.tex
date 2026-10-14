@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Finite-variance accelerated convex optimization under generalized smoothness. Setup: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean}{Finite\allowbreak{}Variance\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteVarianceGeneralizedSmoothAndConvex}
+\caption{Finite-variance accelerated convex optimization under generalized smoothness. Setup: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean}{Finite\allowbreak{}Variance\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteVarianceGeneralizedSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space has differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. IID samples feed a jointly measurable oracle $g$, with $\mathbb{E} g(x,\xi)=\nabla f(x)$ and $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$; the vector and squared error are integrable. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$. Costs count all stochastic-gradient samples, including pilot/correction batches and padding.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,14 +9,14 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AdaptiveRobustGeneralizedAcceleratedConvex.lean}{Adaptive\allowbreak{}Robust\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AdaptiveRobustGeneralizedAcceleratedConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveRobustGeneralizedAcceleratedConvex.lean}{Adaptive\allowbreak{}Robust\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveRobustGeneralizedAcceleratedConvex.md}{(review)}
 & $\begin{aligned}[t]
 \mathcal{O}\!\Bigl(& (W+\sqrt V\,\ell)\\
 &\times\Bigl[1+\frac{\log(eM/\delta)}{\log(e+W\sqrt M/(V\ell^2))}\Bigr]\\
 &+V\ell+\sqrt V\,\ell\log(eM/\delta)\Bigr)
 \end{aligned}$ & --- & --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/FiniteVarianceGeneralizedAcceleratedConvex.lean}{Finite\allowbreak{}Variance\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/FiniteVarianceGeneralizedAcceleratedConvex.md}{(review)}
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteVarianceGeneralizedAcceleratedConvex.lean}{Finite\allowbreak{}Variance\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteVarianceGeneralizedAcceleratedConvex.md}{(review)}
 & $\mathcal{O}\!\bigl((W+V\ell^2)\Lambda\bigr)$ & --- & --- \\
 \midrule[1.2pt]
 RCSAG \citep[Thm.~9, App.~C]{ldg2026heavyv1}\newline Derived bound: $E=\mathbb{R}^d$, $p=2$, constant variance, $\Delta>\varepsilon$.

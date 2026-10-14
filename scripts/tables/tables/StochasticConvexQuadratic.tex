@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticConvexQuadratic.lean}{Stochastic\allowbreak{}Convex\allowbreak{}Quadratic}.}\label{tab:StochasticConvexQuadratic}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticConvexQuadratic.lean}{Stochastic\allowbreak{}Convex\allowbreak{}Quadratic}.}\label{tab:StochasticConvexQuadratic}
 \parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, minimize the convex quadratic $f(x)=c+\|A(x-u)\|^2/2$, with linear $A$, $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. The jointly measurable oracle uses IID samples, is unbiased, and has variance at most $\sigma^2$, with integrable gradients and squared errors. Parameters $L,\varepsilon>0$, $R,\sigma\ge0$ and $x_0$ are known. The allowed family is predetermined nonnegative scalar-step batched SGD. Target: $\mathbb{E}[f(\widehat x)-f(x_\star)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/StochasticChebyshevQuadratic.lean}{Stochastic\allowbreak{}Chebyshev\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/StochasticChebyshevQuadratic.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticChebyshevQuadratic.lean}{Stochastic\allowbreak{}Chebyshev\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticChebyshevQuadratic.md}{(review)}
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & --- & --- \\
 \midrule[1.2pt]
 AC-SA \citep[Prop.~7]{scqGhadimiLan2012}

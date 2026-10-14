@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Accelerated composite generalized-smooth optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/CompositeGeneralizedSmooth.lean}{Composite\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:CompositeGeneralizedSmooth}
+\caption{Accelerated composite generalized-smooth optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGeneralizedSmooth.lean}{Composite\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:CompositeGeneralizedSmooth}
 \parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f:E\to\mathbb{R}$ is convex with continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$ for all $x,y\in E$; $\psi:E\to\mathbb{R}$ is convex on $Q$. Exact gradient and proximal queries are available, with the proximal minimum attained for every positive step. For the same minimizer $x_\star\in Q$, $x_0\in Q$, $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$, where $L_0,R,\Delta,\varepsilon>0$ and $L_1,G\ge0$. Target: $x\in Q$ and $F(x)-F(x_\star)\le\varepsilon$, deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/CompositeGeneralizedAccelerated.lean}{Composite\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/CompositeGeneralizedAccelerated.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeGeneralizedAccelerated.lean}{Composite\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeGeneralizedAccelerated.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&\sqrt{\frac{(L_0+L_1G)R^2}{\varepsilon}}\\[-2pt]&+(1+L_1R)\Bigl[1+\log\!\Bigl(1\\[-2pt]&\qquad +(1+L_1R)\sqrt{\frac{\Delta}{L_0R^2}}\Bigr)\Bigr]\end{aligned}\right)$\newline Total gradient and proximal calls.
 & --- & --- \\
 \midrule[1.2pt]

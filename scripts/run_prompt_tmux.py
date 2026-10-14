@@ -132,6 +132,8 @@ Environment:
         if not key.is_file():
             parser.error(f"AUTO_MATH_BOT_KEY is not a file: {key}")
         tmux.extend(("-e", f"AUTO_MATH_BOT_KEY={key}"))
+    if installation_id := os.environ.get("AUTO_MATH_BOT_INSTALLATION_ID"):
+        tmux.extend(("-e", f"AUTO_MATH_BOT_INSTALLATION_ID={installation_id}"))
     if args.openrouter:
         tmux.extend(("-e", f"OPENROUTER_API_KEY={os.environ['OPENROUTER_API_KEY']}"))
         if args.agent == "claude":

@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic convex optimization under generalized smoothness: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
+\caption{Stochastic convex optimization under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space with its Borel structure, differentiable gradient, and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. IID samples drive a jointly measurable, unbiased gradient oracle $g$, with $\mathbb{E}\|g(x)-\nabla f(x)\|^2\le\sigma^2$ and, for $\sigma>0$, $\mathbb{E}\exp(\|g(x)-\nabla f(x)\|^2/\sigma^2)\le e$; $\sigma=0$ denotes exact gradients. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: measurable $\widehat x$ with $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$. Costs count individual stochastic-gradient samples, including all batches.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/StochasticGeneralizedAcceleratedConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedAcceleratedConvex.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&1+R\sqrt{L_0/\varepsilon} +\min\{\lceil q^{2/3}\rceil\ell,\\&\qquad\ell+(q\ell)^{2/3}\} +\sigma^2R^2\lambda/\varepsilon^2\end{aligned}\right)$
 & --- & --- \\
 \midrule[1.2pt]

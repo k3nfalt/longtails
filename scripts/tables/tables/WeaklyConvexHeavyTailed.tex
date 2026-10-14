@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Weakly convex optimization with heavy-tailed noise: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/WeaklyConvexHeavyTailed.lean}{Weakly\allowbreak{}Convex\allowbreak{}Heavy\allowbreak{}Tailed}.}\label{tab:WeaklyConvexHeavyTailed}
+\caption{Weakly convex optimization with heavy-tailed noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeaklyConvexHeavyTailed.lean}{Weakly\allowbreak{}Convex\allowbreak{}Heavy\allowbreak{}Tailed}.}\label{tab:WeaklyConvexHeavyTailed}
 \parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $X$ is closed and convex, $x_0\in X$, and $f(y)\ge f(x)+\langle v(x),y-x\rangle-\frac{\rho}{2}\|y-x\|^2$ for $x,y\in X$, with $\|v(x)\|\le G$. A lower bound $\ell\le f|_X$ satisfies $f(x_0)-\ell\le\Delta$. The jointly measurable oracle uses IID samples, with $\mathbb{E} g(x,\xi)=v(x)$ and $\mathbb{E}\|g(x,\xi)-v(x)\|^\alpha\le\sigma^\alpha$ (the corresponding integrability holds); exact projection onto $X$ is available. Here $\rho,G,\varepsilon>0$, $\sigma,\Delta\ge0$, and $1<\alpha\le2$. Target: $\mathbb{E}\|2\rho(x_J-\widehat x_J)\|^2\le\varepsilon^2$ for a uniformly sampled iterate.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/WeaklyConvexClippedSubgradient.lean}{Weakly\allowbreak{}Convex\allowbreak{}Clipped\allowbreak{}Subgradient} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/WeaklyConvexClippedSubgradient.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/WeaklyConvexClippedSubgradient.lean}{Weakly\allowbreak{}Convex\allowbreak{}Clipped\allowbreak{}Subgradient} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/WeaklyConvexClippedSubgradient.md}{(review)}
 & $\mathcal{O}\!\Bigl(1+\frac{\rho\Delta(G^2+\sigma^\alpha G^{2-\alpha})}{\varepsilon^4} +\frac{\rho\Delta\sigma^{\alpha/(\alpha-1)}}{\varepsilon^{(3\alpha-2)/(\alpha-1)}}\Bigr)$
 & --- & --- \\
 \midrule[1.2pt]

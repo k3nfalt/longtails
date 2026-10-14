@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic nonconvex--strongly-concave minimax optimization with Lipschitz Hessian: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/StochasticHessianNcsc.lean}{Stochastic\allowbreak{}Hessian\allowbreak{}Ncsc}.}\label{tab:StochasticHessianNcsc}
+\caption{Stochastic nonconvex--strongly-concave minimax optimization with Lipschitz Hessian: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticHessianNcsc.lean}{Stochastic\allowbreak{}Hessian\allowbreak{}Ncsc}.}\label{tab:StochasticHessianNcsc}
 \parbox{\linewidth}{\footnotesize On finite-dimensional real inner-product spaces $E\times F$, $f$ is jointly $L$-smooth, $\mu$-strongly concave in $y$, and has $\rho$-Lipschitz $\nabla^2 f$. Assume $0<\mu\le L$, $\rho,\sigma,\varepsilon>0$, $\Delta,G\ge0$, $\Phi(x_0)-\inf_x\Phi(x)\le\Delta$, and $\|\nabla_y f(x_0,y_0)\|\le G$. Each call returns a jointly measurable, unbiased joint gradient with total variance at most $\sigma^2$, using fresh IID samples. Target: $\mathbb{E}\|\nabla\Phi(\widehat x)\|\le\varepsilon$, where $\Phi(x)=\max_y f(x,y)$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/HessianNcscImplicitTransport.lean}{Hessian\allowbreak{}Ncsc\allowbreak{}Implicit\allowbreak{}Transport} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/HessianNcscImplicitTransport.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HessianNcscImplicitTransport.lean}{Hessian\allowbreak{}Ncsc\allowbreak{}Implicit\allowbreak{}Transport} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HessianNcscImplicitTransport.md}{(review)}
 & $\begin{aligned}[t]
 \mathcal{O}\!\Bigl(&K^2(1+\sigma^2/\varepsilon^2) \cdot(1+\rho\varepsilon K/L^2)\\
 &\cdot\bigl[K\Delta\sqrt Q/\varepsilon+1+\sigma/\varepsilon\\

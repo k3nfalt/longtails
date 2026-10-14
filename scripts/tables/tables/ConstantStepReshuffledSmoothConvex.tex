@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Constant-step random reshuffling: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/ConstantStepReshuffledSmoothConvex.lean}{Constant\allowbreak{}Step\allowbreak{}Reshuffled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:ConstantStepReshuffledSmoothConvex}
+\caption{Constant-step random reshuffling: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConstantStepReshuffledSmoothConvex.lean}{Constant\allowbreak{}Step\allowbreak{}Reshuffled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:ConstantStepReshuffledSmoothConvex}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, $F=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, has convex components with $L_i$-Lipschitz gradients, $0\le L_i\le L_{\max}$ and $n^{-1}\sum_i L_i\le L_{\mathrm{avg}}$, where $0<L_{\mathrm{avg}}\le L_{\max}$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $n^{-1}\sum_i\|\nabla f_i(x_\star)\|^2\le\sigma^2$, with $R,\sigma\ge0$. Exact component gradients are queried. Target: $\mathbb{E}[F(\widehat x)-F(x_\star)]\le\varepsilon$, $\varepsilon>0$; \textbf{(1)} uses the raw final iterate after fresh uniform reshuffling each epoch and a constant positive step.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ReshuffledConstantStepLastIterate.lean}{Reshuffled\allowbreak{}Constant\allowbreak{}Step\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ReshuffledConstantStepLastIterate.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ReshuffledConstantStepLastIterate.lean}{Reshuffled\allowbreak{}Constant\allowbreak{}Step\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ReshuffledConstantStepLastIterate.md}{(review)}
 & $\mathcal{O}\!\left(n+(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\Lambda\right)$ & --- & --- \\
 \midrule[1.2pt]
 RR, averaged output \citep[Cor.~1]{Liu2026RRv1}\newline $E=\mathbb{R}^d$

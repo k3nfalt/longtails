@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/ConstrainedGeneralizedMonotone.lean}{Constrained\allowbreak{}Generalized\allowbreak{}Monotone}.}\label{tab:ConstrainedGeneralizedMonotone}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConstrainedGeneralizedMonotone.lean}{Constrained\allowbreak{}Generalized\allowbreak{}Monotone}.}\label{tab:ConstrainedGeneralizedMonotone}
 \parbox{\linewidth}{\footnotesize
 $E$ is a real inner product space; $X\subseteq E$ is convex with an exact projection oracle. The continuous, monotone $F:E\to E$ satisfies $\|F(x)-F(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|F(x+\theta(y-x))\|\le M$ for all $\theta\in[0,1]$. Here $L_0,R,\varepsilon>0$, $L_1,G,G_0\ge0$, $x_0\in X$, $\|F(x_0)\|\le G_0$, and some VI solution $x_\star\in X$ satisfies $\|x_0-x_\star\|\le R$ and $\|F(x_\star)\|\le G$. Target: return $x\in X$ with some $\xi\in N_X(x)$ satisfying $\|F(x)+\xi\|\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
@@ -10,7 +10,7 @@ $E$ is a real inner product space; $X\subseteq E$ is convex with an exact projec
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ConstrainedGeneralizedMonotone.lean}{Constrained\allowbreak{}Generalized\allowbreak{}Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews/ConstrainedGeneralizedMonotone.md}{(review)} &
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConstrainedGeneralizedMonotone.lean}{Constrained\allowbreak{}Generalized\allowbreak{}Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConstrainedGeneralizedMonotone.md}{(review)} &
 $\mathcal{O}\!\left(\begin{aligned}&\frac{(L_0+L_1G)(1+L_1R)R}{\varepsilon}\\&+(1+L_1R)^2(1+\ell)\end{aligned}\right)$ total $F$/projection calls & --- & --- \\
 \midrule[1.2pt]
 Projected/composite EAG \citep[v6, Thms.~E.4, 3.2]{cgmCai2024v6} &

@@ -63,4 +63,4 @@ This installs `tomlkit` for reading and updating TOML files. Additional tools de
 - Research and proposal runners require the selected agent CLI (`codex`, `omp`, or `claude`) and its authentication.
 - `scripts/run_results_table_prompt.py` requires `latexmk` and a TeX distribution with `pdflatex`, BibTeX, and the `amsmath`, `amssymb`, `array`, `booktabs`, `tabularx`, `threeparttable`, `textcomp`, `natbib`, `hyperref`, and `changepage` packages (for example, TeX Live or MacTeX).
 - `scripts/run_prompt_tmux.py` also requires a running tmux server and zsh. Its `--openrouter` mode requires `OPENROUTER_API_KEY`.
-- `scripts/generate_token.py` requires OpenSSL, curl, and a configured GitHub App private key.
+- `scripts/generate_token.py` requires OpenSSL, curl, a configured GitHub App private key, and `AUTO_MATH_BOT_INSTALLATION_ID` set to the installation ID for `k3nfalt` with access to `longtails`.

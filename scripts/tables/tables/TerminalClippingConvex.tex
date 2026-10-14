@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{High-probability convex optimization under distance-growing second moments: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/TerminalClippingConvex.lean}{Terminal\allowbreak{}Clipping\allowbreak{}Convex}.}\label{tab:TerminalClippingConvex}
+\caption{High-probability convex optimization under distance-growing second moments: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/TerminalClippingConvex.lean}{Terminal\allowbreak{}Clipping\allowbreak{}Convex}.}\label{tab:TerminalClippingConvex}
 \parbox{\linewidth}{\footnotesize Closed convex $X\subseteq\mathbb{R}^d$; measurable $f:\mathbb{R}^d\to\mathbb{R}$ convex on $X$; $x_0,x_\star\in X$, $x_\star\in\arg\min_X f$, $\|x_0-x_\star\|\le R$. IID samples feed a jointly measurable oracle with integrable values, $\mathbb{E} g(x)\in\partial_X f(x)$ and $\mathbb{E}\|g(x)\|^2\le B^2\|x-x_0\|^2+G^2$ for $x\in X$; exact measurable projection onto $X$ is available. Here $B,G,\varepsilon>0$, $R\ge0$, $0<\delta<1$. Target: $\mathbb{P}\{f(x_T)-f(x_\star)>\varepsilon\}\le\delta$ (last iterate).}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ClippedBgLastIterate.lean}{Clipped\allowbreak{}Bg\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ClippedBgLastIterate.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ClippedBgLastIterate.lean}{Clipped\allowbreak{}Bg\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ClippedBgLastIterate.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{(BR^2+G^2/B)^2\ell^2}{\varepsilon^2}\right)$; $T$ subgradients and $T$ projections.
 & --- & --- \\
 \midrule[1.2pt]

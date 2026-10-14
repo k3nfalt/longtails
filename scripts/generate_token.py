@@ -3,6 +3,7 @@
 Requires Python 3 and openssl; no pip packages or sudo.
 Key defaults to ~/.config/auto-math-bot/private-key.pem.
 Override with AUTO_MATH_BOT_KEY. Use an HTTPS Git remote.
+Set AUTO_MATH_BOT_INSTALLATION_ID to the installation ID for k3nfalt.
 Call this wrapper for EACH GitHub operation during long Codex runs.
 This changes authentication, not OS isolation. Do not run commands that
 dump their environment: it contains a secret token.
@@ -24,6 +25,13 @@ def b64(data):
 
 
 def installation_token():
+    installation_id = os.environ.get("AUTO_MATH_BOT_INSTALLATION_ID", "")
+    if (
+        not installation_id.isascii()
+        or not installation_id.isdecimal()
+        or int(installation_id) <= 0
+    ):
+        raise ValueError("Set AUTO_MATH_BOT_INSTALLATION_ID to a positive integer.")
     key = Path(
         os.environ.get("AUTO_MATH_BOT_KEY", "~/.config/auto-math-bot/private-key.pem")
     ).expanduser()
@@ -49,10 +57,10 @@ def installation_token():
     ).stdout
     jwt = message.decode() + "." + b64(signed)
     request = urllib.request.Request(
-        "https://api.github.com/app/installations/164786131/access_tokens",
+        f"https://api.github.com/app/installations/{installation_id}/access_tokens",
         data=json.dumps(
             {
-                "repositories": ["auto-math"],
+                "repositories": ["longtails"],
                 "permissions": {"contents": "write", "pull_requests": "write"},
             }
         ).encode(),

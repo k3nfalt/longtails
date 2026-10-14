@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Smooth convex optimization with noisy function values: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/ZerothOrderSmoothAndConvex.lean}{Zeroth\allowbreak{}Order\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:ZerothOrderSmoothAndConvex}
+\caption{Smooth convex optimization with noisy function values: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ZerothOrderSmoothAndConvex.lean}{Zeroth\allowbreak{}Order\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:ZerothOrderSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$, where $E$ is linearly isometric to $\mathbb{R}^d$, with $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. Each value query uses a fresh IID seed $\xi\sim p$; the jointly measurable oracle satisfies $\int g(x,z)\,dp(z)=f(x)$ and $\int(g(x,z)-f(x))^2\,dp(z)\le\sigma^2$, with integrable values and squared errors. Known parameters: $d\ge1$, $L,\varepsilon>0$, $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,10 +9,10 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedTwoPointZerothOrderConvex.lean}{Accelerated\allowbreak{}Two\allowbreak{}Point\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedTwoPointZerothOrderConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedTwoPointZerothOrderConvex.lean}{Accelerated\allowbreak{}Two\allowbreak{}Point\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedTwoPointZerothOrderConvex.md}{(review)}
 & $\mathcal{O}\!\Bigl(1+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+\sigma/\varepsilon)\Bigr)$ & --- & --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedZerothOrderConvex.lean}{Accelerated\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedZerothOrderConvex.md}{(review)}
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedZerothOrderConvex.lean}{Accelerated\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedZerothOrderConvex.md}{(review)}
 & $\mathcal{O}\!\Bigl(d+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+d\sigma/\varepsilon)\Bigr)$ & --- & --- \\
 \midrule[1.2pt]
 Derived bound: retuned two-point SGD \citep[Prop.~7]{zoBachPerchet2016}

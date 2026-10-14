@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Heavy-tailed Markov gradients for smooth convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean}{Heavy\allowbreak{}Tailed\allowbreak{}Markov\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:HeavyTailedMarkovSmoothAndConvex}
+\caption{Heavy-tailed Markov gradients for smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean}{Heavy\allowbreak{}Tailed\allowbreak{}Markov\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:HeavyTailedMarkovSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a second-countable real Hilbert space with its Borel structure; $\nabla f$ is $L$-Lipschitz and a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. A stationary Markov chain has invariant law $\pi$, kernel $\kappa$, and $\int \operatorname{TV}(\kappa^t(z,\cdot),\pi)\,d\pi(z)\le(1+t/\tau)^{-\beta}$ at every integer lag. The jointly measurable oracle satisfies $\int g(x,z)\,d\pi(z)=\nabla f(x)$ and $\int\|g(x,z)-\nabla f(x)\|^\alpha\,d\pi(z)\le\sigma^\alpha$, with the corresponding integrability conditions. Here $L,\tau,\beta,\varepsilon>0$, $R,\sigma\ge0$, and $1<\alpha\le2$. Target: $\mathbb{E}[f(y_N)-f(x_\star)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedHeavyTailedMarkovConvex.lean}{Accelerated\allowbreak{}Heavy\allowbreak{}Tailed\allowbreak{}Markov\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedHeavyTailedMarkovConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedHeavyTailedMarkovConvex.lean}{Accelerated\allowbreak{}Heavy\allowbreak{}Tailed\allowbreak{}Markov\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedHeavyTailedMarkovConvex.md}{(review)}
 & $\begin{aligned}\mathcal{O}\!\bigl(&(1+\sqrt{LR^2/\varepsilon}+S)\\ &\cdot[1+\tau(256LR^2/\varepsilon+64S)^{1/\beta}]\bigr)\end{aligned}$\newline All calls, including skipped transitions.
 & --- & --- \\
 \midrule[1.2pt]

@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Sample-gradient complexity for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/SampledSmoothConvex.lean}{Sampled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:SampledSmoothConvex}
+\caption{Sample-gradient complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SampledSmoothConvex.lean}{Sampled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:SampledSmoothConvex}
 \parbox{\linewidth}{\footnotesize On a separable real Hilbert space with its Borel $\sigma$-algebra, let $f(x)=\int F_\xi(x)\,dp(\xi)$, with $p$ a probability law and IID samples. Each $F_\xi$ is convex and differentiable with $L$-Lipschitz gradient; sample gradients are jointly measurable and losses are integrable at every point. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\int\|\nabla F_\xi(x_\star)\|^2\,dp(\xi)\le\sigma^2<\infty$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. Target: $\mathbb{E}[f(x_T)-f(x_\star)]\le\varepsilon$ for the last iterate.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/LinearDecaySgdLastIterate.lean}{Linear\allowbreak{}Decay\allowbreak{}Sgd\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/LinearDecaySgdLastIterate.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LinearDecaySgdLastIterate.lean}{Linear\allowbreak{}Decay\allowbreak{}Sgd\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LinearDecaySgdLastIterate.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
 & --- & --- \\
 \midrule[1.2pt]

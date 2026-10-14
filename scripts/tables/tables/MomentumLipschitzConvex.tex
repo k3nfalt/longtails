@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Constant-momentum stochastic optimization under the \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/MomentumLipschitzConvex.lean}{Momentum\allowbreak{}Lipschitz\allowbreak{}Convex} setup.}\label{tab:MomentumLipschitzConvex}
+\caption{Constant-momentum stochastic optimization under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MomentumLipschitzConvex.lean}{Momentum\allowbreak{}Lipschitz\allowbreak{}Convex} setup.}\label{tab:MomentumLipschitzConvex}
 \parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space with its Borel $\sigma$-algebra; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. The jointly measurable oracle $g(x,\xi)$ uses IID samples, with $\mathbb{E} g(x,\xi)\in\partial f(x)$ and integrable squared norm satisfying $\mathbb{E}\|g(x,\xi)\|^2\le G^2$. Given $G>0$, $R\ge0$, $0\le\beta<1$, and $\varepsilon>0$, the target is $\mathbb{E}[f(x_N)-f(x_\star)]\le\varepsilon$ for the last iterate of constant EMA momentum.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ConstantMomentumLastIterate.lean}{Constant\allowbreak{}Momentum\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ConstantMomentumLastIterate.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConstantMomentumLastIterate.lean}{Constant\allowbreak{}Momentum\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConstantMomentumLastIterate.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}+\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}\right)$
 & --- & --- \\
 \midrule[1.2pt]

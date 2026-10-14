@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Convex optimization under generalized smoothness: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/GeneralizedSmoothAndConvex.lean}{Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:GeneralizedSmoothAndConvex}
+\caption{Convex optimization under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothAndConvex.lean}{Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:GeneralizedSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a real Hilbert space, with differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ everywhere; $L_0,R,\Delta,\varepsilon>0$, $L_1\ge0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. Exact gradient access; target $f(x_K)-f(x_\star)\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,14 +9,14 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean}{Generalized\allowbreak{}Self\allowbreak{}Normalized\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GeneralizedSelfNormalizedConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean}{Generalized\allowbreak{}Self\allowbreak{}Normalized\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedSelfNormalizedConvex.md}{(review)}
 & $\begin{aligned}[t]
 &\mathcal{O}\!\Bigl(1+\sqrt{L_0R^2/\varepsilon}\\
 &\quad+\min\{\lceil q^{2/3}\rceil\ell, \ell+(q\ell)^{2/3}\}\Bigr)
 \end{aligned}$ gradients
 & --- & --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/GeneralizedAcceleratedConvex.lean}{Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/GeneralizedAcceleratedConvex.md}{(review)}
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedAcceleratedConvex.lean}{Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedAcceleratedConvex.md}{(review)}
 & $\mathcal{O}\!\bigl(1+\sqrt{L_0R^2/\varepsilon}+\lceil q^{2/3}\rceil\ell\bigr)$ gradients
 & --- & --- \\
 \midrule[1.2pt]

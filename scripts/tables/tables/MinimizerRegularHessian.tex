@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Exact-gradient optimization with minimizer-anchored Hessian regularity: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/MinimizerRegularHessian.lean}{Minimizer\allowbreak{}Regular\allowbreak{}Hessian}.}\label{tab:MinimizerRegularHessian}
+\caption{Exact-gradient optimization with minimizer-anchored Hessian regularity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MinimizerRegularHessian.lean}{Minimizer\allowbreak{}Regular\allowbreak{}Hessian}.}\label{tab:MinimizerRegularHessian}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space of finite dimension $d\ge1$, $f$ and $\nabla f$ are differentiable, $f$ is $\mu$-strongly convex, and $\nabla f$ is $L$-Lipschitz. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\|\nabla^2 f(x)-\nabla^2 f(x_\star)\|\le M\|x-x_\star\|$ for every $x$. Parameters $0<\mu\le L$, $M\ge0$, $R>0$, and $\varepsilon>0$ are known. Count exact gradient calls; target $f(\widehat x)-f(x_\star)\le\varepsilon$ deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SpectralGradientQuadraticConvergence.lean}{Spectral\allowbreak{}Gradient\allowbreak{}Quadratic\allowbreak{}Convergence} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/SpectralGradientQuadraticConvergence.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SpectralGradientQuadraticConvergence.lean}{Spectral\allowbreak{}Gradient\allowbreak{}Quadratic\allowbreak{}Convergence} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SpectralGradientQuadraticConvergence.md}{(review)}
 & $\begin{aligned}\mathcal{O}\!\Bigl(&\kappa\Bigl[1+\log\!\Bigl(1 +\frac{(d+1)^2(2\kappa)^{2d}MLR}{\mu^2}\Bigr)\Bigr]\\&+d[1+\log(1+\ell)]\Bigr)\end{aligned}$
 & --- & --- \\
 \midrule[1.2pt]

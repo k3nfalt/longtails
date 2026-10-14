@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Exact-value optimization under \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean}{Zeroth\allowbreak{}Order\allowbreak{}Matrix\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:ZerothOrderMatrixGeneralizedSmooth}
+\caption{Exact-value optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean}{Zeroth\allowbreak{}Order\allowbreak{}Matrix\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:ZerothOrderMatrixGeneralizedSmooth}
 \parbox{\linewidth}{\footnotesize Convex $f:\mathbb{R}^d\to\mathbb{R}$ has a differentiable gradient and a minimizer $x_\star$, with $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. An unknown symmetric matrix satisfies $0\prec H\preceq I$, $\operatorname{tr}H\le r$, and $\nabla^2 f(x)\preceq(L_0+L_1\|\nabla f(x)\|_{H^{-1}})H$. Here $d\ge1$, $L_0,r,R,\Delta,\varepsilon>0$, $L_1\ge0$, and $0<\delta<1$. Our oracle returns exact function values; the target is $\mathbb{P}[f(\widehat x)-f(x_\star)>\varepsilon]\le\delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/ZerothOrderMatrixGeneralizedAccelerated.lean}{Zeroth\allowbreak{}Order\allowbreak{}Matrix\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/ZerothOrderMatrixGeneralizedAccelerated.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ZerothOrderMatrixGeneralizedAccelerated.lean}{Zeroth\allowbreak{}Order\allowbreak{}Matrix\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ZerothOrderMatrixGeneralizedAccelerated.md}{(review)}
 & $\mathcal{O}\!\left(b\left[\begin{aligned}&\sqrt{d(r+1)L_0R^2/\varepsilon}\\[-2pt]&+(r+1+L_1R\sqrt{d(r+1)})\ell\end{aligned}\right]\right)$\par Function values, including all trials and output selection.
 & --- & --- \\
 \midrule[1.2pt]

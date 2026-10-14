@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Parameter-free generalized-smooth convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/GeneralizedSmoothParameterFree.lean}{Generalized\allowbreak{}Smooth\allowbreak{}Parameter\allowbreak{}Free}.}\label{tab:GeneralizedSmoothParameterFree}
+\caption{Parameter-free generalized-smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothParameterFree.lean}{Generalized\allowbreak{}Smooth\allowbreak{}Parameter\allowbreak{}Free}.}\label{tab:GeneralizedSmoothParameterFree}
 \parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a real Hilbert space, with differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ everywhere; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. Here $L_0,R,\Delta,\varepsilon,h_0>0$ and $L_1\ge0$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$. In \textbf{(1)}, updates receive only $(x_0,h_0)$; the stopping budget depends on $L_0,L_1,R,\Delta,\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/BacktrackingGeneralizedAccelerated.lean}{Backtracking\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/BacktrackingGeneralizedAccelerated.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BacktrackingGeneralizedAccelerated.lean}{Backtracking\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BacktrackingGeneralizedAccelerated.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned} &\sqrt{L_0R^2/\varepsilon}\\ &+(1+q)\log\bigl(2+q+(L_0h_0)^{-1}\\ &\qquad+L_0h_0+L_1^2\Delta/L_0 +L_1^2\Delta h_0\bigr)\end{aligned}\right)$\par Gradient calls, including rejected trials.
 & --- & --- \\
 \midrule[1.2pt]

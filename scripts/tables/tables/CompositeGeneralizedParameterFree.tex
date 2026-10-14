@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/CompositeGeneralizedParameterFree.lean}{Composite\allowbreak{}Generalized\allowbreak{}Parameter\allowbreak{}Free}.}\label{tab:CompositeGeneralizedParameterFree}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGeneralizedParameterFree.lean}{Composite\allowbreak{}Generalized\allowbreak{}Parameter\allowbreak{}Free}.}\label{tab:CompositeGeneralizedParameterFree}
 \parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f$ is convex with continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|\nabla f\|\le M$ on $[x,y]$. The finite-valued $\psi$ is convex on $Q$; exact gradients and exact proximal minimization over $Q$ are available. For $x_0\in Q$, some minimizer $x_\star\in Q$ satisfies $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$. Here $h_0,L_0,R,\Delta,\varepsilon>0$ and $L_1,G\ge0$. Target: $\widehat x\in Q$ with $F(\widehat x)-F(x_\star)\le\varepsilon$. Costs count individual oracle calls, including rejected trials.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/BacktrackingCompositeGeneralized.lean}{Backtracking\allowbreak{}Composite\allowbreak{}Generalized} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/BacktrackingCompositeGeneralized.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BacktrackingCompositeGeneralized.lean}{Backtracking\allowbreak{}Composite\allowbreak{}Generalized} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BacktrackingCompositeGeneralized.md}{(review)}
 & $\begin{gathered}
 \mathcal{O}\!\Bigl(\sqrt{L_\star R^2/\varepsilon}
 \\ +(1+r)\log\bigl(2+r+(L_\star h_0)^{-1}

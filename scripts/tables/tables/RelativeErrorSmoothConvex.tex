@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Relative-error convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/RelativeErrorSmoothConvex.lean}{Relative\allowbreak{}Error\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:RelativeErrorSmoothConvex}
+\caption{Relative-error convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeErrorSmoothConvex.lean}{Relative\allowbreak{}Error\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:RelativeErrorSmoothConvex}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space $E$, $f$ is differentiable and convex, with $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\frac L2\|y-x\|^2$, $L>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$, $R\ge0$. Every oracle reply obeys $\|g-\nabla f(x)\|\le\alpha\|\nabla f(x)\|$, $0\le\alpha<1$, and may depend on the call index and seed. Target: $f(x_N)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, for every seed.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedRelativeErrorConvex.lean}{Accelerated\allowbreak{}Relative\allowbreak{}Error\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedRelativeErrorConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedRelativeErrorConvex.lean}{Accelerated\allowbreak{}Relative\allowbreak{}Error\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedRelativeErrorConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{(1-\alpha)\varepsilon}}+\frac{\alpha^2LR^2}{(1-\alpha)\varepsilon}\right)$ & --- & --- \\
 \midrule[1.2pt]
 Regularized RE-AGM \citep[Thm.~7.2, v1]{vasinGasnikov2026RelativeV1}; Derived bound, $E=\mathbb{R}^n$

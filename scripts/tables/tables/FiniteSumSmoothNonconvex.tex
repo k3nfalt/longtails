@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Finite-sum nonconvex stationarity: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/FiniteSumSmoothNonconvex.lean}{Finite\allowbreak{}Sum\allowbreak{}Smooth\allowbreak{}Nonconvex}.}\label{tab:FiniteSumSmoothNonconvex}
+\caption{Finite-sum nonconvex stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumSmoothNonconvex.lean}{Finite\allowbreak{}Sum\allowbreak{}Smooth\allowbreak{}Nonconvex}.}\label{tab:FiniteSumSmoothNonconvex}
 \parbox{\linewidth}{\footnotesize Let $F=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space $E$ equipped with a measurable structure, with differentiable $f_i$, $n\ge1$, $L>0$, $\Delta\ge0$, and $\varepsilon>0$. Assume $n^{-1}\sum_i\|\nabla f_i(x)-\nabla f_i(y)\|^2\le L^2\|x-y\|^2$ for all $x,y$, and $F\ge\ell$ with $F(x_0)-\ell\le\Delta$. Queries return exact component gradients. Target: measurable $X$ with integrable squared gradient and $\mathbb{E}\|\nabla F(X)\|^2\le\varepsilon^2$; convexity and an attained minimum are not required.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,7 +9,7 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/RecursiveGradientNonconvex.lean}{Recursive\allowbreak{}Gradient\allowbreak{}Nonconvex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/RecursiveGradientNonconvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecursiveGradientNonconvex.lean}{Recursive\allowbreak{}Gradient\allowbreak{}Nonconvex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecursiveGradientNonconvex.md}{(review)}
 & $\mathcal{O}\!(n+\sqrt n\,L\Delta/\varepsilon^2)$\par Deterministic call budget; with-replacement batches.
 & --- & --- \\
 \midrule[1.2pt]

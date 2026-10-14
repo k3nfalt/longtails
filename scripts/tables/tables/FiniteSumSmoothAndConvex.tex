@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Finite-sum convex optimization: \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Setups/FiniteSumSmoothAndConvex.lean}{Finite\allowbreak{}Sum\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteSumSmoothAndConvex}
+\caption{Finite-sum convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumSmoothAndConvex.lean}{Finite\allowbreak{}Sum\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteSumSmoothAndConvex}
 \parbox{\linewidth}{\footnotesize Let $F=n^{-1}\sum_{i=1}^{n}f_i$ on a real Hilbert space $E$ with a measurable-space structure. Each $f_i$ is convex with $L$-Lipschitz gradient; $n\ge1$, $L>0$, $R\ge0$, and $\varepsilon>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. One oracle call returns one exact component gradient. The target is a measurable output $\widehat x$ with integrable gap and $\mathbb{E}[F(\widehat x)-F(x_\star)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,11 +9,11 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/AcceleratedFiniteSumConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedFiniteSumConvex.md}{(review)}
 & $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
 & --- & --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/OptaResearch/auto-math/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/OptaResearch/auto-math/blob/main/scripts/reviews_after_review/SvrgConvex.md}{(review)}
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SvrgConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+n\log\!\left(1+\frac{LR^2}{\varepsilon}\right)+\frac{LR^2}{\varepsilon}\right)$
 & --- & --- \\
 \midrule[1.2pt]
