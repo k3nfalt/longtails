@@ -18,7 +18,7 @@ $x_{\mathrm{out}}$ satisfying $f(x_{\mathrm{out}})-f(x^\star)\le\varepsilon$.
 
 **Complexity.** A classical accelerated gradient method achieves this accuracy using
 ```math
-\textbf{Complexity} = O\left(\sqrt{\frac{LR^2}{\varepsilon}}\right).
+\textbf{Complexity} = O\left(\sqrt{\frac{LR^2}{\varepsilon}}\right)
 ```
 gradient queries. Here $L>0$, $\varepsilon>0$, and $R\ge0$ bounds the initial distance to a minimizer:
 $\lVert x_0-x^\star\rVert\le R$.
