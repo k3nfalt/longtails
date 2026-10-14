@@ -76,7 +76,7 @@ def main(argv=None):
             if not (reviews / f"{path.stem}.md").exists()
             and not (reviews / f"{path.stem}.md").is_symlink()
         ]
-    logs = Path(tempfile.mkdtemp(prefix="auto-math-reviews-"))
+    logs = Path(tempfile.mkdtemp(prefix="longtails-reviews-"))
     print(f"Logs: {logs}", flush=True)
     prompt = (scripts / "novelty_prompt.md").read_text(encoding="utf-8")
     command = {

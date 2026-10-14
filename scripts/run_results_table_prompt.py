@@ -328,7 +328,7 @@ def main(argv=None):
         ]
         + (["-c", "features.network_proxy=false"] if args.dangerous else []),
     }[args.agent]
-    temporary = Path(tempfile.mkdtemp(prefix="auto-math-table-"))
+    temporary = Path(tempfile.mkdtemp(prefix="longtails-table-"))
     print(f"Logs and row data: {temporary}", flush=True)
     try:
         rows = split_tables(read_tables(table)) if table.exists() else []

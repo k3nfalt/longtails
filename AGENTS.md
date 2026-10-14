@@ -1,4 +1,4 @@
-# auto-math
+# longtails
 
 Read these instructions before working in this repository. They record the user's
 project preferences; newer explicit user requests take precedence.

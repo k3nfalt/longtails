@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run one command with a fresh auto-math-bot installation token.
+"""Run one command with a fresh GitHub App installation token for LongTails.
 Requires Python 3 and openssl; no pip packages or sudo.
 Key defaults to ~/.config/auto-math-bot/private-key.pem.
 Override with AUTO_MATH_BOT_KEY. Use an HTTPS Git remote.
@@ -68,7 +68,7 @@ def installation_token():
             "Authorization": f"Bearer {jwt}",
             "Accept": "application/vnd.github+json",
             "Content-Type": "application/json",
-            "User-Agent": "auto-math-bot-token-launcher",
+            "User-Agent": "longtails-bot-token-launcher",
         },
         method="POST",
     )
