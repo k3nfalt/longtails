@@ -31,7 +31,7 @@ Similarly, one can consider other **Setups** with different assumptions, oracles
 
 **LongTails** is a Lean 4 framework built for this goal. You choose a **Setup**, and our *framework guarantees* that the proved **Complexity** is correct: no extra assumptions, no uncounted oracle calls, no gaps in the proof.
 
-Here is how this works for the example above. Its **Setup** is defined in
+Here is how this works for the example above. A summary is presented on our [website](https://k3nfalt.github.io/longtails/#SmoothAndConvex). Its **Setup** is defined in
 [SmoothAndConvex.lean](LongTails/Setups/SmoothAndConvex.lean).
 It might look intimidating if you're new to Lean 4 or LongTails, but we'll show you how simple it is.
 
@@ -97,6 +97,8 @@ Tyurin's bound counts gradient queries and is specialized to the same initial di
 
 Ignoring logarithmic factors, we improve Tyurin's **$L_1R$ term to $(L_1R)^{2/3}$** and remove Vankov et al.'s **$(1+\nu)$ factor**.
 Achieving this complexity using only gradient queries was an open problem.
+
+A summary of this setup and its complexity bounds is presented on our [website](https://k3nfalt.github.io/longtails/#GeneralizedSmoothAndConvex).
 
 Explore more [setups](LongTails/Setups/) and [complexity bounds](LongTails/Theorems/) in the repository and on our [website](https://k3nfalt.github.io/longtails/).
 

@@ -61,7 +61,7 @@
     .budget-formula{padding:12px 0;background:#fff;overflow-x:auto;font-size:18px;scrollbar-width:thin;scrollbar-color:#c7d0df transparent}
     .budget-formula p{margin:0}.budget-formula math{margin:0;text-align:center}.budget-formula math+math{margin-top:16px}
     .budgets>p{font-size:14px;color:var(--muted);padding:0;margin:0}
-    .budget summary,.references-empty{font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.budget summary{cursor:pointer}.budget summary:hover{color:var(--accent)}.budget summary::marker{font-size:10px;color:#8a98ab}
+    .budget summary{font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.budget summary{cursor:pointer}.budget summary:hover{color:var(--accent)}.budget summary::marker{font-size:10px;color:#8a98ab}
     .comparison{margin-top:0}.comparison>summary{cursor:pointer;font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.comparison>summary:hover{color:var(--accent)}.comparison-scroll{overflow-x:auto;font-size:14px;line-height:1.6}.comparison table{width:100%!important;min-width:900px;border-collapse:collapse;margin:16px 0}.comparison th,.comparison td{padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}.comparison th{background:#f3f6fb}.comparison td p{margin:0 0 8px}.comparison a{color:var(--accent)}.comparison .references{margin-top:20px;font-size:13px}.comparison .csl-entry{margin-bottom:10px}
     .theorem-name{font:11px/1.7 var(--mono);overflow-wrap:anywhere;color:var(--muted);margin:4px 0 10px}
     .references-text{font-size:14px;line-height:1.65;overflow-wrap:anywhere}.references-text p{margin:0 0 .8em}.references-text p:last-child{margin-bottom:0}.references-text a{color:var(--accent);text-underline-offset:3px}.references-text math[display="block"]{overflow-x:auto;max-width:100%}
@@ -165,9 +165,7 @@
           formula.tabIndex = 0;formula.setAttribute('aria-label', 'Proved budget formula');
           entry.append(formula);
         }
-        if (theorem.referencesHtml === '') {
-          entry.append(make('div', 'Relevant Previous Results: No matching prior reference found.', 'references-empty'));
-        } else {
+        if (theorem.referencesHtml !== '') {
           const references = make('details');
           references.append(make('summary', 'Relevant Previous Results'));
           const text = make('div', undefined, 'references-text');
