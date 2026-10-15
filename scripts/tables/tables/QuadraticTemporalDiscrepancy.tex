@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Quadratics with bounded temporal discrepancy: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticTemporalDiscrepancy.lean}{QuadraticTemporalDiscrepancy}.}\label{tab:QuadraticTemporalDiscrepancy}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f(x)=\tfrac12\|A(x-x_\star)\|^2$ for a bounded linear operator $A$, with $\mu\|v\|^2\le\|Av\|^2\le L\|v\|^2$ for every $v$, $0<\mu\le L$, and $f(x_0)\le\Delta$. Call $k$ returns $A^*A(x-x_\star)+e_k$, where the deterministic errors are query-independent and $\sup_n\|\sum_{k<n}e_k\|\le D$. Here $D,\Delta\ge0$, $\varepsilon>0$; the target is $f(x_{\rm out})-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/TemporalAcceleratedQuadratic.lean}{Temporal\allowbreak{}Accelerated\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/TemporalAcceleratedQuadratic.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell+\frac{D}{\sqrt{\mu\varepsilon}}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+derived bound: batching and dilation, \citep[Prop.~4]{hltdSchmidt2011v2}; Hilbert-space extension
+& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell+\frac{D}{\sqrt{\mu\varepsilon}}\right)$; includes initial batch
+& \textbf{(1)}: i) Matches known rate.\newline ii) No precision-dependent dilation.\newline iii) Updates need no $D,\varepsilon$; stopping still does.
+& \textbf{(1)}: tail average instead of last iterate. \\
+\midrule
+derived bound: batching only, \citep[Prop.~4]{hltdSchmidt2011v2}; Hilbert-space extension
+& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell\left[1+\frac{\sqrt{\kappa}D}{\sqrt{\mu\varepsilon}}\right]\right)$, $\varepsilon<\Delta$; counts all batch calls
+& \textbf{(1)}: i) Discrepancy term $D/\sqrt{\mu\varepsilon}$ instead of $\kappa\ell D/\sqrt{\mu\varepsilon}$; gain for $D\ge\sqrt{\mu\varepsilon}$, $L\gg\mu$, $\varepsilon<\Delta$.\newline ii) Updates need no $D,\varepsilon$; stopping still does.
+& \textbf{(1)}: tail average instead of last iterate. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=\log(1+\Delta/\varepsilon)$; $\Delta$ is the initial objective-gap bound; $D$ bounds cumulative error; complexity counts primitive gradient-oracle calls. Hilbert-space extension denotes the inner-product extension of the cited finite-dimensional proposition. For \textbf{(1)}, $x_{\rm out}=K^{-1}\sum_{k=K+1}^{2K}x_k$, with $2K$ calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

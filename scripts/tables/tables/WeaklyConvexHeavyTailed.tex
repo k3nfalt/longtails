@@ -15,15 +15,15 @@
 \midrule[1.2pt]
 Clip-SGD \citep[Thm.~5, Eq.~(27)]{wchtZhu2025v1}; $\eta_0=1$, batch size $1$. Requires bounded all subgradients, attained minimum, $X\subset\operatorname{int}(\operatorname{dom}f)$
 & $\begin{aligned}\mathcal{O}\!\Bigl(1&+\frac{(\Delta+G+\rho)^2G^2}{\varepsilon^4}\\&+\Bigl(\frac{(\Delta+G+\rho)\sigma}{\varepsilon^2}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr)\end{aligned}$
-& \textbf{(1)}: Noise exponent $\frac{3\alpha-2}{\alpha-1}$ instead of $\frac{2\alpha}{\alpha-1}$; smaller noise term if $\sigma>0$ and $\varepsilon^{(2-\alpha)/(\alpha-1)}<\frac{(\Delta+G+\rho)^{\alpha/(\alpha-1)}}{\rho\Delta}$ ($\Delta>0$). Method-specific gain for $\alpha<2$; none in the exponent at $\alpha=2$.
+& \textbf{(1)}: noise exponent $\frac{3\alpha-2}{\alpha-1}$ instead of $\frac{2\alpha}{\alpha-1}$; smaller noise term if $\sigma>0$ and $\varepsilon^{(2-\alpha)/(\alpha-1)}<\frac{(\Delta+G+\rho)^{\alpha/(\alpha-1)}}{\rho\Delta}$ ($\Delta>0$). Method-specific gain for $\alpha<2$; none in the exponent at $\alpha=2$.
 & \textbf{(1)}: needs $\rho,\Delta,\varepsilon$ in addition for tuning. Expectation only; baseline also gives high-probability bounds. Deterministic coefficients not comparable: baseline coefficient is dimensionally inhomogeneous. \\
 \midrule
-Derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; $X=\mathbb{R}^d$, closed-form ball projection
+derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; $X=\mathbb{R}^d$, closed-form ball projection
 & $\mathcal{O}\!\Bigl(\Bigl(1+\frac{\rho\Delta}{\varepsilon^2}\Bigr) \cdot\Bigl[1+\frac{G^2}{\varepsilon^2}+\Bigl(\frac{\sigma}{\varepsilon}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr]\Bigr)$
-& \textbf{(1)}: Matches known rate for $\varepsilon<2G$, $\varepsilon^2\le\rho\Delta$; single loop instead of nested loops. Scope: also constrained $X$ with only $\Pi_X$.
+& \textbf{(1)}: matches known rate for $\varepsilon<2G$, $\varepsilon^2\le\rho\Delta$; single loop instead of nested loops. Scope: also constrained $X$ with only $\Pi_X$.
 & --- \\
 \midrule
-Derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; bounded $X$, diameter $D$, only $\Pi_X$
+derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; bounded $X$, diameter $D$, only $\Pi_X$
 & $\begin{aligned}\mathcal{O}\!\Bigl(&\Bigl(1+\frac{\rho\Delta}{\varepsilon^2}\Bigr)\\&\cdot\Bigl[1+\frac{(G+\rho D)^2}{\varepsilon^2}+\Bigl(\frac{\sigma}{\varepsilon}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr]\Bigr)\end{aligned}$
 & \textbf{(1)}: i) For $\varepsilon<2G$, $\varepsilon^2\le\rho\Delta$: $G^2$ instead of $(G+\rho D)^2$; same leading noise term. Gain in deterministic term when $\rho D>G$.\newline ii) Scope: unbounded constrained $X$ with only $\Pi_X$; reduction there unresolved.
 & --- \\

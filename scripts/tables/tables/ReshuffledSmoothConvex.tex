@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ReshuffledSmoothConvex.lean}{ReshuffledSmoothConvex}.}\label{tab:ReshuffledSmoothConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, minimize $f=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, with convex differentiable $f_i$ and $L_i$-Lipschitz gradients, $0\le L_i\le L_{\max}$, $n^{-1}\sum_i L_i\le L_{\mathrm{avg}}\le L_{\max}$, $L_{\mathrm{avg}}>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $n^{-1}\sum_i\|\nabla f_i(x_\star)\|^2\le\sigma^2$, with $R,\sigma\ge0$. Exact component gradients are available. The setup restricts algorithms to random reshuffling; \textbf{(1)} uses horizon-dependent linear decay. Target: $\int [f(x_{\rm out}(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ReshuffledLinearDecayLastIterate.lean}{Reshuffled\allowbreak{}Linear\allowbreak{}Decay\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ReshuffledLinearDecayLastIterate.md}{(review)} & $\mathcal{O}\!\left(n+\frac{n\sqrt{L_{\mathrm{avg}} L_{\max}}R^2}{\varepsilon}+\frac{\sigma R^2\sqrt{nL_{\mathrm{avg}}}}{\varepsilon^{3/2}}\right)$ & --- & --- \\
+\midrule[1.2pt]
+Constant-step RR \citep[Thm.~C.1]{LiuZhou2024Shufflev3}\newline $E=\mathbb{R}^d$, $\psi=0$ & $\mathcal{O}\!\left(\begin{aligned}&n+\sqrt{\Lambda}\Bigl[\frac{n\sqrt{L_{\mathrm{avg}}L_{\max}}R^2}{\varepsilon}\\&\qquad+\frac{\sigma R^2\sqrt{nL_{\mathrm{avg}}}}{\varepsilon^{3/2}}\Bigr]\end{aligned}\right)$ & \textbf{(1)}: removes $\sqrt{\Lambda}$ from initialization and noise terms for RR's last iterate; asymptotic gain, no constant-factor crossover established. & \textbf{(1)}: no composite $\psi$; only uniform RR. Linear decay instead of constant steps; no tuning-knowledge gain. \\
+\midrule
+Averaged RR \citep[Cor.~1]{rscLiu2026v1}\newline $E=\mathbb{R}^d$ & $\mathcal{O}\!\left(\begin{aligned}&n+\frac{L_{\max}R^2}{\varepsilon}\\[-2pt]&+\min\!\left\{\frac{\sigma^2R^2}{\varepsilon^2},\frac{\sigma R^2\sqrt{nL_{\mathrm{avg}}}}{\varepsilon^{3/2}}\right\}\end{aligned}\right)$ & \textbf{(1)}: last iterate instead of weighted averaging; the averaged guarantee does not imply last-iterate accuracy. & \textbf{(1)}: initialization term multiplied by $n\sqrt{L_{\mathrm{avg}}/L_{\max}}$ (worse when $L_{\max}<n^2L_{\mathrm{avg}}$); noise term no smaller. \\
+\midrule
+Full-gradient GD \citep[Cor.~2.1.2]{rscNesterov2018}\newline $E=\mathbb{R}^d$; outside RR restriction & $\mathcal{O}\!\left(n+\frac{nL_{\mathrm{avg}} R^2}{\varepsilon}\right)$ & \textbf{(1)}: no established improvement; matches this rate when $\sigma=0$ and $L_{\mathrm{avg}}\asymp L_{\max}$. & \textbf{(1)}: initialization term multiplied by $\sqrt{L_{\max}/L_{\mathrm{avg}}}\ge1$; additional $\sigma$ term and tuning dependence. \\
+\midrule
+Full-gradient AGD \citep[Thm.~2.2.2]{rscNesterov2018}\newline $E=\mathbb{R}^d$; outside RR restriction & $\mathcal{O}\!\left(n+n\sqrt{\frac{L_{\mathrm{avg}} R^2}{\varepsilon}}\right)$ & \textbf{(1)}: no established improvement on the common finite-sum problem with the same component oracle. & \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-1/2}$ initialization dependence; additional $L_{\max},\sigma$ dependence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L_{\mathrm{avg}}$: average component smoothness; $L_{\max}$: maximum component smoothness; $R$ is the initial-distance bound, $\sigma^2$ the component-gradient second-moment bound at $x_\star$; $P$ is the underlying probability measure. RR: random reshuffling; GD: gradient descent; AGD: accelerated gradient descent. Costs count component-gradient calls: one epoch or full gradient costs $n$. $\psi$ denotes a convex composite term. $\Lambda=1+\log\!\left(1+\sqrt{L_{\mathrm{avg}} L_{\max}}R^2/\varepsilon+\sigma R^2\sqrt{L_{\mathrm{avg}}/n}/\varepsilon^{3/2}\right)$, equivalent up to universal factors to $1+\log K$ at a sufficient baseline epoch count $K$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

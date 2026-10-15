@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Interpolating quadratics with Markov sampling (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MarkovQuadraticInterpolation.lean}{MarkovQuadraticInterpolation}).}\label{tab:MarkovQuadraticInterpolation}
+\parbox{\linewidth}{\footnotesize On a real separable Hilbert space with its Borel measurable structure, let $0\preceq H_i=H_i^*\preceq LI$ for finitely many states and $f(x)-f(u)=\frac12\sum_i\pi_i\langle x-u,H_i(x-u)\rangle$, with $\|x_0-u\|\le R$. The oracle returns $H_{s_t}(x-u)$ along a Markov chain with arbitrary initial law, stationary distribution $\pi$, and $\kappa(i,\cdot)\ge\alpha\pi$. Here $L>0$, $R\ge0$, $0<\alpha\le1$, and $\varepsilon>0$; $L,\alpha$ are public. Target: $\mathbb{E}[f(\widehat x)-f(u)]\le\varepsilon$. The setup permits any output; \textbf{(1)} constructs constant-step SGD and returns its last iterate.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MarkovQuadraticLastIterate.lean}{Markov\allowbreak{}Quadratic\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MarkovQuadraticLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\alpha\varepsilon}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Averaged SGD\newline derived bound
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\alpha\varepsilon}\right)$
+& \textbf{(1)}: matches known rate; last iterate instead of averaging. No problem-class complexity gain.
+& \textbf{(1)}: much larger proved constant; needs $\alpha$ in the step, not just the budget; additionally requires stationarity of $\pi$. \\
+\midrule
+Thinned SGD\newline derived bound \citep{mqiNagaraj2020,mqiDerezinskiDong2026v1}\newline Finite-dimensional restriction
+& $\mathcal{O}\!\left(\left(1+\frac{LR^2}{\alpha\varepsilon}\right)\log\!\left(2+\frac{LR^2}{\varepsilon}\right)\right)$\newline Includes all discarded transitions.
+& \textbf{(1)}: i) Removes $\log(2+LR^2/\varepsilon)$ for last-iterate accuracy.\newline ii) Uses every sample. Method-specific gain; averaging already matches the rate.
+& \textbf{(1)}: Literal-budget gain only when $\log(LR^2/\varepsilon)\gtrsim10^{15}$; no reduction in knowledge of $\alpha$. \\
+\midrule
+SGD \citep[Theorem~5.6]{mqiEven2023}\newline Finite-dimensional; every $H_i\succeq\mu I$, $\mu>0$
+& $\mathcal{O}\!\left(\frac{L}{\mu}\log\!\left(2+\frac{LR^2}{\varepsilon}\right)\right)$\newline Arbitrary sampling order.
+& \textbf{(1)}: scope: permits singular components and infinite-dimensional spaces. On the overlap, asymptotic rate gain requires $\mu R^2\ll\alpha\varepsilon\log(2+LR^2/\varepsilon)$.
+& \textbf{(1)}: requires refresh; inverse-accuracy rather than logarithmic dependence at fixed $\mu>0$. No uniform dominance; much larger proved constant. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $H_i$: component Hessian; $\pi_i=\pi(\{i\})$; $u$: common minimizer; $R$: initial-distance bound; $\alpha$: refresh lower bound; $\mu$: component strong-convexity lower bound; $\widehat x$: output; $\mathbb{E}$: expectation over the sampled path. Costs count primitive component-gradient calls, including skipped transitions; $\ll$ denotes an asymptotically vanishing ratio.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

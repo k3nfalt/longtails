@@ -1,0 +1,51 @@
+\begin{table}[tp]
+\centering
+\caption{Cohypomonotone equations with Jacobian-adjoint access (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneAdjoint.lean}{CohypomonotoneAdjoint}).}\label{tab:CohypomonotoneAdjoint}
+\parbox{\linewidth}{\footnotesize
+On a finite-dimensional real inner product space, $F$ is differentiable and $L$-Lipschitz, $DF$ is $L_2$-Lipschitz, and $\langle F(x)-F(y),x-y\rangle\ge-\rho\|F(x)-F(y)\|^2$ for all $x,y$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$, with $L>0$, $L_2,\rho,R\ge0$. Exact queries return $F(x)$ or $DF(x)^\top w$. The target is $\|F(\widehat x)\|\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAcceleratedCohypomonotone.lean}{Adjoint\allowbreak{}Accelerated\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAcceleratedCohypomonotone.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&(LR/\varepsilon+1+\rho L)h\\&{}+(1+\rho L)^5h\,\frac{L_2R}{L}\ell^2\end{aligned}\right)$
+& --- & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAnchoredCohypomonotone.lean}{Adjoint\allowbreak{}Anchored\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAnchoredCohypomonotone.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&\bigl((1+\rho L)LR/\varepsilon\\&\quad +(1+\rho L)^2\bigr)h\\&{}+(1+\rho L)^4\frac{L_2R}{L}\ell^2\end{aligned}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Inexact Halpern \citep[Thm.~2.1, Cor.~2.2]{sciAKW2026v3}\newline
+Special case: $\rho L<1$, $G=0$; $\eta=(\rho+1/L)/2$
+& $\mathcal{O}\!\left(\left(\frac1\delta+\frac{LR}{\delta^2\varepsilon}\right){}\cdot\left[1+\log\!\left(1+\frac{LR}{\delta\varepsilon}\right)\right]\right)$\newline
+$F$ calls
+& \textbf{(1)}, \textbf{(2)}: i) Scope: any $\rho$, with added regularity/access.\newline
+ii) Leading term: $LR/\varepsilon$, removing $\delta^{-2}$ and its logarithm; gain near $\delta=0$ when $\varepsilon L_2\ell^2\ll L^2/\delta^2$.
+& \textbf{(1)}, \textbf{(2)}: i) Need adjoint calls and a known Lipschitz-Jacobian bound.\newline
+ii) Added $\frac{L_2R}{L}\ell^2$ can dominate on $\rho L<1$.\newline
+iii) Do not cover general $G$ or stochastic variants. \\
+\midrule
+EAG \citep[Cor.~1, Sec.~2.3]{holderYoonRyu2021}\newline
+Special case: $\rho=0$
+& $\mathcal{O}(1+LR/\varepsilon)$\newline
+$F$ calls
+& \textbf{(1)}, \textbf{(2)}: match known rate if $L_2=0$; no established improvement on $\rho=0$.
+& \textbf{(1)}, \textbf{(2)}: extra $\frac{L_2R}{L}\ell^2$; need adjoint calls and a known Lipschitz-Jacobian bound. \\
+\midrule
+Exact proximal point \citep[Thm.~3.1]{chaGorbunov2023v3}\newline
+Maximally cohypomonotone; any $\rho\ge0$, $\gamma>2\rho$
+& $\mathcal{O}\!\left(1+\frac{R^2}{\gamma(\gamma-2\rho)\varepsilon^2}\right)$\newline
+Exact $(I+\gamma F)^{-1}$ calls; primitive-call rates not comparable
+& \textbf{(1)}, \textbf{(2)}: Oracle: explicit $F$/adjoint-call budgets instead of exact resolvent access, for every $\rho$.
+& \textbf{(1)}, \textbf{(2)}: need Lipschitz $F$, Lipschitz $DF$, and known $L,L_2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $h=1+\log(1+\rho L)$; $\ell=1+\log(1+LR/\varepsilon)$; $\delta=1-\rho L$ in the restricted Halpern row. $DF(x)^\top w$ is a Jacobian-adjoint product. Costs in \textbf{(1)}, \textbf{(2)} count all $F$ evaluations and adjoint products together. $G$ denotes an additional maximally monotone operator; $I$ is the identity; $\eta,\gamma$ are resolvent step sizes.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Scalar stochastic H\"older stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ScalarHolderStochastic.lean}{ScalarHolderStochastic}.}\label{tab:ScalarHolderStochastic}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}\to\mathbb{R}$ satisfies $|f'(x)-f'(y)|\le H|x-y|^\nu$ and $f(x_0)-\inf f\le\Delta$, with $H,\Delta,\varepsilon>0$, $0<\nu\le1$, $\sigma\ge0$, $1<p\le2$. The jointly measurable oracle $g$ has integrable replies and central $p$th moments, $\mathbb{E} g(x,\xi)=f'(x)$ and $\mathbb{E}|g(x,\xi)-f'(x)|^p\le\sigma^p$, with IID samples. Target: measurable $X$ with $\mathbb{P}(|f'(X)|>\varepsilon)\le1/3$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ScalarHolderHeavyTailStationarity.lean}{Scalar\allowbreak{}Holder\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ScalarHolderHeavyTailStationarity.md}{(review)}
+& $\mathcal{O}\!\left(C[1+A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)]\right)$
+& --- & --- \\
+\midrule[1.2pt]
+\citep[full version, Cor.~11]{shsLiu2025Full}
+& $\mathcal{O}_{\nu,p}\!\left((1+A^{1+1/\nu})(1+(\sigma/\varepsilon)^{p/(p-1)})\right)$\newline Stochastic gradient calls; random block selection and Markov conversion.
+& \textbf{(1)}: $A^{1+1/\nu}(\sigma/\varepsilon)^{p/(p-1)}$ becomes $A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)$; polynomial gain for $A\ge1$, $\sigma\ge\varepsilon$, with $\nu,p$ fixed.
+& \textbf{(1)}: scalar only; needs all parameters. Cor.~12 permits unknown $H,\Delta,\sigma,p$, at a different rate. \\
+\midrule
+derived bound: dyadic probing, clipped estimation, union-bound bisection; unpublished composition of random search \citep{shsChewi2023}.
+& $\mathcal{O}\!\left(C\left[1+A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)\right.\right.$\newline $\left.\left.{}\cdot\log\log(3+A)\right]\right)$\newline Stochastic gradient calls; known parameters.
+& \textbf{(1)}: removes $\log\log(3+A)$ when $(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)\gtrsim A$; no order gain when $\begin{aligned}A\gtrsim{}&(\sigma/\varepsilon)^{p/(p-1)}\\&\cdot\log(2+A)\log\log(3+A)\end{aligned}$.
+& --- \\
+\midrule
+Random search \citep[Thm.~3]{shsChewi2023}\newline Special case: $\nu=1$, $\sigma=0$.
+& $\mathcal{O}\!\left(1+\sqrt{H\Delta}/\varepsilon\right)$\newline Exact derivative calls.
+& i) \textbf{(1)}: H\"older/heavy-tail scope extension.\newline ii) \textbf{(1)}: matches rate at $\nu=1$, $\sigma=0$.\newline iii) \textbf{(1)}: attains stochastic lower bounds at $\nu=1$, $p=2$, $A>8$, $\varepsilon<\sigma/2$ \citep[Thm.~11]{shsFoster2019}.
+& \textbf{(1)}: proved prefactor $C\ge2^{200}$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=H^{1/(1+\nu)}\Delta^{\nu/(1+\nu)}/\varepsilon$, $C=2^{200/(p-1)}(1+1/\nu)$. $\mathcal{O}_{\nu,p}$ allows constants depending on $\nu,p$; all costs count individual oracle calls, including estimation batches. Logarithms are natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

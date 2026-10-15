@@ -17,22 +17,22 @@
 \midrule[1.2pt]
 Nesterov acceleration \citep[Cor.~4.9]{SmoothConvexASTv4}
 & $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$
-& \textbf{(1)}: Matches known rate; Lean formalization. Hilbert-space extension of the dimension-free Euclidean argument.
+& \textbf{(1)}: matches known rate; Lean formalization. Hilbert-space extension of the dimension-free Euclidean argument.
 & \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{LR^2/\varepsilon}$; asymptotically worse as $LR^2/\varepsilon\to\infty$. \\
 \midrule
 Classical GD, step $1/L$ \citep[Eq.~(3.1)]{SmoothConvexDTv1}
 & $\mathcal{O}\!(1+LR^2/\varepsilon)$; stated on $\mathbb{R}^d$
-& i) \textbf{(2)}: Matches known rate; Lean formalization.\newline ii) \textbf{(1)}: Classical acceleration replaces $LR^2/\varepsilon$ by $\sqrt{LR^2/\varepsilon}$ as $LR^2/\varepsilon\to\infty$.
+& i) \textbf{(2)}: matches known rate; Lean formalization.\newline ii) \textbf{(1)}: classical acceleration replaces $LR^2/\varepsilon$ by $\sqrt{LR^2/\varepsilon}$ as $LR^2/\varepsilon\to\infty$.
 & --- \\
 \midrule
 Sharp GD, step $1/L$ \citep[Thm.~3.1]{SmoothConvexDTv1}
 & $\mathcal{O}\!(1+LR^2/\varepsilon)$; stated on $\mathbb{R}^d$
-& \textbf{(2)}: Matches known rate; no established improvement.
+& \textbf{(2)}: matches known rate; no established improvement.
 & \textbf{(2)}: About twice the certified calls when $LR^2/\varepsilon\gg1$, on $\mathbb{R}^d$. \\
 \midrule
 OGM \citep[Cor.~4.6]{SmoothConvexASTv4}
 & $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$; stated on $\mathbb{R}^d$
-& \textbf{(1)}, \textbf{(2)}: No established improvement.
+& \textbf{(1)}, \textbf{(2)}: no established improvement.
 & On $\mathbb{R}^d$, $LR^2/\varepsilon\gg1$: i) \textbf{(1)}: About $\sqrt2$ times the certified calls.\newline ii) \textbf{(2)}: Linear instead of square-root dependence on $LR^2/\varepsilon$. \\
 \bottomrule
 \end{tabularx}

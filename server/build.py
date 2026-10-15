@@ -230,6 +230,24 @@ def load_comparison_tables(directory):
     }
 
 
+def load_ratings(directory):
+    directory = Path(directory).expanduser().resolve() / "metadata"
+    ratings = {}
+    for path in sorted(directory.glob("*.json")):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        theorems = data.get("theorems")
+        if (
+            not isinstance(theorems, dict)
+            or not theorems
+            or any(type(score) is not int or score not in range(4) for score in theorems.values())
+            or type(data.get("contribution")) is not int
+            or data["contribution"] != max(theorems.values())
+        ):
+            raise ValueError(f"Invalid contribution ratings: {path}")
+        ratings[path.stem] = data
+    return ratings
+
+
 def render(
     regenerate_all=False,
     jobs=1,
@@ -241,6 +259,7 @@ def render(
 ):
     reviews_dir = review_directory(reviews_dir) if reviews_dir is not None else None
     comparisons = load_comparison_tables(tables_dir)
+    ratings = load_ratings(tables_dir if tables_dir is not None else ROOT.parent / "scripts/tables")
     if jobs < 1:
         raise ValueError("jobs must be at least 1")
     for module, supports_model in (
@@ -263,6 +282,9 @@ def render(
     references = load_references(catalogs)
     theorems.sort(key=lambda row: (row["module"], row["theorem"]))
     for theorem in theorems:
+        theorem["contribution"] = ratings.get(
+            theorem["setup"].split(".")[-1], {}
+        ).get("theorems", {}).get(theorem["module"].split(".")[-1])
         theorem["referencesHtml"], theorem["referenceMatch"] = references.get(
             (theorem["setup"], theorem["module"], theorem["theorem"]),
             (None, "unassessed"),
@@ -297,6 +319,7 @@ def render(
         setups.append(
             {
                 "id": path.stem,
+                "contribution": ratings.get(path.stem, {}).get("contribution"),
                 "title": path.name,
                 "filename": path.name,
                 "modifiedAt": modified_dates[path],

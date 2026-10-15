@@ -58,6 +58,7 @@
     .entry-link:hover{border-color:var(--accent)}
     .budgets{min-width:0;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}.budgets h3{font:700 19px/1.4 var(--serif);letter-spacing:0;color:var(--ink);margin:0 0 18px}
     .budget{margin-bottom:22px}.budget:last-child,.budget:has(+.comparison){margin-bottom:0}.budget-name{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:10px;color:#394960}
+    .result-rating{white-space:nowrap;color:#805d12;margin-left:6px}
     .budget-formula{padding:12px 0;background:#fff;overflow-x:auto;font-size:18px;scrollbar-width:thin;scrollbar-color:#c7d0df transparent}
     .budget-formula p{margin:0}.budget-formula math{margin:0;text-align:center}.budget-formula math+math{margin-top:16px}
     .budgets>p{font-size:14px;color:var(--muted);padding:0;margin:0}
@@ -87,7 +88,7 @@
     <form id="filters" class="filters" aria-label="Filter setups">
       <div class="filter-bar">
         <label class="filter-search"><input id="filter-search" type="search" aria-label="Search setups" placeholder="Search setups, tags, descriptions…"></label>
-        <label><select id="sort-order" aria-label="Sort setups"><option value="category">Sort: category</option><option value="newest">Modified: newest first</option><option value="oldest">Modified: oldest first</option></select></label>
+        <label><select id="sort-order" aria-label="Sort setups"><option value="contribution">Sort: contribution</option><option value="newest">Modified: newest first</option><option value="oldest">Modified: oldest first</option></select></label>
         <span id="count" role="status" aria-live="polite"></span>
       </div>
     </form>
@@ -157,6 +158,11 @@
         const filename = theorem.module.split('.').pop() + '.lean';
         const title = make('div', undefined, 'budget-name');
         title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
+        const score = theorem.contribution;
+        const rating = make('span', score == null ? 'Not rated' : '★'.repeat(score) + '☆'.repeat(3 - score), 'result-rating');
+        rating.setAttribute('aria-label', score == null ? 'Contribution not rated' : `Contribution: ${score} out of 3 stars`);
+        rating.title = rating.getAttribute('aria-label');
+        title.append(' ', rating);
         if (theorem.reviewPath) title.append(' ', sourceLink(theorem.reviewPath, '(review)'));
         entry.append(title);
         if (theorem.formulaHtml) {
@@ -262,9 +268,7 @@
         const difference = order === 'newest' ? dateB - dateA : dateA - dateB;
         if (difference) return difference;
       } else {
-        const categories = ['classical', 'non_standard', 'needs_review'];
-        const rank = setup => {const i = categories.indexOf(setup.catalog?.setup_category?.label);return i < 0 ? 3 : i;};
-        const difference = rank(a) - rank(b);
+        const difference = (b.contribution ?? -1) - (a.contribution ?? -1);
         if (difference) return difference;
       }
       return a.title.localeCompare(b.title);
