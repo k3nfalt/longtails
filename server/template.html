@@ -62,10 +62,14 @@
     .budget-formula{padding:12px 0;background:#fff;overflow-x:auto;font-size:18px;scrollbar-width:thin;scrollbar-color:#c7d0df transparent}
     .budget-formula p{margin:0}.budget-formula math{margin:0;text-align:center}.budget-formula math+math{margin-top:16px}
     .budgets>p{font-size:14px;color:var(--muted);padding:0;margin:0}
-    .budget summary{font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.budget summary{cursor:pointer}.budget summary:hover{color:var(--accent)}.budget summary::marker{font-size:10px;color:#8a98ab}
-    .comparison{margin-top:0}.comparison>summary{cursor:pointer;font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.comparison>summary:hover{color:var(--accent)}.comparison-scroll{overflow-x:auto;font-size:14px;line-height:1.6}.comparison table{width:100%!important;min-width:900px;border-collapse:collapse;margin:16px 0}.comparison th,.comparison td{padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}.comparison th{background:#f3f6fb}.comparison td p{margin:0 0 8px}.comparison a{color:var(--accent)}.comparison .references{margin-top:20px;font-size:13px}.comparison .csl-entry{margin-bottom:10px}
+    .budget summary{font-size:12px;color:var(--muted);padding:10px 0;width:fit-content}.budget summary{cursor:pointer}.budget summary:hover{color:var(--accent)}
+    .budget details>summary,.comparison>summary{display:flex;align-items:center;gap:6px;list-style:none}
+    .budget details>summary::-webkit-details-marker,.comparison>summary::-webkit-details-marker{display:none}
+    .budget details>summary::before,.comparison>summary::before{content:"";width:14px;height:14px;flex-shrink:0;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m6 4 4 4-4 4' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+    .budget details[open]>summary::before,.comparison[open]>summary::before{transform:rotate(90deg)}
+    .comparison{margin-top:0}.comparison>summary{cursor:pointer;font-size:14px;color:var(--muted);padding:10px 0;width:fit-content}.comparison>summary:hover{color:var(--accent)}.comparison-scroll{overflow-x:auto;font-size:14px;line-height:1.6}.comparison table{width:100%!important;min-width:900px;border-collapse:collapse;margin:16px 0}.comparison th,.comparison td{padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}.comparison th{background:#f3f6fb}.comparison td p{margin:0 0 8px}.comparison a{color:var(--accent)}.comparison .references{margin-top:20px;font-size:13px}.comparison .csl-entry{margin-bottom:10px}
     .theorem-name{font:11px/1.7 var(--mono);overflow-wrap:anywhere;color:var(--muted);margin:4px 0 10px}
-    .references-text{font-size:14px;line-height:1.65;overflow-wrap:anywhere}.references-text p{margin:0 0 .8em}.references-text p:last-child{margin-bottom:0}.references-text a{color:var(--accent);text-underline-offset:3px}.references-text math[display="block"]{overflow-x:auto;max-width:100%}
+    .previous-results{margin-top:20px}.references-text{font-size:14px;line-height:1.65;overflow-wrap:anywhere}.references-text p{margin:0 0 .8em}.references-text p:last-child{margin-bottom:0}.references-text a{color:var(--accent);text-underline-offset:3px}.references-text math[display="block"]{overflow-x:auto;max-width:100%}
     pre{margin:0;padding:24px;background:#182234;color:#e4eaf5;overflow:auto;font:12px/1.9 var(--mono);tab-size:2;scrollbar-width:thin}
     .budget pre{border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere;padding:18px;font-size:12px}
     .detail{padding:36px 0 60px;max-width:100%;margin:auto}.back{display:inline-block;margin-bottom:24px;font-size:13px;color:var(--muted);text-decoration:none}.back:hover{color:var(--accent)}
@@ -161,6 +165,7 @@
     }
     function budgetsView(setup) {
       const section = make('section', undefined, 'budgets');
+      const references = make('section', undefined, 'previous-results');
       section.append(make('h3', 'Proved Complexities'));
       if (!setup.theorems.length) section.append(make('p', 'No proved budget is currently listed for this setup.'));
       for (const theorem of setup.theorems) {
@@ -182,8 +187,10 @@
           entry.append(formula);
         }
         if (theorem.referencesHtml !== '') {
-          const references = make('details');
-          references.append(make('summary', 'Relevant Previous Results'));
+          const reference = make('div', undefined, 'budget');
+          const heading = make('div', undefined, 'budget-name');
+          heading.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
+          reference.append(heading);
           const text = make('div', undefined, 'references-text');
           if (theorem.referencesHtml) {
             text.innerHTML = theorem.referencesHtml;
@@ -193,18 +200,18 @@
           } else {
             text.textContent = 'References have not been researched yet.';
           }
-          references.append(text);entry.append(references);
+          reference.append(text);references.append(reference);
         }
         section.append(entry);
       }
-      if (setup.comparisonHtml) {
+      if (setup.comparisonHtml || references.hasChildNodes()) {
         const comparison = make('details', undefined, 'comparison');
         comparison.append(make('summary', 'Table'));
         const content = make('div', undefined, 'comparison-scroll');
         content.tabIndex = 0;content.setAttribute('role', 'region');
         content.setAttribute('aria-label', 'Comparison table and references');
         comparison.addEventListener('toggle', () => {
-          if (comparison.open && !content.hasChildNodes()) content.innerHTML = setup.comparisonHtml;
+          if (comparison.open && !content.hasChildNodes()) content.innerHTML = setup.comparisonHtml || '';
         });
         content.addEventListener('click', event => {
           const link = event.target.closest('a[href^="#"]');
@@ -213,7 +220,12 @@
           const target = content.querySelector('#' + CSS.escape(link.getAttribute('href').slice(1)));
           if (target) target.scrollIntoView();
         });
-        comparison.append(content);section.append(comparison);
+        comparison.append(content);
+        if (references.hasChildNodes()) {
+          references.prepend(make('h3', 'Relevant Previous Results'));
+          comparison.append(references);
+        }
+        section.append(comparison);
       }
       return section;
     }
@@ -293,7 +305,7 @@
     function highlightMatches(card, setup, query) {
       if (!highlightIndexes.has(card)) {
         const table = card.querySelector('.comparison-scroll');
-        if (table && !table.hasChildNodes()) table.innerHTML = setup.comparisonHtml;
+        if (table && !table.hasChildNodes()) table.innerHTML = setup.comparisonHtml || '';
         const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
         const texts = [];
         while (walker.nextNode()) {
