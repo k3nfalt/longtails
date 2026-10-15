@@ -12,6 +12,7 @@
     *{box-sizing:border-box}
     body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
     a{color:inherit}a,summary{touch-action:manipulation}::selection{background:#dce7ff}
+    ::highlight(search-matches){background:#ffe58a;color:#111}
     :focus-visible{outline:3px solid #7598da;outline-offset:4px}
     .shell{max-width:1200px;margin:auto;padding:0 40px}
     .shell.site-header{padding-top:28px}.site-header h1{margin:0;text-align:center;font-size:clamp(36px,5vw,48px)}.site-header .title-link{display:inline-flex;align-items:center;gap:16px;font-family:"Manrope",sans-serif;font-weight:700;color:#202020;letter-spacing:-0.025em}.site-logo{width:100px;height:auto;border-radius:6px}
@@ -262,18 +263,72 @@
       if (key === 'label' || key === 'status') return value + ' ' + catalogLabel(value);
       return String(value);
     }
-    const search = new Fuse(data.setups, {
-      keys: ['searchText'],
+    const searchOptions = {
       useTokenSearch: true,
       tokenMatch: 'all',
       tokenize: text => text.split(/\s+/).filter(Boolean),
       threshold: 0.3,
       ignoreDiacritics: true
-    });
+    };
+    const search = new Fuse(data.setups, {...searchOptions, keys: ['searchText']});
     function matchingSetups(query) {
       return new Set(query.trim()
         ? search.search(query.replace(/[_-]/g, ' ')).map(result => result.item)
         : data.setups);
+    }
+    const highlightIndexes = new WeakMap();
+    const openedBySearch = new Set();
+    const searchHighlights = globalThis.Highlight ? new Highlight() : null;
+    if (searchHighlights) CSS.highlights.set('search-matches', searchHighlights);
+    const pendingHighlights = new Map();
+    const highlightObserver = new IntersectionObserver(entries => {
+      for (const {target: card, isIntersecting} of entries) {
+        const pending = pendingHighlights.get(card);
+        if (isIntersecting && pending && !card.hidden) {
+          highlightMatches(card, pending.setup, pending.query);
+          pendingHighlights.delete(card);
+          highlightObserver.unobserve(card);
+        }
+      }
+    }, {rootMargin: '300px'});
+    function clearSearchHighlights() {
+      highlightObserver.disconnect();
+      pendingHighlights.clear();
+      searchHighlights?.clear();
+      for (const details of openedBySearch) details.open = false;
+      openedBySearch.clear();
+    }
+    function highlightMatches(card, setup, query) {
+      if (!highlightIndexes.has(card)) {
+        const table = card.querySelector('.comparison-scroll');
+        if (table && !table.hasChildNodes()) table.innerHTML = setup.comparisonHtml;
+        const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
+        const texts = [];
+        while (walker.nextNode()) {
+          const node = walker.currentNode;
+          if (node.data.trim() && !node.parentElement.closest('summary')) {
+            texts.push({node, text: node.data.replace(/[_-]/g, ' ')});
+          }
+        }
+        highlightIndexes.set(card, new Fuse(texts, {...searchOptions,
+          keys: ['text'], tokenMatch: 'any', includeMatches: true, findAllMatches: true}));
+      }
+      for (const {item, matches} of highlightIndexes.get(card).search(query.replace(/[_-]/g, ' '))) {
+        for (const match of matches || []) {
+          for (const [start, end] of match.indices) {
+            const range = document.createRange();
+            range.setStart(item.node, start);
+            range.setEnd(item.node, end + 1);
+            searchHighlights?.add(range);
+          }
+        }
+        for (let parent = item.node.parentElement; parent && parent !== card; parent = parent.parentElement) {
+          if (parent.tagName === 'DETAILS' && !parent.open) {
+            openedBySearch.add(parent);
+            parent.open = true;
+          }
+        }
+      }
     }
     function compareSetups(a, b, order) {
       if (order === 'newest' || order === 'oldest') {
@@ -287,22 +342,43 @@
       }
       return a.title.localeCompare(b.title);
     }
+    let currentOrder;
+    let filterTimer;
     function applyFilters() {
+      clearTimeout(filterTimer);
+      clearSearchHighlights();
       let visible = 0;
       const query = document.getElementById('filter-search').value;
       const matches = matchingSetups(query);
       const order = document.getElementById('sort-order').value;
-      const sorted = [...cards].sort((a, b) => compareSetups(a.setup, b.setup, order));
-      for (const {setup, card} of sorted) {
-        document.getElementById('setups').append(card);
+      if (order !== currentOrder) {
+        const sorted = [...cards].sort((a, b) => compareSetups(a.setup, b.setup, order));
+        document.getElementById('setups').append(...sorted.map(entry => entry.card));
+        currentOrder = order;
+      }
+      for (const {setup, card} of cards) {
         card.hidden = !matches.has(setup);
-        if (!card.hidden) visible++;
+        if (!card.hidden) {
+          visible++;
+          if (query.trim()) {
+            pendingHighlights.set(card, {setup, query});
+            highlightObserver.observe(card);
+          }
+        }
       }
       document.getElementById('count').textContent = `${visible} of ${data.setups.length} setups`;
       document.getElementById('empty-results').hidden = visible > 0;
     }
     const filters = document.getElementById('filters');
-    filters.addEventListener('input', applyFilters);
+    filters.addEventListener('input', event => {
+      clearTimeout(filterTimer);
+      clearSearchHighlights();
+      if (event.target.id === 'filter-search' && event.target.value.trim()) {
+        filterTimer = setTimeout(applyFilters, 120);
+      } else {
+        applyFilters();
+      }
+    });
     filters.addEventListener('submit', event => event.preventDefault());
     applyFilters();
     function route() {
