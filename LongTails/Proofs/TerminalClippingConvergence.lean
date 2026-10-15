@@ -30,7 +30,7 @@ lemma accuracy_budget {B G R δ ε : ℝ} {T : ℕ}
 
 lemma convergence : Convergence spec (fun p _ => 2 * p.T) := by
   apply convergence_of_public_budget (S := spec) (fun p => 2 * p.T)
-  refine ⟨algorithm, ?_, fun _ _ => trivial⟩
+  refine ⟨algorithm, ?_, fun p _ => algorithm_allowed p.toPublic⟩
   rintro p ⟨hB, hG, hδ, hδ1, hR, hε⟩ I O hadm
   have hT : 1 ≤ p.toPublic.T := le_max_left _ _
   have hbudget : (2 ^ 20 * (p.B * p.R ^ 2 + p.G ^ 2 / p.B) *

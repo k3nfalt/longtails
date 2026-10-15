@@ -1,4 +1,5 @@
 import LongTails.Setups.StochasticGeneralizedSmoothAndConvex
+import LongTails.Algorithms.Clipping
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 open MeasureTheory
@@ -44,6 +45,18 @@ abbrev spec : Setup where
   Reply q := Vector q.d
   Output q := Vector q.d
   publicInput q := q.toPublic
+  allowedAlgorithm q A :=
+    ∃ (η C : A.State → ℝ),
+      (∀ seed, A.output (A.initial seed) = q.x0 ∧
+        A.query (A.initial seed) = (0, .subgradient q.x0)) ∧
+      ∀ s, match (A.query s).2 with
+        | .subgradient x =>
+          x = A.output s ∧ ∀ g,
+            A.output (A.update s g) = x ∧
+            A.query (A.update s g) = (0, .projection (x - η s • clip (C s) g))
+        | .projection _ => ∀ x,
+            A.output (A.update s x) = x ∧
+            A.query (A.update s x) = (0, .subgradient x)
   valid q := 0 < q.B ∧ 0 < q.G ∧ 0 < q.δ ∧ q.δ < 1 ∧ 0 ≤ q.R ∧ 0 < q.ε
   admissible q I O :=
     ∃ (g : Vector q.d → q.Ω → Vector q.d) (projection : Vector q.d → Vector q.d)
