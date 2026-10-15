@@ -244,7 +244,7 @@
     }
     const cards = [...data.setups].sort((a, b) =>
       (b.contribution ?? -1) - (a.contribution ?? -1) || a.title.localeCompare(b.title)).map(setup => {
-      setup.searchText = searchText(setup).replace(/[_-]/g, ' ').toLowerCase();
+      setup.searchText = searchText(setup).replace(/_/g, ' ').toLowerCase();
       const card = make('article');card.id = setup.id;
       const body = make('div', undefined, 'card-body');
       const top = make('div', undefined, 'card-top');
@@ -271,17 +271,16 @@
       useTokenSearch: true,
       tokenMatch: 'all',
       tokenize: text => text.split(/\s+/).filter(Boolean),
-      threshold: 0.3,
+      threshold: 0.2,
       ignoreDiacritics: true
     };
     const search = new Fuse(data.setups, {...searchOptions, keys: ['searchText']});
     function matchingSetups(query) {
       return new Set(query.trim()
-        ? search.search(query.replace(/[_-]/g, ' ')).map(result => result.item)
+        ? search.search(query.replace(/_/g, ' ')).map(result => result.item)
         : data.setups);
     }
     const highlightIndexes = new WeakMap();
-    const openedBySearch = new Set();
     const searchHighlights = globalThis.Highlight ? new Highlight() : null;
     if (searchHighlights) CSS.highlights.set('search-matches', searchHighlights);
     const pendingHighlights = new Map();
@@ -299,8 +298,6 @@
       highlightObserver.disconnect();
       pendingHighlights.clear();
       searchHighlights?.clear();
-      for (const details of openedBySearch) details.open = false;
-      openedBySearch.clear();
     }
     function highlightMatches(card, setup, query) {
       if (!highlightIndexes.has(card)) {
@@ -311,25 +308,19 @@
         while (walker.nextNode()) {
           const node = walker.currentNode;
           if (node.data.trim() && !node.parentElement.closest('summary')) {
-            texts.push({node, text: node.data.replace(/[_-]/g, ' ')});
+            texts.push({node, text: node.data.replace(/_/g, ' ')});
           }
         }
         highlightIndexes.set(card, new Fuse(texts, {...searchOptions,
           keys: ['text'], tokenMatch: 'any', includeMatches: true, findAllMatches: true}));
       }
-      for (const {item, matches} of highlightIndexes.get(card).search(query.replace(/[_-]/g, ' '))) {
+      for (const {item, matches} of highlightIndexes.get(card).search(query.replace(/_/g, ' '))) {
         for (const match of matches || []) {
           for (const [start, end] of match.indices) {
             const range = document.createRange();
             range.setStart(item.node, start);
             range.setEnd(item.node, end + 1);
             searchHighlights?.add(range);
-          }
-        }
-        for (let parent = item.node.parentElement; parent && parent !== card; parent = parent.parentElement) {
-          if (parent.tagName === 'DETAILS' && !parent.open) {
-            openedBySearch.add(parent);
-            parent.open = true;
           }
         }
       }
