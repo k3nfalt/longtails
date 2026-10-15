@@ -21,6 +21,27 @@
       "setup": "LongTails.Setups.QuadraticFiniteSum",
       "statement": "OracleTemplate.Convergence LongTails.Setups.QuadraticFiniteSum.spec OracleTemplate.QuadraticFiniteSum.budget",
       "theorem": "OracleTemplate.QuadraticFiniteSum.result"
+    },
+    {
+      "budget": {
+        "latex": "n \\cdot \\left\\lceil 8 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.QuadraticFiniteSum.spec.Params → ℕ",
+        "value": "fun p => p.n * ⌈8 * √(p.L / p.μ) * Real.log (1 + 2 * p.L * p.R ^ 2 / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "n \\cdot \\left\\lceil 8 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.QuadraticFiniteSum.spec.Params → ℕ",
+          "value": "fun p => p.n * ⌈8 * √(p.L / p.μ) * Real.log (1 + 2 * p.L * p.R ^ 2 / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FullGradientAcceleratedQuadratic",
+      "namespace": "LongTails.Setups.QuadraticFiniteSum",
+      "setup": "LongTails.Setups.QuadraticFiniteSum",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuadraticFiniteSum.spec OracleTemplate.FullGradientAccelerated.budget",
+      "theorem": "OracleTemplate.FullGradientAccelerated.result"
     }
   ],
   "results": [
@@ -28,6 +49,12 @@
       "module": "LongTails.Theorems.RandomReshufflingQuadratic",
       "theorem": "OracleTemplate.QuadraticFiniteSum.result",
       "references": "- B. T. Polyak. [Some methods of speeding up the convergence of iteration methods](https://doi.org/10.1016/0041-5553(64)90137-5). 1964. Complexity: $O(n(L/\\mu)\\log(LR^2/\\varepsilon))$ exact component-gradient calls using the full-gradient method for objective gap at most $\\varepsilon$, counting $n$ component calls per iteration; $0<\\varepsilon<LR^2/2$.\n- James W. Daniel. [The Conjugate Gradient Method for Linear and Nonlinear Operator Equations](https://doi.org/10.1137/0704002). 1967. Complexity: $O(n[1+\\sqrt{L/\\mu}\\log(LR^2/\\varepsilon)])$ exact component-gradient calls using conjugate gradients for objective gap at most $\\varepsilon$, including initialization and component queries implementing operator products; $0<\\varepsilon<LR^2/2$.",
+      "match_status": "match"
+    },
+    {
+      "module": "LongTails.Theorems.FullGradientAcceleratedQuadratic",
+      "theorem": "OracleTemplate.FullGradientAccelerated.result",
+      "references": "- Sébastien Bubeck. [Convex Optimization: Algorithms and Complexity](https://arxiv.org/pdf/1405.4980), 2015, Theorem 3.18 and the Hilbert-space observation preceding Theorem 3.15. Classical accelerated gradient descent gives $O(n+n\\sqrt{L/\\mu}\\log(1+LR^2/\\varepsilon))$ component-gradient calls after implementing each full gradient with $n$ exact component queries. Only the average must be strongly convex; individual quadratic components may be indefinite. This matches the asymptotic order, not the conservative coefficients or explicit constant in the Lean budget. The added result is a classical baseline formalization, not a new complexity rate.",
       "match_status": "match"
     }
   ],
@@ -83,7 +110,8 @@
     "proof_status": {
       "status": "exported_theorem",
       "theorems": [
-        "OracleTemplate.QuadraticFiniteSum.result"
+        "OracleTemplate.QuadraticFiniteSum.result",
+        "OracleTemplate.FullGradientAccelerated.result"
       ],
       "verification": "not_checked_by_catalog"
     },
@@ -94,8 +122,14 @@
           "module": "LongTails.Theorems.RandomReshufflingQuadratic",
           "theorem": "OracleTemplate.QuadraticFiniteSum.result",
           "match_status": "match"
+        },
+        {
+          "module": "LongTails.Theorems.FullGradientAcceleratedQuadratic",
+          "theorem": "OracleTemplate.FullGradientAccelerated.result",
+          "match_status": "match"
         }
       ]
     }
-  }
+  },
+  "updated_at": "2026-10-15T17:58:52.867325+00:00"
 }
