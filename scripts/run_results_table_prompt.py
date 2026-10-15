@@ -195,11 +195,6 @@ def main(argv=None):
         nargs="+",
         help="Setup basenames to add or regenerate (default: missing reviewed setups)",
     )
-    parser.add_argument(
-        "--approved-only",
-        action="store_true",
-        help="Generate only setups in [approved] in scripts/approved_setups.toml",
-    )
     parser.add_argument("--reviews-dir", type=Path, default=scripts / "reviews")
     parser.add_argument(
         "--output-dir",
@@ -212,10 +207,6 @@ def main(argv=None):
     args = parser.parse_args(argv[:split])
     if args.jobs < 1:
         parser.error("--jobs must be positive")
-    if args.approved_only and args.polish_only:
-        parser.error(
-            "--approved-only filters generation; it cannot be combined with --polish-only"
-        )
     if not args.polish_only:
         reviews = args.reviews_dir.expanduser().resolve()
         theorems = sorted((scripts.parent / "LongTails/Theorems").glob("*.lean"))
@@ -254,26 +245,6 @@ def main(argv=None):
             groups = {
                 name: paths for name, paths in groups.items() if name in args.setups
             }
-        if args.approved_only:
-            try:
-                import tomllib
-            except ModuleNotFoundError:
-                import tomlkit as tomllib
-
-            approvals = scripts / "approved_setups.toml"
-            try:
-                approved = {
-                    entry["setup"]
-                    for entry in tomllib.loads(approvals.read_text(encoding="utf-8"))[
-                        "approved"
-                    ]["setups"]
-                }
-            except (OSError, ValueError, KeyError, TypeError) as error:
-                parser.error(f"cannot read approved setups from {approvals}: {error}")
-            groups = {name: paths for name, paths in groups.items() if name in approved}
-            if not groups:
-                print("No approved reviewed setups to process.", flush=True)
-                return 0
         for name in groups:
             if not (scripts.parent / f"LongTails/Setups/{name}.lean").is_file():
                 parser.error(f"missing setup file for {name}")

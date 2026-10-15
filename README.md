@@ -157,41 +157,6 @@ K = 1 + \left\lceil\frac{4L\Delta}{\varepsilon^2}+\frac{8L\Delta\sigma^2}{\varep
 
 Once you're done experimenting, you can remove the copied files with `git clean -f -- LongTails/`, provided you haven't staged or committed them. Preview the list first with `git clean -n -- LongTails/`: this also removes any other untracked files under `LongTails/`. If you updated `LongTails.lean`, run `lake exe mk_all --lib LongTails` again after cleanup.
 
-<!-- ### 3. Review the contribution
-
-```sh
-python3 scripts/run_novelty_prompt.py SgdNonconvex --agent claude --output-dir scripts/reviews
-```
-
-Read `scripts/reviews/SgdNonconvex.md` and check its claims and citations. For this example, the review should identify a classical result. The runner refuses to overwrite an existing review.
-
-### 4. Generate the initial website catalog
-
-```sh
-python3 -m server.build --generate-descriptions --reviews-dir scripts/reviews
-```
-
-This generates missing setup descriptions, theorem budget formulas, and reference reports, then writes `server/theorems.json` and `server/index.html`. Existing artifacts are reused. Inspect the generated descriptions and citations. The next step reads this catalog to connect theorems to their setups.
-
-### 5. Compare with prior work
-
-```sh
-python3 scripts/run_results_table_prompt.py --agent claude --setups StochasticSmoothNonconvex --reviews-dir scripts/reviews --output-dir scripts/tables
-```
-
-Read `scripts/tables/tables/StochasticSmoothNonconvex.tex` and check the accompanying bibliography. The table should compare assumptions, accuracy criteria, and oracle costs. Keep the default selection: `--approved-only` could exclude this classical example.
-
-### 6. View the result
-
-```sh
-python3 -m server.build --reviews-dir scripts/reviews --tables-dir scripts/tables
-python3 server/serve.py
-```
-
-Open <http://127.0.0.1:8000/> and find **StochasticSmoothNonconvex**. You can now inspect its **Setup**, **Complexity**, references, and comparison table together. Review links point to the configured Git remote, so read new reviews locally until they are published there.
-
-These commands do not commit or push your changes. Default builds reuse saved descriptions and reports without running Codex; reuse does not certify that they match the current Lean sources. -->
-
 ## Citation
 
 If you use LongTails in your research, please cite:
