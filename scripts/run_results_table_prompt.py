@@ -4,7 +4,6 @@ import argparse
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -28,7 +27,7 @@ COMPILE_DOCUMENT = r"""\documentclass{article}
   {\originaltable[#1]\begin{adjustwidth}{-2.5cm}{-2.5cm}}
   {\end{adjustwidth}\endoriginaltable}
 \begin{document}
-\input{results_table.tex}
+\input{tables.tex}
 \clearpage
 \bibliographystyle{plain}
 \bibliography{results_table}
@@ -36,11 +35,9 @@ COMPILE_DOCUMENT = r"""\documentclass{article}
 """
 
 
-def check_compilation(table, bibliography, directory, tables_directory=None):
+def check_compilation(table, bibliography, directory):
     directory.mkdir(parents=True, exist_ok=True)
-    if tables_directory is not None:
-        shutil.copytree(tables_directory, directory / "tables", dirs_exist_ok=True)
-    (directory / "results_table.tex").write_text(table, encoding="utf-8")
+    (directory / "tables.tex").write_text(table, encoding="utf-8")
     (directory / "results_table.bib").write_text(bibliography, encoding="utf-8")
     (directory / "check.tex").write_text(COMPILE_DOCUMENT, encoding="utf-8")
     with (directory / "compile.log").open("w") as log:
@@ -83,15 +80,6 @@ def validate_polish(original, revised, original_bib, revised_bib):
         or re.findall(citations, original) != re.findall(citations, revised)
     ):
         raise ValueError("polish changed table structure, links, citations or labels")
-
-
-def read_tables(path):
-    text = path.read_text(encoding="utf-8")
-    return re.sub(
-        r"\\input\{([^}]+)\}",
-        lambda match: (path.parent / match[1]).read_text(encoding="utf-8"),
-        text,
-    )
 
 
 def split_tables(text):
@@ -156,12 +144,6 @@ def save_tables(directory, rows, entries):
         (directory / "tables" / f"{setup}.tex").write_text(
             row.rstrip() + "\n", encoding="utf-8"
         )
-    (directory / "results_table.tex").write_text(
-        HEADER
-        + "".join(r"\input{tables/" + setup + ".tex}\n" for _, setup, _, _ in rows)
-        + FOOTER,
-        encoding="utf-8",
-    )
     (directory / "results_table.bib").write_text(
         "\n\n".join(entries.values()) + "\n", encoding="utf-8"
     )
@@ -200,7 +182,7 @@ def main(argv=None):
         "--output-dir",
         type=Path,
         default=scripts / "paper",
-        help="Destination for tables/SETUP.tex and combined results_table.tex/.bib (default: scripts/paper)",
+        help="Destination for tables/SETUP.tex, metadata, and results_table.bib (default: scripts/paper)",
     )
     argv = list(sys.argv[1:] if argv is None else argv)
     split = argv.index("--") if "--" in argv else len(argv)
@@ -268,19 +250,14 @@ def main(argv=None):
     output = args.output_dir.expanduser().resolve()
     if output.exists() and not output.is_dir():
         parser.error("--output-dir must be a directory")
-    table, bibliography = [
-        output / f"results_table.{suffix}" for suffix in ("tex", "bib")
-    ]
+    bibliography = output / "results_table.bib"
+    table_paths = sorted((output / "tables").glob("*.tex"))
     if args.polish_only:
-        if not all(path.is_file() for path in (table, bibliography)):
-            parser.error(
-                "--polish-only requires existing results_table.tex and results_table.bib"
-            )
+        if not table_paths or not bibliography.is_file():
+            parser.error("--polish-only requires existing tables/*.tex and results_table.bib")
         args.polish = True
-    if table.exists() != bibliography.exists():
-        parser.error(
-            "existing output must contain both results_table.tex and results_table.bib"
-        )
+    if table_paths and not bibliography.is_file():
+        parser.error("existing tables require results_table.bib")
     output.mkdir(parents=True, exist_ok=True)
     prompt = (scripts / "prompts" / "results_table_prompt.md").read_text(encoding="utf-8")
     command = {
@@ -298,14 +275,13 @@ def main(argv=None):
     temporary = Path(tempfile.mkdtemp(prefix="longtails-table-"))
     print(f"Logs and row data: {temporary}", flush=True)
     try:
-        rows = split_tables(read_tables(table)) if table.exists() else []
         entries = (
             bibliography_entries(bibliography.read_text(encoding="utf-8"))
             if bibliography.exists()
             else {}
         )
-        saved = {row[1]: row for row in rows}
-        for path in sorted((output / "tables").glob("*.tex")):
+        saved = {}
+        for path in table_paths:
             parts = split_tables(path.read_text(encoding="utf-8"))
             if len(parts) != 1 or parts[0][1] != path.stem:
                 raise ValueError(f"setup filename and label disagree: {path}")
@@ -533,9 +509,10 @@ def main(argv=None):
             )
         if not rows:
             return 1
+    combined = HEADER + "\n".join(row[2] for row in rows) + "\n" + FOOTER
     if args.polish:
         polish_input = temporary / "polish-input.tex"
-        polish_input.write_text(read_tables(table), encoding="utf-8")
+        polish_input.write_text(combined, encoding="utf-8")
         polished = temporary / "polished.tex"
         polished_bib = temporary / "polished.bib"
         compile_dir = temporary / "polish-compile"
@@ -571,7 +548,7 @@ def main(argv=None):
             "Continuation tables are allowed for page fit; preserve setup labels and logical row order. "
             "Use plain BibTeX style and numeric natbib mode, "
             "not author-year mode. Copy the repaired table and bibliography into the compilation "
-            "directory as results_table.tex and results_table.bib, save the wrapper as check.tex, "
+            "directory as tables.tex and results_table.bib, save the wrapper as check.tex, "
             "and run latexmk -pdf -interaction=nonstopmode -halt-on-error -no-shell-escape check.tex "
             "there. Resolve undefined citations and references as well as compilation errors. "
             "Write all corrections back to the polished destinations. Use no additional agents. "
@@ -610,10 +587,9 @@ def main(argv=None):
     else:
         try:
             check_compilation(
-                table.read_text(encoding="utf-8"),
+                combined,
                 bibliography.read_text(encoding="utf-8"),
                 temporary / "compile",
-                output / "tables",
             )
         except (OSError, ValueError, subprocess.CalledProcessError) as error:
             print(
@@ -621,7 +597,7 @@ def main(argv=None):
                 file=sys.stderr,
             )
             return 1
-    print(f"Created (highest contribution first):\n{table}\n{bibliography}")
+    print(f"Created tables and metadata in {output}\nBibliography: {bibliography}")
     return 0 if all(results) else 1
 
 
