@@ -26,7 +26,7 @@ def main(argv=None):
     args = parser.parse_args(argv[:split])
     agent_args = argv[split + 1 :]
     scripts = Path(__file__).resolve().parent
-    prompt = (scripts / "proposals_prompt.md").read_text(encoding="utf-8")
+    prompt = (scripts / "prompts" / "proposals_prompt.md").read_text(encoding="utf-8")
     if args.keywords:
         prompt += (
             "\n\nKeyword guidance\n\n"

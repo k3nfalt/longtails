@@ -40,7 +40,7 @@ def main(argv=None):
     if args.direction is not None and args.proposal is None:
         parser.error("--direction requires a proposal file")
     scripts = Path(__file__).resolve().parent
-    prompt = (scripts / "research_prompt.md").read_text(encoding="utf-8")
+    prompt = (scripts / "prompts" / "research_prompt.md").read_text(encoding="utf-8")
     if args.agent == "claude":
         prompt = prompt.replace(
             "Run this task as a persistent Codex goal.",

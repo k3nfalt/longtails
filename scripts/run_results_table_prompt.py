@@ -282,7 +282,7 @@ def main(argv=None):
             "existing output must contain both results_table.tex and results_table.bib"
         )
     output.mkdir(parents=True, exist_ok=True)
-    prompt = (scripts / "results_table_prompt.md").read_text(encoding="utf-8")
+    prompt = (scripts / "prompts" / "results_table_prompt.md").read_text(encoding="utf-8")
     command = {
         "omp": ["omp"] + (["--yolo"] if args.dangerous else []),
         "claude": ["claude", "--print"]

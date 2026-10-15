@@ -78,7 +78,7 @@ def main(argv=None):
         ]
     logs = Path(tempfile.mkdtemp(prefix="longtails-reviews-"))
     print(f"Logs: {logs}", flush=True)
-    prompt = (scripts / "novelty_prompt.md").read_text(encoding="utf-8")
+    prompt = (scripts / "prompts" / "novelty_prompt.md").read_text(encoding="utf-8")
     command = {
         "omp": ["omp"] + (["--yolo"] if args.dangerous else []),
         "claude": ["claude", "--print"]
