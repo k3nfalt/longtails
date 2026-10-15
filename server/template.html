@@ -242,8 +242,16 @@
       link.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7 .3l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7-.3l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
       return link;
     }
+    const formulaLengths = new Map(data.setups.map(setup => {
+      const formulas = make('div');
+      formulas.innerHTML = setup.theorems.map(theorem => theorem.formulaHtml || '').join('');
+      formulas.querySelectorAll('annotation, annotation-xml').forEach(node => node.remove());
+      return [setup.id, formulas.textContent.replace(/\s/g, '').length || Infinity];
+    }));
     const cards = [...data.setups].sort((a, b) =>
-      (b.contribution ?? -1) - (a.contribution ?? -1) || a.title.localeCompare(b.title)).map(setup => {
+      (b.contribution ?? -1) - (a.contribution ?? -1) ||
+      formulaLengths.get(a.id) - formulaLengths.get(b.id) ||
+      a.title.localeCompare(b.title)).map(setup => {
       setup.searchText = searchText(setup).replace(/_/g, ' ').toLowerCase();
       const card = make('article');card.id = setup.id;
       const body = make('div', undefined, 'card-body');
