@@ -111,12 +111,22 @@ def split_tables(text):
         row = body[
             starts[index] : starts[index + 1] if index + 1 < len(starts) else len(body)
         ].strip()
-        score = max(
-            (stars.count(r"\star") for stars in re.findall(r"(?:\\star\s*)+", row)),
-            default=0,
-        )
-        rows.append((score, label[1], row))
-    if len({name for _, name, _ in rows}) != len(rows):
+        theorems = {}
+        for link in re.finditer(
+            r"\\href\{[^}]+/LongTails/Theorems/([A-Za-z0-9_]+)\.lean\}", row
+        ):
+            cell_end = re.search(r"(?<!\\)&", row[link.end():])
+            if cell_end is None:
+                raise ValueError(f"missing result cell boundary for {link[1]}")
+            cell = row[link.end():link.end() + cell_end.start()]
+            score = len(re.findall(r"\\star\b", cell))
+            if score > 3 or link[1] in theorems or "/LongTails/Theorems/" in cell:
+                raise ValueError(f"invalid or duplicate rating for {link[1]}")
+            theorems[link[1]] = score
+        if not theorems:
+            raise ValueError(f"no theorem ratings found for {label[1]}")
+        rows.append((max(theorems.values()), label[1], row, theorems))
+    if len({name for _, name, _, _ in rows}) != len(rows):
         raise ValueError("Duplicate setup labels")
     return rows
 
@@ -136,14 +146,19 @@ def bibliography_entries(text):
 def save_tables(directory, rows, entries):
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "tables").mkdir(exist_ok=True)
+    (directory / "metadata").mkdir(exist_ok=True)
     rows.sort(key=lambda item: (-item[0], item[1]))
-    for _, setup, row in rows:
+    for score, setup, row, theorems in rows:
+        (directory / "metadata" / f"{setup}.json").write_text(
+            json.dumps({"contribution": score, "theorems": theorems}, indent=2) + "\n",
+            encoding="utf-8",
+        )
         (directory / "tables" / f"{setup}.tex").write_text(
             row.rstrip() + "\n", encoding="utf-8"
         )
     (directory / "results_table.tex").write_text(
         HEADER
-        + "".join(r"\input{tables/" + setup + ".tex}\n" for _, setup, _ in rows)
+        + "".join(r"\input{tables/" + setup + ".tex}\n" for _, setup, _, _ in rows)
         + FOOTER,
         encoding="utf-8",
     )
@@ -318,7 +333,7 @@ def main(argv=None):
             if bibliography.exists()
             else {}
         )
-        saved = {name: (score, name, row) for score, name, row in rows}
+        saved = {row[1]: row for row in rows}
         for path in sorted((output / "tables").glob("*.tex")):
             parts = split_tables(path.read_text(encoding="utf-8"))
             if len(parts) != 1 or parts[0][1] != path.stem:
@@ -447,6 +462,9 @@ def main(argv=None):
                 raise ValueError(
                     "invalid setup JSON: expected contribution 0..3, exact theorem list, complete table, bibliography map"
                 )
+            parsed = split_tables(row)[0]
+            if parsed[0] != score or sorted(parsed[3]) != sorted(data["theorems"]):
+                raise ValueError("table ratings disagree with setup JSON")
             with lock:
                 cited = {
                     key.strip()
@@ -493,7 +511,7 @@ def main(argv=None):
                         key = new_key
                     entries[key] = entry
                 rows[:] = [item for item in rows if item[1] != setup]
-                rows.append((score, setup, row))
+                rows.append((score, setup, row, parsed[3]))
                 save()
                 completed += 1
                 elapsed = time.monotonic() - started
@@ -600,8 +618,12 @@ def main(argv=None):
             validate_polish(
                 original, revised, bibliography.read_text(encoding="utf-8"), revised_bib
             )
-            check_compilation(revised, revised_bib, compile_dir)
             rows = split_tables(revised)
+            if {row[1]: row[3] for row in rows} != {
+                row[1]: row[3] for row in split_tables(original)
+            }:
+                raise ValueError("polish changed theorem ratings")
+            check_compilation(revised, revised_bib, compile_dir)
             entries = bibliography_entries(revised_bib)
             save()
         except KeyboardInterrupt:
