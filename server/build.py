@@ -352,6 +352,7 @@ def render(
         .read_text(encoding="utf-8")
         .replace("__PROJECT_NAME__", escape(project_name))
         .replace("__CATALOG_DATA__", payload)
+        .replace("__FUSE_JS__", (ROOT / "vendor/fuse-7.5.0.min.cjs").read_text(encoding="utf-8"))
         .replace("__FONT_FACES__", font_css())
         .replace(
             "__LOGO_DATA__",

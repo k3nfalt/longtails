@@ -87,7 +87,7 @@
     <div id="catalog">
     <form id="filters" class="filters" aria-label="Filter setups">
       <div class="filter-bar">
-        <label class="filter-search"><input id="filter-search" type="search" aria-label="Search setups" placeholder="Search setups, tags, descriptions…"></label>
+        <label class="filter-search"><input id="filter-search" type="search" aria-label="Search all setup information" placeholder="Search setups, results, tables, references…"></label>
         <label><select id="sort-order" aria-label="Sort setups"><option value="contribution">Sort: contribution</option><option value="newest">Modified: newest first</option><option value="oldest">Modified: oldest first</option></select></label>
         <span id="count" role="status" aria-live="polite"></span>
       </div>
@@ -98,6 +98,13 @@
   </main>
   <footer><div class="shell">Source: LongTails/Setups · Descriptions summarize the specifications; the Lean source gives the full assumptions. Listing a setup does not assert a convergence result.</div></footer>
   <script id="catalog-data" type="application/json">__CATALOG_DATA__</script>
+  <script>
+    const Fuse = (() => {
+      const module = {exports: {}};
+      __FUSE_JS__
+      return module.exports;
+    })();
+  </script>
   <script>
     const data = JSON.parse(document.getElementById('catalog-data').textContent);
     document.getElementById('github-link').href = data.repository_url + '/blob/main/README.md';
@@ -232,7 +239,7 @@
     }
 
     const cards = data.setups.map((setup, i) => {
-      setup.descriptionText = new DOMParser().parseFromString(setup.descriptionHtml || '', 'text/html').body.textContent;
+      setup.searchText = searchText(setup).replace(/[_-]/g, ' ').toLowerCase();
       const card = make('article');card.id = setup.id;
       const body = make('div', undefined, 'card-body');
       const top = make('div', undefined, 'card-top');
@@ -248,18 +255,25 @@
       return {setup, card};
     });
     document.getElementById('framework-source').append(sourceView('LongTails/Template.lean', data.template));
-    function catalogValues(setup, key) {
-      const value = setup.catalog?.[key];
-      if (Array.isArray(value)) return value.map(item => item.label);
-      const status = key === 'setup_category' ? value?.label : value?.status;
-      return status ? [status] : [];
+    function searchText(value, key = '') {
+      if (value == null) return '';
+      if (typeof value === 'object') return Object.entries(value).map(([key, item]) => searchText(item, key)).join(' ');
+      if (key.endsWith('Html')) return new DOMParser().parseFromString(value, 'text/html').body.textContent;
+      if (key === 'label' || key === 'status') return value + ' ' + catalogLabel(value);
+      return String(value);
     }
-    function matchesSearch(setup, query) {
-      const keywords = [setup.title || '', setup.filename || '', setup.descriptionText || '', ...Object.entries(setup.catalog || {}).flatMap(([key, value]) =>
-        Array.isArray(value) ? value.flatMap(item => [item.label, catalogLabel(item.label), item.details]) :
-          catalogValues(setup, key).flatMap(value => [value, catalogLabel(value)]))]
-        .join(' ').replace(/[_-]/g, ' ').toLowerCase();
-      return query.replace(/[_-]/g, ' ').trim().toLowerCase().split(/\s+/).every(word => keywords.includes(word));
+    const search = new Fuse(data.setups, {
+      keys: ['searchText'],
+      useTokenSearch: true,
+      tokenMatch: 'all',
+      tokenize: text => text.split(/\s+/).filter(Boolean),
+      threshold: 0.3,
+      ignoreDiacritics: true
+    });
+    function matchingSetups(query) {
+      return new Set(query.trim()
+        ? search.search(query.replace(/[_-]/g, ' ')).map(result => result.item)
+        : data.setups);
     }
     function compareSetups(a, b, order) {
       if (order === 'newest' || order === 'oldest') {
@@ -276,11 +290,12 @@
     function applyFilters() {
       let visible = 0;
       const query = document.getElementById('filter-search').value;
+      const matches = matchingSetups(query);
       const order = document.getElementById('sort-order').value;
       const sorted = [...cards].sort((a, b) => compareSetups(a.setup, b.setup, order));
       for (const {setup, card} of sorted) {
         document.getElementById('setups').append(card);
-        card.hidden = !matchesSearch(setup, query);
+        card.hidden = !matches.has(setup);
         if (!card.hidden) visible++;
       }
       document.getElementById('count').textContent = `${visible} of ${data.setups.length} setups`;
