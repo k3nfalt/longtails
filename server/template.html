@@ -19,17 +19,16 @@
     .site-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px 40px;padding-bottom:12px}.github-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #c7d0df;border-radius:8px;background:#fff;color:var(--ink);font-size:14px;font-weight:600;text-decoration:none}.github-link:hover{border-color:var(--accent);color:var(--accent)}.github-link svg{flex-shrink:0;fill:currentColor}
     #count{display:inline-flex;align-items:center;height:40px;white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted)}
     .filters{margin:12px 0 16px;font-size:13px}.filters label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
-    .filters select,.filters input[type="search"]{font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid #c7d0df;border-radius:6px;padding:9px 12px;min-height:40px;min-width:0;width:100%}
-    .filters select{appearance:none;padding-right:38px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%23545f70' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+    .filters input[type="search"]{font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid #c7d0df;border-radius:6px;padding:9px 12px;min-height:40px;min-width:0;width:100%}
     .filter-bar{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.filter-search{flex:1;min-width:180px}
-    .filter-bar input,.filter-bar select{height:40px;min-height:40px;font-size:14px;line-height:20px}
+    .sort-note{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.evaluation-note{margin-left:auto;text-align:right}
+    .filter-bar input{height:40px;min-height:40px;font-size:14px;line-height:20px}
     .empty-results{color:var(--muted);padding:12px 0 36px}.layout{padding-bottom:48px}
     article{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:36px;overflow:hidden;scroll-margin-top:24px;box-shadow:0 2px 8px #0000000a}
     .card-body{padding:48px 72px}
 
     .card-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid #ddd}
     .card-top h1,.card-top h2{flex:1;min-width:0}
-    .metadata{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0;font-size:12px;padding:4px 0}
     #setups article{margin-bottom:20px}#setups .card-body{padding:24px 32px}#setups .card-top{margin-bottom:16px;padding-bottom:10px}
     #setups .description-title{justify-content:flex-start;margin-bottom:12px}#setups .description-title>h2{text-align:left;font-size:22px}
     #setups .description{font-size:16px}#setups .description p{text-align:left;hyphens:none}
@@ -76,8 +75,8 @@
     footer{border-top:1px solid var(--line);padding:24px 0 32px;font-size:11px;line-height:1.8;color:#738094}
     [hidden]{display:none!important}
     @media(max-width:960px){.shell{padding:0 28px}.card-top{margin-bottom:22px;padding-bottom:20px}.entry-link{margin-top:20px}}
-    @media(max-width:560px){.shell{padding:0 14px}.shell.site-header{padding-top:22px}.filter-search{flex-basis:100%;min-width:0}.filters input[type="search"],.filters select{font-size:16px}.card-body,#setups .card-body{padding:22px 18px}.card-top{gap:10px}h2{font-size:20px}h1{font-size:28px}.number{font-size:11px;padding:2px 5px}.budget-formula{padding:16px 12px;font-size:17px}article{border-radius:12px}.detail{padding-top:24px}.description{font-size:16px}.description p{text-align:left;hyphens:none}pre{padding:18px;font-size:11px}}
-    @media(max-width:380px){.filter-bar{gap:8px}.filters select{font-size:14px}}
+    @media(max-width:560px){.shell{padding:0 14px}.shell.site-header{padding-top:22px}.filter-search{flex-basis:100%;min-width:0}.filters input[type="search"]{font-size:16px}.card-body,#setups .card-body{padding:22px 18px}.card-top{gap:10px}h2{font-size:20px}h1{font-size:28px}.number{font-size:11px;padding:2px 5px}.budget-formula{padding:16px 12px;font-size:17px}article{border-radius:12px}.detail{padding-top:24px}.description{font-size:16px}.description p{text-align:left;hyphens:none}pre{padding:18px;font-size:11px}}
+    @media(max-width:380px){.filter-bar{gap:8px}}
     @page{size:A4;margin:20mm}
     @media print{body{background:white}.shell{max-width:none;padding:0}article{box-shadow:none;border:0}.card-body{padding:0}.description{font-size:10pt;line-height:1.1}.budget-formula{overflow:visible}footer,.entry-link,.back{display:none}}
   </style>
@@ -89,8 +88,11 @@
     <form id="filters" class="filters" aria-label="Filter setups">
       <div class="filter-bar">
         <label class="filter-search"><input id="filter-search" type="search" aria-label="Search all setup information" placeholder="Search setups, results, tables, references…"></label>
-        <label><select id="sort-order" aria-label="Sort setups"><option value="contribution">Sort: contribution</option><option value="newest">Modified: newest first</option><option value="oldest">Modified: oldest first</option></select></label>
         <span id="count" role="status" aria-live="polite"></span>
+      </div>
+      <div class="sort-note">
+        <span>Sorted by contribution* (<span class="result-rating">★★★ → ★★ → ★</span>)</span>
+        <small class="evaluation-note">*Codex/Claude Code evaluation. See the reviews.</small>
       </div>
     </form>
     <div class="layout"><section id="setups" aria-label="Setup collection"></section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
@@ -159,7 +161,7 @@
     }
     function budgetsView(setup) {
       const section = make('section', undefined, 'budgets');
-      section.append(make('h3', 'Oracle-call bounds'));
+      section.append(make('h3', 'Proved Complexities'));
       if (!setup.theorems.length) section.append(make('p', 'No proved budget is currently listed for this setup.'));
       for (const theorem of setup.theorems) {
         const entry = make('div', undefined, 'budget');
@@ -228,29 +230,19 @@
       link.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7 .3l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7-.3l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
       return link;
     }
-    function metadataView(setup) {
-      const row = make('div', undefined, 'metadata');
-      row.setAttribute('aria-label', 'Last modified');
-      if (setup.modifiedAt) {
-        const date = new Date(setup.modifiedAt);
-        const time = make('time', 'Modified: ' + date.toLocaleDateString());
-        time.dateTime = setup.modifiedAt;time.title = date.toLocaleString();row.append(time);
-      }
-      return row;
-    }
-
-    const cards = data.setups.map((setup, i) => {
+    const cards = [...data.setups].sort((a, b) =>
+      (b.contribution ?? -1) - (a.contribution ?? -1) || a.title.localeCompare(b.title)).map(setup => {
       setup.searchText = searchText(setup).replace(/[_-]/g, ' ').toLowerCase();
       const card = make('article');card.id = setup.id;
       const body = make('div', undefined, 'card-body');
       const top = make('div', undefined, 'card-top');
-      top.append(setupAnchor(setup), make('span', String(i + 1).padStart(2, '0'), 'number'));
+      top.append(setupAnchor(setup), make('span', 'Setup', 'number'));
       const heading = make('h2');
       const titleLink = sourceLink('LongTails/Setups/' + setup.filename, setup.title, 'title-link');
       heading.append(titleLink);
       if (setup.stale) heading.append(' [stale]');
       top.append(heading);body.append(top, descriptionView(setup.descriptionHtml, true));
-      body.append(metadataView(setup), budgetsView(setup));
+      body.append(budgetsView(setup));
       card.append(body);
       document.getElementById('setups').append(card);
       return {setup, card};
@@ -330,19 +322,6 @@
         }
       }
     }
-    function compareSetups(a, b, order) {
-      if (order === 'newest' || order === 'oldest') {
-        const dateA = Date.parse(a.modifiedAt), dateB = Date.parse(b.modifiedAt);
-        if (Number.isFinite(dateA) !== Number.isFinite(dateB)) return Number.isFinite(dateA) ? -1 : 1;
-        const difference = order === 'newest' ? dateB - dateA : dateA - dateB;
-        if (difference) return difference;
-      } else {
-        const difference = (b.contribution ?? -1) - (a.contribution ?? -1);
-        if (difference) return difference;
-      }
-      return a.title.localeCompare(b.title);
-    }
-    let currentOrder;
     let filterTimer;
     function applyFilters() {
       clearTimeout(filterTimer);
@@ -350,12 +329,6 @@
       let visible = 0;
       const query = document.getElementById('filter-search').value;
       const matches = matchingSetups(query);
-      const order = document.getElementById('sort-order').value;
-      if (order !== currentOrder) {
-        const sorted = [...cards].sort((a, b) => compareSetups(a.setup, b.setup, order));
-        document.getElementById('setups').append(...sorted.map(entry => entry.card));
-        currentOrder = order;
-      }
       for (const {setup, card} of cards) {
         card.hidden = !matches.has(setup);
         if (!card.hidden) {
