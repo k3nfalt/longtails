@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Quadratic finite sums: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticFiniteSum.lean}{QuadraticFiniteSum}.}\label{tab:QuadraticFiniteSum}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, $F(x)=n^{-1}\sum_{i=1}^n(\langle x,A_i x\rangle/2+\langle b_i,x\rangle)$, with self-adjoint $A_i$, $\|A_i\|\le L$, and $n^{-1}\sum_i A_i\succeq\mu I$. Here $n\ge1$, $0<\mu\le L$, $R,G\ge0$, $\varepsilon>0$; a stationary minimizer $x_\star$ exists with $\|x_0-x_\star\|\le R$ and $\max_i\|A_i x_\star+b_i\|\le G$. Components may be indefinite. The target is $\int [F(\widehat x(\omega))-F(x_\star)]\,dP(\omega)\le\varepsilon$. Costs count exact component-gradient calls. The setup does not restrict the algorithm; \textbf{(1)} constructs random reshuffling.}\par\smallskip
+\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, $F(x)=n^{-1}\sum_{i=1}^n(\langle x,A_i x\rangle/2+\langle b_i,x\rangle)$, with self-adjoint $A_i$, $\|A_i\|\le L$, and $n^{-1}\sum_i A_i\succeq\mu I$. Here $n\ge1$, $0<\mu\le L$, $R,G\ge0$, $\varepsilon>0$; a stationary minimizer $x_\star$ exists with $\|x_0-x_\star\|\le R$ and $\max_i\|A_i x_\star+b_i\|\le G$. Components may be indefinite. The target is $\int [F(\widehat x(\omega))-F(x_\star)]\,dP(\omega)\le\varepsilon$. Costs count exact component-gradient calls. The setup does not restrict the algorithm; \textbf{(1)} constructs random reshuffling and \textbf{(2)} constructs deterministic full-gradient acceleration.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -12,16 +12,21 @@
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RandomReshufflingQuadratic.lean}{Random\allowbreak{}Reshuffling\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RandomReshufflingQuadratic.md}{(review)}
 & $\mathcal{O}\!\Bigl(n+\Bigl[n\kappa+\frac{L^{3/2}G}{\mu^2\sqrt\varepsilon} +\Bigl(\frac{n^2L^3G^2}{\mu^4\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)$
 & --- & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FullGradientAcceleratedQuadratic.lean}{Full\allowbreak{}Gradient\allowbreak{}Accelerated\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FullGradientAcceleratedQuadratic.md}{(review)}
+& $n\left\lceil8\sqrt\kappa\log(1+2LR^2/\varepsilon)\right\rceil$\par Deterministic budget; last iterate; no dependence on $G$.
+& Classical accelerated rate, now formalized for this setup. Improves the certified budget of \textbf{(1)}.
+& Full gradients cost $n$ component calls; no new finite-sum complexity claim. \\
 \midrule[1.2pt]
 Nesterov AGD \citep[Thm.~3.18]{Bubeck2015MinimizerHessian}
 & $\mathcal{O}(n+n\sqrt\kappa\,\ell)$\par $n$ component calls per full gradient.
-& \textbf{(1)}: no established improvement.
+& \textbf{(1)}: no established improvement.\par \textbf{(2)}: same classical order.
 & \textbf{(1)}: transient $\sqrt\kappa$ times larger; additional $G$ costs and knowledge; expected rather than deterministic accuracy. \\
 \midrule
 Katyusha X \citep[Cor.~4.4]{qfsAllenZhu2018v1}\par Finite-dimensional overlap; $\varepsilon<LR^2/2$.
 & $\mathcal{O}((n+n^{3/4}\sqrt\kappa)\ell)$\par Expected calls; batch size $1$.
 & \textbf{(1)}: i) Deterministic call budget.\par ii) Hilbert-space formulation instead of finite-dimensional statement.
-& \textbf{(1)}: $n\kappa$ instead of $n^{3/4}\sqrt\kappa$, plus $G$ costs; needs $G$ in addition. \\
+& \textbf{(1)}: $n\kappa$ instead of $n^{3/4}\sqrt\kappa$, plus $G$ costs; needs $G$ in addition.\par \textbf{(2)}: $n\sqrt\kappa$ instead of $n^{3/4}\sqrt\kappa$ in the condition-number term. \\
 \midrule
 Random reshuffling \citep[Thm.~2, App.~B]{qfsAhnYunSra2020v2}\par derived bound; finite dimension, $n\ge2$, $\varepsilon<LR^2/2$.
 & $\begin{aligned}\mathcal{O}\!\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\}\\ &+\frac{L^{3/2}G}{\mu^2\sqrt\varepsilon}\\ &+\Bigl(\frac{n^2L^3G^2\log(en)}{\mu^4\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$

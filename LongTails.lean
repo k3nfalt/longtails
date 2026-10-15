@@ -38,6 +38,7 @@ import LongTails.Algorithms.DiscrepancyBatchedGD
 import LongTails.Algorithms.DriftCorrectedGD
 import LongTails.Algorithms.Extragradient
 import LongTails.Algorithms.FixedBatchSgd
+import LongTails.Algorithms.FullGradientAccelerated
 import LongTails.Algorithms.GapStrongGrowthAccelerated
 import LongTails.Algorithms.Gd
 import LongTails.Algorithms.GdNonconvex
@@ -311,6 +312,8 @@ import LongTails.Proofs.FrankWolfeRate
 import LongTails.Proofs.FrankWolfeSetGeometry
 import LongTails.Proofs.FrankWolfeSharpness
 import LongTails.Proofs.FrankWolfeSlowTrajectory
+import LongTails.Proofs.FullGradientQuadraticExecution
+import LongTails.Proofs.FullGradientQuadraticModel
 import LongTails.Proofs.GapStrongGrowthAccuracy
 import LongTails.Proofs.GapStrongGrowthExecution
 import LongTails.Proofs.GapStrongGrowthExponential
@@ -772,6 +775,7 @@ import LongTails.Theorems.CyclicGradientInterpolation
 import LongTails.Theorems.DiscrepancyBatchedGD
 import LongTails.Theorems.DriftCorrectedGD
 import LongTails.Theorems.FiniteVarianceGeneralizedAcceleratedConvex
+import LongTails.Theorems.FullGradientAcceleratedQuadratic
 import LongTails.Theorems.GapSmoothStrongGrowthHighProbability
 import LongTails.Theorems.GdConvex
 import LongTails.Theorems.GdNonconvex
