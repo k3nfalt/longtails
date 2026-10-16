@@ -56,7 +56,7 @@ def task_theorems(root, base):
     return sorted(names)
 
 
-def generate(root, names, jobs):scripts/postprocess.py
+def generate(root, names, jobs):
     def review(name):
         run(
             [
