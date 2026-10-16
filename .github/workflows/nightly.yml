@@ -39,6 +39,15 @@ jobs:
       - name: Build
         run: ./build.sh 2>&1 | tee build.log
 
+      - name: Install Ruff
+        run: |
+          python3 -m venv "$RUNNER_TEMP/lint-venv"
+          "$RUNNER_TEMP/lint-venv/bin/python" -m pip install ruff==0.14.0
+          echo "$RUNNER_TEMP/lint-venv/bin" >> "$GITHUB_PATH"
+
+      - name: Lint
+        run: ./lint.sh 2>&1 | tee lint.log
+
       - name: Audit convergence results and budgets
         run: python3 -u run_comparator.py -j 2 2>&1 | tee comparator.log
 
@@ -49,6 +58,7 @@ jobs:
           name: verification-logs
           path: |
             build.log
+            lint.log
             comparator.log
           retention-days: 14
 
@@ -80,6 +90,7 @@ jobs:
           Lean toolchain: $(cat lean-toolchain)
           Dependencies: lake-manifest.json at the verified commit
           Build: ./build.sh passed
+          Lint: ./lint.sh passed
           Audit: python3 -u run_comparator.py -j 2 passed
           Permitted axioms: propext, Classical.choice, Quot.sound
           Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT

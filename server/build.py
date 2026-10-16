@@ -239,7 +239,10 @@ def load_ratings(directory):
         if (
             not isinstance(theorems, dict)
             or not theorems
-            or any(type(score) is not int or score not in range(4) for score in theorems.values())
+            or any(
+                type(score) is not int or score not in range(4)
+                for score in theorems.values()
+            )
             or type(data.get("contribution")) is not int
             or data["contribution"] != max(theorems.values())
         ):
@@ -259,7 +262,9 @@ def render(
 ):
     reviews_dir = review_directory(reviews_dir) if reviews_dir is not None else None
     comparisons = load_comparison_tables(tables_dir)
-    ratings = load_ratings(tables_dir if tables_dir is not None else ROOT.parent / "scripts/tables")
+    ratings = load_ratings(
+        tables_dir if tables_dir is not None else ROOT.parent / "scripts/tables"
+    )
     if jobs < 1:
         raise ValueError("jobs must be at least 1")
     for module, supports_model in (
@@ -282,9 +287,11 @@ def render(
     references = load_references(catalogs)
     theorems.sort(key=lambda row: (row["module"], row["theorem"]))
     for theorem in theorems:
-        theorem["contribution"] = ratings.get(
-            theorem["setup"].split(".")[-1], {}
-        ).get("theorems", {}).get(theorem["module"].split(".")[-1])
+        theorem["contribution"] = (
+            ratings.get(theorem["setup"].split(".")[-1], {})
+            .get("theorems", {})
+            .get(theorem["module"].split(".")[-1])
+        )
         theorem["referencesHtml"], theorem["referenceMatch"] = references.get(
             (theorem["setup"], theorem["module"], theorem["theorem"]),
             (None, "unassessed"),
@@ -352,7 +359,10 @@ def render(
         .read_text(encoding="utf-8")
         .replace("__PROJECT_NAME__", escape(project_name))
         .replace("__CATALOG_DATA__", payload)
-        .replace("__FUSE_JS__", (ROOT / "vendor/fuse-7.5.0.min.cjs").read_text(encoding="utf-8"))
+        .replace(
+            "__FUSE_JS__",
+            (ROOT / "vendor/fuse-7.5.0.min.cjs").read_text(encoding="utf-8"),
+        )
         .replace("__FONT_FACES__", font_css())
         .replace(
             "__LOGO_DATA__",

@@ -103,10 +103,10 @@ def split_tables(text):
         for link in re.finditer(
             r"\\href\{[^}]+/LongTails/Theorems/([A-Za-z0-9_]+)\.lean\}", row
         ):
-            cell_end = re.search(r"(?<!\\)&", row[link.end():])
+            cell_end = re.search(r"(?<!\\)&", row[link.end() :])
             if cell_end is None:
                 raise ValueError(f"missing result cell boundary for {link[1]}")
-            cell = row[link.end():link.end() + cell_end.start()]
+            cell = row[link.end() : link.end() + cell_end.start()]
             score = len(re.findall(r"\\star\b", cell))
             if score > 3 or link[1] in theorems or "/LongTails/Theorems/" in cell:
                 raise ValueError(f"invalid or duplicate rating for {link[1]}")
@@ -216,7 +216,9 @@ def main(argv=None):
         groups = {}
         for theorem in metadata:
             setup = theorem["setup"].removesuffix(".spec").split(".")[-1]
-            path = scripts.parent.joinpath(*theorem["module"].split(".")).with_suffix(".lean")
+            path = scripts.parent.joinpath(*theorem["module"].split(".")).with_suffix(
+                ".lean"
+            )
             groups.setdefault(setup, []).append(path)
         if args.setups:
             unknown = set(args.setups) - groups.keys()
@@ -254,12 +256,16 @@ def main(argv=None):
     table_paths = sorted((output / "tables").glob("*.tex"))
     if args.polish_only:
         if not table_paths or not bibliography.is_file():
-            parser.error("--polish-only requires existing tables/*.tex and results_table.bib")
+            parser.error(
+                "--polish-only requires existing tables/*.tex and results_table.bib"
+            )
         args.polish = True
     if table_paths and not bibliography.is_file():
         parser.error("existing tables require results_table.bib")
     output.mkdir(parents=True, exist_ok=True)
-    prompt = (scripts / "prompts" / "results_table_prompt.md").read_text(encoding="utf-8")
+    prompt = (scripts / "prompts" / "results_table_prompt.md").read_text(
+        encoding="utf-8"
+    )
     command = {
         "omp": ["omp"] + (["--yolo"] if args.dangerous else []),
         "claude": ["claude", "--print"]
