@@ -11,9 +11,10 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveEntropicHeavyTailConvex.lean}{Adaptive\allowbreak{}Entropic\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveEntropicHeavyTailConvex.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&\gamma+\sqrt{\frac{Lb}{\varepsilon}\left[\gamma+\log\!\left(2+\frac{Lb}{\varepsilon}\right)\right]}\\[-1pt]&{}+b\left(\frac{2^{38}\sigma}{\varepsilon}\right)^q\end{aligned}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-Clipped-SMD \citep[Thm.~3.1]{ahtNguyen2023v2}; derived bound; entropy geometry, global smoothness; includes pilot calls
+Clipped-SMD \citep[Thm.~3.1]{ahtNguyen2023v2}; Derived bound; entropy geometry, global smoothness; includes pilot calls
 & $\mathcal{O}\!\left(\gamma+\frac{\gamma[Lh+\sqrt h(G_0+\sigma)]}{\varepsilon} {}+\gamma\left(\frac{\sigma\sqrt h}{\varepsilon}\right)^q\right)$
 & i) \textbf{(1)}: $\varepsilon^{-1}\to\varepsilon^{-1/2}$ up to logs; removes $G_0$.\newline ii) \textbf{(1)}: no $p,\sigma$ in updates.\newline iii) \textbf{(1)}: noise factor $\gamma h^{q/2}\to2^{38q}b$ when smaller.
 & \textbf{(1)}: stationary IID and simplex only; stopping needs $p,\sigma,\varepsilon$. Noise gain requires very large $d$ for fixed $p<2,\delta$. \\
@@ -26,9 +27,9 @@ Clipped-ASMD \citep[Thm.~4.1]{ahtNguyen2023v2}; special case $\nabla f(x_\star)=
 Prox-clipped-SSTM-shift \citep[Thm.~2.7]{ahtGorbunov2024v2}; $n=1$, Euclidean assumptions on $B_{5\sqrt2R}(x_\star)$
 & $\mathcal{O}\!\left(\begin{aligned}&\left(1+\sqrt{\frac{L_2R^2}{\varepsilon}}\right)\ell^2\\[-1pt]&{}+\sqrt{\frac{R\zeta_\star}{\varepsilon}}\ell^{3/2}+\left(\frac{\sigma_2R}{\varepsilon}\right)^q\ell\end{aligned}\right)$
 & i) \textbf{(1)}: no $p,\sigma$ in updates.\newline ii) \textbf{(1)}: on a common neighborhood extension, worst-case $L_2=dL$, $\sigma_2=\sqrt d\sigma$, $R\le\sqrt2$ gives polynomial-to-logarithmic dimension dependence.
-& \textbf{(1)}: simplex only; baseline allows composite objectives and unbounded domains. Rates otherwise not comparable; if $L_2=L$, $\sigma_2=\sigma$, \textbf{(1)} retains extra dimension logarithms. \\
+& \textbf{(1)}: simplex only; baseline allows composite objectives and unbounded domains. Otherwise not comparable; if $L_2=L$, $\sigma_2=\sigma$, \textbf{(1)} retains extra dimension logarithms. \\
 \midrule
-ASMD \citep[Thm.~3.3]{ahtLiu2026v1}; derived bound via Markov, entropy geometry, $M=0$
+ASMD \citep[Thm.~3.3]{ahtLiu2026v1}; Derived bound via Markov, entropy geometry, $M=0$
 & $\mathcal{O}\!\left(\begin{aligned}&1+\delta^{-1/p}\sqrt{\frac{Lh}{\varepsilon}}\\[-1pt]&{}+\delta^{-2/(p-1)}\left(\frac{\sigma\sqrt h}{\varepsilon}\right)^q\end{aligned}\right)$
 & i) \textbf{(1)}: logarithmic instead of polynomial confidence dependence.\newline ii) \textbf{(1)}: no $p,\sigma$ in updates; this tuned bound needs them. Unknown-$p$ alternative is slower, requiring $p>4/3$.
 & \textbf{(1)}: requires ambient gradients and simplex geometry; stopping still needs $p,\sigma,\varepsilon$. \\

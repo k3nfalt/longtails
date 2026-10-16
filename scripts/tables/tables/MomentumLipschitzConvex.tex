@@ -11,7 +11,8 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConstantMomentumLastIterate.lean}{Constant\allowbreak{}Momentum\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConstantMomentumLastIterate.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}+\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 Linear-decay SGD \citep[Thm.~3.4]{liu2026lastv4momentum}\par $E=\mathbb{R}^d$; unconstrained specialization
 & $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}\right)$
@@ -20,7 +21,7 @@ Linear-decay SGD \citep[Thm.~3.4]{liu2026lastv4momentum}\par $E=\mathbb{R}^d$; u
 \midrule
 FTRL-SGDM \citep[Cor.~1]{li2022momentumalt}\par $E=\mathbb{R}^d$; increasing momentum
 & $\mathcal{O}\!\left(1+\frac{G^2R^2}{\varepsilon^2}\right)$
-& \textbf{(1)}: log-free constant-EMA analysis with affine decay; priority unresolved. No rate gain over increasing momentum; polynomial-step lower bounds do not cover this schedule.
+& \textbf{(1)}: logarithm-free constant-EMA analysis with affine decay; priority unresolved. No rate gain over increasing momentum; polynomial-step lower bounds do not cover this schedule.
 & \textbf{(1)}: i) Adds $\frac{\beta^2}{(1-\beta)^2}\log\frac{e}{1-\beta}$.\newline ii) Needs horizon $N$; baseline is anytime. \\
 \midrule
 Schedule-Free SGD \citep[Thm.~1]{defazio2024roadmomentum}\par $E=\mathbb{R}^d$; convex, $G$-Lipschitz sample losses

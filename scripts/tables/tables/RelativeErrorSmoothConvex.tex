@@ -10,9 +10,11 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedRelativeErrorConvex.lean}{Accelerated\allowbreak{}Relative\allowbreak{}Error\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedRelativeErrorConvex.md}{(review)}
-& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{(1-\alpha)\varepsilon}}+\frac{\alpha^2LR^2}{(1-\alpha)\varepsilon}\right)$ & --- & --- \\
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{(1-\alpha)\varepsilon}}+\frac{\alpha^2LR^2}{(1-\alpha)\varepsilon}\right)$
+& ---
+& --- \\
 \midrule[1.2pt]
-Regularized RE-AGM \citep[Thm.~7.2, v1]{vasinGasnikov2026RelativeV1}; derived bound, $E=\mathbb{R}^n$
+Regularized RE-AGM \citep[Thm.~7.2, v1]{vasinGasnikov2026RelativeV1}; Derived bound, $E=\mathbb{R}^n$
 & $\begin{aligned}\mathcal{O}\!\Bigl(&[\sqrt{LR^2/\varepsilon}+\alpha LR^2/\varepsilon]\\&\cdot[1+\log(LR^2/\varepsilon)]\Bigr)\end{aligned}$\par $(LR^2/\varepsilon)>1$, $0\le\alpha\le1/3$
 & i) \textbf{(1)}: $\alpha^2LR^2/\varepsilon$ instead of $\alpha LR^2/\varepsilon$; removes $1+\log (LR^2/\varepsilon)$ on this range.\newline ii) \textbf{(1)}: $\alpha<1$ instead of $\alpha\le1/3$.\newline iii) \textbf{(1)}: $\begin{gathered}(LR^2/\varepsilon)^{3/4}[1+\log(LR^2/\varepsilon)]\\{}\to\sqrt{LR^2/\varepsilon}\end{gathered}$ at $\alpha=(LR^2/\varepsilon)^{-1/4}\le1/3$.
 & --- \\

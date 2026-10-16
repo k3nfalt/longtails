@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Bounded temporal discrepancy with a Lipschitz Hessian: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean}{HessianLipschitzTemporalDiscrepancy}.}\label{tab:HessianLipschitzTemporalDiscrepancy}
+\caption{Bounded temporal discrepancy with a Lipschitz Hessian: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean}{Hessian\allowbreak{}Lipschitz\allowbreak{}Temporal\allowbreak{}Discrepancy}.}\label{tab:HessianLipschitzTemporalDiscrepancy}
 \parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space, $f\in C^2$ is $\mu$-strongly convex, has $L$-Lipschitz gradient and $M$-Lipschitz Hessian, with $0<\mu\le L$, $M,D,\Delta\ge0$, and $\varepsilon>0$. A minimizer $x_\star$ satisfies $f(x_0)-f(x_\star)\le\Delta$. Call $k$ returns $\nabla f(x)+e_k$, with hidden, query- and seed-independent errors satisfying $\sup_n\|\sum_{k<n}e_k\|\le D$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$ almost surely. All setup parameters are supplied; the setup imposes no algorithm restriction. Costs count individual oracle calls, including batches and padding.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -11,14 +11,15 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonlinearTemporalAcceleration.lean}{Nonlinear\allowbreak{}Temporal\allowbreak{}Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonlinearTemporalAcceleration.md}{(review)}
 & $\mathcal{O}\!\left(\left[\sqrt{\kappa}\left(1+\frac{MD}{\mu^2}\right)+\frac{D}{\sqrt{\mu\varepsilon}}+1\right]\ell\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-derived bound: restarted, batched AGD+ \citep[Lemma 3.2, Eq.~(3.2)]{hltdCohen2018}
+Derived bound: restarted, batched AGD+ \citep[Lem.~3.2, Eq.~(3.2)]{hltdCohen2018}
 & $\mathcal{O}\!\left(1+\sqrt{\kappa}\left[\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right]\right)$
 & \textbf{(1)}: noise cost $\sqrt{\kappa}D/\sqrt{\mu\varepsilon}\to D\ell/\sqrt{\mu\varepsilon}$. Total speedup $\asymp\sqrt{\kappa}/\ell$ when $\sqrt{\kappa}\gg\ell$, $D\gg\ell\sqrt{\mu\varepsilon}$, $M\sqrt{\varepsilon}\ell\ll\mu^{3/2}$.
 & \textbf{(1)}: needs $C^2$, Lipschitz Hessian and known $M$ in addition; adds $\sqrt{\kappa}MD\ell/\mu^2$ and logarithmic overhead. Loses when $M\sqrt{\varepsilon}\ell\gg\mu^{3/2}$; no uniform low-noise gain. \\
 \midrule
-derived bound: batching and dilation \citep[Prop.~4, v2]{hltdSchmidt2011v2}; quadratics only ($M=0$)
+Derived bound: batching and dilation \citep[Prop.~4, v2]{hltdSchmidt2011v2}; quadratics only ($M=0$)
 & $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right)$
 & \textbf{(1)}: scope: extends from quadratics to nonlinear objectives with Lipschitz Hessian; dilation reduction requires affine gradients.
 & \textbf{(1)}: at $M=0$, extra $\ell_0$ on the noise term; no rate gain. \\

@@ -17,13 +17,15 @@ Target: $\mathbb{E}[F(X)-F(x_\star)]\le\varepsilon$. Costs count all component-g
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MovementSimilarQuasar.lean}{Movement\allowbreak{}Similar\allowbreak{}Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MovementSimilarQuasar.md}{(review)}
 & $\mathcal{O}\!\left(n+\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{(n\delta/\mu)^{2/3}}{\gamma^{4/3}}\right]\ell_\gamma\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule
 \textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ContinuizedSimilarQuasar.lean}{Continuized\allowbreak{}Similar\allowbreak{}Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ContinuizedSimilarQuasar.md}{(review)}
 & $\mathcal{O}\!\left(\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{\delta^2}{\gamma^3\mu^2}\right](1+\ell_\gamma)\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-PAGE via PL \citep[Thm.~5, Cor.~6]{csqLi2021}\par derived bound; $E=\mathbb{R}^d$
+PAGE via PL \citep[Thm.~5, Cor.~6]{csqLi2021}\par Derived bound; $E=\mathbb{R}^d$
 & $\mathcal{O}\!\left(\left[n+\frac{\sqrt n\sqrt{L^2+\delta^2}}{\gamma^2\mu}\right]\ell_0\right)$\par Expected component-gradient calls.
 & i) \textbf{(1)}: no worse polynomial dependence; $\kappa^{3/2}\to\kappa^{4/3}$ at $\gamma=1$, $n=\kappa$, $\delta=L$.\newline ii) \textbf{(2)}: no worse if $\delta^2\le\gamma\sqrt n L\mu$; $\kappa^{3/2}\to\kappa$ at $\gamma=1$, $n=\kappa$, $\delta=0$.\newline iii) \textbf{(1)}, \textbf{(2)}: deterministic budgets.
 & \textbf{(1)}, \textbf{(2)}: quasar structure beyond PL; extra $\log(1/\gamma)$ overhead. \textbf{(2)}: $\kappa^2$ versus $\kappa^{3/2}$ at $\gamma=1$, $n=\kappa$, $\delta=L$. \\

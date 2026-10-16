@@ -1,0 +1,43 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DiagonalSmoothStronglyConvex.lean}{Diagonal\allowbreak{}Smooth\allowbreak{}Strongly\allowbreak{}Convex}.}\label{tab:DiagonalSmoothStronglyConvex}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, with unknown $w_i>0$ and $0<\mu\le1$ satisfying $\frac{\mu}{2}\|y-x\|_w^2\le f(y)-f(x)-\langle\nabla f(x),y-x\rangle\le\frac12\|y-x\|_w^2$ for all $x,y$. The attained minimum $f_\star$ is known; $f(x_0)-f_\star\le\Delta$, $\Delta\ge0$, $\varepsilon>0$. Target: $f(\widehat x)-f_\star\le\varepsilon$. Costs count exact $(f,\nabla f)$ calls, including initialization and rejected trials. Updates in \textbf{(1)} use only $d,x_0,f_\star$; its stopping budget uses $\mu,\Delta,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/OnlineMetricAccelerated.lean}{Online\allowbreak{}Metric\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/OnlineMetricAccelerated.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&(\sqrt{\kappa_\star}+1+\log d)\ell\\&{}+d^2(1+\log d)^2\sqrt{\kappa_\star}\\&\qquad\cdot(1+d\log\kappa_\star)\end{aligned}\right)$
+& ---
+& --- \\
+\midrule[1.2pt]
+Secant diagonal + restarted AGD; Derived bound \citep[Prop.~4.1]{dsscRoulet2019v2}
+& $\mathcal{O}(d+\kappa_\star\ell)$
+& \textbf{(1)}: $\kappa_\star\to\sqrt{\kappa_\star}$ accuracy coefficient when $\sqrt{\kappa_\star}\gg1+\log d$; total gain for $\ell\gg d^3(1+\log d)^2\log\kappa_\star/\sqrt{\kappa_\star}$.
+& \textbf{(1)}: polynomial dimension-dependent warm-up can dominate at moderate accuracy. \\
+\midrule
+Multidimensional backtracking (ellipsoid) \citep[Thm.~5.3]{dsscKunstner2023v1}
+& $\mathcal{O}\!\left(\sqrt d\,\kappa_\star\ell+d[1+\log_+(L/\alpha_0)]\right)$
+& \textbf{(1)}: i) $\sqrt d\,\kappa_\star\to\sqrt{\kappa_\star}+1+\log d$ accuracy coefficient; gain for small $\varepsilon$ when these separate.\newline ii) Removes initial-guess dependence; baseline requires $P_D^\star\in S_0$.
+& \textbf{(1)}: needs $f_\star$ in addition; adds polynomial dimension-dependent warm-up. \\
+\midrule
+Lookahead OSGM-R \citep[Eq.~(5), \S6.1]{dsscGao2025v2}
+& $\mathcal{O}\!\left(\min\left\{\kappa_F[\ell+L^2\|P_1-P_F^\star\|_F^2], \kappa_E\ell\right\}\right)$\newline $P_1=I/L$; two calls per iteration.
+& \textbf{(1)}: i) $\kappa_\star\to\sqrt{\kappa_\star}$ leading coefficient when $\kappa_F\asymp\kappa_\star$, $\sqrt{\kappa_\star}\gg1+\log d$, $\varepsilon\to0$.\newline ii) Warm-up independent of weight spread; no $L$ in updates.
+& \textbf{(1)}: full-matrix $\kappa_F$ can be much smaller; loses when full-matrix scaling helps or the $\kappa_E\ell$ branch is small. \\
+\midrule
+Euclidean AGD + known-$f_\star$ restarts \citep[Prop.~4.1]{dsscRoulet2019v2}
+& $\mathcal{O}(\sqrt{\kappa_E}\,\ell)$
+& \textbf{(1)}: gain for $\sqrt{\kappa_E}\gg\sqrt{\kappa_\star}+1+\log d$, sufficiently small $\varepsilon$; possible when $\max_i w_i/\min_i w_i\gg1$.
+& \textbf{(1)}: warm-up makes the bound worse when Euclidean conditioning is already good. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\|v\|_w^2=\sum_iw_iv_i^2$; $\kappa_\star=1/\mu$; $\ell=1+\log_+(\Delta/\varepsilon)$; $\log_+t=\max\{0,\log t\}$ for $t>0$, $\log_+0=0$; AGD: accelerated gradient descent. $L,m$ are Euclidean smoothness and strong-convexity constants, $\kappa_E=L/m\le\kappa_\star\max_iw_i/\min_iw_i$ for best constants (equality is possible). $P_D^\star$ is an optimal diagonal preconditioner; $S_0=\{\operatorname{diag}(p):p\ge0,\ \alpha_0\|p\|^2\le1\}$, $\alpha_0>0$. $P_F^\star,\kappa_F$ are OSGM-R's optimal full-matrix scaling and ratio condition number; $\|\cdot\|_F$ is the Frobenius norm.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,43 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SampledCompositeSmoothConvex.lean}{Sampled\allowbreak{}Composite\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:SampledCompositeSmoothConvex}
+\parbox{\linewidth}{\footnotesize Minimize $\Phi=f+\psi$ on a closed convex set $Q$ in a separable real Hilbert space, where $f=\int F_\xi\,dp$, every $F_\xi$ is convex and globally $L$-smooth, and $\psi:E\to\mathbb{R}$ is lower semicontinuous and convex on $Q$. Samples are IID; sample gradients are jointly measurable, losses integrable, and exact proximal minimizers are available. For some minimizer $x_\star\in Q$, $x_0\in Q$, $\|x_0-x_\star\|\le R$, $\Phi(x_0)-\Phi(x_\star)\le\Delta$, and $\int\|\nabla F_\xi(x_\star)-\int\nabla F_\zeta(x_\star)\,dp(\zeta)\|^2dp(\xi)\le\sigma^2$, with the corresponding integrability conditions. Here $L,R,\varepsilon>0$ and $\Delta,\sigma\ge0$. The setup restricts the algorithm to proximal SGD with linear decay and terminal output; the target is $\int[\Phi(x_T(\omega))-\Phi(x_\star)]\,dP(\omega)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ProximalLinearDecayLastIterate.lean}{Proximal\allowbreak{}Linear\allowbreak{}Decay\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ProximalLinearDecayLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}+\frac{\Delta}{\varepsilon}\right)$
+& ---
+& --- \\
+\midrule[1.2pt]
+Proximal SGD \citep[Thm.~3.1]{sccVaidyan2026v1}; $E=\mathbb{R}^d$
+& $\begin{aligned}\mathcal{O}\!\Bigl(&1+\bigl(\tfrac{LR^2}{\varepsilon}\bigr)^2+\tfrac{\Delta}{\varepsilon}\\ &+\bigl(\tfrac{\sigma_*^2}{L\varepsilon}\bigr)^2\log^2\!\bigl(2+\tfrac{\sigma_*^2}{L\varepsilon}\bigr)\Bigr)\end{aligned}$
+& \textbf{(1)}: i) Variance instead of second moment at $x_\star$.\newline ii) Logarithm-free method-specific bound; never worse on overlap. For $\sigma=0$, $(LR^2/\varepsilon)^2\to LR^2/\varepsilon$.
+& \textbf{(1)}: needs $R,\sigma$ in step tuning; finite $\psi$ on closed $Q$ excludes barriers. No incremental-prox analogue. \\
+\midrule
+Averaged proximal SGD \citep[Thm.~12.5]{sccGarrigos2024v3}; Derived bound, finite sums in $\mathbb{R}^d$, components bounded below
+& $\mathcal{O}\!\Bigl(1+\tfrac{LR^2}{\varepsilon}+\tfrac{\Delta}{\varepsilon} +\tfrac{\sigma^2R^2}{\varepsilon^2}+\tfrac{\sigma^2\Delta}{L\varepsilon^2}\Bigr)$
+& \textbf{(1)}: i) Removes $\sigma^2\Delta/(L\varepsilon^2)$, dominant when $\Delta\gg LR^2$, $\sigma^2\gg L\varepsilon$.\newline ii) Last iterate instead of weighted average.\newline iii) General sample laws.
+& \textbf{(1)}: finite $\psi$ on closed $Q$; no barrier regularizers. \\
+\midrule
+Linear-decay proximal SGD \citep[Thm.~3.4]{liu2026lastv4momentum}; Euclidean specialization, $E=\mathbb{R}^d$, uniform variance $\sigma_u^2$
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma_u^2R^2}{\varepsilon^2}\right)$
+& \textbf{(1)}: Variance only at $x_\star$ instead of uniform variance; covers cases with $\sigma_u=\infty$. Matches leading rate at equal noise.
+& \textbf{(1)}: requires per-sample convexity and smoothness; extra $\Delta/\varepsilon$. Incomparable classes; no Bregman or high-probability extension. \\
+\midrule
+SAGD \citep[Cor.~1, Eq.~(3.6)]{sccIlandarideva2024v3}; Derived bound, $\psi=0$ on $Q$, $E=\mathbb{R}^d$, batch size $1$
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+& \textbf{(1)}: scope: nonzero $\psi$. No rate improvement on the constraint-only overlap.
+& \textbf{(1)}: extra $\Delta/\varepsilon$; worse when $\Delta\gg LR^2+\sigma^2R^2/\varepsilon$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $p$: sample law; $P$: IID execution law; $R,\Delta$: initial distance and gap bounds; $\sigma^2$: variance bound at $x_\star$; $\sigma_*^2=\sigma^2+\|\nabla f(x_\star)\|^2$: second-moment bound; $\sigma_u^2$: uniform variance bound. Costs count stochastic-gradient and exact-prox calls (one of each per iteration); for SAGD with $\psi=0$, prox means projection onto $Q$. SAGD's state-dependent-noise constants specialize to $\mathcal L=4L$ and noise variance $2\sigma^2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

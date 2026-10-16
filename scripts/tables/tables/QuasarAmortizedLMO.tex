@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Frank--Wolfe comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarAmortizedLMO.lean}{QuasarAmortizedLMO}.}\label{tab:QuasarAmortizedLMO}
+\caption{Frank--Wolfe comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarAmortizedLMO.lean}{Quasar\allowbreak{}Amortized\allowbreak{}LMO}.}\label{tab:QuasarAmortizedLMO}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with globally $L$-Lipschitz gradient; $C$ is convex, $x_0\in C$, and $\operatorname{diam}(C)\le D$. A minimizer $x_\star\in C$ satisfies $\tau(f(x)-f(x_\star))\le\langle\nabla f(x),x-x_\star\rangle$ for every $x\in C$, with $0<\tau\le1$. Gradients are exact; LMO answers $v_k\in C$ satisfy $\langle v,v_k\rangle\le\langle v,u\rangle+\delta_k$ for every direction $v$, $u\in C$, and oracle seed, where $\delta_k\ge0$ and $\sum_{k<n}\delta_k\le\Gamma$ for every $n$. Here $L,D,\Gamma\ge0$ and $\varepsilon>0$. Target: feasible output $x$ with $f(x)-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -11,14 +11,15 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarAmortizedLMO.lean}{Quasar\allowbreak{}Amortized\allowbreak{}LMO} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarAmortizedLMO.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}+\frac{\Gamma}{\tau\varepsilon}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 Frank--Wolfe \citep[Thm.~9, Prop.~12]{qalmMartinezRubio2026v3}
 & $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}\right)$\par Exact LMO; compact $C\subset\mathbb{R}^d$.
-& \textbf{(1)}: i) Summably inexact LMO.\par ii) Bounded convex Hilbert domains.\par iii) Matches known rate at $\Gamma=0$; Lean formalization.
+& \textbf{(1)}: i) Summably inexact LMO.\newline ii) Bounded convex Hilbert domains.\newline iii) Matches known rate at $\Gamma=0$; Lean formalization.
 & \textbf{(1)}: updates need $\tau$; short-step variant is $\tau$-free (needs $L$). \\
 \midrule
-Inexact Frank--Wolfe \citep[Thm.~5.1, Rem.~5.1]{qalmFreundGrigas2016v2}\par derived bound
+Inexact Frank--Wolfe \citep[Thm.~5.1, Rem.~5.1]{qalmFreundGrigas2016v2}\par Derived bound
 & $\mathcal{O}\!\left(1+\frac{LD^2+\Gamma}{\varepsilon}\right)$\par Convex $f$, $\tau=1$, compact $C\subset\mathbb{R}^d$; $\sum_k\delta_k\le\Gamma$.
 & \textbf{(1)}: scope: convex to $\tau$-quasar-convex objectives. Matches known rate on convex overlap at $\tau=1$.
 & \textbf{(1)}: requires summable errors; baseline also handles constant errors with an accuracy floor. \\

@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Exact ball-proximal complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConvexBallProximal.lean}{ConvexBallProximal}.}\label{tab:ConvexBallProximal}
+\caption{Exact ball-proximal complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConvexBallProximal.lean}{Convex\allowbreak{}Ball\allowbreak{}Proximal}.}\label{tab:ConvexBallProximal}
 \parbox{\linewidth}{\footnotesize In a finite-dimensional real inner product space, $f$ is convex on $C$ and its epigraph over $C$ is closed. There exist $x_0,x_\star\in C$ with $x_\star\in\arg\min_C f$, $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$, where $R\ge0$ and $t,\Delta,\varepsilon>0$. The setup requires fixed-radius ball-proximal iteration: each call returns any exact minimizer over $C\cap\overline B(x_k,t)$. Target: $x_K\in C$ and $f(x_K)-f(x_\star)\le\varepsilon$ almost surely. Accuracy-dependent bounds below use $0<\varepsilon<\Delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -10,31 +10,33 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BallProximalSharpProfile.lean}{Ball\allowbreak{}Proximal\allowbreak{}Sharp\allowbreak{}Profile} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BallProximalSharpProfile.md}{(review)}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt h(r)\right\}\right)$ & --- & --- \\
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt h(r)\right\}\right)$
+& ---
+& --- \\
 \midrule[1.2pt]
 \citep[Thm.~3.4]{cbpRichtarikLi2026v1}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt L\right\}\right)$
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt \ell\right\}\right)$
 & \textbf{(1)}: matches known order; sharper explicit coefficient (factor up to $1.18$ at $r=1/2$); gain vanishes as $r\to0$.
 & --- \\
 \midrule
 \citep[Rem.~3.5]{cbpRichtarikLi2026v1}, refined implicit bound
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt{(1-r^2)L}\right\}\right)$\par Large-$K$ asymptotic cost, fixed $r$.
-& i) \textbf{(1)}: up to approximately $4.4\%$ asymptotic constant gain near $r=0.2$.\par ii) \textbf{(1)}: supporting lemmas characterize exact worst cases and sharp leading constants; public export gives budget.
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt{(1-r^2)\ell}\right\}\right)$\par Large-$K$ asymptotic cost, fixed $r$.
+& i) \textbf{(1)}: up to approximately $4.4\%$ asymptotic constant gain near $r=0.2$.\newline ii) \textbf{(1)}: supporting lemmas characterize exact worst cases and sharp leading constants; public export gives budget.
 & \textbf{(1)}: no finite-$K$ dominance; baseline exact at $K=1$. Gain vanishes as $r\to0,1$. \\
 \midrule
 \citep[Thm.~4.5]{cbpRichtarikLi2026v1}, dimension-dependent termination
 & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},C_d\frac Rt\right\}\right)$
-& \textbf{(1)}: dimension-independent accuracy bound; smaller uncapped term when $\sqrt L\ll C_d$ and $r<1/2$.
-& \textbf{(1)}: larger bound if $\min\{R/t,\sqrt L\}\gg C_d$; baseline reaches exact optimum. \\
+& \textbf{(1)}: dimension-independent accuracy bound; smaller uncapped term when $\sqrt \ell\ll C_d$ and $r<1/2$.
+& \textbf{(1)}: larger bound if $\min\{R/t,\sqrt \ell\}\gg C_d$; baseline reaches exact optimum. \\
 \midrule
 \citep[Thm.~8.1(iii), Cor.~8.2]{cbpGruntkowskaEtAl2025v2}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{L}{\log(1+t/R)}\right\}\right)$
-& \textbf{(1)}: $\sqrt L$ instead of $L$ before saturation; total gain when $1\ll L\ll R/t$; already achieved by the 2026 bound.
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{\ell}{\log(1+t/R)}\right\}\right)$
+& \textbf{(1)}: $\sqrt \ell$ instead of $\ell$ before saturation; total gain when $1\ll \ell\ll R/t$; already achieved by the 2026 bound.
 & --- \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} Costs count exact ball-minimization calls. $r=\varepsilon/\Delta$, $L=\log(\Delta/\varepsilon)$; $h(r)=1-r$ for $1/2\le r<1$, and $h(r)=\sqrt{\log(1/r)}$ for $0<r<1/2$. $d=\dim E$; $C_d$ is the dimension-dependent self-contracted-curve length constant. The logarithmic quotient is interpreted by continuity at $R=0$.
+\item[] \textbf{Abbr:} Costs count exact ball-minimization calls. $r=\varepsilon/\Delta$, $\ell=\log(\Delta/\varepsilon)$; $h(r)=1-r$ for $1/2\le r<1$, and $h(r)=\sqrt{\log(1/r)}$ for $0<r<1/2$. $d=\dim E$; $C_d$ is the dimension-dependent self-contracted-curve length constant. The logarithmic quotient is interpreted by continuity at $R=0$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

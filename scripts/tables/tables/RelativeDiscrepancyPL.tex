@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeDiscrepancyPL.lean}{RelativeDiscrepancyPL}.}\label{tab:RelativeDiscrepancyPL}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeDiscrepancyPL.lean}{Relative\allowbreak{}Discrepancy\allowbreak{}PL}.}\label{tab:RelativeDiscrepancyPL}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with $L$-Lipschitz gradient, has a minimizer $x_\star$, and satisfies $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ for every $x$. Assume $0<\mu\le L$, $D,\Delta\ge0$, $\varepsilon>0$, and $f(x_0)-f(x_\star)\le\Delta$. Deterministic replies satisfy $\|\sum_{i=0}^{n-1}(g_{s+i}(x)-\nabla f(x))\|\le D\|\nabla f(x)\|$ for every $s,n,x$. Target: $f(x_{\rm out})-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -11,9 +11,10 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DiscrepancyBatchedGD.lean}{Discrepancy\allowbreak{}Batched\allowbreak{}GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DiscrepancyBatchedGD.md}{(review)}
 & $\mathcal{O}\!\left((1+D)\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-Batched GD, derived bound \citep[\S3, (9)--(11)]{rdplPuchinin2023v3}
+Batched GD, Derived bound \citep[\S3, (9)--(11)]{rdplPuchinin2023v3}
 & $\mathcal{O}\!\left((1+D)\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$
 \newline $b=\max\{1,\lceil3D\rceil\}$, $\alpha\le1/3$.
 & \textbf{(1)}: matches known rate; Lean formalization. Hilbert-space statement versus published $\mathbb{R}^d$ statement; same inner-product argument.
