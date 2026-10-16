@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Value-oracle complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineDriftPL.lean}{AffineDriftPL}.}\label{tab:AffineDriftPL}
+\caption{Value-oracle complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineDriftPL.lean}{Affine\allowbreak{}Drift\allowbreak{}PL}.}\label{tab:AffineDriftPL}
 \parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, has an $L$-Lipschitz gradient and a global minimizer $x_\star$, with $0<\mu\le L$, $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ and $f(x_0)-f(x_\star)\le\Delta$. Query $k$ returns $f(x)+a_t+b_tj+e_k(x)$, where $t=\lfloor k/(d+2)\rfloor$, $j=k\bmod(d+2)$, $a_t,b_t$ are arbitrary, and $|e_k(x)|\le\nu$. Assume $\Delta,\nu\ge0$, $\varepsilon>0$, and $4dL\nu\le\mu\varepsilon$. Target: $f(x_K)-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -11,14 +11,15 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DriftCorrectedGD.lean}{Drift\allowbreak{}Corrected\allowbreak{}GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DriftCorrectedGD.md}{(review)}
 & $\mathcal{O}\!\left(d\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$ value calls
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-Forward-difference GD, derived bound \citep{adplBerahas2022,adplFriedlander2012}
+Forward-difference GD, Derived bound \citep{adplBerahas2022,adplFriedlander2012}
 & $\mathcal{O}\!\left(d\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$ value calls; $a_t=b_t=0$, $4dL\nu\le\mu\varepsilon$
 & \textbf{(1)}: i) Scope: aligned affine drift instead of no drift.\newline ii) Formalization; matches known rate on the drift-free restriction.
 & \textbf{(1)}: $d+2$ instead of $d+1$ calls per step on the drift-free restriction. \\
 \midrule
-TOBYQA \citep{adplYao2026v2}, Sections 3.2--3.3, 4.4
+TOBYQA \citep[Secs.~3.2--3.3, 4.4]{adplYao2026v2}
 & Rates not comparable: expected stationarity time under probabilistically fully-linear models; no comparable objective-gap cost.
 & \textbf{(1)}: i) Scope: arbitrary aligned blockwise affine drift instead of global affine drift.\newline ii) Deterministic objective gap under PL instead of expected stationarity time.
 & \textbf{(1)} needs PL and $4dL\nu\le\mu\varepsilon$; drift jumps must align with batches. No $C^2$ nonlinear-drift bias guarantee. \\

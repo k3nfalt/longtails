@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Cohypomonotone equations with Jacobian-adjoint access (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneAdjoint.lean}{CohypomonotoneAdjoint}).}\label{tab:CohypomonotoneAdjoint}
+\caption{Cohypomonotone equations with Jacobian-adjoint access (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneAdjoint.lean}{Cohypomonotone\allowbreak{}Adjoint}).}\label{tab:CohypomonotoneAdjoint}
 \parbox{\linewidth}{\footnotesize
 On a finite-dimensional real inner product space, $F$ is differentiable and $L$-Lipschitz, $DF$ is $L_2$-Lipschitz, and $\langle F(x)-F(y),x-y\rangle\ge-\rho\|F(x)-F(y)\|^2$ for all $x,y$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$, with $L>0$, $L_2,\rho,R\ge0$. Exact queries return $F(x)$ or $DF(x)^\top w$. The target is $\|F(\widehat x)\|\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
 \begin{threeparttable}
@@ -12,11 +12,13 @@ On a finite-dimensional real inner product space, $F$ is differentiable and $L$-
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAcceleratedCohypomonotone.lean}{Adjoint\allowbreak{}Accelerated\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAcceleratedCohypomonotone.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&(LR/\varepsilon+1+\rho L)h\\&{}+(1+\rho L)^5h\,\frac{L_2R}{L}\ell^2\end{aligned}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule
 \textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAnchoredCohypomonotone.lean}{Adjoint\allowbreak{}Anchored\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAnchoredCohypomonotone.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&\bigl((1+\rho L)LR/\varepsilon\\&\quad +(1+\rho L)^2\bigr)h\\&{}+(1+\rho L)^4\frac{L_2R}{L}\ell^2\end{aligned}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 Inexact Halpern \citep[Thm.~2.1, Cor.~2.2]{sciAKW2026v3}\newline
 Special case: $\rho L<1$, $G=0$; $\eta=(\rho+1/L)/2$

@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Scalar stochastic H\"older stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ScalarHolderStochastic.lean}{ScalarHolderStochastic}.}\label{tab:ScalarHolderStochastic}
+\caption{Scalar stochastic H\"older stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ScalarHolderStochastic.lean}{Scalar\allowbreak{}Holder\allowbreak{}Stochastic}.}\label{tab:ScalarHolderStochastic}
 \parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}\to\mathbb{R}$ satisfies $|f'(x)-f'(y)|\le H|x-y|^\nu$ and $f(x_0)-\inf f\le\Delta$, with $H,\Delta,\varepsilon>0$, $0<\nu\le1$, $\sigma\ge0$, $1<p\le2$. The jointly measurable oracle $g$ has integrable replies and central $p$th moments, $\mathbb{E} g(x,\xi)=f'(x)$ and $\mathbb{E}|g(x,\xi)-f'(x)|^p\le\sigma^p$, with IID samples. Target: measurable $X$ with $\mathbb{P}(|f'(X)|>\varepsilon)\le1/3$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -11,14 +11,15 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ScalarHolderHeavyTailStationarity.lean}{Scalar\allowbreak{}Holder\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ScalarHolderHeavyTailStationarity.md}{(review)}
 & $\mathcal{O}\!\left(C[1+A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)]\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 \citep[full version, Cor.~11]{shsLiu2025Full}
 & $\mathcal{O}_{\nu,p}\!\left((1+A^{1+1/\nu})(1+(\sigma/\varepsilon)^{p/(p-1)})\right)$\newline Stochastic gradient calls; random block selection and Markov conversion.
 & \textbf{(1)}: $A^{1+1/\nu}(\sigma/\varepsilon)^{p/(p-1)}$ becomes $A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)$; polynomial gain for $A\ge1$, $\sigma\ge\varepsilon$, with $\nu,p$ fixed.
 & \textbf{(1)}: scalar only; needs all parameters. Cor.~12 permits unknown $H,\Delta,\sigma,p$, at a different rate. \\
 \midrule
-derived bound: dyadic probing, clipped estimation, union-bound bisection; unpublished composition of random search \citep{shsChewi2023}.
+Derived bound: dyadic probing, clipped estimation, union-bound bisection; composition of random search \citep{shsChewi2023}.
 & $\mathcal{O}\!\left(C\left[1+A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)\right.\right.$\newline $\left.\left.{}\cdot\log\log(3+A)\right]\right)$\newline Stochastic gradient calls; known parameters.
 & \textbf{(1)}: removes $\log\log(3+A)$ when $(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)\gtrsim A$; no order gain when $\begin{aligned}A\gtrsim{}&(\sigma/\varepsilon)^{p/(p-1)}\\&\cdot\log(2+A)\log\log(3+A)\end{aligned}$.
 & --- \\

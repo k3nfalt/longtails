@@ -10,17 +10,21 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedTwoPointZerothOrderConvex.lean}{Accelerated\allowbreak{}Two\allowbreak{}Point\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedTwoPointZerothOrderConvex.md}{(review)}
-& $\mathcal{O}\!\Bigl(1+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+\sigma/\varepsilon)\Bigr)$ & --- & --- \\
+& $\mathcal{O}\!\Bigl(1+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+\sigma/\varepsilon)\Bigr)$
+& ---
+& --- \\
 \midrule
 \textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedZerothOrderConvex.lean}{Accelerated\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedZerothOrderConvex.md}{(review)}
-& $\mathcal{O}\!\Bigl(d+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+d\sigma/\varepsilon)\Bigr)$ & --- & --- \\
+& $\mathcal{O}\!\Bigl(d+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+d\sigma/\varepsilon)\Bigr)$
+& ---
+& --- \\
 \midrule[1.2pt]
-derived bound: retuned two-point SGD \citep[Prop.~7]{zoBachPerchet2016}
+Derived bound: retuned two-point SGD \citep[Prop.~7]{zoBachPerchet2016}
 & $\begin{aligned}&\mathcal{O}\!\bigl(1+dLR^2/\varepsilon +d^2LR^2\sigma^2/\varepsilon^3\\&\quad+d^2LR^2\min\{\sigma/\varepsilon^2,\\&\hspace{75pt}d\sigma^2/\varepsilon^3\}\bigr)\end{aligned}$
 & \textbf{(1)}: $\mathcal{O}\!(dLR^2/\varepsilon)\to\mathcal{O}\!(d\sqrt{LR^2/\varepsilon})$ if $LR^2/\varepsilon\ge1$, $\sigma\le\varepsilon/(d\sqrt{LR^2/\varepsilon})$. Matches order for $LR^2/\varepsilon\ge1$, $\sigma\ge\varepsilon/d$.
 & \textbf{(2)}: $d^3$ instead of $d^2$ in the $LR^2\sigma^2/\varepsilon^3$ term. \\
 \midrule
-derived bound: box-smoothed AC-SA \citep[Cor.~3]{zoLan2008}
+Derived bound: box-smoothed AC-SA \citep[Cor.~3]{zoLan2008}
 & $\mathcal{O}\!\Bigl(d+d\sqrt{LR^2/\varepsilon} +\frac{d^2LR^2\sigma}{\varepsilon^2}(1+d\sigma/\varepsilon)\Bigr)$
 & i) \textbf{(1)}: $d^2$ instead of $d^3$ in the $LR^2\sigma^2/\varepsilon^3$ term.\newline ii) \textbf{(2)}: matches known rate; Lean formalization.
 & --- \\

@@ -9,15 +9,30 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticTwoSidedPLSmoothedAgda.lean}{Stochastic\allowbreak{}Two\allowbreak{}Sided\allowbreak{}PL\allowbreak{}Smoothed\allowbreak{}Agda} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticTwoSidedPLSmoothedAgda.md}{(review)} & $\mathcal{O}\!\left(\left[\frac{L^2}{\mu_x\mu_y}+\frac{L^3\sigma^2}{\mu_x^2\mu_y^2\varepsilon}\right]\ell\right)$ & --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticTwoSidedPLSmoothedAgda.lean}{Stochastic\allowbreak{}Two\allowbreak{}Sided\allowbreak{}PL\allowbreak{}Smoothed\allowbreak{}Agda} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticTwoSidedPLSmoothedAgda.md}{(review)}
+& $\mathcal{O}\!\left(\left[\frac{L^2}{\mu_x\mu_y}+\frac{L^3\sigma^2}{\mu_x^2\mu_y^2\varepsilon}\right]\ell\right)$
+& ---
+& --- \\
 \midrule[1.2pt]
-Stoc-AGDA \citep[Thm.~3.3]{stplYang2020} & $\mathcal{O}\!\left(1+\frac{L^3\Delta}{\mu_x\mu_y^2\varepsilon}+\frac{L^5\sigma^2}{\mu_x^2\mu_y^4\varepsilon}\right)$\newline Finite-dimensional $F$; saddle and slice minima attained. & \textbf{(1)}: noise term smaller by $\kappa_y^2/\ell$ when $\kappa_y^2>\ell$; termwise comparison, not uniform dominance. & \textbf{(1)}: Random second-half iterate instead of last iterate; needs $\sigma,\Delta,\varepsilon$ additionally for tuning; $\Delta$ includes an initial gradient term. \\
+Stoc-AGDA \citep[Thm.~3.3]{stplYang2020}
+& $\mathcal{O}\!\left(1+\frac{L^3\Delta}{\mu_x\mu_y^2\varepsilon}+\frac{L^5\sigma^2}{\mu_x^2\mu_y^4\varepsilon}\right)$\newline Finite-dimensional $F$; saddle and slice minima attained.
+& \textbf{(1)}: noise term smaller by $\kappa_y^2/\ell$ when $\kappa_y^2>\ell$; termwise comparison, not uniform dominance.
+& \textbf{(1)}: random second-half iterate instead of last iterate; needs $\sigma,\Delta,\varepsilon$ additionally for tuning; $\Delta$ includes an initial gradient term. \\
 \midrule
-AGDA \citep[Thm.~3.2]{stplYang2020} & $\mathcal{O}\!\left(\frac{L^3}{\mu_x\mu_y^2}\ell\right)$\newline $\sigma=0$; finite-dimensional $F$; saddle and slice minima attained. & \textbf{(1)}: at $\sigma=0$, $\kappa_x\kappa_y$ instead of $\kappa_x\kappa_y^2$; strict condition-number gain as $\kappa_y$ grows. & \textbf{(1)}: Random second-half iterate instead of last iterate. \\
+AGDA \citep[Thm.~3.2]{stplYang2020}
+& $\mathcal{O}\!\left(\frac{L^3}{\mu_x\mu_y^2}\ell\right)$\newline $\sigma=0$; finite-dimensional $F$; saddle and slice minima attained.
+& \textbf{(1)}: at $\sigma=0$, $\kappa_x\kappa_y$ instead of $\kappa_x\kappa_y^2$; strict condition-number gain as $\kappa_y$ grows.
+& \textbf{(1)}: random second-half iterate instead of last iterate. \\
 \midrule
-Restarted Smoothed-AGDA; derived bound \citep[Thm.~4.1]{stplYang2022} & $\mathcal{O}\!\left(\frac{L^2\ell}{\mu_x\mu_y}+\frac{L^3\sigma^2}{\mu_x^2\mu_y^2\varepsilon}\right)$\newline Finite-dimensional $F$; conditional on geometric restarts with deterministic bounds controlling expected stage initialization gaps. & i) \textbf{(1)}: scope: Hilbert-space $F$.\newline ii) \textbf{(1)}: single-run potential-PL analysis and formalization; matches deterministic rate, without restarts. & \textbf{(1)}: extra $\ell$ on noise term if the expected-initialization restart extension holds; no established complexity gain over this conditional bound. \\
+Restarted Smoothed-AGDA; Derived bound \citep[Thm.~4.1]{stplYang2022}
+& $\mathcal{O}\!\left(\frac{L^2\ell}{\mu_x\mu_y}+\frac{L^3\sigma^2}{\mu_x^2\mu_y^2\varepsilon}\right)$\newline Finite-dimensional $F$; conditional on geometric restarts with deterministic bounds controlling expected stage initialization gaps.
+& i) \textbf{(1)}: scope: hilbert-space $F$.\newline ii) \textbf{(1)}: single-run potential-PL analysis and formalization; matches deterministic rate, without restarts.
+& \textbf{(1)}: extra $\ell$ on noise term if the expected-initialization restart extension holds; no established complexity gain over this conditional bound. \\
 \midrule
-FESS-GDA \citep[Thm.~3.5]{stplShen2024v2}; one client & Different target:\newline $\mathbb{E}\|(x_T,y_T)-(x_\star,y_\star)\|^2\le\delta^2$.\newline Finite-dimensional $F$; saddle and slice minima attained. Rates not comparable. & \textbf{(1)}: scope: no saddle-existence assumption. & --- \\
+FESS-GDA \citep[Thm.~3.5]{stplShen2024v2}; one client
+& Different target:\newline $\mathbb{E}\|(x_T,y_T)-(x_\star,y_\star)\|^2\le\delta^2$.\newline Finite-dimensional $F$; saddle and slice minima attained. Rates not comparable.
+& \textbf{(1)}: scope: no saddle-existence assumption.
+& --- \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

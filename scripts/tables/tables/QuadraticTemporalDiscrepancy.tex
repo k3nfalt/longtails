@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Quadratics with bounded temporal discrepancy: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticTemporalDiscrepancy.lean}{QuadraticTemporalDiscrepancy}.}\label{tab:QuadraticTemporalDiscrepancy}
+\caption{Quadratics with bounded temporal discrepancy: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticTemporalDiscrepancy.lean}{Quadratic\allowbreak{}Temporal\allowbreak{}Discrepancy}.}\label{tab:QuadraticTemporalDiscrepancy}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space, $f(x)=\tfrac12\|A(x-x_\star)\|^2$ for a bounded linear operator $A$, with $\mu\|v\|^2\le\|Av\|^2\le L\|v\|^2$ for every $v$, $0<\mu\le L$, and $f(x_0)\le\Delta$. Call $k$ returns $A^*A(x-x_\star)+e_k$, where the deterministic errors are query-independent and $\sup_n\|\sum_{k<n}e_k\|\le D$. Here $D,\Delta\ge0$, $\varepsilon>0$; the target is $f(x_{\rm out})-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -11,14 +11,15 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/TemporalAcceleratedQuadratic.lean}{Temporal\allowbreak{}Accelerated\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/TemporalAcceleratedQuadratic.md}{(review)}
 & $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell+\frac{D}{\sqrt{\mu\varepsilon}}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-derived bound: batching and dilation, \citep[Prop.~4]{hltdSchmidt2011v2}; Hilbert-space extension
+Derived bound: batching and dilation, \citep[Prop.~4]{hltdSchmidt2011v2}; Hilbert-space extension
 & $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell+\frac{D}{\sqrt{\mu\varepsilon}}\right)$; includes initial batch
 & \textbf{(1)}: i) Matches known rate.\newline ii) No precision-dependent dilation.\newline iii) Updates need no $D,\varepsilon$; stopping still does.
 & \textbf{(1)}: tail average instead of last iterate. \\
 \midrule
-derived bound: batching only, \citep[Prop.~4]{hltdSchmidt2011v2}; Hilbert-space extension
+Derived bound: batching only, \citep[Prop.~4]{hltdSchmidt2011v2}; Hilbert-space extension
 & $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell\left[1+\frac{\sqrt{\kappa}D}{\sqrt{\mu\varepsilon}}\right]\right)$, $\varepsilon<\Delta$; counts all batch calls
 & \textbf{(1)}: i) Discrepancy term $D/\sqrt{\mu\varepsilon}$ instead of $\kappa\ell D/\sqrt{\mu\varepsilon}$; gain for $D\ge\sqrt{\mu\varepsilon}$, $L\gg\mu$, $\varepsilon<\Delta$.\newline ii) Updates need no $D,\varepsilon$; stopping still does.
 & \textbf{(1)}: tail average instead of last iterate. \\

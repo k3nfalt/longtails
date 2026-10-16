@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarSignedBias.lean}{QuasarSignedBias}.}\label{tab:QuasarSignedBias}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarSignedBias.lean}{Quasar\allowbreak{}Signed\allowbreak{}Bias}.}\label{tab:QuasarSignedBias}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with $\|\nabla f(x)\|\le M$, and has a global minimizer $x_\star$ with $\|x_0-x_\star\|\le R$ and $\tau(f(x)-f(x_\star))\le\langle\nabla f(x),x-x_\star\rangle$ for every $x$. Here $M,\varepsilon>0$, $B,R\ge0$, and $0<\tau\le1$. Call $k$ returns $(f(x),\nabla f(x)+b_{k+1}-b_k)$ for one fixed, query-independent sequence with $b_0=0$ and $\|b_k\|\le B$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,11 +9,20 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarSignedBias.lean}{Quasar\allowbreak{}Signed\allowbreak{}Bias} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarSignedBias.md}{(review)} & $\mathcal{O}\!\left(1+\frac{R^2M(M+B)}{\tau^2\varepsilon^2}\right)$ value--gradient calls & --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarSignedBias.lean}{Quasar\allowbreak{}Signed\allowbreak{}Bias} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarSignedBias.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{R^2M(M+B)}{\tau^2\varepsilon^2}\right)$ value--gradient calls
+& ---
+& --- \\
 \midrule[1.2pt]
-derived bound, EF analysis \citep[App.~B.6]{qsbKarimireddy2019} & $\mathcal{O}\!\left(1+\frac{R^2M(M+B)}{\varepsilon^2}\right)$ biased-gradient calls; convex $f$, deterministic gradients, $\|e_k\|\le\eta B$, $e_0=0$ & \textbf{(1)}: i) Scope: quasar-convex instead of convex.\newline ii) Matches known rate on convex overlap ($\tau=1$); formalizes the transferred bound. & \textbf{(1)}: needs exact values and differentiability; no unbiased stochastic noise, unlike EF-SGD. \\
+Derived bound, EF analysis \citep[App.~B.6]{qsbKarimireddy2019}
+& $\mathcal{O}\!\left(1+\frac{R^2M(M+B)}{\varepsilon^2}\right)$ biased-gradient calls; convex $f$, deterministic gradients, $\|e_k\|\le\eta B$, $e_0=0$
+& \textbf{(1)}: i) Scope: quasar-convex instead of convex.\newline ii) Matches known rate on convex overlap ($\tau=1$); formalizes the transferred bound.
+& \textbf{(1)}: needs exact values and differentiability; no unbiased stochastic noise, unlike EF-SGD. \\
 \midrule
-Subgradient descent \citep[Thm.~5.1]{qsbJin2020v3} & $\mathcal{O}\!\left(1+\frac{R^2M^2}{\tau^2\varepsilon^2}\right)$ value--gradient calls; $B=0$, $E=\mathbb{R}^d$; deterministic specialization, best-value selection & \textbf{(1)}: i) Scope: telescoping bias and Hilbert spaces.\newline ii) Matches known rate at $B=0$; no rate gain. & \textbf{(1)}: excludes unbiased stochastic noise; needs exact values. \\
+Subgradient descent \citep[Thm.~5.1]{qsbJin2020v3}
+& $\mathcal{O}\!\left(1+\frac{R^2M^2}{\tau^2\varepsilon^2}\right)$ value--gradient calls; $B=0$, $E=\mathbb{R}^d$; deterministic specialization, best-value selection
+& \textbf{(1)}: i) Scope: telescoping bias and Hilbert spaces.\newline ii) Matches known rate at $B=0$; no rate gain.
+& \textbf{(1)}: excludes unbiased stochastic noise; needs exact values. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Cyclic gradients for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/InterpolatedFiniteSum.lean}{InterpolatedFiniteSum}.}\label{tab:InterpolatedFiniteSum}
+\caption{Cyclic gradients for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/InterpolatedFiniteSum.lean}{Interpolated\allowbreak{}Finite\allowbreak{}Sum}.}\label{tab:InterpolatedFiniteSum}
 \parbox{\linewidth}{\footnotesize On a real Hilbert space, $m\ge1$ convex differentiable components have $L$-Lipschitz gradients, $L>0$, and a common minimizer $x_\star$ with $\|x_0-x_\star\|\le R$, $R\ge0$. Exact component gradients are available. The setup fixes cyclic gradient updates with step $1/L$ and the last complete-pass iterate; the target is $F(x)-F(x_\star)\le\varepsilon$, $\varepsilon>0$, almost surely. Updates use $m,L,x_0$; the stopping budget also uses $R,\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,13 +9,25 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CyclicGradientInterpolation.lean}{Cyclic\allowbreak{}Gradient\allowbreak{}Interpolation} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CyclicGradientInterpolation.md}{(review)} & $\mathcal{O}\!\left(m+\frac{m^4LR^2}{\varepsilon}\right)$ & --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CyclicGradientInterpolation.lean}{Cyclic\allowbreak{}Gradient\allowbreak{}Interpolation} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CyclicGradientInterpolation.md}{(review)}
+& $\mathcal{O}\!\left(m+\frac{m^4LR^2}{\varepsilon}\right)$
+& ---
+& --- \\
 \midrule[1.2pt]
-FISTA on $F$ \citep[Thm.~4.4]{ifsBeckTeboulle2009} & $\mathcal{O}\!\left(m+m\sqrt{\frac{LR^2}{\varepsilon}}\right)$\par Finite-dimensional restriction; $m$ component calls per step. & \textbf{(1)}: no established improvement in oracle complexity. & \textbf{(1)}: $m^4LR^2/\varepsilon$ instead of $m\sqrt{LR^2/\varepsilon}$; requires interpolation, unnecessary for this baseline. \\
+FISTA on $F$ \citep[Thm.~4.4]{ifsBeckTeboulle2009}
+& $\mathcal{O}\!\left(m+m\sqrt{\frac{LR^2}{\varepsilon}}\right)$\par Finite-dimensional restriction; $m$ component calls per step.
+& \textbf{(1)}: no established improvement in oracle complexity.
+& \textbf{(1)}: $m^4LR^2/\varepsilon$ instead of $m\sqrt{LR^2/\varepsilon}$; requires interpolation, unnecessary for this baseline. \\
 \midrule
-Cyclic IGD \citep[Thm.~2.3]{ifsCaiDiakonikolas2024v2} & $\mathcal{O}\!\left(m+\frac{mLR^2\sqrt{\ell}}{\varepsilon}\right)$\par Finite-dimensional, interpolating restriction; horizon-tuned step. & i) \textbf{(1)}: Hilbert-space scope.\par ii) \textbf{(1)}: removes $\sqrt{\ell}$, but costs $m^3$ more; rate gain only for $\ell\gg m^6$. & \textbf{(1)}: worse leading term when $\ell\ll m^6$; requires interpolation, unnecessary for the general baseline. \\
+Cyclic IGD \citep[Thm.~2.3]{ifsCaiDiakonikolas2024v2}
+& $\mathcal{O}\!\left(m+\frac{mLR^2\sqrt{\ell}}{\varepsilon}\right)$\par Finite-dimensional, interpolating restriction; horizon-tuned step.
+& i) \textbf{(1)}: hilbert-space scope.\newline ii) \textbf{(1)}: removes $\sqrt{\ell}$, but costs $m^3$ more; rate gain only for $\ell\gg m^6$.
+& \textbf{(1)}: worse leading term when $\ell\ll m^6$; requires interpolation, unnecessary for the general baseline. \\
 \midrule
-Cyclic projections, derived bound \citep[Prop.~4.13]{ifsEvronEtAl2023} & $\mathcal{O}\!\left(m+\frac{m^4L^2R^4}{\varepsilon^2}\right)$\par $m\ge3$, finite dimension; $f_i=\tfrac L2\operatorname{dist}(\cdot,C_i)^2$, closed convex $C_i$ with nonempty intersection. & i) \textbf{(1)}: general smooth interpolating losses.\par ii) \textbf{(1)}: same cyclic method, $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$ on this subclass when $\varepsilon<LR^2$. & \textbf{(1)}: average loss, rather than maximum squared distance; projection specialization is not separately formalized. \\
+Cyclic projections, Derived bound \citep[Prop.~4.13]{ifsEvronEtAl2023}
+& $\mathcal{O}\!\left(m+\frac{m^4L^2R^4}{\varepsilon^2}\right)$\par $m\ge3$, finite dimension; $f_i=\tfrac L2\operatorname{dist}(\cdot,C_i)^2$, closed convex $C_i$ with nonempty intersection.
+& i) \textbf{(1)}: general smooth interpolating losses.\newline ii) \textbf{(1)}: same cyclic method, $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$ on this subclass when $\varepsilon<LR^2$.
+& \textbf{(1)}: average loss, rather than maximum squared distance; projection specialization is not separately formalized. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

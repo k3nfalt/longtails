@@ -11,13 +11,14 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SpectralGradientQuadraticConvergence.lean}{Spectral\allowbreak{}Gradient\allowbreak{}Quadratic\allowbreak{}Convergence} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SpectralGradientQuadraticConvergence.md}{(review)}
 & $\begin{aligned}\mathcal{O}\!\Bigl(&\kappa\Bigl[1+\log\!\Bigl(1 +\frac{(d+1)^2(2\kappa)^{2d}MLR}{\mu^2}\Bigr)\Bigr]\\&+d[1+\log(1+\ell)]\Bigr)\end{aligned}$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-derived bound: AGD warmup \citep[Thm.~3.18]{Bubeck2015MinimizerHessian} + forward-difference Newton
+Derived bound: AGD warm-up \citep[Thm.~3.18]{Bubeck2015MinimizerHessian} + forward-difference Newton
 & $\mathcal{O}\!\left(\begin{gathered}\sqrt{\kappa}\!\left[1+\log\!\left(1+\frac{\sqrt{d\kappa}MR}{\mu}\right)\right]\\ {}+d[1+\log(1+\ell)]\end{gathered}\right)$\newline
 $d+1$ calls per Newton step; $M=0$: $\mathcal{O}\!(d)$.
 & \textbf{(1)}: global quadratic windows using scalar gradient steps; priority unresolved. No established problem-class improvement.
-& \textbf{(1)}: at least $\sqrt\kappa$ larger warmup bound; matched quadratic-phase order. Symmetric fitting and eigenvalue computations remain necessary. \\
+& \textbf{(1)}: at least $\sqrt\kappa$ larger warm-up bound; matched quadratic-phase order. Symmetric fitting and eigenvalue computations remain necessary. \\
 \midrule
 AGD \citep[Thm.~3.18]{Bubeck2015MinimizerHessian}
 & $\mathcal{O}\!\left(1+\sqrt\kappa\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right)$

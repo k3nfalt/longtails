@@ -11,11 +11,12 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeGeneralizedAccelerated.lean}{Composite\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeGeneralizedAccelerated.md}{(review)}
 & $\mathcal{O}\!\left(\begin{aligned}&\sqrt{\frac{(L_0+L_1G)R^2}{\varepsilon}}\\[-2pt]&+(1+L_1R)\Bigl[1+\log\!\Bigl(1\\[-2pt]&\qquad +(1+L_1R)\sqrt{\frac{\Delta}{L_0R^2}}\Bigr)\Bigr]\end{aligned}\right)$\newline Total gradient and proximal calls.
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 AC-FGM \citep[Cor.~1 and local-smoothness remark]{LiLan2024ACFGMv3}
-& $\mathcal{O}\!\left(1+\sqrt{\bar L B/\varepsilon}\right)$\newline Total gradient, value and proximal calls; Cor.~1 tuning, arbitrary $\eta_1>0$, no initialization search.
-& \textbf{(1)}: no function values. Rates not comparable in setup parameters: $\bar L$ depends on the trajectory. Applies for $E=\mathbb{R}^d$, closed $Q,\psi$.
+& $\mathcal{O}\!\left(1+\sqrt{\bar L B/\varepsilon}\right)$\newline Total gradient, value and proximal calls; 
+& \textbf{(1)}: no function values. Rates not comparable in setup parameters: $\bar L$ depends on the trajectory. Applies for $E=\mathbb{R}^d$, closed $Q,\psi$.\newline Cor.~1 tuning, arbitrary $\eta_1>0$, no initialization search.
 & \textbf{(1)} needs $L_0,L_1,R,\Delta$ for updates and $G$ for its stopping budget; AC-FGM updates need none. \\
 \midrule
 AGD \citep[Thm.~4.3]{Tyurin2026GeneralizedV2}

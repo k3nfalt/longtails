@@ -16,17 +16,16 @@
  +L_1^2\Delta/L_\star\bigr)
 \\ +\log(2+L_\star h_0+L_1^2\Delta h_0)\Bigr)
 \end{gathered}$\par Gradient and proximal calls; three per trial.
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 Accelerated proximal gradient \citep[App.~B, Thm.~B.1]{cgpfLiEtAl2026v3}
 & $\begin{gathered}
 \mathcal{O}\!\Bigl(\sqrt{L_\star R^2/\varepsilon}
  +\log(2+\Delta/(L_\star R^2))
 \\ +(1+q)\log(2+\Delta/\varepsilon)\Bigr)
-\end{gathered}$\par Gradient and proximal calls; $\Gamma_0=2\Delta/R^2$, $\tau=G$. $E=\mathbb{R}^d$, twice-differentiable $f$, $\|\nabla^2 f\|\le L_0+L_1\|\nabla f\|$; $\psi+\iota_Q$ proper closed convex.
-& i) \textbf{(1)}: no $L_0,L_1,G,R,\Delta$ in updates; stopping still needs them.\par
- ii) \textbf{(1)}: Hilbert-space, first-order smoothness scope.\par
- iii) \textbf{(1)}: matched leading rate; $\varepsilon$-free logarithms improve overhead when $h_0\asymp L_\star^{-1}$, $L_1>0$, $\varepsilon\ll\min\{L_\star/L_1^2,\Delta/(1+q)\}$.
+\end{gathered}$\par Gradient and proximal calls; 
+& i) \textbf{(1)}: no $L_0,L_1,G,R,\Delta$ in updates; stopping still needs them.\newline ii) \textbf{(1)}: hilbert-space, first-order smoothness scope.\newline iii) \textbf{(1)}: matched leading rate; $\varepsilon$-free logarithms improve overhead when $h_0\asymp L_\star^{-1}$, $L_1>0$, $\varepsilon\ll\min\{L_\star/L_1^2,\Delta/(1+q)\}$.\newline $\Gamma_0=2\Delta/R^2$, $\tau=G$. $E=\mathbb{R}^d$, twice-differentiable $f$, $\|\nabla^2 f\|\le L_0+L_1\|\nabla f\|$; $\psi+\iota_Q$ proper closed convex.
 & \textbf{(1)}: extra logarithmic cost can occur for $\varepsilon\gtrsim L_\star/L_1^2$; poor $h_0$ adds mismatch costs. Roughly threefold calls per accepted step. Finite $\psi$, versus extended-valued penalties. \\
 \midrule
 Accelerated GRAAL \citep[Cor.~3]{BorodichKovalev2025GRAALV2}\par Special case: $Q=\mathbb{R}^d$, $\psi=0$, $G=0$.
@@ -34,14 +33,12 @@ Accelerated GRAAL \citep[Cor.~3]{BorodichKovalev2025GRAALV2}\par Special case: $
 \mathcal{O}\!\Bigl(1+\sqrt{L_0R^2/\varepsilon}+q^3
 \\ +(1+q^2)\log(1/(\eta_0L_0))\Bigr)
 \end{gathered}$\par Gradient and value calls; $\eta_0L_0e^q\le1$. Requires $f\in C^2$, $\|\nabla^2 f\|\le L_0+L_1\|\nabla f\|$.
-& i) \textbf{(1)}: scope extends to composite constraints, $G>0$.\par
- ii) \textbf{(1)}: any $h_0$; no values on overlap (prox is explicit).\par
- iii) \textbf{(1)}: startup $q^3\to\mathcal{O}\!(q^2)$ for $q\gg1$, $h_0\asymp L_0^{-1}$, $L_1^2\Delta/L_0\lesssim e^q$; total gain requires $\varepsilon\gtrsim L_0R^2/q^6$.
+& i) \textbf{(1)}: scope: extends to composite constraints, $G>0$.\newline ii) \textbf{(1)}: any $h_0$; no values on overlap (prox is explicit).\newline iii) \textbf{(1)}: startup $q^3\to\mathcal{O}\!(q^2)$ for $q\gg1$, $h_0\asymp L_0^{-1}$, $L_1^2\Delta/L_0\lesssim e^q$; total gain requires $\varepsilon\gtrsim L_0R^2/q^6$.
 & \textbf{(1)}: backtracking adds a constant-factor call overhead; unrestricted $h_0$ retains mismatch costs. \\
 \midrule
 AC-FGM \citep[Cor.~1 and following remark]{LiLan2024ACFGMv3}\par Initial-search variant; closed convex $Q\subseteq\mathbb{R}^d$, closed convex $\psi$.
-& $\mathcal{O}\!\left(1+\sqrt{\bar L R^2/\varepsilon}+\log_+(\bar L/\ell_{\rm init})\right)$\par Gradient, value and proximal calls, including initial trials. Local smoothness bound $\bar L$; no polynomial bound in $L_0,L_1,G,R,\Delta$ established. Rates not comparable in setup parameters.
-& \textbf{(1)}: no function values; explicit polynomial dependence on setup parameters, up to logarithms. No established rate gain over the local-curvature bound.
+& $\mathcal{O}\!\left(1+\sqrt{\bar L R^2/\varepsilon}+\log_+(\bar L/\ell_{\rm init})\right)$\par Gradient, value and proximal calls, including initial trials. 
+& \textbf{(1)}: no function values; explicit setup-parameter bound. Baseline uses trajectory curvature $\bar L$; no polynomial setup-parameter bound established. Rates not comparable.
 & \textbf{(1)}: backtracking beyond initialization; no parameter-free-update advantage. \\
 \bottomrule
 \end{tabularx}

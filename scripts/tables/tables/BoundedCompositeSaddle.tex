@@ -9,16 +9,22 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Uniform\allowbreak{}Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)} & $\mathcal{O}\!\left(1+\frac{LR^2+MR}{\varepsilon}\right)$ & --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Uniform\allowbreak{}Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2+MR}{\varepsilon}\right)$
+& ---
+& --- \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Bounded\allowbreak{}Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)} & $\mathcal{O}\!\left(1+\left(\frac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$ & --- & --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Bounded\allowbreak{}Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)}
+& $\mathcal{O}\!\left(1+\left(\frac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$
+& ---
+& --- \\
 \midrule[1.2pt]
-PDHG \citep[Eq.~(16)]{BCSChambollePock2010}\newline derived bound
+PDHG \citep[Eq.~(16)]{BCSChambollePock2010}\newline Derived bound
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\right)$\newline Exact proximal queries; $\tau=\sigma=1/(2L)$; bounded comparators; inner-product-space extension.
 & \textbf{(1)}: matches known rate for $M\le LR$.\newline \textbf{(2)}: no established improvement.
 & i) \textbf{(1)}: extra $MR/\varepsilon$.\newline ii) \textbf{(2)}: exponent $4/3$ instead of $1$ for $LR^2/\varepsilon\gg1$.\newline iii) \textbf{(1)}, \textbf{(2)}: additionally require bounded domains and Lipschitz $g,h$. \\
 \midrule
-Arrow--Hurwicz \citep[\S3.2, Eq.~(20)]{BCSChambollePock2010}\newline derived bound
+Arrow--Hurwicz \citep[\S3.2, Eq.~(20)]{BCSChambollePock2010}\newline Derived bound
 & $\mathcal{O}\!\left(1+\frac{L^2R^4}{\varepsilon^2}\right)$\newline Exact proximal queries; bounded updated domain and comparators; $\tau=\sigma=\sqrt{2}/(L\sqrt{T})$.
 & Method-specific rate:\newline i) \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$, fixed $R,L,M$.\newline ii) \textbf{(2)}: gain when $\frac{R(LR+M)}{\varepsilon}\ll\left(\frac{LR^2}{\varepsilon}\right)^{3/2}$; speedup $\left(\frac{LR^2}{\varepsilon}\right)^{2/3}$ if $M\le LR$, $LR^2\gg\varepsilon$.
 & \textbf{(1)}, \textbf{(2)}: additionally require bounded primal domain and Lipschitz $g,h$.\newline \textbf{(2)}: worse if $M\gg L^{3/2}R^2/\sqrt{\varepsilon}$. \\

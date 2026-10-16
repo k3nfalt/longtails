@@ -12,9 +12,10 @@
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedGradientSliding.lean}{Generalized\allowbreak{}Gradient\allowbreak{}Sliding} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedGradientSliding.md}{(review)}
 & Total: $\mathcal{O}\!\left(\sqrt{(L_0+L_1G)R^2/\varepsilon}+B+M^2R^2/\varepsilon^2\right)$\newline
 $\nabla f$: $\mathcal{O}\!\left(\sqrt{(L_0+L_1G)R^2/\varepsilon}+B\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
-Gradient sliding \citep[Cor.~1(a)]{sgsLan2016v2}\newline derived bound: $E=\mathbb{R}^d$, $X=Q\cap\overline B(x_0,2R)$, Euclidean geometry, no extra proximal term
+Gradient sliding \citep[Cor.~1(a)]{sgsLan2016v2}\newline Derived bound: $E=\mathbb{R}^d$, $X=Q\cap\overline B(x_0,2R)$, Euclidean geometry, no extra proximal term
 & Total: $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+e^{3L_1R/2}\sqrt{(L_0+L_1G)R^2/\varepsilon}\\&{}+M^2R^2/\varepsilon^2\end{aligned}\right)$\newline
 $\nabla f$: $\mathcal{O}\!\left(1+e^{3L_1R/2}\sqrt{(L_0+L_1G)R^2/\varepsilon}\right)$; projections onto $X$
 & i) \textbf{(1)}: generalized-smooth sliding; polynomial constants.\newline
@@ -22,7 +23,7 @@ $\nabla f$: $\mathcal{O}\!\left(1+e^{3L_1R/2}\sqrt{(L_0+L_1G)R^2/\varepsilon}\ri
  iii) \textbf{(1)}: only $\Pi_Q$ for arbitrary $Q$; $Q=E$ has closed-form ball projection.
 & \textbf{(1)}: matched leading rate for $L_1R\lesssim1$; at $L_1=0$, adds $\log(1+\sqrt{\Delta/(L_0R^2)})$. Scope excludes Bregman geometry, extra simple prox terms, stochastic subgradients. \\
 \midrule
-Normalized subgradient \citep[Thm.~2]{sgsGrimmer2019v3}\newline derived bound: $E=\mathbb{R}^d$
+Normalized subgradient \citep[Thm.~2]{sgsGrimmer2019v3}\newline Derived bound: $E=\mathbb{R}^d$
 & Total: $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+(G+M)^2R^2/\varepsilon^2\\&{}+(L_0+L_1G)R^2/\varepsilon+L_1^2R^2\end{aligned}\right)$\newline
 Same order for $\nabla f$; includes subgradients, $\Pi_Q$, and $F$ values selecting the best iterate
 & i) \textbf{(1)}: $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ gradients, fixed parameters with $G+M>0$.\newline

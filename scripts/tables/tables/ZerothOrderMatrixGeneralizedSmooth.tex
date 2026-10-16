@@ -11,14 +11,15 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ZerothOrderMatrixGeneralizedAccelerated.lean}{Zeroth\allowbreak{}Order\allowbreak{}Matrix\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ZerothOrderMatrixGeneralizedAccelerated.md}{(review)}
 & $\mathcal{O}\!\left(b\left[\begin{aligned}&\sqrt{d(r+1)L_0R^2/\varepsilon}\\[-2pt]&+(r+1+L_1R\sqrt{d(r+1)})\ell\end{aligned}\right]\right)$\par Function values, including all trials and output selection.
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 AGD \citep[Thm.~4.3]{Tyurin2026GeneralizedV2}
 & $\mathcal{O}\!\left(\begin{aligned}&1+\sqrt{L_0R^2/\varepsilon}\\[-2pt]&+L_1^{\mathrm E}R\log_+\!\min\!\left\{\frac{(L_1^{\mathrm E})^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\\[-2pt]&+\log_+\!\frac{\Delta}{L_0R^2}\end{aligned}\right)$\par Exact gradients; deterministic accuracy. Displayed tuning requires $R=\|x_0-x_\star\|>0$.
 & i) \textbf{(1)}: values instead of gradients.\newline ii) \textbf{(1)}: no $\mu_H$ input or inverse-eigenvalue dependence. Rates use different oracle units.
 & \textbf{(1)}: needs $r$; probabilistic guarantee; additional accuracy logarithm when $\varepsilon<L_0/(L_1^{\mathrm E})^2$. \\
 \midrule
-RS-NAG, derived bound \citep[Thm.~3.3, Prop.~5.2]{zomgsOmiya2026v1}\par $L_1=0$, $d\ge2$; one-dimensional Haar sketches.
+RS-NAG, Derived bound \citep[Thm.~3.3, Prop.~5.2]{zomgsOmiya2026v1}\par $L_1=0$, $d\ge2$; one-dimensional Haar sketches.
 & $\mathcal{O}\!\left(b\left[1+\sqrt{d(r+1)L_0R^2/\varepsilon}\right]\right)$\par Directional-derivative and value calls. Independent trials, one selection value per trial; target probability $1-\delta$.
 & i) \textbf{(1)}: scope: permits $L_1>0$.\newline ii) \textbf{(1)}: values replace directional derivatives.\newline iii) \textbf{(1)}: matches leading rate at $L_1=0$.
 & \textbf{(1)}: adds $b(r+1)\ell$ at $L_1=0$. \\

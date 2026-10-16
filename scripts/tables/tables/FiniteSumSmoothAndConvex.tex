@@ -11,11 +11,13 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedFiniteSumConvex.md}{(review)}
 & $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule
 \textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SvrgConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+n\log\!\left(1+\frac{LR^2}{\varepsilon}\right)+\frac{LR^2}{\varepsilon}\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 VRADA \citep[Thm.~1]{fscSongJiangMa2020V4}\newline Stated on $E=\mathbb{R}^d$; composite term $=0$.
 & $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
@@ -23,8 +25,8 @@ VRADA \citep[Thm.~1]{fscSongJiangMa2020V4}\newline Stated on $E=\mathbb{R}^d$; c
 & i) \textbf{(1)}, \textbf{(2)}: no composite term.\newline ii) \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{nLR^2/\varepsilon}$ for $LR^2/\varepsilon\gg n$. \\
 \midrule
 SVRG++ \citep[Thm.~4.1]{fscAllenZhuYuan2016V3}\newline Stated on $E=\mathbb{R}^d$; $\Psi=0$.
-& $\mathcal{O}\!\left(n[1+\log_+(\Delta/\varepsilon)]+\frac{LR^2}{\varepsilon}\right)$\newline Gap tuning: $m_0=\lceil LR^2/\Delta\rceil$, $0<\varepsilon\le\Delta$.
-& \textbf{(2)}: matches known rate for $\Delta\asymp LR^2$; formalized Hilbert-space proof.
+& $\mathcal{O}\!\left(n[1+\log_+(\Delta/\varepsilon)]+\frac{LR^2}{\varepsilon}\right)$\newline 
+& \textbf{(2)}: matches known rate for $\Delta\asymp LR^2$; formalized Hilbert-space proof.\newline Gap tuning: $m_0=\lceil LR^2/\Delta\rceil$, $0<\varepsilon\le\Delta$.
 & \textbf{(2)}: $n\log(1+LR^2/\varepsilon)$ instead of gap-tuned $n[1+\log_+(\Delta/\varepsilon)]$; no composite term. \\
 \midrule
 Katyusha + AdaptReg \citep[arXiv v6, Cor.~3.5]{fscAllenZhu2018V6}\newline Stated on $E=\mathbb{R}^d$; $\psi=0$.

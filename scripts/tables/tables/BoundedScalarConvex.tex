@@ -1,6 +1,6 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedScalarConvex.lean}{BoundedScalarConvex}.}\label{tab:BoundedScalarConvex}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedScalarConvex.lean}{Bounded\allowbreak{}Scalar\allowbreak{}Convex}.}\label{tab:BoundedScalarConvex}
 \parbox{\linewidth}{\footnotesize On $C=[\mathrm{lower},\mathrm{upper}]\subset\mathbb{R}$, $f$ is convex and $H$-Lipschitz, $H>0$. A minimizer $x_\star\in C$ satisfies $|x_0-x_\star|\le R$, with $x_0\in C$ and $R\ge0$. Jointly measurable replies $g_t$ obey $|g_t|\le H$ almost surely and $\mathbb{E}[g_t\mid\mathcal F_{t-1}]\in\partial_C f(x_t)$ for every past-measurable query in $C$. Target: measurable feasible output with integrable gap and $\int(f(x_{\rm out})-f(x_\star))\,dP\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
@@ -9,13 +9,25 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BoundedScalarConvex.lean}{Bounded\allowbreak{}Scalar\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BoundedScalarConvex.md}{(review)} & $\mathcal{O}(1+H^2R^2/\varepsilon^2)$\newline Constant-step projected SGD; tuning uses $H,R,\varepsilon$. & --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BoundedScalarConvex.lean}{Bounded\allowbreak{}Scalar\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BoundedScalarConvex.md}{(review)}
+& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$
+& ---
+& --- \\
 \midrule[1.2pt]
-Linear-decay SGD \citep[Thm.~3.4]{liu2026lastv4momentum} & $\mathcal{O}(1+H^2R^2/\varepsilon^2)$ & \textbf{(1)}: matches known rate; same last-iterate guarantee and tuning knowledge. & \textbf{(1)}: Scalar compact interval and bounded replies; baseline permits any dimension, unbounded domains, finite-variance noise. \\
+Linear-decay SGD \citep[Thm.~3.4]{liu2026lastv4momentum}
+& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$
+& \textbf{(1)}: matches known rate; same last-iterate guarantee and $H,R,\varepsilon$ tuning; constant-step projected SGD.
+& \textbf{(1)}: scalar compact interval and bounded replies; baseline permits any dimension, unbounded domains, finite-variance noise. \\
 \midrule
-Scheduled SGD \citep[Thm.~1]{bscJain2019v2}\newline Independent-noise restriction & $\mathcal{O}(1+H^2D^2/\varepsilon^2)$ & \textbf{(1)}: i) $R^2$ instead of $D^2$ when $R<D$; already matched by linear decay.\newline ii) Adapted instead of independent noise. & \textbf{(1)}: Scalar only; baseline permits any dimension. \\
+Scheduled SGD \citep[Thm.~1]{bscJain2019v2}\newline Independent-noise restriction
+& $\mathcal{O}(1+H^2D^2/\varepsilon^2)$
+& \textbf{(1)}: i) $R^2$ instead of $D^2$ when $R<D$; already matched by linear decay.\newline ii) Adapted instead of independent noise.
+& \textbf{(1)}: scalar only; baseline permits any dimension. \\
 \midrule
-Constant-step SGD \citep[Thm.~2]{bscBeretta2026v1}\newline Additive IID, state-independent noise & $\mathcal{O}(1+H^2R^2/\varepsilon^2)$\newline On the bounded-reply overlap. & \textbf{(1)}: constant-step analysis extends to adapted, state- and time-dependent bounded replies; matches the rate on the overlap. & \textbf{(1)}: requires bounded replies and a compact interval; baseline permits unbounded noise and domains. \\
+Constant-step SGD \citep[Thm.~2]{bscBeretta2026v1}\newline Additive IID, state-independent noise
+& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$\newline On the bounded-reply overlap.
+& \textbf{(1)}: constant-step analysis extends to adapted, state- and time-dependent bounded replies; matches the rate on the overlap.
+& \textbf{(1)}: requires bounded replies and a compact interval; baseline permits unbounded noise and domains. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

@@ -11,17 +11,18 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedHeavyTailedMarkovConvex.lean}{Accelerated\allowbreak{}Heavy\allowbreak{}Tailed\allowbreak{}Markov\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedHeavyTailedMarkovConvex.md}{(review)}
 & $\begin{aligned}\mathcal{O}\!\bigl(&(1+\sqrt{LR^2/\varepsilon}+(256\sigma R/\varepsilon)^{\alpha/(\alpha-1)})\\ &\cdot[1+\tau(256LR^2/\varepsilon+64S)^{1/\beta}]\bigr)\end{aligned}$\newline All calls, including skipped transitions.
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 Accelerated mirror descent \citep[Cor.~2, v2]{htmSolodkin2025v2}
 & $\mathcal{O}\!\left(\left[1+\sqrt{LR^2/\varepsilon}+\frac{\tau_{\rm mix}\sigma^2R^2}{\varepsilon^2}\right]\ell_{\rm mix}\right)$\newline Expected calls including batches. Special case: finite-dimensional ball; $\alpha=2$, $\|g-\nabla f\|\le\sigma$ almost surely, uniform geometric mixing.
 & \textbf{(1)}: i) Scope: stationary $\alpha$-moments instead of bounded noise; infinite variance allowed.\newline ii) \textbf{(1)}: averaged polynomial instead of uniform geometric mixing; no rate gain established.
-& \textbf{(1)}: Hilbert geometry only. Geometric overlap: choosing $\beta=\ell$, $\tau=\ell\tau_{\rm mix}/\log2$ pays $1+\tau_{\rm mix}\ell$ on the deterministic term; noise order matches up to logarithms. \\
+& \textbf{(1)}: hilbert geometry only. Geometric overlap: choosing $\beta=\ell$, $\tau=\ell\tau_{\rm mix}/\log2$ pays $1+\tau_{\rm mix}\ell$ on the deterministic term; noise order matches up to logarithms. \\
 \midrule
-Ergodic mirror descent, derived bound \citep[Thm.~1, Eq.~(12), arXiv v3]{htmDuchi2012}
-& $\mathcal{O}_{\beta}\!\left(U^2[1+\tau U^{1/\beta}]\right)$, $U\ge1$.\newline Special case: finite-dimensional ball, convex sample losses, $\|g\|\le G$ almost surely, uniform polynomial mixing.
-& \textbf{(1)}: i) Scope: moment-bounded noise; averaged mixing.\newline ii) Last iterate instead of averaging.\newline iii) Rate: smaller leading bound for $\alpha=2$, $\sigma\asymp G$, $\beta>1$, $U^2\ll (LR^2/\varepsilon)\ll U^{(4\beta+2)/(\beta+2)}$, $\tau U^{1/\beta}\ge1$.
-& \textbf{(1)}: needs smoothness, stationary start, polynomial mixing. For $\alpha=2$, $\sigma\asymp G$, $LR^2/\varepsilon\le U^2$, $U\gg1$, $\tau U^{1/\beta}\ge1$: extra $U^{1/\beta}$ factor. \\
+Ergodic mirror descent, Derived bound \citep[Thm.~1, Eq.~(12), arXiv v3]{htmDuchi2012}
+& $\mathcal{O}_{\beta}\!\left((GR/\varepsilon)^2[1+\tau (GR/\varepsilon)^{1/\beta}]\right)$, $GR/\varepsilon\ge1$.\newline Special case: finite-dimensional ball, convex sample losses, $\|g\|\le G$ almost surely, uniform polynomial mixing.
+& \textbf{(1)}: i) Scope: moment-bounded noise; averaged mixing.\newline ii) Last iterate instead of averaging.\newline iii) Rate: smaller leading bound for $\alpha=2$, $\sigma\asymp G$, $\beta>1$, $(GR/\varepsilon)^2\ll (LR^2/\varepsilon)\ll (GR/\varepsilon)^{(4\beta+2)/(\beta+2)}$, $\tau (GR/\varepsilon)^{1/\beta}\ge1$.
+& \textbf{(1)}: needs smoothness, stationary start, polynomial mixing. For $\alpha=2$, $\sigma\asymp G$, $LR^2/\varepsilon\le (GR/\varepsilon)^2$, $GR/\varepsilon\gg1$, $\tau (GR/\varepsilon)^{1/\beta}\ge1$: extra $(GR/\varepsilon)^{1/\beta}$ factor. \\
 \midrule
 Accelerated stochastic proximal subgradient \citep[Thm.~2(i), v2]{htmHeLiLu2026v2}
 & $\mathcal{O}_{\alpha}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\left(\frac{\sigma R}{\varepsilon}\right)^{\alpha/(\alpha-1)}\right)$\newline Special case: IID, finite-dimensional, $h=\iota_{B(x_0,R)}$, $0<\varepsilon<1$. Ball projection is closed form.
@@ -30,7 +31,7 @@ Accelerated stochastic proximal subgradient \citep[Thm.~2(i), v2]{htmHeLiLu2026v
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $U=GR/\varepsilon$, where $G$ bounds stochastic-gradient norms. $\ell=\log(e+LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2)$; $\ell_{\rm mix}=\log(e+LR^2/\varepsilon+\tau_{\rm mix}\sigma^2R^2/\varepsilon^2)$. $\operatorname{TV}(\mu,\nu)=\sup_B|\mu(B)-\nu(B)|$ over measurable $B$; uniform geometric mixing means $\sup_z\operatorname{TV}(\kappa^t(z,\cdot),\pi)\le2^{-t/\tau_{\rm mix}}$, $\tau_{\rm mix}\ge1$; uniform polynomial mixing replaces the averaged bound by its supremum over $z$. $B(x_0,R)$ is the closed ball; $\iota_B$ its indicator function; $m$ is the sampling interval; $y_N$ the last accelerated iterate. Subscripts on $\mathcal{O}$ permit dependence on those parameters; polynomial-regime comparisons hold for fixed $\beta$. Calls are primitive stochastic-gradient calls.
+\item[] \textbf{Abbr:} $G$ bounds stochastic-gradient norms. $\ell=\log(e+LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2)$; $\ell_{\rm mix}=\log(e+LR^2/\varepsilon+\tau_{\rm mix}\sigma^2R^2/\varepsilon^2)$. $\operatorname{TV}(\mu,\nu)=\sup_B|\mu(B)-\nu(B)|$ over measurable $B$; uniform geometric mixing means $\sup_z\operatorname{TV}(\kappa^t(z,\cdot),\pi)\le2^{-t/\tau_{\rm mix}}$, $\tau_{\rm mix}\ge1$; uniform polynomial mixing replaces the averaged bound by its supremum over $z$. $B(x_0,R)$ is the closed ball; $\iota_B$ its indicator function; $m$ is the sampling interval; $y_N$ the last accelerated iterate. Subscripts on $\mathcal{O}$ permit dependence on those parameters; polynomial-regime comparisons hold for fixed $\beta$. Calls are primitive stochastic-gradient calls.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

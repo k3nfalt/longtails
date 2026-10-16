@@ -11,7 +11,8 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GapSmoothStrongGrowthHighProbability.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth\allowbreak{}High\allowbreak{}Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GapSmoothStrongGrowthHighProbability.md}{(review)}
 & $\mathcal{O}\!\left(\rho c\left[(1+R\sqrt{H_1})\ell+R\sqrt{H_0/\varepsilon}\right]\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 RCSAG \citep[Thm.~9]{gssgLobanov2026v1}\newline $E=\mathbb{R}^d$; $p=2$, pure strong growth; $Q=B(x_0,R)$
 & $\mathcal{O}\!\left((c+\log(1+\ell))\right.$\newline $\left.{}\cdot\left[\ell+R\sqrt{H_0/\varepsilon}+R\sqrt{H_1}J\right.\right.$\newline $\left.\left.{}+(\rho-1)R^2(H_0/\varepsilon+H_1J)\right]\right)$
@@ -28,7 +29,7 @@ Accelerated SGD \citep[Thm.~2]{gssgVaswani2019}\newline $H_1=0$, $E=\mathbb{R}^d
 & \textbf{(1)}: matches known $\varepsilon^{-1/2}$ rate; confidence dependence $\delta^{-1/2}\to c$ versus Markov when $\ell=\mathcal{O}\!(1+R\sqrt{H_0/\varepsilon})$.
 & \textbf{(1)}: batches $\lceil\rho\rceil$ samples; retains initialization cost $\rho c\ell$. \\
 \midrule
-derived bound: AGNES with proxBoost \citep[Thm.~15]{gssgGupta2025v3}\citep[Thm.~3]{gssgDavis2020}\newline $H_1=0$, $E=\mathbb{R}^d$
+Derived bound: AGNES with proxBoost \citep[Thm.~15]{gssgGupta2025v3}\citep[Thm.~3]{gssgDavis2020}\newline $H_1=0$, $E=\mathbb{R}^d$
 & $\mathcal{O}\!\left((1+\rho R\sqrt{H_0/\varepsilon}) {}\cdot\ell_0[c+\log\ell_0]\right)$
 & \textbf{(1)}: matches polynomial rate; removes the outer $\ell_0$ factor when $\ell=\mathcal{O}\!(1+R\sqrt{H_0/\varepsilon})$.
 & \textbf{(1)}: batches $\lceil\rho\rceil$ samples; retains initialization cost $\rho c\ell$. \\

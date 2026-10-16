@@ -10,7 +10,9 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ReshuffledConstantStepLastIterate.lean}{Reshuffled\allowbreak{}Constant\allowbreak{}Step\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ReshuffledConstantStepLastIterate.md}{(review)}
-& $\mathcal{O}\!\left(n+(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\Lambda\right)$ & --- & --- \\
+& $\mathcal{O}\!\left(n+(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\Lambda\right)$
+& ---
+& --- \\
 \midrule[1.2pt]
 RR, averaged output \citep[Cor.~1]{Liu2026RRv1}\newline $E=\mathbb{R}^d$
 & $\begin{aligned}\mathcal{O}\!\Bigl(&n+L_{\max}R^2/\varepsilon\\&+\min\left\{\frac{\sigma^2R^2}{\varepsilon^2},\frac{\sqrt{nL_{\mathrm{avg}}}\,\sigma R^2}{\varepsilon^{3/2}}\right\}\Bigr)\end{aligned}$
@@ -20,14 +22,14 @@ RR, averaged output \citep[Cor.~1]{Liu2026RRv1}\newline $E=\mathbb{R}^d$
 RR, small step \citep[Thm.~C.1]{LiuZhou2024Shufflev3}\newline $E=\mathbb{R}^d$, $\psi=0$
 & $\mathcal{O}\!\left(n+\left[\frac{n\sqrt{L_{\mathrm{avg}}L_{\max}}R^2}{\varepsilon}\right.\right.$\newline $\left.\left.{}+\frac{\sqrt{nL_{\mathrm{avg}}}\,\sigma R^2}{\varepsilon^{3/2}}\right]\sqrt h\right)$
 & \textbf{(1)}: i) Deterministic term improves if $\Lambda\ll n\sqrt{L_{\mathrm{avg}}/L_{\max}}$.\newline ii) Noise term improves if $\varepsilon\gg\sigma^2\Lambda^2/(nL_{\mathrm{avg}})$.
-& \textbf{(1)}: Loses $L_{\mathrm{avg}}$ sensitivity; worse noise term if $\varepsilon\ll\sigma^2\Lambda^2/(nL_{\mathrm{avg}}h)$. \\
+& \textbf{(1)}: loses $L_{\mathrm{avg}}$ sensitivity; worse noise term if $\varepsilon\ll\sigma^2\Lambda^2/(nL_{\mathrm{avg}}h)$. \\
 \midrule
 VRADA \citep[Thm.~1]{SongJiangMa2021VRADAv4}\newline $E=\mathbb{R}^d$, $l=0$
 & $\mathcal{O}\!\left(n[1+\log(1+\log n)]+\sqrt{nL_{\max}R^2/\varepsilon}\right)$
 & \textbf{(1)}: at most a $1+\log(1+\log n)$ factor gain in the initialization-dominated regime $(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\Lambda\lesssim n$.
 & \textbf{(1)}: needs $\sigma$; adds $\sigma^2R^2\Lambda/\varepsilon^2$; $L_{\max}R^2\Lambda/\varepsilon$ instead of $\sqrt{nL_{\max}R^2/\varepsilon}$, worse for $L_{\max}R^2/\varepsilon\ge n$. \\
 \midrule
-IID SGD \citep[Thm.~2]{AttiaEtAl2025Lastv2}\newline derived bound; $E=\mathbb{R}^d$, uniform component sampling
+IID SGD \citep[Thm.~2]{AttiaEtAl2025Lastv2}\newline Derived bound; $E=\mathbb{R}^d$, uniform component sampling
 & $\mathcal{O}\!\left(1+(L_{\max}R^2/\varepsilon+\sigma^2R^2/\varepsilon^2)\ell\right)$
 & \textbf{(1)}: multi-epoch RR analysis; no established complexity improvement.
 & \textbf{(1)}: Additive $n$; $\Lambda$ instead of $\ell$; reshuffling access instead of IID sampling. \\

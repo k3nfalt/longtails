@@ -11,21 +11,22 @@
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HiddenConvexAcceleratedStochastic.lean}{Hidden\allowbreak{}Convex\allowbreak{}Accelerated\allowbreak{}Stochastic} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HiddenConvexAcceleratedStochastic.md}{(review)}
 & $\mathcal{O}\!\left(1+\left(\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)\ell^2\right)$
-& --- & --- \\
+& ---
+& --- \\
 \midrule[1.2pt]
 Momentum P-SGD \citep[Thm.~8]{lhcsFHH2024v2}\par Compact convex $X\ni x_0,x_\star$, convex $c(X)$
 & $\mathcal{O}\!\left(\left(1+\frac{LR^2}{\varepsilon}+\frac{LR^4\sigma^2}{\varepsilon^3}\right)\ell_F\right)$\par Best-case overlap: $D_U/\mu_c\asymp R$, $\varepsilon\le LR^2$.
-& i) \textbf{(1)}: $LR^2/\varepsilon\to\sqrt{LR^2/\varepsilon}$; $LR^4\sigma^2/\varepsilon^3\to\sigma^2R^2/\varepsilon^2$, up to logarithms; gain as $\varepsilon\to0$ with other parameters fixed.\par ii) \textbf{(1)}: no convex-image requirement.\par iii) \textbf{(1)}: updates need no $\varepsilon,D_U,\mu_c$; stopping needs $\varepsilon$.
+& i) \textbf{(1)}: $LR^2/\varepsilon\to\sqrt{LR^2/\varepsilon}$; $LR^4\sigma^2/\varepsilon^3\to\sigma^2R^2/\varepsilon^2$, up to logarithms; gain as $\varepsilon\to0$ with other parameters fixed.\newline ii) \textbf{(1)}: no convex-image requirement.\newline iii) \textbf{(1)}: updates need no $\varepsilon,D_U,\mu_c$; stopping needs $\varepsilon$.
 & \textbf{(1)}: requires local $C^{1,1}$ reparametrization, $32L_JR\le\mu$, and an unconstrained global minimizer; classes incomparable. \\
 \midrule
 Global hidden convexity \citep[Thm.~5.4]{lhcsBCKP2025}
 & $\mathcal{O}\!\left(1+D_2\rho+\frac{D_2^4G^3\rho}{(\alpha\beta)^4\varepsilon^3}\right)$
-& i) \textbf{(1)}: $\varepsilon^{-3}\to\varepsilon^{-2}\ell^2$ on smooth overlap, fixed positive parameters; full parameter bounds not comparable.\par ii) \textbf{(1)}: bounded variance replaces $\|g\|\le G$ almost surely; no Lipschitz $H$ requirement.\par iii) \textbf{(1)}: local instead of global $C^{1,1}$.
+& i) \textbf{(1)}: $\varepsilon^{-3}\to\varepsilon^{-2}\ell^2$ on smooth overlap, fixed positive parameters; full parameter bounds not comparable.\newline ii) \textbf{(1)}: bounded variance replaces $\|g\|\le G$ almost surely; no Lipschitz $H$ requirement.\newline iii) \textbf{(1)}: local instead of global $C^{1,1}$.
 & \textbf{(1)}: needs global $L$-smoothness and $32L_JR\le\mu$. Baseline: global invertible $c$, $\beta\|v\|\le\|Jv\|\le\|v\|/\alpha$, $\rho$-Lipschitz $J$, $G$-Lipschitz $H$; known $D_1,D_2$ with $F(y)\ge F(x)$ on $\|x\|=D_1$, $\|y\|=D_2$, and $D_2\ge\max\{R,\alpha\beta/\rho\}$. \\
 \midrule
 AC-SA \citep[Cor.~1]{lhcsLan2012}\par Convex special case: $L_J=0$, restricted to $\overline B(x_0,R)$
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& \textbf{(1)}: scope extends to locally hidden-convex objectives that can be nonconvex and non-quasar-convex.
+& \textbf{(1)}: scope: extends to locally hidden-convex objectives that can be nonconvex and non-quasar-convex.
 & \textbf{(1)}: extra $\ell^2$ factor on the convex overlap. \\
 \bottomrule
 \end{tabularx}
