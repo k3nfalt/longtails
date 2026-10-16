@@ -56,6 +56,7 @@ import LongTails.Algorithms.NearestAimingNesterov
 import LongTails.Algorithms.NonlinearTemporalAccelerated
 import LongTails.Algorithms.NormalizedSam
 import LongTails.Algorithms.OnlineMetricAccelerated
+import LongTails.Algorithms.ProximalLinearDecaySgd
 import LongTails.Algorithms.QuadraticReshuffling
 import LongTails.Algorithms.QueryPlan
 import LongTails.Algorithms.RandomReshuffling
@@ -465,6 +466,11 @@ import LongTails.Proofs.OnlineMetricRun
 import LongTails.Proofs.OnlineMetricStep
 import LongTails.Proofs.OperatorGeneratingSeries
 import LongTails.Proofs.OrderedResidualProducts
+import LongTails.Proofs.ProximalLinearDecayConvergence
+import LongTails.Proofs.ProximalLinearDecayExecution
+import LongTails.Proofs.ProximalLinearDecayExpectation
+import LongTails.Proofs.ProximalLinearDecayStep
+import LongTails.Proofs.ProximalLinearDecayWeights
 import LongTails.Proofs.QuadraticContractions
 import LongTails.Proofs.QuadraticEnvelope
 import LongTails.Proofs.QuadraticFiniteSumModel
@@ -738,6 +744,7 @@ import LongTails.Setups.RegretMatchingPotential
 import LongTails.Setups.RelativeDiscrepancyPL
 import LongTails.Setups.RelativeErrorSmoothConvex
 import LongTails.Setups.ReshuffledSmoothConvex
+import LongTails.Setups.SampledCompositeSmoothConvex
 import LongTails.Setups.SampledSmoothConvex
 import LongTails.Setups.ScalarHolderStochastic
 import LongTails.Setups.SimilarFiniteSumQuasar
@@ -820,6 +827,7 @@ import LongTails.Theorems.NearZeroSumOwnGradients
 import LongTails.Theorems.NonlinearTemporalAcceleration
 import LongTails.Theorems.NormalizedSamStronglyConvex
 import LongTails.Theorems.OnlineMetricAccelerated
+import LongTails.Theorems.ProximalLinearDecayLastIterate
 import LongTails.Theorems.QuasarAmortizedLMO
 import LongTails.Theorems.QuasarSignedBias
 import LongTails.Theorems.RandomReshufflingQuadratic
