@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.SampledCompositeSmoothConvex",
+  "searched_at": "2026-10-16T08:56:03.538668+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil \\frac{72 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{900 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} + \\frac{6 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SampledCompositeSmoothConvex.spec.Params → ℕ",
+        "value": "fun q => 2 * ⌈72 * q.L * q.R ^ 2 / q.ε + 900 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2 + 6 * q.Δ / q.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil \\frac{72 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{900 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} + \\frac{6 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SampledCompositeSmoothConvex.spec.Params → ℕ",
+          "value": "fun q => 2 * ⌈72 * q.L * q.R ^ 2 / q.ε + 900 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2 + 6 * q.Δ / q.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ProximalLinearDecayLastIterate",
+      "namespace": "LongTails.Setups.SampledCompositeSmoothConvex",
+      "setup": "LongTails.Setups.SampledCompositeSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SampledCompositeSmoothConvex.spec OracleTemplate.SampledComposite.budget",
+      "theorem": "OracleTemplate.SampledComposite.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ProximalLinearDecayLastIterate",
+      "theorem": "OracleTemplate.SampledComposite.result",
+      "references": "- Ahmed Khaled, Othmane Sebbouh, Nicolas Loizou, Robert M. Gower, Peter Richtárik. [Unified Analysis of Stochastic Gradient Methods for Composite Convex and Smooth Optimization](https://arxiv.org/pdf/2006.11573v1). 2023 publication; 2020 preprint v1. Complexity: $O(1+(LR^2+\\Delta)/\\varepsilon+\\sigma^2R^2/\\varepsilon^2)$ total stochastic-gradient and exact proximal oracle calls, with a fixed budget, for averaged proximal SGD achieving expected composite objective gap at most $\\varepsilon$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(x)=Eξ[loss(ξ,x)]+ψ(x) over a nonempty closed convex set Q. Every sampled loss is convex, and ψ is convex on Q and lower semicontinuous. A minimizer x⋆ exists.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: smoothPart, objective, spec.admissible."
+      },
+      {
+        "label": "composite",
+        "details": "The expected smooth loss is combined with a potentially nonsmooth convex regularizer and a constraint set; exact proximal minimization includes both ψ and Q.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: proxObjective, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query at x returns grad(ξ,x), the exact gradient of a fresh IID sampled loss. The law and sampled functions are hidden instance data. No function values or reusable sample identifiers are returned.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: Model, oracleAnswer, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "proximal",
+        "details": "For a>0, a query (a,z,g) returns an exact minimizer over Q of ‖u−z‖²/(2a)+⟨g,u−z⟩+ψ(u). Gradient and proximal queries each consume one call from the same oracle budget.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: proxObjective, oracleAnswer, spec.admissible; LongTails/Template.lean: execute, _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Only solution variance is bounded: Eξ‖grad(ξ,x⋆)−Eζ grad(ζ,x⋆)‖²≤σ² at a minimizer satisfying the initialization bounds. There is no uniform variance bound over x, bounded-gradient assumption, or exponential-tail assumption.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: spec.admissible, minimizer and variance clauses."
+      },
+      {
+        "label": "other",
+        "details": "E is a second-countable real Hilbert space with its Borel measurable structure, possibly infinite-dimensional. Every sampled gradient is globally L-Lipschitz. Public parameters include x0,L,R,Δ,σ,ε, with L,R,ε>0 and Δ,σ≥0; x0∈Q, ‖x0−x⋆‖≤R, and F(x0)−F(x⋆)≤Δ. Q need not be bounded.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned E-valued point must be measurable, its objective gap integrable, and E[F(output)−F(x⋆)]≤ε for a minimizer over Q. The successful predicate does not separately require output∈Q or specify averaging; allowedAlgorithm restricts the permitted algorithm family.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: spec.Output, spec.successful, spec.allowedAlgorithm."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over the joint algorithm and oracle randomness, under a fixed total oracle budget; it is not a high-probability guarantee.",
+        "evidence": "LongTails/Setups/SampledCompositeSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence, execute."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established stochastic composite convex optimization formulation with IID sample gradients, samplewise smoothness, solution-only variance control, exact proximal access, and expected objective error. The Hilbert-space scope and restricted algorithm family require separate applicability checks."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SampledComposite.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ProximalLinearDecayLastIterate",
+          "theorem": "OracleTemplate.SampledComposite.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "setup": "LongTails.Setups.DiagonalSmoothStronglyConvex",
+  "searched_at": "2026-10-16T08:50:57.351109+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left(d + 1 + \\left\\lceil \\log_{2}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil 24 \\cdot \\frac{1}{\\sqrt{\\mu}} + \\log_{2}\\left(d\\right) + 2 \\right\\rceil_{+} + \\left(d \\cdot \\left\\lceil -\\log_{2}\\left(\\mu\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil 110 \\cdot d^{2} \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right)\\right)^{2} \\cdot \\frac{1}{\\sqrt{\\mu}} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.DiagonalSmoothStronglyConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  2 *\n    (q.d + 1 + ⌈Real.logb 2 (q.Δ / q.ε)⌉₊ * ⌈24 * (√q.μ)⁻¹ + Real.logb 2 ↑q.d + 2⌉₊ +\n      (q.d * ⌈-Real.logb 2 q.μ⌉₊ + 1) * ⌈110 * ↑q.d ^ 2 * (1 + Real.log (2 * ↑q.d)) ^ 2 * (√q.μ)⁻¹⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(d + 1 + \\left\\lceil \\log_{2}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil 24 \\cdot \\frac{1}{\\sqrt{\\mu}} + \\log_{2}\\left(d\\right) + 2 \\right\\rceil_{+} + \\left(d \\cdot \\left\\lceil -\\log_{2}\\left(\\mu\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil 110 \\cdot d^{2} \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right)\\right)^{2} \\cdot \\frac{1}{\\sqrt{\\mu}} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.DiagonalSmoothStronglyConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  2 *\n    (q.d + 1 + ⌈Real.logb 2 (q.Δ / q.ε)⌉₊ * ⌈24 * (√q.μ)⁻¹ + Real.logb 2 ↑q.d + 2⌉₊ +\n      (q.d * ⌈-Real.logb 2 q.μ⌉₊ + 1) * ⌈110 * ↑q.d ^ 2 * (1 + Real.log (2 * ↑q.d)) ^ 2 * (√q.μ)⁻¹⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.OnlineMetricAccelerated",
+      "namespace": "LongTails.Setups.DiagonalSmoothStronglyConvex",
+      "setup": "LongTails.Setups.DiagonalSmoothStronglyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.DiagonalSmoothStronglyConvex.spec\n  OracleTemplate.OnlineMetricAccelerated.budget",
+      "theorem": "OracleTemplate.OnlineMetricAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.OnlineMetricAccelerated",
+      "theorem": "OracleTemplate.OnlineMetricAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on R^d, with an attained minimum.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: spec.admissible."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "Writing ||v||_W² = Σ_i w_i v_i², f is μ-strongly convex and 1-smooth in this weighted norm: μ||y−x||_W²/2 ≤ f(y)−f(x)−⟨∇f(x),y−x⟩ ≤ ||y−x||_W²/2. Here 0 < μ ≤ 1 and every w_i > 0.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: spec.valid and both quadratic inequalities in spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query returns the exact full Euclidean gradient at any requested point, together with its function value. Replies are independent of the call index and oracle seed.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: spec.Query, spec.Reply, and oracle.answer equality in spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "Exact function values accompany gradients in the same oracle call; they incur no separate oracle charge.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: spec.Reply and spec.admissible; LongTails/Template.lean: Setup.numOracles and execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "The positive diagonal weights w and relative strong-convexity parameter μ are hidden. No bounds on individual weights or their ratios are public.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: Public, Params, spec.publicInput, and spec.valid; LongTails/Template.lean: Convergence.makeAlgorithm quantification."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Both curvature bounds use the same unknown diagonal quadratic geometry W = diag(w), rather than a supplied scalar Euclidean smoothness constant.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: weighted quadratic bounds in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace R (Fin d), with public integer dimension d ≥ 1.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: Public.d, Public.nonzero, and spec.Instance."
+      },
+      {
+        "label": "other",
+        "details": "Only d, x0, and the exact attained optimum value fstar are public. The initial-gap bound Δ ≥ 0 and tolerance ε > 0 are hidden alongside w and μ. They determine the external oracle budget, but are not inputs to the algorithm constructor.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: Public, Params, spec.publicInput, spec.valid, and spec.admissible; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output) − f(xstar) ≤ ε, where xstar is a global minimizer with f(xstar) = fstar.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law, after execution with the supplied fixed oracle-call budget. Deterministic behavior is not required.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvex.lean: almost-everywhere quantifier in spec.successful; LongTails/Template.lean: Algorithm.law, Convergence, and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The underlying objective class is smooth strongly convex minimization, but the information model combines unknown diagonal geometry and hidden curvature and accuracy parameters with a public exact optimum value and an externally imposed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.OnlineMetricAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.OnlineMetricAccelerated",
+          "theorem": "OracleTemplate.OnlineMetricAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -380,6 +380,27 @@
   },
   {
     "budget": {
+      "latex": "2 \\cdot \\left(d + 1 + \\left\\lceil \\log_{2}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil 24 \\cdot \\frac{1}{\\sqrt{\\mu}} + \\log_{2}\\left(d\\right) + 2 \\right\\rceil_{+} + \\left(d \\cdot \\left\\lceil -\\log_{2}\\left(\\mu\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil 110 \\cdot d^{2} \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right)\\right)^{2} \\cdot \\frac{1}{\\sqrt{\\mu}} \\right\\rceil_{+}\\right)",
+      "oracle": 0,
+      "type": "LongTails.Setups.DiagonalSmoothStronglyConvex.spec.Params → ℕ",
+      "value": "fun q =>\n  2 *\n    (q.d + 1 + ⌈Real.logb 2 (q.Δ / q.ε)⌉₊ * ⌈24 * (√q.μ)⁻¹ + Real.logb 2 ↑q.d + 2⌉₊ +\n      (q.d * ⌈-Real.logb 2 q.μ⌉₊ + 1) * ⌈110 * ↑q.d ^ 2 * (1 + Real.log (2 * ↑q.d)) ^ 2 * (√q.μ)⁻¹⌉₊)"
+    },
+    "budgets": [
+      {
+        "latex": "2 \\cdot \\left(d + 1 + \\left\\lceil \\log_{2}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil 24 \\cdot \\frac{1}{\\sqrt{\\mu}} + \\log_{2}\\left(d\\right) + 2 \\right\\rceil_{+} + \\left(d \\cdot \\left\\lceil -\\log_{2}\\left(\\mu\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil 110 \\cdot d^{2} \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right)\\right)^{2} \\cdot \\frac{1}{\\sqrt{\\mu}} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.DiagonalSmoothStronglyConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  2 *\n    (q.d + 1 + ⌈Real.logb 2 (q.Δ / q.ε)⌉₊ * ⌈24 * (√q.μ)⁻¹ + Real.logb 2 ↑q.d + 2⌉₊ +\n      (q.d * ⌈-Real.logb 2 q.μ⌉₊ + 1) * ⌈110 * ↑q.d ^ 2 * (1 + Real.log (2 * ↑q.d)) ^ 2 * (√q.μ)⁻¹⌉₊)"
+      }
+    ],
+    "module": "LongTails.Theorems.OnlineMetricAccelerated",
+    "namespace": "LongTails.Setups.DiagonalSmoothStronglyConvex",
+    "setup": "LongTails.Setups.DiagonalSmoothStronglyConvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.DiagonalSmoothStronglyConvex.spec\n  OracleTemplate.OnlineMetricAccelerated.budget",
+    "theorem": "OracleTemplate.OnlineMetricAccelerated.result"
+  },
+  {
+    "budget": {
       "latex": "2 \\cdot \\left\\lceil \\sqrt{\\frac{2 \\cdot R^{2}}{lam \\cdot \\gamma \\cdot \\varepsilon}} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.DouglasRachfordSmoothConvex.spec.Params → ℕ",
@@ -884,6 +905,27 @@
   },
   {
     "budget": {
+      "latex": "2 \\cdot \\left\\lceil \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{2 \\cdot L^{2} \\cdot \\rho}{\\mu \\cdot \\sqrt{\\mu \\cdot \\varepsilon}}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.NormalizedSamStronglyConvex.spec.Params → ℕ",
+      "value": "fun p => 2 * ⌈(2 * p.L / p.μ + 2 * p.L ^ 2 * p.ρ / (p.μ * √(p.μ * p.ε))) * Real.log (1 + p.Δ / p.ε)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "2 \\cdot \\left\\lceil \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{2 \\cdot L^{2} \\cdot \\rho}{\\mu \\cdot \\sqrt{\\mu \\cdot \\varepsilon}}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NormalizedSamStronglyConvex.spec.Params → ℕ",
+        "value": "fun p => 2 * ⌈(2 * p.L / p.μ + 2 * p.L ^ 2 * p.ρ / (p.μ * √(p.μ * p.ε))) * Real.log (1 + p.Δ / p.ε)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.NormalizedSamStronglyConvex",
+    "namespace": "LongTails.Setups.NormalizedSamStronglyConvex",
+    "setup": "LongTails.Setups.NormalizedSamStronglyConvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.NormalizedSamStronglyConvex.spec\n  LongTails.Theorems.NormalizedSamStronglyConvex.budget",
+    "theorem": "LongTails.Theorems.NormalizedSamStronglyConvex.result"
+  },
+  {
+    "budget": {
       "latex": "n \\cdot \\left\\lceil \\left(\\frac{64 \\cdot L}{\\mu} + \\frac{128 \\cdot L \\cdot \\sqrt{L} \\cdot G}{n \\cdot \\mu^{2} \\cdot \\sqrt{\\varepsilon}} + 8 \\cdot \\left(\\frac{L^{3} \\cdot G^{2}}{n \\cdot \\mu^{4} \\cdot \\varepsilon}\\right)^{\\frac{1}{3}}\\right) \\cdot \\log\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.QuadraticFiniteSum.spec.Params → ℕ",
@@ -1049,6 +1091,27 @@
     "setup": "LongTails.Setups.ReshuffledSmoothConvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.ReshuffledSmoothConvex.spec OracleTemplate.ReshuffledConvex.budget",
     "theorem": "OracleTemplate.ReshuffledConvex.result"
+  },
+  {
+    "budget": {
+      "latex": "2 \\cdot \\left\\lceil \\frac{72 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{900 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} + \\frac{6 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.SampledCompositeSmoothConvex.spec.Params → ℕ",
+      "value": "fun q => 2 * ⌈72 * q.L * q.R ^ 2 / q.ε + 900 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2 + 6 * q.Δ / q.ε⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "2 \\cdot \\left\\lceil \\frac{72 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{900 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} + \\frac{6 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SampledCompositeSmoothConvex.spec.Params → ℕ",
+        "value": "fun q => 2 * ⌈72 * q.L * q.R ^ 2 / q.ε + 900 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2 + 6 * q.Δ / q.ε⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.ProximalLinearDecayLastIterate",
+    "namespace": "LongTails.Setups.SampledCompositeSmoothConvex",
+    "setup": "LongTails.Setups.SampledCompositeSmoothConvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.SampledCompositeSmoothConvex.spec OracleTemplate.SampledComposite.budget",
+    "theorem": "OracleTemplate.SampledComposite.result"
   },
   {
     "budget": {

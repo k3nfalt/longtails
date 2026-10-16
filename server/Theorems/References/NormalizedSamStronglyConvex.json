@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.NormalizedSamStronglyConvex",
+  "searched_at": "2026-10-16T08:53:43.650494+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{2 \\cdot L^{2} \\cdot \\rho}{\\mu \\cdot \\sqrt{\\mu \\cdot \\varepsilon}}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NormalizedSamStronglyConvex.spec.Params → ℕ",
+        "value": "fun p => 2 * ⌈(2 * p.L / p.μ + 2 * p.L ^ 2 * p.ρ / (p.μ * √(p.μ * p.ε))) * Real.log (1 + p.Δ / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{2 \\cdot L^{2} \\cdot \\rho}{\\mu \\cdot \\sqrt{\\mu \\cdot \\varepsilon}}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NormalizedSamStronglyConvex.spec.Params → ℕ",
+          "value": "fun p => 2 * ⌈(2 * p.L / p.μ + 2 * p.L ^ 2 * p.ρ / (p.μ * √(p.μ * p.ε))) * Real.log (1 + p.Δ / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.NormalizedSamStronglyConvex",
+      "namespace": "LongTails.Setups.NormalizedSamStronglyConvex",
+      "setup": "LongTails.Setups.NormalizedSamStronglyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NormalizedSamStronglyConvex.spec\n  LongTails.Theorems.NormalizedSamStronglyConvex.budget",
+      "theorem": "LongTails.Theorems.NormalizedSamStronglyConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NormalizedSamStronglyConvex",
+      "theorem": "LongTails.Theorems.NormalizedSamStronglyConvex.result",
+      "references": "- Hamed Karimi, Julie Nutini, and Mark Schmidt. [Linear Convergence of Gradient and Proximal-Gradient Methods Under the Polyak–Łojasiewicz Condition](https://arxiv.org/pdf/1608.04636v1). 2016, preprint v1. Complexity: $O(1+(L/\\mu)\\log(\\Delta/\\varepsilon))$ exact-gradient oracle calls using gradient descent for deterministic $f(x_T)-f^*\\le\\varepsilon$, when $0<\\varepsilon<\\Delta$; zero calls suffice when $\\Delta\\le\\varepsilon$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "The stated global strong-convexity inequality implies convexity on all of E.",
+        "evidence": "LongTails/Setups/NormalizedSamStronglyConvex.lean: spec.admissible, strong-convexity inequality."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "Unconstrained minimization of a differentiable μ-strongly convex function f:E→ℝ, with 0<μ≤L and an attained global minimum x*. The initial objective gap satisfies f(x0)−f(x*)≤Δ.",
+        "evidence": "LongTails/Setups/NormalizedSamStronglyConvex.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query x returns ∇f(x) exactly for every call index and seed. There is no oracle error or sampling dependence in the reply, and no function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/NormalizedSamStronglyConvex.lean: spec.Query, spec.Reply, and final clause of spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "E is an arbitrary real Hilbert space. The gradient is globally L-Lipschitz. E, L, x0, μ, ρ, Δ, and ε are public, with ρ>0, Δ≥0, and ε>0; f and its minimizer are hidden. The setup restricts allowed algorithms to the named NormalizedSam.method family with some fixed η>0 and the supplied ρ and x0.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Public; LongTails/Setups/NormalizedSamStronglyConvex.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.valid, spec.admissible, and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−f(x*)≤ε after the fixed exact-gradient call budget.",
+        "evidence": "LongTails/Setups/NormalizedSamStronglyConvex.lean: spec.successful; LongTails/Template.lean: execute and Convergence."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap bound must hold almost surely under the joint algorithm-seed and oracle-seed law.",
+        "evidence": "LongTails/Setups/NormalizedSamStronglyConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth strongly convex minimization with exact gradients and an objective-gap target is a classical formulation. The named algorithm-family restriction specifies which methods may witness the guarantee. Local proofs and implementations were not checked; the verified citation does not establish the full restricted Hilbert-space statement."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.NormalizedSamStronglyConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NormalizedSamStronglyConvex",
+          "theorem": "LongTails.Theorems.NormalizedSamStronglyConvex.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

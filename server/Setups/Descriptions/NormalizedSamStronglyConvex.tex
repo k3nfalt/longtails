@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strongly Convex Normalized SAM}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with $L$-Lipschitz gradient and strong convexity parameter $0<\mu\leq L$. A global minimizer $x^\star$ and initial point $x^0$ satisfy $f(x^0)-f(x^\star)\leq\Delta$, where $\Delta\geq0$. Each oracle call returns the exact gradient at its query point. Algorithms are restricted to normalized sharpness-aware minimization (SAM), with perturbation radius $\rho>0$ and a fixed positive step size. Given $\varepsilon>0$, the last iterate $\bar{x}$ must satisfy $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. The quantities $E,L,\mu,\rho,x^0,\Delta,\varepsilon$ are public.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where the norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$, which may be infinite dimensional. The objective and its designated minimizer satisfy the following conditions.
+
+\begin{assumption}[Smoothness and strong convexity]
+The function $f$ is differentiable everywhere on $E$, and, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|,\\
+f(y) &\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and initial gap]
+The designated point $x^\star\in E$ is a global minimizer, and the initial objective gap is bounded as follows:
+\[
+\begin{aligned}
+f(x^\star) &\leq f(x) \qquad\text{for every }x\in E,\\
+f(x^0)-f(x^\star) &\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact-gradient access]
+Oracle $0$ returns $\nabla f(x)\in E$ at every query point $x\in E$, at every call index, and for every realization of oracle randomness. Each query costs one oracle call. Algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, and queries may lie anywhere in $E$. The algorithm must be normalized SAM with a constant step size $\eta>0$, selected using only the public tuple $(E,L,\mu,\rho,x^0,\Delta,\varepsilon)$. Starting from $x^0$, its updates are
+\[
+\begin{aligned}
+g^t &= \nabla f(x^t),\\
+u^t &=
+\begin{cases}
+g^t/\|g^t\|, & g^t\neq0,\\
+0, & g^t=0,
+\end{cases}\\
+y^t &= x^t+\rho u^t,\\
+x^{t+1} &= x^t-\eta\nabla f(y^t),
+\qquad t=0,1,2,\ldots.
+\end{aligned}
+\]
+Each update makes two calls to oracle $0$, first at $x^t$ and then at $y^t$, including when these query points coincide. The zero-gradient convention makes the perturbation zero when $g^t=0$.
+
+For a call budget $K\in\mathbb{N}$, which may depend on the public tuple, the output is the last completed iterate
+\[
+\bar{x}=x^{\lfloor K/2\rfloor}.
+\]
+If $K$ is odd, the remaining call evaluates the gradient at this iterate without changing the output; this call is included in the budget. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, the required accuracy is
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\qquad \mathbb{P}\text{-almost surely}.
+\]
+\end{document}
