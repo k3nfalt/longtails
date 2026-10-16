@@ -260,6 +260,13 @@ def render(
     reviews_dir=None,
     tables_dir=None,
 ):
+    ignored_setups = json.loads(
+        (ROOT / "ignore_settings.json").read_text(encoding="utf-8")
+    )["setups"]
+    if not isinstance(ignored_setups, list) or any(
+        not isinstance(name, str) for name in ignored_setups
+    ):
+        raise ValueError("ignore_settings.json: setups must be a list of names")
     reviews_dir = review_directory(reviews_dir) if reviews_dir is not None else None
     comparisons = load_comparison_tables(tables_dir)
     ratings = load_ratings(
@@ -319,6 +326,8 @@ def render(
     modified_dates = setup_modification_dates(files)
     setups = []
     for path in files:
+        if path.stem in ignored_setups:
+            continue
         description = ROOT / "Setups/Descriptions" / path.stem
         rows = [
             row for row in theorems if row["setup"] == "LongTails.Setups." + path.stem
