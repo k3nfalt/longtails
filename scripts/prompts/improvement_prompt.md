@@ -20,17 +20,19 @@ Use exactly two agents: a Researcher and an independent Reviewer. Determine whet
 
 Inspect the repository, its instructions, the existing result, and its proof dependencies before starting. Understand the current assumptions, algorithm, guarantee, and oracle-cost accounting.
 
-All committed changes must be inside `LongTails/`. Never modify `LongTails/Template.lean`. Treat existing core definitions, oracle interfaces, assumptions, verification infrastructure, and existing theorem statements as frozen. Preserve the original result.
+All research changes must be inside `LongTails/`, except necessary dependency additions in `lakefile.toml` and `lake-manifest.json`. `LongTails.lean` is generated automatically by build and lint; do not commit it. Never modify `LongTails/Template.lean`. Treat existing core definitions, oracle interfaces, assumptions, verification infrastructure, and existing theorem statements as frozen. Preserve the original result.
 
 Deliver only:
 - New setup definitions, if the improvement requires them.
 - New algorithm definitions, if needed.
 - Supporting proofs and lemmas.
-- Exactly one main proved improved theorem under `LongTails/Theorems`, following repository conventions.
+- Exactly one NEW main proved improved theorem under `LongTails/Theorems`, following repository conventions.
+- A companion Markdown contribution note beside the new theorem, with the same basename, explaining its improvement, literature comparisons, and limitations.
+- Necessary Lean dependency additions.
 
 Reuse existing definitions when appropriate. Do not duplicate a setup or algorithm merely to rename it.
 
-No paper draft or standalone research note is required. Keep research notes and review exchanges outside the repository. Summarize the outcome in the final response.
+No paper draft or additional standalone research note is required. Keep research notes and review exchanges outside the repository. Summarize the outcome in the final response.
 
 2. Agents and independence
 
@@ -38,21 +40,11 @@ Use separate agents, contexts, Git worktrees, and working branches for the Resea
 
 The Researcher develops the improvement. The Reviewer independently checks correctness, the comparison with the existing result, novelty, and significance.
 
-The Researcher must not write the Reviewer’s assessment or approve its own work. Only the Reviewer may create the final commit and push to `main-bot`.
+The Researcher must not write the Reviewer’s assessment or approve its own work. Only the Reviewer may create the final commit and push to the task's unique `agent/<unique-task-name>` branch.
 
 3. Git workflow
 
-Inspect `./scripts/generate_token.py` and use its supported interface for authentication in every GitHub operation, including fetches. Do not use personal credentials or alter repository protections.
-
-Fetch the latest remote state before starting. Create separate worktrees and unique branches from the freshly fetched `origin/main-bot`. If it does not exist, use the latest `origin/main` as the initial base and create remote `main-bot` only when pushing an approved result.
-
-Do not overwrite existing work or interfere with other sessions’ worktrees and branches. All research edits and validation must happen in the agents’ own worktrees. Never update `main`.
-
-Do not create intermediate commits. Transfer candidate changes using patches or explicit file copies, including new files. Record the base revision and identify the exact contents being reviewed.
-
-Before final integration, fetch again. The Reviewer must integrate the candidate with the latest `origin/main-bot`, review the complete resulting diff, and rerun verification.
-
-Create exactly one final commit. Never force-push. If another session advances `main-bot`, fetch, integrate, and revalidate; recreate the unpublished commit on the updated base as necessary. Preserve other sessions’ changes.
+Read and follow section 3 (Git workflow and authentication) of `scripts/prompts/research_prompt.md`. Use separate worktrees based on freshly fetched `origin/main` and deliver the approved improvement on a unique `agent/<unique-task-name>` branch with exactly one research commit. Keep the recorded starting base even if `origin/main` advances; being behind alone does not require rebasing or repeating validation. Never push or merge into `main`.
 
 4. Researcher
 
@@ -108,16 +100,17 @@ If the proposed improvement is false, already known, or unsupported, report that
 
 Before committing, the Reviewer must:
 - Approve the exact integrated candidate contents.
-- Inspect the full diff against the latest integration base.
-- Confirm that all changed paths are inside `LongTails/`.
+- Inspect the full diff against the recorded starting base.
+- Confirm that all changed paths match the permitted research deliverables above.
+- Independently check the companion contribution note against the improved theorem and literature.
 - Confirm that `LongTails/Template.lean`, frozen core files, and existing theorem statements are unchanged.
 - Verify the improved theorem and its comparison with the original.
-- Run the required build, proof, and axiom checks.
+- Run the required build, proof, and axiom checks. Audit the new theorem with `python3 run_comparator.py <TheoremName>.lean`; a full-library comparator run is not required for adding a new result.
 - Confirm that only the requested deliverables are staged.
 
 Any substantive change after approval requires renewed review and validation.
 
-The Reviewer creates the single final commit, verifies that its contents match the approved result, and pushes to `main-bot`. This task authorizes that push once the acceptance criteria pass. It never authorizes an update to `main`.
+After acceptance, follow the submission instructions at the end of section 7 of `scripts/prompts/research_prompt.md`. Push the single approved research commit and open one draft PR targeting `main`. Verify that the PR contains the approved commit, report its URL, and stop. Verification and novelty reviews start automatically. Do not dispatch or monitor workflows, append commits, force-push, merge, or automatically retry, repair, replace, or close the PR.
 
 Finish with:
 - The original guarantee and the improved guarantee side by side.
@@ -125,4 +118,4 @@ Finish with:
 - The parameter regimes where the improvement matters.
 - The central proof idea and comparison with prior work.
 - The Reviewer’s verdict and remaining limitations.
-- Verification results, changed file paths, and the pushed commit ID—or why no commit was justified.
+- Verification results, changed file paths, and the pushed research commit ID, PR URL, or why submission was blocked or no commit was justified.

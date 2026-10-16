@@ -112,7 +112,7 @@ Explore more [setups](LongTails/Setups/) and [complexity bounds](LongTails/Theor
 
 You're welcome to use our framework to check your ideas locally. If you'd like to contribute your results, please follow the steps below.
 
-If you add or remove Lean modules, run `lake exe mk_all --lib LongTails` to update the import index. Then run `./lint.sh` to check formatting, build the code, and run the linters. Once lint and the Comparator audit both pass, open a pull request explaining the setup, bound, and contribution.
+Run `./lint.sh` to check formatting, build the code, and run the linters. Both `./build.sh` and `./lint.sh` regenerate `LongTails.lean` automatically; this generated import index is ignored by Git. Once lint and the Comparator audit both pass, open a pull request explaining the setup, bound, and contribution.
 
 ## Tutorial
 
@@ -155,7 +155,7 @@ K = 1 + \left\lceil\frac{4L\Delta}{\varepsilon^2}+\frac{8L\Delta\sigma^2}{\varep
 
    Open <http://127.0.0.1:8000/> and find **StochasticSmoothNonconvex** to inspect its Lean source and **Complexity** bound. The build does not run Codex; descriptions and references appear only if they have already been generated.
 
-Once you're done experimenting, you can remove the copied files with `git clean -f -- LongTails/`, provided you haven't staged or committed them. Preview the list first with `git clean -n -- LongTails/`: this also removes any other untracked files under `LongTails/`. If you updated `LongTails.lean`, run `lake exe mk_all --lib LongTails` again after cleanup.
+Once you're done experimenting, you can remove the copied files with `git clean -f -- LongTails/`, provided you haven't staged or committed them. Preview the list first with `git clean -n -- LongTails/`: this also removes any other untracked files under `LongTails/`. The next `./build.sh` or `./lint.sh` run regenerates `LongTails.lean` after cleanup.
 
 ## Citation
 

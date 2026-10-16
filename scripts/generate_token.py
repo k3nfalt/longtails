@@ -5,6 +5,8 @@ Key defaults to ~/.config/auto-math-bot/private-key.pem.
 Override with AUTO_MATH_BOT_KEY. Use an HTTPS Git remote.
 Set AUTO_MATH_BOT_INSTALLATION_ID to the installation ID for k3nfalt.
 Call this wrapper for EACH GitHub operation during long Codex runs.
+Monitoring workflows requires Actions read permission; dispatch, rerun, and cancel
+require Actions write permission.
 This changes authentication, not OS isolation. Do not run commands that
 dump their environment: it contains a secret token.
 """
@@ -24,7 +26,7 @@ def b64(data):
     return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
 
 
-def installation_token():
+def installation_token(actions_permission=None):
     installation_id = os.environ.get("AUTO_MATH_BOT_INSTALLATION_ID", "")
     if (
         not installation_id.isascii()
@@ -56,12 +58,15 @@ def installation_token():
         check=True,
     ).stdout
     jwt = message.decode() + "." + b64(signed)
+    permissions = {"contents": "write", "pull_requests": "write"}
+    if actions_permission:
+        permissions["actions"] = actions_permission
     request = urllib.request.Request(
         f"https://api.github.com/app/installations/{installation_id}/access_tokens",
         data=json.dumps(
             {
                 "repositories": ["longtails"],
-                "permissions": {"contents": "write", "pull_requests": "write"},
+                "permissions": permissions,
             }
         ).encode(),
         headers={
@@ -143,12 +148,21 @@ def main():
         print(__doc__)
         return 0 if command else 2
     try:
-        env = command_environment(installation_token())
+        actions_permission = None
+        if command[:2] in (["gh", "workflow"], ["gh", "run"]):
+            actions_permission = "read"
+        if command[:3] in (
+            ["gh", "workflow", "run"],
+            ["gh", "run", "rerun"],
+            ["gh", "run", "cancel"],
+        ):
+            actions_permission = "write"
+        env = command_environment(installation_token(actions_permission))
         return subprocess.call(command, env=env)
     except urllib.error.HTTPError as error:
         print(
             f"Token request failed: HTTP {error.code}. Check app installation, "
-            "repository selection, and Contents/Pull requests write permissions.",
+            "repository selection, and Contents/Pull requests/Actions write permissions.",
             file=sys.stderr,
         )
     except subprocess.CalledProcessError:

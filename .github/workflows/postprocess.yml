@@ -1,0 +1,71 @@
+name: Postprocess research PR
+run-name: 'Postprocess PR #${{ github.event.pull_request.number || inputs.pr }}'
+
+on:
+  pull_request:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Agent PR number (one research commit)
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+concurrency:
+  group: postprocess-pr-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: false
+
+jobs:
+  postprocess:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       startsWith(github.event.pull_request.head.ref, 'agent/') &&
+       github.event.pull_request.base.ref == 'main')
+    runs-on: [self-hosted, longtails-postprocess]
+    timeout-minutes: 360
+    env:
+      POSTPROCESS_DIR: longtails-${{ github.run_id }}-${{ github.run_attempt }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Cache postprocessing Lean artifacts
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/${{ env.POSTPROCESS_DIR }}/lake
+          key: postprocess-lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            postprocess-lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
+
+      # Run multiple isolated runner services with this label for concurrent PRs.
+      # Each service needs authenticated Claude, gh, lake, Python, openssl, curl,
+      # and AUTO_MATH_BOT_KEY / AUTO_MATH_BOT_INSTALLATION_ID.
+      # The GitHub App needs Contents, Pull requests, and Actions write access.
+      - name: Generate theorem reviews
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr }}
+          TMPDIR: ${{ runner.temp }}/${{ env.POSTPROCESS_DIR }}/tmp
+          LONGTAILS_LAKE_CACHE: ${{ runner.temp }}/${{ env.POSTPROCESS_DIR }}/lake
+        run: |
+          mkdir -p "$TMPDIR"
+          python3 -u scripts/postprocess.py --pr "$PR_NUMBER" 2>&1 | tee "$RUNNER_TEMP/$POSTPROCESS_DIR/postprocess.log"
+
+      - name: Upload postprocessing logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: postprocess-pr-${{ github.event.pull_request.number || inputs.pr }}-logs
+          path: |
+            ${{ runner.temp }}/${{ env.POSTPROCESS_DIR }}/postprocess.log
+            ${{ runner.temp }}/${{ env.POSTPROCESS_DIR }}/tmp/**/*.log
+          retention-days: 14

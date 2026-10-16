@@ -1,0 +1,30 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-verification-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  task-commits:
+    name: Task commits
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require two commits for agent tasks
+        if: startsWith(github.event.pull_request.head.ref, 'agent/')
+        env:
+          COMMITS: ${{ github.event.pull_request.commits }}
+        run: |
+          if [ "$COMMITS" != 2 ]; then
+            echo 'Agent PRs require one research commit and one reviews commit.'
+            exit 1
+          fi
+
+  verify:
+    uses: ./.github/workflows/verify.yml

@@ -34,7 +34,7 @@ Both routes require repository deliverables. In particular, choosing a setup fro
 
 Inspect the repository, its instructions, existing setups, proofs, and verification tools before starting.
 
-All committed changes must be inside `LongTails/`, except necessary dependency additions in `lakefile.toml` and `lake-manifest.json`. Never modify `LongTails/Template.lean`. Treat existing core definitions, oracle interfaces, assumptions, and verification infrastructure as frozen. Do not weaken existing statements or modify the framework to make a proof pass.
+All committed changes must be inside `LongTails/`, except necessary dependency additions in `lakefile.toml` and `lake-manifest.json`. `LongTails.lean` is generated automatically by build and lint; do not commit it. Never modify `LongTails/Template.lean`. Treat existing core definitions, oracle interfaces, assumptions, and verification infrastructure as frozen. Do not weaken existing statements or modify the framework to make a proof pass.
 
 You may install reasonable Python libraries, system packages, and Lean libraries when needed for research, experiments, or formalization. Reuse existing libraries and tools when they suffice. Prefer a virtual environment for Python libraries and the system package manager for system packages. Keep temporary tooling outside the repository; for Lean dependencies needed by the deliverables, update `lakefile.toml` and regenerate `lake-manifest.json` with Lake, preserving existing pinned versions and the Lean toolchain. The Reviewer must review dependency additions and verify the final result with them.
 
@@ -43,7 +43,7 @@ Deliver only:
 - Algorithm definitions.
 - Complete supporting Lean proofs and lemmas for the new result, following the existing proof-module layout.
 - Exactly one NEW main proved convergence or oracle-complexity theorem under `LongTails/Theorems`, connected to the chosen setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
-- A companion Markdown contribution note beside that theorem, with the same basename: `LongTails/Theorems/<TheoremName>.md` for `<TheoremName>.lean`. Include it in the same reviewed final commit and push to `main-bot` as the Lean deliverables.
+- A companion Markdown contribution note beside that theorem, with the same basename: `LongTails/Theorems/<TheoremName>.md` for `<TheoremName>.lean`. Include it in the same reviewed final commit and push to the task's `agent/<unique-task-name>` branch as the Lean deliverables.
 - Necessary Lean dependency additions in `lakefile.toml` and `lake-manifest.json`.
 
 Prefer new files. Supporting lemmas are allowed; “one theorem” means one main research result.
@@ -58,13 +58,13 @@ The root agent is the Researcher and owns the goal; spawn exactly one independen
 
 The Researcher proposes and develops the result. The Reviewer independently assesses correctness, novelty, significance, and faithful formalization. Start the Reviewer in a fresh context with the full task and any user or proposal guidance, without inheriting the Researcher's candidate rankings or conclusions. Before reading the Researcher's preferred candidate and ranking, the Reviewer independently surveys current ICML, ICLR, NeurIPS, and arXiv results for meaningful assumption gaps. Keep this independent search distinct from reviewing the eventual candidate; reuse the same Reviewer.
 
-The Researcher must not write the Reviewer’s assessment or approve its own work. Only the Reviewer may create the final commit and push to `main-bot`.
+The Researcher must not write the Reviewer’s assessment or approve its own work. Only the Reviewer may create the final commit and push to the task's `agent/<unique-task-name>` branch.
 
 3. Git workflow and authentication
 
-Inspect `./scripts/generate_token.py` and use its supported interface to authenticate every GitHub operation, including fetches. Do not assume it accepts a command as an argument. Do not use personal credentials or alter repository protections.
+Inspect `./scripts/generate_token.py` and authenticate every GitHub operation, including fetches, with `python3 scripts/generate_token.py <command> [arguments...]`. Do not use personal credentials or alter repository protections.
 
-Fetch the latest remote state before starting. Base both agents’ working branches on the freshly fetched `origin/main-bot`. If that branch does not exist, use the latest `origin/main` as the initial base and create remote `main-bot` only when pushing an approved result.
+Fetch the latest remote state before starting. Base both agents’ working branches on the freshly fetched `origin/main`. Deliver each task on a unique `agent/<unique-task-name>` branch; do not combine tasks on a shared integration branch.
 
 Create a separate Git worktree and unique working branch for each agent. Use unique paths and branch names so other Codex sessions can work concurrently. Do not overwrite existing work, reuse another session’s worktree, or change its branches.
 
@@ -74,11 +74,11 @@ Reuse existing Lean build artifacts when initializing each worktree to avoid reb
 
 Do not create intermediate commits. Transfer proposed changes between worktrees using patches or explicit file copies that include new files. Record the base revision and identify the exact candidate contents being reviewed.
 
-Before final integration, fetch again. In the Reviewer’s worktree, integrate the proposed changes with the latest `origin/main-bot`. Inspect and validate the complete resulting diff.
+In the Reviewer’s worktree, apply the proposed changes to the recorded starting base. Inspect and validate the complete resulting diff. A PR may use this base even if `origin/main` has advanced.
 
-Create exactly one final commit containing the approved deliverables. Push only to `main-bot`, without force-pushing.
+Create exactly one final commit containing the approved deliverables. Push only to the task's unique `agent/<unique-task-name>` branch, without force-pushing.
 
-If another session advances `main-bot`, fetch, integrate, and revalidate. Recreate the unpublished final commit on the new base as necessary, so this task contributes exactly one commit. Preserve other sessions’ changes.
+Do not rebase, merge newer `main` commits, or restart validation merely because `origin/main` advances. Keep the recorded starting base through submission and postprocessing. Never rewrite the submitted branch or replace a submitted PR automatically. Preserve other sessions’ changes.
 
 4. Researcher
 
@@ -164,7 +164,7 @@ Do not weaken acceptance criteria to obtain approval. Continue revising, searchi
 
 Respect explicit user stop or pause instructions and actual runtime limits. Do not invent an execution limit from elapsed effort, a review-round count, or mathematical difficulty. For a genuine external blocker, identify the failed operation and evidence, try permitted alternatives, and continue unaffected work. If work must stop, preserve the checkpoint and report the precise stopping condition honestly. Never claim success or manufacture approval to avoid reporting an incomplete task.
 
-Do not declare completion after literature screening, candidate selection, a Reviewer response, or an ordinary end-of-turn summary. Keep pursuing it across turns. Completion requires every acceptance condition below, including the actual Lean deliverables, independent approval of the final integrated contents, successful verification, and the confirmed remote commit.
+Do not declare completion after literature screening, candidate selection, a Reviewer response, or an ordinary end-of-turn summary. Keep pursuing it across turns. Completion requires every acceptance condition below, including the actual Lean deliverables, independent approval of the final integrated contents, successful local verification, and creation of the research PR.
 
 7. Acceptance and final commit
 
@@ -176,25 +176,27 @@ Before committing, the Reviewer must:
 - Confirm that the setup remains naturally motivated and that no artificial assumptions were introduced during proof completion.
 - Confirm that the final assumptions were checked for unnecessary restrictions, that their literature provenance or independent justification is explicit, and that the claimed improvement accounts for every strengthening relative to prior work.
 - Confirm that the final theorem preserves the reviewed objective class and assumption change, includes the intended nonlinear instances, and resolves the identified gap beyond the checked standard reduction. Reassess significance if proof development narrowed the scope.
-- Inspect the full diff against the latest integration base.
+- Inspect the full diff against the recorded starting base.
 - Confirm that every changed path is inside `LongTails/`, except reviewed, necessary dependency additions in `lakefile.toml` and `lake-manifest.json`.
 - Confirm that `LongTails/Template.lean` and all other frozen core files are unchanged.
 - Confirm that the deliverables contain exactly one main research theorem under `LongTails/Theorems`.
 - Confirm that the chosen setup is present under `LongTails/Setups` and that the new theorem and complete supporting proofs are included, regardless of which research route was selected.
-- Independently review the companion `<TheoremName>.md` for accuracy of its contribution claims, literature comparisons, and limitations; confirm it reflects the final clarifications and integrated Lean result and is included in the same commit to be pushed to `main-bot`.
+- Independently review the companion `<TheoremName>.md` for accuracy of its contribution claims, literature comparisons, and limitations; confirm it reflects the final clarifications and integrated Lean result and is included in the same commit to be pushed to the task branch.
 - Check that the public budget satisfies the simplification requirement and that its proof preserves all required terms, actual oracle-call accounting, parameter rates, and the claimed improvement over prior work.
-- Run the required build, proof, and axiom checks on the integrated result.
+- Run the required build, proof, and axiom checks on the integrated result. Audit the new theorem with `python3 run_comparator.py <TheoremName>.lean`; a full-library comparator run is not required for adding a new result.
 - Confirm that only the requested deliverables are staged.
 
 Any substantive change after approval, including conflict resolution, requires renewed review and validation.
 
-The Reviewer then creates the single final commit, verifies that it matches the approved contents, and pushes it to `main-bot`. This task explicitly authorizes that push once all acceptance criteria pass. It never authorizes an update to `main`.
+The Reviewer then creates the single final research commit, verifies that it matches the approved contents, and pushes it to the task's unique `agent/<unique-task-name>` branch. This task explicitly authorizes that push and opening one draft PR targeting `main` once all acceptance criteria pass. It never authorizes pushing or merging into `main`.
 
-The Researcher verifies the Reviewer’s evidence and the presence of the approved commit on remote `main-bot` using the required authentication wrapper before declaring completion. An unapproved, unverified, or unpushed result does not meet the goal.
+Before submission, confirm `git rev-list --count origin/main..HEAD` is exactly 1. Use `python3 scripts/generate_token.py` for each GitHub operation. Create one draft with `gh pr create --draft --base main --head <task-branch> --title <title> --body-file <file>`. Include the theorem, setup, contribution note, and verification evidence in the PR body. Write multiline PR text to a temporary file. Verify that the PR exists and contains the approved research commit, report its URL, and stop. Do not dispatch or monitor workflows, append commits, force-push, or automatically retry, repair, replace, or close the PR.
+
+PR creation automatically starts verification and novelty reviews. Postprocessing adds a second commit containing only `scripts/reviews/<TheoremName>.md` for each new theorem. Negative novelty reviews do not block this stage. Tables, references, metadata, and website generation remain separate manual steps. Failed PRs remain open for the user to inspect.
 
 Finish with:
 - The setup, main theorem, and convergence or complexity rate.
 - The closest prior results and the specific novelty claim.
 - The Reviewer’s verdict and remaining limitations.
 - Verification results and changed file paths.
-- The pushed commit ID, or an explicit explanation of why no commit was justified.
+- The pushed research commit ID and PR URL, or an explicit explanation of why submission was blocked.

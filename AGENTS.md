@@ -19,8 +19,9 @@ project preferences; newer explicit user requests take precedence.
   a separate Lean file for each helper or small proof step.
 - Put public theorem exports in `LongTails/Theorems/` so the audit discovers them.
 - Keep public declaration names distinct across modules so `LongTails.lean` can
-  import the whole library. Regenerate the root using
-  `lake exe mk_all --lib LongTails`; `./lint.sh` checks that it is current.
+  import the whole library. This file is generated and ignored by Git.
+  `./build.sh` and `./lint.sh` regenerate it automatically with
+  `lake exe mk_all --lib LongTails`; do not commit it.
 - Each file in `LongTails/Theorems/` must contain exactly one main convergence
   theorem, `result : Convergence spec budget`. Put distinct mathematical cases in
   separate files. Proof modules use lemmas for supporting results; do not add redundant public convergence/rate
@@ -97,8 +98,11 @@ project preferences; newer explicit user requests take precedence.
   the proof requires them; do not claim a stronger complexity bound than proved.
 - Use the pinned `lean-toolchain` and `lake-manifest.json`.
 - After changing Lean declarations or imports, run `./build.sh`
-  to build the project and `python3 run_comparator.py` to audit public
-  convergence results and budgets, allowing only `propext`, `Classical.choice`,
-  and `Quot.sound`. The default command only builds; it does not run the audit.
+  to build the project. For new results, run
+  `python3 run_comparator.py <TheoremName>.lean` for each new theorem to audit its
+  convergence result and budget, allowing only `propext`, `Classical.choice`,
+  and `Quot.sound`. When modifying existing results or shared assumptions, audit
+  the affected existing theorems as well. Nightly verification runs the full audit.
+  The default build command only builds; it does not run the audit.
 - For comment-only or documentation changes, inspect the diff and run
   `git diff --check`; do not repeat unrelated proof builds.

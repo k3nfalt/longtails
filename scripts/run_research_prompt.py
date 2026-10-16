@@ -107,8 +107,10 @@ def main(argv=None):
             "substantively novel optimization result with exactly two agents, obtain the "
             "independent Reviewer's acceptance recommendation, formalize all required Lean "
             "deliverables and the companion contribution note, pass the required build and "
-            "axiom checks, and verify the approved commit is pushed to remote main-bot. "
-            "Surface the review, verification, and remote commit evidence in the conversation."
+            "axiom checks, submit the approved research commit through an agent/* draft PR, "
+            "verify that the PR contains the approved commit, report its URL, and stop. "
+            "Do not dispatch or monitor workflows or automatically modify failed PRs. "
+            "Surface the independent review, local verification, and PR evidence in the conversation."
         )
     try:
         return subprocess.run(

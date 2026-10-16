@@ -14,53 +14,7 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 360
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Elan
-        run: |
-          curl -sSfL https://github.com/leanprover/elan/releases/download/v4.2.2/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz -C "$RUNNER_TEMP"
-          "$RUNNER_TEMP/elan-init" -y --default-toolchain none
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-
-      - name: Cache Lean build artifacts
-        uses: actions/cache@v4
-        with:
-          path: .lake
-          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
-          restore-keys: |
-            lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
-
-      - name: Build
-        run: ./build.sh 2>&1 | tee build.log
-
-      - name: Install Ruff
-        run: |
-          python3 -m venv "$RUNNER_TEMP/lint-venv"
-          "$RUNNER_TEMP/lint-venv/bin/python" -m pip install ruff==0.14.0
-          echo "$RUNNER_TEMP/lint-venv/bin" >> "$GITHUB_PATH"
-
-      - name: Lint
-        run: ./lint.sh 2>&1 | tee lint.log
-
-      - name: Audit convergence results and budgets
-        run: python3 -u run_comparator.py -j 2 2>&1 | tee comparator.log
-
-      - name: Upload verification logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: verification-logs
-          path: |
-            build.log
-            lint.log
-            comparator.log
-          retention-days: 14
+    uses: ./.github/workflows/verify.yml
 
   tag:
     needs: verify

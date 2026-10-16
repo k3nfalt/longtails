@@ -1,0 +1,84 @@
+name: Verify Lean and scripts
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Elan
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/download/v4.2.2/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/elan-init" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Lean build artifacts
+        uses: actions/cache@v4
+        with:
+          path: .lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+          restore-keys: |
+            lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
+
+      - name: Build
+        run: ./build.sh 2>&1 | tee build.log
+
+      - name: Install Ruff
+        run: |
+          python3 -m venv "$RUNNER_TEMP/lint-venv"
+          "$RUNNER_TEMP/lint-venv/bin/python" -m pip install ruff==0.14.0
+          echo "$RUNNER_TEMP/lint-venv/bin" >> "$GITHUB_PATH"
+
+      - name: Lint
+        run: ./lint.sh 2>&1 | tee lint.log
+
+      - name: Test Python scripts
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 -m unittest discover -s server/Theorems -p 'test_*.py'
+
+      - name: Audit convergence results and budgets
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          {
+            if [ -n "$PR_HEAD" ]; then
+              git diff --name-only --diff-filter=A --no-renames -z "$PR_BASE...$PR_HEAD" \
+                -- ':(glob)LongTails/Theorems/*.lean' > "$RUNNER_TEMP/new-theorems"
+              found=false
+              while IFS= read -r -d '' theorem; do
+                found=true
+                python3 -u run_comparator.py "$theorem" -j 2
+              done < "$RUNNER_TEMP/new-theorems"
+              if [ "$found" = false ]; then
+                echo 'No new public results in this PR; skipping comparator.'
+              fi
+            else
+              python3 -u run_comparator.py -j 2
+            fi
+          } 2>&1 | tee comparator.log
+
+      - name: Upload verification logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-logs
+          path: |
+            build.log
+            lint.log
+            comparator.log
+          retention-days: 14
+
