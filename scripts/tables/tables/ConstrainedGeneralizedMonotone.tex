@@ -17,29 +17,29 @@ $E$ is a real inner product space; $X\subseteq E$ is convex with an exact projec
 \midrule[1.2pt]
 Projected/composite EAG \citep[v6, Thms.~E.4, 3.2]{cgmCai2024v6}
 & $\mathcal{O}(1+L_XR/\varepsilon)$ total $F$/projection calls. Projected variant: $E=\mathbb{R}^d$, $L_X<\infty$ on $X$; composite variant requires global Lipschitzness.
-& i) \textbf{(1)} Scope: permits $L_X=\infty$.\newline
-ii) \textbf{(1)} Leading-term gain $e^{L_1D}/(1+L_1R)$ when $L_X\asymp(L_0+L_1G)e^{L_1D}$; exponential for $D=R$, $L_1R\gg1$.\newline
-iii) \textbf{(1)} Matches known rate at $L_1=0$.
-& \textbf{(1)} Needs global monotonicity/regularity. For $L_X\asymp L_0+L_1G$, extra $1+L_1R$ leading factor and $(1+L_1R)^2(1+\ell)$ term. Restricted to monotone normal-cone inclusions; composite baseline also covers comonotone/proximal inclusions. \\
+& i) \textbf{(1)}: Scope: permits $L_X=\infty$.\newline
+ii) \textbf{(1)}: Leading-term gain $e^{L_1D}/(1+L_1R)$ when $L_X\asymp(L_0+L_1G)e^{L_1D}$; exponential for $D=R$, $L_1R\gg1$.\newline
+iii) \textbf{(1)}: Matches known rate at $L_1=0$.
+& \textbf{(1)}: Needs global monotonicity/regularity. For $L_X\asymp L_0+L_1G$, extra $1+L_1R$ leading factor and $(1+L_1R)^2(1+\ell)$ term. Restricted to monotone normal-cone inclusions; composite baseline also covers comonotone/proximal inclusions. \\
 \midrule
 PF-NE-EG \citep[v2, App.~A, Alg.~3]{cgmShen2026v2}
 & Derived bound, fixed backtracking factors:\newline
 $\mathcal{O}\!\left(\begin{aligned}&1+\frac{(\eta_0^{-1}+\bar L+\bar G)^2R^2}{\varepsilon^2}\\&+\log_+\!\bigl(\eta_0(\bar L+\bar G)\bigr)\end{aligned}\right)$ total $F$/projection calls, including rejected trials. $E=\mathbb{R}^d$; locally Lipschitz $F$ on $X$.
-& i) \textbf{(1)} Rate: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$, remaining parameters fixed; polynomial instead of exponential local-bound substitution.\newline
-ii) \textbf{(1)} No backtracking.
-& \textbf{(1)} Needs $L_0,L_1$ in updates and global generalized Lipschitzness/monotonicity; baseline needs only local Lipschitzness and monotonicity on $X$. \\
+& i) \textbf{(1)}: Rate: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$, remaining parameters fixed; polynomial instead of exponential local-bound substitution.\newline
+ii) \textbf{(1)}: No backtracking.
+& \textbf{(1)}: Needs $L_0,L_1$ in updates and global generalized Lipschitzness/monotonicity; baseline needs only local Lipschitzness and monotonicity on $X$. \\
 \midrule
 EG \citep[Thm.~3.6]{cgmChoudhury2025v1}
 & $\mathcal{O}\!\left(1+L_0^2R^2/\varepsilon^2+L_1^2R^2\right)$ $F$ calls; $X=E=\mathbb{R}^d$, $G=0$.
-& i) \textbf{(1)} Scope: constrained VIs, including $F(x_\star)\ne0$.\newline
-ii) \textbf{(1)} Leading term improves when $L_0R/\varepsilon\gg1+L_1R$; total gain also requires controlling the initialization logarithm.\newline
-iii) \textbf{(1)} Last instead of best iterate.
-& \textbf{(1)} On $X=E$, logarithmic loss when $L_1^2R^2$ dominates; no uniform total-cost dominance. \\
+& i) \textbf{(1)}: Scope: constrained VIs, including $F(x_\star)\ne0$.\newline
+ii) \textbf{(1)}: Leading term improves when $L_0R/\varepsilon\gg1+L_1R$; total gain also requires controlling the initialization logarithm.\newline
+iii) \textbf{(1)}: Last instead of best iterate.
+& \textbf{(1)}: On $X=E$, logarithmic loss when $L_1^2R^2$ dominates; no uniform total-cost dominance. \\
 \midrule
 Anchored extragradient \citep{sgmAnchoredRepository2026}
 & $\mathcal{O}\!\left(1+L_0R/\varepsilon+(1+L_1R)\ell\right)$ $F$ calls; $X=E$, $G=0$.
-& \textbf{(1)} Scope: constrained VIs, including $F(x_\star)\ne0$.
-& \textbf{(1)} On $X=E$, extra $1+L_1R$ leading factor and logarithmic coefficient; projection is the identity there. \\
+& \textbf{(1)}: Scope: constrained VIs, including $F(x_\star)\ne0$.
+& \textbf{(1)}: On $X=E$, extra $1+L_1R$ leading factor and logarithmic coefficient; projection is the identity there. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

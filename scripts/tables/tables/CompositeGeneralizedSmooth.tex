@@ -15,13 +15,13 @@
 & --- \\
 \midrule[1.2pt]
 AC-FGM \citep[Cor.~1 and local-smoothness remark]{LiLan2024ACFGMv3}
-& $\mathcal{O}\!\left(1+\sqrt{\bar L B/\varepsilon}\right)$\newline Total gradient, value and proximal calls; 
+& $\mathcal{O}\!\left(1+\sqrt{\bar L B/\varepsilon}\right)$\newline Total gradient, value and proximal calls.
 & \textbf{(1)}: no function values. Rates not comparable in setup parameters: $\bar L$ depends on the trajectory. Applies for $E=\mathbb{R}^d$, closed $Q,\psi$.\newline Cor.~1 tuning, arbitrary $\eta_1>0$, no initialization search.
 & \textbf{(1)} needs $L_0,L_1,R,\Delta$ for updates and $G$ for its stopping budget; AC-FGM updates need none. \\
 \midrule
 AGD \citep[Thm.~4.3]{Tyurin2026GeneralizedV2}
 & $\mathcal{O}\!\left(\begin{aligned}&1+\sqrt{\frac{L_0R^2}{\varepsilon}}+\log_+\!\frac{\Delta}{L_0R^2}\\[-2pt]&+L_1R\log_+\!\min\!\left\{\frac{L_1^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\end{aligned}\right)$\newline Gradient calls; $\Gamma_0=2\Delta/R^2$, $\bar R=R=\|x_0-x_\star\|$.
-& \textbf{(1)}: scope: accelerated composite/constrained guarantee with $\nabla f(x_\star)\ne0$. Baseline restricted to $Q=E=\mathbb{R}^d$, $\psi=0$, $G=0$; matched leading rate there.
+& \textbf{(1)}: Scope: accelerated composite/constrained guarantee with $\nabla f(x_\star)\ne0$. Baseline restricted to $Q=E=\mathbb{R}^d$, $\psi=0$, $G=0$; matched leading rate there.
 & \textbf{(1)} has a potentially larger logarithmic term when $L_1>0$, $\varepsilon>L_0/L_1^2$; no rate improvement on the overlap. \\
 \bottomrule
 \end{tabularx}

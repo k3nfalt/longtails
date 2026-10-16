@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Paired zeroth-order optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdaptivePairedZerothOrder.lean}{Adaptive\allowbreak{}Paired\allowbreak{}Zeroth\allowbreak{}Order}.}\label{tab:AdaptivePairedZerothOrder}
+\parbox{\linewidth}{\footnotesize Convex, $M$-Lipschitz $f=\mathbb{E} F(\cdot,\omega)$ on $Q+\gamma_{\max}B_2^d$, where $Q\subset\mathbb{R}^d$ is compact and convex, $x_0,x_\star\in Q$, $x_\star$ minimizes $f$ on $Q$, and $\operatorname{diam}Q\le D$. Exact projection onto $Q$ is supplied. Paired values $F(x,\omega)+b(x)$ share one sample; pairs use IID samples. The jointly measurable sample functions are almost surely continuous with locally integrable weak gradients $G$, and $\mathbb{E}\|G(x,\omega)\|^2\le M_2^2$ pointwise in the interior; $|b(x)|\le\Delta$. The smooth case additionally has an $L$-Lipschitz gradient there. Target: $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\beta$, with $\widehat x\in Q$. The tuned bound requires $\Delta\le\varepsilon\gamma/(16384\sqrt d D)$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptivePairedZerothOrderConfidence.lean}{Adaptive\allowbreak{}Paired\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Confidence} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptivePairedZerothOrderConfidence.md}{(review)}
+& $\mathcal{O}\!\left((d+\ell)\left(1+\frac{M_2^2D^2}{\varepsilon^2}\right)+N\right)$
+& --- & --- \\
+\midrule[1.2pt]
+ZO-clipped-SSTM \citep[Thms.~1, 3]{apzoKornilov2023v1}; finite-variance restriction
+& $\mathcal{O}\!\left(1+\left[\frac{dM_2^2D^2}{\varepsilon^2}+\frac{d^{1/4}M_2D}{\varepsilon}\right]h\right)$\newline Global convex Lipschitz samples, $\mathbb{E}\operatorname{Lip}(F)^2\le M_2^2$, $\Delta=0$; unconstrained minimizer in $Q$; queries unrestricted.
+& \textbf{(1)}: Scope: pointwise weak-gradient moments instead of square-integrable sample Lipschitz constants.
+& \textbf{(1)}: Needs bounded $Q$, its diameter and projection; excludes moment orders $1<\alpha<2$. \\
+\midrule
+Derived bound: clipped SGD + spherical smoothing \citep[Thm.~1]{apzoLiu2026v3}
+& $\mathcal{O}\!\left(1+\frac{(d+\sqrt d\,\ell)M_2^2D^2}{\varepsilon^2}\right.$\newline $\left.{}+\frac{\sqrt d\,\ell MD}{\varepsilon}\right)$\newline $\Delta=0$, $\mathbb{E}\operatorname{Lip}(F)^2\le M_2^2$; smoothing radius $\min\{\gamma_{\max},\varepsilon/(2M)\}$.
+& \textbf{(1)}: Rate: $d+\ell$ instead of $d+\sqrt d\,\ell$; statistical-term gain only for $\ell\gg\sqrt d$, up to $\sqrt d$ when $\ell\gtrsim d$; requires other costs dominated.
+& \textbf{(1)} Nonsmooth radius term can erase gain: $\gamma_{\max}\lesssim\frac{\sqrt d\,M\varepsilon^3}{(d+\ell)^2M_2^4D^2}$. Needs compactness; $\Delta>0$ comparison unresolved. \\
+\midrule
+Derived bound: spherical smoothing \citep[Thm.~2.2]{apzoZhang2026v1}
+& $\mathcal{O}\!\left(1+\frac{(d+\ell)M_2^2D^2}{\varepsilon^2}+\frac{\ell MD}{\varepsilon}\right)$\newline $\Delta=0$, $\beta<1/10$, $\mathbb{E}\operatorname{Lip}(F)^2\le M_2^2$; same smoothing radius.
+& \textbf{(1)}: Matches statistical oracle order with polynomially many exact-real operations; baseline permits exponential-dimensional internal computation.
+& \textbf{(1)}: Additional $d+\ell$ overhead and $N$, including radius dependence; $\Delta>0$ comparison unresolved. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count scalar value evaluations, including all batches and rejected draws; one paired estimate costs two values. $d\ge1$: dimension; $B_2^d$: closed Euclidean unit ball; $D$: diameter bound; $M,M_2,L,\Delta$: Lipschitz, weak-gradient moment, smoothness and bias bounds; $\gamma_{\max}>0$: query-neighborhood radius; $\varepsilon>0$: accuracy; $0<\beta<1$: failure probability; $\ell=\log(8/\beta)$; $h=1+\log(1/\beta)+\log(1+dM_2D/\varepsilon)$. For \textbf{(1)}, $N\asymp1+\sqrt{LD^2/\varepsilon}$ in the smooth case, and $N\asymp1+d^{1/4}MD/\varepsilon+d^{1/4}D\sqrt{M/(\gamma_{\max}\varepsilon)}$ otherwise, with sufficiently large universal factors; respectively $\gamma=\min\{\gamma_{\max},D/N\}$ and $\gamma=\min\{\gamma_{\max},d^{1/4}D/N\}$. $T\asymp(d+\ell)(1+M_2^2D^2/\varepsilon^2)+N$ is the tuned work parameter; the certified execution uses $6T+4N$ values. Prior distance bounds are taken as $D$ on the overlap.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

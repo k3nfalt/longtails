@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ReshuffledSmoothConvex.lean}{Reshuffled\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:ReshuffledSmoothConvex}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, minimize $f=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, with convex differentiable $f_i$ and $L_i$-Lipschitz gradients, $0\le L_i\le L_{\max}$, $n^{-1}\sum_i L_i\le L_{\mathrm{avg}}\le L_{\max}$, $L_{\mathrm{avg}}>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $n^{-1}\sum_i\|\nabla f_i(x_\star)\|^2\le\sigma^2$, with $R,\sigma\ge0$. Exact component gradients are available. The setup restricts algorithms to random reshuffling; \textbf{(1)} uses horizon-dependent linear decay. Target: $\int [f(x_{\rm out}(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, minimize $f=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, with convex differentiable $f_i$ and $L_i$-Lipschitz gradients, $0\le L_i\le L_{\max}$, $n^{-1}\sum_i L_i\le L_{\mathrm{avg}}\le L_{\max}$, $L_{\mathrm{avg}}>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $n^{-1}\sum_i\|\nabla f_i(x_\star)\|^2\le\sigma^2$, with $R,\sigma\ge0$. Exact component gradients are available. The setup restricts algorithms to random reshuffling; \textbf{(1)} uses horizon-dependent linear decay. Target: $\int [f(\widehat x(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -26,12 +26,12 @@ Averaged RR \citep[Cor.~1]{rscLiu2026v1}\newline $E=\mathbb{R}^d$
 \midrule
 Full-gradient GD \citep[Cor.~2.1.2]{rscNesterov2018}\newline $E=\mathbb{R}^d$; outside RR restriction
 & $\mathcal{O}\!\left(n+\frac{nL_{\mathrm{avg}} R^2}{\varepsilon}\right)$
-& \textbf{(1)}: no established improvement; matches this rate when $\sigma=0$ and $L_{\mathrm{avg}}\asymp L_{\max}$.
+& \textbf{(1)}: No established improvement; matches this rate when $\sigma=0$ and $L_{\mathrm{avg}}\asymp L_{\max}$.
 & \textbf{(1)}: initialization term multiplied by $\sqrt{L_{\max}/L_{\mathrm{avg}}}\ge1$; additional $\sigma$ term and tuning dependence. \\
 \midrule
 Full-gradient AGD \citep[Thm.~2.2.2]{rscNesterov2018}\newline $E=\mathbb{R}^d$; outside RR restriction
 & $\mathcal{O}\!\left(n+n\sqrt{\frac{L_{\mathrm{avg}} R^2}{\varepsilon}}\right)$
-& \textbf{(1)}: no established improvement on the common finite-sum problem with the same component oracle.
+& \textbf{(1)}: No established improvement on the common finite-sum problem with the same component oracle.
 & \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-1/2}$ initialization dependence; additional $L_{\max},\sigma$ dependence. \\
 \bottomrule
 \end{tabularx}
