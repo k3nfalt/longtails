@@ -61,11 +61,24 @@ def check_compilation(table, bibliography, directory):
         raise ValueError(f"Unresolved LaTeX references; see {directory / 'check.log'}")
 
 
+def added_rows(original, revised):
+    if original == revised:
+        return ""
+    if original.count(r"\bottomrule") != 1 or revised.count(r"\bottomrule") != 1:
+        raise ValueError("extending a saved table requires exactly one bottomrule")
+    prefix, end = original.split(r"\bottomrule")
+    suffix = r"\bottomrule" + end
+    if not revised.startswith(prefix) or not revised.endswith(suffix):
+        raise ValueError("changed previously saved table content")
+    return revised[len(prefix) : -len(suffix)]
+
+
 def validate_polish(original, revised, original_bib, revised_bib, saved=None):
     revised_tables = {row[1]: row[2] for row in split_tables(revised)}
     for setup, row in (saved or {}).items():
-        if revised_tables.get(setup) != row[2]:
-            raise ValueError(f"polish changed previously saved table: {setup}")
+        if setup not in revised_tables:
+            raise ValueError(f"polish removed previously saved table: {setup}")
+        added_rows(row[2], revised_tables[setup])
     bib_keys = r"@\w+\s*[{(]\s*([^,]+),"
     if sorted(re.findall(bib_keys, revised_bib)) != sorted(
         re.findall(bib_keys, original_bib)
@@ -135,13 +148,17 @@ def bibliography_entries(text):
     }
 
 
-def save_tables(directory, rows, entries, saved=()):
+def save_tables(directory, rows, entries, saved=None):
+    saved = saved or {}
+    for _, setup, row, _ in rows:
+        if setup in saved:
+            added_rows(saved[setup][2], row)
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "tables").mkdir(exist_ok=True)
     (directory / "metadata").mkdir(exist_ok=True)
     rows.sort(key=lambda item: (-item[0], item[1]))
     for score, setup, row, theorems in rows:
-        if setup in saved:
+        if setup in saved and row == saved[setup][2]:
             continue
         (directory / "metadata" / f"{setup}.json").write_text(
             json.dumps({"contribution": score, "theorems": theorems}, indent=2) + "\n",
@@ -168,7 +185,7 @@ def main(argv=None):
     parser.add_argument(
         "--polish",
         action="store_true",
-        help="Run one final agent session to polish only tables added in this run",
+        help="Polish new tables and new rows, preserving previously saved content",
     )
     parser.add_argument(
         "--polish-only",
@@ -181,7 +198,7 @@ def main(argv=None):
     parser.add_argument(
         "--setups",
         nargs="+",
-        help="Setup basenames to add; existing tables are preserved (default: missing reviewed setups)",
+        help="Setup basenames to extend with missing reviewed results; existing content is preserved",
     )
     parser.add_argument("--reviews-dir", type=Path, default=scripts / "reviews")
     parser.add_argument(
@@ -302,7 +319,18 @@ def main(argv=None):
     except (OSError, ValueError) as error:
         parser.error(f"cannot load saved tables: {error}")
     if not args.polish_only:
-        groups = {name: paths for name, paths in groups.items() if name not in saved}
+        groups = {
+            name: [
+                p for p in paths if name not in saved or p.stem not in saved[name][3]
+            ]
+            for name, paths in groups.items()
+        }
+        groups = {name: paths for name, paths in groups.items() if paths}
+    protected = temporary / "previous-tables.tex"
+    protected.write_text(
+        HEADER + "\n".join(row[2] for row in saved.values()) + "\n" + FOOTER,
+        encoding="utf-8",
+    )
     lock, stopped = Lock(), Event()
     completed = 0
 
@@ -389,6 +417,21 @@ def main(argv=None):
             f"\nExisting bibliography: {previous_bib}"
             f"\nJSON destination: {row_path}\n"
         )
+        if setup in saved:
+            task += (
+                f"\nEXTEND EXISTING TABLE: Read {protected} for this setup's saved table. "
+                "The supplied theorems are only the missing results. Return the complete "
+                "table and list ALL its theorem basenames in the JSON, with contribution "
+                "equal to the maximum of old and new ratings. Insert new rows immediately "
+                "before the existing \\bottomrule. Preserve every existing character outside "
+                "that insertion, including rows, numbering, caption, assumptions and notes. "
+                "Append new result numbers after existing ones; never renumber or reorder old rows. "
+                "Include comparisons for the new results in appended prior-work rows, even "
+                "if the baseline already appears above. Define any new notation within the "
+                "new cells. Start the insertion with \\midrule. These requirements override "
+                "the usual sorting and consolidation instructions. Negative novelty reviews "
+                "are valid inputs: include their results with the prescribed low rating.\n"
+            )
         row_started = time.monotonic()
         print(f"[{index}/{len(groups)}] START {setup} | log: {log_path}", flush=True)
         try:
@@ -403,7 +446,7 @@ def main(argv=None):
             if (
                 not args.polish
                 and isinstance(row, str)
-                and not row.strip().endswith(r"\end{table}")
+                and not re.search(r"\\end\{table\}\s*(?:\\clearpage\s*)?$", row)
             ):
                 raise ValueError(r"incomplete table: missing final \end{table}")
             if (
@@ -412,7 +455,11 @@ def main(argv=None):
                 or not isinstance(row, str)
                 or row.count(r"\begin{table}") != 1
                 or re.findall(r"\\label\{tab:([A-Za-z0-9_]+)\}", row) != [setup]
-                or sorted(data["theorems"]) != sorted(p.stem for p in groups[setup])
+                or sorted(data["theorems"])
+                != sorted(
+                    {p.stem for p in groups[setup]}
+                    | (saved[setup][3].keys() if setup in saved else set())
+                )
                 or any(row.count(item["url"]) != 1 for item in inputs)
                 or any(item["review_url"] not in row for item in inputs)
                 or not isinstance(additions, dict)
@@ -427,6 +474,8 @@ def main(argv=None):
             parsed = split_tables(row)[0]
             if parsed[0] != score or sorted(parsed[3]) != sorted(data["theorems"]):
                 raise ValueError("table ratings disagree with setup JSON")
+            if setup in saved:
+                row = added_rows(saved[setup][2], row)
             with lock:
                 cited = {
                     key.strip()
@@ -472,6 +521,9 @@ def main(argv=None):
                         )
                         key = new_key
                     entries[key] = entry
+                if setup in saved:
+                    prefix, suffix = saved[setup][2].split(r"\bottomrule")
+                    row = prefix + row + r"\bottomrule" + suffix
                 rows[:] = [item for item in rows if item[1] != setup]
                 rows.append((score, setup, row, parsed[3]))
                 save()
@@ -525,7 +577,9 @@ def main(argv=None):
         if not rows:
             return 1
     combined = HEADER + "\n".join(row[2] for row in rows) + "\n" + FOOTER
-    if args.polish and any(row[1] not in saved for row in rows):
+    if args.polish and any(
+        row[1] not in saved or row[2] != saved[row[1]][2] for row in rows
+    ):
         polish_input = temporary / "polish-input.tex"
         polish_input.write_text(combined, encoding="utf-8")
         polished = temporary / "polished.tex"
@@ -536,9 +590,12 @@ def main(argv=None):
             prompt
             + "\n\nFINAL EDITORIAL PASS: The per-setup generation and JSON contract above "
             "do not apply to this pass. Read ONLY the combined LaTeX and bibliography below. "
-            "Previously saved tables listed below are read-only: copy them verbatim into "
-            "the output, without changing their text, formulas, formatting, ratings or citations. "
-            "Apply all editorial and table syntax repairs only to newly generated tables. "
+            "Read the previous-tables snapshot below. Preserve all its content verbatim, "
+            "including text, formulas, formatting, numbering, ratings and citations. "
+            "Existing tables may only gain rows immediately before their original bottomrule. "
+            "Polish only newly generated tables and the newly inserted rows in existing tables. "
+            "Do not reorder existing rows or move new rows outside that insertion. "
+            "Keep new notation definitions within new cells; do not edit existing notes. "
             "If a previously saved table prevents compilation, report the problem rather "
             "than modifying it. These preservation requirements override the editing instructions below. "
             "Write the complete polished LaTeX to the destination below. Do not do research, "
@@ -573,7 +630,7 @@ def main(argv=None):
             "there. Resolve undefined citations and references as well as compilation errors. "
             "Write all corrections back to the polished destinations. Use no additional agents. "
             "Do not modify the input files.\n"
-            f"Previously saved tables (setup labels): {json.dumps(sorted(saved))}\n"
+            f"Previously saved tables: {protected}\n"
             f"Combined LaTeX: {polish_input}\nBibliography: {bibliography}\n"
             f"Compilation directory: {compile_dir}\nWrapper:\n{COMPILE_DOCUMENT}\n"
             f"LaTeX destination: {polished}\nBibliography destination: {polished_bib}\n"
