@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -87,11 +88,21 @@ def validate_reviews(root, names, changed):
 
 
 def finish_pr(repository, number, names):
-    pr = json.loads(
-        authenticated(["gh", "api", f"repos/{repository}/pulls/{number}"], capture=True)
-    )
-    if pr["commits"] != 2:
-        raise ValueError("Expected exactly two commits after postprocessing")
+    for attempt in range(5):
+        pr = json.loads(
+            authenticated(
+                ["gh", "api", f"repos/{repository}/pulls/{number}"], capture=True
+            )
+        )
+        if pr["commits"] == 2:
+            break
+        if pr["commits"] != 1 or attempt == 4:
+            raise ValueError(
+                f"Expected exactly two commits after postprocessing; GitHub reports {pr['commits']}"
+            )
+        # GitHub can briefly return the pre-push commit count.
+        print("Waiting for GitHub to report the reviews commit...", flush=True)
+        time.sleep(2)
     links = "\n".join(
         f"- [{name} review](https://github.com/{repository}/blob/{pr['head']['sha']}/scripts/reviews/{name}.md)"
         for name in names
