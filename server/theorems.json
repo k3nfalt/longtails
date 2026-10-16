@@ -22,6 +22,27 @@
   },
   {
     "budget": {
+      "latex": "6 \\cdot T + 4 \\cdot N",
+      "oracle": 0,
+      "type": "LongTails.Setups.AdaptivePairedZerothOrder.spec.Params → ℕ",
+      "value": "fun p => 6 * p.T + 4 * p.N"
+    },
+    "budgets": [
+      {
+        "latex": "6 \\cdot T + 4 \\cdot N",
+        "oracle": 0,
+        "type": "LongTails.Setups.AdaptivePairedZerothOrder.spec.Params → ℕ",
+        "value": "fun p => 6 * p.T + 4 * p.N"
+      }
+    ],
+    "module": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence",
+    "namespace": "LongTails.Setups.AdaptivePairedZerothOrder",
+    "setup": "LongTails.Setups.AdaptivePairedZerothOrder",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.AdaptivePairedZerothOrder.spec\n  LongTails.Theorems.AdaptivePairedZerothOrderConfidence.budget",
+    "theorem": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil \\frac{L}{\\mu} \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left(d + 2\\right)",
       "oracle": 0,
       "type": "LongTails.Setups.AffineDriftPL.spec.Params → ℕ",

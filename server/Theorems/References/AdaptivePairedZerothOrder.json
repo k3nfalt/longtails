@@ -1,0 +1,123 @@
+{
+  "setup": "LongTails.Setups.AdaptivePairedZerothOrder",
+  "searched_at": "2026-10-16T15:46:46.713995+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "6 \\cdot T + 4 \\cdot N",
+        "oracle": 0,
+        "type": "LongTails.Setups.AdaptivePairedZerothOrder.spec.Params → ℕ",
+        "value": "fun p => 6 * p.T + 4 * p.N"
+      },
+      "budgets": [
+        {
+          "latex": "6 \\cdot T + 4 \\cdot N",
+          "oracle": 0,
+          "type": "LongTails.Setups.AdaptivePairedZerothOrder.spec.Params → ℕ",
+          "value": "fun p => 6 * p.T + 4 * p.N"
+        }
+      ],
+      "module": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence",
+      "namespace": "LongTails.Setups.AdaptivePairedZerothOrder",
+      "setup": "LongTails.Setups.AdaptivePairedZerothOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AdaptivePairedZerothOrder.spec\n  LongTails.Theorems.AdaptivePairedZerothOrderConfidence.budget",
+      "theorem": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence",
+      "theorem": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence.result",
+      "references": "- Nikita Kornilov, Alexander Gasnikov, Pavel Dvurechensky, Darina Dvinskikh. [Gradient-Free Methods for Non-Smooth Convex Stochastic Optimization with Heavy-Tailed Noise on Convex Compact](https://arxiv.org/html/2304.02442v3). 2023 (preprint v3, August 24). Complexity: $O(1+dM_2^2D^2/\\varepsilon^2)$ paired stochastic function-value calls for $\\mathbb E[f(\\bar x)-f(x^*)]\\le\\varepsilon$, using Euclidean ZO-RSMD with moment exponent $2$; here $M_2$ bounds the RMS sample Lipschitz constant, $0<\\varepsilon\\le M_2D$, smoothing radius $\\tau=\\Theta(\\varepsilon/M_2)\\le\\gamma_{\\max}$, and $\\Delta\\le c\\varepsilon^2/(\\sqrt d M_2D)$ for a sufficiently small universal $c$. Each pair comprises two scalar evaluations; the budget is fixed.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize f over a compact convex Q ⊂ ℝ^d of diameter at most D, with x0 and a minimizer xstar in Q. On Q + closedBall(0, γmax), f is convex and M-Lipschitz. When smooth=true, its gradient is L-Lipschitz on the interior; otherwise nonsmooth objectives are permitted.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: Point, domain, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "A scalar query at x returns F(x,w)+δ(x), with E[F(x,w)]=f(x). Calls 2k and 2k+1 share the same sample ξk; different pairs use independent identically distributed samples. Neither samples nor gradients are returned. The extracted budget counts 6T+4N individual scalar evaluations.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.Query, spec.Reply, spec.admissible, oracle law ξ(n/2); LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; supplied extracted budget; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "The algorithm receives d, Q, x0, project, D, γmax, ε, ell, N and T. The smoothness flag and M, M2, L, Δ are hidden. Public horizons must satisfy T ≥ 2^48(d+ell)(1+M2²D²/ε²)+N. The smooth branch requires N ≥ 32(1+√(LD²/ε)); the nonsmooth branch requires N ≥ 1024(1+d^(1/4)MD/ε+d^(1/4)D√(M/(γmax ε))).",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: Public, Params, spec.publicInput, spec.valid; LongTails/Template.lean: Convergence.makeAlgorithm."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Sample weak gradients may have heavy tails with finite second moment; exponential moments, bounded realizations, and moments above order two are not required.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.admissible moment conditions."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "The actual moment condition is the uncentered bound E‖G(x,w)‖²≤M2² at every interior point. G is a weak gradient of the sample function, not an observed oracle reply. No second-moment bound on function values is imposed.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.admissible, final integrability and squared-norm integral conditions."
+      },
+      {
+        "label": "biased_oracle",
+        "details": "A fixed measurable perturbation δ satisfies |δ(x)|≤Δ on the enlarged domain. With r=min(γmax,D/N) in the smooth branch and r=min(γmax,d^(1/4)D/N) otherwise, √d Δ/r ≤ ε/(16384D). No continuity or Lipschitz condition is imposed on δ.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: smoothRadius, nonsmoothRadius, spec.valid, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝ^d with d>0. An exact Euclidean projection onto Q is publicly available.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: Point, Public.dimension_pos, Public.project, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Almost every sample function is continuous on the enlarged domain and admits a locally integrable distributional gradient G there, expressed through integration by parts against smooth compactly supported test functions. Samplewise convexity and a square-integrable global sample Lipschitz constant are not assumed. Dependence is confined to the prescribed adjacent query pairs.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.admissible, sample continuity, weak-gradient identity, and oracle law."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The target is f(output)−f(xstar)≤ε, with ε>0. Both the output and its objective gap must be measurable.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.valid, spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output belongs to Q for every seed, including seeds in the objective-error failure event.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.successful, ∀ ζ, output ζ ∈ p.Q."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(output)−f(xstar)>ε)≤8 exp(−ell), with ell≥log 8. Probability includes both algorithm randomization and the paired oracle samples; the oracle budget is fixed.",
+        "evidence": "LongTails/Setups/AdaptivePairedZerothOrder.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This combines paired stochastic function evaluations, deterministic bounded bias, pointwise second moments of distributional sample gradients, hidden regularity parameters, and a fixed-budget confidence guarantee. These features go beyond the usual stochastic zeroth-order benchmark. Implementation and proofs were not inspected; the literature comparison does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AdaptivePairedZerothOrderConfidence.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence",
+          "theorem": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

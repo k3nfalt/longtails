@@ -1,0 +1,126 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Adaptive Paired Zeroth-Order Optimization}
+We consider minimizing $f:\mathbb{R}^d\to\mathbb{R}$ over a nonempty compact convex set $Q$, where $d\geq1$. The objective is convex and Lipschitz on a neighborhood of $Q$; its smoothness status and regularity bounds are hidden. Each oracle call returns a random scalar function value plus a bounded deterministic perturbation. Consecutive pairs of calls share a sample, with independent samples across pairs; the random functions have weak gradients with bounded second moments. Given $\varepsilon>0$ and $\ell\geq\log 8$, success requires a measurable feasible output $\bar{x}$ satisfying $\mathbb{P}(f(\bar{x})-f(x^\star)>\varepsilon)\leq8e^{-\ell}$, where $x^\star$ minimizes $f$ on $Q$ and $\mathbb{P}$ is the joint law of algorithm and oracle randomness.
+
+More precisely, the problem is
+\[
+\min_{x\in Q} f(x),
+\]
+with the Euclidean inner product and norm on $\mathbb{R}^d$. The public inputs are
+\[
+(d,Q,x^0,\operatorname{proj}_Q,D,\gamma_{\max},\varepsilon,\ell,N,T),
+\]
+where $d,N,T$ are positive integers, $D,\gamma_{\max},\varepsilon>0$, and $\ell\geq\log 8$. The hidden parameters are $M,M_2,L,\Delta\geq0$, a flag $s\in\{0,1\}$ indicating the smooth case, and the measurable spaces supporting the oracle samples. Define the enlarged domain
+\[
+U=Q+\{u\in\mathbb{R}^d:\|u\|\leq\gamma_{\max}\}.
+\]
+The admissible instances satisfy the following conditions.
+
+\begin{assumption}[Feasible geometry and attainment]
+The set $Q$ is compact and convex, $x^0\in Q$, and
+\[
+\|x-y\|\leq D\qquad(x,y\in Q).
+\]
+The supplied projection satisfies, for every $x\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\operatorname{proj}_Q(x)&\in Q,\\
+\|x-\operatorname{proj}_Q(x)\|&=\inf_{y\in Q}\|x-y\|.
+\end{aligned}
+\]
+There is a point $x^\star\in Q$ such that $f(x^\star)\leq f(x)$ for every $x\in Q$.
+\end{assumption}
+
+\begin{assumption}[Objective regularity and hidden smoothness]
+For every $x,y\in U$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+|f(x)-f(y)|&\leq M\|x-y\|.
+\end{aligned}
+\]
+If $s=1$, there is a map $g:\mathbb{R}^d\to\mathbb{R}^d$ such that $f$ is differentiable on $\operatorname{int}U$ with gradient $g$, and
+\[
+\|g(x)-g(y)\|\leq L\|x-y\|
+\qquad(x,y\in\operatorname{int}U).
+\]
+\end{assumption}
+
+\begin{assumption}[Paired scalar oracle]
+Let $\Omega$ and $\Xi$ be measurable spaces with probability measures $\mu$ and $\nu$, respectively. There are measurable, independent random variables $\xi_j:\Xi\to\Omega$, indexed by $j\geq0$, each with law $\mu$. There are jointly measurable maps
+\[
+F:\mathbb{R}^d\times\Omega\to\mathbb{R},
+\qquad
+G:\mathbb{R}^d\times\Omega\to\mathbb{R}^d,
+\]
+and a measurable deterministic function $\delta:\mathbb{R}^d\to\mathbb{R}$. At zero-based call index $k$, the single oracle, of ID $0$, returns
+\[
+F(x,\xi_{\lfloor k/2\rfloor}(z))+\delta(x),
+\qquad z\sim\nu,
+\]
+when queried at $x\in\mathbb{R}^d$. Each scalar reply costs one oracle call, so a complete pair costs two calls. Queries may be adaptive and may lie outside $Q$ or $U$; the bounds below apply on their stated domains. Algorithm randomness is independent of the entire sample sequence.
+
+For every $x\in U$, the function $F(x,\cdot)$ is integrable with respect to $\mu$, and
+\[
+\begin{aligned}
+\int_\Omega F(x,w)\,d\mu(w)&=f(x),\\
+|\delta(x)|&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Weak gradients and second moments]
+For $\mu$-almost every $w$, the function $F(\cdot,w)$ is continuous on $U$, and $G(\cdot,w)$ is locally Bochner integrable on $\operatorname{int}U$ with respect to Lebesgue measure. For each such $w$, every smooth compactly supported function $\psi:\mathbb{R}^d\to\mathbb{R}$ with $\operatorname{supp}\psi\subseteq\operatorname{int}U$, and every $v\in\mathbb{R}^d$, the weak-gradient identity is
+\[
+\begin{aligned}
+&\int_{\mathbb{R}^d}F(x,w)D\psi(x)[v]\,dx\\
+&\qquad=-\int_{\mathbb{R}^d}\langle G(x,w),v\rangle\psi(x)\,dx.
+\end{aligned}
+\]
+For every $x\in\operatorname{int}U$, the function $w\mapsto\|G(x,w)\|^2$ is integrable and satisfies
+\[
+\int_\Omega\|G(x,w)\|^2\,d\mu(w)\leq M_2^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Parameter compatibility]
+Define the two radii and the radius selected by the hidden flag as
+\[
+\begin{aligned}
+\rho_1&=\min\{\gamma_{\max},D/N\},\\
+\rho_0&=\min\{\gamma_{\max},d^{1/4}D/N\},\\
+\rho_s&=\begin{cases}\rho_1,&s=1,\\\rho_0,&s=0.\end{cases}
+\end{aligned}
+\]
+The public integers and hidden bounds obey
+\[
+2^{48}(d+\ell)\left(1+\frac{M_2^2D^2}{\varepsilon^2}\right)+N\leq T.
+\]
+Their additional compatibility condition depends on the flag:
+\[
+\begin{aligned}
+s=1:\quad N&\geq32\left(1+\sqrt{\frac{LD^2}{\varepsilon}}\right),\\
+s=0:\quad N&\geq1024\left(1+\frac{d^{1/4}MD}{\varepsilon}
++d^{1/4}D\sqrt{\frac{M}{\gamma_{\max}\varepsilon}}\right).
+\end{aligned}
+\]
+In either case, the perturbation bound satisfies
+\[
+\frac{\sqrt d\,\Delta}{\rho_s}\leq\frac{\varepsilon}{16384D}.
+\]
+\end{assumption}
+
+The algorithm is selected using only the public inputs above; the objective, its minimizer, the oracle representation and laws, the regularity and perturbation bounds, and the flag $s$ are not supplied to it. An externally specified budget $K\in\mathbb{N}$ counts scalar calls to oracle $0$ and may depend on the full parameter tuple. The public parameter $T$ is subject to the stated compatibility condition; the setup itself does not identify it with $K$.
+
+Writing $\mathbb{P}$ for the joint probability law, the returned point $\bar{x}$ must be measurable and belong to $Q$ for every realization. The objective gap must also be measurable, and the exact success requirement is
+\[
+\mathbb{P}\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)
+\leq8\exp(-\ell).
+\]
+\end{document}
