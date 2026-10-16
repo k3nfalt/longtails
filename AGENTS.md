@@ -33,15 +33,19 @@ project preferences; newer explicit user requests take precedence.
 
 - State the algorithm variant, hypotheses, accuracy criterion, and iteration
   budget precisely. Clarify an ambiguous algorithm variant before implementing it.
-- Use accelerated methods without restarts unless explicitly requested otherwise.
 - Preserve the requested algorithm family when improving a rate. Use the strongest
   applicable published analysis as the starting point, and distinguish limitations
   of the current proof from lower bounds on the algorithm or problem class.
-- Put the stochastic-gradient existence assumption in `LongTails/Setups/`. State
-  vector-valued unbiasedness, `∫ ω, oracle x ω ∂p = gradient f x`, and bounded
-  variance, `∫ ω, ‖oracle x ω - gradient f x‖^2 ∂p ≤ σ^2`, with the necessary
-  integrability conditions and mathlib's `IsProbabilityMeasure p`. Require the
-  oracle to be jointly measurable in its point and random-sample arguments.
+  Exploration may discover a different proof or algorithm; keep any new algorithm
+  within the requested scope.
+- Put oracle assumptions in `LongTails/Setups/`. State the exact error or moment
+  conditions of the model, with the necessary measurability and integrability
+  conditions. For unbiased stochastic gradients with bounded variance, state
+  `∫ ω, oracle x ω ∂p = gradient f x` and
+  `∫ ω, ‖oracle x ω - gradient f x‖^2 ∂p ≤ σ^2`, using mathlib's
+  `IsProbabilityMeasure p`. Do not impose unbiasedness or bounded variance on
+  models that do not assume them. Require stochastic oracles to be jointly
+  measurable in their point and random-sample arguments.
 - Make public theorem statements readable and explicit: give concrete parameter
   formulas once, using local names such as `η` for the step size, `Δ` for the
   initial objective gap, and `K` for the iteration count. Reuse those names
@@ -67,18 +71,21 @@ project preferences; newer explicit user requests take precedence.
   retain all necessary noise, initialization, and mixing terms.
 - Define algorithm outputs in `LongTails/Algorithms/` and name the output in the
   theorem statement so the accuracy claim is directly readable.
-- State stochastic accuracy using explicit integrals, for example
-  `(∫ ω, f (output ω) - f xstar ∂P) ≤ ε`.
-  Take an abstract probability measure `P` and sample variables `ξ`, with
+- Make the probability measure and stochastic accuracy criterion explicit.
+  State expected accuracy using integrals, for example
+  `(∫ ω, f (output ω) - f xstar ∂P) ≤ ε`; use explicit probability bounds or
+  almost-sure statements for high-probability or almost-sure guarantees.
+  Do not use `letI : MeasureSpace ...` to select a hidden distribution for `𝔼`,
+  or introduce custom expectation helpers such as `expected` or `sampleMean`.
+- State the sampling dependence assumed by the model. For IID sampling, take
+  an abstract probability measure `P` and sample variables `ξ`, with
   `h_samples : LongTails.Setups.StochasticGeneralizedSmoothAndConvex.IID ξ p P`. Reuse the IID
   structure in `LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean` to bundle
   measurability, `ProbabilityTheory.iIndepFun ξ P`, and marginal laws
-  `P.map (ξ k) = p`. Do not use `letI : MeasureSpace ...`
-  to select a hidden distribution for `𝔼`, or introduce custom expectation helpers
-  such as `expected` or `sampleMean`. Derive any product-measure representation
-  internally from independence; do not prescribe `P` as a product measure.
-- Reuse `sgd` in `LongTails/Algorithms/Sgd.lean`, which defines an oracle
-  `Algorithm`; use `execute` from `LongTails/Template.lean` to run it.
+  `P.map (ξ k) = p`. Derive any product-measure representation internally from
+  independence; do not prescribe `P` as a product measure. For Markov or other
+  dependent sampling, state the appropriate dependence assumptions instead of IID.
+- Use `execute` from `LongTails/Template.lean` to run oracle algorithms.
 - Express minimizer-based accuracy relative to `xstar`, using the setup's
   minimizer assumption. State clearly whether the result
   concerns a last iterate, an average across iterations, or some iterate.
