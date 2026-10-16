@@ -10,17 +10,6 @@ namespace OracleTemplate.TerminalClipping
 
 open LongTails.Setups.TerminalClippingConvex
 
-lemma algorithm_allowed (q : Public) : spec.allowedAlgorithm q (algorithm q) := by
-  refine ⟨(fun s => stepSize q.B q.δ q.T s.t),
-    (fun s => threshold q.B q.G q.T (s.x - q.x0)
-      (influenceScale q.B q.δ q.T s.t • (s.x - q.x0 - s.auxiliary))), ?_, ?_⟩
-  · intro seed
-    exact ⟨rfl, rfl⟩
-  · intro s
-    cases h : s.pending <;> simp [algorithm, h, nextPoint]
-    intro g
-    abel
-
 lemma even_samples_iid {Ω Ξ : Type*} [MeasurableSpace Ω] [MeasurableSpace Ξ]
     {ξ : ℕ → Ξ → Ω} {ν : Measure Ω} {P : Measure Ξ}
     (h : LongTails.Setups.StochasticGeneralizedSmoothAndConvex.IID ξ ν P) :

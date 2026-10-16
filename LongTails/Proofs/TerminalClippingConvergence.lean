@@ -28,9 +28,27 @@ lemma accuracy_budget {B G R δ ε : ℝ} {T : ℕ}
   rw [he']
   nlinarith
 
+lemma algorithm_allowed (q : Public) (hB : 0 < q.B) (hG : 0 < q.G)
+    (hδ : 0 < q.δ) (hδ1 : q.δ < 1) : spec.allowedAlgorithm q (algorithm q) := by
+  refine ⟨(fun s => stepSize q.B q.δ q.T s.t),
+    (fun s => threshold q.B q.G q.T (s.x - q.x0)
+      (influenceScale q.B q.δ q.T s.t • (s.x - q.x0 - s.auxiliary))), ?_, ?_, ?_⟩
+  · intro s
+    constructor
+    · by_cases ht : s.t < q.T
+      · exact (stepSize_pos hB hδ hδ1 ht).le
+      · exact (stepSize_after q.B q.δ (Nat.le_of_not_gt ht)).ge
+    · exact (threshold_pos hB hG (lt_of_lt_of_le Nat.zero_lt_one (le_max_left 1 _)) _ _).le
+  · intro seed
+    exact ⟨rfl, rfl⟩
+  · intro s
+    cases h : s.pending <;> simp [algorithm, h, nextPoint]
+    intro g
+    abel
+
 lemma convergence : Convergence spec (fun p _ => 2 * p.T) := by
   apply convergence_of_public_budget (S := spec) (fun p => 2 * p.T)
-  refine ⟨algorithm, ?_, fun p _ => algorithm_allowed p.toPublic⟩
+  refine ⟨algorithm, ?_, fun p hp => algorithm_allowed p.toPublic hp.1 hp.2.1 hp.2.2.1 hp.2.2.2.1⟩
   rintro p ⟨hB, hG, hδ, hδ1, hR, hε⟩ I O hadm
   have hT : 1 ≤ p.toPublic.T := le_max_left _ _
   have hbudget : (2 ^ 20 * (p.B * p.R ^ 2 + p.G ^ 2 / p.B) *

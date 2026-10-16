@@ -47,6 +47,7 @@ abbrev spec : Setup where
   publicInput q := q.toPublic
   allowedAlgorithm q A :=
     ∃ (η C : A.State → ℝ),
+      (∀ s, 0 ≤ η s ∧ 0 ≤ C s) ∧
       (∀ seed, A.output (A.initial seed) = q.x0 ∧
         A.query (A.initial seed) = (0, .subgradient q.x0)) ∧
       ∀ s, match (A.query s).2 with
