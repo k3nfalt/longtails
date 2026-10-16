@@ -61,7 +61,11 @@ def check_compilation(table, bibliography, directory):
         raise ValueError(f"Unresolved LaTeX references; see {directory / 'check.log'}")
 
 
-def validate_polish(original, revised, original_bib, revised_bib):
+def validate_polish(original, revised, original_bib, revised_bib, saved=None):
+    revised_tables = {row[1]: row[2] for row in split_tables(revised)}
+    for setup, row in (saved or {}).items():
+        if revised_tables.get(setup) != row[2]:
+            raise ValueError(f"polish changed previously saved table: {setup}")
     bib_keys = r"@\w+\s*[{(]\s*([^,]+),"
     if sorted(re.findall(bib_keys, revised_bib)) != sorted(
         re.findall(bib_keys, original_bib)
@@ -131,12 +135,14 @@ def bibliography_entries(text):
     }
 
 
-def save_tables(directory, rows, entries):
+def save_tables(directory, rows, entries, saved=()):
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "tables").mkdir(exist_ok=True)
     (directory / "metadata").mkdir(exist_ok=True)
     rows.sort(key=lambda item: (-item[0], item[1]))
     for score, setup, row, theorems in rows:
+        if setup in saved:
+            continue
         (directory / "metadata" / f"{setup}.json").write_text(
             json.dumps({"contribution": score, "theorems": theorems}, indent=2) + "\n",
             encoding="utf-8",
@@ -162,12 +168,12 @@ def main(argv=None):
     parser.add_argument(
         "--polish",
         action="store_true",
-        help="Run one final agent session to unify and polish all tables",
+        help="Run one final agent session to polish only tables added in this run",
     )
     parser.add_argument(
         "--polish-only",
         action="store_true",
-        help="Polish existing output files without regenerating setup tables",
+        help="Check compilation of existing output files; saved tables remain untouched",
     )
     parser.add_argument(
         "--jobs", type=int, default=6, help="Parallel sessions (default: 6)"
@@ -175,7 +181,7 @@ def main(argv=None):
     parser.add_argument(
         "--setups",
         nargs="+",
-        help="Setup basenames to add or regenerate (default: missing reviewed setups)",
+        help="Setup basenames to add; existing tables are preserved (default: missing reviewed setups)",
     )
     parser.add_argument("--reviews-dir", type=Path, default=scripts / "reviews")
     parser.add_argument(
@@ -295,13 +301,13 @@ def main(argv=None):
         rows = list(saved.values())
     except (OSError, ValueError) as error:
         parser.error(f"cannot load saved tables: {error}")
-    if not args.polish_only and not args.setups:
+    if not args.polish_only:
         groups = {name: paths for name, paths in groups.items() if name not in saved}
     lock, stopped = Lock(), Event()
     completed = 0
 
     def save():
-        save_tables(output, rows, entries)
+        save_tables(output, rows, entries, saved)
 
     save()
     started = time.monotonic()
@@ -374,6 +380,9 @@ def main(argv=None):
         ]
         task = (
             prompt
+            + "\n\nDo not change previously saved tables, their metadata, or the existing "
+            "bibliography. Generate only the supplied setup's table and write only to "
+            "the JSON destination below; the runner will merge the result."
             + f"\n\nSetup: {scripts.parent / 'LongTails/Setups' / (setup + '.lean')}"
             f"\nSetup URL: {repository_url}LongTails/Setups/{setup}.lean"
             f"\nTheorems: {json.dumps(inputs)}"
@@ -516,7 +525,7 @@ def main(argv=None):
         if not rows:
             return 1
     combined = HEADER + "\n".join(row[2] for row in rows) + "\n" + FOOTER
-    if args.polish:
+    if args.polish and any(row[1] not in saved for row in rows):
         polish_input = temporary / "polish-input.tex"
         polish_input.write_text(combined, encoding="utf-8")
         polished = temporary / "polished.tex"
@@ -527,11 +536,16 @@ def main(argv=None):
             prompt
             + "\n\nFINAL EDITORIAL PASS: The per-setup generation and JSON contract above "
             "do not apply to this pass. Read ONLY the combined LaTeX and bibliography below. "
+            "Previously saved tables listed below are read-only: copy them verbatim into "
+            "the output, without changing their text, formulas, formatting, ratings or citations. "
+            "Apply all editorial and table syntax repairs only to newly generated tables. "
+            "If a previously saved table prevents compilation, report the problem rather "
+            "than modifying it. These preservation requirements override the editing instructions below. "
             "Write the complete polished LaTeX to the destination below. Do not do research, "
             "read reviews or proofs. Copy the bibliography to its destination and fix only "
             "LaTeX/BibTeX syntax there, preserving every entry, key and bibliographic fact. Unify typography, "
             "notation for equivalent quantities, output labels, big-O complexity notation, "
-            "caption/assumptions/Abbr placement, and concise wording across all tables. "
+            "caption/assumptions/Abbr placement, and concise wording across newly generated tables. "
             "Prefer explicit setup parameters in rates; expand unnecessary A, B, S, T-style "
             "abbreviations. Keep them only when long or repeated expressions would otherwise "
             "be unwieldy, not merely to force a formula onto one line. "
@@ -559,6 +573,7 @@ def main(argv=None):
             "there. Resolve undefined citations and references as well as compilation errors. "
             "Write all corrections back to the polished destinations. Use no additional agents. "
             "Do not modify the input files.\n"
+            f"Previously saved tables (setup labels): {json.dumps(sorted(saved))}\n"
             f"Combined LaTeX: {polish_input}\nBibliography: {bibliography}\n"
             f"Compilation directory: {compile_dir}\nWrapper:\n{COMPILE_DOCUMENT}\n"
             f"LaTeX destination: {polished}\nBibliography destination: {polished_bib}\n"
@@ -570,7 +585,11 @@ def main(argv=None):
             revised = polished.read_text(encoding="utf-8")
             revised_bib = polished_bib.read_text(encoding="utf-8")
             validate_polish(
-                original, revised, bibliography.read_text(encoding="utf-8"), revised_bib
+                original,
+                revised,
+                bibliography.read_text(encoding="utf-8"),
+                revised_bib,
+                saved,
             )
             rows = split_tables(revised)
             if {row[1]: row[3] for row in rows} != {
