@@ -31,12 +31,12 @@ Linear-decay proximal SGD \citep[Thm.~3.4]{liu2026lastv4momentum}; Euclidean spe
 \midrule
 SAGD \citep[Cor.~1, Eq.~(3.6)]{sccIlandarideva2024v3}; Derived bound, $\psi=0$ on $Q$, $E=\mathbb{R}^d$, batch size $1$
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& \textbf{(1)}: scope: nonzero $\psi$. No rate improvement on the constraint-only overlap.
+& \textbf{(1)}: Scope: nonzero $\psi$. No rate improvement on the constraint-only overlap.
 & \textbf{(1)}: extra $\Delta/\varepsilon$; worse when $\Delta\gg LR^2+\sigma^2R^2/\varepsilon$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $p$: sample law; $P$: IID execution law; $R,\Delta$: initial distance and gap bounds; $\sigma^2$: variance bound at $x_\star$; $\sigma_*^2=\sigma^2+\|\nabla f(x_\star)\|^2$: second-moment bound; $\sigma_u^2$: uniform variance bound. Costs count stochastic-gradient and exact-prox calls (one of each per iteration); for SAGD with $\psi=0$, prox means projection onto $Q$. SAGD's state-dependent-noise constants specialize to $\mathcal L=4L$ and noise variance $2\sigma^2$.
+\item[] \textbf{Abbr:} $p$: sample law; $P$: IID execution law; $R,\Delta$: initial distance and gap bounds; $\sigma^2$: variance bound at $x_\star$; $\sigma_*^2=\sigma^2+\|\nabla f(x_\star)\|^2$: second-moment bound; $\sigma_u^2$: uniform variance bound. Costs count stochastic-gradient and exact-prox calls (one of each per iteration); for SAGD with $\psi=0$, prox means projection onto $Q$. SAGD's state-dependent-noise constants specialize to $\mathcal{L}=4L$ and noise variance $2\sigma^2$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

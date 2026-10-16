@@ -16,17 +16,17 @@
 \midrule[1.2pt]
 SHB-IMA \citep[Thm.~G.1, Cor.~G.2]{sebbouh2021sampledv2}\newline Finite-dimensional case
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& i) \textbf{(1)}: matches known rate with plain SGD.\newline ii) \textbf{(1)}: scope: extends the statement to separable Hilbert spaces; method-specific priority unresolved.
+& i) \textbf{(1)}: Matches known rate with plain SGD.\newline ii) \textbf{(1)}: Scope: extends the statement to separable Hilbert spaces; method-specific priority unresolved.
 & --- \\
 \midrule
 Constant-step SGD\newline \citep[Thm.~2]{attia2025sampledv2}: $\mathbb{R}^d$;\newline \citep[Thm.~3.1]{garrigos2025sampledv1}: Hilbert space; Derived bound (tuned)
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\ell\!\left(\frac{LR^2}{\varepsilon}\right)+\frac{\sigma^2R^2}{\varepsilon^2}\ell\!\left(\frac{\sigma R}{\varepsilon}\right)\right)$
-& i) \textbf{(1)}: rate: removes logarithms for plain SGD when $LR^2/\varepsilon$ or $\sigma R/\varepsilon$ grows; no problem-class rate improvement.\newline ii) \textbf{(1)}: scope: extends the Euclidean statement to Hilbert spaces.
+& i) \textbf{(1)}: Rate: removes logarithms for plain SGD when $LR^2/\varepsilon$ or $\sigma R/\varepsilon$ grows; no problem-class rate improvement.\newline ii) \textbf{(1)}: Scope: extends the Euclidean statement to Hilbert spaces.
 & \textbf{(1)} needs $\sigma$; the Hilbert-space Cor.~3.4 alternative avoids $\sigma$ in its steps, but loses the interpolation rate. \\
 \midrule
 Linear-decay SGD \citep[Thm.~3.4]{liu2026sampledv4}\newline Common case: $\mathbb{R}^d$, unconstrained, noncomposite, uniform variance $\sigma_u^2<\infty$
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma_u^2R^2}{\varepsilon^2}\right)$
-& i) \textbf{(1)}: scope: needs variance only at $x_\star$, permitting $\sigma_u=\infty$.\newline ii) \textbf{(1)}: rate on overlap ($\sigma\le\sigma_u$): replaces $\sigma_u^2$ by $\sigma^2$ in the noise term; matches at equal noise.
+& i) \textbf{(1)}: Scope: needs variance only at $x_\star$, permitting $\sigma_u=\infty$.\newline ii) \textbf{(1)}: rate on overlap ($\sigma\le\sigma_u$): replaces $\sigma_u^2$ by $\sigma^2$ in the noise term; matches at equal noise.
 & \textbf{(1)} needs per-sample convexity and smoothness; lacks composite/constrained scope and high-probability guarantees (available there under sub-Gaussian noise). \\
 \bottomrule
 \end{tabularx}

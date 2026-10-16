@@ -23,18 +23,18 @@ $\varepsilon\le\min\{LR,\sigma\}$; includes final residual conversion: one forwa
 RAIN$^{++}$ \citep[Thm.~5.4, Prop.~5.3]{sciChenLuo2024v4}\newline
 $G=0$, $F$ a smooth saddle-gradient operator
 & $\begin{gathered}\mathcal{O}\!\bigl((1+LR/\varepsilon+\sigma^2/\varepsilon^2)\\{}\cdot\operatorname{polylog}(2+LR/\varepsilon+\sigma/\varepsilon)\bigr)\end{gathered}$\newline Expected sample count, including conversion to $\mathbb{E}\|F(\bar x)\|\le\varepsilon$.
-& i) \textbf{(1)}: scope: extends to general composite inclusions.\newline ii) \textbf{(1)}: fixed budget instead of expected random cost.\newline \textbf{(1)}: matches polynomial parameter dependence on the common setup.
+& i) \textbf{(1)}: Scope: extends to general composite inclusions.\newline ii) \textbf{(1)}: fixed budget instead of expected random cost.\newline \textbf{(1)}: matches polynomial parameter dependence on the overlap.
 & \textbf{(1)}: polynomial $\tau^{-8}$ loss; excludes $\rho L=1/2$. No established logarithmic improvement. \\
 \midrule
 Accumulative regularization \citep[Thm.~2.2]{sciJiLanZhu2026v2}\newline
 Monotone $F$, $G=N_X$, $x_0\in X$; closed convex $X$
 & $\mathcal{O}\!\left(\left(\frac{LR}{\varepsilon}+\frac{\sigma^2\ell^3}{\varepsilon^2}\right)\operatorname{polylog}(2+\ell)\right)$\newline $0<\varepsilon\le LR$; samples plus projections; $\sqrt{\mathbb{E}\operatorname{res}_F(\bar x)^2}\le\varepsilon$.
-& \textbf{(1)}: nonmonotone $F+G$ and general resolvents instead of monotone $F$ and projections. Matches polynomial parameter dependence on the common setup.
+& \textbf{(1)}: nonmonotone $F+G$ and general resolvents instead of monotone $F$ and projections. Matches polynomial parameter dependence on the overlap.
 & \textbf{(1)} at $\rho=0$: $\ell^4$ instead of $\ell^3$ noise factor (up to iterated logs); larger deterministic logarithmic overhead; mean residual instead of RMS. \\
 \midrule
 Inexact Halpern, deterministic \citep[Cor.~2.2, Rem.~2.3]{sciAKW2026v3}\newline $\sigma=0$
 & $\mathcal{O}\!\left(\frac{LR}{d^2\varepsilon}\left[1+\log\!\left(1+\frac{LR}{d\varepsilon}\right)\right]\right)$\newline $0<\varepsilon\le LR$; evaluations plus resolvents; strong residual after conversion.
-& \textbf{(1)}: no established improvement on $\sigma=0$.
+& \textbf{(1)}: No established improvement on $\sigma=0$.
 & \textbf{(1)}: narrower $\rho$ range; $\tau^{-8}$ loss and fourth-power rather than single-logarithm overhead. \\
 \bottomrule
 \end{tabularx}

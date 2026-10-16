@@ -16,7 +16,7 @@
 \midrule[1.2pt]
 Nesterov AGD \citep[Thm.~3.18]{Bubeck2015MinimizerHessian}
 & $\mathcal{O}(n+n\sqrt\kappa\,\ell)$\par $n$ component calls per full gradient.
-& \textbf{(1)}: no established improvement.
+& \textbf{(1)}: No established improvement.
 & \textbf{(1)}: transient $\sqrt\kappa$ times larger; additional $G$ costs and knowledge; expected rather than deterministic accuracy. \\
 \midrule
 Katyusha X \citep[Cor.~4.4]{qfsAllenZhu2018v1}\par Finite-dimensional overlap; $\varepsilon<LR^2/2$.
@@ -25,12 +25,12 @@ Katyusha X \citep[Cor.~4.4]{qfsAllenZhu2018v1}\par Finite-dimensional overlap; $
 & \textbf{(1)}: $n\kappa$ instead of $n^{3/4}\sqrt\kappa$, plus $G$ costs; needs $G$ in addition. \\
 \midrule
 Random reshuffling \citep[Thm.~2, App.~B]{qfsAhnYunSra2020v2}\par Derived bound; finite dimension, $n\ge2$, $\varepsilon<LR^2/2$.
-& $\begin{aligned}\mathcal{O}\!\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\}\\ &+\frac{L^{3/2}G}{\mu^2\sqrt\varepsilon}\\ &+\Bigl(\frac{n^2L^3G^2\log(en)}{\mu^4\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$
+& $\begin{aligned}\mathcal{O}\!\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\} +\frac{L^{3/2}G}{\mu^2\sqrt\varepsilon}\\ &+\Bigl(\frac{n^2L^3G^2\log(en)}{\mu^4\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$
 & \textbf{(1)}: i) Transient factor $\sqrt{\kappa/n}$ saved when $\kappa>36n$, $G\le n\mu\sqrt{\varepsilon/L}$.\newline ii) Removes cubic-term $(\log(en))^{1/3}$. Method-specific gain; priority unresolved.
 & --- \\
 \midrule
 Tail-averaged reshuffling \citep[Thm.~14, App.~C]{qfsAhnYunSra2020v2}\par Derived bound; finite dimension, $n\ge2$, $\varepsilon<LR^2/2$.
-& $\begin{aligned}\mathcal{O}\!\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\}\\ &+\frac{LG}{\mu^{3/2}\sqrt\varepsilon}\\ &+\Bigl(\frac{n^2L^2G^2\log(en)}{\mu^3\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$
+& $\begin{aligned}\mathcal{O}\!\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\} +\frac{LG}{\mu^{3/2}\sqrt\varepsilon}\\ &+\Bigl(\frac{n^2L^2G^2\log(en)}{\mu^3\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$
 & \textbf{(1)}: i) Transient factor $\sqrt{\kappa/n}$ saved when $\kappa>36n$, $G\le n\mu\sqrt{\varepsilon/L}$.\newline ii) Final endpoint instead of tail average.
 & \textbf{(1)}: bias cost $\sqrt\kappa$ times larger; cubic cost ratio $(\kappa/\log(en))^{1/3}$, worse when $\kappa>\log(en)$; no uniform dominance. \\
 \bottomrule

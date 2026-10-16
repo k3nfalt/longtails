@@ -16,12 +16,12 @@
 \midrule[1.2pt]
 FISTA on $F$ \citep[Thm.~4.4]{ifsBeckTeboulle2009}
 & $\mathcal{O}\!\left(m+m\sqrt{\frac{LR^2}{\varepsilon}}\right)$\par Finite-dimensional restriction; $m$ component calls per step.
-& \textbf{(1)}: no established improvement in oracle complexity.
+& \textbf{(1)}: No established improvement in oracle complexity.
 & \textbf{(1)}: $m^4LR^2/\varepsilon$ instead of $m\sqrt{LR^2/\varepsilon}$; requires interpolation, unnecessary for this baseline. \\
 \midrule
 Cyclic IGD \citep[Thm.~2.3]{ifsCaiDiakonikolas2024v2}
 & $\mathcal{O}\!\left(m+\frac{mLR^2\sqrt{\ell}}{\varepsilon}\right)$\par Finite-dimensional, interpolating restriction; horizon-tuned step.
-& i) \textbf{(1)}: hilbert-space scope.\newline ii) \textbf{(1)}: removes $\sqrt{\ell}$, but costs $m^3$ more; rate gain only for $\ell\gg m^6$.
+& i) \textbf{(1)}: Hilbert-space scope.\newline ii) \textbf{(1)}: removes $\sqrt{\ell}$, but costs $m^3$ more; rate gain only for $\ell\gg m^6$.
 & \textbf{(1)}: worse leading term when $\ell\ll m^6$; requires interpolation, unnecessary for the general baseline. \\
 \midrule
 Cyclic projections, Derived bound \citep[Prop.~4.13]{ifsEvronEtAl2023}
