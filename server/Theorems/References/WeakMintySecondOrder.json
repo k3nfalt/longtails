@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.WeakMintySecondOrder",
+  "searched_at": "2026-10-16T20:37:54.791639+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{1048576 \\cdot \\left(1 + \\frac{L_2 \\cdot R^{2}}{\\varepsilon}\\right) \\cdot \\log\\left(\\frac{2}{1 - \\frac{\\rho \\cdot L_1}{2}}\\right)}{\\left(1 - \\frac{\\rho \\cdot L_1}{2}\\right)^{5}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.WeakMintySecondOrder.spec.Params → ℕ",
+        "value": "fun q => ⌈1048576 * (1 + q.L₂ * q.R ^ 2 / q.ε) * Real.log (2 / (1 - q.ρ * q.L₁ / 2)) / (1 - q.ρ * q.L₁ / 2) ^ 5⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{1048576 \\cdot \\left(1 + \\frac{L_2 \\cdot R^{2}}{\\varepsilon}\\right) \\cdot \\log\\left(\\frac{2}{1 - \\frac{\\rho \\cdot L_1}{2}}\\right)}{\\left(1 - \\frac{\\rho \\cdot L_1}{2}\\right)^{5}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.WeakMintySecondOrder.spec.Params → ℕ",
+          "value": "fun q => ⌈1048576 * (1 + q.L₂ * q.R ^ 2 / q.ε) * Real.log (2 / (1 - q.ρ * q.L₁ / 2)) / (1 - q.ρ * q.L₁ / 2) ^ 5⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FullRangeSecondOrderWeakMinty",
+      "namespace": "LongTails.Setups.WeakMintySecondOrder",
+      "setup": "LongTails.Setups.WeakMintySecondOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.WeakMintySecondOrder.spec\n  OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.budget",
+      "theorem": "OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FullRangeSecondOrderWeakMinty",
+      "theorem": "OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained root-finding for a differentiable, potentially nonmonotone operator F:E→E satisfying a weak Minty condition. No scalar objective or saddle-point representation is required.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrder.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact operator-value and full Jacobian evaluations, requested separately. Each query returns either (F(x),0) or (0,J(x)); both consume the same oracle budget. Answers are exact for every call index and seed.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrder.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "An arbitrary finite-dimensional real inner-product space with its induced norm; no dimension-dependent restriction is imposed.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrder.lean: Public.normedE, Public.linearE, Public.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "F is globally L₁-Lipschitz and its Fréchet derivative J is globally L₂-Lipschitz in operator norm. There exists xstar with F(xstar)=0, ‖x0−xstar‖≤R, and ⟨F(x),x−xstar⟩≥−(ρ/2)‖F(x)‖² for every x. Parameters satisfy L₁,L₂,ε>0, R,ρ≥0, and ρL₁<2. E,L₁,L₂,ρ,ε,x0 are public; R is hidden from algorithm construction.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrder.lean: Public, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual guarantee holds almost surely under the joint algorithm-seed and oracle-seed law, after a fixed oracle budget.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrder.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "other",
+        "details": "Return one point x with unsquared operator residual ‖F(x)‖≤ε; no averaging, last-iterate, or distance-to-solution requirement is imposed.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrder.lean: spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines nonmonotone weak-Minty root-finding across ρL₁<2 with Lipschitz Jacobians and separate exact operator/Jacobian queries. This is a specialized structured variant of root-finding; the classification does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FullRangeSecondOrderWeakMinty",
+          "theorem": "OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

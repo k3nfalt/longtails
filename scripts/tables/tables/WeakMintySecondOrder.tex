@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Second-order weak Minty root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeakMintySecondOrder.lean}{Weak\allowbreak{}Minty\allowbreak{}Second\allowbreak{}Order}.}\label{tab:WeakMintySecondOrder}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is differentiable, $L_1$-Lipschitz, and has an $L_2$-Lipschitz Jacobian, with $L_1,L_2>0$. There exists $x_\star$ with $F(x_\star)=0$, $\|x_0-x_\star\|\le R$, and $\langle F(x),x-x_\star\rangle\ge-\rho\|F(x)\|^2/2$ for every $x$, where $R,\rho\ge0$ and $\rho L_1<2$. Exact value and full-Jacobian queries are available. Target: $\|F(x_{\rm out})\|\le\varepsilon$ almost surely, $\varepsilon>0$. The constructed algorithm needs no $R$ input.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FullRangeSecondOrderWeakMinty.lean}{Full\allowbreak{}Range\allowbreak{}Second\allowbreak{}Order\allowbreak{}Weak\allowbreak{}Minty} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FullRangeSecondOrderWeakMinty.md}{(review)}
+& $\mathcal{O}\!\left((1+L_2R^2/\varepsilon)\delta^{-5}\ell\right)$ total $F$ and $J$ calls.
+& --- & --- \\
+\midrule[1.2pt]
+\citep[Thm.~6.1, Cor.~6.3]{wmsoPethick2025}; $A=0$
+& Derived bound: $\mathcal{O}\!\left((1+L_1^2R^2/\varepsilon^2)\delta^{-3}\ell\right)$ $F$ calls, including inner iterations.
+& \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$; total gain when $\varepsilon\ll\delta^2L_1^2/L_2$ and $\varepsilon\lesssim L_2R^2$.
+& \textbf{(1)}: needs Lipschitz $J$, full-Jacobian queries and exact cubic solves; $\delta^{-5}$ instead of $\delta^{-3}$; can lose for $\varepsilon\gtrsim L_1^2/L_2$. Only unconstrained problems. \\
+\midrule
+\citep[Thm.~B.1, $p=q=2$]{wmsoVyas2023v1}; small-$\rho$ special case
+& Derived bound: $\mathcal{O}(1+L_2R^2/\varepsilon)$ $F$ and $J$ calls, conditional on Fej\'er iterates $\|z_k-x_\star\|\le R$ and sufficiently small $\rho\sqrt{L_1L_2R}$.
+& \textbf{(1)}: Scope: $\rho L_1<2$ for arbitrary $R$, without trajectory-dependent smallness.
+& \textbf{(1)}: extra $\delta^{-5}\ell$ factor on this overlap; same full-Jacobian access and cubic-root subproblem. \\
+\midrule
+\citep[Thm.~3.5, $p=2$]{wmsoVyas2023v1}; $3/2$-power defect
+& $\mathcal{O}(1+L_2R^2/\varepsilon)$ $F$ and $J$ calls on the common Minty restriction $\rho=\rho'=0$.
+& \textbf{(1)}: Matches known rate at $\rho=\rho'=0$. General squared and $3/2$-power defect classes are incomparable; no general rate comparison.
+& \textbf{(1)}: additionally needs globally $L_1$-Lipschitz $F$; does not cover the entire $3/2$-power defect class. \\
+\midrule
+\citep[Thm.~B.3]{wmsoVyas2026v1}; bounded-operator special case
+& ---
+& \textbf{(1)}: Scope: unbounded $F$ allowed; $\rho L_1<2$ replaces smallness depending on a global bound $\sup_x\|F(x)\|\le D$.
+& --- \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $J=DF$; $\delta=1-\rho L_1/2\in(0,1]$; $\ell=1+\log(1/\delta)$; $\rho'$ denotes the defect coefficient in $\langle F(x),x-x_\star\rangle\ge-\rho'\|F(x)\|^{3/2}$. One $F$ call returns the full operator value; one $J$ call returns the full Jacobian. Oracle counts exclude arithmetic and cubic-root solution costs. $A=0$ denotes the unconstrained restriction, whose resolvent is the identity.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Weak Minty Second-Order Root Finding}
+We seek an approximate zero of a differentiable map $F:E\to E$ on a finite-dimensional real inner product space $E$. The map and its derivative are Lipschitz with constants $L_1>0$ and $L_2>0$, respectively. A zero $x^\star$ satisfies $\|x^0-x^\star\|\leq R$ and $\langle F(x),x-x^\star\rangle\geq-(\rho/2)\|F(x)\|^2$ for every $x\in E$, where $x^0\in E$ is given, $R\geq0$, and $0\leq\rho<2/L_1$. Each oracle call returns either the exact value or the exact derivative at a queried point. For $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $\|F(\bar{x})\|\leq\varepsilon$ almost surely. The inputs $E,L_1,L_2,\rho,\varepsilon,x^0$ are public; $R$ is hidden.
+
+The underlying root-finding problem is
+\[
+\text{find }x\in E\text{ such that }F(x)=0.
+\]
+The norm on $E$ is induced by its inner product. Write $J(x)=DF(x)$ for the Fr\'echet derivative, viewed as a continuous linear map from $E$ to $E$, and use the operator norm for such maps. The admissible maps and oracle access satisfy the following conditions.
+
+\begin{assumption}[Lipschitz map and derivative]
+The map $F$ is Fr\'echet differentiable at every point of $E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+\|F(x)-F(y)\| &\leq L_1\|x-y\|,\\
+\|J(x)-J(y)\| &\leq L_2\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty condition and initialization]
+There exists a common witness $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq R,\\
+\langle F(x),x-x^\star\rangle
+&\geq-\frac{\rho}{2}\|F(x)\|^2
+\qquad\text{for every }x\in E.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact value and derivative access]
+A single oracle, with ID $0$, accepts two query types at any point $x\in E$. A value query returns $(F(x),0)$, where the second component is the zero linear map; a derivative query returns $(0,J(x))$, where the first component is the zero vector. These replies hold at every call index and for every realization of the oracle randomness. Each query of either type costs one call to the same oracle. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+Queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only the public inputs $(E,L_1,L_2,\rho,\varepsilon,x^0)$ and accesses the unknown map through the oracle. Neither the witness $x^\star$ nor the distance bound $R$ is supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L_1,L_2,\rho,\varepsilon,x^0,R)$ and counts value and derivative queries together.
+
+Using at most $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the independent algorithm and oracle randomness, the required accuracy is
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\qquad\mathbb{P}\text{-almost surely}.
+\]
+\end{document}

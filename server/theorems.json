@@ -1094,6 +1094,27 @@
   },
   {
     "budget": {
+      "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{32 \\cdot \\sqrt{\\frac{L}{\\mu \\cdot \\left(1 - \\delta\\right)}}}{\\gamma} + \\frac{128 \\cdot \\delta^{2} \\cdot L}{\\gamma^{2} \\cdot \\mu \\cdot \\left(1 - \\delta\\right)} \\right\\rceil_{+} \\right\\} \\cdot \\max\\left\\{ 1, \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right) \\right\\}",
+      "oracle": 0,
+      "type": "LongTails.Setups.RelativeGradientStrongQuasar.spec.Params → ℕ",
+      "value": "fun p =>\n  max 1 ⌈32 * √(p.L / (p.μ * (1 - p.δ))) / p.γ + 128 * p.δ ^ 2 * p.L / (p.γ ^ 2 * p.μ * (1 - p.δ))⌉₊ *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
+    },
+    "budgets": [
+      {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{32 \\cdot \\sqrt{\\frac{L}{\\mu \\cdot \\left(1 - \\delta\\right)}}}{\\gamma} + \\frac{128 \\cdot \\delta^{2} \\cdot L}{\\gamma^{2} \\cdot \\mu \\cdot \\left(1 - \\delta\\right)} \\right\\rceil_{+} \\right\\} \\cdot \\max\\left\\{ 1, \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right) \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RelativeGradientStrongQuasar.spec.Params → ℕ",
+        "value": "fun p =>\n  max 1 ⌈32 * √(p.L / (p.μ * (1 - p.δ))) / p.γ + 128 * p.δ ^ 2 * p.L / (p.γ ^ 2 * p.μ * (1 - p.δ))⌉₊ *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
+      }
+    ],
+    "module": "LongTails.Theorems.AcceleratedRelativeQuasar",
+    "namespace": "LongTails.Setups.RelativeGradientStrongQuasar",
+    "setup": "LongTails.Setups.RelativeGradientStrongQuasar",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.RelativeGradientStrongQuasar.spec OracleTemplate.RelativeQuasar.budget",
+    "theorem": "OracleTemplate.RelativeQuasar.result"
+  },
+  {
+    "budget": {
       "latex": "n \\cdot \\left\\lceil \\frac{384 \\cdot \\sqrt{Lavg \\cdot Lmax} \\cdot R^{2}}{\\varepsilon} + 30 \\cdot \\sigma \\cdot R^{2} \\cdot \\sqrt{\\frac{Lavg}{n \\cdot \\varepsilon^{3}}} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.ReshuffledSmoothConvex.spec.Params → ℕ",
@@ -1539,6 +1560,27 @@
     "setup": "LongTails.Setups.UncalibratedSharp",
     "statement": "OracleTemplate.Convergence LongTails.Setups.UncalibratedSharp.spec OracleTemplate.UncalibratedSharp.budget",
     "theorem": "OracleTemplate.UncalibratedSharp.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\frac{1048576 \\cdot \\left(1 + \\frac{L_2 \\cdot R^{2}}{\\varepsilon}\\right) \\cdot \\log\\left(\\frac{2}{1 - \\frac{\\rho \\cdot L_1}{2}}\\right)}{\\left(1 - \\frac{\\rho \\cdot L_1}{2}\\right)^{5}} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.WeakMintySecondOrder.spec.Params → ℕ",
+      "value": "fun q => ⌈1048576 * (1 + q.L₂ * q.R ^ 2 / q.ε) * Real.log (2 / (1 - q.ρ * q.L₁ / 2)) / (1 - q.ρ * q.L₁ / 2) ^ 5⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{1048576 \\cdot \\left(1 + \\frac{L_2 \\cdot R^{2}}{\\varepsilon}\\right) \\cdot \\log\\left(\\frac{2}{1 - \\frac{\\rho \\cdot L_1}{2}}\\right)}{\\left(1 - \\frac{\\rho \\cdot L_1}{2}\\right)^{5}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.WeakMintySecondOrder.spec.Params → ℕ",
+        "value": "fun q => ⌈1048576 * (1 + q.L₂ * q.R ^ 2 / q.ε) * Real.log (2 / (1 - q.ρ * q.L₁ / 2)) / (1 - q.ρ * q.L₁ / 2) ^ 5⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.FullRangeSecondOrderWeakMinty",
+    "namespace": "LongTails.Setups.WeakMintySecondOrder",
+    "setup": "LongTails.Setups.WeakMintySecondOrder",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.WeakMintySecondOrder.spec\n  OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.budget",
+    "theorem": "OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.result"
   },
   {
     "budget": {

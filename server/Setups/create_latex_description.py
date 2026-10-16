@@ -46,7 +46,9 @@ The latex field must be a complete, compilable document using this preamble:
 \usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
-Begin with \section*{...} containing a brief, descriptive title (3--7 words)
+Start the latex string with \documentclass, then the preamble above, then
+\begin{document}. End it with \end{document}. Inside the document,
+begin with \section*{...} containing a brief, descriptive title (3--7 words)
 for the target problem. Avoid generic titles such as "Problem formulation" and
 claims of novelty or convergence. This title appears inside the description;
 the website keeps the original Lean filename as its setup heading.
@@ -105,6 +107,20 @@ def setup_sources(setup):
                     sources[dependency] = None
                     pending.append(dependency)
     return list(sources)
+
+
+def parse_document(response):
+    result = json.loads(response)
+    if not isinstance(result, dict) or not isinstance(result.get("latex"), str):
+        raise ValueError("Codex must return a JSON object with a LaTeX string")
+    latex = result["latex"].strip()
+    if not (
+        latex.startswith(r"\documentclass")
+        and r"\begin{document}" in latex
+        and latex.endswith(r"\end{document}")
+    ):
+        raise ValueError("Codex did not return a standalone LaTeX document")
+    return latex
 
 
 def generate_setup(
@@ -176,21 +192,36 @@ def generate_setup(
         if model:
             command += ["--model", model]
         print(f"Generating {setup.name} -> {output}", flush=True)
-        subprocess.run(
-            command + ["-"], input=prompt, text=True, encoding="utf-8", check=True
-        )
-        result = json.loads(draft.read_text(encoding="utf-8"))
-        if not isinstance(result, dict) or not isinstance(result.get("latex"), str):
-            raise TypeError("Codex must return a LaTeX string; output unchanged")
-        latex = result["latex"].strip()
-        if not (
-            latex.startswith(r"\documentclass")
-            and r"\begin{document}" in latex
-            and latex.endswith(r"\end{document}")
-        ):
-            raise ValueError(
-                "Codex did not return a standalone LaTeX document; output unchanged"
+        for attempt in range(2):
+            draft.unlink(missing_ok=True)
+            subprocess.run(
+                command + ["-"], input=prompt, text=True, encoding="utf-8", check=True
             )
+            response = draft.read_text(encoding="utf-8") if draft.exists() else ""
+            try:
+                latex = parse_document(response)
+                break
+            except ValueError as error:
+                if attempt == 0:
+                    print(f"Retrying {setup.name}: {error}", flush=True)
+                    prompt += (
+                        "\nThe previous response had an invalid document format. Return only "
+                        'JSON with a "latex" string containing the complete document: '
+                        r"\documentclass, the preamble, \begin{document}, the full body, "
+                        r"and \end{document}. Do not return only a subsection or Markdown fences."
+                    )
+                    continue
+                with tempfile.NamedTemporaryFile(
+                    mode="w",
+                    prefix=f"longtails-setup-{setup.stem}-",
+                    suffix=".json",
+                    encoding="utf-8",
+                    delete=False,
+                ) as failed:
+                    failed.write(response)
+                raise ValueError(
+                    f"{setup.name}: {error}; response saved to {failed.name}; output unchanged"
+                ) from error
         write_description(output, latex + "\n", commit, regenerate_all)
         print(f"Created {output}", flush=True)
     return output

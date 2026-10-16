@@ -62,6 +62,10 @@ def check_compilation(table, bibliography, directory):
 
 
 def added_rows(original, revised):
+    # Page breaks after the table are layout separators, not saved table content.
+    separators = r"(\\end\{table\})(?:\s*\\(?:clearpage|newpage)\b)*\s*\Z"
+    original = re.sub(separators, r"\1", original)
+    revised = re.sub(separators, r"\1", revised)
     if original == revised:
         return ""
     if original.count(r"\bottomrule") != 1 or revised.count(r"\bottomrule") != 1:
@@ -73,28 +77,52 @@ def added_rows(original, revised):
     return revised[len(prefix) : -len(suffix)]
 
 
+def normalize_polish(text):
+    # The script owns the outer group; agents may copy its closer before new tables.
+    parts = re.split(r"(\\begin\{table\}.*?\\end\{table\})", text, flags=re.S)
+    if len(parts) == 1:
+        raise ValueError("polish produced no complete tables")
+    for index in range(0, len(parts), 2):
+        if not re.fullmatch(
+            r"(?:\s|\\(?:begingroup|endgroup|clearpage|newpage)\b)*", parts[index]
+        ):
+            raise ValueError("unexpected content outside polished tables")
+        parts[index] = re.sub(r"\\(?:begingroup|endgroup)\b", "", parts[index])
+    return HEADER + "".join(parts).strip() + "\n" + FOOTER
+
+
 def validate_polish(original, revised, original_bib, revised_bib, saved=None):
+    original_tables = {row[1]: row[2] for row in split_tables(original)}
     revised_tables = {row[1]: row[2] for row in split_tables(revised)}
     for setup, row in (saved or {}).items():
         if setup not in revised_tables:
             raise ValueError(f"polish removed previously saved table: {setup}")
-        added_rows(row[2], revised_tables[setup])
+        try:
+            added_rows(row[2], revised_tables[setup])
+        except ValueError as error:
+            raise ValueError(f"{setup}: {error}") from error
     bib_keys = r"@\w+\s*[{(]\s*([^,]+),"
     if sorted(re.findall(bib_keys, revised_bib)) != sorted(
         re.findall(bib_keys, original_bib)
     ):
         raise ValueError("polish changed bibliography keys")
-    # Preserve ordered structural identifiers before replacing the usable draft.
+    # Preserve order within each setup; save_tables sorts the setups by contribution.
     identifiers = r"\\label\{[^}]+\}|\\href\{(?![^}]+/LongTails/Setups/)[^}]+\}"
     setup_links = r"\\href\{[^}]+/LongTails/Setups/[^}]+\}"
     citations = r"\\citep(?:\[[^\]]*\]){0,2}\{([^}]+)\}"
     if (
         not revised.startswith(HEADER)
         or not revised.rstrip().endswith(FOOTER.strip())
-        or re.findall(identifiers, original) != re.findall(identifiers, revised)
-        or list(dict.fromkeys(re.findall(setup_links, original)))
-        != list(dict.fromkeys(re.findall(setup_links, revised)))
-        or re.findall(citations, original) != re.findall(citations, revised)
+        or original_tables.keys() != revised_tables.keys()
+        or any(
+            re.findall(identifiers, table)
+            != re.findall(identifiers, revised_tables[setup])
+            or list(dict.fromkeys(re.findall(setup_links, table)))
+            != list(dict.fromkeys(re.findall(setup_links, revised_tables[setup])))
+            or re.findall(citations, table)
+            != re.findall(citations, revised_tables[setup])
+            for setup, table in original_tables.items()
+        )
     ):
         raise ValueError("polish changed table structure, links, citations or labels")
 
@@ -150,16 +178,22 @@ def bibliography_entries(text):
 
 def save_tables(directory, rows, entries, saved=None):
     saved = saved or {}
-    for _, setup, row, _ in rows:
-        if setup in saved:
-            added_rows(saved[setup][2], row)
+    additions = {
+        setup: added_rows(saved[setup][2], row)
+        for _, setup, row, _ in rows
+        if setup in saved
+    }
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "tables").mkdir(exist_ok=True)
     (directory / "metadata").mkdir(exist_ok=True)
     rows.sort(key=lambda item: (-item[0], item[1]))
     for score, setup, row, theorems in rows:
-        if setup in saved and row == saved[setup][2]:
-            continue
+        if setup in saved:
+            if not additions[setup]:
+                continue
+            row = saved[setup][2].replace(
+                r"\bottomrule", additions[setup] + r"\bottomrule", 1
+            )
         (directory / "metadata" / f"{setup}.json").write_text(
             json.dumps({"contribution": score, "theorems": theorems}, indent=2) + "\n",
             encoding="utf-8",
@@ -590,7 +624,8 @@ def main(argv=None):
             prompt
             + "\n\nFINAL EDITORIAL PASS: The per-setup generation and JSON contract above "
             "do not apply to this pass. Read ONLY the combined LaTeX and bibliography below. "
-            "Read the previous-tables snapshot below. Preserve all its content verbatim, "
+            "Use the combined LaTeX as the base; preserve its table order. "
+            "Use the previous-tables snapshot only to identify protected content. Preserve saved table bodies verbatim, "
             "including text, formulas, formatting, numbering, ratings and citations. "
             "Existing tables may only gain rows immediately before their original bottomrule. "
             "Polish only newly generated tables and the newly inserted rows in existing tables. "
@@ -598,6 +633,8 @@ def main(argv=None):
             "Keep new notation definitions within new cells; do not edit existing notes. "
             "If a previously saved table prevents compilation, report the problem rather "
             "than modifying it. These preservation requirements override the editing instructions below. "
+            "Use one outer \\begingroup before all tables and one \\endgroup after all tables. "
+            "Do not copy the snapshot wrapper. Put page breaks only between tables. "
             "Write the complete polished LaTeX to the destination below. Do not do research, "
             "read reviews or proofs. Copy the bibliography to its destination and fix only "
             "LaTeX/BibTeX syntax there, preserving every entry, key and bibliographic fact. Unify typography, "
@@ -639,7 +676,7 @@ def main(argv=None):
         try:
             run_agent(task, log_path, "final polish")
             original = polish_input.read_text(encoding="utf-8")
-            revised = polished.read_text(encoding="utf-8")
+            revised = normalize_polish(polished.read_text(encoding="utf-8"))
             revised_bib = polished_bib.read_text(encoding="utf-8")
             validate_polish(
                 original,

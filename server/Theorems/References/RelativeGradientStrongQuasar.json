@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.RelativeGradientStrongQuasar",
+  "searched_at": "2026-10-16T20:37:18.525409+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{32 \\cdot \\sqrt{\\frac{L}{\\mu \\cdot \\left(1 - \\delta\\right)}}}{\\gamma} + \\frac{128 \\cdot \\delta^{2} \\cdot L}{\\gamma^{2} \\cdot \\mu \\cdot \\left(1 - \\delta\\right)} \\right\\rceil_{+} \\right\\} \\cdot \\max\\left\\{ 1, \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right) \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RelativeGradientStrongQuasar.spec.Params → ℕ",
+        "value": "fun p =>\n  max 1 ⌈32 * √(p.L / (p.μ * (1 - p.δ))) / p.γ + 128 * p.δ ^ 2 * p.L / (p.γ ^ 2 * p.μ * (1 - p.δ))⌉₊ *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\frac{32 \\cdot \\sqrt{\\frac{L}{\\mu \\cdot \\left(1 - \\delta\\right)}}}{\\gamma} + \\frac{128 \\cdot \\delta^{2} \\cdot L}{\\gamma^{2} \\cdot \\mu \\cdot \\left(1 - \\delta\\right)} \\right\\rceil_{+} \\right\\} \\cdot \\max\\left\\{ 1, \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right) \\right\\}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RelativeGradientStrongQuasar.spec.Params → ℕ",
+          "value": "fun p =>\n  max 1 ⌈32 * √(p.L / (p.μ * (1 - p.δ))) / p.γ + 128 * p.δ ^ 2 * p.L / (p.γ ^ 2 * p.μ * (1 - p.δ))⌉₊ *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedRelativeQuasar",
+      "namespace": "LongTails.Setups.RelativeGradientStrongQuasar",
+      "setup": "LongTails.Setups.RelativeGradientStrongQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RelativeGradientStrongQuasar.spec OracleTemplate.RelativeQuasar.budget",
+      "theorem": "OracleTemplate.RelativeQuasar.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedRelativeQuasar",
+      "theorem": "OracleTemplate.RelativeQuasar.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The strong quasar-convexity condition permits nonconvex objectives; neither convexity nor ordinary strong convexity is required.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "Unconstrained minimization of a differentiable, globally L-smooth, (γ, μ)-strongly quasar-convex function: f(x*) ≥ f(x) + ⟨∇f(x), x*−x⟩/γ + μ‖x−x*‖²/2 for every x and some global minimizer x*. Here L, μ > 0 and 0 < γ ≤ 1; f(x0)−f(x*) ≤ Δ.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "A query x returns g(x), where g is one fixed measurable map satisfying ‖g(x)−∇f(x)‖ ≤ δ‖∇f(x)‖. Replies do not depend on the call index or oracle seed. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.Query, spec.Reply, and the existential g clause in spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "The fixed gradient error may be arbitrarily biased within the relative-error bound; no unbiasedness, independence, or averaging assumption is imposed.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.admissible, O.answer k (0, x) seed = g x."
+      },
+      {
+        "label": "relative_error",
+        "details": "The error bound holds pointwise on the entire space, relative to the true gradient norm, with publicly known 0 ≤ δ < 1.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.valid, spec.admissible, Public := Params, and publicInput."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real Hilbert space equipped with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: Params.finiteE, Params.measurableE, Params.borelE; LongTails/Setups/SmoothAndConvex.lean: Public.normedE, Public.linearE, Public.completeE."
+      },
+      {
+        "label": "other",
+        "details": "E, x0, L, μ, γ, δ, Δ, and ε are public. The objective, minimizer, and oracle map are hidden. The initial objective-gap bound Δ ≥ 0 is available without function-value access.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: Params, spec.Public, spec.publicInput, spec.Instance, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point X ∈ E with integrable objective gap and E[f(X)−f(x*)] ≤ ε for some global minimizer x*, where ε > 0.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.Output, spec.valid, and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over the algorithm and oracle seed laws, under a fixed oracle-call budget. Deterministic oracle replies do not require the algorithm or its output to be deterministic.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.successful; LongTails/Template.lean: Algorithm, execute, and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines possibly nonconvex strong quasar-convexity with a fixed, potentially biased relative-error gradient oracle and gradient-only information. No repository implementation or proof was inspected; the absence of a qualifying verified reference does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RelativeQuasar.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedRelativeQuasar",
+          "theorem": "OracleTemplate.RelativeQuasar.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

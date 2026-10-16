@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strong Quasar Optimization with Relative Errors}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and a global minimizer $x^\star$ satisfies $f(x)-f(x^\star)\leq\gamma^{-1}\langle\nabla f(x),x-x^\star\rangle-(\mu/2)\|x-x^\star\|^2$ for every $x\in E$, where $\mu>0$ and $\gamma\in(0,1]$. The initial point $x^0\in E$ satisfies $f(x^0)-f(x^\star)\leq\Delta$, with $\Delta\geq0$. Each oracle call returns a deterministic measurable vector $g(x)$ satisfying $\|g(x)-\nabla f(x)\|\leq\delta\|\nabla f(x)\|$, where $\delta\in[0,1)$. Given $\varepsilon>0$, the output $\bar{x}\in E$ must have integrable objective gap with expectation at most $\varepsilon$ under the joint randomness law. All these parameters are public.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where the norm is induced by the inner product and $E$ carries its Borel sigma-algebra. The objective and oracle satisfy the following conditions.
+
+\begin{assumption}[Differentiability and smoothness]
+The function $f$ is differentiable everywhere on $E$, with gradient $\nabla f(x)$ at each $x\in E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|
+\qquad\text{for all }x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Strong quasar geometry and initialization]
+There exists a single point $x^\star\in E$ such that, for every $x\in E$,
+\begin{align*}
+f(x^\star)&\leq f(x),\\
+f(x^0)-f(x^\star)&\leq\Delta,\\
+\gamma f(x)+\langle\nabla f(x),x^\star-x\rangle
++\frac{\gamma\mu}{2}\|x^\star-x\|^2
+&\leq\gamma f(x^\star).
+\end{align*}
+\end{assumption}
+
+\begin{assumption}[Relative-gradient oracle]
+There exists a Borel-measurable map $g:E\to E$ such that oracle $0$ returns $g(x)$ at every query $x\in E$, for every call index and every realization of oracle randomness. Its error obeys
+\[
+\|g(x)-\nabla f(x)\|\leq\delta\|\nabla f(x)\|
+\qquad\text{for all }x\in E.
+\]
+Each query costs one oracle call. Any internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+The algorithm accesses the objective through this oracle and may choose queries adaptively anywhere in $E$. Its public inputs are exactly $(E,L,x^0,\mu,\gamma,\delta,\Delta,\varepsilon)$; the objective $f$, the oracle map $g$, and the witnessing minimizer $x^\star$ are not supplied as inputs. An externally specified call budget $K\in\mathbb{N}$ may depend on the full public parameter tuple.
+
+After at most $K$ oracle calls, the algorithm returns $\bar{x}\in E$. Let $\mathbb{P}$ denote the joint probability law of algorithm and oracle randomness on a measurable space $\Omega$, and write $\bar{x}(\omega)$ for the output at $\omega\in\Omega$. Success requires a global minimizer $x^\star$ such that the scalar map $\omega\mapsto f(\bar{x}(\omega))-f(x^\star)$ is integrable with respect to $\mathbb{P}$ and
+\[
+\int_{\Omega}\bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)
+\,d\mathbb{P}(\omega)\leq\varepsilon.
+\]
+The minimizer witnessing the initialization and geometry conditions can be used here, since all global minimizers have the same objective value.
+\end{document}
