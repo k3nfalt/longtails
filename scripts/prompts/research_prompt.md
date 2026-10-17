@@ -183,7 +183,7 @@ Before committing, the Reviewer must:
 - Confirm that the chosen setup is present under `LongTails/Setups` and that the new theorem and complete supporting proofs are included, regardless of which research route was selected.
 - Independently review the companion `<TheoremName>.md` for accuracy of its contribution claims, literature comparisons, and limitations; confirm it reflects the final clarifications and integrated Lean result and is included in the same commit to be pushed to the task branch.
 - Check that the public budget satisfies the simplification requirement and that its proof preserves all required terms, actual oracle-call accounting, parameter rates, and the claimed improvement over prior work.
-- Run the required build, proof, and axiom checks on the integrated result. Audit the new theorem with `python3 run_comparator.py <TheoremName>.lean`; a full-library comparator run is not required for adding a new result.
+- Run `./build.sh`, `./lint.sh`, and `python3 run_comparator.py <TheoremName>.lean` on the final integrated result. All three must pass before committing and submitting the PR; a full-library comparator run is not required for adding a new result.
 - Confirm that only the requested deliverables are staged.
 
 Any substantive change after approval, including conflict resolution, requires renewed review and validation.
