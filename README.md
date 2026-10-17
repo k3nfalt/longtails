@@ -8,11 +8,13 @@ More than 25 new results so far—and more to come.</h3>
 ## Preliminaries: Setup and Complexity
 
 LongTails is a framework for **automatic research in mathematical optimization**.
-Before presenting it, let's explain a typical protocol in optimization using the following example. We want to minimize
+Before presenting it, let's explain a typical protocol in optimization using the following example.
+
+**Setup.** We want to minimize
 ```math
 \min_{x\in ℝ^d} f(x).
 ```
-**Setup.** The function $f$ is differentiable, convex, and $L$-smooth, and we can
+The function $f$ is differentiable, convex, and $L$-smooth, and we can
 query an exact gradient oracle. Starting from $x_0$, we want an output
 $x_{\mathrm{out}}$ satisfying $f(x_{\mathrm{out}})-f(x^\star)\le\varepsilon$.
 
