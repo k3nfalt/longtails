@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Expected Smoothness}
+We consider a differentiable, possibly nonconvex objective $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is Lipschitz, and its initial objective gap above a global lower bound is bounded. An unbiased stochastic gradient has mean-square Lipschitz increments and variance bounded by an affine function of the objective gap. Each oracle call returns stochastic gradients at two queried points using one shared sample, with independent samples across calls. For a prescribed tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable gradient norm satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where expectation includes all algorithm and oracle randomness.
+
+More precisely, consider the unconstrained problem
+\[
+\inf_{x\in E} f(x).
+\]
+Equip $E$ with its Borel sigma-algebra and the norm induced by its inner product. The public inputs are $E$, a measurable sample space $\Omega$, an initial point $x^0\in E$, and parameters
+\[
+L>0,\qquad A\geq 0,\qquad C\geq 0,\qquad
+\Delta\geq 0,\qquad \varepsilon>0.
+\]
+The objective is accessed through the oracle described below. Its sampling law $p$, stochastic gradient map $g$, and lower bound $f_{\mathrm{low}}$ are not public inputs.
+
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere on $E$. There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|,\\
+f_{\mathrm{low}} &\leq f(x),\\
+f(x^0)-f_{\mathrm{low}} &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Measurable unbiased gradients]
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $p$, and
+\[
+\int_{\Omega} g(x,\omega)\,p(d\omega)=\nabla f(x).
+\]
+\end{assumption}
+
+\begin{assumption}[Expected smoothness and variance growth]
+For every $x,y\in E$, both scalar maps
+\[
+\begin{aligned}
+\omega &\longmapsto \|g(x,\omega)-\nabla f(x)\|^2,\\
+\omega &\longmapsto \|g(x,\omega)-g(y,\omega)\|^2
+\end{aligned}
+\]
+are integrable under $p$, and satisfy
+\[
+\begin{aligned}
+\int_{\Omega}\|g(x,\omega)-g(y,\omega)\|^2\,p(d\omega)
+&\leq L^2\|x-y\|^2,\\
+\int_{\Omega}\|g(x,\omega)-\nabla f(x)\|^2\,p(d\omega)
+&\leq 2A\bigl(f(x)-f_{\mathrm{low}}\bigr)+C.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Paired oracle and independent sampling]
+Let $P$ be a probability measure on $\Omega^{\mathbb{N}}$. The coordinate samples $\xi_k(\omega)=\omega_k$, indexed by $k=0,1,\ldots$, are measurable and mutually independent under $P$, with
+\[
+P\circ\xi_k^{-1}=p\qquad\text{for every }k\geq 0.
+\]
+At call $k$, the single oracle, with ID $0$, accepts any pair $(x,y)\in E\times E$ and returns
+\[
+\bigl(g(x,\xi_k),g(y,\xi_k)\bigr)\in E\times E.
+\]
+The two replies use the same sample and together cost one oracle call. Queries may be adaptive. Any internal algorithm randomness is independent of the entire sample sequence.
+\end{assumption}
+
+An algorithm is selected using only the public inputs. A call budget $K\in\mathbb{N}$ may depend on all of these inputs and counts paired oracle calls. After at most $K$ calls, the algorithm returns $\bar{x}\in E$. Let $\mathbb{P}$ denote the joint law of its independent internal randomness and the oracle sample sequence, on a measurable space $\mathcal{Z}$. Success requires that $\bar{x}:\mathcal{Z}\to E$ be measurable, that $z\mapsto\|\nabla f(\bar{x}(z))\|$ be integrable under $\mathbb{P}$, and that
+\[
+\int_{\mathcal{Z}}\|\nabla f(\bar{x}(z))\|\,\mathbb{P}(dz)
+\leq\varepsilon.
+\]
+\end{document}

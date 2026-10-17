@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ExpectedSmoothnessNonconvex.lean}{Expected\allowbreak{}Smoothness\allowbreak{}Nonconvex}.}\label{tab:ExpectedSmoothnessNonconvex}
+\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel structure, $f$ is differentiable, $L$-smooth and bounded below by $\ell$, with $f(x_0)-\ell\le\Delta$. The jointly measurable oracle is unbiased, has integrable gradients and squared errors/differences, and satisfies $\mathbb{E}_p\|g(x,\xi)-g(y,\xi)\|^2\le L^2\|x-y\|^2$ and $\mathbb{E}_p\|g(x,\xi)-\nabla f(x)\|^2\le2A(f(x)-\ell)+C$. Here $L,\varepsilon>0$ and $A,C,\Delta\ge0$. Samples are IID with marginal $p$; each query returns two gradients sharing a sample. Target: $\int\|\nabla f(x_{\rm out}(\omega))\|\,dP(\omega)\le\varepsilon$. Prior-work comparisons below use $E=\mathbb{R}^d$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NormalizedStormExpectedSmoothness.lean}{Normalized\allowbreak{}Storm\allowbreak{}Expected\allowbreak{}Smoothness} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NormalizedStormExpectedSmoothness.md}{(review)}
+& $\mathcal{O}\!\left(\begin{gathered}1+\frac AL+\frac{L\Delta+A\Delta+C}{\varepsilon^2}\\{}+\frac{L\Delta\sqrt{A\Delta+C}}{\varepsilon^3}\end{gathered}\right)$
+& --- & --- \\
+\midrule[1.2pt]
+NSTORM \citep[Thm.~2(i)]{esnUpadhyay2026v1}; Derived bound
+& $\mathcal{O}\!\left(1+\frac{(L\Delta)^2}{\varepsilon^4}+\frac{(A\Delta+C)L\Delta}{\varepsilon^2}\right)$\par
+$\gamma_0=\sqrt{\Delta/L}$; $L\Delta\ge1$, $\varepsilon^2\le L\Delta$, $\varepsilon\sqrt{A\Delta+C}\le L\Delta$.
+& \textbf{(1)}: $\varepsilon^{-3}$ instead of $\varepsilon^{-4}$ at fixed positive parameters; no larger order in the displayed regime.
+& \textbf{(1)}: needs ABC structure; distance-dependent BG noise alone is insufficient. \\
+\midrule
+SGD \citep[Cor.~1]{esnKhaled2020v3}
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta(A\Delta+C)}{\varepsilon^4}\right)$\par Some-iterate expected gradient norm.
+& \textbf{(1)}: leading noise term reduced by $\sqrt{A\Delta+C}/\varepsilon$ when $\varepsilon\le\min\{\sqrt{A\Delta+C},\sqrt{L\Delta}\}$.
+& \textbf{(1)}: needs MSS and same-sample pairs; two gradients per call. SGD needs only population smoothness, potentially $L_f<L$. \\
+\midrule
+SPIDER \citep[Thm.~4]{esnChen2023v2}; Derived bound, affine-variance restriction
+& $\mathcal{O}\!\left(\begin{gathered}1+\frac{L\Delta(1+\Gamma^2)+\Lambda^2}{\varepsilon^2}\\{}+\frac{L\Delta(1+\Gamma)\Lambda}{\varepsilon^3}\end{gathered}\right)$\par
+$\operatorname{var}g(x)\le\Gamma^2\|\nabla f(x)\|^2+\Lambda^2$; $A=L\Gamma^2$, $C=\Lambda^2$. Retuning: $q=\max\{1,\Lambda/(\max\{1,\Gamma\}\varepsilon)\}$; $\varepsilon^2\le\min\{1,L\Delta\}$, $\Lambda\varepsilon\le\max\{1,\Gamma\}\min\{1,L\Delta\}$.
+& i) \textbf{(1)}: Scope: extends to ABC without affine variance.\newline
+ ii) \textbf{(1)}: $\varepsilon^{-3}$ coefficient gains factor $\asymp\min\{\Gamma,\Lambda/\sqrt{L\Delta}\}$ for $\Gamma\ge1$, $\Lambda\ge\sqrt{L\Delta}$; strict when this factor grows.
+& \textbf{(1)}: worse cubic term if $\Lambda\ll\Gamma\sqrt{L\Delta}/(1+\Gamma)$; near $\Lambda=0$, retains $\varepsilon^{-3}$ versus $\varepsilon^{-2}$. No uniform dominance. \\
+\midrule
+SPIDER \citep[Thm.~1]{esnFang2018v2}; bounded-variance restriction $A=0$
+& $\mathcal{O}\!\left(1+\frac{L\Delta+C}{\varepsilon^2}+\frac{L\Delta\sqrt C}{\varepsilon^3}\right)$\par $0<\varepsilon\le\sqrt C$.
+& i) \textbf{(1)}: Scope: extends from bounded variance to ABC.\newline
+ ii) \textbf{(1)}: matches known rate on $A=0$.
+& --- \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Complexity counts individual stochastic-gradient evaluations, including all batches (one pair call costs two evaluations). $\Delta$ is the initial gap bound; $\varepsilon$ is the expected gradient-norm tolerance; $P$ is the execution law. MSS: mean-square smoothness; ABC: the displayed function-gap variance bound; BG: $\operatorname{var}g(x)\le B^2\|x-x_0\|^2+G^2$, here $B^2=2L^2$, $G^2=2(2A\Delta+C)$. $\operatorname{var}g(x)=\mathbb{E}_p\|g(x,\xi)-\nabla f(x)\|^2$; $\Gamma,\Lambda$ are affine-variance parameters; $q$ is an epoch length; $\gamma_0$ is the NSTORM step-scale; $L_f$ is population smoothness. $\mathcal{O}$ suppresses universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

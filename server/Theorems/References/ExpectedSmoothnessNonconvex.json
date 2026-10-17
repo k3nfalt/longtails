@@ -1,0 +1,93 @@
+{
+  "setup": "LongTails.Setups.ExpectedSmoothnessNonconvex",
+  "searched_at": "2026-10-17T09:05:41.153648+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{192 \\cdot \\left(4 \\cdot A \\cdot \\Delta + C\\right) + 80 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{384 \\cdot A}{L} + \\frac{1600 \\cdot L \\cdot \\Delta \\cdot \\sqrt{4 \\cdot A \\cdot \\Delta + \\frac{2 \\cdot A \\cdot \\varepsilon^{2}}{L} + C}}{\\varepsilon^{3}} \\right\\rceil_{+} + 3",
+        "oracle": 0,
+        "type": "LongTails.Setups.ExpectedSmoothnessNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(192 * (4 * q.A * q.Δ + q.C) + 80 * q.L * q.Δ) / q.ε ^ 2 + 384 * q.A / q.L +\n        1600 * q.L * q.Δ * √(4 * q.A * q.Δ + 2 * q.A * q.ε ^ 2 / q.L + q.C) / q.ε ^ 3⌉₊ +\n    3"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{192 \\cdot \\left(4 \\cdot A \\cdot \\Delta + C\\right) + 80 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{384 \\cdot A}{L} + \\frac{1600 \\cdot L \\cdot \\Delta \\cdot \\sqrt{4 \\cdot A \\cdot \\Delta + \\frac{2 \\cdot A \\cdot \\varepsilon^{2}}{L} + C}}{\\varepsilon^{3}} \\right\\rceil_{+} + 3",
+          "oracle": 0,
+          "type": "LongTails.Setups.ExpectedSmoothnessNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈(192 * (4 * q.A * q.Δ + q.C) + 80 * q.L * q.Δ) / q.ε ^ 2 + 384 * q.A / q.L +\n        1600 * q.L * q.Δ * √(4 * q.A * q.Δ + 2 * q.A * q.ε ^ 2 / q.L + q.C) / q.ε ^ 3⌉₊ +\n    3"
+        }
+      ],
+      "module": "LongTails.Theorems.NormalizedStormExpectedSmoothness",
+      "namespace": "LongTails.Setups.ExpectedSmoothnessNonconvex",
+      "setup": "LongTails.Setups.ExpectedSmoothnessNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ExpectedSmoothnessNonconvex.spec OracleTemplate.NormalizedStorm.budget",
+      "theorem": "OracleTemplate.NormalizedStorm.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NormalizedStormExpectedSmoothness",
+      "theorem": "OracleTemplate.NormalizedStorm.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable, globally L-smooth function f on a second-countable real Hilbert space E. Convexity is not required. There exists a global lower bound ℓ with f(x0)−ℓ≤Δ; attainment of the infimum is not required.",
+        "evidence": "LongTails/Setups/ExpectedSmoothnessNonconvex.lean: Params; spec.admissible, gradient Lipschitz condition and existential lower bound."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call queries a pair (x,y) and returns (g(x,ξ),g(y,ξ)) using the same sample ξ. Samples are independent and identically distributed across calls. The oracle is unbiased: E[g(x,ξ)]=∇f(x). One paired reply counts as one oracle call; no function values or exact gradients are supplied.",
+        "evidence": "LongTails/Setups/ExpectedSmoothnessNonconvex.lean: spec.Query, spec.Reply, spec.admissible oracle answer and unbiasedness; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Mean-square smoothness E‖g(x,ξ)−g(y,ξ)‖²≤L²‖x−y‖² is combined with objective-gap-dependent variance E‖g(x,ξ)−∇f(x)‖²≤2A(f(x)−ℓ)+C. Uniformly bounded variance, samplewise smoothness, and exponential tails are not required. E may be infinite-dimensional. L>0, A,C,Δ≥0, ε>0 and x0 are public; f, g, the sampling laws, and the witness ℓ are hidden. The extracted budget bounds the number of paired calls deterministically.",
+        "evidence": "LongTails/Setups/ExpectedSmoothnessNonconvex.lean: Params, spec.Public, spec.publicInput, spec.valid and spec.admissible; LongTails/Template.lean: Convergence and execute; supplied OracleTemplate.NormalizedStorm.result budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable E-valued output X with integrable gradient norm and E‖∇f(X)‖≤ε. The criterion uses the first power of the norm; it does not require a last iterate or an expected squared-norm bound.",
+        "evidence": "LongTails/Setups/ExpectedSmoothnessNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over both the algorithm's random seed and the oracle sample sequence under their product probability law.",
+        "evidence": "LongTails/Setups/ExpectedSmoothnessNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines the standard expected-stationarity objective with a meaningful variance variant: objective-gap-dependent noise together with mean-square smoothness and same-sample paired queries on a potentially infinite-dimensional Hilbert space. No repository implementation or proofs were inspected; the absence of a qualifying verified reference is not a novelty claim."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NormalizedStorm.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NormalizedStormExpectedSmoothness",
+          "theorem": "OracleTemplate.NormalizedStorm.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

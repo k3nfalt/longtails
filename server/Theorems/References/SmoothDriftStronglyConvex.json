@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.SmoothDriftStronglyConvex",
+  "searched_at": "2026-10-17T09:05:30.087494+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 16 \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right) \\cdot \\log\\left(1 + \\frac{15 \\cdot R^{2} + 45 \\cdot V^{2} \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right)^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + H + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothDriftStronglyConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈16 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) *\n          Real.log (1 + (15 * p.R ^ 2 + 45 * p.V ^ 2 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) ^ 2) / p.ε)⌉₊ +\n      p.H +\n    1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 16 \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right) \\cdot \\log\\left(1 + \\frac{15 \\cdot R^{2} + 45 \\cdot V^{2} \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right)^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + H + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothDriftStronglyConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈16 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) *\n          Real.log (1 + (15 * p.R ^ 2 + 45 * p.V ^ 2 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) ^ 2) / p.ε)⌉₊ +\n      p.H +\n    1"
+        }
+      ],
+      "module": "LongTails.Theorems.VelocityTrackingSmoothDrift",
+      "namespace": "LongTails.Setups.SmoothDriftStronglyConvex",
+      "setup": "LongTails.Setups.SmoothDriftStronglyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothDriftStronglyConvex.spec\n  OracleTemplate.VelocityTracking.SmoothDrift.budget",
+      "theorem": "OracleTemplate.VelocityTracking.SmoothDrift.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.VelocityTrackingSmoothDrift",
+      "theorem": "OracleTemplate.VelocityTracking.SmoothDrift.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "strongly_convex",
+        "details": "Unconstrained, time-indexed objectives f_k on a real separable Hilbert space. Every f_k is differentiable, μ-strongly convex, has L-Lipschitz gradient, and attains its minimum; 0 < μ ≤ L.",
+        "evidence": "LongTails/Setups/SmoothDriftStronglyConvex.lean: Public; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Call k at x returns g_k(x,ω_k), with E[g_k(x,ω_k)] = ∇f_k(x) and E‖g_k(x,ω_k)−∇f_k(x)‖² ≤ σ². Seeds are independent with common law P; the oracle map may vary with k. Each call advances time, so repeated calls cannot query the same time-indexed objective. Public inputs include μ, L, σ, ε and x0; Γ, R, V and H are hidden from algorithm construction.",
+        "evidence": "LongTails/Setups/SmoothDriftStronglyConvex.lean: Public, Params, spec.publicInput, spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient; LongTails/Template.lean: execute, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-moment noise bound σ² at every time and query, with σ ≥ 0; no bounded-support or higher-moment assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance_integrable, IsStochasticGradient.variance; LongTails/Setups/SmoothDriftStronglyConvex.lean: spec.admissible."
+      },
+      {
+        "label": "temporal_discrepancy",
+        "details": "The minimizer trajectory satisfies ‖x*_0−x0‖ ≤ R, ‖x*_1−x*_0‖ ≤ V, and ‖x*_{k+2}−2x*_{k+1}+x*_k‖ ≤ Γ. There is no uniform bound on subsequent velocities or on temporal gradient variation. With A = 2L/μ + 99σ²/(μ²ε), admissibility requires 9792Γ²A⁴ ≤ ε, where R,V,Γ ≥ 0 and ε > 0.",
+        "evidence": "LongTails/Setups/SmoothDriftStronglyConvex.lean: spec.valid; minimizer-trajectory conditions in spec.admissible."
+      },
+      {
+        "label": "affine_drift",
+        "details": "The allowed case Γ = 0 includes x*_k = x*_0 + kv with unknown, potentially nonzero velocity v satisfying ‖v‖ ≤ V.",
+        "evidence": "LongTails/Setups/SmoothDriftStronglyConvex.lean: second-difference and initial-velocity conditions in spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "Output (x,N) must satisfy E‖x−x*_{N−1}‖² ≤ ε, with integrable squared error. The output clock starts at zero and increases exactly once per oracle reply; N equals the number of calls made.",
+        "evidence": "LongTails/Setups/SmoothDriftStronglyConvex.lean: spec.successful, spec.allowedAlgorithm; LongTails/Template.lean: execute."
+      },
+      {
+        "label": "expected",
+        "details": "The squared-distance guarantee averages over both algorithm randomness and independent oracle seeds, at the supplied fixed oracle budget. No high-probability or almost-sure accuracy requirement is imposed.",
+        "evidence": "LongTails/Setups/SmoothDriftStronglyConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This tracking formulation combines one stochastic gradient per advancing time step with hidden minimizer velocity, bounded second differences, an accuracy-dependent acceleration restriction, and expected squared error against the last queried time's minimizer."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.VelocityTracking.SmoothDrift.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.VelocityTrackingSmoothDrift",
+          "theorem": "OracleTemplate.VelocityTracking.SmoothDrift.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

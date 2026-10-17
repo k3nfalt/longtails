@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Gradient-dependent Hessian variation: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GradientDependentHessian.lean}{Gradient\allowbreak{}Dependent\allowbreak{}Hessian}.}\label{tab:GradientDependentHessian}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^3$, $\|D(\nabla^2 f)(x)\|\le L_0+L_1\|\nabla f(x)\|$ for every $x$, $f(x_0)-\inf f\le\Delta$, and $\|\nabla f(x_0)\|\le G_0$. Here $L_0,\Delta,\varepsilon>0$, $L_1,G_0\ge0$, and $m\in\mathbb{N}$, $m\ge1$. Exact gradient and Hessian access; target $\|\nabla f(x_{\rm out})\|\le\varepsilon$ almost surely.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/EnergyHessianReuse.lean}{Energy\allowbreak{}Hessian\allowbreak{}Reuse} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/EnergyHessianReuse.md}{(review)}
+& $\mathcal{O}\!\left(\sqrt m\,A+m\ell\right)$
+& --- & --- \\
+\midrule[1.2pt]
+Parameter-free CRN \citep[Thm.~2, Cor.~1]{gdhFang2026v1}
+& $\mathcal{O}\!\left(m\left[A+1+\log_+\!\frac{\sigma+L_1G_0}{L_0+L_1^{3/2}\Delta}\right]\right.$\newline
+$\left.{}+\log_+\!\frac{L_0+L_1^{3/2}\Delta}{\sigma}\right)$; includes value/gradient trials, first-order target.
+& \textbf{(1)}: Hessian reuse; $\sqrt m$ instead of $m$ in the accuracy term. Factor-$\sqrt m$ saving when $A\gtrsim\sqrt m\,\ell$; same leading order for $m=\mathcal{O}(1)$.
+& \textbf{(1)}: needs $L_0,L_1,\Delta,G_0$ in addition; only first-order stationarity, versus an available second-order guarantee. \\
+\midrule
+LazyCRN \citep[Thm.~3.1, Cor.~3.7]{gdhDoikov2023}
+& $\mathcal{O}\!\left(m+\sqrt{mL_0}\,\Delta\varepsilon^{-3/2}\right)$\newline
+Special case: $L_1=0$.
+& i) \textbf{(1)}: Scope: extends Hessian reuse to gradient-dependent third derivatives.\newline
+ ii) \textbf{(1)}: Matches known rate at $L_1=0$.
+& \textbf{(1)}: needs $\Delta,G_0$ in addition; lacks the baseline's negative-curvature bound. \\
+\midrule
+NALEN \citep[Thm.~4.1]{gdhChen2026v3}
+& $\mathcal{O}\!\left(m+m^{1/3}\sqrt H\,\Delta\varepsilon^{-3/2}\right)$\newline
+Restricted to globally $H$-Lipschitz $\nabla^2 f$.
+& i) \textbf{(1)}: Scope: no uniform Hessian-Lipschitz bound.\newline
+ ii) \textbf{(1)}: Smaller accuracy term on the intersection if $H\gg m^{1/3}(L_0+L_1\varepsilon)$; initialization remains.
+& \textbf{(1)}: At $L_1=0$, $H=L_0$, the accuracy term is $m^{1/6}$ worse; no uniform dominance. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=\Delta(\sqrt{L_0}\,\varepsilon^{-3/2}+\sqrt{L_1}\,\varepsilon^{-1})$;
+$\ell=1+\log(1+L_1G_0/(mL_0))$;
+$\log_+t=\max\{0,\log t\}$ for $t>0$.
+$\sigma>0$: CRN's initial regularization.
+Costs are $N_g+mN_H$ (plus $N_f$ for CRN), with gradient/value calls of unit cost and Hessian calls of cost $m$; $N_g,N_H,N_f$ count all calls, including trials. $m$ is also the Hessian reuse period in the lazy methods. $H$ is a global Lipschitz constant of $\nabla^2 f$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

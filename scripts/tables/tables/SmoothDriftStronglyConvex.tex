@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Tracking under smooth minimizer drift: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothDriftStronglyConvex.lean}{Smooth\allowbreak{}Drift\allowbreak{}Strongly\allowbreak{}Convex}.}\label{tab:SmoothDriftStronglyConvex}
+\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel structure, each $f_k$ is differentiable, $\mu$-strongly convex and $L$-smooth, $0<\mu\le L$. Deterministic minimizers satisfy $\|x_0-x_0^*\|\le R$, $\|x_1^*-x_0^*\|\le V$, and $\|x_{k+2}^*-2x_{k+1}^*+x_k^*\|\le\Gamma$. Jointly measurable stochastic gradients are unbiased, with integrable squared error bounded by $\sigma^2$ uniformly in the query; seeds are independent with common law $p$. Here $R,V,\Gamma,\sigma\ge0$, $\varepsilon>0$, and $9792\Gamma^2(2L/\mu+99\sigma^2/(\mu^2\varepsilon))^4\le\varepsilon$. The constructed velocity tracker guarantees $\int\|x_N(\omega)-x_{N-1}^*\|^2\,d p^{\otimes\mathbb{N}}(\omega)\le\varepsilon$ at every $N$ beyond its budget. Updates use $\mu,L,\sigma,\varepsilon$, not $R,V,\Gamma$; the setup restricts the output clock, not the update family.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/VelocityTrackingSmoothDrift.lean}{Velocity\allowbreak{}Tracking\allowbreak{}Smooth\allowbreak{}Drift} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/VelocityTrackingSmoothDrift.md}{(review)}
+& $\mathcal{O}\!\left(1+H+S\log\!\left(1+\frac{R^2+V^2S^2}{\varepsilon}\right)\right)$ stochastic-gradient calls. Certified accuracy floor: $\varepsilon\gtrsim (\Gamma^2\sigma^8/\mu^8)^{1/5}+\kappa^4\Gamma^2$; none when $\Gamma=0$.
+& --- & --- \\
+\midrule[1.2pt]
+SGD tracking \citep[Thms.~3, 4, 28]{sdscCutler2023v4}\newline Bounded-speed restriction
+& Derived bound: $\mathcal{O}\!\left(1+\kappa\log\!\left(1+\frac{R^2}{\varepsilon}\right)+\frac{\sigma^2}{\mu^2\varepsilon}\right)$ gradient calls, with step decay; $\varepsilon\gtrsim(\Delta\sigma^2/\mu^2)^{2/3}+\kappa^2\Delta^2$. Common setup: finite dimension, deterministic speed $\le\Delta$; $V\le\Delta$, $\Gamma\le2\Delta$.
+& i) \textbf{(1)}: Scope: permits unbounded speed.\newline ii) \textbf{(1)}: lower certified floor when $(\Gamma^2\sigma^8/\mu^8)^{1/5}+\kappa^4\Gamma^2\ll\varepsilon\ll(\Delta\sigma^2/\mu^2)^{2/3}$.
+& i) \textbf{(1)}: extra noise logarithm and $V$ initialization term on overlap.\newline ii) \textbf{(1)}: deterministic drift, uniform variance required.\newline iii) \textbf{(1)}: $\Gamma\asymp\Delta$ gives $\kappa^4\Delta^2$ instead of $\kappa^2\Delta^2$. \\
+\midrule
+Romberg NLMS \citep[Thm.~8, Cor.~9]{sdscMoulines2005}\newline Quadratic, stable time-varying autoregression
+& $\mathcal{O}(n)$ sample updates (two chains per sample); mean-square error $\mathcal{O}(n^{-4/5})$ for $C^2$ coefficients, smoothly varying covariance, bounded innovation/initial moments of order $>8$, after a fixed-fraction burn-in; constants non-explicit.
+& i) \textbf{(1)}: nonlinear objectives, arbitrarily changing Hessians under uniform variance.\newline ii) \textbf{(1)}: explicit finite-time budget.\newline iii) \textbf{(1)}: matches floor exponent when $\Gamma\asymp n^{-2}$, not a faster rate.
+& \textbf{(1)}: excludes multiplicative random-design noise. Different oracle models; total costs not comparable. \\
+\midrule
+Stochastic SHARP \citep[Thms.~4.4, 5.5]{sdscKamijima2025v1}\newline Smooth trajectories; strongly convex sample losses
+& No finite-time mean-square call budget; asymptotic first-moment guarantee uses sample-function inner solves. Vanishing polynomial-regression bound additionally requires unbiased sample minimizers and sufficiently accurate inner solves.
+& i) \textbf{(1)}: no per-sample strong convexity or sample-minimizer unbiasedness.\newline ii) \textbf{(1)}: one fresh gradient per step, no repeated sample solves.\newline iii) \textbf{(1)}: finite-time mean square instead of asymptotic first moment.
+& \textbf{(1)}: uniform variance instead of variance only at minimizers; no convex regularizer. Rates not comparable. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $S=L/\mu+\sigma^2/(\mu^2\varepsilon)$; $H\in\mathbb{N}$ is additional elapsed steps, each costing one call; $\Delta$ bounds minimizer speed; $n$ is the autoregression sampling resolution; $\gtrsim$ suppresses universal constants; NLMS: normalized least mean squares.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

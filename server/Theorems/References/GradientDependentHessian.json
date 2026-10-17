@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.GradientDependentHessian",
+  "searched_at": "2026-10-17T09:05:30.789866+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{\\log\\left(1 + \\frac{L_1 \\cdot G_0}{m \\cdot L_0}\\right)}{\\log\\left(\\frac{4}{3}\\right)} \\right\\rceil_{+} + \\left(\\left\\lceil \\frac{27000 \\cdot \\Delta \\cdot \\left(\\sqrt{m} \\cdot \\sqrt{L_0}\\right)}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} + \\frac{15000 \\cdot \\Delta \\cdot \\left(\\sqrt{m} \\cdot \\sqrt{L_1}\\right)}{\\varepsilon} \\right\\rceil_{+} + m + 74\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.GradientDependentHessian.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈Real.log (1 + p.L₁ * p.G₀ / (↑p.m * p.L₀)) / Real.log (4 / 3)⌉₊ +\n    (⌈27000 * p.Δ * (√↑p.m * √p.L₀) / (p.ε * √p.ε) + 15000 * p.Δ * (√↑p.m * √p.L₁) / p.ε⌉₊ + p.m + 74)"
+        },
+        {
+          "latex": "\\left\\lceil \\frac{\\log\\left(1 + \\frac{L_1 \\cdot G_0}{m \\cdot L_0}\\right)}{\\log\\left(\\frac{4}{3}\\right)} \\right\\rceil_{+} + \\left(\\left\\lceil \\frac{54000 \\cdot \\Delta \\cdot \\frac{\\sqrt{L_0}}{\\sqrt{m}}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} + \\frac{30000 \\cdot \\Delta \\cdot \\frac{\\sqrt{L_1}}{\\sqrt{m}}}{\\varepsilon} \\right\\rceil_{+} + 146\\right)",
+          "oracle": 1,
+          "type": "LongTails.Setups.GradientDependentHessian.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈Real.log (1 + p.L₁ * p.G₀ / (↑p.m * p.L₀)) / Real.log (4 / 3)⌉₊ +\n    (⌈54000 * p.Δ * (√p.L₀ / √↑p.m) / (p.ε * √p.ε) + 30000 * p.Δ * (√p.L₁ / √↑p.m) / p.ε⌉₊ + 146)"
+        }
+      ],
+      "module": "LongTails.Theorems.EnergyHessianReuse",
+      "namespace": "LongTails.Setups.GradientDependentHessian",
+      "setup": "LongTails.Setups.GradientDependentHessian",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GradientDependentHessian.spec LongTails.Theorems.EnergyHessianReuse.budget",
+      "theorem": "LongTails.Theorems.EnergyHessianReuse.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.EnergyHessianReuse",
+      "theorem": "LongTails.Theorems.EnergyHessianReuse.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a C³ function f:E→ℝ, permitting nonconvex objectives. The initial objective gap satisfies f(x₀)−inf f≤Δ, and ‖∇f(x₀)‖≤G₀. No convexity or gradient-dominance condition is imposed.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Oracle 0 returns the full exact gradient ∇f(x) at any queried point, independently of the call index and seed. Gradient calls have a separate fixed budget.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: spec.admissible, oracle-0 equality; LongTails/Template.lean: execute and Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 1 returns the full exact Hessian D(∇f)(x) as a continuous linear operator, independently of the call index and seed. Hessian calls have a separate fixed budget. Function values are not supplied by either oracle.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: spec.numOracles, spec.Reply, and spec.admissible, oracle-1 equality; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The pointwise third-derivative bound ‖D²(∇f)(x)‖≤L₀+L₁‖∇f(x)‖ holds globally, with L₀>0 and L₁≥0. This controls variation of the Hessian; it is not a bound on the Hessian norm itself.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: spec.admissible, nested fderiv inequality; spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space, with its induced norm.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: Params.normedE, Params.innerE, and Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "All parameters are public: E, x₀, L₀, L₁, Δ, G₀, ε, and m. Their restrictions are L₀>0, L₁≥0, Δ>0, G₀≥0, ε>0, and integer m≥1. The objective f is the hidden instance. The parameter m affects the supplied oracle budgets but imposes no additional condition on f.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a point x∈E satisfying ‖∇f(x)‖≤ε. The criterion uses the norm, not its square, and requires neither objective accuracy nor second-order stationarity.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The output criterion must hold almost surely under the joint algorithm and oracle seed law, within the separate fixed oracle budgets. Deterministic algorithm behavior is not required.",
+        "evidence": "LongTails/Setups/GradientDependentHessian.lean: spec.successful; LongTails/Template.lean: Algorithm.law, Oracle.law, execute, and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup uses gradient-dependent control of the third derivative instead of uniform Hessian Lipschitz continuity, with separately budgeted exact gradient and full-Hessian access."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.EnergyHessianReuse.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.EnergyHessianReuse",
+          "theorem": "LongTails.Theorems.EnergyHessianReuse.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

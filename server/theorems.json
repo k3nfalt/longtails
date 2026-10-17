@@ -443,6 +443,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{192 \\cdot \\left(4 \\cdot A \\cdot \\Delta + C\\right) + 80 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{384 \\cdot A}{L} + \\frac{1600 \\cdot L \\cdot \\Delta \\cdot \\sqrt{4 \\cdot A \\cdot \\Delta + \\frac{2 \\cdot A \\cdot \\varepsilon^{2}}{L} + C}}{\\varepsilon^{3}} \\right\\rceil_{+} + 3",
+      "oracle": 0,
+      "type": "LongTails.Setups.ExpectedSmoothnessNonconvex.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈(192 * (4 * q.A * q.Δ + q.C) + 80 * q.L * q.Δ) / q.ε ^ 2 + 384 * q.A / q.L +\n        1600 * q.L * q.Δ * √(4 * q.A * q.Δ + 2 * q.A * q.ε ^ 2 / q.L + q.C) / q.ε ^ 3⌉₊ +\n    3"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{192 \\cdot \\left(4 \\cdot A \\cdot \\Delta + C\\right) + 80 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{384 \\cdot A}{L} + \\frac{1600 \\cdot L \\cdot \\Delta \\cdot \\sqrt{4 \\cdot A \\cdot \\Delta + \\frac{2 \\cdot A \\cdot \\varepsilon^{2}}{L} + C}}{\\varepsilon^{3}} \\right\\rceil_{+} + 3",
+        "oracle": 0,
+        "type": "LongTails.Setups.ExpectedSmoothnessNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(192 * (4 * q.A * q.Δ + q.C) + 80 * q.L * q.Δ) / q.ε ^ 2 + 384 * q.A / q.L +\n        1600 * q.L * q.Δ * √(4 * q.A * q.Δ + 2 * q.A * q.ε ^ 2 / q.L + q.C) / q.ε ^ 3⌉₊ +\n    3"
+      }
+    ],
+    "module": "LongTails.Theorems.NormalizedStormExpectedSmoothness",
+    "namespace": "LongTails.Setups.ExpectedSmoothnessNonconvex",
+    "setup": "LongTails.Setups.ExpectedSmoothnessNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.ExpectedSmoothnessNonconvex.spec OracleTemplate.NormalizedStorm.budget",
+    "theorem": "OracleTemplate.NormalizedStorm.result"
+  },
+  {
+    "budget": {
       "latex": "3 \\cdot n \\cdot \\left(\\operatorname{clog}_{2}\\left(\\operatorname{clog}_{2}\\left(n\\right)\\right) + \\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{n \\cdot \\varepsilon}} \\right\\rceil_{+}\\right)",
       "oracle": 0,
       "type": "LongTails.Setups.FiniteSumSmoothAndConvex.spec.Params → ℕ",
@@ -650,6 +671,28 @@
     "setup": "LongTails.Setups.GeneralizedSmoothParameterFree",
     "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothParameterFree.spec\n  OracleTemplate.ParameterFreeGeneralized.budget",
     "theorem": "OracleTemplate.ParameterFreeGeneralized.result"
+  },
+  {
+    "budget": null,
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{\\log\\left(1 + \\frac{L_1 \\cdot G_0}{m \\cdot L_0}\\right)}{\\log\\left(\\frac{4}{3}\\right)} \\right\\rceil_{+} + \\left(\\left\\lceil \\frac{27000 \\cdot \\Delta \\cdot \\left(\\sqrt{m} \\cdot \\sqrt{L_0}\\right)}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} + \\frac{15000 \\cdot \\Delta \\cdot \\left(\\sqrt{m} \\cdot \\sqrt{L_1}\\right)}{\\varepsilon} \\right\\rceil_{+} + m + 74\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.GradientDependentHessian.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈Real.log (1 + p.L₁ * p.G₀ / (↑p.m * p.L₀)) / Real.log (4 / 3)⌉₊ +\n    (⌈27000 * p.Δ * (√↑p.m * √p.L₀) / (p.ε * √p.ε) + 15000 * p.Δ * (√↑p.m * √p.L₁) / p.ε⌉₊ + p.m + 74)"
+      },
+      {
+        "latex": "\\left\\lceil \\frac{\\log\\left(1 + \\frac{L_1 \\cdot G_0}{m \\cdot L_0}\\right)}{\\log\\left(\\frac{4}{3}\\right)} \\right\\rceil_{+} + \\left(\\left\\lceil \\frac{54000 \\cdot \\Delta \\cdot \\frac{\\sqrt{L_0}}{\\sqrt{m}}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} + \\frac{30000 \\cdot \\Delta \\cdot \\frac{\\sqrt{L_1}}{\\sqrt{m}}}{\\varepsilon} \\right\\rceil_{+} + 146\\right)",
+        "oracle": 1,
+        "type": "LongTails.Setups.GradientDependentHessian.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈Real.log (1 + p.L₁ * p.G₀ / (↑p.m * p.L₀)) / Real.log (4 / 3)⌉₊ +\n    (⌈54000 * p.Δ * (√p.L₀ / √↑p.m) / (p.ε * √p.ε) + 30000 * p.Δ * (√p.L₁ / √↑p.m) / p.ε⌉₊ + 146)"
+      }
+    ],
+    "module": "LongTails.Theorems.EnergyHessianReuse",
+    "namespace": "LongTails.Setups.GradientDependentHessian",
+    "setup": "LongTails.Setups.GradientDependentHessian",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.GradientDependentHessian.spec LongTails.Theorems.EnergyHessianReuse.budget",
+    "theorem": "LongTails.Theorems.EnergyHessianReuse.result"
   },
   {
     "budget": {
@@ -1308,6 +1351,27 @@
     "setup": "LongTails.Setups.SmoothConvexConcave",
     "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothConvexConcave.spec OracleTemplate.SaddlePoint.budget",
     "theorem": "OracleTemplate.SaddlePoint.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 16 \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right) \\cdot \\log\\left(1 + \\frac{15 \\cdot R^{2} + 45 \\cdot V^{2} \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right)^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + H + 1",
+      "oracle": 0,
+      "type": "LongTails.Setups.SmoothDriftStronglyConvex.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈16 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) *\n          Real.log (1 + (15 * p.R ^ 2 + 45 * p.V ^ 2 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) ^ 2) / p.ε)⌉₊ +\n      p.H +\n    1"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 16 \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right) \\cdot \\log\\left(1 + \\frac{15 \\cdot R^{2} + 45 \\cdot V^{2} \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right)^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + H + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothDriftStronglyConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈16 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) *\n          Real.log (1 + (15 * p.R ^ 2 + 45 * p.V ^ 2 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) ^ 2) / p.ε)⌉₊ +\n      p.H +\n    1"
+      }
+    ],
+    "module": "LongTails.Theorems.VelocityTrackingSmoothDrift",
+    "namespace": "LongTails.Setups.SmoothDriftStronglyConvex",
+    "setup": "LongTails.Setups.SmoothDriftStronglyConvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothDriftStronglyConvex.spec\n  OracleTemplate.VelocityTracking.SmoothDrift.budget",
+    "theorem": "OracleTemplate.VelocityTracking.SmoothDrift.result"
   },
   {
     "budget": {
