@@ -906,6 +906,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil 800 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}}}{\\varepsilon^{3}}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.MeanSquaredHolderNonconvex.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈800 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n      (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Δ * q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹) / q.ε ^ 3)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 800 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}}}{\\varepsilon^{3}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.MeanSquaredHolderNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈800 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n      (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Δ * q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹) / q.ε ^ 3)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.DyadicVarianceReductionHolder",
+    "namespace": "LongTails.Setups.MeanSquaredHolderNonconvex",
+    "setup": "LongTails.Setups.MeanSquaredHolderNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.MeanSquaredHolderNonconvex.spec OracleTemplate.DyadicHolder.budget",
+    "theorem": "OracleTemplate.DyadicHolder.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil \\frac{2 \\cdot L}{\\mu} \\cdot \\log\\left(2 + \\frac{8 \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right)^{2} \\cdot \\left(\\frac{4 \\cdot L^{2}}{\\mu^{2}}\\right)^{\\dim_{\\mathbb{R}}\\left(E\\right)} \\cdot M \\cdot L \\cdot R}{\\mu^{2}}\\right) \\right\\rceil_{+} + 2 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\log\\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\mu \\cdot \\varepsilon}\\right)\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.MinimizerRegularHessian.spec.Params → ℕ",
@@ -987,6 +1008,27 @@
     "setup": "LongTails.Setups.NormalizedSamStronglyConvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.NormalizedSamStronglyConvex.spec\n  LongTails.Theorems.NormalizedSamStronglyConvex.budget",
     "theorem": "LongTails.Theorems.NormalizedSamStronglyConvex.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\frac{32 \\cdot \\left(16 \\cdot L + 14 \\cdot L \\cdot \\sqrt{\\sqrt{\\frac{L}{\\mu}}} + \\frac{28311552 \\cdot K \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot L \\cdot \\sigma^{2} \\cdot \\rho^{2}}{\\mu^{4}} + \\frac{64 \\cdot \\sigma^{2}}{\\varepsilon}\\right)}{\\mu} \\cdot \\left(\\log\\left(1 + \\frac{6 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\varepsilon}\\right) + 1\\right) + \\frac{512 \\cdot \\sigma^{2}}{\\mu \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
+      "oracle": 0,
+      "type": "LongTails.Setups.PLHessianLipschitzKurtosis.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈32 *\n              (16 * q.L + 14 * q.L * √√(q.L / q.μ) + 28311552 * q.K * √(q.L / q.μ) * q.L * q.σ ^ 2 * q.ρ ^ 2 / q.μ ^ 4 +\n                64 * q.σ ^ 2 / q.ε) /\n            q.μ *\n          (Real.log (1 + 6 * √(q.L / q.μ) * q.Δ / q.ε) + 1) +\n        512 * q.σ ^ 2 / (q.μ * q.ε)⌉₊ +\n    1"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{32 \\cdot \\left(16 \\cdot L + 14 \\cdot L \\cdot \\sqrt{\\sqrt{\\frac{L}{\\mu}}} + \\frac{28311552 \\cdot K \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot L \\cdot \\sigma^{2} \\cdot \\rho^{2}}{\\mu^{4}} + \\frac{64 \\cdot \\sigma^{2}}{\\varepsilon}\\right)}{\\mu} \\cdot \\left(\\log\\left(1 + \\frac{6 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\varepsilon}\\right) + 1\\right) + \\frac{512 \\cdot \\sigma^{2}}{\\mu \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.PLHessianLipschitzKurtosis.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈32 *\n              (16 * q.L + 14 * q.L * √√(q.L / q.μ) + 28311552 * q.K * √(q.L / q.μ) * q.L * q.σ ^ 2 * q.ρ ^ 2 / q.μ ^ 4 +\n                64 * q.σ ^ 2 / q.ε) /\n            q.μ *\n          (Real.log (1 + 6 * √(q.L / q.μ) * q.Δ / q.ε) + 1) +\n        512 * q.σ ^ 2 / (q.μ * q.ε)⌉₊ +\n    1"
+      }
+    ],
+    "module": "LongTails.Theorems.KappaFreeSgdPLHessian",
+    "namespace": "LongTails.Setups.PLHessianLipschitzKurtosis",
+    "setup": "LongTails.Setups.PLHessianLipschitzKurtosis",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.PLHessianLipschitzKurtosis.spec OracleTemplate.PLHessian.budget",
+    "theorem": "OracleTemplate.PLHessian.result"
   },
   {
     "budget": {
@@ -1603,6 +1645,28 @@
     "setup": "LongTails.Setups.TerminalClippingConvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.TerminalClippingConvex.spec OracleTemplate.TerminalClipping.budget",
     "theorem": "OracleTemplate.TerminalClipping.result"
+  },
+  {
+    "budget": null,
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 2^{90} \\cdot \\left(1 + \\frac{\\Delta^{\\frac{5}{4}} \\cdot L_3^{\\frac{5}{12}}}{\\varepsilon^{\\frac{5}{3}}}\\right) \\cdot \\log\\left(2 + \\frac{H_0 \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{L_3 \\cdot \\Delta^{3}}{\\varepsilon^{4}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 90 * (1 + p.Δ ^ (5 / 4) * p.L₃ ^ (5 / 12) / p.ε ^ (5 / 3)) *\n      Real.log (2 + p.H₀ * p.Δ / p.ε ^ 2 + p.L₃ * p.Δ ^ 3 / p.ε ^ 4)⌉₊"
+      },
+      {
+        "latex": "\\left\\lceil 2^{62} \\cdot \\left(1 + \\frac{\\Delta^{\\frac{3}{4}} \\cdot L_3^{\\frac{1}{4}}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 1,
+        "type": "LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌈2 ^ 62 * (1 + p.Δ ^ (3 / 4) * p.L₃ ^ 4⁻¹ / p.ε)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.LazyQuarticHessianTradeoff",
+    "namespace": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
+    "setup": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec\n  LongTails.Theorems.LazyQuarticHessianTradeoff.budget",
+    "theorem": "LongTails.Theorems.LazyQuarticHessianTradeoff.result"
   },
   {
     "budget": {
