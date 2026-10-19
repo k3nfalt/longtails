@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedAdam",
+  "searched_at": "2026-10-19T15:02:24.780458+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "1 + \\left\\lceil \\frac{400000000 \\cdot \\Delta \\cdot L}{\\varepsilon^{2}} \\cdot \\left(1000000000000 + \\left(\\frac{100000 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedAdam.spec.Params → ℕ",
+        "value": "fun q => 1 + ⌈400000000 * q.Δ * q.L / q.ε ^ 2 * (1000000000000 + (100000 * q.σ / q.ε) ^ (q.α / (q.α - 1)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "1 + \\left\\lceil \\frac{400000000 \\cdot \\Delta \\cdot L}{\\varepsilon^{2}} \\cdot \\left(1000000000000 + \\left(\\frac{100000 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedAdam.spec.Params → ℕ",
+          "value": "fun q => 1 + ⌈400000000 * q.Δ * q.L / q.ε ^ 2 * (1000000000000 + (100000 * q.σ / q.ε) ^ (q.α / (q.α - 1)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AdamHeavyTailedFixedMomentum",
+      "namespace": "LongTails.Setups.HeavyTailedAdam",
+      "setup": "LongTails.Setups.HeavyTailedAdam",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedAdam.spec OracleTemplate.AdamHeavyTailedFixedMomentum.budget",
+      "theorem": "OracleTemplate.AdamHeavyTailedFixedMomentum.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdamHeavyTailedFixedMomentum",
+      "theorem": "OracleTemplate.AdamHeavyTailedFixedMomentum.result",
+      "references": "- Florian Hübler, Ilyas Fatkhullin, Niao He. [From Gradient Clipping to Normalization for Heavy Tailed SGD](https://opt-ml.org/papers/2024/paper58.pdf). 2024 (OPT workshop; AISTATS publication 2025). Complexity: $O\\!\\left(1+\\frac{\\Delta L}{\\varepsilon^2}\\left[1+\\left(\\frac{6\\sigma}{\\varepsilon}\\right)^{\\alpha/(\\alpha-1)}\\right]\\right)$ stochastic-gradient oracle calls, with fixed cost including initialization, for normalized SGD with momentum and a uniformly selected iterate satisfying $\\mathbb E\\|\\nabla f(x)\\|_2\\le\\varepsilon$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on R^d, permitting nonconvexity, with globally L-Lipschitz gradient and f(x0)-inf_x f(x) ≤ Δ. No minimizer attainment or convexity is required. L>0 and Δ≥0.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using a fresh IID seed. The jointly measurable, integrable oracle is unbiased: E[g(x,ξ)]=∇f(x). Neither function values nor paired evaluations using the same sample are provided.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: spec.admissible, oracle answer and unbiasedness clauses; supplied LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every x, E[Σ_i |g_i(x,ξ)-∇_i f(x)|^α]≤σ^α, with 1<α≤2 and σ≥0. This bounds the summed coordinate central moments, implies E||g(x,ξ)-∇f(x)||_2^α≤σ^α without a dimension factor, and permits infinite variance when α<2. Independence between coordinates is not required.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: spec.valid and the final two clauses of spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is R^d with its Euclidean norm, for public d∈ℕ.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: Params.d and Params.x0; supplied LongTails/Algorithms/Adam.lean: Point."
+      },
+      {
+        "label": "other",
+        "details": "All parameters, including L, σ, α, Δ, ε and x0, are public. The objective and oracle distribution are hidden. Calls use IID seeds, and the extracted budget is a fixed cap counting individual oracle replies. The allowedAlgorithm field restricts admissible methods to the supplied Adam.method family; the literature comparison concerns the attainable rate, not implementation identity.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: Params, spec.Public, spec.publicInput, spec.admissible and spec.allowedAlgorithm; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output must be measurable, its Euclidean gradient norm integrable, and E||∇f(output)||_2≤ε for ε>0. The criterion uses the first power of the norm, not its square.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over both algorithm randomization and oracle seeds. No high-probability or almost-sure accuracy guarantee is required.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: spec.successful; LongTails/Template.lean: Convergence, product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established smooth nonconvex stochastic-optimization benchmark with unbiased IID gradients, bounded central heavy-tail moments, and expected first-order stationarity. The coordinate moment bound is a conventional finite-dimensional noise condition."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AdamHeavyTailedFixedMomentum.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdamHeavyTailedFixedMomentum",
+          "theorem": "OracleTemplate.AdamHeavyTailedFixedMomentum.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

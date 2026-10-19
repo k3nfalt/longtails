@@ -1,6 +1,6 @@
 <h1 align="center"><img src="server/wordmark.svg" width="227" height="60" align="middle" alt="LongTails"> <img src="server/logo.png" width="100" height="100" align="middle" alt="LongTails logo"></h1>
 
-<h3 align="center">Discovering new results in Computational Mathematics.<br>
+<h3 align="center">Discovering new results in computational mathematics.<br>
 More than 25 new results so far—and more to come.</h3>
 
 <p align="center"><a href="https://k3nfalt.github.io/longtails/"><strong>Explore the results on our website →</strong></a></p>
