@@ -58,7 +58,7 @@ jobs:
           LONGTAILS_LAKE_CACHE: ${{ runner.temp }}/${{ env.POSTPROCESS_DIR }}/lake
         run: |
           mkdir -p "$TMPDIR"
-          python3 -u scripts/postprocess.py --pr "$PR_NUMBER" 2>&1 | tee "$RUNNER_TEMP/$POSTPROCESS_DIR/postprocess.log"
+          python3 -u infra/postprocess.py --pr "$PR_NUMBER" 2>&1 | tee "$RUNNER_TEMP/$POSTPROCESS_DIR/postprocess.log"
 
       - name: Upload postprocessing logs
         if: always()

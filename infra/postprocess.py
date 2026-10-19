@@ -23,7 +23,7 @@ def run(command, cwd=None, capture=False):
 
 def authenticated(command, cwd=None, capture=False):
     return run(
-        [sys.executable, str(ROOT / "scripts/generate_token.py"), *command],
+        [sys.executable, str(ROOT / "infra/generate_token.py"), *command],
         cwd,
         capture,
     )

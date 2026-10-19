@@ -62,7 +62,7 @@ The Researcher must not write the Reviewer’s assessment or approve its own wor
 
 3. Git workflow and authentication
 
-Inspect `./scripts/generate_token.py` and authenticate every GitHub operation, including fetches, with `python3 scripts/generate_token.py <command> [arguments...]`. Do not use personal credentials or alter repository protections.
+Inspect `./infra/generate_token.py` and authenticate every GitHub operation, including fetches, with `python3 infra/generate_token.py <command> [arguments...]`. Do not use personal credentials or alter repository protections.
 
 Fetch the latest remote state before starting. Base both agents’ working branches on the freshly fetched `origin/main`. Deliver each task on a unique `agent/<unique-task-name>` branch; do not combine tasks on a shared integration branch.
 
@@ -190,7 +190,7 @@ Any substantive change after approval, including conflict resolution, requires r
 
 The Reviewer then creates the single final research commit, verifies that it matches the approved contents, and pushes it to the task's unique `agent/<unique-task-name>` branch. This task explicitly authorizes that push and opening one draft PR targeting `main` once all acceptance criteria pass. It never authorizes pushing or merging into `main`.
 
-Before submission, confirm `git rev-list --count origin/main..HEAD` is exactly 1. Use `python3 scripts/generate_token.py` for each GitHub operation. Create one draft with `gh pr create --draft --base main --head <task-branch> --title <title> --body-file <file>`. Include the theorem, setup, contribution note, and verification evidence in the PR body. Write multiline PR text to a temporary file. Verify that the PR exists and contains the approved research commit, report its URL, and stop. Do not dispatch or monitor workflows, append commits, force-push, or automatically retry, repair, replace, or close the PR.
+Before submission, confirm `git rev-list --count origin/main..HEAD` is exactly 1. Use `python3 infra/generate_token.py` for each GitHub operation. Create one draft with `gh pr create --draft --base main --head <task-branch> --title <title> --body-file <file>`. Include the theorem, setup, contribution note, and verification evidence in the PR body. Write multiline PR text to a temporary file. Verify that the PR exists and contains the approved research commit, report its URL, and stop. Do not dispatch or monitor workflows, append commits, force-push, or automatically retry, repair, replace, or close the PR.
 
 PR creation automatically starts verification and novelty reviews. Postprocessing adds a second commit containing only `scripts/reviews/<TheoremName>.md` for each new theorem. Negative novelty reviews do not block this stage. Tables, references, metadata, and website generation remain separate manual steps. Failed PRs remain open for the user to inspect.
 
