@@ -18,6 +18,9 @@
     .shell.site-header{padding-top:28px}.site-header h1{margin:0;text-align:center;font-size:clamp(36px,5vw,48px)}.site-header .title-link{display:inline-flex;align-items:center;gap:16px;font-family:"Manrope",sans-serif;font-weight:700;color:#202020;letter-spacing:-0.025em}.site-logo{width:100px;height:auto;border-radius:6px}
     .site-header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px 40px;padding-bottom:12px}.github-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #c7d0df;border-radius:8px;background:#fff;color:var(--ink);font-size:14px;font-weight:600;text-decoration:none}.github-link:hover{border-color:var(--accent);color:var(--accent)}.github-link svg{flex-shrink:0;fill:currentColor}
     .site-tagline{flex-basis:100%;margin:0;text-align:center;font:600 20px/1.25 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;color:var(--ink)}
+    .masthead{min-height:256px;padding:24px 0 12px}.masthead .site-header{width:min(640px,calc(100% - 768px));margin:auto;padding:0;flex-direction:column;gap:12px}.masthead .site-header h1{order:0}.masthead .site-tagline{order:1;flex-basis:auto}.masthead .github-link{order:2}.history.floating-history{position:absolute;top:12px;left:calc(50% + 560px);width:min(360px,calc(50% - 572px));margin:0;padding:8px 10px}.floating-history svg{max-height:180px}
+    @media(max-width:1659px){.masthead{padding:24px 14px 12px;min-height:0}.masthead .site-header{width:100%}.history.floating-history{position:static;width:calc(100% - 28px);max-width:360px;margin:12px 14px 24px auto}}
+    .history{margin:24px 0;padding:20px 24px;background:#fff;border:1px solid var(--line);border-radius:12px}.history p{font-size:12px;color:var(--muted);margin:4px 0 12px}.history svg{display:block;width:100%;height:auto;max-height:230px}.history-legend{display:flex;justify-content:flex-start;gap:12px;font-size:12px;flex-wrap:wrap}.history-legend span::before{content:"";display:inline-block;width:18px;border-top:2px solid var(--accent);margin-right:7px;vertical-align:middle}.history-legend span:last-child::before{border-color:#ad7422;border-top-style:dashed}
     #count{display:inline-flex;align-items:center;height:40px;white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted)}
     .filters{margin:12px 0 16px;font-size:13px}.filters label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
     .filters input[type="search"]{font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid #c7d0df;border-radius:6px;padding:9px 12px;min-height:40px;min-width:0;width:100%}
@@ -87,7 +90,15 @@
   </style>
 </head>
 <body>
-  <header class="shell site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="data:image/png;base64,__LOGO_DATA__" width="1254" height="1254" alt=""></a></h1><a id="github-link" class="github-link" href="#"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>Details on GitHub</a><h3 class="site-tagline">Discovering new results in mathematical optimization</h3></header>
+  <div class="masthead">
+  <header class="site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="data:image/png;base64,__LOGO_DATA__" width="1254" height="1254" alt=""></a></h1><a id="github-link" class="github-link" href="#"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>Details on GitHub</a><h3 class="site-tagline">Discovering new results in mathematical optimization</h3></header>
+  </div>
+    <section class="history floating-history" aria-label="Theorem history">
+      <div>
+        <div class="history-legend"><span>All theorems</span><span>Theorems with ★★★</span></div>
+        <div id="history-chart"></div>
+      </div>
+    </section>
   <main class="shell">
     <div id="catalog">
     <form id="filters" class="filters" aria-label="Filter setups">
@@ -122,6 +133,58 @@
       if (className) element.className = className;
       return element;
     };
+    function renderHistory() {
+      const rows = data.nightlyHistory;
+      const container = document.getElementById('history-chart');
+      container.replaceChildren();
+      if (!rows.length) {
+        container.append(make('p', 'No nightly snapshots available yet.'));
+        return;
+      }
+      const svgNode = (tag, attributes, text) => {
+        const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
+        if (text !== undefined) node.textContent = text;
+        return node;
+      };
+      const width = Math.max(220, container.clientWidth), right = width - 40;
+      const svg = svgNode('svg', {viewBox: `0 0 ${width} 180`, role: 'img', 'aria-labelledby': 'history-title'});
+      svg.append(svgNode('title', {id: 'history-title'}, 'Total and three-star theorems at nightly snapshots, using ratings recorded at each snapshot.'));
+      const dates = rows.map(row => Date.parse(row.date + 'T00:00:00Z'));
+      const maximum = Math.max(1, ...rows.map(row => row.total));
+      const ceiling = Math.ceil(maximum / 4) * 4;
+      const x = index => dates.length === 1 ? (44 + right) / 2 : 44 + (dates[index] - dates[0]) / (dates.at(-1) - dates[0]) * (right - 44);
+      const y = value => 144 - value / ceiling * 120;
+      for (let tick = 0; tick <= 4; tick++) {
+        const value = ceiling * tick / 4;
+        svg.append(svgNode('line', {x1: 44, x2: right, y1: y(value), y2: y(value), stroke: '#e3e7ed'}));
+        svg.append(svgNode('text', {x: 32, y: y(value) + 4, 'text-anchor': 'end', fill: '#637083', 'font-size': 12}, value));
+      }
+      for (const [key, color, dash] of [['total', '#3157a3', ''], ['threeStar', '#ad7422', '5 4']]) {
+        let path = '', connected = false;
+        rows.forEach((row, index) => {
+          if (row[key] == null) { connected = false; return; }
+          path += `${connected ? 'L' : 'M'}${x(index)},${y(row[key])} `;
+          connected = true;
+        });
+        svg.append(svgNode('path', {d: path, fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-dasharray': dash}));
+        rows.forEach((row, index) => {
+          if (row[key] == null) return;
+          const dot = svgNode('circle', {cx: x(index), cy: y(row[key]), r: 3.5, fill: color});
+          dot.append(svgNode('title', {}, `${row.date}: ${row[key]} ${key === 'total' ? 'total' : 'three-star'} theorems`));
+          svg.append(dot);
+          if (index === rows.length - 1) {
+            svg.append(svgNode('text', {x: x(index) + 8, y: y(row[key]) + 4, fill: color, 'font-size': 12, 'font-weight': 600}, row[key]));
+          }
+        });
+      }
+      for (const index of [...new Set([0, rows.length - 1])]) {
+        svg.append(svgNode('text', {x: x(index), y: 172, 'text-anchor': rows.length === 1 ? 'middle' : index === 0 ? 'start' : 'end', fill: '#637083', 'font-size': 12}, rows[index].date));
+      }
+      container.append(svg);
+    }
+    renderHistory();
+    window.addEventListener('resize', renderHistory);
     function descriptionView(html, compact = false) {
       const container = make('div', undefined, 'description');
       container.innerHTML = html;

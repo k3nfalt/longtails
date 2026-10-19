@@ -1,9 +1,11 @@
 import argparse
 import base64
+import io
 import json
 import subprocess
 import sys
-from datetime import datetime, timezone
+import tarfile
+from datetime import date, datetime, timezone
 from html import escape
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -251,6 +253,59 @@ def load_ratings(directory):
     return ratings
 
 
+def nightly_history():
+    def git(*args):
+        return subprocess.check_output(["git", *args], cwd=ROOT.parent)
+
+    history = []
+    for tag in sorted(git("tag", "--list", "nightly-*").decode().splitlines()):
+        try:
+            day = date.fromisoformat(tag.removeprefix("nightly-"))
+        except ValueError:
+            continue
+        paths = (
+            git(
+                "ls-tree",
+                "--name-only",
+                tag,
+                "LongTails/Theorems",
+                "scripts/tables/metadata",
+            )
+            .decode()
+            .splitlines()
+        )
+        if "LongTails/Theorems" not in paths:
+            continue
+        theorems, rated = set(), set()
+        has_ratings = "scripts/tables/metadata" in paths
+        with tarfile.open(fileobj=io.BytesIO(git("archive", tag, *paths))) as archive:
+            for member in archive:
+                path = Path(member.name)
+                if not member.isfile():
+                    continue
+                if path.is_relative_to("LongTails/Theorems") and path.suffix == ".lean":
+                    theorems.add(path.stem)
+                elif (
+                    path.is_relative_to("scripts/tables/metadata")
+                    and path.suffix == ".json"
+                ):
+                    ratings = json.load(archive.extractfile(member))["theorems"]
+                    if any(
+                        type(score) is not int or score not in range(4)
+                        for score in ratings.values()
+                    ):
+                        raise ValueError(f"Invalid contribution ratings: {tag}:{path}")
+                    rated.update(name for name, score in ratings.items() if score == 3)
+        history.append(
+            {
+                "date": day.isoformat(),
+                "total": len(theorems),
+                "threeStar": len(theorems & rated) if has_ratings else None,
+            }
+        )
+    return history
+
+
 def render(
     regenerate_all=False,
     jobs=1,
@@ -355,6 +410,7 @@ def render(
             }
         )
     data = {
+        "nightlyHistory": nightly_history(),
         "project_name": project_name,
         "repository_url": repository_url(),
         "setups": setups,
