@@ -238,8 +238,8 @@ def main(argv=None):
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=scripts / "paper",
-        help="Destination for tables/SETUP.tex, metadata, and results_table.bib (default: scripts/paper)",
+        default=scripts / "tables",
+        help="Destination for tables/SETUP.tex, metadata, and results_table.bib (default: scripts/tables)",
     )
     argv = list(sys.argv[1:] if argv is None else argv)
     split = argv.index("--") if "--" in argv else len(argv)
