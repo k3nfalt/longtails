@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.QuantileSymmetricRemainderConvex",
+  "searched_at": "2026-10-19T06:38:08.701858+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(1 + \\left\\lceil 4 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 32768 \\cdot \\left(\\frac{\\sqrt{d} \\cdot R \\cdot \\left(2 \\cdot L \\cdot R + r\\right)}{\\varepsilon} + \\frac{8 \\cdot d \\cdot M \\cdot R^{2}}{\\varepsilon^{2}}\\right)^{2} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\frac{\\log\\left(1 + 512 \\cdot \\left(\\frac{\\sqrt{d} \\cdot R \\cdot \\left(2 \\cdot L \\cdot R + r\\right)}{\\varepsilon} + \\frac{8 \\cdot d \\cdot M \\cdot R^{2}}{\\varepsilon^{2}}\\right)\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.QuantileSymmetricRemainderConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  (1 +\n      ⌈4 * √(q.L * q.R ^ 2 / q.ε) +\n          32768 * (√↑q.d * q.R * (2 * q.L * q.R + q.r) / q.ε + 8 * ↑q.d * q.M * q.R ^ 2 / q.ε ^ 2) ^ 2⌉₊) *\n    (1 +\n      ⌈Real.log (1 + 512 * (√↑q.d * q.R * (2 * q.L * q.R + q.r) / q.ε + 8 * ↑q.d * q.M * q.R ^ 2 / q.ε ^ 2)) /\n          Real.log 2⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(1 + \\left\\lceil 4 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 32768 \\cdot \\left(\\frac{\\sqrt{d} \\cdot R \\cdot \\left(2 \\cdot L \\cdot R + r\\right)}{\\varepsilon} + \\frac{8 \\cdot d \\cdot M \\cdot R^{2}}{\\varepsilon^{2}}\\right)^{2} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\frac{\\log\\left(1 + 512 \\cdot \\left(\\frac{\\sqrt{d} \\cdot R \\cdot \\left(2 \\cdot L \\cdot R + r\\right)}{\\varepsilon} + \\frac{8 \\cdot d \\cdot M \\cdot R^{2}}{\\varepsilon^{2}}\\right)\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.QuantileSymmetricRemainderConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  (1 +\n      ⌈4 * √(q.L * q.R ^ 2 / q.ε) +\n          32768 * (√↑q.d * q.R * (2 * q.L * q.R + q.r) / q.ε + 8 * ↑q.d * q.M * q.R ^ 2 / q.ε ^ 2) ^ 2⌉₊) *\n    (1 +\n      ⌈Real.log (1 + 512 * (√↑q.d * q.R * (2 * q.L * q.R + q.r) / q.ε + 8 * ↑q.d * q.M * q.R ^ 2 / q.ε ^ 2)) /\n          Real.log 2⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.QuantileRemainderMinimaxConvex",
+      "namespace": "LongTails.Setups.QuantileSymmetricRemainderConvex",
+      "setup": "LongTails.Setups.QuantileSymmetricRemainderConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuantileSymmetricRemainderConvex.spec\n  LongTails.Theorems.QuantileRemainderMinimaxConvex.budget",
+      "theorem": "LongTails.Theorems.QuantileRemainderMinimaxConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.QuantileRemainderMinimaxConvex",
+      "theorem": "LongTails.Theorems.QuantileRemainderMinimaxConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on R^d with globally L-Lipschitz gradient. A global minimizer x* exists with ||x0-x*||₂ ≤ R. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns the full vector g(x,ξ), using a fresh IID seed. Coordinate error distributions satisfy the symmetric-remainder condition; the full oracle response need not have an expectation or finite variance. Coordinates need not be independent.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every x and coordinate i, the error law μ decomposes as μ=S+A into nonnegative measures. S is invariant under z↦−z, with no moment requirement. A has integrable first and second moments, ∫z dA=0, and ∫z² dA≤M. These are mixture measures, not an assumed sum of independent random variables. Uniformly, μ{|z|>r}≤1/64; no density or tail-decay exponent is required.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: HasSymmetricRemainder, NoiseCondition, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean R^d with its ℓ₂ norm, where d is a positive integer. Noise restrictions apply to coordinate marginals.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: Space, spec.valid, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "All parameters are public: d, Ω with its measurable structure, x0, L, R, r, M, ε. Validity requires L,R,r,ε>0 and M≥0. The objective, oracle map, sampling law, minimizer, and decomposition measures are not supplied as public input. Seeds are IID across calls; error laws may depend on the query.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable R^d-valued output X whose objective gap f(X)−f(x*) is integrable and satisfies E[f(X)−f(x*)]≤ε for a global minimizer x*. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the product of algorithm randomness and oracle-seed randomness. The extracted budget is a fixed cap on individual full-vector oracle calls, not an expected stopping-time cost.",
+        "evidence": "LongTails/Setups/QuantileSymmetricRemainderConvex.lean: spec.successful; LongTails/Template.lean: Convergence, execute; supplied extracted result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth convex objective and expected-gap criterion are standard, but the coordinatewise mixture of unrestricted symmetric noise and a centered finite-second-moment remainder, controlled only by a fixed quantile and remainder moment, is an unusual oracle model. This classification does not assert novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.QuantileRemainderMinimaxConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.QuantileRemainderMinimaxConvex",
+          "theorem": "LongTails.Theorems.QuantileRemainderMinimaxConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

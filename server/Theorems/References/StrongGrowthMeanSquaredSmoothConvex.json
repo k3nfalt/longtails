@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex",
+  "searched_at": "2026-10-19T06:39:00.692029+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\sqrt{\\frac{2 \\cdot Lbar \\cdot R^{2}}{\\left(1 + \\Gamma\\right) \\cdot \\varepsilon}} \\right\\rceil_{+} \\cdot \\left\\lceil \\left(1 + \\Gamma\\right)^{2} \\cdot \\left(4810 + 3200 \\cdot \\log\\left(1 + \\Gamma\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex.spec.Params → ℕ",
+        "value": "fun q => ⌈√(2 * q.Lbar * q.R ^ 2 / ((1 + q.Γ) * q.ε))⌉₊ * ⌈(1 + q.Γ) ^ 2 * (4810 + 3200 * Real.log (1 + q.Γ))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\sqrt{\\frac{2 \\cdot Lbar \\cdot R^{2}}{\\left(1 + \\Gamma\\right) \\cdot \\varepsilon}} \\right\\rceil_{+} \\cdot \\left\\lceil \\left(1 + \\Gamma\\right)^{2} \\cdot \\left(4810 + 3200 \\cdot \\log\\left(1 + \\Gamma\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex.spec.Params → ℕ",
+          "value": "fun q => ⌈√(2 * q.Lbar * q.R ^ 2 / ((1 + q.Γ) * q.ε))⌉₊ * ⌈(1 + q.Γ) ^ 2 * (4810 + 3200 * Real.log (1 + q.Γ))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ProximalStormStrongGrowth",
+      "namespace": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex",
+      "setup": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex.spec OracleTemplate.ProximalStorm.budget",
+      "theorem": "OracleTemplate.ProximalStorm.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ProximalStormStrongGrowth",
+      "theorem": "OracleTemplate.ProximalStorm.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ on a second-countable real Hilbert space. A global minimizer x★ exists with ‖x0−x★‖≤R. Strong convexity and convexity of individual sample functions are not assumed.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: Params; spec.admissible (ConvexOn, HasGradientAt, IsMinOn)."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One oracle call at (x,y) returns (g(x,ω),g(y,ω)) using the same fresh sample for both evaluations. Samples are IID across calls, and E[g(x,ω)]=∇f(x). The sample law and g are hidden; no function values or exact gradients are supplied. The extracted budget counts paired calls with a fixed cap.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "relative_error",
+        "details": "Gradient-relative variance: E‖g(x,ω)−∇f(x)‖²≤Γ²‖∇f(x)‖² for every x, with Γ≥0. Together with unbiasedness this gives E‖g(x,ω)‖²≤(1+Γ²)‖∇f(x)‖². This is a second-moment condition, not a pointwise error bound; no additive noise floor is present.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.valid; spec.admissible (unbiasedness, variance integrability and inequality)."
+      },
+      {
+        "label": "other",
+        "details": "Mean-squared smoothness under the shared sample: E‖g(x,ω)−g(y,ω)‖²≤Lbar²‖x−y‖² for all x,y. No samplewise Lipschitz bound is required. The space may be infinite-dimensional. All Params are public, including Lbar>0, Γ≥0, R≥0, ε>0 and x0; the objective, sampling laws and oracle map remain hidden.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: Params; spec.Public, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output X whose objective gap f(X)−f(x★) is integrable and at most ε in expectation for a global minimizer x★. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.Output, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[f(X)−f(x★)]≤ε, taking expectation over the product of algorithm randomness and the IID oracle-seed law. No high-probability or almost-sure accuracy guarantee is requested.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A structured stochastic convex variant combining gradient-relative variance, mean-squared oracle smoothness and paired shared-sample queries on a potentially infinite-dimensional Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ProximalStorm.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ProximalStormStrongGrowth",
+          "theorem": "OracleTemplate.ProximalStorm.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

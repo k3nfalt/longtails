@@ -2,6 +2,27 @@ import BudgetLatex
 
 open Lean Elab Command Term
 
+namespace BudgetLatexTests
+structure Public where
+  L : ℝ
+structure Params where
+  data : Public
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (q : Params) => q.data.L)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "L" do
+    throwError "Unexpected bundled public parameter: {result}"
+end BudgetLatexTests
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (m : ℕ) => Nat.log2 (m ^ 3 + 4))) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\operatorname{log2}\\left(m^{3} + 4\\right)" do
+    throwError "Unexpected natural logarithm base two: {result}"
+
 set_option hygiene false in
 run_cmd liftTermElabM do
   let value ← elabTerm (← `(fun (β : ℝ) => β⁻¹)) none

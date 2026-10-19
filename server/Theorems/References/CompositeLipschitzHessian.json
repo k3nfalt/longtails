@@ -1,0 +1,125 @@
+{
+  "setup": "LongTails.Setups.CompositeLipschitzHessian",
+  "searched_at": "2026-10-19T06:38:05.861426+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "549755813888 \\cdot m \\cdot \\left(3 + \\operatorname{log2}\\left(m^{3} + 4\\right)\\right)^{4} \\cdot \\left(3 + \\operatorname{log2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.CompositeLipschitzHessian.spec.Params → ℕ",
+          "value": "fun p =>\n  549755813888 * p.m * (3 + (p.m ^ 3 + 4).log2) ^ 4 * (3 + (2 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (4 / 7)⌉₊).log2) *\n    (1 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (2 / 7)⌉₊)"
+        },
+        {
+          "latex": "4160 \\cdot \\left(3 + \\operatorname{log2}\\left(m^{3} + 4\\right)\\right) \\cdot \\left(3 + \\operatorname{log2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
+          "oracle": 1,
+          "type": "LongTails.Setups.CompositeLipschitzHessian.spec.Params → ℕ",
+          "value": "fun p =>\n  4160 * (3 + (p.m ^ 3 + 4).log2) * (3 + (2 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (4 / 7)⌉₊).log2) *\n    (1 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (2 / 7)⌉₊)"
+        },
+        {
+          "latex": "549755813888 \\cdot m \\cdot \\left(3 + \\operatorname{log2}\\left(m^{3} + 4\\right)\\right)^{4} \\cdot \\left(3 + \\operatorname{log2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
+          "oracle": 2,
+          "type": "LongTails.Setups.CompositeLipschitzHessian.spec.Params → ℕ",
+          "value": "fun p =>\n  549755813888 * p.m * (3 + (p.m ^ 3 + 4).log2) ^ 4 * (3 + (2 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (4 / 7)⌉₊).log2) *\n    (1 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (2 / 7)⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.CompositeLazyCubicAcceleration",
+      "namespace": "LongTails.Setups.CompositeLipschitzHessian",
+      "setup": "LongTails.Setups.CompositeLipschitzHessian",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CompositeLipschitzHessian.spec\n  LongTails.Theorems.CompositeLazyCubicAcceleration.budget",
+      "theorem": "LongTails.Theorems.CompositeLazyCubicAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CompositeLazyCubicAcceleration",
+      "theorem": "LongTails.Theorems.CompositeLazyCubicAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize f(x)+ψ(x) over a convex domain. The function f is globally convex and twice continuously differentiable; ψ is convex on the domain. A global minimizer xstar exists.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: spec.admissible."
+      },
+      {
+        "label": "composite",
+        "details": "The smooth component f is accessed through derivatives. The potentially nonsmooth component ψ and domain are accessed through exact regularized model minimization. Extending ψ by +∞ outside the domain gives a proper closed convex function.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: Problem, Model.solution, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Oracle 0 returns ∇f(x) exactly at every queried point, for every call index and seed.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: spec.admissible, oracle 0 clause."
+      },
+      {
+        "label": "proximal",
+        "details": "Oracle 2 exactly minimizes ⟨b,z−c⟩+½⟨z−c,Q(z−c)⟩+(a/3)‖z−c‖³+sψ(z) over the domain. Valid queries require s>0, a≥0, symmetric positive-semidefinite Q, and either a>0 or positive-definite Q. The returned point satisfies the specified variational inequality. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: Model.valid, Model.derivative, Model.solution, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 1 returns the full exact Hessian ∇²f(x), represented as a continuous linear operator. Its calls are budgeted separately from gradient and model-solver calls.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: spec.admissible, oracle 1 clause; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm. No dimension bound is imposed.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: Params.normedE, Params.innerE, Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "The Hessian obeys ‖∇²f(x)−∇²f(y)‖≤H‖x−y‖ globally. Public inputs are E, x0, H>0, R>0, ε>0, and integer m≥1. The feasible starting point satisfies ‖x0−xstar‖≤R. The functions, domain, and minimizer are hidden instance data. No global gradient-Lipschitz bound, bounded domain, or strong convexity is assumed.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: Params, Problem, spec.Public, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output x must satisfy f(x)+ψ(x)−(f(xstar)+ψ(xstar))≤ε.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to the domain.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound hold almost surely under the joint algorithm and oracle seed law, within fixed separate oracle budgets.",
+        "evidence": "LongTails/Setups/CompositeLipschitzHessian.lean: spec.successful; LongTails/Template.lean: Convergence, execute."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is standard finite-dimensional composite convex optimization with a Lipschitz Hessian and idealized exact regularized-model solves. Separate oracle budgets specify the complexity accounting."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CompositeLazyCubicAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CompositeLazyCubicAcceleration",
+          "theorem": "LongTails.Theorems.CompositeLazyCubicAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.PLHessianLipschitzKurtosis",
+  "searched_at": "2026-10-18T09:45:13.625675+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{32 \\cdot \\left(16 \\cdot L + 14 \\cdot L \\cdot \\sqrt{\\sqrt{\\frac{L}{\\mu}}} + \\frac{28311552 \\cdot K \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot L \\cdot \\sigma^{2} \\cdot \\rho^{2}}{\\mu^{4}} + \\frac{64 \\cdot \\sigma^{2}}{\\varepsilon}\\right)}{\\mu} \\cdot \\left(\\log\\left(1 + \\frac{6 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\varepsilon}\\right) + 1\\right) + \\frac{512 \\cdot \\sigma^{2}}{\\mu \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.PLHessianLipschitzKurtosis.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈32 *\n              (16 * q.L + 14 * q.L * √√(q.L / q.μ) + 28311552 * q.K * √(q.L / q.μ) * q.L * q.σ ^ 2 * q.ρ ^ 2 / q.μ ^ 4 +\n                64 * q.σ ^ 2 / q.ε) /\n            q.μ *\n          (Real.log (1 + 6 * √(q.L / q.μ) * q.Δ / q.ε) + 1) +\n        512 * q.σ ^ 2 / (q.μ * q.ε)⌉₊ +\n    1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{32 \\cdot \\left(16 \\cdot L + 14 \\cdot L \\cdot \\sqrt{\\sqrt{\\frac{L}{\\mu}}} + \\frac{28311552 \\cdot K \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot L \\cdot \\sigma^{2} \\cdot \\rho^{2}}{\\mu^{4}} + \\frac{64 \\cdot \\sigma^{2}}{\\varepsilon}\\right)}{\\mu} \\cdot \\left(\\log\\left(1 + \\frac{6 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\varepsilon}\\right) + 1\\right) + \\frac{512 \\cdot \\sigma^{2}}{\\mu \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.PLHessianLipschitzKurtosis.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈32 *\n              (16 * q.L + 14 * q.L * √√(q.L / q.μ) + 28311552 * q.K * √(q.L / q.μ) * q.L * q.σ ^ 2 * q.ρ ^ 2 / q.μ ^ 4 +\n                64 * q.σ ^ 2 / q.ε) /\n            q.μ *\n          (Real.log (1 + 6 * √(q.L / q.μ) * q.Δ / q.ε) + 1) +\n        512 * q.σ ^ 2 / (q.μ * q.ε)⌉₊ +\n    1"
+        }
+      ],
+      "module": "LongTails.Theorems.KappaFreeSgdPLHessian",
+      "namespace": "LongTails.Setups.PLHessianLipschitzKurtosis",
+      "setup": "LongTails.Setups.PLHessianLipschitzKurtosis",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.PLHessianLipschitzKurtosis.spec OracleTemplate.PLHessian.budget",
+      "theorem": "OracleTemplate.PLHessian.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.KappaFreeSgdPLHessian",
+      "theorem": "OracleTemplate.PLHessian.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective may be nonconvex; global PL, gradient Lipschitz continuity, and Hessian Lipschitz continuity are imposed without convexity.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Unconstrained minimization with an attained global minimum f*, global inequality 2μ(f(x)−f*) ≤ ‖∇f(x)‖², and initial gap f(x0)−f* ≤ Δ. Parameters satisfy 0 < μ ≤ L and Δ ≥ 0.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns g(x,ξ) using a fresh IID seed, with E[g(x,ξ)] = ∇f(x). Only gradient observations are supplied. All Params, including L, μ, ρ, σ, K, Δ, ε and x0, are public; f and the oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.Public, spec.publicInput and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform centered second-moment bound E‖g(x,ξ)−∇f(x)‖² ≤ σ², with σ ≥ 0.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is a finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: Params.normedE, Params.innerE, Params.finiteE and Params.borelE."
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz gradient and differentiable gradient with globally ρ-Lipschitz Hessian in operator norm, ρ ≥ 0. Uniform centered fourth-moment bound E‖g(x,ξ)−∇f(x)‖⁴ ≤ Kσ⁴ with K ≥ 1; no exponential-tail or sample-gradient smoothness assumption.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable point X with integrable objective gap and E[f(X)−f*] ≤ ε, where ε > 0. The allowed algorithm is restricted to WindowSgd.method with positive constant step size and natural-number window parameters.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.successful and spec.allowedAlgorithm."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm randomization and IID oracle seeds. The extracted budget is a fixed cap on all stochastic-gradient oracle calls, rather than an expected stopping cost.",
+        "evidence": "LongTails/Setups/PLHessianLipschitzKurtosis.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This specializes stochastic PL optimization through the combination of global Hessian Lipschitz continuity, a quantitative centered fourth-moment bound, and a restricted constant-step window algorithm family."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.PLHessian.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.KappaFreeSgdPLHessian",
+          "theorem": "OracleTemplate.PLHessian.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

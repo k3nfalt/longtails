@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.SymmetricFirstMomentNonconvex",
+  "searched_at": "2026-10-19T06:37:53.903190+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot \\left\\lceil 14400 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Lambda \\cdot \\sigma \\cdot \\Delta}{\\varepsilon^{3}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SymmetricFirstMomentNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  3 *\n    ⌈14400 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n        (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Λ * q.σ * q.Δ / q.ε ^ 3)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot \\left\\lceil 14400 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Lambda \\cdot \\sigma \\cdot \\Delta}{\\varepsilon^{3}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SymmetricFirstMomentNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  3 *\n    ⌈14400 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n        (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Λ * q.σ * q.Δ / q.ε ^ 3)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.MedianFirstMomentNonconvex",
+      "namespace": "LongTails.Setups.SymmetricFirstMomentNonconvex",
+      "setup": "LongTails.Setups.SymmetricFirstMomentNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SymmetricFirstMomentNonconvex.spec OracleTemplate.MedianGradient.budget",
+      "theorem": "OracleTemplate.MedianGradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MedianFirstMomentNonconvex",
+      "theorem": "OracleTemplate.MedianGradient.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained optimization on R^d, permitting nonconvex differentiable objectives with globally L-Lipschitz gradient and f(x0) − inf f ≤ Δ. No minimizer attainment is required. Public parameters satisfy L > 0, Λ ≥ 0, σ ≥ 0, Δ ≥ 0 and ε > 0.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: Params; spec.Public, spec.publicInput, spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query (x,y) returns (g(x,ω),g(y,ω)) using one shared sample; successive calls use IID samples. The jointly measurable estimator is integrable and unbiased at every point. One oracle call counts the pair of gradient evaluations. All Params are public; f, g and the sampling laws are hidden.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: spec.Query, spec.Reply, spec.Public and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "The centered noise satisfies E‖η(x,ω) − η(y,ω)‖₂ ≤ Λ‖x−y‖₂ under the same sample ω. This is first-moment regularity of noise differences, not mean-square smoothness.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: spec.admissible, centered noise difference inequality."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For η(x,ω) = g(x,ω) − ∇f(x), E‖η(x,ω)‖₂ ≤ σ uniformly in x. No second moment or moment of order greater than one is assumed; infinite variance is permitted.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: spec.admissible, integrability and first absolute moment clauses."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean R^d with its ℓ₂ norm, for public d ∈ ℕ.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: Params.d, Params.x0 and spec.Instance."
+      },
+      {
+        "label": "other",
+        "details": "For every x and coordinate i, η_i(x,ω) and −η_i(x,ω) have identical distributions. Only coordinatewise marginal symmetry is required; neither joint central symmetry nor independence between coordinates is assumed.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: spec.admissible, final equality of pushforward probability measures."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point X ∈ R^d with integrable gradient norm and E‖∇f(X)‖₂ ≤ ε. The criterion uses the norm, not its square; X need not be a specified iterate.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation includes algorithm randomness and the IID oracle sequence. The extracted budget is a fixed cap on paired oracle calls, not an expected stopping cost.",
+        "evidence": "LongTails/Setups/SymmetricFirstMomentNonconvex.lean: spec.successful; LongTails/Template.lean: execute and Convergence; supplied extracted budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines coordinatewise symmetric noise with only a first-moment bound, first-moment regularity of centered noise differences, and shared-sample paired gradient queries. This is a meaningful specialized variant of smooth stochastic nonconvex optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.MedianGradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MedianFirstMomentNonconvex",
+          "theorem": "OracleTemplate.MedianGradient.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

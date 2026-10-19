@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
+  "searched_at": "2026-10-18T09:44:58.626533+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{90} \\cdot \\left(1 + \\frac{\\Delta^{\\frac{5}{4}} \\cdot L_3^{\\frac{5}{12}}}{\\varepsilon^{\\frac{5}{3}}}\\right) \\cdot \\log\\left(2 + \\frac{H_0 \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{L_3 \\cdot \\Delta^{3}}{\\varepsilon^{4}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 90 * (1 + p.Δ ^ (5 / 4) * p.L₃ ^ (5 / 12) / p.ε ^ (5 / 3)) *\n      Real.log (2 + p.H₀ * p.Δ / p.ε ^ 2 + p.L₃ * p.Δ ^ 3 / p.ε ^ 4)⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{62} \\cdot \\left(1 + \\frac{\\Delta^{\\frac{3}{4}} \\cdot L_3^{\\frac{1}{4}}}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => ⌈2 ^ 62 * (1 + p.Δ ^ (3 / 4) * p.L₃ ^ 4⁻¹ / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.LazyQuarticHessianTradeoff",
+      "namespace": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
+      "setup": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec\n  LongTails.Theorems.LazyQuarticHessianTradeoff.budget",
+      "theorem": "LongTails.Theorems.LazyQuarticHessianTradeoff.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LazyQuarticHessianTradeoff",
+      "theorem": "LongTails.Theorems.LazyQuarticHessianTradeoff.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a possibly nonconvex C³ function f:E→ℝ, with f(x₀)−inf f≤Δ. No convexity assumption is imposed.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Oracle 0 returns the exact gradient together with the function value at any queried point, independently of call index and seed.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: spec.admissible, oracle-0 answer equality."
+      },
+      {
+        "label": "function_value",
+        "details": "Exact function values are bundled with gradients in oracle 0; each bundled evaluation counts as one call.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: spec.Reply and spec.admissible; LongTails/Template.lean: execute and _run."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 1 returns the exact full Hessian as a continuous linear operator. Hessian calls and value/gradient calls have separate fixed budgets. No third-derivative oracle is supplied.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: spec.numOracles, spec.Reply and spec.admissible; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm; no dimension bound is specified.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: Params.normedE, Params.innerE and Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "The third derivative is globally L₃-Lipschitz in operator norm. Only the initial Hessian is norm-bounded: ‖∇²f(x₀)‖≤H₀. Global gradient or Hessian Lipschitz bounds are not assumed. E, x₀, L₃, Δ, H₀ and ε are public; f is hidden. Parameters satisfy L₃>0, Δ>0, H₀≥0 and ε>0.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: Params, spec.Public, spec.publicInput, spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return one point x∈E satisfying ‖∇f(x)‖≤ε; the criterion uses the unsquared norm.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The returned point must satisfy the gradient-norm criterion almost surely under the joint algorithm and oracle seed law, within the separate fixed oracle budgets.",
+        "evidence": "LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established higher-order smooth nonconvex stationarity formulation with exact derivative information, an initial objective-gap bound, and separately counted first- and second-order evaluations."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.LazyQuarticHessianTradeoff.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LazyQuarticHessianTradeoff",
+          "theorem": "LongTails.Theorems.LazyQuarticHessianTradeoff.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

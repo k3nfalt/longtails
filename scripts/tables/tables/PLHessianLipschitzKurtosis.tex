@@ -1,0 +1,27 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PLHessianLipschitzKurtosis.lean}{PL\allowbreak{}Hessian\allowbreak{}Lipschitz\allowbreak{}Kurtosis}.}\label{tab:PLHessianLipschitzKurtosis}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f$ has an attained minimum, an $L$-Lipschitz gradient, a differentiable gradient with $\rho$-Lipschitz Hessian, and $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ globally. Here $0<\mu\le L$, $\rho,\sigma,\Delta\ge0$, $K\ge1$, $\varepsilon>0$, and $f(x_0)-f(x_\star)\le\Delta$. The jointly measurable oracle uses IID samples of law $P_0$, with $\int g(x,\omega)\,dP_0=\nabla f(x)$ and integrable central moments of orders two and four bounded by $\sigma^2$ and $K\sigma^4$. The setup requires constant-step SGD with a uniformly sampled final-window output $\widehat x$; the target is $\int(f(\widehat x)-f(x_\star))\,dP\le\varepsilon$, where $P$ is its execution law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/KappaFreeSgdPLHessian.lean}{Kappa\allowbreak{}Free\allowbreak{}Sgd\allowbreak{}PL\allowbreak{}Hessian} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/KappaFreeSgdPLHessian.md}{(review)} & $\mathcal{O}\!\left(\left[\kappa^{5/4}+\frac{K\kappa^{3/2}\sigma^2\rho^2}{\mu^4}+\frac{\sigma^2}{\mu\varepsilon}\right]\ell\right)$ & --- & --- \\
+\midrule[1.2pt]
+SGD \citep[Thm.~3, Cor.~2]{esnKhaled2020v3} & $\mathcal{O}\!\left(\kappa\left[1+\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right]+\frac{\kappa\sigma^2}{\mu\varepsilon}\right)$ & \textbf{(1)}: Statistical factor $\ell$ instead of $\kappa$. Total gain when $\ell\ll\kappa$, $\varepsilon\ell\ll\frac{\sigma^2}{\mu\kappa^{1/4}}$, and $\varepsilon\ell\ll\frac{\mu^3}{K\sqrt\kappa\rho^2}$ (omit the last restriction if $\rho=0$). & \textbf{(1)}: Adds Hessian regularity and kurtosis; worse $\kappa^{5/4}$ initialization and extra $\rho$-term. Random-window instead of last iterate; statistical advantage disappears for $\ell\gtrsim\kappa$. \\
+\midrule
+SGD \citep[Thm.~5]{plhkStich2019v2}\newline Strongly convex restriction & $\mathcal{O}\!\left(\kappa\left[1+\log\!\left(1+\frac{\kappa\Delta}{\varepsilon}\right)\right]+\frac{\sigma^2}{\mu\varepsilon}\right)$ & \textbf{(1)}: Scope extends from strong convexity to PL with possibly non-isolated minimizers. & \textbf{(1)}: On strongly convex overlap, worse initialization, extra $\rho$-term and statistical logarithm; needs $\rho,K$ in addition. \\
+\midrule
+Ruppert--Polyak \citep[Thm.~2]{plhkGadatPanloup2017v1}\newline Isolated-minimizer comparison & Derived bound: $\mathcal{O}\!\left(1+\frac{\operatorname{tr}\Sigma_\star}{\delta}+\left(\frac{C}{\delta}\right)^{4/5}\right)$ for mean squared distance $\le\delta$; $C$ non-explicit, steps $\gamma_n\propto n^{-3/4}$. & \textbf{(1)}: Allows non-isolated minimizers; explicit parameter dependence. Baseline requires coercivity, a unique critical point, $\nabla^2 f(x_\star)\succ0$, Lipschitz noise covariance and $L^4$ consistency. & \textbf{(1)}: Rates not comparable: distance criterion, non-explicit $C$, and different covariance/consistency assumptions. \\
+\midrule
+Lower bound \citep[Thm.~4.3, Rem.~4.6]{plhkMasiha2026v3}\newline Broader $C^{1,1}$ global-PL class & $\Omega\!\left(\frac{\kappa\sigma^2}{\mu\varepsilon}\right)$ for bounded-variance first-order oracles, $0<\varepsilon\le c\Delta$, $\sigma>0$. & \textbf{(1)}: Hessian-Lipschitz subclass excludes these hard instances; this lower bound does not apply to the target setup. & \textbf{(1)}: Whether either added assumption alone suffices remains open. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls. $\kappa=L/\mu$; $\ell=1+\log(1+\sqrt\kappa\Delta/\varepsilon)$. $\delta$ is the squared-distance tolerance; $\Sigma_\star=H^{-1}S(x_\star)H^{-1}$, $H=\nabla^2 f(x_\star)$, and $S$ is the noise covariance. $C$ is the distance bound's remainder constant; $c>0$ is universal. $C^{1,1}$ means Lipschitz gradient; PL means Polyak--\L{}ojasiewicz.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

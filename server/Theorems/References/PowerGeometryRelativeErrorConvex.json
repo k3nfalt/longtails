@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.PowerGeometryRelativeErrorConvex",
+  "searched_at": "2026-10-19T06:37:44.272056+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(\\frac{1536 \\cdot \\max\\left\\{ 1, \\frac{32^{\\frac{p - 2}{2}}}{c} \\right\\} \\cdot L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{p}{p + 2}} + \\frac{4224 \\cdot L \\cdot \\alpha^{2} \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.PowerGeometryRelativeErrorConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(1536 * max 1 (32 ^ ((q.data.p - 2) / 2) / q.data.c) * q.data.L * q.R ^ 2 / q.ε) ^ (q.data.p / (q.data.p + 2)) +\n        4224 * q.data.L * q.data.α ^ 2 * q.R ^ 2 / q.ε⌉₊ +\n    1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(\\frac{1536 \\cdot \\max\\left\\{ 1, \\frac{32^{\\frac{p - 2}{2}}}{c} \\right\\} \\cdot L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{p}{p + 2}} + \\frac{4224 \\cdot L \\cdot \\alpha^{2} \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.PowerGeometryRelativeErrorConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈(1536 * max 1 (32 ^ ((q.data.p - 2) / 2) / q.data.c) * q.data.L * q.R ^ 2 / q.ε) ^ (q.data.p / (q.data.p + 2)) +\n        4224 * q.data.L * q.data.α ^ 2 * q.R ^ 2 / q.ε⌉₊ +\n    1"
+        }
+      ],
+      "module": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration",
+      "namespace": "LongTails.Setups.PowerGeometryRelativeErrorConvex",
+      "setup": "LongTails.Setups.PowerGeometryRelativeErrorConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.PowerGeometryRelativeErrorConvex.spec\n  LongTails.Theorems.PowerGeometryRelativeErrorAcceleration.budget",
+      "theorem": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration",
+      "theorem": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ with globally L-Lipschitz derivative in the dual norm. A global minimizer x⋆ exists with ‖x⋆−x0‖≤R. No strong convexity is assumed.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "Each query x returns a continuous linear functional g satisfying ‖g−Df(x)‖≤α‖Df(x)‖ for every call index, seed, and query. Function values are not supplied. The budget counts individual derivative-oracle calls.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "relative_error",
+        "details": "The public error level satisfies 0≤α≤1/4. The error is bounded pointwise relative to the true derivative's dual norm; it need not be unbiased, independent, or identically distributed.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: Public.Valid and spec.admissible; LongTails/Template.lean: Oracle."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The norm need not arise from an inner product. For public p>2 and c>0, ψ(x)=‖x−x0‖²/2 is differentiable and satisfies Dψ(y,x)≥c‖y−x‖^p/(‖y−x0‖+‖x−x0‖)^(p−2) for all x,y, where Dψ(y,x)=ψ(y)−ψ(x)−Dψ(x)[y−x].",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: Public, Public.ψ, Public.Valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real normed vector space; no particular dimension or coordinate norm is prescribed.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: Public.finiteE, Public.normedE, Public.linearE."
+      },
+      {
+        "label": "other",
+        "details": "E, its geometry, L>0, α, p, c, and x0 are public. R≥0 and ε>0 determine the external oracle budget but are not supplied to makeAlgorithm. The objective and minimizer are hidden.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: Public, Params, spec.publicInput, spec.valid; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point x must satisfy f(x)−f(x⋆)≤ε for a global minimizer x⋆, after the prescribed fixed oracle budget.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: spec.Output and spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the product of the algorithm's seed law and the oracle's joint seed law; it is not merely an expectation bound.",
+        "evidence": "LongTails/Setups/PowerGeometryRelativeErrorConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines pointwise relative derivative errors with a specific power-type Bregman lower bound for the squared norm, and requires almost-sure objective accuracy under a fixed budget without exposing R or ε to the algorithm."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration",
+          "theorem": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

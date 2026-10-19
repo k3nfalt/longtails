@@ -1,0 +1,93 @@
+{
+  "setup": "LongTails.Setups.AffineVarianceMeanSquaredSmooth",
+  "searched_at": "2026-10-19T06:39:26.007631+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 16 + 131 \\cdot \\Gamma^{2} + 5 \\cdot \\Gamma^{4} + \\frac{516 \\cdot \\Lambda^{2}}{\\varepsilon^{2}} + \\frac{64 \\cdot \\left(L + Lbar\\right) \\cdot \\left(1 + 3 \\cdot \\Gamma\\right) \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{384 \\cdot \\left(L + Lbar\\right) \\cdot \\Lambda \\cdot \\Delta}{\\varepsilon^{3}} \\right\\rceil_{+} + 2",
+        "oracle": 0,
+        "type": "LongTails.Setups.AffineVarianceMeanSquaredSmooth.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈16 + 131 * q.Γ ^ 2 + 5 * q.Γ ^ 4 + 516 * q.Λ ^ 2 / q.ε ^ 2 + 64 * (q.L + q.Lbar) * (1 + 3 * q.Γ) * q.Δ / q.ε ^ 2 +\n        384 * (q.L + q.Lbar) * q.Λ * q.Δ / q.ε ^ 3⌉₊ +\n    2"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 16 + 131 \\cdot \\Gamma^{2} + 5 \\cdot \\Gamma^{4} + \\frac{516 \\cdot \\Lambda^{2}}{\\varepsilon^{2}} + \\frac{64 \\cdot \\left(L + Lbar\\right) \\cdot \\left(1 + 3 \\cdot \\Gamma\\right) \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{384 \\cdot \\left(L + Lbar\\right) \\cdot \\Lambda \\cdot \\Delta}{\\varepsilon^{3}} \\right\\rceil_{+} + 2",
+          "oracle": 0,
+          "type": "LongTails.Setups.AffineVarianceMeanSquaredSmooth.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈16 + 131 * q.Γ ^ 2 + 5 * q.Γ ^ 4 + 516 * q.Λ ^ 2 / q.ε ^ 2 + 64 * (q.L + q.Lbar) * (1 + 3 * q.Γ) * q.Δ / q.ε ^ 2 +\n        384 * (q.L + q.Lbar) * q.Λ * q.Δ / q.ε ^ 3⌉₊ +\n    2"
+        }
+      ],
+      "module": "LongTails.Theorems.RecursiveMomentumAffineVariance",
+      "namespace": "LongTails.Setups.AffineVarianceMeanSquaredSmooth",
+      "setup": "LongTails.Setups.AffineVarianceMeanSquaredSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AffineVarianceMeanSquaredSmooth.spec OracleTemplate.RecursiveMomentum.budget",
+      "theorem": "OracleTemplate.RecursiveMomentum.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RecursiveMomentumAffineVariance",
+      "theorem": "OracleTemplate.RecursiveMomentum.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on a second-countable real Hilbert space, permitting nonconvexity. The gradient is L-Lipschitz and f(x0) − inf f ≤ Δ; attainment of the infimum is not required.",
+        "evidence": "LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean: Params and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call queries two points (x,y) and returns (g(x,ω),g(y,ω)) using the same fresh sample. Samples are IID across calls, and E[g(x,ω)] = ∇f(x). One paired reply counts as one oracle call. The objective, sampling law, and oracle map are hidden; all Params, including L, Lbar, Γ, Λ, Δ, ε and x0, are public.",
+        "evidence": "LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean: spec.Public, publicInput, Query, Reply and admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Affine variance: E‖g(x,ω) − ∇f(x)‖² ≤ Γ²‖∇f(x)‖² + Λ². Mean-squared smoothness under shared sampling: E‖g(x,ω) − g(y,ω)‖² ≤ Lbar²‖x−y‖². These are second-moment conditions, not almost-sure error bounds or samplewise smoothness. The ambient Hilbert space need not be finite-dimensional. Parameters satisfy L>0, Lbar,Γ,Λ,Δ≥0 and ε>0.",
+        "evidence": "LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean: Params, spec.valid and the variance and gradient-difference clauses of spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return an E-valued measurable output X with integrable gradient norm satisfying E‖∇f(X)‖ ≤ ε. The criterion uses the unsquared norm and does not require the last iterate.",
+        "evidence": "LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the joint algorithm and oracle randomness. Oracle cost is bounded by the supplied deterministic budget, rather than only in expectation.",
+        "evidence": "LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean: spec.successful; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A smooth nonconvex stationarity variant combining gradient-dependent affine variance, shared-sample two-point oracle access, mean-squared smoothness, and potentially infinite-dimensional Hilbert geometry. This classification does not imply novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RecursiveMomentum.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RecursiveMomentumAffineVariance",
+          "theorem": "OracleTemplate.RecursiveMomentum.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

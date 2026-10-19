@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.MeanSquaredHolderNonconvex",
+  "searched_at": "2026-10-18T09:45:26.452551+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 800 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}}}{\\varepsilon^{3}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.MeanSquaredHolderNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈800 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n      (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Δ * q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹) / q.ε ^ 3)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 800 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}}}{\\varepsilon^{3}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.MeanSquaredHolderNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈800 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n      (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Δ * q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹) / q.ε ^ 3)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.DyadicVarianceReductionHolder",
+      "namespace": "LongTails.Setups.MeanSquaredHolderNonconvex",
+      "setup": "LongTails.Setups.MeanSquaredHolderNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MeanSquaredHolderNonconvex.spec OracleTemplate.DyadicHolder.budget",
+      "theorem": "OracleTemplate.DyadicHolder.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DyadicVarianceReductionHolder",
+      "theorem": "OracleTemplate.DyadicHolder.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives permitting nonconvexity, with globally L-Lipschitz gradient and f(x0) − inf f ≤ Δ. No minimizer attainment or convexity is required.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One query (x,y) returns (g(x,ξ),g(y,ξ)) using the same sample. Samples are independent and identically distributed across calls. Each gradient estimate is unbiased. The budget counts paired queries, with a fixed upper limit including initialization and batches. All Params are public; f, g and the sampling law are hidden.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: spec.Public, spec.publicInput, spec.Query, spec.Reply, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The shared-sample oracle satisfies E‖g(x,ξ) − g(y,ξ)‖² ≤ M‖x−y‖^(2ν) globally, where M ≥ 0 and 1/2 ≤ ν ≤ 1. Separately, the objective gradient is globally L-Lipschitz with L > 0. Samplewise Lipschitz continuity is not assumed.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform finite variance E‖g(x,ξ) − ∇f(x)‖² ≤ σ², with σ ≥ 0. No exponential-tail or almost-sure noise bound is imposed.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is a second-countable real Hilbert space with its Borel measurable structure; finite dimensionality is not required. Public parameters include L, M, ν, σ, Δ ≥ 0, ε > 0 and x0.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: Params, spec.Public, spec.publicInput and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a point X in E satisfying E‖∇f(X)‖ ≤ ε, using the unsquared norm. The output must be measurable and its gradient norm integrable; no particular iterate-selection rule is required.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee averages over both algorithm randomness and the IID oracle sequence, under their product probability law.",
+        "evidence": "LongTails/Setups/MeanSquaredHolderNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines a Lipschitz objective gradient with a separately specified mean-square Hölder paired oracle, allowing ν < 1, in a potentially infinite-dimensional Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.DyadicHolder.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DyadicVarianceReductionHolder",
+          "theorem": "OracleTemplate.DyadicHolder.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Optimization with Strong Growth}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. The initial point $x^0\in E$ is within distance $R\geq0$ of a global minimizer $x^\star$. An unbiased stochastic gradient $g$ has variance at most $\Gamma^2\|\nabla f(x)\|^2$ at each $x\in E$, where $\Gamma\geq0$, and is mean-square Lipschitz with constant $\bar{L}>0$. Each call at $(x,y)\in E^2$ returns $(g(x,\omega),g(y,\omega))$ using one shared sample $\omega$, independently drawn across calls. For $\varepsilon>0$, success requires a measurable output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, over all algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\]
+where $E$ carries its Borel $\sigma$-algebra and the norm induced by its inner product. Let $\Omega$ be a measurable sample space. The public inputs are $E$, $\Omega$, $x^0$, $\bar{L}$, $\Gamma$, $R$, and $\varepsilon$, with the ranges specified above. The objective is accessed through the oracle described below; its stochastic gradient map and sampling laws are not public inputs.
+
+\begin{assumption}[Convexity and initial distance]
+The function $f$ is differentiable everywhere on $E$, and for every $x,y\in E$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
+\]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) \qquad \text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiasedness and strong growth]
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $p$, the function $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^2$ is integrable under $p$, and
+\[
+\begin{aligned}
+\int_\Omega g(x,\omega)\,dp(\omega)
+&=\nabla f(x),\\
+\int_\Omega\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)
+&\leq\Gamma^2\|\nabla f(x)\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Mean-square smoothness]
+For every $x,y\in E$, the function $\omega\mapsto\|g(x,\omega)-g(y,\omega)\|^2$ is integrable under $p$ and satisfies
+\[
+\int_\Omega\|g(x,\omega)-g(y,\omega)\|^2\,dp(\omega)
+\leq\bar{L}^2\|x-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Independent sampling and paired access]
+Let $P$ be a probability measure on $\Omega^{\mathbb{N}}$. The coordinate samples $\xi_k:\Omega^{\mathbb{N}}\to\Omega$, indexed by $k\in\mathbb{N}$ starting at zero, are measurable and mutually independent under $P$, with
+\[
+P\circ\xi_k^{-1}=p \qquad \text{for every }k\in\mathbb{N}.
+\]
+At call $k$, the sole oracle, with ID $0$, accepts any pair $(x,y)\in E\times E$ and returns
+\[
+\bigl(g(x,\xi_k),\,g(y,\xi_k)\bigr).
+\]
+The two replies use the same sample, and the entire pair costs one oracle call. Queries may be chosen adaptively anywhere in $E\times E$. Any internal algorithm randomness is independent of the complete sample sequence.
+\end{assumption}
+
+For an externally specified budget $K\in\mathbb{N}$, the algorithm uses at most $K$ paired oracle calls and returns $\bar{x}\in E$. Both the algorithm and the budget may depend on the full public parameter tuple. Writing $\mathbb{P}$ for the joint law of the independent algorithm and oracle randomness, the output must be measurable, and its objective gap must satisfy
+\[
+\begin{aligned}
+&\int \bigl|f(\bar{x})-f(x^\star)\bigr|\,d\mathbb{P}<\infty,\\
+&\int \bigl(f(\bar{x})-f(x^\star)\bigr)\,d\mathbb{P}\leq\varepsilon.
+\end{aligned}
+\]
+Here $x^\star$ is a global minimizer; the minimizer witnessing the initial distance bound may be used because all global minimizers have the same objective value.
+\end{document}

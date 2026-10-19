@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.MixedRelativeSmoothNonconvex",
+  "searched_at": "2026-10-19T06:38:20.360838+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & 2 \\cdot L \\cdot \\Delta \\leq \\varepsilon^{2} \\\\ 16777216 \\cdot \\left\\lceil 1 + \\frac{\\left(1 + r\\right) \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + \\min\\left\\{ \\frac{M \\cdot \\sigma \\cdot \\Delta}{\\varepsilon^{3}}, \\frac{L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}} \\right\\} \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "oracle": 0,
+        "type": "LongTails.Setups.MixedRelativeSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  if 2 * q.L * q.Δ ≤ q.ε ^ 2 then 0\n  else\n    16777216 *\n      ⌈1 + (1 + q.r) * q.L * q.Δ / q.ε ^ 2 + q.σ ^ 2 / q.ε ^ 2 +\n          min (q.M * q.σ * q.Δ / q.ε ^ 3) (q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & 2 \\cdot L \\cdot \\Delta \\leq \\varepsilon^{2} \\\\ 16777216 \\cdot \\left\\lceil 1 + \\frac{\\left(1 + r\\right) \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + \\min\\left\\{ \\frac{M \\cdot \\sigma \\cdot \\Delta}{\\varepsilon^{3}}, \\frac{L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}} \\right\\} \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "oracle": 0,
+          "type": "LongTails.Setups.MixedRelativeSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  if 2 * q.L * q.Δ ≤ q.ε ^ 2 then 0\n  else\n    16777216 *\n      ⌈1 + (1 + q.r) * q.L * q.Δ / q.ε ^ 2 + q.σ ^ 2 / q.ε ^ 2 +\n          min (q.M * q.σ * q.Δ / q.ε ^ 3) (q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.MixedRelativeSmoothNonconvex",
+      "namespace": "LongTails.Setups.MixedRelativeSmoothNonconvex",
+      "setup": "LongTails.Setups.MixedRelativeSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MixedRelativeSmoothNonconvex.spec\n  OracleTemplate.MixedRelativeSmoothNonconvex.budget",
+      "theorem": "OracleTemplate.MixedRelativeSmoothNonconvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MixedRelativeSmoothNonconvex",
+      "theorem": "OracleTemplate.MixedRelativeSmoothNonconvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on a second-countable real Hilbert space E, with globally L-Lipschitz gradient and f(x0) − inf f ≤ Δ. Convexity and attainment of the infimum are not required. Parameters satisfy L > 0, M,r,σ,Δ ≥ 0, and ε > 0.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: Params; spec.valid; spec.admissible gradient-Lipschitz and initial-gap clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Jointly measurable oracle g(x,ω) with Eω[g(x,ω)] = ∇f(x). Calls 2j and 2j+1 share the same hidden sample ωj; different pairs use independent identically distributed samples. Each point evaluation counts as one oracle call. The oracle returns only a vector, without function values or sample identities.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: spec.Query, spec.Reply, and spec.admissible oracle law P.map (fun ξ k => ξ (k / 2)); LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: execute and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The centered oracle noise satisfies E‖e(x,ω) − e(y,ω)‖² ≤ r(‖∇f(x)‖² + ‖∇f(y)‖²) + M²‖x−y‖² for every x,y using the same sample. The gradient-dependent terms are not multiplied by ‖x−y‖². This condition concerns noise differences; the objective itself has ordinary global L-smoothness.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: spec.admissible final noise-difference inequality and gradient-Lipschitz clause."
+      },
+      {
+        "label": "relative_error",
+        "details": "Writing e(x,ω) = g(x,ω) − ∇f(x), the finite second moment satisfies E‖e(x,ω)‖² ≤ r‖∇f(x)‖² + σ². This is an unbiased mixed relative/additive variance bound, not an almost-sure relative-error bound or a uniform variance bound when r > 0.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: spec.admissible unbiasedness, squared-error integrability, and variance clauses."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space can be infinite-dimensional. Oracle dependence consists of prescribed consecutive sample pairs, with independence across pairs. All Params, including L,M,r,σ,Δ,ε,x0, are public; f, g, and the sampling distributions are hidden. The oracle budget is a fixed cap, not an expected cost.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: Params, spec.Public, spec.publicInput, and spec.admissible; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return one measurable E-valued output X with integrable gradient norm and E‖∇f(X)‖ ≤ ε. The criterion uses the first power of the norm; the output need not be the final iterate.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the joint law of the algorithm's random seed and the paired oracle sample stream. No high-probability or almost-sure accuracy guarantee is required.",
+        "evidence": "LongTails/Setups/MixedRelativeSmoothNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The standard smooth nonconvex stationarity objective is combined with a distinctive centered-noise difference inequality, mixed relative/additive variance, and prescribed paired-sample access in a potentially infinite-dimensional Hilbert space. Repository implementations and proofs were not inspected; no qualifying reference was verified, which does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.MixedRelativeSmoothNonconvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MixedRelativeSmoothNonconvex",
+          "theorem": "OracleTemplate.MixedRelativeSmoothNonconvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

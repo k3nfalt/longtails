@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Strong-growth, mean-squared smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean}{Strong\allowbreak{}Growth\allowbreak{}Mean\allowbreak{}Squared\allowbreak{}Smooth\allowbreak{}Convex}.}\label{tab:StrongGrowthMeanSquaredSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$ on a second-countable real Hilbert space with its Borel structure; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. Known $\bar L>0$, $\Gamma,R\ge0$, $\varepsilon>0$. The jointly measurable oracle, with the required integrability, satisfies $\int g(x,\omega)\,dp=\nabla f(x)$, $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp\le\Gamma^2\|\nabla f(x)\|^2$, and $\int\|g(x,\omega)-g(y,\omega)\|^2\,dp\le\bar L^2\|x-y\|^2$. Each query returns two evaluations on one fresh IID sample with law $p$; $P$ is the sampling law. Target: measurable output $Y$ with integrable gap and $\int[f(Y)-f(x_\star)]\,dP\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ProximalStormStrongGrowth.lean}{Proximal\allowbreak{}Storm\allowbreak{}Strong\allowbreak{}Growth} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ProximalStormStrongGrowth.md}{(review)}
+& $\mathcal{O}\!\left(\ell(1+\Gamma)^{3/2}\sqrt{\frac{\bar L R^2}{\varepsilon}}\right.$\newline $\left.{}+\ell(1+\Gamma)^2\right)$ pair calls, including batching and warm-up
+& --- & --- \\
+\midrule[1.2pt]
+Accelerated SGD \citep[Thm.~2]{sgmssVaswani2019}; AGNES \citep[Thm.~3]{sgmssGupta2024v3}
+& $\mathcal{O}\!\left(1+(1+\Gamma^2)\sqrt{\frac{LR^2}{\varepsilon}}\right)$ single-point calls; $L=\bar L$ is valid tuning
+& \textbf{(1)}: $\Gamma^{3/2}\ell\sqrt{\bar L}$ instead of $\Gamma^2\sqrt L$ for large $\Gamma$; total gain when $\bar L\ll\Gamma L/\ell^2$, $\varepsilon\ll LR^2/\ell^2$. With $\bar L$ tuning: factor $\sqrt\Gamma/\ell$ when $\varepsilon\lesssim\bar L R^2/\Gamma$.
+& \textbf{(1)}: needs MSS and same-sample pairs; additive $(1+\Gamma)^2\ell$ cost. Loses a logarithm when $\bar L\asymp\Gamma L$; no uniform dominance. \\
+\midrule
+ASGD \citep[Thm.~1, Cor.~2]{sgmssJain2018}\newline Special case: realizable least squares in $\mathbb{R}^d$, $H\succ0$, finite fourth moments
+& $\mathcal{O}\!\left(\sqrt{\kappa\widetilde\kappa}\left[1+\log\!\left(d\kappa\widetilde\kappa\left(1+\frac{LR^2}{\varepsilon}\right)\right)\right]\right)$ single-point calls
+& \textbf{(1)}: Scope: convex nonquadratic objectives without strong convexity or a PL condition.
+& \textbf{(1)}: $\varepsilon^{-1/2}$ instead of logarithmic accuracy dependence on this overlap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+\Gamma)$; MSS: mean-squared smoothness; $L\le\bar L$: gradient Lipschitz constant; PL: Polyak--\L{}ojasiewicz. A pair call evaluates two stochastic gradients on the same sample, so primitive evaluation counts differ by at most two. For least squares, $f(x)=\tfrac12\mathbb{E}(a^\top x-b)^2$, $b=a^\top x_\star$ almost surely, $H=\mathbb{E} aa^\top=\nabla^2 f$, $L=\lambda_{\max}(H)$, $\mu=\lambda_{\min}(H)$, $\kappa=M/\mu$, where $M$ is the least constant satisfying $\mathbb{E}[\|a\|^2aa^\top]\preceq MH$; $\widetilde\kappa$ is the least constant satisfying $\mathbb{E}[\|a\|_{H^{-1}}^2aa^\top]\preceq\widetilde\kappa H$; $d=\dim E$. Costs count all oracle calls for the expected objective-gap target.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

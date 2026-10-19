@@ -71,6 +71,8 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``Nat.sqrt => return .ofString ("\\left\\lfloor\\sqrt{" ++
       (← latexPP args.back!).latex.1 ++ "}\\right\\rfloor")
+  | ``Nat.log2 => return .ofString ("\\operatorname{log2}\\left(" ++
+      (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``Finset.sum =>
     guard (args[args.size - 2]!.getAppFn.constName! == ``Finset.univ)
     let fn ← ensureLam args.back! none
@@ -100,7 +102,9 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       let parentName := parameter.getAppFn.constName!
       let some parent ← getProjectionFnInfo? parentName | failure
       guard ((getStructureParentInfo (← getEnv) parent.ctorName.getPrefix).any
-        (fun info => info.projFn == parentName))
+        (fun info => info.projFn == parentName) ||
+        (parent.ctorName.getPrefix.getString! == "Params" &&
+          (← inferType parameter).getAppFn.constName! == structName))
       parameter := parameter.getAppArgs[parent.numParams]!
     let mut result := symbol name.getString!
     for arg in args.toList.drop (projection.numParams + 1) do

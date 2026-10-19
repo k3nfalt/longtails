@@ -1,0 +1,39 @@
+\begin{table}[tp]
+\centering
+\caption{Quantile-controlled stochastic convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuantileSymmetricRemainderConvex.lean}{Quantile\allowbreak{}Symmetric\allowbreak{}Remainder\allowbreak{}Convex}.}\label{tab:QuantileSymmetricRemainderConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:\mathbb{R}^d\to\mathbb{R}$ has $L$-Lipschitz gradient and a minimizer $x_\star$ with $\|x_0-x_\star\|\le R$. The jointly measurable gradient oracle uses IID samples. Each noise-coordinate law, at every query, is $S+A$: $S,A$ are nonnegative measures, $S$ is reflection-symmetric, $\int z\,dA=0$, $\int |z|\,dA<\infty$, $\int z^2\,dA\le M$, and $\Pr(|z|>r)\le1/64$. Here $d\ge1$, $L,R,r,\varepsilon>0$, $M\ge0$. Target: measurable output with integrable gap and $\int[f(\mathrm{output}(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuantileRemainderMinimaxConvex.lean}{Quantile\allowbreak{}Remainder\allowbreak{}Minimax\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuantileRemainderMinimaxConvex.md}{(review)} &
+$\mathcal{O}\!\left(\left[1+\sqrt{\frac{LR^2}{\varepsilon}}\right.\right.$\newline
+$\left.\left.{}+\frac{dR^2(LR+r)^2}{\varepsilon^2}+\frac{d^2M^2R^4}{\varepsilon^4}\right]\ell_q\right)$ & --- & --- \\
+\midrule[1.2pt]
+Clipped-SSTM + SMoM \citep[Cor.~5.8, Lem.~4.5, Eq.~(117)]{qsrcPuchkin2024v2}\newline Derived bound; density subclass &
+$\mathcal{O}\!\left(\left[1+M+\frac{H\sqrt d\,MR}{\varepsilon}\right]\right.$\newline
+$\left.{}\cdot\left[1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{dH^2R^2}{\varepsilon^2}\right]\ell_H\right)$\newline
+$\theta=1$; probability $1-\delta$. &
+\textbf{(1)}: Scope: quantile only; permits atoms and symmetric noise without positive moments. Baseline additionally requires a density with $s^{*k}(u)\le Bk/(k^{(\beta+1)/\beta}+|u|^{1+\beta})$, $\beta\ge1$. &
+\textbf{(1)}: Expected accuracy only. On overlap, fixed $B,\beta$, small $\varepsilon$, $M>0$: $d^2M^2R^4/\varepsilon^4$ versus $d^{3/2}MR^3/\varepsilon^3$, up to logs; ratio $\sqrt d\,MR/\varepsilon$. \\
+\midrule
+Clipped-SSTM + median \citep[Prop.~4.1, Thm.~5.7, Eqs.~(18), (117)]{qsrcPuchkin2024v2}\newline Derived bound; $M=0$ &
+$\mathcal{O}\!\left(m\left[1+\sqrt{\frac{LR^2}{\varepsilon}}\right.\right.$\newline
+$\left.\left.{}+\frac{dmVR^2}{\varepsilon^2}\right]\ell_V\right)$\newline Probability $1-\delta$. &
+\textbf{(1)}: Scope: no density or polynomial-tail requirement. Baseline requires symmetric coordinate densities $p(u)\le B/(1\vee|u|^{1+\beta})$, $\beta>0$. Matches $\varepsilon^{-2}$ order, up to logs. &
+\textbf{(1)}: Expected accuracy only; $(LR+r)^2$ noise scale includes an extra $L^2R^2$ term. Extra accuracy logarithm at fixed confidence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count raw vector-gradient calls, including all batch samples; SMoM: smoothed median of means. $\ell_q=1+\log(1+\sqrt d\,R(LR+r)/\varepsilon+dMR^2/\varepsilon^2)$.
+$B,\beta$ are uniform coordinate-tail parameters; $s(u)=(p(u)+p(-u))/2$; $s^{*k}$ is its $k$-fold convolution.
+$H=1+(B/\beta)^{1/\beta}+B^{1/(\beta+1)}$, $m=1+\lceil3/\beta\rceil$, $V=(1\vee(4B/\beta))^{2/\beta}$.
+$\ell_H=1+\log((1+\sqrt{LR^2/\varepsilon}+dH^2R^2/\varepsilon^2)/\delta)$;
+$\ell_V=1+\log((1+\sqrt{LR^2/\varepsilon}+dmVR^2/\varepsilon^2)/\delta)$; $0<\delta<1$ is the failure probability.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

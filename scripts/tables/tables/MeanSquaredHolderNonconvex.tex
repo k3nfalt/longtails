@@ -1,0 +1,43 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MeanSquaredHolderNonconvex.lean}{Mean\allowbreak{}Squared\allowbreak{}Holder\allowbreak{}Nonconvex}.}\label{tab:MeanSquaredHolderNonconvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space $E$ with its Borel structure, $f$ is differentiable, $\nabla f$ is $L$-Lipschitz, and $f(x_0)-f(x)\le\Delta$ for every $x$. The jointly measurable oracle $g$ has IID samples with marginal law $p$ and joint law $P$, with $\int g(x,\omega)\,dp=\nabla f(x)$, $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp\le\sigma^2$, and $\int\|g(x,\omega)-g(y,\omega)\|^2\,dp\le M\|x-y\|^{2\nu}$, with these integrands integrable. Here $L,\varepsilon>0$, $M,\sigma,\Delta\ge0$, and $\nu\in[1/2,1]$. Each pair query evaluates two points using the same sample. Target: $\int\|\nabla f(x_{\mathrm{out}})\|\,dP\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DyadicVarianceReductionHolder.lean}{Dyadic\allowbreak{}Variance\allowbreak{}Reduction\allowbreak{}Holder} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DyadicVarianceReductionHolder.md}{(review)}
+& $\mathcal{O}\!\left(\ell^2\left[1+\frac{L\Delta+\sigma^2}{\varepsilon^2}\right.\right.$\newline
+$\left.\left.{}+\frac{\Delta M^{1/(2\nu)}\sigma^{2-1/\nu}}{\varepsilon^3}\right]\right)$ pair calls
+& --- & --- \\
+\midrule[1.2pt]
+SGD \citep[Cor.~2.2]{mshGhadimiLan2013v1}\newline $E=\mathbb{R}^d$
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$ single-point calls
+& \textbf{(1)}: leading stochastic term smaller by $\frac{L\sigma^{1/\nu}}{\ell^2 M^{1/(2\nu)}\varepsilon}$ when this exceeds one; no uniform total-cost gain.
+& \textbf{(1)}: needs paired access, H\"older regularity and $M,\nu$; extra $\ell^2$ and $\sigma^2/\varepsilon^2$ terms. Worse if $M^{1/(2\nu)}\varepsilon\gtrsim L\sigma^{1/\nu}$. \\
+\midrule
+SPIDER \citep[Thm.~1]{esnFang2018v2}\newline Special case: $E=\mathbb{R}^d$, $\nu=1$, $L=\sqrt M$, $\sigma\ge\varepsilon$
+& $\mathcal{O}\!\left(1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{\Delta\sqrt M\sigma}{\varepsilon^3}\right)$ gradient evaluations
+& \textbf{(1)}: Scope: permits $\nu<1$, including kinked sample losses under suitable density bounds.
+& \textbf{(1)}: extra $\ell^2$ on the stated common setup. \\
+\midrule
+SPIDER recursion \citep{esnFang2018v2}\newline Derived bound under H\"older regularity; $E=\mathbb{R}^d$
+& $\mathcal{O}\!\left(1+\frac{L\Delta+\sigma^2}{\varepsilon^2}\right.$\newline
+$\left.{}+\frac{\Delta\sigma\sqrt M L^{1-\nu}}{\varepsilon^{4-\nu}}\right)$ pair calls
+& \textbf{(1)}: leading-term gain when $\left(\frac{L\sigma^{1/\nu}}{M^{1/(2\nu)}\varepsilon}\right)^{1-\nu}\gg\ell^2$; at $\nu=1/2$, $\varepsilon^{-3}$ instead of $\varepsilon^{-7/2}$, up to $\ell^2$.
+& \textbf{(1)}: extra $\ell^2$; same paired oracle; no uniform dominance. \\
+\midrule
+NSGD-MVR \citep[Thm.~4.1, $p=2,q=1$]{mshFradin2026v2}\newline Overlap: $E=\mathbb{R}^d$, also 1-WAS
+& $\mathcal{O}\!\left(1+\frac{\sigma^2+\bar L\Delta}{\varepsilon^2}+\frac{\bar L\Delta\sigma^2}{\varepsilon^4}\right)$ gradient evaluations
+& \textbf{(1)}: on ramp instances, $\nu=1/2$, $\bar L=2\kappa R^2$, $M=2\kappa R^3$, $\sigma\asymp R$: leading-term gain $R/(\ell^2\varepsilon)$ when $R\gg\ell^2\varepsilon$.
+& \textbf{(1)}: H\"older and 1-WAS classes are incomparable; rate comparison only on their intersection. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+L\Delta/\varepsilon^2)$; $\Delta$ is the initial objective-gap bound; $\sigma^2$ is the variance bound; $M,\nu$ are the mean-squared H\"older parameters. 1-WAS means $\int\|g(x,\omega)-g(y,\omega)\|\,dp\le\bar L\|x-y\|$, with $\bar L\ge L$. $R,\kappa>0$ parameterize the ramp example through $\bar L=2\kappa R^2$ and $M=2\kappa R^3$. Pair calls cost at most two primitive gradient evaluations; all bounds include batches. Powers use $0^0=1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
