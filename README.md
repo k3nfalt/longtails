@@ -7,7 +7,7 @@ More than 25 new results so far—and more to come.</h3>
 
 ## Preliminaries: Setup and Complexity
 
-LongTails is a framework for **automatic research in numerical mathematics and optimization**.
+LongTails is a framework for **automatic research in computational mathematics and optimization**.
 Before presenting it, let's explain a typical protocol in mathematical optimization using the following example.
 
 **Setup.** We want to minimize
@@ -165,7 +165,7 @@ If you use LongTails in your research, please cite:
 ```bibtex
 @misc{longtails2026,
   author = {Tyurin, Alexander and Pham, QuocViet and Khrulkov, Valentin and Oseledets, Ivan},
-  title = {{LongTails}: Automated Research in Numerical Mathematics},
+  title = {{LongTails}: Automated Research in Computational Mathematics},
   year = {2026}
 }
 ```
