@@ -1,13 +1,13 @@
 <h1 align="center"><img src="server/wordmark.svg" width="227" height="60" align="middle" alt="LongTails"> <img src="server/logo.png" width="100" height="100" align="middle" alt="LongTails logo"></h1>
 
-<h3 align="center">Discovering new results in computational mathematics.<br>
+<h3 align="center">Discovering new results in mathematical optimization.<br>
 More than 25 new results so far—and more to come.</h3>
 
 <p align="center"><a href="https://k3nfalt.github.io/longtails/"><strong>Explore the results on our website →</strong></a></p>
 
 ## Preliminaries: Setup and Complexity
 
-LongTails is a framework for **automatic research in computational mathematics and optimization**.
+LongTails is a framework for **automatic research in numerical mathematics and optimization**.
 Before presenting it, let's explain a typical protocol in mathematical optimization using the following example.
 
 **Setup.** We want to minimize
@@ -165,7 +165,7 @@ If you use LongTails in your research, please cite:
 ```bibtex
 @misc{longtails2026,
   author = {Tyurin, Alexander and Pham, QuocViet and Khrulkov, Valentin and Oseledets, Ivan},
-  title = {{LongTails}: Automated Research in Computational Mathematics},
+  title = {{LongTails}: Automated Research in Optimization},
   year = {2026}
 }
 ```
