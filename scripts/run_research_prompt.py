@@ -33,6 +33,12 @@ def main(argv=None):
         default=[],
         help="Keywords or phrases to guide research (quote multi-word phrases)",
     )
+    parser.add_argument(
+        "--requirements",
+        nargs="+",
+        default=[],
+        help="Mandatory research direction requirements (quote multi-word requirements)",
+    )
     argv = list(sys.argv[1:] if argv is None else argv)
     split = argv.index("--") if "--" in argv else len(argv)
     args = parser.parse_args(argv[:split])
@@ -61,6 +67,28 @@ def main(argv=None):
             "Both agents must independently verify novelty and feasibility; "
             "all research, review, formalization, and delivery requirements still apply.\n"
             + "\n".join(f"- {direction}" for direction in args.research_direction)
+            + "\n"
+        )
+    if args.requirements:
+        prompt += (
+            "\n\nStrict research direction requirements\n\n"
+            "Every requirement below is mandatory, not an optional keyword or preference. "
+            "The chosen problem, algorithm, and final theorem must satisfy all supplied "
+            "requirements together. Preserve any specified algorithm family, assumptions, "
+            "oracle model, and accuracy criterion. These scope constraints take precedence "
+            "over general candidate-selection preferences, proposal guidance, and permission "
+            "to pivot elsewhere in this task. Refinements and pivots must remain within scope; "
+            "do not silently relax, replace, or drop a requirement to obtain a result. "
+            "Give the Reviewer these requirements unchanged. Both agents must independently "
+            "check scope compliance during candidate selection and final review, and the "
+            "contribution note must explain how the final result meets each requirement. "
+            "An out-of-scope result cannot be approved or submitted. If requirements are "
+            "ambiguous or incompatible, request clarification; if changing scope is necessary, "
+            "report the evidence and obtain explicit user authorization before doing so. "
+            "Difficulty or failed candidates alone do not authorize changing scope. "
+            "Both agents must independently verify novelty and feasibility; "
+            "all research, review, formalization, and delivery requirements still apply.\n"
+            + "\n".join(f"- {requirement}" for requirement in args.requirements)
             + "\n"
         )
     if args.proposal is not None:
@@ -107,7 +135,7 @@ def main(argv=None):
             "substantively novel optimization result with exactly two agents, obtain the "
             "independent Reviewer's acceptance recommendation, formalize all required Lean "
             "deliverables and the companion contribution note, pass the required build and "
-            "axiom checks, submit the approved research commit through an agent/* draft PR, "
+            "axiom checks, submit the approved research commit through an agent/* ready-for-review PR, "
             "verify that the PR contains the approved commit, report its URL, and stop. "
             "Do not dispatch or monitor workflows or automatically modify failed PRs. "
             "Surface the independent review, local verification, and PR evidence in the conversation."

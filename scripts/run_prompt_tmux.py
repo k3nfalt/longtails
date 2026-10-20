@@ -17,6 +17,7 @@ def main(argv=None):
   proposals: --keywords WORD [WORD ...] (quote multi-word phrases)
   research:  [PROPOSAL.md] [--direction {1,2,3,4,5}]
              [--research-direction WORD [WORD ...]] (quote multi-word phrases)
+             [--requirements TEXT [TEXT ...]] (mandatory; quote each requirement)
              --direction requires a proposal file.
   Put extra agent arguments after --.
 
