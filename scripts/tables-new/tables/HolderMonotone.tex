@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Residual complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HolderMonotone.lean}{HolderMonotone}.}\label{tab:HolderMonotone}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is monotone and $\|F(x)-F(y)\|\le L\|x-y\|+H\|x-y\|^\alpha$, with $L,H\ge0$, $0<\alpha\le1$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$; $0<r_0\le R$ and $\varepsilon>0$. The oracle returns exact $F(x)$. Target: $\|F(\hat x)\|\le\varepsilon$. Result \textbf{(1)} constructs regularized extragradient with stopped output, using only $x_0,r_0,\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/UniversalHolderMonotone.lean}{Universal\allowbreak Holder\allowbreak Monotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/UniversalHolderMonotone.md}{(review)} & $\mathcal{O}\!\left((Q+\log(R/r_0))\right.$\newline $\left.\qquad\cdot[1+\log(QR/r_0)]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} PolyakEG-LS \citep[Thm.~3.4, Prop.~3.5(b)]{holderYoon2026v1}; pure H\"older, $L=0$, $0<\alpha<1$ & $\mathcal{O}\!\left(1+(2HR^\alpha/\varepsilon)^{2/\alpha}\right.$\newline $\left.\quad +(\lambda R/\varepsilon)^2+\log_+\!\frac{(2H)^{1/\alpha}}{\lambda\varepsilon^{(1-\alpha)/\alpha}}\right)$ & \textbf{(1)}: extends to mixed continuity. For $\alpha=\tfrac12$, $H=R=r_0=1$, fixed $\lambda$: $\mathcal{O}(\varepsilon^{-4})$ becomes $\mathcal{O}(\varepsilon^{-2}\log(1/\varepsilon))$ as $\varepsilon\downarrow0$. Parameter-free tuning is matched. & \\
+\midrule
+\textbf{(3)} PolyakEG-LS \citep[Thm.~3.4, Prop.~3.5(a)]{holderYoon2026v1}; Lipschitz, $H=0$ & $\mathcal{O}\!\left(1+\frac{\max\{L,\lambda\}^2R^2}{\varepsilon^2}\right.$\newline $\left.\qquad+\log_+(L/\lambda)\right)$ & \textbf{(1)}: for fixed $L,R,r_0,\lambda>0$, $\mathcal{O}(\varepsilon^{-2})$ becomes $\mathcal{O}(\varepsilon^{-1}\log(1/\varepsilon))$ as $\varepsilon\downarrow0$. & \\
+\midrule
+\textbf{(4)} Composite FEG \citep[Thm.~2]{holderZhang2026v1}; comparison at $G=0$, $N=1$, $L=0$, $\alpha>1/3$ & $\mathcal{O}\!\left(\left[\frac{1+(1-\alpha)\log(1/\varepsilon)}{\varepsilon^2}\right]^{\!1/(3\alpha-1)}\right)$\newline As $\varepsilon\downarrow0$, fixed $H,R,\alpha$; their dependence is not explicit in the stated bound. & \textbf{(1)}: exponent $1/\alpha$ instead of $2/(3\alpha-1)$ for $1/3<\alpha<1$; also covers $\alpha\le1/3$. No knowledge of $H,\alpha$. & \textbf{(1)}: stopped instead of last iterate; extra logarithm at $\alpha=1$. Does not cover general maximal-monotone inclusions or infinite-dimensional spaces. \\
+\midrule
+\textbf{(5)} Tseng splitting \citep[Thm.~1]{holderZhang2026v1}; comparison at $G=0$, $N=1$, $L=0$ & $\mathcal{O}\!\left(\left[\frac{1+(1-\alpha)\log(1/\varepsilon)}{\varepsilon^2}\right]^{\!1/\alpha}\right)$\newline As $\varepsilon\downarrow0$, fixed $H,R,\alpha$; their dependence is not explicit in the stated bound. & \textbf{(1)}: exponent $1/\alpha$ instead of $2/\alpha$, up to logarithms, for fixed $H,R,r_0,\alpha$; no knowledge of $H,\alpha$. & \textbf{(1)}: does not cover general maximal-monotone inclusions or infinite-dimensional spaces. \\
+\midrule
+\textbf{(6)} Anchored EG \citep[Cor.~2, Sec.~2.3]{yoon2021adjoint}; Lipschitz, $H=0$ & $\mathcal{O}(1+LR/\varepsilon)$ & \textbf{(1)}: no knowledge of $L$; extends to mixed Lipschitz-plus-H\"older continuity. & \textbf{(1)}: extra logarithmic factor on the Lipschitz restriction; stopped instead of last iterate. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $Q=1+LR/\varepsilon+(8HR^\alpha/\varepsilon)^{1/\alpha}$; $\log_+t=\max\{0,\log t\}$. Costs count all evaluations of $F$, including rejected trials. In \textbf{(2)}, \textbf{(3)}, $\lambda>0$ is the initial inverse-step guess, with fixed line-search settings $A=1/2$, $\beta=3$, $\nu_A=1/3$ and $\lambda_{-1}^1=0$. In \textbf{(4)}, \textbf{(5)}, $G$ is the set-valued part and $N$ the number of H\"older summands; $G=0$ makes its resolvent the identity.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

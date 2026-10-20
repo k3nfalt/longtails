@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{High-probability plain SGD under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedPL.lean}{HeavyTailedPL setup}.}\label{tab:HeavyTailedPL}
+\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel $\sigma$-algebra, $f$ is differentiable, bounded below, globally $L$-smooth and satisfies $2\mu(f(x)-\inf f)\leq\|\nabla f(x)\|^2$, with $0<\mu\leq L$ and $f(x_0)-\inf f\leq\Delta$. A jointly measurable unbiased oracle uses IID samples and has uniformly bounded central moments $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\leq\sigma^2$ and $\mathbb E\|g(x,\xi)-\nabla f(x)\|^q\leq\nu^q$, where $\sigma,\nu>0$, $q>2$. The setup requires positive deterministic-step plain SGD with last-iterate output. Target: $P\{f(x_T)-\inf f>\varepsilon\}\leq\delta$, $\varepsilon>0$, $0<\delta<1$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HeavyTailedPLLastIterate.lean}{Heavy\allowbreak Tailed\allowbreak PL\allowbreak Last\allowbreak Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HeavyTailedPLLastIterate.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(1+\kappa\sqrt{\frac{\Delta}{\varepsilon}}+\frac{\sigma^2(\kappa+\ell)}{\mu\varepsilon}+B\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Clipped SGD \citep[Thm.~E.4, $\alpha=2$]{htplSadiev2023v2}
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+\kappa d\log(e\kappa d/\delta)\\&+Nh\bigl[1+\log_+(\Delta/(\varepsilon h))\bigr]^2\end{aligned}\right)$\par Finite-dimensional PL; only local finite variance and smoothness are needed.
+& \textbf{(1)}: Steps need only $L,\mu$, not $\Delta,\sigma,T,\delta$; stopping still needs all setup parameters. Rate: fixed $\kappa,\delta,q,\nu/\sigma$, $\varepsilon\to0$: $\mathcal{O}(\varepsilon^{-1})$ versus $\mathcal{O}(\varepsilon^{-1}\log^3(1/\varepsilon))$; requires $\varepsilon\lesssim\sigma^4/(\mu^2\Delta)$ and $B\lesssim N$.
+& \textbf{(1)}: Needs global assumptions and an extra $q>2$ moment; excludes infinite variance. Initialization $\sqrt{\Delta/\varepsilon}$ replaces logarithmic dependence; polynomial-confidence burn-in can dominate. \\
+\midrule
+\textbf{(3)} SGD \citep[Thm.~8]{htplMadden2024}
+& $\displaystyle\mathcal{O}\!\left(1+\kappa\sqrt{\frac{\Delta\ell}{\varepsilon}}+\frac{\kappa\sigma^2\ell}{\mu\varepsilon}\right)$\par Special case: finite-dimensional, conditionally norm-sub-Gaussian noise of scale $\sigma$; initialization retained.
+& \textbf{(1)}: Scope: polynomial tails allowed. On the uniform IID sub-Gaussian overlap, $q=2+2\ell$, $\nu\lesssim\sigma\sqrt q$: noise factor $\kappa\ell\to\kappa+\ell$. Total gain requires $\varepsilon\lesssim\sigma^2/(\mu\kappa^{1+2/\ell}\ell)$ and $\varepsilon\lesssim\sigma^4\ell^2/(\mu^2\Delta)$. Updates already need only $L,\mu$.
+& \textbf{(1)}: Requires IID sampling and uniform-in-$x$ moments instead of adapted martingale noise; adds $B$. \\
+\midrule
+\textbf{(4)} SGD \citep[Thm.~3.7, v1]{htplTong2026v1}
+& $\displaystyle T=\mathcal{O}\!\left(1+\frac{e^{2[\log(T/\delta)]^{1/\beta}}\sqrt{\log T\,\ell}}{\varepsilon}\right)$\par Implicit, $T\geq2$; finite-data empirical risk, component smoothness, conditional $\beta$-Orlicz noise, $\beta>1$, and $\eta_t\|\nabla f(x_t)\|\leq G$. Constants depend on smoothness, initial gap, PL, Orlicz scale and trajectory bounds.
+& \textbf{(1)}: Removes finite-data and trajectory-cap restrictions; one $q$-moment replaces Orlicz tails. On overlap, fixed confidence and remaining parameters: $\mathcal{O}(\varepsilon^{-1})$, removing the super-polylogarithmic accuracy factor. Full parameter rates are not comparable.
+& \textbf{(1)}: Uniform-in-$x$ moments exclude heterogeneous-curvature finite sums; noise classes are incomparable. On overlap, $B$ has polynomial confidence dependence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $\ell=\log(3/\delta)$, $\log_+u=\max\{0,\log u\}$ (with $\log_+0=0$), $d=1+\log_+(\Delta/\varepsilon)$, $N=\kappa\sigma^2/(\mu\varepsilon)$, $h=\log(e+N/\delta)$, $B=\bigl[(64\kappa^2\nu^2\ell/\sigma^2)^q(3/\delta)^2\bigr]^{1/(q-2)}$. Costs count individual stochastic-gradient calls. In \textbf{(4)}, $\beta$ is the Orlicz tail index and $G$ the trajectory cap; $\Psi_\beta(u)=\exp(\log^\beta(1+u))-1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

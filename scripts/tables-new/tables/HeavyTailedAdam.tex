@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Heavy-tailed Adam: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedAdam.lean}{HeavyTailedAdam}.}\label{tab:HeavyTailedAdam}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$ has $L$-Lipschitz gradient and $f(x_0)-f(x)\leq\Delta$ for every $x$, with $L>0$, $\Delta,\sigma\geq0$, $1<\alpha\leq2$, and $\varepsilon>0$. The jointly measurable, integrable oracle is unbiased and satisfies $\mathbb{E}\sum_i|g_i(x,\xi)-\partial_i f(x)|^\alpha\leq\sigma^\alpha$, with IID samples. The setup restricts algorithms to coordinate Adam. Target: $\mathbb{E}\|\nabla f(x_I)\|_2\leq\varepsilon$ under the sampling and output law. Result \textbf{(1)} uses a uniformly random pre-update iterate, no bias correction, $\beta_1=0.9$, and damping outside the square root; tuning uses $L,\Delta,\sigma,\alpha,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdamHeavyTailedFixedMomentum.lean}{Adam\allowbreak Heavy\allowbreak Tailed\allowbreak Fixed\allowbreak Momentum} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdamHeavyTailedFixedMomentum.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{\Delta L}{\varepsilon^2}\left[1+\left(\dfrac{10^5\sigma}{\varepsilon}\right)^r\right]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} NSGD-M \citep{htaHubler2025v3}, Cor.~19
+& $\mathcal{O}\!\left(1+\dfrac{\Delta L}{\varepsilon^2}\left[1+\left(\dfrac{\sigma_2}{\varepsilon}\right)^r\right]\right)$
+& \textbf{(1)}: Matches known accuracy exponent using Adam with fixed $\beta_1$, without normalization, instead of horizon-tuned momentum. No problem-class rate improvement.
+& \textbf{(1)}: Stronger coordinate noise condition; Euclidean conversion costs $d^{(2-\alpha)/(2(\alpha-1))}$ in the noise term. Much larger constants, including $10^{5r}$. \\
+\midrule
+\textbf{(3)} SGD \citep{htaLiu2026v1}, Thm.~4.1, horizon-tuned constant step
+& $\mathcal{O}\!\left(1+\dfrac{\Delta L}{\varepsilon^2}+\left(\dfrac{\sigma_2\sqrt{L\Delta}}{\varepsilon^2}\right)^r\right)$\par $\varepsilon\leq\sqrt{2L\Delta}$.
+& \textbf{(1)}: Polynomial noise-term gain $(\sqrt{L\Delta}/\varepsilon)^{(2-\alpha)/(\alpha-1)}$ at $\sigma=\sigma_2$; Euclidean conversion replaces the ratio by $\sqrt{L\Delta}/(\sqrt d\,\varepsilon)$. Gain requires $\alpha<2$ and that ratio $>1$; none at $\alpha=2$.
+& \textbf{(1)}: Coordinate noise condition; weaker target than $\mathbb{E}(T^{-1}\sum_t\|\nabla f(x_t)\|_2^2)^{\alpha/2}$ $\leq\varepsilon^\alpha$. \\
+\midrule
+\textbf{(4)} Vector Adam \citep{htaPang2026v2}, Thm.~6.4
+& Different target: relaxed $(\lambda,\varepsilon)$-stationarity, $\alpha>4/3$, bounded gradients. Rates not comparable.
+& \textbf{(1)}: Ordinary expected gradient norm; no bounded-gradient assumption; covers $1<\alpha\leq4/3$. These are scope and criterion differences, not a rate comparison.
+& \textbf{(1)} needs smoothness; uses $1-\beta_2\leq10^{-12}$ and accuracy-dependent damping instead of a fixed stabilizer. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $r=\alpha/(\alpha-1)$; $\Delta$ is an initial objective-gap bound. Costs count individual stochastic-gradient calls. $\sigma_2$ satisfies $\mathbb{E}\|g-\nabla f\|_2^\alpha\leq\sigma_2^\alpha$: the coordinate model permits $\sigma_2=\sigma$, whereas Euclidean-to-coordinate conversion uses $\sigma=d^{1/\alpha-1/2}\sigma_2$. Prior-work big-$\mathcal{O}$ bounds and polynomial comparisons hold for fixed $\alpha$; $10^{5r}$ in \textbf{(1)} is retained because it diverges as $\alpha\downarrow1$. $T$ denotes iterations. In \textbf{(4)}, $\lambda>0$ weights the variance in $\inf_{\mathbb{E}Y=x}\{\|\mathbb{E}\nabla f(Y)\|_2+\lambda\mathbb{E}\|Y-x\|_2^2\}$, the relaxed stationarity measure.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

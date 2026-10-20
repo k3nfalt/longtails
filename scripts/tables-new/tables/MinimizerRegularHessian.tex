@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-gradient complexity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MinimizerRegularHessian.lean}{MinimizerRegularHessian}.}\label{tab:MinimizerRegularHessian}
+\parbox{\linewidth}{\footnotesize A real Hilbert space of finite dimension $d\ge1$; twice differentiable, $\mu$-strongly convex $f$ with $L$-Lipschitz gradient. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\|\nabla^2 f(x)-\nabla^2 f(x_\star)\|\le M\|x-x_\star\|$ for every $x$. Parameters $0<\mu\le L$, $M\ge0$, $R>0$ are known; $\varepsilon>0$. Exact gradients may be queried at arbitrary points; the setup imposes no algorithm restriction. Target: deterministic $f(x_{\rm out})-f(x_\star)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SpectralGradientQuadraticConvergence.lean}{Spectral\allowbreak{}Gradient\allowbreak{}Quadratic\allowbreak{}Convergence} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SpectralGradientQuadraticConvergence.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&\kappa\log\!\left(2+(d+1)^2(2\kappa)^{2d}\Theta\right)\\[-2pt]&{}+d\log(2+\ell)\end{aligned}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: AGD + finite-difference Newton \citep{mrhBubeck2015,mrhDennisSchnabel1996}
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt\kappa\log\!\left(2+\sqrt{d\kappa}\,MR/\mu\right)\\[-2pt]&{}+d\log(2+\ell)\end{aligned}\right)$\newline Same setup; $d+1$ gradient calls per Newton step.
+& \textbf{(1)}: Matches quadratic-phase rate using scalar-gradient windows without off-iterate probes; no established total-complexity improvement.
+& \textbf{(1)}: Larger warmup: $\kappa$ rather than $\sqrt\kappa$, with a dimension-dependent logarithm. Still requires matrix fitting and eigendecomposition. \\
+\midrule
+\textbf{(3)} AGD \citep[Theorem 3.18]{mrhBubeck2015}
+& $\mathcal{O}\!\left(\sqrt\kappa\log(2+LR^2/\varepsilon)\right)$
+& \textbf{(1)}: $\mathcal{O}(\log\log(1/\varepsilon))$ instead of $\mathcal{O}(\log(1/\varepsilon))$ for fixed problem parameters as $\varepsilon\downarrow0$.
+& \textbf{(1)}: Needs anchored Hessian regularity and $M,R$ for tuning; dimension-dependent warmup can be worse at moderate accuracy. \\
+\midrule
+\textbf{(4)} Silver steps \citep[Theorem 1.1, arXiv v1]{mrhAltschulerParrilo2025}
+& $\mathcal{O}\!\left(\kappa^{\log_{1+\sqrt2}2}\log(2+LR^2/\varepsilon)\right)$
+& \textbf{(1)}: Quadratic scalar-gradient windows give $\mathcal{O}(\log\log(1/\varepsilon))$ instead of $\mathcal{O}(\log(1/\varepsilon))$ for fixed problem parameters as $\varepsilon\downarrow0$.
+& \textbf{(1)}: Needs finite dimension, anchored Hessian regularity, and $M,R$ for tuning; warmup can be worse at moderate accuracy. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d=\dim E$, $\kappa=L/\mu$, $\Theta=MLR/\mu^2$, $\ell=\log(1+L^2R^2/(\mu\varepsilon))$; $\log$ denotes the natural logarithm. Costs count all exact-gradient calls, including probes; $\nabla^2 f$ denotes the Hessian, with operator norm.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MixedRelativeSmoothNonconvex.lean}{MixedRelativeSmoothNonconvex}.}\label{tab:MixedRelativeSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, $f$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. Here $L,\varepsilon>0$ and $r,M,\sigma,\Delta\ge0$. The jointly measurable oracle $g$ is unbiased, with square-integrable error satisfying $\mathbb E_p\|e(x)\|^2\le r\|\nabla f(x)\|^2+\sigma^2$ and $\mathbb E_p\|e(x)-e(y)\|^2\le r(\|\nabla f(x)\|^2+\|\nabla f(y)\|^2)+M^2\|x-y\|^2$. IID samples from $p$ are shared by consecutive call pairs. Target: a measurable output $X$ with $\int\|\nabla f(X)\|\,d\mathbb P\le\varepsilon$, including algorithmic randomness.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MixedRelativeSmoothNonconvex.lean}{Mixed\allowbreak Relative\allowbreak Smooth\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MixedRelativeSmoothNonconvex.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned} &1+\frac{(1+r)L\Delta+\sigma^2}{\varepsilon^2}\\[-2pt]&+\min\!\left\{\frac{M\sigma\Delta}{\varepsilon^3},\frac{L\Delta\sigma^2}{\varepsilon^4}\right\}\end{aligned}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} SGD \citep{mrsnKhaled2020v3}, Cor.~1, $A=0$, $B=1+r$, $C=\sigma^2$
+& $\mathcal{O}\!\left(1+\frac{(1+r)L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$
+& \textbf{(1)}: No worse in order. For $\varepsilon^2<2L\Delta$, $\sigma^2\ge(1+r)\varepsilon^2$, $M\varepsilon\le L\sigma$, speedup of order $\min\{L\Delta/\varepsilon^2,L\sigma/(M\varepsilon)\}$.
+& \textbf{(1)} needs the increment condition, paired samples and $M$; uses $\mathcal{O}(Td)$ memory in $\mathbb R^d$ and a much larger leading constant. \\
+\midrule
+\textbf{(3)} Normalized STORM \citep{mrsnLiu2023v2}, Thm.~3.3/Cor.~3.4, $L_1=0$
+\par Raw MSS; $\mathbb R^d$, stochastic gradients.
+& $\mathcal{O}\!\left(\begin{aligned}&(1+r)+\frac{(1+r)\bar L\Delta}{\varepsilon^2}\\[-2pt]&+\frac{(\sigma+\sqrt rG_0)\sqrt{1+r}}{\varepsilon}\\[-2pt]&+\frac{\bar L\sigma\Delta}{\varepsilon^3}\\[-2pt]&+\frac{\sigma^2(\sigma+\sqrt rG_0)}{\sqrt{1+r}\,\varepsilon^3}\end{aligned}\right)$
+\par $K\asymp1+r$; $\min_t\mathbb E\|\nabla f(x_t)\|\le\varepsilon$.
+& \textbf{(1)}: Scope beyond raw MSS. On the overlap, $M$ replaces $\bar L$; removes cubic-noise initialization. For $M=0$ and fixed positive remaining parameters: $\mathcal{O}(\varepsilon^{-2})$ versus $\mathcal{O}(\varepsilon^{-3})$.
+& \textbf{(1)} uses growing batches and $\mathcal{O}(Td)$ memory; \textbf{(3)} uses batches independent of $\varepsilon$. \\
+\midrule
+\textbf{(4)} PAGE \citep{mrsnLi2021}, Cor.~4, online
+\par Special case: $r=0$, raw MSS with $\bar L=L$, $\mathbb R^d$, stochastic gradients.
+& $\mathcal{O}\!\left(1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{L\sigma\Delta}{\varepsilon^3}\right)$ expected calls.
+& \textbf{(1)}: Matches known $\varepsilon^{-3}$ rate at $r=0$; centered $M\le L$ can reduce the cubic term. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $e(x)=g(x,\omega)-\nabla f(x)$; $\mathbb E_p$ integrates $\omega\sim p$; $\mathbb P$ is the execution law. Raw MSS: $\mathbb E_p\|g(x,\omega)-g(y,\omega)\|^2\le\bar L^2\|x-y\|^2$; on this overlap $L,M\le\bar L$. $G_0=\|\nabla f(x_0)\|\le\sqrt{2L\Delta}$; $K$ is the STORM batch size; $T$ is the number of iterations; $d$ is dimension. Costs count individual stochastic-gradient evaluations, including initialization, batches and paired evaluations. $L\sigma/(M\varepsilon)=+\infty$ when $M=0<\sigma$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

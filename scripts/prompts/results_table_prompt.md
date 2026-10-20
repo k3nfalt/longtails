@@ -31,6 +31,9 @@ GROUPING AND CONTENT
   the theorem's name or the table's appearance.
 - Select the closest baseline and additional baselines needed to expose distinct
   material gains. Give each baseline its own row; consolidate equivalent ones.
+  Each comparison must use the exact guarantee cited in that row. Do not borrow
+  an adaptivity, accuracy, or scope advantage from a different theorem in the
+  same paper; give that materially different guarantee its own numbered row.
 - Distinguish direct competitors from special-case baselines. If a baseline
   cannot solve the full target setup, label its row with the precise restriction
   under which it applies. Describe broader scope as a scope extension; compare
@@ -92,26 +95,36 @@ LAYOUT AND STYLE
    Put material differences in assumptions, tuning knowledge, oracle access, outputs
    and complexity in Novelty or Limitations, as short explicit comparisons.
    Shared setup assumptions remain below the caption; do not repeat them in cells.
-   The body should be formulas and short comparison fragments, not paragraphs.
-   Our rows must contain only `---` in Novelty and Limitations. Populate
+   Use formulas and short, direct comparison sentences; avoid dense paragraphs.
+   Leave Novelty and Limitations empty in our rows (no dashes or placeholder text). Populate
    these columns ONLY in prior-work rows, always from our results' perspective:
    Novelty states what ours improves over that baseline; Limitations states
    what ours loses (e.g. worse noise dependence or stronger assumptions).
    Keep conditions attached to their claims. Do not invent disadvantages for
-   symmetry: use `---` if none is established. State a comparative requirement
+   symmetry: leave the cell empty if none is established. Do not fill it with
+   "No additional restriction identified" or generic caveats. A deterioration
+   outside the comparison method's admissible range is not a comparative loss.
+   A matched rate belongs in Novelty, not Limitations. Do not put unresolved
+   priority, novelty, or optimality in Limitations: those are not losses against
+   the numbered comparison method. Preserve a supported worse leading constant
+   as a short prose limitation even though big-O hides it. State a comparative requirement
    tradeoff directly, e.g. `needs $R,\Delta$ in addition` in Limitations.
-   Give only gains
-   supported by the review, preferably 1--3 short items marked `i)`, `ii)`, `iii)` when there
-   is more than one. Aim for at most 30 prose words per cell, excluding formulas
+   Give only gains supported by the review. Prefer short connected sentences;
+   use numbered items only when they make several distinct gains easier to read. Aim for at most 30 prose words per cell, excluding formulas
    and citations; keep a necessary validity condition even if it needs more.
-   Use a line break between numbered items. Cut secondary method descriptions
+   Preserve useful quantitative examples from the reviews: state the parameter
+   regime and compare total big-O bounds when this makes a gain concrete. Do not
+   replace such an example with a vague claim of improvement merely to meet the
+   word budget. Use a line break between numbered items. Cut secondary method descriptions
    and repeated qualifications before exceeding this budget.
    State the change directly: e.g. `$x$ instead of $x^2$`, `no bounded-gradient
    assumption`, `no knowledge of $L$`, or `last iterate instead of averaging`.
    These are examples of wording, not claims to copy. The baseline is already
    identified by its row; do not repeat its citation in the comparison cells.
-   Refer to our results only by their table-local numbers: `(1): ...`, `(2): ...`,
-   or `(1), (2): ...` for a shared gain. Do not write `both`, `first`, `second`,
+   Refer to all results by their table-local numbers: `(1): ...`, `(2): ...`,
+   or `(1), (2): ...` for a shared gain. Use explicit row numbers instead of "the baseline" or a method-name substitute
+   in comparison cells. Repeat the target number only when needed for clarity.
+   Do not write `both`, `first`, `second`,
    `next row`, or descriptive substitutes. State each supported improvement in
    parameter dependence as well as oracle access; do not reduce a rate improvement
    to merely removing a search. Distinguish a matched rate from a strict gain,
@@ -130,9 +143,11 @@ LAYOUT AND STYLE
    before opening it: otherwise its delayed caption can reverse their order.
    State only the setup's actual hypotheses: do not silently add completeness,
    finite dimension, or stronger smoothness just to use a familiar description.
-3. Number our rows `(1)`, `(2)`, ... in display order, restarting in each table.
+3. Number EVERY result row `(1)`, `(2)`, ... in display order, restarting in each
+   table. Number our rows first, then continue numbering through prior-work rows.
+   Never restart numbering at the prior-work separator.
    Use bold numbers `\textbf{(1)}`, `\textbf{(2)}`, ... both in result labels
-   and in Novelty and Limitations references. Place the number before the exact theorem
+   and in Novelty and Limitations references. For our rows, place the number before the exact theorem
    basename, hyperlinked to the supplied
    `LongTails/Theorems/<basename>.lean` URL and a bold `(Ours)` label.
    Add a short `\href{<supplied review_url>}{(review)}` link only in each of our result rows.
@@ -147,7 +162,8 @@ LAYOUT AND STYLE
    Do not substitute an invented descriptive method name. Allow breaks between
    CamelCase words without changing the visible name. These are our theorem
    statements; the label does not assert invention of a classical algorithm.
-4. Identify prior work with `\citep{key}`. A standard method name may precede it,
+4. Prefix each prior-work result label with its bold row number, then identify
+   prior work with `\citep{key}`. A standard method name may precede it,
    but do not manually repeat author names next to the citation. Retain a version
    or theorem locator only if necessary to identify the guarantee being compared.
    Do not add review links to prior-method rows; use their paper citations only.

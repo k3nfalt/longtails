@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic convex optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{StochasticGeneralizedSmoothAndConvex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex $f$ on a separable real Hilbert space, with differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. The jointly measurable oracle is IID under a probability law $P$, unbiased, with integrable noise moments, $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$ and $\mathbb E\exp(\|g(x,\xi)-\nabla f(x)\|^2/\sigma^2)\le e$ for $\sigma>0$; $\sigma=0$ gives exact gradients almost surely. Here $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, and $0<\delta<1$. Target: measurable $\hat x$ with $P\{f(\hat x)-f(x_\star)>\varepsilon\}\le\delta$. All parameters are supplied; costs count individual stochastic-gradient samples, including batches.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedAcceleratedConvex.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&1+\sqrt{L_0R^2/\varepsilon}\\&+\min\!\left\{\lceil t^{2/3}\rceil\ell,\,\ell+(t\ell)^{2/3}\right\}\\&+\sigma^2R^2h/\varepsilon^2\end{aligned}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} ARC-SG \citep[Thms.~1, 4]{gssgDvinskikh2026v1}\par Finite-dimensional specialization; supplied gap certificate.
+& $\mathcal{O}\!\left(\begin{aligned}&\kappa b\!\left[1+\frac{\sigma^2\lambda^2b^2}{L_0^2}\log\frac{e\kappa b}{\delta}\right]\\&+uvk\!\left(\kappa+\sqrt{\kappa L_0R^2/\varepsilon}\right)\\&+\sigma^2\kappa^3u^3v^3\!\left(k+\log\frac1\delta\right)\\&\qquad\cdot\left(\frac{R^2}{\varepsilon^2}+\frac{\lambda^2}{L_0^2}\right)\end{aligned}\right)$
+& \textbf{(1)}: removes $\kappa^{1/2}$ optimization and $\kappa^3$ noise factors, burn-in, and associated logarithms. Polynomial term gains for $t\gg1$. Hilbert-space scope; no projection subproblems.
+& \textbf{(1)}: curvature contribution $\ell+(t\ell)^{2/3}$ can exceed $t$ through logarithms when $\ell^2\gtrsim t$; not a uniform total-cost comparison. \\
+\midrule
+\textbf{(3)} RCSAG \citep[Thm.~9]{gssgLobanov2026v1}\par Derived bound on $\mathbb R^d$: $Q=B(x_0,R)$, $p=2$, $H_0\asymp L_0$, $H_1\asymp L_1^2$, additive noise $\sigma_0=\sigma$.
+& $\mathcal{O}\!\left(\begin{aligned}&\left[\ell+\sqrt{L_0R^2/\varepsilon}\right.\\&\quad+t\min\{\ell,\log(2+L_1^2\Delta/L_0)\}\\&\left.\quad+\sigma^2R^2/\varepsilon^2\right]\log\frac{e\ell}{\delta}\end{aligned}\right)$
+& \textbf{(1)}: smaller curvature term in regimes where it matters. For fixed $\delta$, $\sigma=0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2/t^{4/3}$, $t\to\infty$: total $\mathcal{O}(t\log t\log\log t)$ becomes $\mathcal{O}(t^{2/3}\log^{2/3}t)$.
+& \textbf{(1)}: needs light tails and batching; \textbf{(3)} allows finite $p$-th moments, $1<p\le2$, and gradient- or gap-dependent noise without batching. Curvature-term gains need not hold when $L_1^2\Delta\lesssim L_0$, $\ell^2\gg t$. \\
+\midrule
+\textbf{(4)} Clipped SGD \citep[Thm.~1, arXiv v2]{sgacGaash2025v2}\par Finite-dimensional specialization.
+& $\mathcal{O}\!\left(\begin{aligned}&1+\left(\frac{L_0R^2}{\varepsilon}+t^2\right)q\\&+\frac{\sigma^2R^2}{\varepsilon^2}q^3\end{aligned}\right)$\par Two samples per iteration are included.
+& \textbf{(1)}: $L_0R^2/\varepsilon\to\sqrt{L_0R^2/\varepsilon}$ when $\sigma^2h\le L_0\varepsilon$; startup $t^2q\to\ell+(t\ell)^{2/3}$. Noise-dominated gain: $q^3\to h$. Stopped accelerated iterate replaces averaging. Hilbert-space statement; prior proof appears dimension-independent.
+& \textbf{(1)}: needs $\Delta$ in addition and batches samples; \textbf{(4)} uses two samples per step without batching. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $t=L_1R$, $\ell=1+\log(1+\Delta/\varepsilon)$, $h=1+\log(1/\delta)$. For the explicit logarithms in \textbf{(2)}: $\kappa=1+t$, $\lambda=\max\{L_1,R^{-1}\}$, $b=1+\log(1+\lambda^2\Delta/L_0)$, $u=1+\log(1+L_0R/(\lambda\varepsilon))$, $v=1+\log(1+L_0R^2/\varepsilon)$, $k=1+\log(\kappa uv(1+L_0R^2/\varepsilon))$. In \textbf{(4)}, $q=1+\log((1+L_0R^2/\varepsilon+t^2+\sigma^2R^2/\varepsilon^2)/\delta)$. $\asymp$ denotes equality up to universal factors; logarithms are natural. Projection arithmetic is excluded from sample counts.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SimilarFiniteSumQuasar.lean}{SimilarFiniteSumQuasar}.}\label{tab:SimilarFiniteSumQuasar}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, let $F=n^{-1}\sum_{i=0}^{n-1}f_i$, $n\ge1$, with differentiable components and exact component-gradient access. Assume $\nabla F$ is $L$-Lipschitz, each $\nabla f_i-\nabla F$ is $\delta$-Lipschitz, $0<\mu\le L$, $0<\gamma\le1$, $\delta\ge0$, and $384\delta^2\le\gamma^3\mu^2$. For a global minimizer $x_\star$, assume $F(x_0)-F(x_\star)\le\Delta$, $\Delta\ge0$, and, for all $x,y$, $F(x_\star)\ge F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2$, $F(y)\ge F(x)+\langle\nabla F(x),y-x\rangle-\frac{\gamma\sqrt{\mu L}}{2}\|y-x\|^2$, and $F(x)-F(x_\star)\ge\frac{\gamma\mu}{2(2-\gamma)}\|x-x_\star\|^2$. Target: $F(\widehat x)-F(x_\star)\le\varepsilon$, $\varepsilon>0$; \textbf{(1)} gives a deterministic final iterate. Tuning uses $L,\mu,\gamma,\delta,\Delta,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CachedSimilarQuasar.lean}{Cached\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CachedSimilarQuasar.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(n+\frac{n\ell}{\log(\gamma^3\mu^2/\delta^2)}+\frac{\sqrt\kappa}{\gamma}\ell\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Nesterov acceleration \citep[Thm.~2, v3]{sfqHermant2026v3}; full gradients, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(n\gamma^{-1}\sqrt\kappa\,\ell\right)$
+& \textbf{(1)}: Multiplicative $n\gamma^{-1}\sqrt\kappa$ becomes additive under the stated similarity regime; at $\delta=0$, $\mathcal{O}(n+\gamma^{-1}\sqrt\kappa\,\ell)$.
+& \textbf{(1)} needs finite-sum similarity $384\delta^2\le\gamma^3\mu^2$ and knowledge of $\delta$ in addition. \\
+\midrule
+\textbf{(3)} Gradient sliding \citep[Thm.~3]{sfqKovalev2022v1}; derived bound, $E=\mathbb R^d$, $\gamma=1$, $F$ $\mu$-strongly convex
+& $\mathcal{O}\!\left((n+\sqrt\kappa)\left[1+\log\!\left(1+\frac{L\Delta}{\mu\varepsilon}\right)\right]\right)$\par $q=f_0$, $p=F-f_0$, $L_p=\mu$; distance target $\|x-x_\star\|^2\le2\varepsilon/L$.
+& \textbf{(1)}: Scope: nonconvex quasar-convex $F$, $\gamma<1$. On the strongly convex overlap, reduces the $n$-term by $\log(\mu^2/\delta^2)$ when $\delta\ll\mu$ and removes $\kappa$ inside the accuracy logarithm.
+& \textbf{(1)} requires $\delta\le\gamma^{3/2}\mu/\sqrt{384}$; \textbf{(3)} permits larger similarity constants when $f_0$ is convex. \\
+\midrule
+\textbf{(4)} \citep[Thm.~1]{csqHinder2020}; full gradients, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(n\gamma^{-1}\sqrt\kappa\,[1+\log(\kappa/\gamma)]\ell\right)$\par Component value and gradient evaluations, including line search.
+& \textbf{(1)}: On the stated curvature/similarity subclass, replaces multiplicative $n$ by additive dependence and removes $1+\log(\kappa/\gamma)$; needs no function values. \textbf{(2)} already removes that logarithm.
+& \textbf{(1)} additionally needs the lower-curvature bound and strong component similarity; \textbf{(4)} requires neither. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$; $\Delta$ is the initial objective-gap bound; $\delta$ measures component-gradient similarity. Set $1/\log(\gamma^3\mu^2/\delta^2)=0$ at $\delta=0$. Costs count individual component-gradient calls, including full-gradient refreshes; \textbf{(4)} also counts individual component-value calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-value optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean}{ZerothOrderMatrixGeneralizedSmooth}.}\label{tab:ZerothOrderMatrixGeneralizedSmooth}
+\parbox{\linewidth}{\footnotesize Convex $f:\mathbb R^d\to\mathbb R$ has a differentiable gradient and a minimizer $x_\star$, with $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. An unknown symmetric $0\prec H\preceq I$, $\operatorname{tr}H\le r$, satisfies $\langle\nabla^2 f(x)v,w\rangle\le (L_0+L_1\|\nabla f(x)\|_{H^{-1}})\|v\|_H\|w\|_H$ for all $x,v,w$. Here $d\ge1$, $L_0,r,R,\Delta,\varepsilon>0$, $L_1\ge0$, and $0<\delta<1$. Exact function values are available; the target is $\Pr\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ZerothOrderMatrixGeneralizedAccelerated.lean}{Zeroth\allowbreak Order\allowbreak Matrix\allowbreak Generalized\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ZerothOrderMatrixGeneralizedAccelerated.md}{(review)}
+& $\mathcal{O}\!\left(q\left[\sqrt{\frac{d(r+1)L_0R^2}{\varepsilon}}\right.\right.$\newline
+$\left.\left.{}+\bigl(r+1+L_1R\sqrt{d(r+1)}\bigr)\ell\right]\right)$ exact values, including independent runs and output selection.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} AGD \citep[Thm.~4.3]{Tyurin2026v2CompositeTable}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{L_0R^2}{\varepsilon}}\right.$\newline
+${}+L_1^{\rm E}R\left[1+\log_+\min\!\left\{\frac{(L_1^{\rm E})^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\right]$\newline
+$\left.{}+\log_+\frac{\Delta}{L_0R^2}\right)$ gradient calls; deterministic accuracy. Here $R=\|x_0-x_\star\|>0$, $\varepsilon\le\Delta$, $\bar R=R$, $\Gamma_0=2\Delta/R^2$.
+& \textbf{(1)}: values instead of gradients; no $\mu_H^{-1}$ dependence. Different oracles: no established function-value complexity improvement.
+& \textbf{(1)}: probabilistic instead of deterministic accuracy; needs $r$ in addition. \\
+\midrule
+\textbf{(3)} RS-NAG \citep[Thm.~3.3, Prop.~5.2]{zomgsOmiya2026v1}; Haar sketch dimension one, $L_1=0$, $d\ge2$
+& $\mathcal{O}\!\left(1+\sqrt{\frac{d(r+1)L_0R^2}{\varepsilon}}\right)$ directional derivatives for expected gap $\le\varepsilon$.
+& \textbf{(1)}: scope extends to $L_1>0$; values replace directional derivatives. At $L_1=0$, matches the leading rate after confidence amplification.
+& \textbf{(1)} adds $\mathcal{O}(q(r+1)\ell)$. Amplifying \textbf{(3)} costs $q$ times its bound, plus $\mathcal{O}(q)$ selection values. \\
+\midrule
+\textbf{(4)} Uniform coordinate acceleration \citep[Thm.~6]{zomgsLobanov2026v1}; local gap model (Ass.~2), $\widetilde R<\infty$
+& No comparable function-value bound. Partial derivatives, values, and exact segment minimizations; expected gap $\le\varepsilon$, $0<\varepsilon\le f(x_0)-f_\star$.
+& \textbf{(1)} on common instances: values only; no exact segment minimization or known $f_\star,\widetilde R$; uses $R,\Delta$ instead. High-probability rather than expected accuracy.
+& \\
+\midrule
+\textbf{(5)} Importance-sampled coordinate acceleration \citep[Thm.~8]{zomgsLobanov2026v1}; coordinate local gap model (Ass.~7), $\widetilde R<\infty$
+& No comparable function-value bound. Partial derivatives, values, and exact segment minimizations; expected gap $\le\varepsilon$, $0<\varepsilon\le f(x_0)-f_\star$.
+& \textbf{(1)} on common instances: values only; no segment minimization, known $f_\star,\widetilde R$, or coordinate curvature inputs; uses $R,\Delta,r$. High-probability rather than expected accuracy.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=1+\log(1/\delta)$; $\ell=1+\log(1+\Delta/\varepsilon)$; $\|v\|_H=\sqrt{v^\top Hv}$; $\mu_H=\lambda_{\min}(H)$; $L_1^{\rm E}=L_1/\sqrt{\mu_H}$ (equals $L_1$ for $H=I$); $\log_+ t=\max\{0,\log t\}$ for $t>0$, $\log_+0=0$; $f_\star=f(x_\star)$; $\widetilde R=\sup_{f(x)\le f(x_0)}\|x-x_\star\|$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

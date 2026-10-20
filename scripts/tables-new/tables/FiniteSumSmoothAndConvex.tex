@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-sum smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumSmoothAndConvex.lean}{FiniteSumSmoothAndConvex}.}\label{tab:FiniteSumSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space equipped with a measurable structure, $F=n^{-1}\sum_{i=1}^n f_i$, where $n\ge1$, every $f_i$ is convex with $L$-Lipschitz gradient, $L>0$, and some minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$, $R\ge0$. One oracle call returns an exact component gradient. The target is a measurable output with integrable gap and $\int [F(\widehat x(\omega))-F(x_\star)]\,dP(\omega)\le\varepsilon$, $\varepsilon>0$, under the algorithm's randomization law $P$. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak Finite\allowbreak Sum\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedFiniteSumConvex.md}{(review)} & $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{nLR^2/\varepsilon}\right)$ &  &  \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SvrgConvex.md}{(review)} & $\mathcal{O}\!\left(1+n\log(1+LR^2/\varepsilon)+LR^2/\varepsilon\right)$ &  &  \\
+\midrule[1.2pt]
+\textbf{(3)} VRADA \citep[Thm.~1]{fsSong2021V4}; $m=n$, $l=0$, $E=\mathbb R^d$ & $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{nLR^2/\varepsilon}\right)$ & \textbf{(1)}: Matches known rate; Lean formalization on Hilbert spaces. \textbf{(2)}: smaller startup term when $1\lesssim LR^2/\varepsilon\ll\log n$. & \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{nLR^2/\varepsilon}$; slower at high accuracy. \textbf{(1)}, \textbf{(2)}: no composite-term guarantee. \\
+\midrule
+\textbf{(4)} SVRG++ \citep[Thm.~4.1]{fsAllenZhuYuan2016}; $m_0=1$, $\Psi=0$, $E=\mathbb R^d$ & $\mathcal{O}\!\left(n[1+\log_+(LR^2/\varepsilon)]+LR^2/\varepsilon\right)$ & \textbf{(2)}: Matches known rate; Lean formalization on Hilbert spaces. \textbf{(1)}: $\sqrt{nLR^2/\varepsilon}$ replaces $LR^2/\varepsilon$; faster when $LR^2/\varepsilon\gg n$. & \textbf{(1)}, \textbf{(2)}: no composite-term guarantee. \\
+\midrule
+\textbf{(5)} SVRG++ \citep[Thm.~4.1]{fsAllenZhuYuan2016}; $m_0=\lceil LR^2/\Delta\rceil$, $\Psi=0$, $E=\mathbb R^d$ & $\mathcal{O}\!\left(n[1+\log(\Delta/\varepsilon)]+LR^2/\varepsilon\right)$, $0<\varepsilon<\Delta\le LR^2/2$ & \textbf{(2)}: No established improvement. & \textbf{(2)}: logarithm depends on $LR^2/\varepsilon$ instead of $\Delta/\varepsilon$; larger when $\Delta\ll LR^2$. \\
+\midrule
+\textbf{(6)} ANITA \citep[Thm.~1, Cor.~1]{fsLi2022V3}; $E=\mathbb R^d$ & $\displaystyle\mathcal{O}\!\left(\begin{gathered}n\left[1+\min\left\{\log_+\!\frac{LR^2}{\varepsilon\sqrt n},\log\sqrt n\right\}\right]\\{}+\sqrt{nLR^2/\varepsilon}\end{gathered}\right)$\newline Expected calls; parameters independent of $\varepsilon$. & \textbf{(1)}: rate comparison for $\frac{LR^2}{n\log^2 n}\lesssim\varepsilon\lesssim\frac{LR^2}{\sqrt n\log n}$. At $\varepsilon=LR^2/n$: $\mathcal{O}(n[1+\log\log(n+2)])$ versus $\mathcal{O}(n[1+\log n])$, already attained by \textbf{(3)}. & \textbf{(1)}: for $\varepsilon\ge LR^2/\sqrt n$, startup $\mathcal{O}(n[1+\log\log(n+2)])$ versus $\mathcal{O}(n)$; epoch average instead of last iterate. \\
+\midrule
+\textbf{(7)} Katyusha + AdaptReg \citep[Cor.~3.5]{AllenZhu2018KatyushaComposite}; $\psi=0$, $E=\mathbb R^d$ & $\mathcal{O}\!\left(n[1+\log(\Delta/\varepsilon)]+\sqrt{nLR^2/\varepsilon}\right)$, $0<\varepsilon<\Delta\le LR^2/2$; includes regularization stages. & \textbf{(2)}: No established improvement. & \textbf{(2)}: slower by up to $\sqrt{LR^2/(n\varepsilon)}$ when $LR^2/\varepsilon\gg n$; no composite-term guarantee. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\Delta=F(x_0)-F(x_\star)$; $\log_+t=\max\{0,\log t\}$ for $t>0$, with $\log_+0=0$; $m,m_0$ are epoch-length parameters; $l,\Psi,\psi$ denote optional convex proximal terms. Costs count component-gradient calls, including full-gradient refreshes and sampled-gradient pairs.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

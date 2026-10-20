@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Local acceleration under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LocalStrongAiming.lean}{LocalStrongAiming}.}\label{tab:LocalStrongAiming}
+\parbox{\linewidth}{\footnotesize A globally differentiable function $f$ on a finite-dimensional real Hilbert space attains $f^*$. On $U_r$, its gradient is $L$-Lipschitz and, for every $x,y\in U_r$,
+$f(y)\ge f(x)+\langle\nabla f(x),y-x\rangle-\sqrt{\mu L}\|y-x\|^2$.
+For every nearest minimizer $z$ to $x\in U_r$,
+$\langle\nabla f(x),x-z\rangle\ge f(x)-f^*+\frac{\mu}{2}\|x-z\|^2$.
+Here $0<\mu\le L$, $r>0$, $x_0\in U_r$, and $f(x_0)-f^*\le\Delta\le\mu r^2/256$, with $\Delta\ge0$.
+Exact gradients; target $f(x_K)-f^*\le\varepsilon$, $\varepsilon>0$.
+The constructed fixed-parameter Nesterov method uses $L,\mu$; its horizon also uses $\Delta,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LocalStrongAimingNesterov.lean}{Local\allowbreak Strong\allowbreak Aiming\allowbreak Nesterov} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LocalStrongAimingNesterov.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{L/\mu}\log(1+\Delta/\varepsilon)\right)$ gradient calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} NAG \citep{gssgGupta2025v3}, Thm.~11.
+& $\mathcal{O}\!\left(1+\sqrt{L/\mu}\log(1+\Delta/\varepsilon)\right)$ gradient calls. Affine $M$; global smoothness and strong aiming; global weak-convexity coefficient at most $\sqrt{\mu L}/2$.
+& \textbf{(1)}: Matches rate on the overlap. Scope: curved, nonconvex $M$; assumptions only on $U_r$. Classes are incomparable.
+& \textbf{(1)}: Requires the stated local initialization; worse contraction constant ($1/2$ versus $1$). \\
+\midrule
+\textbf{(3)} Continuized NAG \citep{lsaHermant2026v2}, Cor.~23(1).
+& $\mathcal{O}\!\left(1+\frac{\sqrt{L/\mu}}{a}\log(1+\Delta/\varepsilon)\right)$ gradient calls for success probability at least $1/2$. Global smoothness and strong aiming; convex $M$ with $C^2$ boundary; $\mu/L<\varphi^{-4}$.
+& \textbf{(1)}: Deterministic last-iterate guarantee instead of constant probability on the overlap. Scope: nonconvex $M$, without boundary regularity. Classes are incomparable; rates use different guarantees.
+& \textbf{(1)}: Local initialization and weak convexity required; \textbf{(3)} is global without a weak-convexity assumption. \\
+\midrule
+\textbf{(4)} NAG \citep{lsaFengYuan2026v1}, Thm.~2.2.
+& No explicit call budget in $(L,\mu,\Delta,\varepsilon)$. Local distance convergence with factor $1-2\sqrt{\mu_H/(3L_H+\mu_H)}+\delta$; implicit basin and prefactor. Requires $C^2$ and local PL.
+& \textbf{(1)}: Explicit nonasymptotic budget and basin; no $C^2$ requirement, allowing curved non-$C^2$ examples. Rates are not directly comparable.
+& \textbf{(1)}: On $C^2$ instances, requires strong aiming and tube weak convexity instead of local PL. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $M=\arg\min f$, $f^*=f(x^*)$ for $x^*\in M$, $U_r=\{x:d(x,M)<r\}$. NAG: Nesterov accelerated gradient. PL: Polyak--\L{}ojasiewicz inequality. $\varphi=(1+\sqrt5)/2$, $a=1-\varphi(\mu/L)^{1/4}$. In \textbf{(4)}, $\mu_H,L_H$ are the extremal positive eigenvalues of $\nabla^2 f$ at the reference minimizer; $\delta>0$ is arbitrarily small. Costs count individual exact-gradient evaluations; logarithms are natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

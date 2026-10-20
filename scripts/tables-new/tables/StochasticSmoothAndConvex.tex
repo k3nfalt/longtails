@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic smooth convex minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{StochasticSmoothAndConvex}.}\label{tab:StochasticSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb R$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra, $L$-Lipschitz gradient, and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. Jointly measurable stochastic gradients $g(x,\xi)$ are integrable and unbiased, with integrable squared error and $\mathbb E_p\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$; samples are IID with law $p$. Here $L,\varepsilon>0$, $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x)-f(x_\star)]\,dP\le\varepsilon$, where $P=p^{\otimes\mathbb N}$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedStochasticConvex.lean}{Accelerated\allowbreak Stochastic\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedStochasticConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SgdConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(3)} AC-SA \citep[Prop.~7, (4.10)--(4.11), June 2012 revision]{sscvGhadimiLan2012}
+\par Unconstrained Euclidean specialization.
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+& \textbf{(1)}: Matches known rate. \textbf{(2)}: Matches when $\sigma^2\ge L\varepsilon$.
+\par \textbf{(1)}, \textbf{(2)}: Lean formalization in Hilbert spaces; the classical analysis is dimension-free. Same tuning information $L,\sigma,R$.
+& \textbf{(2)}: Worse deterministic term. At $\sigma=0$, $LR^2/\varepsilon\gg1$: $\mathcal{O}(LR^2/\varepsilon)$ versus $\mathcal{O}(\sqrt{LR^2/\varepsilon})$; unchanged noise can mask this loss. \\
+\midrule
+\textbf{(4)} Derived bound: smooth SGD \citep[Thm.~6.3 and proof]{qfsBubeck2015}
+\par Unconstrained Euclidean specialization, quadratic mirror map.
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+\par Uses the proof's initial-distance bound, not the statement's domain radius.
+& \textbf{(2)}: Matches known rate; Lean formalization. Step uses $\varepsilon$ instead of $R$, but the budget still needs $R$: no overall information gain.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $R$: initial-distance bound; $\sigma^2$: gradient-noise variance bound; $\varepsilon$: expected-gap tolerance. Costs count individual stochastic-gradient calls, one per iteration. $\mathcal{O}$ hides universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

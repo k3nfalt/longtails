@@ -1,0 +1,33 @@
+\begin{table}[tp]
+\centering
+\caption{Power-geometry acceleration with relative gradient error: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PowerGeometryRelativeErrorConvex.lean}{PowerGeometryRelativeErrorConvex}.}\label{tab:PowerGeometryRelativeErrorConvex}
+\parbox{\linewidth}{\footnotesize
+A finite-dimensional real normed space; convex differentiable $f$ with $L$-Lipschitz derivative, $L>0$; a global minimizer $x_\star$ with $\|x_\star-x_0\|\le R$, $R\ge0$.
+For $p>2$, $c>0$, the differentiable function $\psi(x)=\|x-x_0\|^2/2$ satisfies
+$D_\psi(y,x)\ge c\|y-x\|^p/(\|y-x_0\|+\|x-x_0\|)^{p-2}$ for all $x,y$.
+Every oracle reply obeys $\|g-Df(x)\|_*\le\alpha\|Df(x)\|_*$, $0\le\alpha\le1/4$, with arbitrary bias and call/seed dependence.
+Target: $f(x_K)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, for every seed, hence almost surely under any execution law. Result \textbf{(1)} constructs squared-norm dual averaging with last steepest-step output $x_K$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PowerGeometryRelativeErrorAcceleration.lean}{Power\allowbreak Geometry\allowbreak Relative\allowbreak Error\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PowerGeometryRelativeErrorAcceleration.md}{(review)} & $\mathcal{O}\!\left(1+(CT)^{p/(p+2)}+\alpha^2T\right)$ gradient replies & & \\
+\midrule[1.2pt]
+\textbf{(2)} Bregman acceleration \citep[Prop.~4.9, Cor.~4.10, \S5.1.2]{pgDGJ2016v3} & $\mathcal{O}_p\!\left(1+T^{p/(p+2)}\right)$ exact gradients; $\ell_p^d$, $\alpha=0$, optimization over $B_p(x_0,R)$. & \textbf{(1)}: Matches known rate at $\alpha=0$; extends to biased relative errors. Updates need neither $R$, $\varepsilon$, nor horizon; stopping budget still does. & \textbf{(1)}: Larger $p$-dependent constant. \\
+\midrule
+\textbf{(3)} Derived bound: Euclidean relative-error acceleration \citep{pgRepositoryRelativeError} & $\mathcal{O}\!\left(1+d^s\sqrt{T/\rho}+\alpha^2d^{4s}T/\rho\right)$ gradient replies; norm conversion on $\ell_p^d$, $d^s\alpha<1$. & \textbf{(1)}: Removes $d^{4s}$ noise penalty; competitive for fixed $p$, $d\gtrsim T^{p/(p+2)}$. Covers $d^s\alpha\ge1$: $p=4$, $d=T^2$, $\alpha=T^{-1/6}\le1/4$ gives $\mathcal{O}(1+T^{2/3})$; \textbf{(3)} is inapplicable. & \textbf{(1)}: At $\alpha=0$, slower when $d\ll T^{p/(p+2)}$; requires $p>2$, $\alpha\le1/4$. \\
+\midrule
+\textbf{(4)} SODA \citep[Cor.~3.2]{pgPethick2026v1} & $\mathcal{O}_p\!\left(1+T^{p/(p+2)}\right)$ exact gradients on $\ell_p^d$; common deterministic case $\alpha=0$, $p$-uniformly convex prox. & \textbf{(1)}: Matches exact-gradient rate; $R$-free updates. Biased relative errors admit pathwise accuracy; \textbf{(4)} assumes unbiased noise and gives expected accuracy. & \textbf{(1)}: No additive heavy-tailed noise guarantee. No noisy-rate comparison: noise models are incomparable. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $C=\max\{1,32^{(p-2)/2}/c\}$; $D_\psi(y,x)=\psi(y)-\psi(x)-D\psi(x)[y-x]$; $\|\cdot\|_*$ is the dual norm; the modulus fraction is zero at $x=y=x_0$.
+For the $\ell_p^d$ comparisons, $d$ is dimension, $s=1/2-1/p$, $\rho=1-d^s\alpha$, and $\mathcal{O}_p$ hides constants depending on fixed $p$.
+The reviewed $\ell_p$ specialization uses $c=2^{2-p}/[p(p-1)]$, giving $C=p(p-1)2^{7(p-2)/2}$ ($C=1536$ at $p=4$).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

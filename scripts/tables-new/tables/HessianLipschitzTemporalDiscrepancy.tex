@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean}{HessianLipschitzTemporalDiscrepancy}.}\label{tab:HessianLipschitzTemporalDiscrepancy}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space, $f\in C^2$ is $\mu$-strongly convex, has $L$-Lipschitz gradient and $M$-Lipschitz Hessian, with $0<\mu\le L$, $M,D,\Delta\ge0$, and $f(x_0)-f(x_\star)\le\Delta$ for a minimizer $x_\star$. Call $k$ returns $\nabla f(x)+e_k$, where $e_k$ is query- and seed-independent and $\sup_n\|\sum_{k<n}e_k\|\le D$. The parameters and $x_0$ are supplied, with $\varepsilon>0$. Target: $f(\bar x)-f(x_\star)\le\varepsilon$ for every seed; $\bar x$ is the constructed method's tail average. Costs count all gradient calls, including batches and padding.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonlinearTemporalAcceleration.lean}{Nonlinear\allowbreak Temporal\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonlinearTemporalAcceleration.md}{(review)}
+& $\displaystyle \mathcal{O}\!\left(\left[\begin{aligned}&\sqrt{\kappa}\left(1+\frac{MD}{\mu^2}\right)\\[-2pt]&{}+\frac{D}{\sqrt{\mu\varepsilon}}+1\end{aligned}\right]\ell\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} AGD+ \citep{hltdCohen2018}, Lemma 3.2, Eq. (3.2). Derived bound: restarts and consecutive-call batching.
+& $\displaystyle \mathcal{O}\!\left(1+\sqrt{\kappa}\left[\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right]\right)$
+& \textbf{(1)}: noise term $\sqrt{\kappa}D/\sqrt{\mu\varepsilon}\to D\ell/\sqrt{\mu\varepsilon}$. Total gain when $\sqrt\kappa\gg\ell$, $D\gg\ell\sqrt{\mu\varepsilon}$, $M\sqrt\varepsilon\,\ell\ll\mu^{3/2}$. For $\mu=M=D=\Delta=1$, $L=\varepsilon^{-1}$, $\varepsilon\downarrow0$: $\mathcal{O}(\varepsilon^{-1})\to\mathcal{O}(\varepsilon^{-1/2}\log(1/\varepsilon))$.
+& \textbf{(1)} needs $C^2$, a Lipschitz Hessian and known $M$ in addition. Adds $\sqrt\kappa MD\ell/\mu^2$ and larger logarithms; can lose when $M\sqrt\varepsilon\,\ell\gg\mu^{3/2}$. \\
+\midrule
+\textbf{(3)} \citep{hltdSchmidt2011v2}, Proposition 4. Derived bound: quadratic dilation, $M=0$, zero nonsmooth term.
+& $\displaystyle \mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right)$
+& \textbf{(1)}: scope extends from quadratics to nonlinear Hessian-Lipschitz objectives. At $M=D=0$, matches known accelerated rate.
+& \textbf{(1)} at $M=0$ multiplies the noise term by $\ell_0$; no rate improvement on this overlap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $\ell_0=1+\log(1+\Delta/\varepsilon)$, $\ell=1+\log(1+\Delta/\varepsilon+M^2\Delta/\mu^3)$; $\nabla^2 f$ denotes the Hessian. $\gg$ and $\ll$ denote sufficiently large and small universal-factor separations.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

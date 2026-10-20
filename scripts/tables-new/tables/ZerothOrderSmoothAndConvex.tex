@@ -1,0 +1,51 @@
+\begin{table}[tp]
+\centering
+\caption{Independent noisy-value optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ZerothOrderSmoothAndConvex.lean}{ZerothOrderSmoothAndConvex}.}\label{tab:ZerothOrderSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb R$, with $E$ linearly isometric to $\mathbb R^d$, $d\ge1$, $L>0$, and $L$-Lipschitz gradient. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. Jointly measurable value oracle $g$ uses fresh IID seeds of law $p$, with $\int g(x,z)\,dp(z)=f(x)$ and $\int(g(x,z)-f(x))^2\,dp(z)\le\sigma^2$; these integrals are finite. Here $R,\sigma\ge0$, $\varepsilon>0$. Target: measurable output $\hat x$ with integrable gap and $\int[f(\hat x(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, where $P$ is the execution law. Our tuning uses $d,L,R,\sigma,\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedTwoPointZerothOrderConvex.lean}{Accelerated\allowbreak Two\allowbreak Point\allowbreak Zeroth\allowbreak Order\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedTwoPointZerothOrderConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+d\sqrt T+\frac{d^2T\sigma}{\varepsilon}+\frac{d^2T\sigma^2}{\varepsilon^2}\right)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedZerothOrderConvex.lean}{Accelerated\allowbreak Zeroth\allowbreak Order\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedZerothOrderConvex.md}{(review)}
+& $\mathcal{O}\!\left(d+d\sqrt T+\frac{d^2T\sigma}{\varepsilon}+\frac{d^3T\sigma^2}{\varepsilon^2}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(3)} Derived bound: retuned SGD \citep{zoscBachPerchet2016}, Prop.~7, App.~D.3
+& $\mathcal{O}\!\left(\begin{aligned}&1+dT+\frac{d^2T\sigma^2}{\varepsilon^2}\\&{}+d^2T\min\!\left\{\frac{\sigma}{\varepsilon},\frac{d\sigma^2}{\varepsilon^2}\right\}\end{aligned}\right)$
+& \textbf{(1)}: $\mathcal{O}(d\sqrt T)$ instead of $\mathcal{O}(dT)$ when $T\ge1$, $\sigma\le\varepsilon/(d\sqrt T)$. Matches order for $T\ge1$, $\sigma\ge\varepsilon/d$; unchanged $\sigma^2/\varepsilon^3$ term.
+& \\
+\midrule
+\textbf{(4)} Derived bound: AC-SA with box smoothing \citep{zoscLan2008}, Cor.~3
+& $\mathcal{O}\!\left(d+d\sqrt T+\frac{d^2T\sigma}{\varepsilon}+\frac{d^3T\sigma^2}{\varepsilon^2}\right)$; $2d$ independent value calls per gradient estimate, on $B(x_0,R)$.
+& \textbf{(2)}: Matches known rate; formalization. \textbf{(1)}: $d^2$ instead of $d^3$ in the quadratic-noise term, with the other parameter orders unchanged.
+& \\
+\midrule
+\textbf{(5)} Untuned two-point SGD \citep{zoscBachPerchet2016}, Prop.~7, $\beta=2$
+& $\mathcal{O}\!\left(d^2+\frac{d^2}{\varepsilon^3}\left(LR^2+\frac{\sigma^2}{LR^2}\right)^3\right)$, $R>0$, $T\ge1$; rescaled to common parameters.
+& \textbf{(2)}: No worse order for $\sigma\le LR^2/\sqrt d$; at $\sigma=0$, $\mathcal{O}(d\sqrt T)$ instead of $\mathcal{O}(d^2T^3)$.
+& \textbf{(2)}: Needs $\sigma$ for tuning. Up to $d$ times worse near $\sigma=LR^2$; loss regime $LR^2/\sqrt d<\sigma<d^{1/4}LR^2$.
+\\
+\midrule
+\textbf{(6)} Accelerated random search \citep{zoscNesterovSpokoiny2017}, Thm.~9
+& $\mathcal{O}(1+d\sqrt T)$; exact values only ($\sigma=0$).
+& \textbf{(1)}, \textbf{(2)}: Scope extends to independent finite-variance value noise; matches noiseless order for $T\ge1$.
+& \\
+\midrule
+\textbf{(7)} Subsequent result \citep{zoscLoginov2026v1}, Thm.~4(b), $V=L$
+& $\mathcal{O}\!\left(d(1+T)+\frac{d^2T\sigma^2}{\varepsilon^2}\right)$; subclass with additional H\"older smoothness of order $\beta>2$; unbiased-noise specialization.
+& \textbf{(1)}: Drops $\beta>2$. On the overlap, $\mathcal{O}(d\sqrt T)$ instead of $\mathcal{O}(dT)$ for $T\ge1$, $\sigma\le\varepsilon/(d\sqrt T)$.
+& \textbf{(1)}: Excludes the systematic and adversarial errors admitted by \textbf{(7)}.
+\\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $d$ is the dimension, $L$ the gradient Lipschitz constant, $R$ the initial distance bound, $\sigma$ the value-noise standard-deviation bound. All costs count individual function-value calls; $\mathcal{O}$ hides universal numerical factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Quantile-controlled symmetric-remainder noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuantileSymmetricRemainderConvex.lean}{QuantileSymmetricRemainderConvex}.}\label{tab:QuantileSymmetricRemainderConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:\mathbb R^d\to\mathbb R$ has $L$-Lipschitz gradient and a minimizer $x_\star$ with $\|x_0-x_\star\|\le R$. The jointly measurable oracle uses IID samples with law $p$ and stream law $P$. At every query, each coordinate-noise law is $\mu=S+A$, where $S,A$ are nonnegative measures, $S$ is reflection-symmetric, $\int |z|\,dA<\infty$, $\int z\,dA=0$, $\int z^2\,dA\le M$, and $\mu\{|z|>r\}\le1/64$. Here $d\ge1$, $L,R,r,\varepsilon>0$, $M\ge0$; no moments of $S$ are required. Target: measurable output with integrable gap and $\int[f(\mathrm{output}(\xi))-f(x_\star)]\,dP(\xi)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuantileRemainderMinimaxConvex.lean}{Quantile\allowbreak Remainder\allowbreak Minimax\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuantileRemainderMinimaxConvex.md}{(review)}
+& $\displaystyle\mathcal{O}\!\bigl(\bigl[1+\sqrt{\frac{LR^2}{\varepsilon}}$\newline
+$\displaystyle{}+\frac{dR^2(LR+r)^2}{\varepsilon^2}+\frac{d^2M^2R^4}{\varepsilon^4}\bigr]\ell_0\bigr)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Clipped-SSTM/SMoM \citep[Cor.~5.8, Lem.~4.5, Eq.~(117)]{qsrcPuchkin2024v2}. Derived bound on the overlap: absolutely continuous noise; centered signed antisymmetric density with absolute second moment $\le M$; $\beta\ge1$, $s^{*k}(u)\le Bk/(k^{(\beta+1)/\beta}+|u|^{1+\beta})$.
+& $\displaystyle\mathcal{O}_{B,\beta}\!\bigl(\bigl[1+M+\frac{\sqrt d MR}{\varepsilon}\bigr]$\newline
+$\displaystyle{}\times\bigl[1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{dR^2}{\varepsilon^2}\bigr]\ell(1)\bigr)$\newline
+Fixed $B,\beta$, Gaussian scale $\theta=1$; includes all batches. Gap $\le\varepsilon$ with probability $1-\delta$.
+& \textbf{(1)} Scope: quantile control replaces density/convolution-tail requirements; covers atomic noise and symmetric backgrounds with no positive moment.
+& \textbf{(1)} Expected rather than high-probability accuracy. For fixed positive parameters and $\varepsilon\to0$, $\varepsilon^{-4}$ versus $\varepsilon^{-3}$, up to logarithms. \\
+\midrule
+\textbf{(3)} Clipped-SSTM/median \citep[Prop.~4.1, Thm.~5.7, Eqs.~(18), (117)]{qsrcPuchkin2024v2}. Derived bound restricted to $M=0$ and symmetric coordinate densities $p_j(u)\le B/(1\vee|u|^{1+\beta})$, $\beta>0$.
+& $\displaystyle\mathcal{O}\!\bigl(m\bigl[1+\sqrt{\frac{LR^2}{\varepsilon}}$\newline
+$\displaystyle{}+\frac{dmv^2R^2}{\varepsilon^2}\bigr]\ell(mv^2)\bigr)$\newline
+Includes median batches. Gap $\le\varepsilon$ with probability $1-\delta$.
+& \textbf{(1)} Scope: quantile-only noise replaces polynomial-tail densities. Matches the known $\varepsilon^{-2}$ polynomial order for fixed remaining parameters at $M=0$.
+& \textbf{(1)} Expected rather than high-probability accuracy; noise scale includes $(LR+r)^2$, introducing $L^2R^2$ dependence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count raw stochastic-gradient calls. $\ell_0=1+\log(1+\sqrt d\,R(LR+r)/\varepsilon+dMR^2/\varepsilon^2)$; $\ell(t)=1+\log((1+\sqrt{LR^2/\varepsilon}+dtR^2/\varepsilon^2)/\delta)$; $0<\delta<1$. In \textbf{(2)}, $s=(p_j(u)+p_j(-u))/2$ is each symmetrized coordinate density and $s^{*k}$ its $k$-fold convolution. $\mathcal{O}_{B,\beta}$ permits constants depending on fixed $B,\beta$. In \textbf{(3)}, $m=1+\lceil4/\beta\rceil$ and $v^2=(1\vee(4B/\beta))^{2/\beta}$; $\vee$ denotes maximum.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

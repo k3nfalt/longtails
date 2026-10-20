@@ -227,7 +227,7 @@ def main(argv=None):
         help="Check compilation of existing output files; saved tables remain untouched",
     )
     parser.add_argument(
-        "--jobs", type=int, default=6, help="Parallel sessions (default: 6)"
+        "--jobs", "-j", type=int, default=6, help="Parallel sessions (default: 6)"
     )
     parser.add_argument(
         "--setups",
@@ -645,11 +645,16 @@ def main(argv=None):
             "be unwieldy, not merely to force a formula onto one line. "
             "Keep formulas on one line whenever they fit their column; remove unnecessary "
             "forced breaks, retaining breaks only to prevent overflow without shrinking the font. "
-            "Keep exactly Result, Oracle complexity, Novelty, and Limitations columns; put all differences, including tuning requirements, in the comparison columns; preserve table-local result numbers, leave our comparison cells as dashes, refer to those numbers for our advantages and disadvantages only in prior-work rows, and define notation locally in each table. "
+            "Keep exactly Result, Oracle complexity, Novelty, and Limitations columns; put all differences, including tuning requirements, in the comparison columns; number every result row consecutively within each table (ours first, then prior work), leave our comparison cells empty, use explicit row numbers instead of both or the baseline for comparisons only in prior-work rows, and define notation locally in each table. "
             "Keep comparisons factual; remove review verdicts, opinions and commentary about "
             "the review process, such as 'Review’s composition is not a directly stated theorem'. "
             "Preserve each method's individual star rating in parentheses beside its label; do not replace it with a textual verdict. "
             "Label review links (review) and keep them only beside our methods; prior methods use paper citations only. "
+            "Preserve useful quantitative examples with their regimes and total big-O bounds. "
+            "Leave Limitations empty unless a baseline-specific loss or extra requirement is established; "
+            "omit generic caveats, unresolved priority/optimality, and statements that no restriction was found. "
+            "Retain supported worse leading constants in prose even when big-O hides them. "
+            "Compare only the exact guarantee cited in each numbered row, not a different theorem in the same paper. "
             "Preserve substantive comparison conditions; "
             "do not recast a scope extension as a rate improvement. "
             "Preserve all mathematical guarantees, parameter dependence, validity conditions, "

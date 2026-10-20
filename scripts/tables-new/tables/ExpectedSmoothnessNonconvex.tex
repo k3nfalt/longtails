@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Expected stationarity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ExpectedSmoothnessNonconvex.lean}{ExpectedSmoothnessNonconvex}.}\label{tab:ExpectedSmoothnessNonconvex}
+\parbox{\linewidth}{\footnotesize A differentiable, lower-bounded $f$ on a second-countable real Hilbert space with its Borel structure satisfies $f(x_0)-f_{\mathrm{low}}\leq\Delta$ and has $L$-Lipschitz gradient. The jointly measurable oracle $g$ is unbiased, with integrable gradients and squared errors/differences, and satisfies $\mathbb E_p\|g(x,\xi)-g(y,\xi)\|^2\leq L^2\|x-y\|^2$ and $\mathbb E_p\|g(x,\xi)-\nabla f(x)\|^2\leq2A(f(x)-f_{\mathrm{low}})+C$. Here $L,\varepsilon>0$ and $A,C,\Delta\geq0$. Samples are IID under $P$, with marginal $p$; each query returns two gradients at chosen points using the same sample. The target is measurable $x_{\mathrm{out}}$ with $\int\|\nabla f(x_{\mathrm{out}}(\omega))\|\,dP(\omega)\leq\varepsilon$. Prior-work comparisons below use the finite-dimensional overlap.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NormalizedStormExpectedSmoothness.lean}{Normalized\allowbreak Storm\allowbreak Expected\allowbreak Smoothness} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NormalizedStormExpectedSmoothness.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&1+\frac AL+\frac{L\Delta+A\Delta+C}{\varepsilon^2}\\&{}+\frac{L\Delta\sqrt{A\Delta+C}}{\varepsilon^3}\end{aligned}\right)$ pair calls, including initialization. & & \\
+\midrule[1.2pt]
+\textbf{(2)} SGD \citep{esncKhaledRichtarik2023}, Cor.~1
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta(A\Delta+C)}{\varepsilon^4}\right)$ single-gradient calls; minimum expected gradient norm across iterates.
+& \textbf{(1)}: stochastic leading term improves by $\sqrt{A\Delta+C}/\varepsilon$ when $\varepsilon\leq\min\{\sqrt{A\Delta+C},\sqrt{L\Delta}\}$; strict gain when this factor grows.
+& \textbf{(1)} needs MSS and same-sample pairs (two gradients); \textbf{(2)} only needs objective smoothness, potentially $L_F<L$. \\
+\midrule
+\textbf{(3)} NSTORM \citep{esncUpadhyay2026v1}, Thm.~2(i), derived bound
+& $\mathcal{O}\!\left(1+\frac{(L\Delta)^2}{\varepsilon^4}+\frac{(A\Delta+C)L\Delta}{\varepsilon^2}\right)$ gradient calls, including initialization; $\gamma_0=\sqrt{\Delta/L}$. Valid for $L\Delta\geq1$, $\varepsilon^2\leq L\Delta$, $\varepsilon\sqrt{A\Delta+C}\leq L\Delta$.
+& \textbf{(1)}: $\varepsilon^{-3}$ instead of $\varepsilon^{-4}$ at fixed positive parameters; no worse total order in the stated regime. MSS+ABC imply the required BG bound.
+& \textbf{(1)} exploits ABC; it does not cover general distance-driven BG noise. \\
+\midrule
+\textbf{(4)} SPIDER \citep{esncChen2023}, Thm.~4, derived bound
+& $\mathcal{O}\!\left(\begin{aligned}&1+\Gamma^2+\frac{L\Delta(1+\Gamma^2)+\Lambda^2}{\varepsilon^2}\\&{}+\frac{L\Delta(1+\Gamma)\Lambda}{\varepsilon^3}\end{aligned}\right)$ gradient calls. Affine variance; $A=L\Gamma^2$, $C=\Lambda^2$. Retuned epoch $q\asymp\max\{1,\Lambda/(\max\{1,\Gamma\}\varepsilon)\}$; $\varepsilon<1$, $\varepsilon\Lambda\leq\max\{1,\Gamma\}$.
+& \textbf{(1)}: Scope: ABC permits non-affine variance. Rate: the $\varepsilon^{-3}$ coefficient improves by $\asymp\min\{\Gamma,\Lambda/\sqrt{L\Delta}\}$ when $\Gamma\geq1$, $\Lambda\geq\sqrt{L\Delta}$; not uniform total-cost dominance.
+& \textbf{(1)} has a worse $\varepsilon^{-3}$ coefficient when $\Lambda\ll\Gamma\sqrt{L\Delta}/(1+\Gamma)$; at $\Lambda=0$, $\Gamma,\Delta>0$, it loses $\varepsilon^{-1}$. \\
+\midrule
+\textbf{(5)} SPIDER \citep{esncFang2018v2}, Thm.~1
+& $\mathcal{O}\!\left(1+\frac{L\Delta+C}{\varepsilon^2}+\frac{L\Delta\sqrt C}{\varepsilon^3}\right)$ gradient calls. Bounded-variance restriction: $A=0$, $C=\sigma^2$; $\varepsilon\leq\sigma$.
+& \textbf{(1)} matches the known rate on this overlap; extends scope to function-value-dependent, potentially unbounded variance. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\Delta$ is the initial gap bound; $f_{\mathrm{low}}$ is a global lower bound. MSS: mean-square smoothness. ABC: the stated function-value variance bound. BG: $\operatorname{Var}(g(x,\xi))\leq B^2\|x-x_0\|^2+G^2$; here $B^2=2L^2$, $G^2=2(2A\Delta+C)$. Affine variance: $\operatorname{Var}(g(x,\xi))\leq\Gamma^2\|\nabla f(x)\|^2+\Lambda^2$. $q$ is an epoch length; $\gamma_0$ is the step-size prefactor; $L_F$ is objective smoothness. A pair call uses one sample and two gradient evaluations; all costs include minibatches. $\asymp$ suppresses universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

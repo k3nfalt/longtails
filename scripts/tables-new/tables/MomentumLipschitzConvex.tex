@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MomentumLipschitzConvex.lean}{MomentumLipschitzConvex}.}\label{tab:MomentumLipschitzConvex}
+\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb R$ on a separable real Hilbert space with its Borel measurable structure; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. The jointly measurable oracle $g(\xi,x)$ uses IID samples of law $p$, with $\int g(\xi,x)\,dp(\xi)\in\partial f(x)$ and $\int\|g(\xi,x)\|^2\,dp(\xi)\le G^2$ for every $x$. Here $G,\varepsilon>0$, $R\ge0$, and $0\le\beta<1$. The setup restricts algorithms to constant-$\beta$ EMA momentum SGD. Our horizon-dependent affine schedule uses $G,R,\beta,\varepsilon$ and zero initial momentum; its last iterate satisfies $\int[f(x_N(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, with integrable gap and $P=p^{\otimes\mathbb N}$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConstantMomentumLastIterate.lean}{Constant\allowbreak Momentum\allowbreak Last\allowbreak Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConstantMomentumLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{G^2R^2}{\varepsilon^2}+\kappa^2\log\dfrac{e}{1-\beta}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Linear-decay SGD \citep[Thm.~3.4, v4]{bscLiuZhou2026v4}
+& $\mathcal{O}\!\left(1+\dfrac{G^2R^2}{\varepsilon^2}\right)$\par Finite-dimensional overlap: unconstrained Euclidean case, $L=0$, $M=2G$, $\sigma\le G$.
+& \textbf{(1)}: Matches known rate for fixed $\beta$; method-specific log-free last-iterate analysis for constant EMA momentum, without a problem-class complexity gain.
+& \textbf{(1)}: Adds $\kappa^2\log(e/(1-\beta))$ calls; does not cover the composite, constrained, or general-norm extensions of \textbf{(2)}. \\
+\midrule
+\textbf{(3)} FTRL-based SGDM \citep[Cor.~1]{mlcLi2022v3}
+& $\mathcal{O}\!\left(1+\dfrac{G^2R^2}{\varepsilon^2}\right)$\par In $\mathbb R^d$, under H3; $c=R$, $\gamma_{t-1}=R/(G\sqrt t)$, $\beta_t=(t-1)/t$.
+& \textbf{(1)}: Matches known rate for fixed $\beta$; constant instead of increasing momentum gives no total-cost improvement.
+& \textbf{(1)}: Adds momentum burn-in and has a larger leading constant; needs the horizon, whereas \textbf{(3)} is anytime. \\
+\midrule
+\textbf{(4)} Schedule-Free SGD \citep[Thm.~1, v4]{mlcDefazio2024v4}
+& $\mathcal{O}\!\left(1+\dfrac{G^2R^2}{\varepsilon^2}\right)$\par Special case: $f=\mathbb E_\xi\ell(\cdot,\xi)$, each sample loss $G$-Lipschitz; stochastic subgradient oracle. Returns averaged $x_T$, not query $y_T$.
+& \textbf{(1)}: Scope: permits second-moment-bounded oracles beyond Lipschitz sample losses. Matches the leading rate on the common setup.
+& \textbf{(1)}: On the common setup, adds $\kappa^2\log(e/(1-\beta))$ calls and has a larger leading constant. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=\beta/(1-\beta)$; $G$ is the oracle second-moment bound, $R$ the initial-distance bound, $\varepsilon$ the expected objective-gap target; $N,T$ are oracle-call horizons. EMA: exponential moving average; FTRL: follow the regularized leader; H3: $\mathbb E\|g_t\|^2\le G^2$. Costs count individual stochastic subgradient calls. In \textbf{(2)}, $L,M$ are the smoothness and Lipschitz parameters and $\sigma$ bounds noise standard deviation.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

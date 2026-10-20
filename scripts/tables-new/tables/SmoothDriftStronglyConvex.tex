@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Tracking under smooth minimizer drift: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothDriftStronglyConvex.lean}{SmoothDriftStronglyConvex}.}\label{tab:SmoothDriftStronglyConvex}
+\parbox{\linewidth}{\footnotesize Deterministic $\mu$-strongly convex, $L$-smooth $f_k$ on a separable real Hilbert space, $0<\mu\le L$, with arbitrary shape variation. Minimizers satisfy $\|x_0-x_0^*\|\le R$, $\|x_1^*-x_0^*\|\le V$ and $\|x_{k+2}^*-2x_{k+1}^*+x_k^*\|\le\Gamma$. Jointly measurable stochastic gradients use independent samples with law $p$, are unbiased, and have variance at most $\sigma^2$ uniformly in $x$. Target: $\int\|x_N-x_{N-1}^*\|^2\,d p^{\otimes\mathbb N}\le\varepsilon$ for every $N$ beyond the budget, with $\varepsilon>0$ and $9792\Gamma^2(2\kappa+99\sigma^2/(\mu^2\varepsilon))^4\le\varepsilon$. Updates know $\mu,L,\sigma,\varepsilon$, not $\Gamma,R,V$; the setup restricts the reported time to the call count, not the method.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/VelocityTrackingSmoothDrift.lean}{Velocity\allowbreak Tracking\allowbreak Smooth\allowbreak Drift} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/VelocityTrackingSmoothDrift.md}{(review)}
+& $\mathcal{O}\!\left(1+H+A\log\!\left(1+\frac{R^2+V^2A^2}{\varepsilon}\right)\right)$ stochastic-gradient calls.
+\par Admissibility, up to universal constants:
+$\varepsilon\gtrsim (\Gamma^2\sigma^8/\mu^8)^{1/5}+\kappa^4\Gamma^2$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} SGD, step decay \citep[Thms.~3, 4, 28]{sdsCDH2023v4}. Special case: bounded speed in $\mathbb R^d$, no regularizer.
+& Derived bound: $\mathcal{O}\!\left(1+\kappa\log\!\left(1+\frac{R^2}{\varepsilon}\right)+\frac{\sigma^2}{\mu^2\varepsilon}\right)$ gradient calls.
+\par Target $\mathbb E\|x_N-x_N^*\|^2\le\varepsilon$. Certified floor: $\varepsilon\gtrsim (\Delta\sigma^2/\mu^2)^{2/3}+\kappa^2\Delta^2$; $\|x_{k+1}^*-x_k^*\|\le\Delta$ on the deterministic overlap ($V\le\Delta$, $\Gamma\le2\Delta$).
+& \textbf{(1)}: reaches below the certified floor when $(\Gamma^2\sigma^8/\mu^8)^{1/5}+\kappa^4\Gamma^2\ll\varepsilon\ll(\Delta\sigma^2/\mu^2)^{2/3}$. Every accuracy is admissible at $\Gamma=0$. Scope: permits unbounded speed.
+& \textbf{(1)}: extra noise logarithm and velocity initialization; deterministic drift and uniform variance instead of along-iterate variance. At $\Gamma\asymp\Delta$, drift-floor term $\kappa^4\Delta^2$ instead of $\kappa^2\Delta^2$. \\
+\midrule
+\textbf{(3)} Romberg NLMS \citep[Thm.~8, Cor.~9]{sdsMPR2005}. Special case: stable time-varying autoregression, smooth coefficients/covariance.
+& $\mathcal{O}(n)$ normalized-gradient updates (two chains per sample); MSE $\mathcal{O}(n^{-2\beta/(1+2\beta)})$, $1<\beta\le2$, after fixed-fraction burn-in. Requires bounded innovation/initial moments of order $q>8$ for MSE; unspecified constants. No explicit parameter-dependent call bound.
+& \textbf{(1)}: explicit finite-time guarantee for nonlinear objectives with arbitrarily changing shape. Matches the $n^{-4/5}$ floor exponent when $\beta=2$, $\Gamma\asymp n^{-2}$; oracle complexities are not comparable.
+& \textbf{(1)}: uniform variance excludes the multiplicative random-design noise admitted by \textbf{(3)}. \\
+\midrule
+\textbf{(4)} Prediction--correction \citep[Thm.~5.5]{sdsKMT2025v1}. Sample losses strongly convex and smooth; twice differentiable minimizer path with bounded second derivative.
+& No total gradient-call bound. First-moment asymptotic error $\mathcal{O}(h^{2/5})$ with fixed noise scale, unbiased sample minimizers, window $\Theta(h^{-4/5})$, and inner contraction $\rho=\mathcal{O}(h^{2/5})$ toward each sample minimizer.
+& \textbf{(1)}: finite-time mean-square accuracy; removes per-sample strong convexity and sample-minimizer unbiasedness. One gradient per step replaces repeated sample-function solves, even without regularization. Call rates are not comparable.
+& \textbf{(1)}: needs variance uniform in $x$, not only at $x_k^*$; excludes the convex regularizer supported by \textbf{(4)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $A=\kappa+\sigma^2/(\mu^2\varepsilon)$; $H\in\mathbb N$ is additional elapsed calls. $\Delta$ bounds minimizer speed; $n$ is sample size; $\beta$ is coefficient smoothness; $q$ is moment order; $h$ is sampling period; $\rho$ is inner-solver contraction. MSE: mean-square error; NLMS: normalized least mean squares. $\gtrsim$ in accuracy conditions means a sufficiently large universal factor.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

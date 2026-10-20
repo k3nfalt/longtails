@@ -1,0 +1,56 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ContinuizedSimilarQuasar.lean}{ContinuizedSimilarQuasar}.}\label{tab:ContinuizedSimilarQuasar}
+\parbox{\linewidth}{\footnotesize
+Let $F=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space, with differentiable $f_i$, exact component gradients, and $L$-Lipschitz $\nabla F$.
+For a global minimizer $x_\star$, assume $F(x_0)-F(x_\star)\le\Delta$ and
+$F(x)-F(x_\star)\le\gamma^{-1}\langle\nabla F(x),x-x_\star\rangle-\frac\mu2\|x-x_\star\|^2$.
+For all $x,y$, assume
+$\frac1n\sum_i\|[\nabla f_i(x)-\nabla F(x)]-[\nabla f_i(y)-\nabla F(y)]\|^2\le\delta^2\|x-y\|^2$.
+Here $n\ge1$, $0<\mu\le L$, $0<\gamma\le1$, $\delta,\Delta\ge0$, and $\varepsilon>0$.
+No interpolation is required. Our constructions have deterministic component-gradient budgets and final outputs $X$ satisfying $\int [F(X(\omega))-F(x_\star)]\,dP(\omega)\le\varepsilon$, where $P$ is the execution law.
+}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MovementSimilarQuasar.lean}{Movement\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MovementSimilarQuasar.md}{(review)}
+& $\mathcal{O}\!\left(n+\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{(n\delta/\mu)^{2/3}}{\gamma^{4/3}}\right]\lambda_\gamma\right)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ContinuizedSimilarQuasar.lean}{Continuized\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ContinuizedSimilarQuasar.md}{(review)}
+& $\mathcal{O}\!\left(\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{\delta^2}{\gamma^3\mu^2}\right](1+\lambda_\gamma)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(3)} PAGE \citep{csqLi2021v3}, Thm.~5/Cor.~6. Derived bound on $\mathbb R^d$ via PL.
+& $\mathcal{O}\!\left(n+\left[n+\frac{\sqrt n\sqrt{L^2+\delta^2}}{\gamma^2\mu}\right](1+\lambda_1)\right)$ expected component-gradient calls.
+& \textbf{(1)}: no worse polynomial dependence; \textbf{(2)}: likewise if $\delta^2\le\gamma\sqrt n L\mu$; extra $\log(1/\gamma)$ possible.\newline
+At $\gamma=1$, $n=\kappa$, $\delta=0$: $\mathcal{O}(\kappa^{3/2}(1+\lambda_1))\to\mathcal{O}(\kappa(1+\lambda_1))$. \textbf{(1)}: at $\gamma=1$, $n=\kappa$, $\delta=L$, $\mathcal{O}(\kappa^{3/2}(1+\lambda_1))\to\mathcal{O}(\kappa^{4/3}(1+\lambda_1))$. \textbf{(1)}, \textbf{(2)}: deterministic budgets.
+& \textbf{(1)}, \textbf{(2)} need quasar structure, beyond PL. At $\gamma=1$, $n=\kappa$, $\delta=L$, \textbf{(2)} costs $\mathcal{O}(\kappa^2(1+\lambda_1))$ versus $\mathcal{O}(\kappa^{3/2}(1+\lambda_1))$. \\
+\midrule
+\textbf{(4)} Full-batch acceleration \citep{csqHinder2020}, Thm.~1; $\mathbb R^d$.
+& $\mathcal{O}\!\left(\frac{n\sqrt\kappa}{\gamma}\left[1+\log\frac\kappa\gamma\right](1+\lambda_\gamma)\right)$ component-value plus component-gradient calls; deterministic accuracy.
+& \textbf{(1)}, \textbf{(2)}: gradients only. \textbf{(2)}: speedup $\asymp\min\{n,\sqrt\kappa/\gamma\}(1+\log(\kappa/\gamma))$ if $\delta^2\lesssim\gamma^3\mu^2(n+\sqrt\kappa/\gamma)$. \textbf{(1)}: no worse rate if $\delta\lesssim\sqrt{n\gamma}\mu\kappa^{3/4}$.
+& \textbf{(1)}, \textbf{(2)}: expected instead of deterministic accuracy. \textbf{(1)} worsens when $\delta\gg\sqrt{n\gamma}\mu\kappa^{3/4}[1+\log(\kappa/\gamma)]^{3/2}$; \textbf{(2)} can also worsen for large $\delta$. \\
+\midrule
+\textbf{(5)} QASVRG \citep{csqFu2023}, Cor.~3.6, Option~I. Special case: $\mathbb R^d$, interpolation, $L_{\max}$-smooth components.
+& $\mathcal{O}\!\left(\left[n+\min\!\left\{\frac{\kappa_{\max}}{\gamma^2},\frac{n\sqrt{\kappa_{\max}}}{\gamma}\right\}\right.\right.$\newline
+$\left.\left.\vphantom{\frac11}\cdot[1+\log(1/\gamma)]\right.\right.$\newline $\left.\left.{}\cdot[1+\log(\kappa_{\max}/\gamma)]\right](1+\lambda_\gamma)\right)$ component-value plus component-gradient calls.
+& \textbf{(1)}, \textbf{(2)}: scope extends beyond interpolation; gradients only. \textbf{(2)}: gains on the overlap require small similarity, e.g. $\delta^2/(\gamma^3\mu^2)\lesssim n+\min\{\kappa_{\max}/\gamma^2,n\sqrt{\kappa_{\max}}/\gamma\}$.
+& \textbf{(2)} can lose on the overlap: at $\delta=L_{\max}$ its similarity term is $\kappa_{\max}^2/\gamma^3$. No uniform rate improvement. \\
+\midrule
+\textbf{(6)} AccSVRS \citep{csqLin2023v2}, \S3.3/App.~E. Special case: $\mathbb R^d$, $\gamma=1$, $\mu$-strongly convex $F$, $L$-smooth $f_1$, $\mu\le\delta\le L$.
+& $\mathcal{O}\!\left(\left[n+n^{3/4}\!\left(\sqrt{\frac\delta\mu}+\sqrt{\frac L\delta}\right)+\sqrt{n\kappa}\right]\right.$\newline
+$\left.\cdot\left[1+\log\frac{\sqrt n\delta+L}{\mu}\right](1+\lambda_1)\right)$ expected component-gradient calls, including inner solves.
+& \textbf{(1)}, \textbf{(2)}: allow nonconvex $F$; no $L$-smoothness requirement on $f_1$ or $\mu\le\delta\le L$. \textbf{(1)}: at $\delta=\mu$, $n\le\sqrt\kappa$, improves $n^{3/4}\sqrt\kappa$ to $\sqrt\kappa$, up to displayed logarithms.
+& \textbf{(1)}: at $\delta=L$, $\kappa>\sqrt n$, polynomial cost worsens by $(\kappa^2/n)^{1/12}$, up to displayed logarithms. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $L_{\max}$ is a common component-gradient Lipschitz bound; $\kappa_{\max}=L_{\max}/\mu$; $\lambda_a=\log(1+\Delta/(a\varepsilon))$.
+PL denotes $\|\nabla F(x)\|^2\ge2\gamma^2\mu[F(x)-F(x_\star)]$; average smoothness for \textbf{(3)} is $\sqrt{L^2+\delta^2}$. Costs count individual component evaluations, including refreshes; $\lesssim$ hides universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth convex minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothAndConvex.lean}{SmoothAndConvex}.}\label{tab:SmoothAndConvex}
+\parbox{\linewidth}{\footnotesize A convex differentiable $f:E\to\mathbb{R}$ on a real Hilbert space has an exact $L$-Lipschitz gradient oracle, $L>0$, and a minimizer $x_\star$ with $\|x_0-x_\star\|\le R$, $R\ge0$. The target is $f(x_{\mathrm{out}})-f(x_\star)\le\varepsilon$, $\varepsilon>0$, almost surely under the oracle law (deterministically here). The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedConvex.lean}{Accelerated\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedConvex.md}{(review)} & $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GdConvex.lean}{Gd\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GdConvex.md}{(review)} & $\mathcal{O}(1+LR^2/\varepsilon)$ & & \\
+\midrule[1.2pt]
+\textbf{(3)} Nesterov acceleration \citep[Cor.~4.9]{scAST2021v4} & $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$; dimension-free Hilbert-space extension. & \textbf{(1)}: Matches known rate; Lean formalization, with the same oracle and knowledge of $L$. & \textbf{(2)}: About $\sqrt{LR^2/(8\varepsilon)}$ more calls for $LR^2/\varepsilon\gg1$; unrounded budgets cross at $8$. At $LR^2/\varepsilon\le8$, each budget is at most four calls. \\
+\midrule
+\textbf{(4)} Classical GD \citep[Eq.~(3.1)]{scDT2014v1} & $\mathcal{O}(1+LR^2/\varepsilon)$; step $1/L$, stated on $\mathbb{R}^d$. & \textbf{(2)}: Matches known rate; Lean formalization. \textbf{(1)}: Classical acceleration replaces $LR^2/\varepsilon$ by $\sqrt{LR^2/\varepsilon}$ in the large-$LR^2/\varepsilon$ regime. & \\
+\midrule
+\textbf{(5)} Tight GD \citep[Thm.~3.1]{scDT2014v1} & $\mathcal{O}(1+LR^2/\varepsilon)$; step $1/L$, $E=\mathbb{R}^d$. & \textbf{(2)}: Matches known rate in finite dimension. & \textbf{(2)}: About twice as many certified calls when $LR^2/\varepsilon\gg1$, on the finite-dimensional overlap. \\
+\midrule
+\textbf{(6)} OGM \citep[Cor.~4.6]{scAST2021v4} & $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$; $E=\mathbb{R}^d$. & \textbf{(1)}: Matches known rate on the finite-dimensional overlap. & \textbf{(1)}: About $\sqrt{2}$ more certified calls when $LR^2/\varepsilon\gg1$, with the same oracle and knowledge of $L$. \\
+\midrule
+\textbf{(7)} FISTA \citep[Thm.~4.4]{ifsBeckTeboulle2009} & $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$; fixed step $1/L$, $g=0$, $E=\mathbb{R}^d$. & \textbf{(1)}: Matches known rate on this restriction; the proximal update reduces to a gradient step. & \textbf{(1)}: Up to one extra certified call. Its theorem does not cover the composite objectives covered by \textbf{(7)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count exact gradient calls. $L$: gradient Lipschitz constant; $R$: initial distance bound; $\varepsilon$: objective accuracy; $d$: finite dimension; $g$: FISTA's nonsmooth convex summand; GD: gradient descent; OGM: optimized gradient method. Updates use $L$; stopping budgets use $R,\varepsilon$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

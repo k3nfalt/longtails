@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Paired zeroth-order convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdaptivePairedZerothOrder.lean}{AdaptivePairedZerothOrder}.}\label{tab:AdaptivePairedZerothOrder}
+\parbox{\linewidth}{\footnotesize On $\mathbb{R}^d$, $d\ge1$, let $Q$ be compact and convex, with diameter at most $D>0$, $x_0\in Q$, and an exact Euclidean projection. The population objective $f=\mathbb{E}F(\cdot,\omega)$ is convex and $M$-Lipschitz on $Q+\overline B(0,\gamma_{\max})$, where $\gamma_{\max}>0$; the smooth branch additionally assumes an $L$-Lipschitz gradient in its interior. Samples are almost surely continuous with locally integrable weak gradients $G$, satisfying $\mathbb{E}\|G(x,\omega)\|^2\le M_2^2$ pointwise in the interior. The oracle is jointly measurable and integrable, with IID samples across pairs and the same sample within each pair; it returns $F(x,\omega)+b(x)$, $|b(x)|\le\Delta$. For $\varepsilon>0$, the constructed output $\widehat x\in Q$ satisfies $\Pr\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$, where $x_\star\in\arg\min_Q f$. Take the smallest admissible budgets and require $\Delta\le\varepsilon\gamma/(16384\sqrt d\,D)$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptivePairedZerothOrderConfidence.lean}{Adaptive\allowbreak Paired\allowbreak Zeroth\allowbreak Order\allowbreak Confidence} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptivePairedZerothOrderConfidence.md}{(review)}
+& $\mathcal{O}\!\left((d+\ell)\left(1+\frac{M_2^2D^2}{\varepsilon^2}\right)+N\right)$ scalar values; includes all $6T+4N$ evaluations.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: \citep{apzoZhang2026v1}, Thm.~2.2, with two-point smoothing \citep{apzoShamir2017}
+& $\mathcal{O}\!\left(1+\frac{(d+\ell)M_2^2D^2}{\varepsilon^2}+\frac{\ell MD}{\varepsilon}\right)$ scalar values, including rejected trials. Requires $\Delta=0$, $\delta<1/10$, and $\mathbb{E}\operatorname{Lip}(F)^2\le M_2^2$; smoothing radius $\min\{\gamma_{\max},\varepsilon/(2M)\}$.
+& \textbf{(1)} matches the statistical oracle order with polynomially many exact-real primitive operations; \textbf{(2)} permits an exponentially large representation. No established oracle-rate improvement.
+& \textbf{(1)} adds dimension/confidence overhead and $N$; its nonsmooth cost can grow as $\gamma_{\max}^{-1/2}$. \\
+\midrule
+\textbf{(3)} Derived bound: clipped SGD \citep{apzoLiu2026v3}, Thm.~1, with two-point smoothing \citep{apzoShamir2017}
+& $\mathcal{O}\!\left(1+\frac{(d+\sqrt d\,\ell)M_2^2D^2}{\varepsilon^2}+\frac{\sqrt d\,\ell MD}{\varepsilon}\right)$ scalar values. Requires $\Delta=0$ and $\mathbb{E}\operatorname{Lip}(F)^2\le M_2^2$; smoothing radius $\min\{\gamma_{\max},\varepsilon/(2M)\}$.
+& \textbf{(1)}: statistical coefficient $d+\ell$ instead of $d+\sqrt d\,\ell$; gain requires $\ell\gg\sqrt d$ and dominated overhead. No statistical-order gain for $\ell\lesssim\sqrt d$. At $\ell=d$, statistical-dominated totals are $\mathcal{O}(dM_2^2D^2/\varepsilon^2)$ versus $\mathcal{O}(d^{3/2}M_2^2D^2/\varepsilon^2)$.
+& \textbf{(1)} needs compact $Q$; nonsmooth radius cost can erase the gain when $\gamma_{\max}\ll\frac{\sqrt d\,M\varepsilon^3}{(d+\ell)^2M_2^4D^2}$. \\
+\midrule
+\textbf{(4)} ZO-clipped-SSTM \citep{apzoKornilov2023v1}, Thm.~3, $\alpha=2$
+& $\mathcal{O}\!\left(1+H\left[\frac{dM_2^2R^2}{\varepsilon^2}+\frac{d^{1/4}M_2R}{\varepsilon}\right]\right)$ scalar values, including batches. Unbiased unconstrained case: global minimizer, convex Lipschitz samples with $\mathbb{E}\operatorname{Lip}(F)^2\le M_2^2$, and queries on the required enlarged $B_{3R}(x_\star)$.
+& Scope: \textbf{(1)} permits pointwise weak-gradient moments instead of square-integrable sample Lipschitz constants, and arbitrary constrained minimizers. Rates on general $Q$ are not comparable.
+& \textbf{(1)} needs bounded $Q$ and its diameter; \textbf{(4)} uses an initial-distance bound and also covers $1<\alpha<2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\delta\in(0,1)$ is failure probability; $\ell=\log(8/\delta)$. $N$ is the smallest admissible iteration budget: $N\asymp1+\sqrt{LD^2/\varepsilon}$ in the smooth branch, and $N\asymp1+d^{1/4}MD/\varepsilon+d^{1/4}D\sqrt{M/(\gamma_{\max}\varepsilon)}$ otherwise. Respectively, $\gamma=\min\{\gamma_{\max},D/N\}$ or $\min\{\gamma_{\max},d^{1/4}D/N\}$. $T$ is the sampling budget, $T\asymp(d+\ell)(1+M_2^2D^2/\varepsilon^2)+N$. $R\ge\|x_0-x_\star\|$; $H=1+\log((1+d^{1/4}M_2R/\varepsilon)/\delta)$. $\operatorname{Lip}(F)$ denotes a sample Lipschitz constant on the relevant query domain. $\asymp$ suppresses universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

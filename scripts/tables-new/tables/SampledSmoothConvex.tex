@@ -1,0 +1,62 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SampledSmoothConvex.lean}{SampledSmoothConvex}.}\label{tab:SampledSmoothConvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, $f(x)=\int F_\xi(x)\,dp(\xi)$, where $p$ is a probability law, every $F_\xi$ is convex with $L$-Lipschitz gradient, sample losses are integrable, and sample gradients are jointly measurable. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\int\|\nabla F_\xi(x_\star)\|^2\,dp(\xi)\le\sigma^2<\infty$; $L,\varepsilon>0$ and $R,\sigma\ge0$. Samples are IID under $P$. The setup restricts algorithms to linear-decay SGD; the target is $\int[f(x_T(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, with measurable output and integrable gap.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LinearDecaySgdLastIterate.lean}{Linear\allowbreak Decay\allowbreak Sgd\allowbreak Last\allowbreak Iterate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LinearDecaySgdLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$.
+\par $\eta_k=\eta(T-k)/T$, $\eta=R/(8LR+\sigma\sqrt T)$; tuned horizon $T$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} SHB-IMA \citep[Thm.~G.1, Cor.~G.2]{sscSebbouh2021v2}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$.
+\par $\mathbb{R}^d$; tuned constant learning rate, varying momentum.
+& \textbf{(1)}: Matches known last-iterate rate using plain SGD. Scope: Hilbert space instead of $\mathbb{R}^d$; no problem-class complexity gain.
+& \\
+\midrule
+\textbf{(3)} Constant-step SGD \citep[Thm.~2]{csrrAttia2025v2}
+& $\mathcal{O}\!\left(1+\left[\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right]\ell\right)$.
+\par $\mathbb{R}^d$; tuned step, known horizon.
+& \textbf{(1)}: Removes $\ell$ for plain SGD when $LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2\to\infty$. Scope: Hilbert space. At $\sigma=0$, $\mathcal{O}(LR^2/\varepsilon)$ instead of $\mathcal{O}((LR^2/\varepsilon)\ell)$.
+& \\
+\midrule
+\textbf{(4)} Constant-step SGD \citep[Thm.~3.1, Rem.~3.8]{sscGarrigos2025v1}
+& $\mathcal{O}\!\left(1+\left[\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right]\ell\right)$.
+\par Derived bound: Hilbert space; noise-tuned constant step, known horizon.
+& \textbf{(1)}: Removes $\ell$ for plain SGD when $LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2\to\infty$, including interpolation; same problem scope.
+& \\
+\midrule
+\textbf{(5)} Constant-step SGD \citep[Cor.~3.4]{sscGarrigos2025v1}
+& $\mathcal{O}\!\left(1+\frac{L^2R^4}{\varepsilon^2}\right.$\par
+$\left.{}+\frac{\sigma^4}{L^2\varepsilon^2}\log^2\!\left(2+\frac{\sigma^2}{L\varepsilon}\right)\right)$.
+\par Hilbert space; step $1/(CL\sqrt T)$, fixed $C\ge2$.
+& \textbf{(1)}: At $\sigma=0$ and $LR^2/\varepsilon\gg1$, $\mathcal{O}(LR^2/\varepsilon)$ instead of $\mathcal{O}(L^2R^4/\varepsilon^2)$.
+& \textbf{(1)} needs $R,\sigma$ for updates in addition to $L,T$; \textbf{(5)} does not.
+\\
+\midrule
+\textbf{(6)} Linear-decay SGD \citep[Thm.~3.4]{bscLiuZhou2026v4}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma_u^2R^2}{\varepsilon^2}\right)$.
+\par Common restriction: unconstrained smooth $f$ on $\mathbb{R}^d$, finite uniform variance $\sigma_u^2$.
+& \textbf{(1)}: Scope: permits $\sigma_u=\infty$, including random-design least squares. On overlap, replaces $\sigma_u^2$ by $\sigma^2\le\sigma_u^2$ in noise cost; matches rate at equal noise.
+& \textbf{(1)} requires per-sample convexity and smoothness; \textbf{(6)} does not. Classes are incomparable; \textbf{(1)} lacks the constrained/composite extension.
+\\
+\midrule
+\textbf{(7)} Averaged SGD \citep[Thm.~8, App.~B]{csrrAttia2025v2}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$.
+\par $\mathbb{R}^d$; tuned constant step.
+& \textbf{(1)}: Matches known rate with last iterate instead of averaging; extends to Hilbert space.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} SGD: stochastic gradient descent; SHB-IMA: stochastic heavy ball in iterate-moving-average form. Costs count individual sample-gradient calls. $L$: sample smoothness; $R$: initial distance bound; $\sigma^2$: gradient second moment at $x_\star$; $T$: horizon; $k=0,\ldots,T-1$. $\ell=\log(2+LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2)$. $\sigma_u^2=\sup_x\int\|\nabla F_\xi(x)-\nabla f(x)\|^2\,dp(\xi)$. All displayed costs concern expected objective accuracy.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

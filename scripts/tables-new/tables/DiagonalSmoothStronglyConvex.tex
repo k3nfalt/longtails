@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DiagonalSmoothStronglyConvex.lean}{DiagonalSmoothStronglyConvex}.}\label{tab:DiagonalSmoothStronglyConvex}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, satisfies $\frac{\mu}{2}\|y-x\|_w^2\le f(y)-f(x)-\langle\nabla f(x),y-x\rangle\le\frac12\|y-x\|_w^2$ for all $x,y$, with unknown $w_i>0$, $0<\mu\le1$. The attained minimum $f_\star=f(x_\star)$ is known; $f(x_0)-f_\star\le\Delta$, $\Delta\ge0$. Target: $f(\hat x)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, deterministically (hence almost surely). Calls return exact $(f,\nabla f)$. In \textbf{(1)}, updates use only $d,x_0,f_\star$; the stopping budget uses $\mu,\Delta,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/OnlineMetricAccelerated.lean}{Online\allowbreak{}Metric\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/OnlineMetricAccelerated.md}{(review)} & $\mathcal{O}\bigl((\sqrt{\kappa_\star}+\log(2d))\ell+W\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: secant diagonal + restarted AGD \citep[Prop.~4.1]{diagRoulet2019v2} & $\mathcal{O}(d+\kappa_\star\ell)$. $s_i=\partial_i f(x_0+e_i)-\partial_i f(x_0)$; $\mu w_i\le s_i\le w_i$, metric condition $\le\kappa_\star^2$. Known $f_\star$. & \textbf{(1)}: $\kappa_\star\to\sqrt{\kappa_\star}$ in the accuracy term. Total gain when $\sqrt{\kappa_\star}\gg\log(2d)$ and $\ell\gg d^3\log^2(2d)\log\kappa_\star/\sqrt{\kappa_\star}$; speedup approaches $\sqrt{\kappa_\star}$ as $\varepsilon\to0$. & \textbf{(1)}: larger warm-up $W$ can dominate at moderate accuracy or large $d$; larger proved constants. \\
+\midrule
+\textbf{(3)} Multidimensional backtracking, ellipsoid \citep[Thms.~1.1, 5.3]{diagKunstner2023v1} & $\mathcal{O}\bigl(\sqrt d\,\kappa_\star\ell+d\log_+(L/\alpha_0)\bigr)$, including rejected trials. Initial ellipsoid $\mathcal S_0$ must contain an optimal diagonal preconditioner. & \textbf{(1)}: accuracy coefficient $\sqrt d\,\kappa_\star\to\sqrt{\kappa_\star}+\log(2d)$; removes initial-guess dependence. For $\sqrt{\kappa_\star}\gg\log(2d)$, speedup approaches $\sqrt{d\kappa_\star}$ as $\varepsilon\to0$. & \textbf{(1)}: needs $f_\star$; adds polynomial-in-$d$ warm-up $W$. \\
+\midrule
+\textbf{(4)} Lookahead OSGM-R \citep[Eq.~(5), Thms.~6.1--6.2]{diagGao2025v2} & $\mathcal{O}\!\left(\min\!\left\{\begin{array}{l}\kappa_E\ell,\\ \kappa_F[\ell+L^2\|L^{-1}I-P_\star\|_F^2]\end{array}\right\}\right)$. $P_1=L^{-1}I$; two oracle calls per iteration; known $f_\star,L$. & \textbf{(1)}: warm-up independent of weight spread. When $\kappa_F\asymp\kappa_\star$, improves the accuracy coefficient for $\sqrt{\kappa_\star}\gg\log(2d)$; total gain requires sufficiently small $\varepsilon$. & \textbf{(1)}: loses full-matrix gains when $\kappa_F\ll\kappa_\star$ and can lose to the $\kappa_E\ell$ branch. \\
+\midrule
+\textbf{(5)} Euclidean AGD + known-gap restarts \citep[Prop.~4.1]{diagRoulet2019v2} & $\mathcal{O}(\sqrt{\kappa_E}\,\ell)$, with supplied Euclidean smoothness bound $L$ and known $f_\star$. & \textbf{(1)}: gains for small $\varepsilon$ when $\sqrt{\kappa_E}\gg\sqrt{\kappa_\star}+\log(2d)$; possible with large weight spread, since $\kappa_E\le\kappa_\star\max_i w_i/\min_i w_i$ can be tight. & \textbf{(1)}: warm-up $W$ makes the bound worse when Euclidean conditioning is already good. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\|v\|_w^2=\sum_i w_i v_i^2$; $\kappa_\star=1/\mu$; $\log_+t=\max\{0,\log t\}$ (zero at $t=0$); $\ell=1+\log_+(\Delta/\varepsilon)$; $W=d^2\log^2(2d)\sqrt{\kappa_\star}(1+d\log\kappa_\star)$. $L,m$ are Euclidean smoothness and strong-convexity constants, $\kappa_E=L/m$ (one may use $L=\max_i w_i$, $m=\mu\min_i w_i$). $P_\star,\kappa_F$ denote the optimal full-matrix ratio-feedback comparator and condition number of \textbf{(4)}, distinct from the supplied diagonal bound $\kappa_\star$. $\|\cdot\|_F$ is the Frobenius norm; $e_i$ is a coordinate vector; $\alpha_0$ is the uniform initial ellipsoid parameter of \textbf{(3)}. AGD: accelerated gradient descent. All costs count paired value/gradient oracle calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

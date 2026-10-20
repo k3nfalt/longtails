@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Reverse Fisher gradient descent for symmetric Gaussian mixtures: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricGaussianReverseFisher.lean}{SymmetricGaussianReverseFisher}.}\label{tab:SymmetricGaussianReverseFisher}
+\parbox{\linewidth}{\footnotesize In $\mathbb{R}^d$, $d\geq1$, let $p_\theta=\tfrac12\mathcal{N}(\theta,I)+\tfrac12\mathcal{N}(-\theta,I)$ and $F_\mu(\theta)=\mathbb{E}_{X\sim p_\theta}\|\nabla\log p_\theta(X)-\nabla\log p_\mu(X)\|^2$. Given $0\leq s\leq\|\mu\|\leq B$ and $\varepsilon,\delta\in(0,1]$, the oracle returns exact $\nabla F_\mu$. The setup permits positive, state-dependent GD steps and returns the current iterate. The target is $\Pr\{\min_{\sigma\in\{-1,1\}}\|\theta_K-\sigma\mu\|^2\leq\varepsilon\}\geq1-\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SymmetricReverseFisherGlobalGD.lean}{Symmetric\allowbreak Reverse\allowbreak Fisher\allowbreak Global\allowbreak GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SymmetricReverseFisherGlobalGD.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{(1+B)(1+s^2)}{\max\{s^2,\varepsilon\}}\left[1+\log\dfrac{d(1+B)}{\delta\varepsilon}\right]\right)$ exact-gradient calls. Step $(48+20B)^{-1}$; normalized uniform-cube initialization.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: two-call adaptive GD
+& $\mathcal{O}(1)$ exact-gradient calls (at most two); exact recovery almost surely. Uses exact known one-dimensional Gaussian integrals and scalar inversion.
+& \textbf{(1)}: No established improvement.
+& \textbf{(1)}: More calls; needs $B,s,\varepsilon,\delta$ in addition to $d$; only $\varepsilon$-accuracy with probability $1-\delta$. \\
+\midrule
+\textbf{(3)} GD \citep[Thms.~3.2, E.1]{sgrfTyurin2026v1}
+& $\mathcal{O}(L_R^2L_d^2/\varepsilon)$ joint-gradient calls, $n=m=2$. Untied student, teacher $\pm\mu$; independent sphere starts of radius $R$.
+\par $R\geq C\bigl(1+\sqrt d B^2/\delta$\par $\qquad{}+B\sqrt{1+\log(1+B)}\bigr)$,
+\par $d\geq C(1+\log(1/\delta))$,
+\par $\|\mu\|\geq C\sqrt{(L_R+\log(1/\varepsilon))L_d}$.
+& \textbf{(1)}: Constant-step analysis without separation, including $\mu=0$. Rates are not comparable across tied and untied parameterizations.
+& \textbf{(1)}: Only tied, antipodal two-component mixtures; \textbf{(3)} allows arbitrary component counts. One fixed last iterate instead of every $k\geq K$. \\
+\midrule
+\textbf{(4)} GD \citep[Thm.~2.1, Cor.~2.5]{sgrfTyurin2026v1}
+& $\mathcal{O}\!\left(\varepsilon^{-1}+\log_+(R_0^2/\varepsilon)\right)$ joint-gradient calls, $n=2$, single teacher ($\mu=0$). Arbitrary initialization; deterministic accuracy.
+& \textbf{(1)}: Extends constant-step analysis from $\mu=0$ to all $\|\mu\|\leq B$, for tied students.
+& \textbf{(1)}: At $\mu=0$, $R_0=1$, costs $\mathcal{O}((1+B)\varepsilon^{-1}[1+\log\tfrac{d(1+B)}{\delta\varepsilon}])$ versus $\mathcal{O}(\varepsilon^{-1})$; randomized guarantee instead of deterministic accuracy. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $s,B$: supplied signal bounds; $\varepsilon$: squared-distance tolerance; $\delta$: failure probability; $n,m$: student and teacher component counts; $R$: sphere initialization radius; $R_0$: largest initial distance to the single teacher mean; $L_R=1+\log R$; $L_d=1+\log(d/\delta)$; $\log_+t=\max\{0,\log t\}$; $C$: sufficiently large universal constant. A joint-gradient call returns gradients for all student means.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Normalized SAM under strong convexity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NormalizedSamStronglyConvex.lean}{NormalizedSamStronglyConvex}.}\label{tab:NormalizedSamStronglyConvex}
+\parbox{\linewidth}{\footnotesize On a complete real inner-product space, $f$ is differentiable, $L$-smooth and $\mu$-strongly convex, with minimizer $x_\star$, $0<\mu\le L$, and $f(x_0)-f(x_\star)\le\Delta$, $\Delta\ge0$. The oracle returns exact gradients. For $\rho>0$, $\varepsilon>0$, the setup requires constant-step normalized SAM with radius $\rho$ and last-state output; \textbf{(1)} guarantees $f(x_K)-f(x_\star)\le\varepsilon$ deterministically. GD and AGD compare the underlying optimization problem without this method restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NormalizedSamStronglyConvex.lean}{Normalized\allowbreak Sam\allowbreak Strongly\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NormalizedSamStronglyConvex.md}{(review)} & $\mathcal{O}\!\left(1+\left[\kappa+\dfrac{L^2\rho}{\mu^{3/2}\sqrt{\varepsilon}}\right]\ell\right)$\par $\eta=(2L+2L^2\rho/\sqrt{\mu\varepsilon})^{-1}$; two gradients per step. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Normalized SAM, \citep{nsscSiYun2023v3}, App.~B.2, (6). Derived bound; $E=\mathbb{R}^d$. & $\mathcal{O}\!\left(1+\left[\kappa+\dfrac{L^3\rho}{\mu^{5/2}\sqrt{\varepsilon}}\right]\ell\right)$\par Retuned constant step; two gradients per step; best-iterate gap. & \textbf{(1)}: Radius term improves by $\kappa$; total factor $\kappa$ when $\rho\ge\sqrt{\mu\varepsilon}/L$, $\Delta\ge\varepsilon$. Matches order for $\kappa=\mathcal{O}(1)$. Last instead of best iterate; gradient-norm selection already costs only an additional $\mathcal{O}(1+\log\kappa)$ factor. & \\
+\midrule
+\textbf{(3)} GD, \citep{nsscKarimi2020v4}, Thm.~1; $E=\mathbb{R}^d$, strongly convex specialization. & $\mathcal{O}(1+\kappa\ell)$ & \textbf{(1)}: No established improvement. & \textbf{(1)}: Extra radius term $L^2\rho\ell/(\mu^{3/2}\sqrt{\varepsilon})$, dominating when $\rho\gg\sqrt{\mu\varepsilon}/L$; two gradients per step instead of one. \\
+\midrule
+\textbf{(4)} AGD, \citep{nsscNesterov2018}, \S2.2; $E=\mathbb{R}^d$. & $\mathcal{O}(1+\sqrt{\kappa}\,\ell)$ & \textbf{(1)}: No established improvement. & \textbf{(1)}: At least a $\sqrt{\kappa}$ factor worse in the displayed budgets when $\Delta\ge\varepsilon$, with an additional radius-dependent cost. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=\log(1+\Delta/\varepsilon)$; $\Delta$ bounds the initial objective gap; $\rho$ is the perturbation radius; $\eta$ is the step size; $K$ is the number of SAM steps. Costs count individual gradient calls. GD: gradient descent; AGD: accelerated gradient descent; SAM: sharpness-aware minimization.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
