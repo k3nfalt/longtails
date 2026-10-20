@@ -138,7 +138,8 @@ def main(argv=None):
             "independent Reviewer's acceptance recommendation, formalize all required Lean "
             "deliverables and the companion contribution note, pass the required build and "
             "axiom checks, submit the approved research commit through an agent/* ready-for-review PR, "
-            "verify that the PR contains the approved commit, report its URL, and stop. "
+            "verify that the PR contains the approved commit, clean up the task worktrees as instructed, "
+            "report its URL, and stop. "
             "Do not dispatch or monitor workflows or automatically modify failed PRs. "
             "Surface the independent review, local verification, and PR evidence in the conversation."
         )

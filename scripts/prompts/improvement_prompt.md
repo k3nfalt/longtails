@@ -110,7 +110,7 @@ Before committing, the Reviewer must:
 
 Any substantive change after approval requires renewed review and validation.
 
-After acceptance, follow the submission instructions at the end of section 7 of `scripts/prompts/research_prompt.md`. Push the single approved research commit and open one draft PR targeting `main`. Verify that the PR contains the approved commit, report its URL, and stop. Verification and novelty reviews start automatically. Do not dispatch or monitor workflows, append commits, force-push, merge, or automatically retry, repair, replace, or close the PR.
+After acceptance, follow the submission instructions at the end of section 7 of `scripts/prompts/research_prompt.md`. Push the single approved research commit and open one draft PR targeting `main`. Verify that the PR contains the approved commit, perform the worktree cleanup required by section 7, report its URL, and stop. Verification and novelty reviews start automatically. Do not dispatch or monitor workflows, append commits, force-push, merge, or automatically retry, repair, replace, or close the PR.
 
 Finish with:
 - The original guarantee and the improved guarantee side by side.
