@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Reverse Fisher divergence for symmetric Gaussian mixtures: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricGaussianReverseFisher.lean}{Symmetric\allowbreak{}Gaussian\allowbreak{}Reverse\allowbreak{}Fisher}.}\label{tab:SymmetricGaussianReverseFisher}
+\parbox{\linewidth}{\footnotesize In $\mathbb{R}^d$, $d\ge1$, let $p_\theta=\tfrac12\mathcal{N}(\theta,I)+\tfrac12\mathcal{N}(-\theta,I)$ and $F_\mu(\theta)=\int\|\nabla\log p_\theta(x)-\nabla\log p_\mu(x)\|^2p_\theta(x)\,dx$. Given $0\le s\le\|\mu\|\le B$ and $\varepsilon,\delta\in(0,1]$, the oracle returns exact $\nabla F_\mu$. The setup permits positive, state-dependent GD steps and requires the current iterate as output. The target is $\Pr\{\min_{\sigma\in\{-1,1\}}\|\theta_K-\sigma\mu\|^2\le\varepsilon\}\ge1-\delta$. Result \textbf{(1)} uses constant steps and normalized uniform-cube initialization.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SymmetricReverseFisherGlobalGD.lean}{Symmetric\allowbreak Reverse\allowbreak Fisher\allowbreak Global\allowbreak GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SymmetricReverseFisherGlobalGD.md}{(review)}
+& $\begin{gathered}\mathcal{O}\!\Bigl(\dfrac{(1+B)(1+s^2)}{\max\{s^2,\varepsilon\}}\\{}\cdot\left[1+\log\dfrac{d(1+B)}{\delta\varepsilon}\right]\Bigr)\end{gathered}$
+& --- & --- \\
+\midrule[1.2pt]
+Derived bound: adaptive GD (unformalized)
+& $\mathcal{O}(1)$; at most two calls to the same oracle; exact recovery almost surely. Uses exact known one-dimensional Gaussian integrals and scalar inversion.
+& \textbf{(1)}: Constant-step dynamics characterized; priority unresolved. No established oracle-complexity improvement.
+& \textbf{(1)}: Larger budget; needs $B,s,\varepsilon,\delta$ in addition to $d$; approximate high-probability recovery instead of almost-sure exact recovery. \\
+\midrule
+GD \citep[Thm.~E.1]{sgrfTyurin2026v1}; two untied students, teachers $\pm\mu$
+& $\mathcal{O}\!\left(\dfrac{(1+\log R_0)^2(1+\log(d/\delta))^2}{\varepsilon}\right)$ full untied-gradient calls; independent sphere initialization of radius $R_0$; each student approaches its initially closest teacher.
+& \textbf{(1)}: Scope: no separation or dimension threshold; baseline requires $\begin{gathered}\|\mu\|^2\gtrsim(1+\log(R_0/\varepsilon))\\{}\cdot(1+\log(d/\delta))\end{gathered}$ and $d\gtrsim1+\log(1/\delta)$. Rates not comparable: untied versus tied students.
+& \textbf{(1)}: Only two antipodal components; baseline allows arbitrary component counts. One fixed last iterate instead of every $k\ge K$. \\
+\midrule
+GD \citep[Thm.~2.1, Cor.~2.5]{sgrfTyurin2026v1}; $\mu=0$, two students
+& $\mathcal{O}\!\left(\varepsilon^{-1}+\log(1+R_{\rm init}^2/\varepsilon)\right)$ full population-gradient calls; arbitrary initialization, deterministic accuracy.
+& \textbf{(1)}: Scope: all $\|\mu\|\le B$ instead of $\mu=0$; no rate gain on the overlap.
+& \textbf{(1)}: At $\mu=0$, $R_{\rm init}=1$, extra factor $\begin{gathered}(1+B)\\{}\cdot[1+\log\tfrac{d(1+B)}{\delta\varepsilon}]\end{gathered}$; randomized instead of deterministic guarantee. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $s,B$: supplied signal bounds; $\varepsilon$: squared-distance tolerance; $\delta$: failure probability; $d$: dimension; GD: gradient descent. $R_{\rm init}$: maximum initial student distance to the single teacher. $R_0=C[1+\sqrt d\,B^2/\delta+B\sqrt{1+\log(1+B)}]$: sphere radius, with sufficiently large universal $C$. $\gtrsim$: inequality up to a sufficiently large universal constant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

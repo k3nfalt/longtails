@@ -450,6 +450,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{4 \\cdot Lg \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{8 \\cdot L\\xi \\cdot \\sigma^{2} \\cdot \\Delta}{\\varepsilon^{4}} \\right\\rceil_{+} + 1",
+      "oracle": 0,
+      "type": "LongTails.Setups.CurvatureAlignedNoiseNonconvex.spec.Params → ℕ",
+      "value": "fun q => ⌈4 * q.Lg * q.Δ / q.ε ^ 2 + 8 * q.Lξ * q.σ ^ 2 * q.Δ / q.ε ^ 4⌉₊ + 1"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{4 \\cdot Lg \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{8 \\cdot L\\xi \\cdot \\sigma^{2} \\cdot \\Delta}{\\varepsilon^{4}} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.CurvatureAlignedNoiseNonconvex.spec.Params → ℕ",
+        "value": "fun q => ⌈4 * q.Lg * q.Δ / q.ε ^ 2 + 8 * q.Lξ * q.σ ^ 2 * q.Δ / q.ε ^ 4⌉₊ + 1"
+      }
+    ],
+    "module": "LongTails.Theorems.CurvatureAlignedSgdNonconvex",
+    "namespace": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
+    "setup": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.CurvatureAlignedNoiseNonconvex.spec OracleTemplate.CurvatureAligned.budget",
+    "theorem": "OracleTemplate.CurvatureAligned.result"
+  },
+  {
+    "budget": {
       "latex": "2 \\cdot \\left(d + 1 + \\left\\lceil \\log_{2}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil 24 \\cdot \\frac{1}{\\sqrt{\\mu}} + \\log_{2}\\left(d\\right) + 2 \\right\\rceil_{+} + \\left(d \\cdot \\left\\lceil -\\log_{2}\\left(\\mu\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil 110 \\cdot d^{2} \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right)\\right)^{2} \\cdot \\frac{1}{\\sqrt{\\mu}} \\right\\rceil_{+}\\right)",
       "oracle": 0,
       "type": "LongTails.Setups.DiagonalSmoothStronglyConvex.spec.Params → ℕ",
@@ -826,6 +847,27 @@
     "setup": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy",
     "statement": "OracleTemplate.Convergence LongTails.Setups.HessianLipschitzTemporalDiscrepancy.spec\n  OracleTemplate.NonlinearTemporalDiscrepancy.budget",
     "theorem": "OracleTemplate.NonlinearTemporalDiscrepancy.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 10^{84} \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\log\\left(10^{84} \\cdot \\left(1 + \\sigma Body\\right) \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right)\\right)\\right)^{4} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HeterogeneousSymmetricFirstMoment.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈10 ^ 84 *\n        (1 +\n            (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n              q.ε ^ 4 +\n          (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n              ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n            q.ε ^ 2) *\n      Real.log\n          (10 ^ 84 * (1 + q.σBody) *\n            (1 +\n                (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                    (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n                  q.ε ^ 4 +\n              (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n                  ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                    √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n                q.ε ^ 2)) ^\n        4⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 10^{84} \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\log\\left(10^{84} \\cdot \\left(1 + \\sigma Body\\right) \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right)\\right)\\right)^{4} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeterogeneousSymmetricFirstMoment.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈10 ^ 84 *\n        (1 +\n            (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n              q.ε ^ 4 +\n          (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n              ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n            q.ε ^ 2) *\n      Real.log\n          (10 ^ 84 * (1 + q.σBody) *\n            (1 +\n                (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                    (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n                  q.ε ^ 4 +\n              (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n                  ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                    √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n                q.ε ^ 2)) ^\n        4⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.HeterogeneousAdamFirstMoment",
+    "namespace": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
+    "setup": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.HeterogeneousSymmetricFirstMoment.spec\n  LongTails.Theorems.HeterogeneousAdamFirstMoment.budget",
+    "theorem": "LongTails.Theorems.HeterogeneousAdamFirstMoment.result"
   },
   {
     "budget": {
@@ -1354,6 +1396,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{256 \\cdot \\Delta \\cdot \\left(8 \\cdot Lv + \\frac{64 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)}{\\varepsilon^{2}}\\right)}{\\varepsilon^{2}} + \\left(\\log\\left(3 + \\frac{Lv^{2}}{\\mu^{2}} + \\frac{4 \\cdot Lv^{2} \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{3} \\cdot \\left(Lv \\cdot \\varepsilon^{2} + 8 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)\\right)}\\right)\\right)^{2} \\cdot \\left(\\frac{16 \\cdot Lv}{\\mu} + \\frac{512 \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{2} \\cdot \\varepsilon^{2}}\\right) + 1 \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.RiverValleyHillNoise.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈256 * q.Δ *\n            (8 * q.Lv +\n              64 *\n                  (2 * q.Lh * q.σu ^ 2 +\n                        (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                          ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                            q.σu * q.σv) +\n                      (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                        (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                    2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv) /\n                q.ε ^ 2) /\n          q.ε ^ 2 +\n        Real.log\n              (3 + q.Lv ^ 2 / q.μ ^ 2 +\n                4 * q.Lv ^ 2 *\n                    (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                      8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n                  (q.μ ^ 3 *\n                    (q.Lv * q.ε ^ 2 +\n                      8 *\n                        (2 * q.Lh * q.σu ^ 2 +\n                              (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                                ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                                  q.σu * q.σv) +\n                            (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                              (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                          2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv)))) ^\n            2 *\n          (16 * q.Lv / q.μ +\n            512 *\n                (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                  8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n              (q.μ ^ 2 * q.ε ^ 2)) +\n      1⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{256 \\cdot \\Delta \\cdot \\left(8 \\cdot Lv + \\frac{64 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)}{\\varepsilon^{2}}\\right)}{\\varepsilon^{2}} + \\left(\\log\\left(3 + \\frac{Lv^{2}}{\\mu^{2}} + \\frac{4 \\cdot Lv^{2} \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{3} \\cdot \\left(Lv \\cdot \\varepsilon^{2} + 8 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)\\right)}\\right)\\right)^{2} \\cdot \\left(\\frac{16 \\cdot Lv}{\\mu} + \\frac{512 \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{2} \\cdot \\varepsilon^{2}}\\right) + 1 \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RiverValleyHillNoise.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈256 * q.Δ *\n            (8 * q.Lv +\n              64 *\n                  (2 * q.Lh * q.σu ^ 2 +\n                        (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                          ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                            q.σu * q.σv) +\n                      (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                        (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                    2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv) /\n                q.ε ^ 2) /\n          q.ε ^ 2 +\n        Real.log\n              (3 + q.Lv ^ 2 / q.μ ^ 2 +\n                4 * q.Lv ^ 2 *\n                    (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                      8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n                  (q.μ ^ 3 *\n                    (q.Lv * q.ε ^ 2 +\n                      8 *\n                        (2 * q.Lh * q.σu ^ 2 +\n                              (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                                ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                                  q.σu * q.σv) +\n                            (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                              (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                          2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv)))) ^\n            2 *\n          (16 * q.Lv / q.μ +\n            512 *\n                (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                  8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n              (q.μ ^ 2 * q.ε ^ 2)) +\n      1⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.AnnealedSgdRiverValley",
+    "namespace": "LongTails.Setups.RiverValleyHillNoise",
+    "setup": "LongTails.Setups.RiverValleyHillNoise",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.RiverValleyHillNoise.spec OracleTemplate.RiverValley.budget",
+    "theorem": "OracleTemplate.RiverValley.result"
+  },
+  {
+    "budget": {
       "latex": "2 \\cdot \\left\\lceil \\frac{72 \\cdot L \\cdot R^{2}}{\\varepsilon} + \\frac{900 \\cdot \\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} + \\frac{6 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.SampledCompositeSmoothConvex.spec.Params → ℕ",
@@ -1799,6 +1862,27 @@
     "setup": "LongTails.Setups.SymmetricFirstMomentNonconvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.SymmetricFirstMomentNonconvex.spec OracleTemplate.MedianGradient.budget",
     "theorem": "OracleTemplate.MedianGradient.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\frac{1000000000000000 \\cdot \\left(1 + upper\\right) \\cdot \\left(1 + lower^{2}\\right)}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{1000000000000000 \\cdot dimension \\cdot \\left(1 + upper\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.SymmetricGaussianReverseFisher.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈1000000000000000 * (1 + p.upper) * (1 + p.lower ^ 2) / max (p.lower ^ 2) p.accuracy *\n      Real.log (1000000000000000 * ↑↑p.dimension * (1 + p.upper) / (p.failure * p.accuracy))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{1000000000000000 \\cdot \\left(1 + upper\\right) \\cdot \\left(1 + lower^{2}\\right)}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{1000000000000000 \\cdot dimension \\cdot \\left(1 + upper\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SymmetricGaussianReverseFisher.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈1000000000000000 * (1 + p.upper) * (1 + p.lower ^ 2) / max (p.lower ^ 2) p.accuracy *\n      Real.log (1000000000000000 * ↑↑p.dimension * (1 + p.upper) / (p.failure * p.accuracy))⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.SymmetricReverseFisherGlobalGD",
+    "namespace": "LongTails.Setups.SymmetricGaussianReverseFisher",
+    "setup": "LongTails.Setups.SymmetricGaussianReverseFisher",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.SymmetricGaussianReverseFisher.spec\n  LongTails.Theorems.SymmetricReverseFisherGlobalGD.budget",
+    "theorem": "LongTails.Theorems.SymmetricReverseFisherGlobalGD.result"
   },
   {
     "budget": {

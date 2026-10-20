@@ -1,0 +1,129 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{River-Valley Optimization with Anisotropic Noise}
+We consider finding a stationary point of a potentially nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The objective combines a smooth hill function with a positive quadratic penalty for displacement from a smooth valley graph over an orthogonal subspace. Derivative, curvature, coupling, and noise bounds satisfy quantitative scale restrictions, and the initial point $x^0\in E$ has bounded objective gap above a global lower bound. Each oracle call returns an unbiased stochastic gradient with separately bounded second moments in the two orthogonal directions, using independent samples. For $\varepsilon>0$, the required measurable output $\bar{x}\in E$ satisfies $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x),
+\]
+with the norm induced by the inner product on $E$. The public inputs are $E$, a measurable sample space $\Omega$, the initial point $x^0$, and all scalar parameters
+\[
+L_h,\rho_h,G,\Gamma,L_J,\rho_J,\mu,L_v,
+\sigma_u,\sigma_v,\Delta,\varepsilon.
+\]
+Their ranges are
+\[
+\begin{aligned}
+&0<\mu\leq L_v,\qquad \varepsilon>0,\qquad \Delta\geq0,\\
+&L_h,\rho_h,G,\Gamma,L_J,\rho_J,\sigma_u,\sigma_v\geq0.
+\end{aligned}
+\]
+The objective and its structural witnesses satisfy the following assumptions.
+
+\begin{assumption}[Valley geometry and initial gap]
+There exist a linear subspace $\mathcal{K}\subseteq E$, functions $h:E\to\mathbb{R}$ and $\phi:E\to E$, and a linear operator $A:E\to E$. Write $\Pi_u$ and $\Pi_v$ for the orthogonal projections onto $\mathcal{K}^{\perp}$ and $\mathcal{K}$, respectively. For every $x\in E$, set $r(x)=\Pi_vx-\phi(\Pi_ux)$. Then
+\[
+\begin{aligned}
+f(x)&=h(\Pi_ux)+\tfrac12\langle Ar(x),r(x)\rangle,\\
+f(x^0)-f(x)&\leq\Delta.
+\end{aligned}
+\]
+For every $y\in E$, $\phi(y)\in\mathcal{K}$. The operator $A$ satisfies, for every $u,v\in E$ and $k\in\mathcal{K}$,
+\[
+\begin{aligned}
+\langle Au,v\rangle&=\langle u,Av\rangle,\qquad Ak\in\mathcal{K},\\
+\mu\|k\|^2&\leq\langle Ak,k\rangle,\qquad
+\|Ak\|\leq L_v\|k\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Hill and graph regularity]
+The function $h$ has gradient $g_h=\nabla h$, and $g_h$ is Fr\'echet differentiable with derivative $H_h=Dg_h$. The map $\phi$ is Fr\'echet differentiable with derivative $J_\phi=D\phi$, and $J_\phi$ is Fr\'echet differentiable with derivative $DJ_\phi$. For all $y,y'\in E$,
+\[
+\begin{aligned}
+\|g_h(y)-g_h(y')\|&\leq L_h\|y-y'\|,\\
+\|H_h(y)-H_h(y')\|&\leq\rho_h\|y-y'\|,\\
+\|g_h(y)\|&\leq G,\\
+\|J_\phi(y)-J_\phi(y')\|&\leq L_J\|y-y'\|,\\
+\|DJ_\phi(y)-DJ_\phi(y')\|&\leq\rho_J\|y-y'\|.
+\end{aligned}
+\]
+Norms of linear maps, including derivatives taking values in linear maps, are operator norms. The coupling satisfies, for every $y,z\in E$,
+\[
+\|A(J_\phi(y)\Pi_uz)\|\leq\Gamma\mu\|\Pi_uz\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Independent anisotropic gradient noise]
+There exist a probability measure $P_0$ on $\Omega$, a probability measure $P$ on $\Omega^{\mathbb{N}}$, and a jointly measurable map $g:E\times\Omega\to E$. Under $P$, the coordinate variables $\xi_k(\xi)=\xi_k$ are measurable, mutually independent, and each has law $P_0$. Oracle $0$, queried at any $x\in E$ on call $k$, returns $g(x,\xi_k)\in E$ at a cost of one oracle call.
+
+For every fixed $x\in E$, $g(x,\cdot)$ is Bochner integrable and
+\[
+\int_{\Omega}g(x,\omega)\,dP_0(\omega)=\nabla f(x).
+\]
+Define $e(x,\omega)=g(x,\omega)-\nabla f(x)$. Both scalar functions $\|\Pi_ue(x,\cdot)\|^2$ and $\|\Pi_ve(x,\cdot)\|^2$ are integrable, and
+\[
+\begin{aligned}
+\int_{\Omega}\|\Pi_ue(x,\omega)\|^2\,dP_0(\omega)&\leq\sigma_u^2,\\
+\int_{\Omega}\|\Pi_ve(x,\omega)\|^2\,dP_0(\omega)&\leq\sigma_v^2.
+\end{aligned}
+\]
+Algorithm randomness is independent of the oracle sample sequence.
+\end{assumption}
+
+\begin{assumption}[Quantitative scale restrictions]
+Introduce the following abbreviations, determined entirely by the public scalar parameters:
+\[
+\begin{aligned}
+a&=\Gamma L_h+2L_JG,\\
+b&=2G\rho_J+2L_JL_h+\Gamma\rho_h+GL_J^2,\\
+c&=\frac{256a^2}{\mu}+32\Gamma a+\frac{2b\sigma_u}{L_v},\\
+V&=(2G\rho_h+L_h^2)\sigma_u^2+4L_v^2\sigma_v^2\\
+ &\quad+20\Gamma^2\mu^2\sigma_u^2
+ +\frac{8L_vL_J^2\sigma_u^4}{\mu}
+ +\frac{\Gamma\mu GL_J\sigma_u^2}{4},\\
+W&=2L_h\sigma_u^2+7c(\sigma_v^2+\sigma_u^2)
+ +a\sigma_u\sigma_v\\
+ &\quad+\frac{b\sigma_u^3}{\mu}
+ +\frac{b\Gamma G\sigma_u^2}{L_v}
+ +\frac{2L_J^2\sigma_u^4}{L_v}.
+\end{aligned}
+\]
+The required restrictions are
+\[
+\begin{aligned}
+16\Gamma&\leq1,\\
+64a&\leq\mu,\\
+64b\sigma_u&\leq\mu L_v,\\
+32L_h\log\left(3+\frac{L_v^2}{\mu^2}
+ +\frac{4L_v^2V}{\mu^3(L_v\varepsilon^2+8W)}\right)&\leq\mu,
+\end{aligned}
+\]
+where $\log$ denotes the natural logarithm.
+\end{assumption}
+
+The algorithm accesses $f$ through oracle $0$. The subspace, functions, derivative maps, operator, and probability laws witnessing these assumptions are not supplied as public inputs. Queries may be chosen adaptively anywhere in $E$.
+
+Admissible algorithms are restricted to the following two-stage stochastic gradient method. Using only the public inputs, select step sizes $\eta_s,\eta_c>0$ and integers $T,K\geq0$, and draw $\tau$ uniformly from $\{0,\ldots,T\}$ independently of the oracle samples. Starting at $x^0$, the iterates satisfy
+\[
+ x^{k+1}=\begin{cases}
+ x^k-\eta_s g(x^k,\xi_k),&k<\tau,\\
+ x^k-\eta_c g(x^k,\xi_k),&\tau\leq k<\tau+K,\\
+ x^k,&k\geq\tau+K.
+ \end{cases}
+\]
+There is no additional ordering constraint on the two positive step sizes. For an externally specified budget $N\in\mathbb{N}$, the method makes $N$ calls to oracle $0$ and returns $\bar{x}=x^N$. Calls after the updates have stopped still count toward the budget; when $N\geq\tau+K$, the output is $x^{\tau+K}$.
+
+Writing $\mathbb{P}$ for the joint law of the independent algorithm and oracle randomness, success requires that $\bar{x}$ be measurable, that $\|\nabla f(\bar{x})\|$ be integrable, and that
+\[
+\int \|\nabla f(\bar{x}(\omega))\|\,d\mathbb{P}(\omega)
+\leq\varepsilon.
+\]
+\end{document}

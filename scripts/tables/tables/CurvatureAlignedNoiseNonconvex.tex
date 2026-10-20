@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Curvature-aligned stochastic nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean}{Curvature\allowbreak{}Aligned\allowbreak{}Noise\allowbreak{}Nonconvex}.}\label{tab:CurvatureAlignedNoiseNonconvex}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f$ is differentiable, $f\ge f_{\rm low}$, and $f(x_0)-f_{\rm low}\le\Delta$. For every $x,u$, a linear map $Q(x)$ satisfies $f(x+u)\le f(x)+\langle\nabla f(x),u\rangle+\frac12\langle Q(x)u,u\rangle$ and $\langle Q(x)\nabla f(x),\nabla f(x)\rangle\le L_g\|\nabla f(x)\|^2$. IID samples have law $P_0$; the jointly measurable oracle $g$ is unbiased, with $\zeta=g-\nabla f$, $\int\|\zeta\|^2\,dP_0\le\sigma^2$, and $\int\langle Q(x)\zeta,\zeta\rangle\,dP_0\le L_\xi\int\|\zeta\|^2\,dP_0$; these integrands and $g$ are integrable. Here $L_g>0$, $L_\xi,\sigma,\Delta\ge0$, $\varepsilon>0$. Target: $\int\|\nabla f(\hat x)\|\,dP_{\rm out}\le\varepsilon$. The setup does not restrict the algorithm; \textbf{(1)} constructs constant-step SGD.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CurvatureAlignedSgdNonconvex.lean}{Curvature\allowbreak Aligned\allowbreak Sgd\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CurvatureAlignedSgdNonconvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{L_g\Delta}{\varepsilon^2}+\frac{L_\xi\sigma^2\Delta}{\varepsilon^4}\right)$ & --- & --- \\
+\midrule[1.2pt]
+Randomized SGD \citep[Eq.~(2.17)]{mshGhadimiLan2013v1}\newline Special case: $L$-Lipschitz gradient
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\sigma^2\Delta}{\varepsilon^4}\right)$
+& \textbf{(1)}: i) Scope: one-sided directional model.\newline ii) Rate: $L_g,L_\xi$ replace $L$; no worse if $L_g,L_\xi\le L$; noise-dominated gain of order $L/L_\xi$ when $L_\xi\sigma^2\ge L_g\varepsilon^2$.
+& \textbf{(1)}: gains require certifying global $Q$ and oracle-dependent $L_\xi$; a local Hessian bound alone does not suffice. Accuracy exponents unchanged. \\
+\midrule
+SGD \citep[Thm.~D.2]{canLiuPanZhang2024v2}\newline Special case: $\|\nabla f(x)-\nabla f(y)\|_{D^{-1}}\le\|x-y\|_D$, $\int\zeta_i^2\,dP_0\le s_i^2$
+& $\mathcal{O}\!\left(1+\frac{\|\ell\|_\infty\Delta}{\varepsilon^2}+\frac{\|\ell\|_\infty\|s\|_2^2\Delta}{\varepsilon^4}\right)$\newline Single-sample SGD
+& \textbf{(1)}: i) Scope: state-dependent, nondiagonal $Q$.\newline ii) For $Q=D$, $\sigma^2=\|s\|_2^2$, certified $L_\xi\sigma^2\le\sum_i\ell_i s_i^2$: noise coefficient $\sum_i\ell_i s_i^2$ instead of $\|\ell\|_\infty\|s\|_2^2$; total gain when noise dominates.
+& \textbf{(1)}: coordinate variance bounds alone do not certify the relative alignment condition. No improvement over AdaGrad is established. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls. $\Delta$: initial objective-gap bound; $\sigma^2$: variance bound; $L_g,L_\xi$: gradient- and noise-direction curvature bounds; $P_{\rm out}$: output probability law. $\ell=(\ell_i)>0$, $s=(s_i)>0$: coordinate smoothness and noise bounds; $D=\operatorname{diag}(\ell)$; $\|v\|_D^2=v^\top Dv$. Baseline squared-gradient bounds imply the stated expected-norm target for a uniformly random iterate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

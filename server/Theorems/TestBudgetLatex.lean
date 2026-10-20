@@ -7,6 +7,7 @@ structure Public where
   L : ℝ
 structure Params where
   data : Public
+  dimension : ℕ+
 
 set_option hygiene false in
 run_cmd liftTermElabM do
@@ -14,6 +15,13 @@ run_cmd liftTermElabM do
   let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
   unless result == "L" do
     throwError "Unexpected bundled public parameter: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (p : Params) => (p.dimension : ℝ))) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "dimension" do
+    throwError "Unexpected positive natural parameter: {result}"
 end BudgetLatexTests
 
 set_option hygiene false in

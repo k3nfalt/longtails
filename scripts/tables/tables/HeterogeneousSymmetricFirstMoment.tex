@@ -1,0 +1,35 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean}{Heterogeneous\allowbreak{}Symmetric\allowbreak{}First\allowbreak{}Moment}.}\label{tab:HeterogeneousSymmetricFirstMoment}
+\parbox{\linewidth}{\footnotesize
+On $\mathbb R^{b+h}$, $b+h>0$, $f$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. Samples are IID; the jointly measurable, integrable gradient oracle is unbiased. Writing $\zeta=g-\nabla f$, body coordinates have symmetric noise with $\mathbb E\|\zeta_b(x)\|_1\le\sigma_b$; the head satisfies $\mathbb E\|\zeta_h(x)\|^2\le\sigma_h^2$. Almost surely, $|\zeta_i(x)-\zeta_i(y)|\le K\|x-y\|$ for every body coordinate and all $x,y$, with measurable $K\ge0$ and $\mathbb E K\le M$. Here $L,\Delta,\varepsilon,\delta>0$ and $M,\sigma_b,\sigma_h\ge0$. The setup restricts the algorithm to bias-corrected Adam on the body ($\beta_1=0.9$, $\beta_2=0.999$, stabilizer $\delta$) and coordinatewise AdaGrad on the head. Target: $\int\|\nabla f(x_J)\|\,d\mathbb P\le\varepsilon$, with $J$ uniform and independent of the sample sequence; $\mathbb P$ is their joint law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HeterogeneousAdamFirstMoment.lean}{Heterogeneous\allowbreak Adam\allowbreak First\allowbreak Moment} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HeterogeneousAdamFirstMoment.md}{(review)}
+& $\mathcal{O}\!\left(Q[1+\log((1+\sigma_b)Q)]^4\right)$ gradient calls
+& --- & --- \\
+\midrule[1.2pt]
+Median-of-three + randomized SGD; Derived bound \citep{mshGhadimiLan2013v1}
+& $\mathcal{O}\!\left(1+\dfrac{L\Delta}{\varepsilon^2}+\dfrac{L\Delta(\sigma_b^2+\sigma_h^2)}{\varepsilon^4}\right)$ gradient calls, including three samples per step; full noise model, without $K$.
+& \textbf{(1)}: No established improvement in problem-class complexity; method-specific Adam/AdaGrad analysis, with priority unresolved.
+& \textbf{(1)}: i) Extra modulus $K$.\newline ii) $d^2(1+M/L)^2$ noise overhead and logarithms.\newline iii) For $b>0$, fixed $\delta$ retains $\varepsilon^{-4}$ even without noise. \\
+\midrule
+Adam \citep[Thm.~1.2]{hsfmDereich2026v2}; strongly convex objective, $C^2$ sample loss, bounded IID data and iterates
+& $\mathcal{O}(nB)$ gradient calls for $n$ steps with batch size $B$. $L^p$ parameter-error guarantee; no comparable stationarity budget.
+& \textbf{(1)}: Adam-specific scope: nonconvex objectives and unbounded symmetric first-moment body noise, including atoms; fixed memory. No problem-class rate gain established.
+& \textbf{(1)}: Requires body symmetry and $K$; classes are incomparable. Stationarity replaces parameter error, so rates are not comparable. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $b,h$: body/head dimensions; $d=b+h$; $L$: gradient Lipschitz constant; $\Delta$: initial gap bound; $\sigma_b,\sigma_h$: body first-moment and head standard-deviation bounds; $M$: mean noise-modulus bound; $\delta$: stabilizer; $\varepsilon$: target accuracy. $A=1+d^2(L+M)^2\Delta/L$ and
+$\displaystyle Q=1+\frac{A(b\delta+\sigma_b+\sqrt h\,\sigma_h)^2}{\varepsilon^4}+\frac{A+h(1+L\Delta+h\sigma_h^2)\sqrt A}{\varepsilon^2}$.
+$B$: baseline batch size; $n$: baseline steps; $p$: parameter-error moment order. Costs count individual stochastic gradient evaluations; $\log$ is natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -4,6 +4,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Data.Nat.Log
 import Mathlib.Data.Nat.Sqrt
+import Mathlib.Data.PNat.Defs
 import Mathlib.Algebra.BigOperators.Group.Finset.Defs
 import Mathlib.LinearAlgebra.Dimension.Finrank
 
@@ -52,7 +53,7 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       " & " ++ (← latexPP args[1]!).latex.1 ++ " \\\\ " ++
       (← latexPP args[4]!).latex.1 ++ " & \\mathrm{otherwise} \\end{cases}")
   | ``OfNat.ofNat => latexPP args[1]!
-  | ``Nat.cast | ``NatCast.natCast => latexPP args.back!
+  | ``Nat.cast | ``NatCast.natCast | ``PNat.val => latexPP args.back!
   | ``LE.le => binary args " \\leq " 50 .none
   | ``HAdd.hAdd => binary args " + " 65 .left
   | ``HSub.hSub => binary args " - " 65 .left
