@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
+  "searched_at": "2026-10-20T08:34:04.964285+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10^{84} \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\log\\left(10^{84} \\cdot \\left(1 + \\sigma Body\\right) \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right)\\right)\\right)^{4} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeterogeneousSymmetricFirstMoment.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈10 ^ 84 *\n        (1 +\n            (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n              q.ε ^ 4 +\n          (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n              ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n            q.ε ^ 2) *\n      Real.log\n          (10 ^ 84 * (1 + q.σBody) *\n            (1 +\n                (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                    (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n                  q.ε ^ 4 +\n              (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n                  ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                    √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n                q.ε ^ 2)) ^\n        4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10^{84} \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\log\\left(10^{84} \\cdot \\left(1 + \\sigma Body\\right) \\cdot \\left(1 + \\frac{\\left(1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}\\right) \\cdot \\left(bodyDim \\cdot \\delta + \\sigma Body + \\sqrt{headDim} \\cdot \\sigma Head\\right)^{2}}{\\varepsilon^{4}} + \\frac{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L} + headDim \\cdot \\left(1 + 2 \\cdot L \\cdot \\Delta + headDim \\cdot \\sigma Head^{2}\\right) \\cdot \\sqrt{1 + \\frac{\\left(bodyDim + headDim\\right)^{2} \\cdot \\left(L + M\\right)^{2} \\cdot \\Delta}{L}}}{\\varepsilon^{2}}\\right)\\right)\\right)^{4} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeterogeneousSymmetricFirstMoment.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈10 ^ 84 *\n        (1 +\n            (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n              q.ε ^ 4 +\n          (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n              ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n            q.ε ^ 2) *\n      Real.log\n          (10 ^ 84 * (1 + q.σBody) *\n            (1 +\n                (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                    (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n                  q.ε ^ 4 +\n              (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n                  ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                    √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n                q.ε ^ 2)) ^\n        4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HeterogeneousAdamFirstMoment",
+      "namespace": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
+      "setup": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeterogeneousSymmetricFirstMoment.spec\n  LongTails.Theorems.HeterogeneousAdamFirstMoment.budget",
+      "theorem": "LongTails.Theorems.HeterogeneousAdamFirstMoment.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HeterogeneousAdamFirstMoment",
+      "theorem": "LongTails.Theorems.HeterogeneousAdamFirstMoment.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives with globally L-Lipschitz gradients and f(x₀) − inf f ≤ Δ. Nonconvex objectives are permitted; no convexity, minimizer attainment, or bounded domain is required. L > 0 and Δ > 0.",
+        "evidence": "LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: spec.Instance, spec.valid, and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call returns the full vector g(x,ω), with E[g(x,ω)] = ∇f(x). Fresh seeds are IID with common law p; errors may depend on x and coordinates may be dependent. No function values, exact gradients, or reusable sample access are supplied. All Params are public, including dimensions, L, M, σBody, σHead, Δ, ε, δ, and x₀; f, g, p, P, and K are hidden.",
+        "evidence": "LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: Params, spec.Public, spec.publicInput, and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Oracle and execute."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For e(x,ω) = g(x,ω) − ∇f(x), the body block satisfies E[∑ᵢ |eBody,i(x,ω)|] ≤ σBody uniformly in x. Only a first absolute moment is required; no body moment of order greater than one is assumed. σBody ≥ 0.",
+        "evidence": "LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: spec.valid and the body absolute-moment condition in spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "The head block satisfies E[∑ⱼ eHead,j(x,ω)²] ≤ σHead² uniformly in x, with integrability explicitly required and σHead ≥ 0. Head errors need not be symmetric. This variance bound does not apply to the body block.",
+        "evidence": "LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: spec.valid and the head integrability and second-moment conditions in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝ^(bodyDim+headDim) with its Euclidean norm and designated body/head coordinate blocks. Dimensions are nonnegative integers with positive sum; either block may be empty.",
+        "evidence": "LongTails/Algorithms/HeterogeneousAdam.lean: supplied Point definition; LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: Params and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Each body error coordinate is marginally symmetric: eBody,i(x,ω) and −eBody,i(x,ω) have identical distributions. Neither a density nor joint central symmetry is required. A common measurable, integrable K ≥ 0 satisfies E[K] ≤ M and, almost surely simultaneously for all x,y and body coordinates i, |eBody,i(x,ω) − eBody,i(y,ω)| ≤ K(ω)‖x−y‖, with M ≥ 0. The allowed family is explicitly restricted by α = 9/10, β = 999/1000, damping equal to public δ > 0, positive r₀, and positive body/head step schedules.",
+        "evidence": "LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: symmetry and K conditions in spec.admissible, spec.valid, and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point X such that ‖∇f(X)‖ is integrable and E[‖∇f(X)‖] ≤ ε, where ε > 0. The norm is Euclidean and unsquared; successful does not require a last iterate or a best-iterate certificate.",
+        "evidence": "LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: spec.Output, spec.valid, and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the product of algorithm randomness and the oracle seed-stream law. The extracted budget is a fixed cap on total stochastic-gradient calls, not an expected stopping cost. No high-probability guarantee is required; δ is an algorithm damping parameter.",
+        "evidence": "LongTails/Template.lean: Convergence and execute; LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean: spec.successful and spec.allowedAlgorithm; supplied extracted oracle budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines symmetric first-moment body noise, potentially asymmetric finite-variance head noise, and samplewise Lipschitz body errors with an integrable random modulus. This is an unusual variant of smooth nonconvex stochastic optimization. The classification does not assert novelty; no repository files or Lean proofs were checked."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HeterogeneousAdamFirstMoment.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HeterogeneousAdamFirstMoment",
+          "theorem": "LongTails.Theorems.HeterogeneousAdamFirstMoment.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

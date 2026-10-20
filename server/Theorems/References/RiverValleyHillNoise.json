@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.RiverValleyHillNoise",
+  "searched_at": "2026-10-20T08:34:29.568483+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{256 \\cdot \\Delta \\cdot \\left(8 \\cdot Lv + \\frac{64 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)}{\\varepsilon^{2}}\\right)}{\\varepsilon^{2}} + \\left(\\log\\left(3 + \\frac{Lv^{2}}{\\mu^{2}} + \\frac{4 \\cdot Lv^{2} \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{3} \\cdot \\left(Lv \\cdot \\varepsilon^{2} + 8 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)\\right)}\\right)\\right)^{2} \\cdot \\left(\\frac{16 \\cdot Lv}{\\mu} + \\frac{512 \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{2} \\cdot \\varepsilon^{2}}\\right) + 1 \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RiverValleyHillNoise.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈256 * q.Δ *\n            (8 * q.Lv +\n              64 *\n                  (2 * q.Lh * q.σu ^ 2 +\n                        (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                          ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                            q.σu * q.σv) +\n                      (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                        (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                    2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv) /\n                q.ε ^ 2) /\n          q.ε ^ 2 +\n        Real.log\n              (3 + q.Lv ^ 2 / q.μ ^ 2 +\n                4 * q.Lv ^ 2 *\n                    (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                      8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n                  (q.μ ^ 3 *\n                    (q.Lv * q.ε ^ 2 +\n                      8 *\n                        (2 * q.Lh * q.σu ^ 2 +\n                              (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                                ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                                  q.σu * q.σv) +\n                            (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                              (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                          2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv)))) ^\n            2 *\n          (16 * q.Lv / q.μ +\n            512 *\n                (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                  8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n              (q.μ ^ 2 * q.ε ^ 2)) +\n      1⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{256 \\cdot \\Delta \\cdot \\left(8 \\cdot Lv + \\frac{64 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)}{\\varepsilon^{2}}\\right)}{\\varepsilon^{2}} + \\left(\\log\\left(3 + \\frac{Lv^{2}}{\\mu^{2}} + \\frac{4 \\cdot Lv^{2} \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{3} \\cdot \\left(Lv \\cdot \\varepsilon^{2} + 8 \\cdot \\left(2 \\cdot Lh \\cdot \\sigma u^{2} + \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right) \\cdot \\left(\\left(\\frac{1792 \\cdot \\left(\\Gamma \\cdot Lh + 2 \\cdot LJ \\cdot G\\right)}{\\mu} + 224 \\cdot \\Gamma\\right) \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right) + \\sigma u \\cdot \\sigma v\\right) + \\left(2 \\cdot G \\cdot \\rho J + 2 \\cdot LJ \\cdot Lh + \\Gamma \\cdot \\rho h + G \\cdot LJ^{2}\\right) \\cdot \\sigma u \\cdot \\left(\\frac{14 \\cdot \\left(\\sigma u^{2} + \\sigma v^{2}\\right)}{Lv} + \\frac{\\sigma u^{2}}{\\mu} + \\frac{\\Gamma \\cdot G \\cdot \\sigma u}{Lv}\\right) + \\frac{2 \\cdot LJ^{2} \\cdot \\sigma u^{4}}{Lv}\\right)\\right)}\\right)\\right)^{2} \\cdot \\left(\\frac{16 \\cdot Lv}{\\mu} + \\frac{512 \\cdot \\left(2 \\cdot G \\cdot \\rho h \\cdot \\sigma u^{2} + \\mu^{2} \\cdot \\sigma u^{2} + 4 \\cdot Lv^{2} \\cdot \\sigma v^{2} + \\frac{8 \\cdot Lv \\cdot LJ^{2} \\cdot \\sigma u^{4}}{\\mu}\\right)}{\\mu^{2} \\cdot \\varepsilon^{2}}\\right) + 1 \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RiverValleyHillNoise.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈256 * q.Δ *\n            (8 * q.Lv +\n              64 *\n                  (2 * q.Lh * q.σu ^ 2 +\n                        (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                          ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                            q.σu * q.σv) +\n                      (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                        (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                    2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv) /\n                q.ε ^ 2) /\n          q.ε ^ 2 +\n        Real.log\n              (3 + q.Lv ^ 2 / q.μ ^ 2 +\n                4 * q.Lv ^ 2 *\n                    (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                      8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n                  (q.μ ^ 3 *\n                    (q.Lv * q.ε ^ 2 +\n                      8 *\n                        (2 * q.Lh * q.σu ^ 2 +\n                              (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                                ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                                  q.σu * q.σv) +\n                            (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                              (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                          2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv)))) ^\n            2 *\n          (16 * q.Lv / q.μ +\n            512 *\n                (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                  8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n              (q.μ ^ 2 * q.ε ^ 2)) +\n      1⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AnnealedSgdRiverValley",
+      "namespace": "LongTails.Setups.RiverValleyHillNoise",
+      "setup": "LongTails.Setups.RiverValleyHillNoise",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RiverValleyHillNoise.spec OracleTemplate.RiverValley.budget",
+      "theorem": "OracleTemplate.RiverValley.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AnnealedSgdRiverValley",
+      "theorem": "OracleTemplate.RiverValley.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of f(x)=h(u)+⟨A(v−φ(u)),v−φ(u)⟩/2, where u=P_{K⊥}x and v=P_Kx. The function h need not be convex, and φ may be nonlinear. Strong convexity is imposed only on the quadratic transverse component; global convexity, strong convexity, and a PL inequality are not assumed. The initialization satisfies f(x0)−inf f≤Δ.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: spec.admissible, objective decomposition, conditions on A, and initialization inequality."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call at x returns g(x,ξ), with E[g(x,ξ)]=∇f(x). Seeds are independent with a common distribution across calls. Noise may depend on x; its two orthogonal projections have separate second-moment bounds. The oracle does not reveal K, h, φ, A, their derivatives, or the sampling distribution.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: spec.admissible, oracle equality, unbiasedness, and projected variance bounds; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For e(x,ξ)=g(x,ξ)−∇f(x), E‖P_{K⊥}e(x,ξ)‖²≤σu² and E‖P_Ke(x,ξ)‖²≤σv² uniformly in x. Thus total variance is at most σu²+σv². Independence between the two projected errors, Gaussianity, exponential tails, and higher noise moments are not required.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: spec.admissible, final four projected integrability and variance conditions."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure. The geometry uses an unknown orthogonal decomposition E=K⊥⊕K.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: Params.normedE, Params.innerE, Params.finiteE, Params.borelE, and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Curved quadratic valley with controlled derivatives and scale separation. The gradient of h is Lh-Lipschitz and bounded by G; its Hessian is ρh-Lipschitz. The map φ takes values in K, Dφ is LJ-Lipschitz, and D²φ is ρJ-Lipschitz. A is self-adjoint, preserves K, and satisfies μ‖k‖²≤⟨Ak,k⟩ and ‖Ak‖≤Lv‖k‖ on K. Also ‖A Dφ(y)P_{K⊥}z‖≤Γμ‖P_{K⊥}z‖. All scalar bounds and x0 are public; the decomposition and functions are existentially hidden. Validity requires 0<μ≤Lv, ε>0, nonnegative remaining scalar bounds, 16Γ≤1, 64a≤μ, and 64bσu≤μLv, where a=ΓLh+2LJG and b=2GρJ+2LJLh+Γρh+GLJ². Additionally, 32Lh log(3+Lv²/μ²+4Lv²D/[μ³(Lvε²+8Q)])≤μ, where D=(2Gρh+Lh²)σu²+4Lv²σv²+20Γ²μ²σu²+8LvLJ²σu⁴/μ+ΓμGLJσu²/4 and Q=2Lhσu²+7(256a²/μ+32Γa+2bσu/Lv)(σv²+σu²)+aσuσv+bσu³/μ+bΓGσu²/Lv+2LJ²σu⁴/Lv. Allowed algorithms are restricted to the family explicitly named in spec.allowedAlgorithm.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible, and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return an E-valued measurable output X with integrable gradient norm satisfying E‖∇f(X)‖≤ε. This is the first power of the full ambient gradient norm, not its square or a projected gradient norm.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm randomness and the independent oracle seed sequence, under their product probability law. The supplied budget is a deterministic cap on oracle calls, not an expected stopping cost. No high-probability or almost-sure accuracy guarantee is required.",
+        "evidence": "LongTails/Setups/RiverValleyHillNoise.lean: spec.successful; LongTails/Template.lean: Convergence and execute; supplied extracted oracle budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a hidden curved quadratic-valley decomposition, separate directional noise bounds, higher derivative controls, and accuracy-dependent scale-separation restrictions. These are substantive additional structures beyond standard smooth nonconvex stochastic optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RiverValley.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AnnealedSgdRiverValley",
+          "theorem": "OracleTemplate.RiverValley.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

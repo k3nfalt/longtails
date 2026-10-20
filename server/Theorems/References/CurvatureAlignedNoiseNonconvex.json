@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
+  "searched_at": "2026-10-20T08:33:55.769766+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{4 \\cdot Lg \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{8 \\cdot L\\xi \\cdot \\sigma^{2} \\cdot \\Delta}{\\varepsilon^{4}} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.CurvatureAlignedNoiseNonconvex.spec.Params → ℕ",
+        "value": "fun q => ⌈4 * q.Lg * q.Δ / q.ε ^ 2 + 8 * q.Lξ * q.σ ^ 2 * q.Δ / q.ε ^ 4⌉₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{4 \\cdot Lg \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{8 \\cdot L\\xi \\cdot \\sigma^{2} \\cdot \\Delta}{\\varepsilon^{4}} \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.CurvatureAlignedNoiseNonconvex.spec.Params → ℕ",
+          "value": "fun q => ⌈4 * q.Lg * q.Δ / q.ε ^ 2 + 8 * q.Lξ * q.σ ^ 2 * q.Δ / q.ε ^ 4⌉₊ + 1"
+        }
+      ],
+      "module": "LongTails.Theorems.CurvatureAlignedSgdNonconvex",
+      "namespace": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
+      "setup": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CurvatureAlignedNoiseNonconvex.spec OracleTemplate.CurvatureAligned.budget",
+      "theorem": "OracleTemplate.CurvatureAligned.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CurvatureAlignedSgdNonconvex",
+      "theorem": "OracleTemplate.CurvatureAligned.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f:E→ℝ, with no convexity requirement. A global lower bound ℓ exists with f(x0)−ℓ≤Δ; attainment is not required.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.admissible, gradient existence and lower-bound clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns g(x,ξ) with E[g(x,ξ)]=∇f(x). Seeds are independent with a common distribution. The oracle supplies gradient samples only. All Params, including Lg, Lξ, σ, Δ, ε and x0, are public; f, Q and the sampling distribution are hidden.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.Public, publicInput and admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "A hidden field of continuous linear operators Q(x) satisfies f(x+u)≤f(x)+⟨∇f(x),u⟩+⟨Q(x)u,u⟩/2 for every x,u, and ⟨Q(x)∇f(x),∇f(x)⟩≤Lg‖∇f(x)‖². No uniform operator-norm bound is stipulated.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.admissible, Q witness and two curvature inequalities."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For e(x,ξ)=g(x,ξ)−∇f(x), E‖e(x,ξ)‖²≤σ² uniformly in x. Joint measurability and the stated first and second moment integrability conditions are required; no light-tail condition is imposed.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.admissible, measurability, integrability, unbiasedness and variance clauses."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space equipped with its Borel measurable structure. Accuracy and variance use its induced norm.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: Params.normedE, innerE, finiteE, measurableE and borelE."
+      },
+      {
+        "label": "other",
+        "details": "Noise curvature is controlled separately from gradient curvature: E⟨Q(x)e(x,ξ),e(x,ξ)⟩≤Lξ E‖e(x,ξ)‖², with the quadratic form integrable. Public parameters satisfy Lg>0, Lξ≥0, σ≥0, Δ≥0 and ε>0; Lξ may vanish despite nonzero variance.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.valid and final two spec.admissible clauses."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output X∈E must be measurable, ‖∇f(X)‖ must be integrable, and E‖∇f(X)‖≤ε. This is the first power of the norm; no last-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm randomness and the oracle seed sequence under their product law. The extracted budget is a fixed cap of ⌈4LgΔ/ε²+8Lξσ²Δ/ε⁴⌉₊+1 stochastic-gradient calls.",
+        "evidence": "LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence and execute; supplied OracleTemplate.CurvatureAligned.result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation separates gradient-direction curvature from expected noise curvature through a hidden, point-dependent quadratic upper model. These assumptions are more specialized than the standard single-smoothness-constant stochastic nonconvex benchmark. Repository proofs and implementations were not inspected; the absence of a qualifying verified reference does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CurvatureAligned.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CurvatureAlignedSgdNonconvex",
+          "theorem": "OracleTemplate.CurvatureAligned.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

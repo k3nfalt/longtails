@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.SymmetricGaussianReverseFisher",
+  "searched_at": "2026-10-20T08:32:54.894715+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{1000000000000000 \\cdot \\left(1 + upper\\right) \\cdot \\left(1 + lower^{2}\\right)}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{1000000000000000 \\cdot dimension \\cdot \\left(1 + upper\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SymmetricGaussianReverseFisher.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈1000000000000000 * (1 + p.upper) * (1 + p.lower ^ 2) / max (p.lower ^ 2) p.accuracy *\n      Real.log (1000000000000000 * ↑↑p.dimension * (1 + p.upper) / (p.failure * p.accuracy))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{1000000000000000 \\cdot \\left(1 + upper\\right) \\cdot \\left(1 + lower^{2}\\right)}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{1000000000000000 \\cdot dimension \\cdot \\left(1 + upper\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SymmetricGaussianReverseFisher.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈1000000000000000 * (1 + p.upper) * (1 + p.lower ^ 2) / max (p.lower ^ 2) p.accuracy *\n      Real.log (1000000000000000 * ↑↑p.dimension * (1 + p.upper) / (p.failure * p.accuracy))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SymmetricReverseFisherGlobalGD",
+      "namespace": "LongTails.Setups.SymmetricGaussianReverseFisher",
+      "setup": "LongTails.Setups.SymmetricGaussianReverseFisher",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SymmetricGaussianReverseFisher.spec\n  LongTails.Theorems.SymmetricReverseFisherGlobalGD.budget",
+      "theorem": "LongTails.Theorems.SymmetricReverseFisherGlobalGD.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SymmetricReverseFisherGlobalGD",
+      "theorem": "LongTails.Theorems.SymmetricReverseFisherGlobalGD.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Parameter recovery for the reverse Fisher loss between symmetric mixtures Pθ = ½N(θ,I) + ½N(−θ,I) and Pμ. The loss averages squared score differences under Pθ. For μ ≠ 0, its values at ±μ are zero while its value at their midpoint θ = 0 is positive, so the permitted objectives include nonconvex functions.",
+        "evidence": "LongTails/Setups/SymmetricGaussianReverseFisher.lean: score, loss, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every query θ returns the exact parameter gradient ∇θ loss(μ,θ), including differentiation through the θ-dependent integration distribution. Replies are identical across oracle seeds and call indices. No sampling or direct target-score oracle is supplied.",
+        "evidence": "LongTails/Setups/SymmetricGaussianReverseFisher.lean: loss and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The parameter space is Euclidean R^d, with public positive integer dimension d and standard Gaussian integration.",
+        "evidence": "LongTails/Setups/SymmetricGaussianReverseFisher.lean: Params.dimension, Space, loss."
+      },
+      {
+        "label": "other",
+        "details": "Both mixtures have two equally weighted, opposite means and identity covariance. The hidden target satisfies lower ≤ ‖μ‖ ≤ upper; public parameters satisfy 0 ≤ lower ≤ upper and accuracy,failure ∈ (0,1]. Zero separation is permitted. Allowed algorithms query their current point, update it by a positive scalar step times the negative oracle reply, and output that point; randomized initialization is permitted.",
+        "evidence": "LongTails/Setups/SymmetricGaussianReverseFisher.lean: score, loss, Params, spec.publicInput, spec.valid, spec.admissible, gdFamily; LongTails/Template.lean: Algorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The measurable final output θ must satisfy min{‖θ−μ‖², ‖θ+μ‖²} ≤ accuracy: squared Euclidean parameter error up to sign, rather than objective error or stationarity.",
+        "evidence": "LongTails/Setups/SymmetricGaussianReverseFisher.lean: spec.successful and gdFamily."
+      },
+      {
+        "label": "high_probability",
+        "details": "The recovery event must have probability at least 1−failure under the joint algorithm and oracle seed law, with a fixed cap on exact-gradient calls. The exact oracle does not remove possible algorithm randomness.",
+        "evidence": "LongTails/Setups/SymmetricGaussianReverseFisher.lean: spec.successful; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This formulation combines model-weighted reverse Fisher optimization, a symmetric mixture parameterization, exact population gradients, and high-probability recovery up to sign without a positive separation requirement. Local implementations and proofs were not inspected. No qualifying reference was verified; this does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SymmetricReverseFisherGlobalGD.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SymmetricReverseFisherGlobalGD",
+          "theorem": "LongTails.Theorems.SymmetricReverseFisherGlobalGD.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
