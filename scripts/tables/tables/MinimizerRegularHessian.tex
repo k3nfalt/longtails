@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Exact-gradient optimization with minimizer-anchored Hessian regularity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MinimizerRegularHessian.lean}{Minimizer\allowbreak{}Regular\allowbreak{}Hessian}.}\label{tab:MinimizerRegularHessian}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space of finite dimension $d\ge1$, $f$ and $\nabla f$ are differentiable, $f$ is $\mu$-strongly convex, and $\nabla f$ is $L$-Lipschitz. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\|\nabla^2 f(x)-\nabla^2 f(x_\star)\|\le M\|x-x_\star\|$ for every $x$. Parameters $0<\mu\le L$, $M\ge0$, $R>0$, and $\varepsilon>0$ are known. Count exact gradient calls; target $f(\widehat x)-f(x_\star)\le\varepsilon$ deterministically.}\par\smallskip
+\caption{Exact-gradient complexity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MinimizerRegularHessian.lean}{MinimizerRegularHessian}.}\label{tab:MinimizerRegularHessian}
+\parbox{\linewidth}{\footnotesize A real Hilbert space of finite dimension $d\ge1$; twice differentiable, $\mu$-strongly convex $f$ with $L$-Lipschitz gradient. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\|\nabla^2 f(x)-\nabla^2 f(x_\star)\|\le M\|x-x_\star\|$ for every $x$. Parameters $0<\mu\le L$, $M\ge0$, $R>0$ are known; $\varepsilon>0$. Exact gradients may be queried at arbitrary points; the setup imposes no algorithm restriction. Target: deterministic $f(x_{\rm out})-f(x_\star)\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,29 +10,26 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SpectralGradientQuadraticConvergence.lean}{Spectral\allowbreak{}Gradient\allowbreak{}Quadratic\allowbreak{}Convergence} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SpectralGradientQuadraticConvergence.md}{(review)}
-& $\begin{aligned}\mathcal{O}\!\Bigl(&\kappa\Bigl[1+\log\!\Bigl(1 +\frac{(d+1)^2(2\kappa)^{2d}MLR}{\mu^2}\Bigr)\Bigr]\\&+d[1+\log(1+\ell)]\Bigr)\end{aligned}$
-& ---
-& --- \\
+& $\mathcal{O}\!\left(\begin{aligned}&\kappa\log\!\left(2+(d+1)^2(2\kappa)^{2d}\Theta\right)\\[-2pt]&{}+d\log(2+\ell)\end{aligned}\right)$ & & \\
 \midrule[1.2pt]
-Derived bound: AGD warm-up \citep[Thm.~3.18]{Bubeck2015MinimizerHessian} + forward-difference Newton
-& $\mathcal{O}\!\left(\begin{gathered}\sqrt{\kappa}\!\left[1+\log\!\left(1+\frac{\sqrt{d\kappa}MR}{\mu}\right)\right]\\ {}+d[1+\log(1+\ell)]\end{gathered}\right)$\newline
-$d+1$ calls per Newton step; $M=0$: $\mathcal{O}\!(d)$.
-& \textbf{(1)}: global quadratic-convergence windows using scalar gradient steps; priority unresolved. No established problem-class improvement.
-& \textbf{(1)}: at least $\sqrt\kappa$ larger warm-up bound; matched quadratic-phase order. Symmetric fitting and eigenvalue computations remain necessary. \\
+\textbf{(2)} Derived bound: AGD + finite-difference Newton \citep{mrhBubeck2015,mrhDennisSchnabel1996}
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt\kappa\log\!\left(2+\sqrt{d\kappa}\,MR/\mu\right)\\[-2pt]&{}+d\log(2+\ell)\end{aligned}\right)$\newline Same setup; $d+1$ gradient calls per Newton step.
+& \textbf{(1)}: Matches quadratic-phase rate using scalar-gradient windows without off-iterate probes; no established total-complexity improvement.
+& \textbf{(1)}: Larger warmup: $\kappa$ rather than $\sqrt\kappa$, with a dimension-dependent logarithm. Still requires matrix fitting and eigendecomposition. \\
 \midrule
-AGD \citep[Thm.~3.18]{Bubeck2015MinimizerHessian}
-& $\mathcal{O}\!\left(1+\sqrt\kappa\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right)$
-& \textbf{(1)}: $\log\log(1/\varepsilon)$ instead of $\log(1/\varepsilon)$ accuracy dependence for fixed $d,L,\mu,M,R$ as $\varepsilon\to0$.
-& \textbf{(1)}: needs anchored Hessian regularity, finite $d$, and known $M,R$; can cost more at moderate accuracy. \\
+\textbf{(3)} AGD \citep[Theorem 3.18]{mrhBubeck2015}
+& $\mathcal{O}\!\left(\sqrt\kappa\log(2+LR^2/\varepsilon)\right)$
+& \textbf{(1)}: $\mathcal{O}(\log\log(1/\varepsilon))$ instead of $\mathcal{O}(\log(1/\varepsilon))$ for fixed problem parameters as $\varepsilon\downarrow0$.
+& \textbf{(1)}: Needs anchored Hessian regularity and $M,R$ for tuning; dimension-dependent warmup can be worse at moderate accuracy. \\
 \midrule
-Silver step sizes \citep[Thm.~1.1]{AltschulerParrilo2023SilverV1MinimizerHessian}
-& $\mathcal{O}\!\left(1+\kappa^{\log_{1+\sqrt2}2}\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right)$
-& \textbf{(1)}: $\log\log(1/\varepsilon)$ instead of $\log(1/\varepsilon)$ accuracy dependence within scalar gradient steps, for fixed $d,L,\mu,M,R$ as $\varepsilon\to0$.
-& \textbf{(1)}: needs anchored Hessian regularity, finite $d$, known $M,R$, symmetric fitting, and eigendecomposition; no uniform cost improvement. \\
+\textbf{(4)} Silver steps \citep[Theorem 1.1, arXiv v1]{mrhAltschulerParrilo2025}
+& $\mathcal{O}\!\left(\kappa^{\log_{1+\sqrt2}2}\log(2+LR^2/\varepsilon)\right)$
+& \textbf{(1)}: Quadratic scalar-gradient windows give $\mathcal{O}(\log\log(1/\varepsilon))$ instead of $\mathcal{O}(\log(1/\varepsilon))$ for fixed problem parameters as $\varepsilon\downarrow0$.
+& \textbf{(1)}: Needs finite dimension, anchored Hessian regularity, and $M,R$ for tuning; warmup can be worse at moderate accuracy. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $d=\dim E$, $\kappa=L/\mu$, $\ell=\log(1+L^2R^2/(\mu\varepsilon))$; $\log$ is natural; Hessian norms are operator norms. AGD: accelerated gradient descent. Costs count gradient queries, including all probing and finite-difference queries, not matrix computations.
+\item[] \textbf{Abbr:} $d=\dim E$, $\kappa=L/\mu$, $\Theta=MLR/\mu^2$, $\ell=\log(1+L^2R^2/(\mu\varepsilon))$; $\log$ denotes the natural logarithm. Costs count all exact-gradient calls, including probes; $\nabla^2 f$ denotes the Hessian, with operator norm.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

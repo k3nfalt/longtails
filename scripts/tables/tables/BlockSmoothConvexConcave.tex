@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Block-smooth convex--concave optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BlockSmoothConvexConcave.lean}{Block\allowbreak{}Smooth\allowbreak{}Convex\allowbreak{}Concave}.}\label{tab:BlockSmoothConvexConcave}
-\parbox{\linewidth}{\footnotesize Let $f:E\times F\to\mathbb{R}$ be differentiable and convex--concave on real Hilbert spaces. Its partial gradients have within-block Lipschitz bounds $L_x,L_y\ge0$ and cross-block bound $L_{xy}\ge0$, with $L_x+L_{xy},L_y+L_{xy}>0$. A saddle $z_\star$ satisfies $\|z_0-z_\star\|\le R$, $R\ge0$. Exact partial-gradient queries are available. The setup restricts algorithms to constant-step Alex-GDA with $1<\gamma\le2$, $\delta\ge1$. Target: $\|\nabla_x f(\widehat z)\|^2+\|\nabla_y f(\widehat z)\|^2\le\varepsilon^2$, $\varepsilon>0$, deterministically at the selected iterate.}\par\smallskip
+\caption{Block-smooth convex--concave optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BlockSmoothConvexConcave.lean}{BlockSmoothConvexConcave}.}\label{tab:BlockSmoothConvexConcave}
+\parbox{\linewidth}{\footnotesize On real Hilbert spaces $E\times F$, $f$ is differentiable in each block and convex--concave. Partial gradients have global within-block Lipschitz bounds $L_x,L_y\ge0$ and cross-block bound $L_{xy}\ge0$, with $L_x+L_{xy},L_y+L_{xy}>0$. A saddle $z_\star$ satisfies $\|z_0-z_\star\|\le R$, where $R\ge0$. The oracle returns exact partial gradients. The setup requires constant-step Alex-GDA with $1<\gamma\le2$, $\delta\ge1$; the target is $\|\nabla_x f(\hat z)\|^2+\|\nabla_y f(\hat z)\|^2\le\varepsilon^2$, $\varepsilon>0$, deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,34 +9,48 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AlexGdaConvexConcave.lean}{Alex\allowbreak{}Gda\allowbreak{}Convex\allowbreak{}Concave} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AlexGdaConvexConcave.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{\gamma^4\delta^4\Lambda^2R^2}{(\gamma-1)^3\varepsilon^2}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AlexGdaConvexConcave.lean}{Alex\allowbreak Gda\allowbreak Convex\allowbreak Concave} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AlexGdaConvexConcave.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{\gamma^4\delta^4\Lambda^2R^2}{(\gamma-1)^3\varepsilon^2}\right)$ & & \\
 \midrule[1.2pt]
-EAG-V \citep[Cor.~2]{holderYoonRyu2021}\par Finite-dimensional overlap
-& $\mathcal{O}(1+\Lambda R/\varepsilon)$\par Four block calls per iteration.
-& \textbf{(1)}: No established improvement on this overlap.
-& \textbf{(1)}: quadratic instead of linear in $\Lambda R/\varepsilon>1$ for fixed $\gamma,\delta$; selected instead of last iterate. \\
+\textbf{(2)} EAG-V \citep[Cor.~2]{bscYoonRyu2021}
+& $\mathcal{O}(1+\Lambda R/\varepsilon)$.
+Finite-dimensional restriction; four block calls per iteration.
+& \textbf{(1)}: No established improvement on the finite-dimensional overlap.
+& \textbf{(1)}: Quadratic instead of linear dependence when $\Lambda R/\varepsilon>1$ and $\gamma,\delta$ are fixed; selected instead of last iterate. Needs block bounds separately, not only $\Lambda$. \\
 \midrule
-Optimistic gradient / PEG \citep[Thm.~1]{bscGorbunov2022v2}\par Finite-dimensional overlap
-& $\mathcal{O}(1+\Lambda^2R^2/\varepsilon^2)$\par Two block calls per iteration, including initialization.
-& \textbf{(1)}: Matches known rate for fixed $\gamma,\delta$; same block oracle.
-& \textbf{(1)}: selected instead of last iterate; bound deteriorates as $\gamma\downarrow1$ or $\delta\uparrow\infty$. \\
+\textbf{(3)} PEG / optimistic gradient \citep[Thm.~1]{bscGorbunov2022}
+& $\mathcal{O}(1+\Lambda^2R^2/\varepsilon^2)$.
+Finite-dimensional restriction; two block calls per iteration, including initialization.
+& \textbf{(1)}: Matches known rate for fixed $\gamma,\delta$, with the same oracle access on the common saddle class.
+& \textbf{(1)}: Selected instead of last iterate; larger leading constant, with deterioration as $\gamma\downarrow1$ or $\delta\uparrow\infty$. \\
 \midrule
-Alternating GDA, momentum $-1/2$ \citep[Thm.~3.1]{bscShugart2026v1}\par Finite-dimensional overlap
-& $\mathcal{O}(1+\Lambda^2R^2/\varepsilon^2)$\par Two calls/iteration for expected squared residual; three with deterministic residual selection.
-& \textbf{(1)}: i) Deterministic selection without extra residual calls.\newline ii) Matches rate for fixed $\gamma,\delta$; no order improvement after deterministic conversion.
-& \textbf{(1)}: bound deteriorates as $\gamma\downarrow1$ or $\delta\uparrow\infty$. \\
+\textbf{(4)} Negative-momentum alternating GDA \citep[Thm.~3.1]{bscShugart2026}
+& $\mathcal{O}(1+\Lambda^2R^2/\varepsilon^2)$.
+Finite-dimensional restriction; $\mathbb{E}\|\nabla f(z_\tau)\|^2\le\varepsilon^2$ for a uniform random iterate; two block calls per iteration.
+& \textbf{(1)}: Deterministic selected-iterate accuracy instead of expected accuracy; matched order for fixed $\gamma,\delta$.
+& \\
 \midrule
-Alex-GDA \citep[Thm.~5.1]{bscLee2024v2}\par Twice-differentiable, strongly convex--strongly concave Euclidean case
-& Linear distance convergence for $\mu_x,\mu_y>0$; no bound at $\mu_x=\mu_y=0$. Rates not comparable on the full target setup.
-& \textbf{(1)}: method Scope: no strong convexity or twice differentiability; includes $\delta=1$. Priority of the convex--concave analysis remains unresolved.
-& \textbf{(1)}: restricts $\gamma\le2$; selected-iterate stationarity does not establish last-iterate convergence in Conjecture~8.2. \\
+\textbf{(5)} Derived bound: deterministic selection \citep[Thm.~3.1]{bscShugart2026}
+& $\mathcal{O}(1+\Lambda^2R^2/\varepsilon^2)$.
+Finite-dimensional restriction; deterministic minimum-residual selection, counting three block calls per iteration.
+& \textbf{(1)}: Matches known rate for fixed $\gamma,\delta$; selection needs no extra residual evaluations. No stronger output guarantee than \textbf{(5)}.
+& \\
+\midrule
+\textbf{(6)} Alex-GDA \citep[Thm.~5.1]{bscLee2024}
+& Linear distance convergence for twice-differentiable, strongly convex--strongly concave Euclidean objectives; no residual budget at zero strong-convexity moduli.
+& \textbf{(1)}: Method-specific scope extension to merely convex--concave Hilbert objectives and $\delta=1$; best-iterate stationarity only, not the last-iterate convergence of Conjecture~8.2.
+& \textbf{(1)}: Restricts $\gamma\le2$; no linear convergence guarantee on the strongly convex--strongly concave overlap. \\
+\midrule
+\textbf{(7)} Derived bound: regularized Alex-GDA \citep[Thm.~5.1, App.~D]{bscLee2024}
+& $\mathcal{O}\!\left((1+\Lambda R/\varepsilon)\right.$\newline
+$\left.{}\cdot[1+\log(1+\Lambda R/\varepsilon)]\right)$.
+Twice-differentiable finite-dimensional restriction, $R>0$; regularization $\mu=\varepsilon/(4R)$, $\gamma=\delta=2$; two block calls per iteration.
+& \textbf{(1)}: Unmodified objective; updates do not need $R,\varepsilon$ (stopping does). Also covers Hilbert spaces without twice differentiability.
+& \textbf{(1)}: On the common setup, quadratic instead of near-linear accuracy dependence for fixed $\gamma,\delta$ and large $\Lambda R/\varepsilon$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\Lambda=\max\{L_x,L_y\}+L_{xy}$; $z_0=(x_0,y_0)$; product norm $\|(x,y)\|^2=\|x\|^2+\|y\|^2$; $\widehat z$ is the proxy-selected iterate; $\mu_x,\mu_y$ are strong convexity/concavity moduli. Costs count individual partial-gradient calls; a full saddle-operator evaluation costs two. Expected squared residual means $\mathbb{E}[\|\nabla_x f(\widehat z)\|^2+\|\nabla_y f(\widehat z)\|^2]\le\varepsilon^2$.
+\item[] \textbf{Abbr:} $\Lambda=\max\{L_x,L_y\}+L_{xy}$; $z_0=(x_0,y_0)$; $\|z\|^2=\|x\|^2+\|y\|^2$; $\|\nabla f(z)\|^2=\|\nabla_x f(z)\|^2+\|\nabla_y f(z)\|^2$. Costs count individual partial-gradient calls. $\hat z$ is the iterate selected by the recorded proxy in \textbf{(1)}; $\tau$ is uniform over the executed iterates in \textbf{(4)}; $\mu$ is the added strong-convexity/concavity modulus in \textbf{(7)}.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

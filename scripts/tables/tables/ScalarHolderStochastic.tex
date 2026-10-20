@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Scalar stochastic H\"older stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ScalarHolderStochastic.lean}{Scalar\allowbreak{}Holder\allowbreak{}Stochastic}.}\label{tab:ScalarHolderStochastic}
-\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}\to\mathbb{R}$ satisfies $|f'(x)-f'(y)|\le H|x-y|^\nu$ and $f(x_0)-\inf f\le\Delta$, with $H,\Delta,\varepsilon>0$, $0<\nu\le1$, $\sigma\ge0$, $1<p\le2$. The jointly measurable oracle $g$ has integrable replies and central $p$th moments, $\mathbb{E} g(x,\xi)=f'(x)$ and $\mathbb{E}|g(x,\xi)-f'(x)|^p\le\sigma^p$, with IID samples. Target: measurable $X$ with $\mathbb{P}(|f'(X)|>\varepsilon)\le1/3$.}\par\smallskip
+\caption{Scalar H\"older stochastic stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ScalarHolderStochastic.lean}{ScalarHolderStochastic}.}\label{tab:ScalarHolderStochastic}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb R\to\mathbb R$ satisfies $|f'(x)-f'(y)|\le H|x-y|^\nu$ and $f\ge f_{\rm low}$, with $f(x_0)-f_{\rm low}\le\Delta$. Here $H,\Delta,\varepsilon>0$, $0<\nu\le1$, $\sigma\ge0$, and $1<p\le2$ are supplied parameters. The jointly measurable oracle $g(x,\xi)$ uses IID samples of law $\mu$, with integrable replies and central $p$th moments, $\int g(x,\xi)\,d\mu=f'(x)$ and $\int|g(x,\xi)-f'(x)|^p\,d\mu\le\sigma^p$. Target: measurable $X$ with $\Pr(|f'(X)|>\varepsilon)\le1/3$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,29 +9,31 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ScalarHolderHeavyTailStationarity.lean}{Scalar\allowbreak{}Holder\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ScalarHolderHeavyTailStationarity.md}{(review)}
-& $\mathcal{O}\!\left(C[1+A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)]\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ScalarHolderHeavyTailStationarity.lean}{Scalar\allowbreak Holder\allowbreak Heavy\allowbreak Tail\allowbreak Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ScalarHolderHeavyTailStationarity.md}{(review)}
+& $\begin{gathered}\mathcal{O}\!\left(2^{200/(p-1)}(1+\nu^{-1})\right.\\[-2pt]\left.{}\cdot[1+A+Q\log(2+A)]\right)\end{gathered}$ stochastic gradient calls & & \\
 \midrule[1.2pt]
-\citep[full version, Cor.~11]{shsLiu2025Full}
-& $\mathcal{O}_{\nu,p}\!\left((1+A^{1+1/\nu})(1+(\sigma/\varepsilon)^{p/(p-1)})\right)$\newline Stochastic gradient calls; random block selection and Markov conversion.
-& \textbf{(1)}: $A^{1+1/\nu}(\sigma/\varepsilon)^{p/(p-1)}$ becomes $A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)$; polynomial gain for $A\ge1$, $\sigma\ge\varepsilon$, with $\nu,p$ fixed.
-& \textbf{(1)}: scalar only; needs all parameters. Cor.~12 permits unknown $H,\Delta,\sigma,p$, at a different rate. \\
+\textbf{(2)} \citep[Cor.~11, full version]{shsLiu2025v1}; tuned
+& $\mathcal{O}_{\nu,p}\!\left((1+A^{1+1/\nu})(1+Q)\right)$ stochastic gradient calls; any $d$, compared at $d=1$. Uniform block selection and Markov conversion to the probability target.
+& \textbf{(1)}: Additive instead of multiplicative costs. For $A,Q\ge1$, speedup at least order $\min\{A^{1/\nu}Q,A^{1+1/\nu}/\log(2+A)\}$, for fixed $\nu,p$. At $\nu=1,p=2$, $\mathcal{O}(H\Delta\sigma^2/\varepsilon^4)$ becomes $\mathcal{O}(A+Q\log(2+A))$.
+& \textbf{(1)}: Dimension one only; \textbf{(2)} covers every dimension. \\
 \midrule
-Derived bound: dyadic probing, clipped estimation, union-bound bisection; using random search \citep{shsChewi2023}.
-& $\mathcal{O}\!\left(C\left[1+A+(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)\right.\right.$\newline $\left.\left.{}\cdot\log\log(3+A)\right]\right)$\newline Stochastic gradient calls; known parameters.
-& \textbf{(1)}: removes $\log\log(3+A)$ when $(\sigma/\varepsilon)^{p/(p-1)}\log(2+A)\gtrsim A$; no order gain when $\begin{aligned}A\gtrsim{}&(\sigma/\varepsilon)^{p/(p-1)}\\&\cdot\log(2+A)\log\log(3+A)\end{aligned}$.
-& --- \\
+\textbf{(3)} \citep[Cor.~12, full version]{shsLiu2025v1}; parameter-free
+& $\begin{gathered}\mathcal{O}_{\nu,p}\!\left(1+A+(\Delta/\varepsilon)^4\right.\\[-2pt]\left.{}+(H/\varepsilon)^{4/\nu}+Q^2\right)\end{gathered}$ stochastic gradient calls; any $d$, compared at $d=1$. Uniform block selection and Markov conversion to the probability target.
+& & \textbf{(1)}: Needs $H,\nu,\Delta,\sigma,p$; \textbf{(3)} tunes updates without them (its stopping budget depends on them). Dimension one only. \\
 \midrule
-Random search \citep[Thm.~3]{shsChewi2023}\newline Special case: $\nu=1$, $\sigma=0$.
-& $\mathcal{O}\!\left(1+\sqrt{H\Delta}/\varepsilon\right)$\newline Exact derivative calls.
-& i) \textbf{(1)}: H\"older/heavy-tail scope extension.\newline ii) \textbf{(1)}: matches rate at $\nu=1$, $\sigma=0$.\newline iii) \textbf{(1)}: attains stochastic lower bounds at $\nu=1$, $p=2$, $A>8$, $\varepsilon<\sigma/2$ \citep[Thm.~11]{shsFoster2019}.
-& \textbf{(1)}: proved prefactor $C\ge2^{200}$. \\
+\textbf{(4)} \citep[Thm.~3]{shsChewi2023}; exact gradients, $\nu=1$
+& $\mathcal{O}(1+\sqrt{H\Delta}/\varepsilon)$ exact derivative calls, including constant-confidence amplification.
+& \textbf{(1)}: Matches known rate at $\sigma=0,\nu=1$. Scope: extends to $\nu$-H\"older derivatives and unbiased heavy-tailed noise.
+& \textbf{(1)}: Proved prefactor at least $2^{200}$, even on the common noiseless smooth setup. \\
+\midrule
+\textbf{(5)} Derived bound: dyadic probing, clipped estimation, union-bound bisection; random-search ingredient \citep{shsChewi2023}
+& $\begin{gathered}\mathcal{O}_{\nu,p}\!\left(1+A+Q\log(2+A)\right.\\[-2pt]\left.{}\cdot\log\log(3+A)\right)\end{gathered}$ stochastic gradient calls; same scalar setup and parameter knowledge.
+& \textbf{(1)}: Removes $\log\log(3+A)$ when $Q\log(2+A)\gtrsim A$, via arbitrary-sign noisy backtracking. No order gain when $A\gtrsim Q\log(2+A)\log\log(3+A)$.
+& \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $A=H^{1/(1+\nu)}\Delta^{\nu/(1+\nu)}/\varepsilon$, $C=2^{200/(p-1)}(1+1/\nu)$. $\mathcal{O}_{\nu,p}$ allows constants depending on $\nu,p$; all costs count individual oracle calls, including estimation batches. Logarithms are natural.
+\item[] \textbf{Abbr:} $A=H^{1/(1+\nu)}\Delta^{\nu/(1+\nu)}/\varepsilon$, $Q=(\sigma/\varepsilon)^{p/(p-1)}$; $d$ is dimension; $\mathcal{O}_{\nu,p}$ hides constants depending on $\nu,p$; $\log$ is natural. Costs count individual oracle replies, including estimation batches.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

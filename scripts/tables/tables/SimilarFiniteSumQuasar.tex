@@ -1,14 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Component-gradient complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SimilarFiniteSumQuasar.lean}{Similar\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Quasar}.}\label{tab:SimilarFiniteSumQuasar}
-\parbox{\linewidth}{\footnotesize
-Let $F=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space, with differentiable $f_i$, exact component gradients, $L$-Lipschitz $\nabla F$, and $\delta$-Lipschitz $\nabla f_i-\nabla F$.
-For a global minimizer $x_\star$, assume $F(x_0)-F(x_\star)\le\Delta$,
-$F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2\le F(x_\star)$,
-$\frac{\gamma\mu}{2(2-\gamma)}\|x-x_\star\|^2\le F(x)-F(x_\star)$, and
-$F(y)\ge F(x)+\langle\nabla F(x),y-x\rangle-\frac{\gamma\sqrt{\mu L}}{2}\|y-x\|^2$ for all $x,y$.
-Here $n\ge1$, $0<\mu\le L$, $0<\gamma\le1$, $\delta,\Delta\ge0$, $384\delta^2\le\gamma^3\mu^2$, and $\varepsilon>0$; tuning uses $L,\mu,\gamma,\delta,\Delta,\varepsilon$.
-Target: $F(\widehat x)-F(x_\star)\le\varepsilon$ pathwise.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SimilarFiniteSumQuasar.lean}{SimilarFiniteSumQuasar}.}\label{tab:SimilarFiniteSumQuasar}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, let $F=n^{-1}\sum_{i=0}^{n-1}f_i$, $n\ge1$, with differentiable components and exact component-gradient access. Assume $\nabla F$ is $L$-Lipschitz, each $\nabla f_i-\nabla F$ is $\delta$-Lipschitz, $0<\mu\le L$, $0<\gamma\le1$, $\delta\ge0$, and $384\delta^2\le\gamma^3\mu^2$. For a global minimizer $x_\star$, assume $F(x_0)-F(x_\star)\le\Delta$, $\Delta\ge0$, and, for all $x,y$, $F(x_\star)\ge F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2$, $F(y)\ge F(x)+\langle\nabla F(x),y-x\rangle-\frac{\gamma\sqrt{\mu L}}{2}\|y-x\|^2$, and $F(x)-F(x_\star)\ge\frac{\gamma\mu}{2(2-\gamma)}\|x-x_\star\|^2$. Target: $F(\widehat x)-F(x_\star)\le\varepsilon$, $\varepsilon>0$; \textbf{(1)} gives a deterministic final iterate. Tuning uses $L,\mu,\gamma,\delta,\Delta,\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -16,33 +9,27 @@ Target: $F(\widehat x)-F(x_\star)\le\varepsilon$ pathwise.}\par\smallskip
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CachedSimilarQuasar.lean}{Cached\allowbreak{}Similar\allowbreak{}Quasar} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CachedSimilarQuasar.md}{(review)}
-& $\mathcal{O}\!\left(n+\frac{n\ell}{\log(\gamma^3\mu^2/\delta^2)}+\frac{\sqrt{L/\mu}}{\gamma}\ell\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CachedSimilarQuasar.lean}{Cached\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CachedSimilarQuasar.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(n+\frac{n\ell}{\log(\gamma^3\mu^2/\delta^2)}+\frac{\sqrt\kappa}{\gamma}\ell\right)$ & & \\
 \midrule[1.2pt]
-Full-gradient NAG \citep[Thm.~2]{hermant2026v3cached}; $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left(\frac{n}{\gamma}\sqrt{\frac L\mu}\,\ell\right)$
-& \textbf{(1)}: Rate: multiplicative $n\gamma^{-1}\sqrt{L/\mu}$ becomes additive for $n\ge2$; similarity reduces full-gradient refreshes.
-& \textbf{(1)}: needs finite-sum similarity $384\delta^2\le\gamma^3\mu^2$ and knowledge of $\delta$ in addition. \\
+\textbf{(2)} Nesterov acceleration \citep[Thm.~2, v3]{sfqHermant2026v3}; full gradients, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(n\gamma^{-1}\sqrt\kappa\,\ell\right)$
+& \textbf{(1)}: Multiplicative $n\gamma^{-1}\sqrt\kappa$ becomes additive under the stated similarity regime; at $\delta=0$, $\mathcal{O}(n+\gamma^{-1}\sqrt\kappa\,\ell)$.
+& \textbf{(1)} needs finite-sum similarity $384\delta^2\le\gamma^3\mu^2$ and knowledge of $\delta$ in addition. \\
 \midrule
-Extragradient sliding \citep[Thm.~3]{kovalev2022v1cached}; Derived bound, $E=\mathbb{R}^d$, $\gamma=1$, $F$ $\mu$-strongly convex
-& $\mathcal{O}\!\left(\left(n+\sqrt{\frac L\mu}\right)\left[1+\log\!\left(1+\frac{L\Delta}{\mu\varepsilon}\right)\right]\right)$\par
-$q=f_1$, $p=F-f_1$, $L_p=\mu$; all inner gradient calls counted.
-& i) \textbf{(1)}: Scope: nonconvex strongly quasar-convex $F$, including $\gamma<1$.\newline
- ii) \textbf{(1)}: on overlap, accuracy-dependent $n$-term gains $\log(\mu^2/\delta^2)$ for $\delta\ll\mu$; removes $L/\mu$ inside accuracy logarithm.
-& \textbf{(1)}: restricted similarity range; baseline also permits $\mu\le\delta\le L$ with convex components. Gains on overlap are logarithmic only. \\
+\textbf{(3)} Gradient sliding \citep[Thm.~3]{sfqKovalev2022v1}; derived bound, $E=\mathbb R^d$, $\gamma=1$, $F$ $\mu$-strongly convex
+& $\mathcal{O}\!\left((n+\sqrt\kappa)\left[1+\log\!\left(1+\frac{L\Delta}{\mu\varepsilon}\right)\right]\right)$\par $q=f_0$, $p=F-f_0$, $L_p=\mu$; distance target $\|x-x_\star\|^2\le2\varepsilon/L$.
+& \textbf{(1)}: Scope: nonconvex quasar-convex $F$, $\gamma<1$. On the strongly convex overlap, reduces the $n$-term by $\log(\mu^2/\delta^2)$ when $\delta\ll\mu$ and removes $\kappa$ inside the accuracy logarithm.
+& \textbf{(1)} requires $\delta\le\gamma^{3/2}\mu/\sqrt{384}$; \textbf{(3)} permits larger similarity constants when $f_0$ is convex. \\
 \midrule
-Full-gradient acceleration \citep[Thm.~1]{hinder2020cached}; $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left(\frac n\gamma\sqrt{\frac L\mu}\left[1+\log\!\left(\frac L{\gamma\mu}\right)\right]\ell\right)$\par
-Component-value and component-gradient calls, including searches.
-& i) \textbf{(1)}: on stated subclass, additive rather than multiplicative $n$ dependence; no $1+\log(L/(\gamma\mu))$ search factor.\newline
- ii) \textbf{(1)}: no function values.
-& \textbf{(1)}: needs lower-curvature and similarity bounds; baseline needs neither. \\
+\textbf{(4)} \citep[Thm.~1]{csqHinder2020}; full gradients, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(n\gamma^{-1}\sqrt\kappa\,[1+\log(\kappa/\gamma)]\ell\right)$\par Component value and gradient evaluations, including line search.
+& \textbf{(1)}: On the stated curvature/similarity subclass, replaces multiplicative $n$ by additive dependence and removes $1+\log(\kappa/\gamma)$; needs no function values. \textbf{(2)} already removes that logarithm.
+& \textbf{(1)} additionally needs the lower-curvature bound and strong component similarity; \textbf{(4)} requires neither. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $n$: number of components; $L$: average smoothness; $\mu,\gamma$: strong-quasar parameters; $\delta$: gradient similarity; $\Delta$: initial gap bound; $\varepsilon$: target gap; $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$. The reciprocal $1/\log(\gamma^3\mu^2/\delta^2)$ is $0$ at $\delta=0$. Costs count individual component-gradient calls unless specified otherwise.
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$; $\Delta$ is the initial objective-gap bound; $\delta$ measures component-gradient similarity. Set $1/\log(\gamma^3\mu^2/\delta^2)=0$ at $\delta=0$. Costs count individual component-gradient calls, including full-gradient refreshes; \textbf{(4)} also counts individual component-value calls.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

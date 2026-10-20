@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneInclusion.lean}{Cohypomonotone\allowbreak{}Inclusion}.}\label{tab:CohypomonotoneInclusion}
-\parbox{\linewidth}{\footnotesize On a real inner product space $E$, $F:E\to E$ is $L$-Lipschitz, $L>0$, and $H:E\rightrightarrows E$ is monotone with exact, everywhere-defined resolvents $J_\gamma=(I+\gamma H)^{-1}$ for every $\gamma>0$. For $g\in(F+H)(x)$ and $h\in(F+H)(y)$, $\langle g-h,x-y\rangle\ge-\rho\|g-h\|^2$, where $0\le\rho L<1$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$, $R\ge0$. Target: output $u$ with some $\xi\in H(u)$ satisfying $\|F(u)+\xi\|\le\varepsilon$, $\varepsilon>0$. Each evaluation of $F$ or $J_\gamma$ counts as one call.}\par\smallskip
+\caption{Cohypomonotone inclusions: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneInclusion.lean}{CohypomonotoneInclusion}.}\label{tab:CohypomonotoneInclusion}
+\parbox{\linewidth}{\footnotesize In a real inner-product space, $F$ is $L$-Lipschitz and $H$ is monotone with exact, everywhere-defined resolvents $J_{\gamma H}$ for every $\gamma>0$. For $g\in(F+H)(x)$ and $h\in(F+H)(y)$, $\langle g-h,x-y\rangle\ge-\rho\|g-h\|^2$. Assume $L>0$, $\rho\ge0$, $\rho L<1$, and $0\in(F+H)(x_\star)$ with $\|x_0-x_\star\|\le R$. Target: an output $u$ with some $\xi\in H(u)$ satisfying $\|F(u)+\xi\|\le\varepsilon$, where $R\ge0$ and $\varepsilon>0$. Each evaluation of $F$ or $J_{\gamma H}$ counts as one call.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,35 +9,29 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MultiStepAnchoredCohypomonotone.lean}{Multi\allowbreak{}Step\allowbreak{}Anchored\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MultiStepAnchoredCohypomonotone.md}{(review)}
-& $\mathcal{O}\!\left(1+\left(\frac{LR}{\delta^2\varepsilon}+\frac{\mathbf{1}_{R>0}}{\delta}\right)\log\frac{e}{\delta}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MultiStepAnchoredCohypomonotone.lean}{Multi\allowbreak Step\allowbreak Anchored\allowbreak Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MultiStepAnchoredCohypomonotone.md}{(review)}
+& $\mathcal{O}\!\left(1+\left(\frac{LR}{\delta^2\varepsilon}+\frac{\mathbf{1}_{R>0}}{\delta}\right)\log\frac{e}{\delta}\right)$ & & \\
 \midrule[1.2pt]
-Inexact Halpern \citep[Thm.~2.1, Cor.~2.2, Rem.~2.3]{sciAKW2026v3}\newline
-$E=\mathbb{R}^d$; $H$ maximally monotone; $F+H$ maximally $\rho$-cohypomonotone
-& $\mathcal{O}\!\left(\frac1\delta+\frac{LR}{\delta^2\varepsilon}\log\left(e+\frac{LR}{\delta\varepsilon}\right)\right)$
-& i) \textbf{(1)}: $\log(e/\delta)$ replaces $\log(e+LR/(\delta\varepsilon))$; gain as $\varepsilon\to0$ at fixed $\rho L$.\newline
- ii) \textbf{(1)}: arbitrary inner product spaces.
-& \textbf{(1)}: up to $\log(e/\delta)$ more calls when $0<LR\lesssim\varepsilon$; no uniform dominance. \\
+\textbf{(2)} Inexact Halpern \citep{cohypAKW2024v3}, v3, Thm.~2.1, Cor.~2.2, Rem.~2.3
+& $\mathcal{O}\!\left(\frac1\delta+\frac{LR}{\delta^2\varepsilon}\log\!\left(e+\frac{LR}{\delta\varepsilon}\right)\right)$\par
+$E=\mathbb{R}^d$; $H$ maximally monotone; $F+H$ maximally $\rho$-cohypomonotone.
+& \textbf{(1)}: Replaces the accuracy logarithm by $\log(e/\delta)$; strict gain at fixed $\delta$, $\varepsilon\to0$. Scope: arbitrary inner-product spaces; no explicit sum-maximality assumption (additional instances unestablished).
+& \textbf{(1)}: Can lose a factor $\log(e/\delta)$ when $LR\lesssim\varepsilon$. \\
 \midrule
-Composite FEG \citep[Thm.~4.1]{cgmCai2024v6}\newline
-Special case: $E=\mathbb{R}^d$, $H$ maximally monotone, $\rho L<1/2$
-& $\mathcal{O}\!\left(1+\frac{LR}{(1-2\rho L)\varepsilon}\right)$
-& i) \textbf{(1)}: Scope: extends to $\rho L<1$.\newline
- ii) \textbf{(1)}: accuracy coefficient stays bounded as $\rho L\uparrow1/2$; away from this boundary, matches the order.
-& \textbf{(1)}: inner loop instead of single loop; larger constants can outweigh gains away from $\rho L=1/2$. \\
+\textbf{(3)} Composite FEG \citep{cohypCOZ2024v6}, v6, Thm.~4.1
+& $\mathcal{O}\!\left(1+\frac{LR}{(1-2\rho L)\varepsilon}\right)$\par
+Special case: $\rho L<1/2$, $E=\mathbb{R}^d$, $H$ maximally monotone.
+& \textbf{(1)}: Scope extends to $\rho L<1$. On the overlap, $\mathcal{O}(1+LR/\varepsilon)$ avoids $(1-2\rho L)^{-1}$; gain only sufficiently near $\rho L=1/2$.
+& \textbf{(1)}: Inner loop instead of single loop; worse leading constant away from $\rho L=1/2$. \\
 \midrule
-AEP, Derived bound \citep[Thm.~3.2]{chiJiangYoon2026v1}\newline
-Graph transformation $w=u+\rho g$, $g\in(F+H)(u)$
-& $\mathcal{O}\!\left(1+\left(\frac{LR}{\delta^2\varepsilon}+\frac{\mathbf{1}_{R>0}}{\delta}\right)\log\frac{e}{\delta}\right)$\newline
-Fixed contraction inner solves on the stated setup
-& \textbf{(1)}: matches derived rate; explicit oracle budget and formalization of the relative-error construction.
-& --- \\
+\textbf{(4)} Derived bound: AEP \citep{cohypJY2026v1}, v1, Thm.~3.2
+& $\mathcal{O}\!\left(1+\left(\frac{LR}{\delta^2\varepsilon}+\frac{\mathbf{1}_{R>0}}{\delta}\right)\log\frac{e}{\delta}\right)$\par
+Under the shared assumptions, via $w=u+\rho g$, $g\in(F+H)(u)$, and warm-started inner contraction.
+& \textbf{(1)}: Matches derived rate; explicit cohypomonotone implementation and formalization of the monotone AEP relative-error mechanism. & \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\delta=1-\rho L\in(0,1]$; $\mathbf{1}_{R>0}$ is the indicator of $R>0$; $\log$ is natural. FEG: fast extragradient; AEP: anchored extra-proximal. Inexact Halpern uses $\eta=(1+\rho L)/(2L)$; composite FEG uses $\eta=1/L$.
+\item[] \textbf{Abbr:} $\delta=1-\rho L\in(0,1]$; $\mathbf{1}_{R>0}$ is the indicator of $R>0$; $J_{\gamma H}=(I+\gamma H)^{-1}$; $\log$ is natural; FEG: fast extragradient; AEP: anchored extra-proximal.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

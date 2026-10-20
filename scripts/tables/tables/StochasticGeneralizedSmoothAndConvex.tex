@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic convex optimization under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space with its Borel structure, differentiable gradient, and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. IID samples drive a jointly measurable, unbiased gradient oracle $g$, with $\mathbb{E}\|g(x)-\nabla f(x)\|^2\le\sigma^2$ and, for $\sigma>0$, $\mathbb{E}\exp(\|g(x)-\nabla f(x)\|^2/\sigma^2)\le e$; $\sigma=0$ denotes exact gradients. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: measurable $\widehat x$ with $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$. Costs count individual stochastic-gradient samples, including all batches.}\par\smallskip
+\caption{Stochastic convex optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{StochasticGeneralizedSmoothAndConvex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex $f$ on a separable real Hilbert space, with differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. The jointly measurable oracle is IID under a probability law $P$, unbiased, with integrable noise moments, $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$ and $\mathbb E\exp(\|g(x,\xi)-\nabla f(x)\|^2/\sigma^2)\le e$ for $\sigma>0$; $\sigma=0$ gives exact gradients almost surely. Here $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, and $0<\delta<1$. Target: measurable $\hat x$ with $P\{f(\hat x)-f(x_\star)>\varepsilon\}\le\delta$. All parameters are supplied; costs count individual stochastic-gradient samples, including batches.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,28 +10,26 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedAcceleratedConvex.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&1+R\sqrt{L_0/\varepsilon} +\min\{\lceil q^{2/3}\rceil\ell,\\&\qquad\ell+(q\ell)^{2/3}\} +\sigma^2R^2\lambda/\varepsilon^2\end{aligned}\right)$
-& ---
-& --- \\
+& $\mathcal{O}\!\left(\begin{aligned}&1+\sqrt{L_0R^2/\varepsilon}\\&+\min\!\left\{\lceil t^{2/3}\rceil\ell,\,\ell+(t\ell)^{2/3}\right\}\\&+\sigma^2R^2h/\varepsilon^2\end{aligned}\right)$ & & \\
 \midrule[1.2pt]
-ARC-SG \citep[Thms.~1, 3]{sgscDvinskikh2026v1}\par $E=\mathbb{R}^d$; supplied $\Delta$
-& $\mathcal{O}\!\left(\begin{aligned}&\Bigl[1+q+(1+q)^{1/2}R\sqrt{L_0/\varepsilon}\\&+(1+q)^3\sigma^2R^2/\varepsilon^2\\&+(1+q)^3\sigma^2L_1^2/L_0^2\Bigr]\operatorname{polylog} U\end{aligned}\right)$
-& i) \textbf{(1)}: removes $(1+q)^{1/2}$ optimization and $(1+q)^3$ noise factors, plus burn-in; polynomial term gains for $q\gg1$.\newline ii) \textbf{(1)}: Hilbert-space scope; no ball projections.
-& \textbf{(1)}: $\ell+(q\ell)^{2/3}$ can exceed $q$ through logarithms when $\ell^2\gtrsim q$; no uniform dominance. \\
+\textbf{(2)} ARC-SG \citep[Thms.~1, 4]{gssgDvinskikh2026v1}\par Finite-dimensional specialization; supplied gap certificate.
+& $\mathcal{O}\!\left(\begin{aligned}&\kappa b\!\left[1+\frac{\sigma^2\lambda^2b^2}{L_0^2}\log\frac{e\kappa b}{\delta}\right]\\&+uvk\!\left(\kappa+\sqrt{\kappa L_0R^2/\varepsilon}\right)\\&+\sigma^2\kappa^3u^3v^3\!\left(k+\log\frac1\delta\right)\\&\qquad\cdot\left(\frac{R^2}{\varepsilon^2}+\frac{\lambda^2}{L_0^2}\right)\end{aligned}\right)$
+& \textbf{(1)}: removes $\kappa^{1/2}$ optimization and $\kappa^3$ noise factors, burn-in, and associated logarithms. Polynomial term gains for $t\gg1$. Hilbert-space scope; no projection subproblems.
+& \textbf{(1)}: curvature contribution $\ell+(t\ell)^{2/3}$ can exceed $t$ through logarithms when $\ell^2\gtrsim t$; not a uniform total-cost comparison. \\
 \midrule
-RCSAG \citep[Thm.~9]{ldg2026heavyv1}\par Contemporaneous; $E=\mathbb{R}^d$, $Q=B(x_0,R)$, $p=2$, $\sigma_0=\sigma$, $\sigma_1=\sigma_2=0$
-& Derived bound:\par $\mathcal{O}\!\left(\begin{aligned}&\bigl(\ell+R\sqrt{L_0/\varepsilon}+tJ\\&\quad+\sigma^2R^2/\varepsilon^2\bigr) \cdot[1+\log(\ell/\delta)]\end{aligned}\right)$
-& \textbf{(1)}: curvature $tJ\to\ell+(q\ell)^{2/3}$. For $\sigma=0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2/q^{4/3}$, $q\to\infty$: $q\log q\to q^{2/3}(\log q)^{2/3}$, apart from confidence/phase logarithms.
-& \textbf{(1)}: needs light tails and batching; prior allows finite $p$th moments and gradient/gap-dependent noise. Can lose logarithms when $L_1^2\Delta\lesssim L_0$, $\ell^2\gg q$. \\
+\textbf{(3)} RCSAG \citep[Thm.~9]{gssgLobanov2026v1}\par Derived bound on $\mathbb R^d$: $Q=B(x_0,R)$, $p=2$, $H_0\asymp L_0$, $H_1\asymp L_1^2$, additive noise $\sigma_0=\sigma$.
+& $\mathcal{O}\!\left(\begin{aligned}&\left[\ell+\sqrt{L_0R^2/\varepsilon}\right.\\&\quad+t\min\{\ell,\log(2+L_1^2\Delta/L_0)\}\\&\left.\quad+\sigma^2R^2/\varepsilon^2\right]\log\frac{e\ell}{\delta}\end{aligned}\right)$
+& \textbf{(1)}: smaller curvature term in regimes where it matters. For fixed $\delta$, $\sigma=0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2/t^{4/3}$, $t\to\infty$: total $\mathcal{O}(t\log t\log\log t)$ becomes $\mathcal{O}(t^{2/3}\log^{2/3}t)$.
+& \textbf{(1)}: needs light tails and batching; \textbf{(3)} allows finite $p$-th moments, $1<p\le2$, and gradient- or gap-dependent noise without batching. Curvature-term gains need not hold when $L_1^2\Delta\lesssim L_0$, $\ell^2\gg t$. \\
 \midrule
-Clipped SGD \citep[Thm.~1]{sgscGaash2025v2}\par $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left(1+(L_0R^2/\varepsilon+q^2)h+\sigma^2R^2h^3/\varepsilon^2\right)$\par Includes two samples per step.
-& i) \textbf{(1)}: $L_0R^2/\varepsilon\to R\sqrt{L_0/\varepsilon}$ when $\sigma^2\lambda\le L_0\varepsilon$; curvature $q^2\to\ell+(q\ell)^{2/3}$ when smaller.\newline ii) \textbf{(1)}: noise logarithm $h^3\to\lambda$.\newline iii) \textbf{(1)}: Hilbert-space scope; stopped iterate instead of averaging.
-& \textbf{(1)}: needs $\Delta$ in addition and batching. Noise-dominated gain is logarithmic; curvature gain depends on $\ell$. \\
+\textbf{(4)} Clipped SGD \citep[Thm.~1, arXiv v2]{sgacGaash2025v2}\par Finite-dimensional specialization.
+& $\mathcal{O}\!\left(\begin{aligned}&1+\left(\frac{L_0R^2}{\varepsilon}+t^2\right)q\\&+\frac{\sigma^2R^2}{\varepsilon^2}q^3\end{aligned}\right)$\par Two samples per iteration are included.
+& \textbf{(1)}: $L_0R^2/\varepsilon\to\sqrt{L_0R^2/\varepsilon}$ when $\sigma^2h\le L_0\varepsilon$; startup $t^2q\to\ell+(t\ell)^{2/3}$. Noise-dominated gain: $q^3\to h$. Stopped accelerated iterate replaces averaging. Hilbert-space statement; prior proof appears dimension-independent.
+& \textbf{(1)}: needs $\Delta$ in addition and batches samples; \textbf{(4)} uses two samples per step without batching. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $q=L_1R$, $\ell=1+\log(1+\Delta/\varepsilon)$, $\lambda=1+\log(1/\delta)$, $J=\min\{\ell,1+\log(1+L_1^2\Delta/L_0)\}$, $h=1+\log\bigl((1+L_0R^2/\varepsilon+q^2+\sigma^2R^2/\varepsilon^2)/\delta\bigr)$. RCSAG reduction: $H_0=\mathcal{O}\!(L_0)$, $H_1=\mathcal{O}\!(L_1^2)$. For ARC-SG, $U=2+q+L_1^2\Delta/L_0+L_0R^2/\varepsilon+1/\delta$; $\operatorname{polylog} U$ denotes the unspecified polynomial logarithmic factors.
+\item[] \textbf{Abbr:} $t=L_1R$, $\ell=1+\log(1+\Delta/\varepsilon)$, $h=1+\log(1/\delta)$. For the explicit logarithms in \textbf{(2)}: $\kappa=1+t$, $\lambda=\max\{L_1,R^{-1}\}$, $b=1+\log(1+\lambda^2\Delta/L_0)$, $u=1+\log(1+L_0R/(\lambda\varepsilon))$, $v=1+\log(1+L_0R^2/\varepsilon)$, $k=1+\log(\kappa uv(1+L_0R^2/\varepsilon))$. In \textbf{(4)}, $q=1+\log((1+L_0R^2/\varepsilon+t^2+\sigma^2R^2/\varepsilon^2)/\delta)$. $\asymp$ denotes equality up to universal factors; logarithms are natural. Projection arithmetic is excluded from sample counts.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

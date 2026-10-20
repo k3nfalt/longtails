@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Near-zero-sum games: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NearZeroSumGames.lean}{Near\allowbreak{}Zero\allowbreak{}Sum\allowbreak{}Games}.}\label{tab:NearZeroSumGames}
-\parbox{\linewidth}{\footnotesize Compact convex strategy sets $X,Y$ in finite-dimensional real inner product spaces, with feasible initial point and $\operatorname{diam}(X\times Y)\le D$. Players minimize $h+g$ and $g-h$; $h$ is $\mu$-strongly convex in $x$ and $\nu$-strongly concave in $y$, and $g$ is jointly convex. On the domain, gradients of $h\pm g$ are $L$-Lipschitz and $\nabla g$ is $\delta$-Lipschitz, with $0<\mu,\nu\le L$, $0\le\delta\le L$, and $D,\varepsilon>0$. An equilibrium exists. Available oracles return players' own-gradient field and exact projection. Target: feasible $\widehat z$ with $\|\widehat z-z_\star\|^2\le\varepsilon$ almost surely for an equilibrium $z_\star$.}\par\smallskip
+\caption{Near-zero-sum games: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NearZeroSumGames.lean}{\texttt{NearZeroSumGames}}.}\label{tab:NearZeroSumGames}
+\parbox{\linewidth}{\footnotesize On compact convex $X\subset E$, $Y\subset F$ in finite-dimensional real inner-product spaces, players minimize $h+g$ and $g-h$, respectively. The function $h$ is $\mu$-strongly convex in $x$ and $\nu$-strongly concave in $y$; $g$ is jointly convex. Within-domain gradients exist, $\nabla(h\pm g)$ are $L$-Lipschitz, and $\nabla g$ is $\delta$-Lipschitz. Assume $0<\mu,\nu\le L$, $0\le\delta\le L$, a feasible initial point, diameter at most $D>0$, and an equilibrium. Exact own-gradient and projection queries are available. Target: a feasible $z_{\rm out}$ with $\|z_{\rm out}-z_\star\|^2\le\varepsilon$ for an equilibrium $z_\star$, where $\varepsilon>0$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,29 +9,30 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NearZeroSumOwnGradients.lean}{Near\allowbreak{}Zero\allowbreak{}Sum\allowbreak{}Own\allowbreak{}Gradients} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NearZeroSumOwnGradients.md}{(review)}
-& $\mathcal{O}\!\left(\frac{L}{m}\sqrt{\frac{m+\delta}{\mu+\nu+\delta}}\,\ell q\right)$\newline Total $F$ and projection calls
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NearZeroSumOwnGradients.lean}{Near\allowbreak Zero\allowbreak Sum\allowbreak Own\allowbreak Gradients} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NearZeroSumOwnGradients.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{L}{m}\sqrt{\dfrac{m+\delta}{\mu+\nu+\delta}}\,\ell q\right)$ own-gradient and projection calls, counted together.
+& & \\
 \midrule[1.2pt]
-ICL \citep[Thm.~1]{nzsLuoStichChatterjee2025v1}
-& $\mathcal{O}\!\left(\frac{L}{m}\sqrt{\frac{m+\delta}{M+\delta}}\,\ell q\right)$\newline Full-gradient queries; $0<\varepsilon\le D^2$; projections uncounted
-& \textbf{(1)}: Matches known rate; own gradients instead of full utility gradients; no separate $\nabla g$ or saddle gradient of $h$.
-& --- \\
+\textbf{(2)} ICL \citep[Thm.~1, v1]{nzsLuoStichChatterjee2025v1}
+& $\mathcal{O}\!\left(\dfrac{L}{m}\sqrt{\dfrac{m+\delta}{M+\delta}}\,\ell\right.$\par $\left.{}\cdot\left[1+\log_+\!\dfrac{LD^2}{m\varepsilon}\right]\right)$ full utility-gradient queries; projections not explicitly counted.
+& \textbf{(1)}: Matches known rate for $D^2\ge\varepsilon$; uses only $F$, without separate $\nabla g$ or $\nabla h$. Also counts projections.
+& \\
 \midrule
-Extragradient bound \citep[Prop.~1]{nzsLuoStichChatterjee2025v1}
-& $\mathcal{O}\!\left(\frac{L}{m}\ell\right)$\newline $F$ and projection calls
-& \textbf{(1)}: rate gain when $\frac{m+\delta}{M+\delta}q^2\ll1$; for $\delta=m$, $L=M=\kappa m$, $\kappa\ell$ becomes $\sqrt{\kappa}\ell q$.
-& \textbf{(1)}: extra factor $q$ when $M\asymp m$ or $\delta\gtrsim M$; needs separate $\mu,\nu,\delta$ and the decomposition structure. \\
+\textbf{(3)} Extragradient \citep[Prop.~1, v1]{nzsLuoStichChatterjee2025v1}
+& $\mathcal{O}\!\left(\dfrac{L}{m}\ell\right)$ own-gradient and projection calls.
+& \textbf{(1)}: Faster when $\dfrac{m+\delta}{M+\delta}q^2\ll1$. For $\delta=m$, $L=M=\kappa m$, $D^2\ge\varepsilon$: $\mathcal{O}(\sqrt\kappa\,\ell q)$ instead of $\mathcal{O}(\kappa\ell)$.
+& \textbf{(1)}: Extra factor $q$ when $M\asymp m$ or $\delta\gtrsim M$; needs separate curvature and coupling parameters, beyond $m,L,D$.
+\\
 \midrule
-Zero-sum baseline \citep[Prop.~2]{nzsLuoStichChatterjee2025v1}
-& $\mathcal{O}\!\left(\frac{L}{\sqrt{\mu\nu}}\ell\right)$\newline Gradient queries; $\delta=0$; projections uncounted
-& \textbf{(1)}: Scope: extends from $\delta=0$ (affine $g$) to $\delta>0$.
-& \textbf{(1)}: extra factor $q$ on the $\delta=0$ overlap. \\
+\textbf{(4)} Zero-sum methods \citep[Prop.~2, v1]{nzsLuoStichChatterjee2025v1}
+& $\mathcal{O}\!\left(\dfrac{L}{\sqrt{\mu\nu}}\ell\right)$ gradient queries; projections not explicitly counted. Special case $\delta=0$ (affine $g$ absorbed).
+& \textbf{(1)}: Scope extends to $\delta>0$.
+& \textbf{(1)}: Extra logarithmic factor $q$ on the $\delta=0$ overlap.
+\\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $m=\min\{\mu,\nu\}$, $M=\max\{\mu,\nu\}$; $\log_+t=\max\{0,\log t\}$; $\ell=1+\log_+(D^2/\varepsilon)$, $q=1+\log_+(L^2D^2/(m^2\varepsilon))$; $F=(\nabla_x(h+g),\nabla_y(g-h))$; $\kappa=L/m$ in the stated example.
+\item[] \textbf{Abbr:} $m=\min\{\mu,\nu\}$, $M=\max\{\mu,\nu\}$; $F=(\nabla_x(h+g),\nabla_y(g-h))$; $\log_+t=\max\{0,\log t\}$; $\ell=1+\log_+(D^2/\varepsilon)$, $q=1+\log_+(L^2D^2/(m^2\varepsilon))$; $\kappa=L/m$ in the example. One own-gradient query returns the paired vector $F$; one projection query returns $\Pi_{X\times Y}$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

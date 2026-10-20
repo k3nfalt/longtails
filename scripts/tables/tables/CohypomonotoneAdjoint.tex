@@ -1,8 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Cohypomonotone equations with Jacobian-adjoint access (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneAdjoint.lean}{Cohypomonotone\allowbreak{}Adjoint}).}\label{tab:CohypomonotoneAdjoint}
-\parbox{\linewidth}{\footnotesize
-On a finite-dimensional real inner product space, $F$ is differentiable and $L$-Lipschitz, $DF$ is $L_2$-Lipschitz, and $\langle F(x)-F(y),x-y\rangle\ge-\rho\|F(x)-F(y)\|^2$ for all $x,y$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$, with $L>0$, $L_2,\rho,R\ge0$. Exact queries return $F(x)$ or $DF(x)^\top w$. The target is $\|F(\widehat x)\|\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneAdjoint.lean}{CohypomonotoneAdjoint}.}\label{tab:CohypomonotoneAdjoint}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is differentiable, $L$-Lipschitz, and satisfies $\langle F(x)-F(y),x-y\rangle\geq-\rho\|F(x)-F(y)\|^2$; $DF$ is $L_2$-Lipschitz. A zero $x_\star$ satisfies $\|x_0-x_\star\|\leq R$, with $L>0$, $L_2,\rho,R\geq0$. Exact queries return $F(x)$ or $DF(x)^*w$. Target: $\|F(\widehat x)\|\leq\varepsilon$, $\varepsilon>0$, almost surely. Our deterministic constructions use $L,L_2,\rho$; $R,\varepsilon$ enter their budgets.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,43 +9,19 @@ On a finite-dimensional real inner product space, $F$ is differentiable and $L$-
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAcceleratedCohypomonotone.lean}{Adjoint\allowbreak{}Accelerated\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAcceleratedCohypomonotone.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&(LR/\varepsilon+1+\rho L)h\\&{}+(1+\rho L)^5h\,\frac{L_2R}{L}\ell^2\end{aligned}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAcceleratedCohypomonotone.lean}{Adjoint\allowbreak Accelerated\allowbreak Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAcceleratedCohypomonotone.md}{(review)} & $\displaystyle\mathcal{O}\!\left(\begin{aligned}&(LR/\varepsilon+\lambda)\log(1+\lambda)\\&+\lambda^5\log(1+\lambda)\frac{L_2R}{L}\ell^2\end{aligned}\right)$ total $F$ and adjoint calls & & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAnchoredCohypomonotone.lean}{Adjoint\allowbreak{}Anchored\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAnchoredCohypomonotone.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&\bigl((1+\rho L)LR/\varepsilon +(1+\rho L)^2\bigr)h\\&{}+(1+\rho L)^4\frac{L_2R}{L}\ell^2\end{aligned}\right)$
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdjointAnchoredCohypomonotone.lean}{Adjoint\allowbreak Anchored\allowbreak Cohypomonotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdjointAnchoredCohypomonotone.md}{(review)} & $\displaystyle\mathcal{O}\!\left(\begin{aligned}&(\lambda LR/\varepsilon+\lambda^2)\log(1+\lambda)\\&+\lambda^4\frac{L_2R}{L}\ell^2\end{aligned}\right)$ total $F$ and adjoint calls & & \\
 \midrule[1.2pt]
-Inexact Halpern \citep[Thm.~2.1, Cor.~2.2]{sciAKW2026v3}\newline
-Special case: $\rho L<1$, $G=0$; $\eta=(\rho+1/L)/2$
-& $\mathcal{O}\!\left(\left(\frac1\delta+\frac{LR}{\delta^2\varepsilon}\right){}\cdot\left[1+\log\!\left(1+\frac{LR}{\delta\varepsilon}\right)\right]\right)$\newline
-$F$ calls
-& \textbf{(1)}, \textbf{(2)}: i) Scope: any $\rho$, with added regularity/access.\newline
-ii) Leading term: $LR/\varepsilon$, removing $\delta^{-2}$ and its logarithm; gain near $\delta=0$ when $\varepsilon L_2\ell^2\ll L^2/\delta^2$.
-& \textbf{(1)}, \textbf{(2)}: i) Need adjoint calls and a known Lipschitz-Jacobian bound.\newline
-ii) Added $\frac{L_2R}{L}\ell^2$ can dominate on $\rho L<1$.\newline
-iii) Do not cover general $G$ or stochastic variants. \\
+\textbf{(3)} \citep{akw2026v3adjoint}, Thm.~2.1, Cor.~2.2; special case $\rho L<1$, $G=0$ & $\displaystyle\mathcal{O}\!\left(1+\frac{LR}{\delta^2\varepsilon}\log\!\left(2+\frac{LR}{\delta\varepsilon}\right)\right)$ $F$ calls; $\eta=(\rho+1/L)/2$ & \textbf{(1)}, \textbf{(2)}: Scope extends to every $\rho$ with adjoints and Jacobian regularity. On $\rho L<1$, rate becomes $\mathcal{O}(1+LR/\varepsilon+(L_2R/L)\ell^2)$; gain near $\delta=0$ when $(L_2R/L)\ell^2\lesssim LR/(\delta^2\varepsilon)$. & \textbf{(1)}, \textbf{(2)}: Need adjoints and known $L_2$-Lipschitz Jacobian; added $(L_2R/L)\ell^2$ can dominate away from $\rho L=1$. Only $G=0$ is covered. \\
 \midrule
-EAG \citep[Cor.~1, Sec.~2.3]{holderYoonRyu2021}\newline
-Special case: $\rho=0$
-& $\mathcal{O}(1+LR/\varepsilon)$\newline
-$F$ calls
-& \textbf{(1)}, \textbf{(2)}: match known rate if $L_2=0$; no established improvement on $\rho=0$.
-& \textbf{(1)}, \textbf{(2)}: extra $\frac{L_2R}{L}\ell^2$; need adjoint calls and a known Lipschitz-Jacobian bound. \\
+\textbf{(4)} EAG \citep{yoon2021adjoint}, Cor.~1, Sec.~2.3; special case $\rho=0$ & $\mathcal{O}(1+LR/\varepsilon)$ $F$ calls & \textbf{(1)}, \textbf{(2)}: No established improvement on $\rho=0$. & \textbf{(1)}, \textbf{(2)}: Extra $(L_2R/L)\ell^2$ cost; require adjoints and known Lipschitz-Jacobian bound. \\
 \midrule
-Exact proximal point \citep[Thm.~3.1]{chaGorbunov2023v3}\newline
-Maximally cohypomonotone; any $\rho\ge0$, $\gamma>2\rho$
-& $\mathcal{O}\!\left(1+\frac{R^2}{\gamma(\gamma-2\rho)\varepsilon^2}\right)$\newline
-Exact $(I+\gamma F)^{-1}$ calls; primitive-call rates not comparable
-& \textbf{(1)}, \textbf{(2)}: Oracle: explicit $F$/adjoint-call budgets instead of exact resolvent access, for every $\rho$.
-& \textbf{(1)}, \textbf{(2)}: need Lipschitz $F$, Lipschitz $DF$, and known $L,L_2$. \\
+\textbf{(5)} Exact proximal point \citep{gorbunov2023v3adjoint}, Thm.~3.1; all $\rho\geq0$ & $\displaystyle\mathcal{O}\!\left(1+\frac{R^2}{\gamma(\gamma-2\rho)\varepsilon^2}\right)$ exact $(I+\gamma F)^{-1}$ calls, $\gamma>2\rho$ & \textbf{(1)}, \textbf{(2)}: Implement inexact resolvents using counted $F$/adjoint calls. Rates are not comparable across these oracle models. & \textbf{(1)}, \textbf{(2)}: Require Lipschitz $F$ and a known Lipschitz-Jacobian bound; \textbf{(5)} assumes maximal cohypomonotonicity without this regularity. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $h=1+\log(1+\rho L)$; $\ell=1+\log(1+LR/\varepsilon)$; $\delta=1-\rho L$ in the restricted Halpern row. $DF(x)^\top w$ is a Jacobian-adjoint product. Costs in \textbf{(1)}, \textbf{(2)} count all $F$ evaluations and adjoint products together. $G$ denotes an additional maximally monotone operator; $I$ is the identity; $\eta,\gamma$ are resolvent step sizes.
+\item[] \textbf{Abbr:} $\lambda=1+\rho L$, $\ell=\log(2+LR/\varepsilon)$, $\delta=1-\rho L$ in \textbf{(3)}; $DF(x)^*$ is the Jacobian adjoint; $G$ is the additional maximally monotone operator in \textbf{(3)}; $\gamma$ is the proximal step in \textbf{(5)}. Each $F$ evaluation and each adjoint-vector product counts separately. $\lesssim$ suppresses universal constants.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

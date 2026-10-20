@@ -1,7 +1,8 @@
 \begin{table}[tp]
 \centering
-\caption{Symmetric first-moment nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricFirstMomentNonconvex.lean}{Symmetric\allowbreak{}First\allowbreak{}Moment\allowbreak{}Nonconvex}.}\label{tab:SymmetricFirstMomentNonconvex}
-\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$ has $L$-Lipschitz gradient and $f(x_0)-f(x)\le\Delta$ for every $x$; $L,\varepsilon>0$ and $\Lambda,\sigma,\Delta\ge0$. The jointly measurable, integrable oracle $g$ uses IID samples with law $\mu$ and permits paired evaluations with the same sample. Writing $\zeta(x,\xi)=g(x,\xi)-\nabla f(x)$, assume $\mathbb{E}_{\mu}g(x,\xi)=\nabla f(x)$, $\mathbb{E}_{\mu}\|\zeta(x,\xi)\|\le\sigma$, $\mathbb{E}_{\mu}\|\zeta(x,\xi)-\zeta(y,\xi)\|\le\Lambda\|x-y\|$, and $\zeta_i(x,\xi)\overset{d}{=}-\zeta_i(x,\xi)$ for every $x,i$. Target: measurable output with $\int\|\nabla f(x_{\mathrm{out}})\|\,dP\le\varepsilon$, where $P$ is the execution law. Costs count primitive stochastic gradient evaluations, including all median samples and batches; each paired query costs two.}\par\smallskip
+\caption{Symmetric first-moment nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricFirstMomentNonconvex.lean}{SymmetricFirstMomentNonconvex}.}\label{tab:SymmetricFirstMomentNonconvex}
+\parbox{\linewidth}{\footnotesize
+$f:\mathbb{R}^d\to\mathbb{R}$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$; $L,\varepsilon>0$ and $\Lambda,\sigma,\Delta\ge0$. The jointly measurable, integrable oracle is unbiased and returns $(g(x,\xi),g(y,\xi))$ using the same sample, with IID samples of law $p$ under $P$. For $\zeta(x,\xi)=g(x,\xi)-\nabla f(x)$, $\int\|\zeta(x,\xi)\|\,dp\le\sigma$ and $\int\|\zeta(x,\xi)-\zeta(y,\xi)\|\,dp\le\Lambda\|x-y\|$; every coordinate of $\zeta(x,\xi)$ has a symmetric marginal distribution. Target: measurable output with integrable gradient norm and $\int\|\nabla f(x_{\rm out})\|\,dP\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,28 +10,29 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MedianFirstMomentNonconvex.lean}{Median\allowbreak{}First\allowbreak{}Moment\allowbreak{}Nonconvex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MedianFirstMomentNonconvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MedianFirstMomentNonconvex.lean}{Median\allowbreak First\allowbreak Moment\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MedianFirstMomentNonconvex.md}{(review)}
 & $\mathcal{O}\!\left(\ell^2\left[1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{\Lambda\sigma\Delta}{\varepsilon^3}\right]\right)$
-& --- & --- \\
+& & \\
 \midrule[1.2pt]
-Median-of-three SGD, Derived bound \citep[Cor.~2.2]{mshGhadimiLan2013v1}
+\textbf{(2)} Derived bound: median-of-three SGD \citep{canGhadimiLan2013}, Eq.~(2.17)
 & $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$
-& \textbf{(1)}: Rate: stochastic term $L\Delta\sigma^2/\varepsilon^4\to\ell^2\Lambda\sigma\Delta/\varepsilon^3$; smaller when $\varepsilon\ell^2\Lambda\ll L\sigma$, $\sigma^2\gtrsim\varepsilon^2$. No uniform total-cost dominance.
-& \textbf{(1)}: Adds $\ell^2$ overhead; worse stochastic term when $\Lambda\gg L\sigma/\varepsilon$. \\
+& \textbf{(1)}: stochastic term $L\Delta\sigma^2/\varepsilon^4$ becomes $\ell^2\Lambda\sigma\Delta/\varepsilon^3$; smaller when $\varepsilon\ell^2\Lambda\ll L\sigma$. This alone does not ensure total-cost dominance.
+& \textbf{(1)}: adds $\ell^2$ and $\ell^2\sigma^2/\varepsilon^2$; worse stochastic term when $\Lambda\gg L\sigma/\varepsilon$. \\
 \midrule
-NSGD-MVR \citep[Thm.~4.2, $q=1$]{mshFradin2026v2}\par Special case: $\mathbb{E}\|\zeta\|^p\le\sigma_p^p$, $1<p\le2$.
-& $\mathcal{O}\!\left(\begin{gathered}1+(\sigma_p/\varepsilon)^{p/(p-1)}\\+\frac{(L+\Lambda)\Delta}{\varepsilon^2}\\+\frac{\Lambda\Delta}{\varepsilon^2}(\sigma_p/\varepsilon)^{p/(p-1)}\end{gathered}\right)$
-& i) \textbf{(1)}: Scope: first moment suffices.\par ii) \textbf{(1)}: On symmetric overlap, $\sigma\le\sigma_p$: stochastic accuracy exponent $2+p/(p-1)\to3$, up to $\ell^2$; fixed positive parameters, small $\varepsilon$.
-& \textbf{(1)}: Requires coordinatewise symmetry; this baseline does not. \\
+\textbf{(3)} NSGD-MVR \citep{mshFradin2026v2}, Thm.~4.2 ($q=1$)
+& $\mathcal{O}\!\left(1+\left(\frac{\sigma_p}{\varepsilon}\right)^r+\frac{(L+\Lambda)\Delta}{\varepsilon^2}\right.$\newline
+$\left.\displaystyle{}+\frac{\Lambda\Delta\sigma_p^r}{\varepsilon^{2+r}}\right)$
+& \textbf{(1)}: first moments suffice. On symmetric overlap, $\sigma\le\sigma_p$; fixed positive parameters give $\varepsilon^{-(2+r)}$ versus $\ell^2\varepsilon^{-3}$.
+& \textbf{(1)} needs coordinatewise symmetry. \textbf{(3)} instead requires $\mathbb{E}\|\zeta(x)\|^p\le\sigma_p^p$, $1<p\le2$, without symmetry. \\
 \midrule
-Median-of-three SPIDER, Derived bound \citep[Thm.~1]{esnFang2018v2}\par Special case: $\mathbb{E}\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$, $0<\varepsilon\le\sigma$.
-& $\mathcal{O}\!\left(1+\frac{\bar L\sigma\Delta}{\varepsilon^3}+\frac{\sigma^2}{\varepsilon^2}\right)$
-& i) \textbf{(1)}: Scope: permits infinite second-moment increments.\par ii) \textbf{(1)}: On overlap ($L\le\bar L$, $\Lambda\le2\bar L$), stochastic term improves if $\Lambda\ell^2\ll\bar L$.
-& \textbf{(1)}: Matches the $\varepsilon^{-3}$ exponent, with $\ell^2$ overhead; no uniform total-cost gain. \\
+\textbf{(4)} Derived bound: median-of-three SPIDER \citep{esncFang2018v2}, Thm.~1
+& $\mathcal{O}\!\left(\frac{\bar L\sigma\Delta}{\varepsilon^3}+\frac{\sigma^2}{\varepsilon^2}+\frac{\sigma}{\varepsilon}\right)$
+& \textbf{(1)}: permits infinite second-moment increments. On overlap, matches the $\varepsilon^{-3}$ power; smaller cubic-term coefficient only if $\Lambda\ell^2\ll\bar L$.
+& \textbf{(1)} adds $\ell^2$. \textbf{(4)} applies when $\mathbb{E}\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$ and $\varepsilon\le\sigma$; take $L\le\bar L$, $\Lambda\le2\bar L$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\ell=1+\log(1+L\Delta/\varepsilon^2)$; $\Delta$ is the initial objective-gap bound; $\sigma$ bounds the first noise moment; $\Lambda$ is the centered first-moment coupling constant; $\sigma_p$ bounds the $p$th central moment to power $1/p$; $\bar L$ is the raw mean-squared smoothness constant. IID means independent and identically distributed. Median-of-three means the coordinatewise median of three independent samples. SPIDER denotes stochastic path integrated differential estimator; NSGD-MVR denotes normalized stochastic gradient descent with momentum variance reduction.
+\item[] \textbf{Abbr:} $\ell=\log(2+L\Delta/\varepsilon^2)$; $r=p/(p-1)$; $\sigma_p$ is the $p$th central-moment scale; $\bar L$ is the raw mean-squared smoothness constant. Costs count all primitive gradient evaluations, including median triples and batches; each paired query uses two evaluations. Expectations use the indicated sampling laws.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

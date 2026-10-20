@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Affine-variance stochastic optimization with mean-squared smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean}{Affine\allowbreak{}Variance\allowbreak{}Mean\allowbreak{}Squared\allowbreak{}Smooth}.}\label{tab:AffineVarianceMeanSquaredSmooth}
-\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel measurable structure, $f$ is differentiable, $\nabla f$ is $L$-Lipschitz, and $f(x_0)-\inf f\le\Delta$. A jointly measurable, unbiased oracle $g$ has integrable gradients and squared errors and differences, with $\mathbb{E}_p\|g(x,\xi)-\nabla f(x)\|^2\le\Gamma^2\|\nabla f(x)\|^2+\Lambda^2$ and $\mathbb{E}_p\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$. Calls return same-sample pairs using IID samples with marginal $p$. Here $L,\varepsilon>0$ and $\bar L,\Gamma,\Lambda,\Delta\ge0$. Target: $\mathbb{E}\|\nabla f(x_{\mathrm{out}})\|\le\varepsilon$, over sampling and output randomization.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineVarianceMeanSquaredSmooth.lean}{AffineVarianceMeanSquaredSmooth}.}\label{tab:AffineVarianceMeanSquaredSmooth}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, $f$ has an $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. The jointly measurable, unbiased oracle uses IID samples and returns $(g(x,\xi),g(y,\xi))$ with the same sample, with finite second moments satisfying $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\le\Gamma^2\|\nabla f(x)\|^2+\Lambda^2$ and $\mathbb E\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$. Here $L,\varepsilon>0$ and $\bar L,\Gamma,\Lambda,\Delta\ge0$. Target: $\int\|\nabla f(x_{\rm out}(\omega))\|\,dP(\omega)\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,28 +9,33 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecursiveMomentumAffineVariance.lean}{Recursive\allowbreak{}Momentum\allowbreak{}Affine\allowbreak{}Variance} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecursiveMomentumAffineVariance.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&1+\Gamma^4+\frac{\Lambda^2}{\varepsilon^2}\\[-2pt]&+\frac{(L+\bar L)(1+\Gamma)\Delta}{\varepsilon^2}\\[-2pt]&+\frac{(L+\bar L)\Lambda\Delta}{\varepsilon^3}\end{aligned}\right)$
-& --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecursiveMomentumAffineVariance.lean}{Recursive\allowbreak Momentum\allowbreak Affine\allowbreak Variance} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecursiveMomentumAffineVariance.md}{(review)}
+& $\mathcal{O}\!\left(\begin{gathered}1+\Gamma^4+\Lambda^2/\varepsilon^2\\ {}+M(1+\Gamma)\Delta/\varepsilon^2\\ {}+M\Lambda\Delta/\varepsilon^3\end{gathered}\right)$ pair calls, including initialization.
+& & \\
 \midrule[1.2pt]
-SGD \citep[Cor.~1]{esnKhaled2020v3}\par $E=\mathbb{R}^d$; $A=0$, $B=1+\Gamma^2$, $C=\Lambda^2$
-& $\mathcal{O}\!\left(1+\frac{(1+\Gamma^2)L\Delta}{\varepsilon^2}+\frac{L\Lambda^2\Delta}{\varepsilon^4}\right)$
-& i) \textbf{(1)}: at $\Lambda=0$, speedup $\asymp\Gamma L/\bar L$ if $L\le\bar L\ll\Gamma L$ and $\Gamma^3\varepsilon^2\lesssim\bar L\Delta$.\par ii) \textbf{(1)}: noise term $\varepsilon^{-4}\to\varepsilon^{-3}$ for $L\le\bar L$, $\varepsilon\lesssim L\Lambda/\bar L$; no uniform dominance.
-& \textbf{(1)}: needs MSS and paired gradients; adds $\Gamma^4$. Descent term worse when $(1+\Gamma)\bar L\gg(1+\Gamma^2)L$. \\
+\textbf{(2)} SGD \citep{avmsKhaledRichtarik2020v3}, Cor.~1; Euclidean setting.
+& $\mathcal{O}\!\left(\begin{gathered}1+(1+\Gamma^2)L\Delta/\varepsilon^2\\ {}+L\Lambda^2\Delta/\varepsilon^4\end{gathered}\right)$ single-gradient calls; $A=0$, $B=1+\Gamma^2$, $C=\Lambda^2$.
+& \textbf{(1)}: At $\Lambda=0$, $\mathcal{O}(M\Gamma\Delta/\varepsilon^2)$ versus $\mathcal{O}(\Gamma^2L\Delta/\varepsilon^2)$ when $\Gamma L\gg M$, $\Gamma^3\varepsilon^2\lesssim M\Delta$. Additive-noise term improves for $\varepsilon\lesssim L\Lambda/M$.
+& \textbf{(1)} needs MSS and paired gradients; adds $\Gamma^4$. Its descent term is worse when $(1+\Gamma)M\gg(1+\Gamma^2)L$. \\
 \midrule
-SPIDER \citep[Thm.~4, v2]{esnChen2023v2}\par Derived bound: MSS specialization $L_1=0$; $E=\mathbb{R}^d$, $g=\nabla f_\xi$
-& $\mathcal{O}\!\left(\begin{aligned}&1+\frac{\Lambda^2}{\varepsilon^2}+\frac{(1+\Gamma^2)\bar L\Delta}{\varepsilon^2}\\[-2pt]&+\frac{(1+\Gamma)\bar L\Lambda\Delta}{\varepsilon^3}\end{aligned}\right)$\par $\varepsilon\le\min\{1,\sqrt{\bar L\Delta}\}$
-& \textbf{(1)}, $L\le\bar L$: $\Gamma^2\to\Gamma$ in descent and $1+\Gamma\to1$ in the $\varepsilon^{-3}$ coefficient; gains require $\Gamma\gg1$. Matches known rate at $\Gamma=0$.
-& \textbf{(1)}: adds $\Gamma^4$; absorbed by descent when $\Gamma^3\varepsilon^2\lesssim\bar L\Delta$ for $\Gamma\ge1$. \\
+\textbf{(3)} SPIDER \citep{avmsChenEtAl2023v2}, Thm.~4; derived bound, MSS specialization.
+& $\mathcal{O}\!\left(\begin{gathered}1+\Lambda^2/\varepsilon^2\\ {}+(1+\Gamma^2)\bar L\Delta/\varepsilon^2\\ {}+(1+\Gamma)\bar L\Lambda\Delta/\varepsilon^3\end{gathered}\right)$ primitive calls. Euclidean stochastic objectives; $\varepsilon<1$, $\varepsilon\Lambda\lesssim1+\Gamma$, $\varepsilon^2\le L\Delta$.
+& \textbf{(1)}: For $L\le\bar L$, replaces $\Gamma^2$ by $\Gamma$ in the descent term and removes $\Gamma$ from the $\varepsilon^{-3}$ coefficient. Matches the bounded-variance rate at $\Gamma=0$.
+& \textbf{(1)} adds $\Gamma^4$, absorbed when $\Gamma^3\varepsilon^2\lesssim\bar L\Delta$ for $\Gamma\ge1$. \\
 \midrule
-Minibatched SPIDER \citep[Thm.~4, v2]{esnChen2023v2}\par Derived bound: $b\asymp\Gamma^2$; $L_1=0$, $E=\mathbb{R}^d$, $g=\nabla f_\xi$
-& $\mathcal{O}\!\left(\begin{aligned}&1+\frac{\Lambda^2}{\varepsilon^2}+\frac{(\Gamma^2L+\Gamma\bar L)\Delta}{\varepsilon^2}\\[-2pt]&+\frac{(\Gamma L+\bar L)\Lambda\Delta}{\varepsilon^3}\end{aligned}\right)$\par $\Gamma\ge1$, $\varepsilon\le\min\{1,\sqrt{\bar L\Delta}\}$
-& \textbf{(1)}, $L\le\bar L$: $\Gamma L+\bar L\to\bar L$ in the noise coefficient. Descent improves by $\asymp\Gamma L/\bar L$ when $\Gamma L\gg\bar L$; matches when $\Gamma L\lesssim\bar L$.
-& \textbf{(1)}: adds $\Gamma^4$; negligible relative to descent if $\Gamma^3\varepsilon^2\ll\bar L\Delta$. \\
+\textbf{(4)} Minibatched SPIDER \citep{avmsChenEtAl2023v2}, Thm.~4; derived bound, $b\asymp\Gamma^2$.
+& $\mathcal{O}\!\left(\begin{gathered}1+\Lambda^2/\varepsilon^2\\ {}+(\Gamma^2L+\Gamma\bar L)\Delta/\varepsilon^2\\ {}+(\Gamma L+\bar L)\Lambda\Delta/\varepsilon^3\end{gathered}\right)$ primitive calls, including batches. Euclidean stochastic objectives; $\Gamma\ge1$, $\varepsilon<1$, $\varepsilon\Lambda\lesssim\Gamma$, $\varepsilon^2\le L\Delta$.
+& \textbf{(1)}: For $L\le\bar L$, the $\varepsilon^{-3}$ coefficient falls from $(\Gamma L+\bar L)\Lambda\Delta$ to $\bar L\Lambda\Delta$. Descent improves when $\Gamma L\gg\bar L$; matches when $\Gamma L\lesssim\bar L$.
+& \textbf{(1)} adds $\Gamma^4$; total strong-growth gain requires $\Gamma^3\varepsilon^2\lesssim\bar L\Delta$. \\
+\midrule
+\textbf{(5)} Normalized STORM \citep{avmsNormalizedStormRepository}; ABC--MSS overlap.
+& $\mathcal{O}\!\left(\begin{gathered}1+\Gamma^2\\ {}+(\bar L\Delta+L\Gamma^2\Delta+\Lambda^2)/\varepsilon^2\\ {}+\bar L\Delta(\Lambda+\Gamma\sqrt{L\Delta})/\varepsilon^3\end{gathered}\right)$ pair calls; $A=L\Gamma^2$, $B=1$, $C=\Lambda^2$, $L\le\bar L$.
+& \textbf{(1)}: At $\Lambda=0$, $\varepsilon^{-2}$ instead of $\varepsilon^{-3}$. Removes $\Gamma\bar L\Delta\sqrt{L\Delta}/\varepsilon^3$ when $\Lambda>0$.
+& \textbf{(1)} assumes affine variance rather than general ABC noise; initialization grows from $\Gamma^2$ to $\Gamma^4$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} MSS: mean-squared smoothness; $\bar L$: MSS constant; $\Gamma$: relative noise; $\Lambda$: additive noise; $\Delta$: initial objective-gap bound; $\varepsilon$: expected gradient-norm tolerance. Costs count all initialization, refresh, and minibatch calls: single-gradient evaluations for SGD, same-sample pairs (two gradient evaluations each) otherwise. $b$: minibatch size. $A,B,C$: second-moment coefficients $\mathbb{E}\|g(x)\|^2\le2A(f(x)-\inf f)+B\|\nabla f(x)\|^2+C$. $L_1$: prior generalized-smoothness coefficient; $f_\xi$: sample objective. $\lesssim$ and $\asymp$: comparison up to universal factors.
+\item[] \textbf{Abbr:} $M=L+\bar L$; MSS: mean-squared smoothness. $\Delta$: initial objective-gap bound; $\Gamma$: relative-noise coefficient; $\Lambda$: additive-noise scale. A pair call returns two stochastic gradients; primitive costs include every sampled gradient, equivalent within a universal factor to pair costs. $P$: execution law including output randomization. ABC: $\mathbb E\|g(x,\xi)\|^2\le2A(f(x)-\inf f)+B\|\nabla f(x)\|^2+C$. $\asymp,\lesssim$: equality or inequality up to universal factors.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

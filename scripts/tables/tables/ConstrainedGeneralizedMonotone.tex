@@ -1,8 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConstrainedGeneralizedMonotone.lean}{Constrained\allowbreak{}Generalized\allowbreak{}Monotone}.}\label{tab:ConstrainedGeneralizedMonotone}
-\parbox{\linewidth}{\footnotesize
-$E$ is a real inner product space; $X\subseteq E$ is convex with an exact projection oracle. The continuous, monotone $F:E\to E$ satisfies $\|F(x)-F(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|F(x+\theta(y-x))\|\le M$ for all $\theta\in[0,1]$. Here $L_0,R,\varepsilon>0$, $L_1,G,G_0\ge0$, $x_0\in X$, $\|F(x_0)\|\le G_0$, and some VI solution $x_\star\in X$ satisfies $\|x_0-x_\star\|\le R$ and $\|F(x_\star)\|\le G$. Target: return $x\in X$ with some $\xi\in N_X(x)$ satisfying $\|F(x)+\xi\|\le\varepsilon$.}\par\smallskip
+\caption{Constrained generalized monotone variational inequalities: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConstrainedGeneralizedMonotone.lean}{ConstrainedGeneralizedMonotone}.}\label{tab:ConstrainedGeneralizedMonotone}
+\parbox{\linewidth}{\footnotesize Real inner-product space $E$; convex $X$ with an exact projection oracle; continuous, monotone $F:E\to E$ satisfying $\|F(x)-F(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|F(z)\|)\|x-y\|$ for all $x,y\in E$. Assume $L_0,R,\varepsilon>0$, $L_1,G,G_0\ge0$, $x_0\in X$, $\|F(x_0)\|\le G_0$, and a VI solution $x^*\in X$ with $\|x_0-x^*\|\le R$, $\|F(x^*)\|\le G$. Target: $x\in X$ and some $\xi\in N_X(x)$ with $\|F(x)+\xi\|\le\varepsilon$. The constructed projected anchored method returns its last iterate; updates use $L_0,L_1,x_0$, while the stopping budget depends on the remaining parameters.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -11,39 +10,37 @@ $E$ is a real inner product space; $X\subseteq E$ is convex with an exact projec
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConstrainedGeneralizedMonotone.lean}{Constrained\allowbreak{}Generalized\allowbreak{}Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConstrainedGeneralizedMonotone.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&\frac{(L_0+L_1G)(1+L_1R)R}{\varepsilon}\\&+(1+L_1R)^2(1+\ell)\end{aligned}\right)$ total $F$/projection calls
-& ---
-& --- \\
+& $\mathcal{O}\!\left(\begin{gathered}\dfrac{(L_0+L_1G)(1+s)R}{\varepsilon}\\{}+(1+s)^2\ell\end{gathered}\right)$ total calls; two $F$ evaluations and one projection per iteration.
+& & \\
 \midrule[1.2pt]
-Projected/composite EAG \citep[v6, Thms.~E.4, 3.2]{cgmCai2024v6}
-& $\mathcal{O}(1+L_XR/\varepsilon)$ total $F$/projection calls. Projected variant: $E=\mathbb{R}^d$, $L_X<\infty$ on $X$; composite variant requires global Lipschitzness.
-& i) \textbf{(1)}: Scope: permits $L_X=\infty$.\newline
-ii) \textbf{(1)}: Leading-term gain $e^{L_1D}/(1+L_1R)$ when $L_X\asymp(L_0+L_1G)e^{L_1D}$; exponential for $D=R$, $L_1R\gg1$.\newline
-iii) \textbf{(1)}: Matches known rate at $L_1=0$.
-& \textbf{(1)}: Needs global monotonicity/regularity. For $L_X\asymp L_0+L_1G$, extra $1+L_1R$ leading factor and $(1+L_1R)^2(1+\ell)$ term. Restricted to monotone normal-cone inclusions; composite baseline also covers comonotone/proximal inclusions. \\
+\textbf{(2)} PF-NE-EG, standard backtracking \citep[App.~A, Lem.~10]{cgmShen2026v2}
+& $\mathcal{O}(T+B)$ operator/projection calls, including all trials; last-iterate residual $o(T^{-1/2})$, with finite $B$. Locally Lipschitz monotone $F$ on closed convex $X\subseteq\mathbb R^d$.
+& \textbf{(1)}: Explicit $\varepsilon^{-1}$ guarantee with polynomial growth dependence; $G_0$ enters only logarithmically.
+& \textbf{(1)} needs known $L_0,L_1$ and global generalized Lipschitz continuity and monotonicity on $E$; \textbf{(2)} needs only local Lipschitz continuity on $X$. \\
 \midrule
-PF-NE-EG \citep[v2, App.~A, Alg.~3]{cgmShen2026v2}
-& Derived bound, fixed backtracking factors:\newline
-$\mathcal{O}\!\left(\begin{aligned}&1+\frac{(\eta_0^{-1}+\bar L+\bar G)^2R^2}{\varepsilon^2}\\&+\log_+\!\bigl(\eta_0(\bar L+\bar G)\bigr)\end{aligned}\right)$ total $F$/projection calls, including rejected trials. $E=\mathbb{R}^d$; locally Lipschitz $F$ on $X$.
-& i) \textbf{(1)}: Rate: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$, remaining parameters fixed; polynomial instead of exponential local-bound substitution.\newline
-ii) \textbf{(1)}: No backtracking.
-& \textbf{(1)}: Needs $L_0,L_1$ in updates and global generalized Lipschitzness/monotonicity; baseline needs only local Lipschitzness and monotonicity on $X$. \\
+\textbf{(3)} proj-EAG \citep[Thm.~E.4]{cohypCOZ2024v6}
+& $\mathcal{O}(1+L_XR/\varepsilon)$ operator/projection calls. Special case: $X\subseteq\mathbb R^d$ closed convex, $F|_X$ monotone and $L_X$-Lipschitz. For $D=\operatorname{diam}X<\infty$, $L_X\le(L_0+L_1G)e^{L_1D}$.
+& \textbf{(1)} allows $L_X=\infty$; matches the rate at $L_1=0$. For $F(x)=Ge^{L_1(x-x^*)}$ on $[x^*,x^*+R]$, $L_0\le L_1G$, $s\gg1$: \textbf{(1)} costs $\mathcal{O}(a(1+s)+(1+s)^2[s+\log(2+a)])$, versus \textbf{(3)}'s $\mathcal{O}(1+ae^s)$.
+& \textbf{(1)} needs global assumptions on $E$. For nearly Lipschitz $F$ with large $s$, its extra $1+s$ factor and $(1+s)^2\ell$ overhead can worsen costs. \\
 \midrule
-EG \citep[Thm.~3.6]{cgmChoudhury2025v1}
-& $\mathcal{O}\!\left(1+L_0^2R^2/\varepsilon^2+L_1^2R^2\right)$ $F$ calls; $X=E=\mathbb{R}^d$, $G=0$.
-& i) \textbf{(1)}: Scope: constrained VIs, including $F(x_\star)\ne0$.\newline
-ii) \textbf{(1)}: Leading term improves when $L_0R/\varepsilon\gg1+L_1R$; total gain also requires controlling the initialization logarithm.\newline
-iii) \textbf{(1)}: Last instead of best iterate.
-& \textbf{(1)}: On $X=E$, logarithmic loss when $L_1^2R^2$ dominates; no uniform total-cost dominance. \\
+\textbf{(4)} EG \citep[Thm.~3.6]{cgmChoudhury2025v1}
+& $\mathcal{O}\!\left(1+\dfrac{L_0^2R^2}{\varepsilon^2}+L_1^2R^2\right)$ $F$ evaluations. Unconstrained special case $X=E=\mathbb R^d$, $G=0$; best-iterate residual.
+& \textbf{(1)} extends to constraints and $F(x^*)\ne0$; last instead of best iterate. On $X=E$, leading accuracy term improves when $L_0R/\varepsilon\gg1+s$; total gain also requires $(1+s)^2\ell\ll(L_0R/\varepsilon)^2$.
+& \textbf{(1)} can lose a logarithmic factor when $s^2$ dominates \textbf{(4)}'s bound. \\
 \midrule
-Anchored extragradient \citep{sgmAnchoredRepository2026}
-& $\mathcal{O}\!\left(1+L_0R/\varepsilon+(1+L_1R)\ell\right)$ $F$ calls; $X=E$, $G=0$.
-& \textbf{(1)}: Scope: constrained VIs, including $F(x_\star)\ne0$.
-& \textbf{(1)}: On $X=E$, extra $1+L_1R$ leading factor and logarithmic coefficient; projection is the identity there. \\
+\textbf{(5)} Repository anchored result \citep{cgmRepositoryAnchored}
+& $\mathcal{O}\!\left(1+\dfrac{L_0R}{\varepsilon}+(1+s)\ell\right)$ $F$ evaluations. Unconstrained special case $X=E$, $G=0$.
+& \textbf{(1)} extends to constraints and nonzero $F(x^*)$.
+& On $X=E$, \textbf{(1)} has an extra $1+s$ factor in the leading and logarithmic terms, and larger leading constants. \\
+\midrule
+\textbf{(6)} composite-EAG \citep[Thm.~3.2]{cohypCOZ2024v6}
+& $\mathcal{O}(1+LR/\varepsilon)$ operator/projection calls on the monotone VI overlap: $E=\mathbb R^d$, globally $L$-Lipschitz $F$, $A=N_X$. General version uses resolvents of maximally monotone $A$.
+& \textbf{(1)} extends beyond global Lipschitz continuity; matches the rate at $L_1=0$.
+& \textbf{(1)} does not cover general proximal inclusions or negative comonotonicity admitted by \textbf{(6)}; its overhead can worsen costs for large $s$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $N_X(x)=\{\xi:\langle\xi,w-x\rangle\le0\ \forall w\in X\}$; $\ell=\log(1+(L_0+L_1G_0)R/\varepsilon)$; $D=\operatorname{diam}X$; $L_X$ is a Lipschitz bound on $X$, with $L_X\le(L_0+L_1G)e^{L_1D}$ for finite $D$. For PF-NE-EG, $\eta_0>0$ is the initial step size, $\bar L$ a Lipschitz bound on $X\cap B(x_\star,R+1)$, and $\bar G$ an operator-norm bound there; admissible choices are $\bar L=(L_0+L_1G)e^{L_1(R+1)}$ and $\bar G=G+(R+1)\bar L$. $\log_+t=\max\{0,\log t\}$. Total calls count each $F$ evaluation and each projection separately.
+\item[] \textbf{Abbr:} $N_X(x)=\{\xi:\langle\xi,w-x\rangle\le0\ \forall w\in X\}$; $s=L_1R$; $\ell=\log(2+(L_0+L_1G_0)R/\varepsilon)$; $a=L_1GR/\varepsilon$ in the exponential example; $L_X$ is a Lipschitz constant on $X$; $L$ is a global Lipschitz constant; $T$ counts accepted iterations and $B$ rejected backtracking trials, with fixed line-search factors. Total calls count operator evaluations and projections separately, then sum them.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,62 +1,29 @@
 \begin{table}[tp]
 \centering
-\caption{Exact ball-proximal complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConvexBallProximal.lean}{Convex\allowbreak{}Ball\allowbreak{}Proximal}.}\label{tab:ConvexBallProximal}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner product space, $f$ is convex on $C$ and its epigraph over $C$ is closed. There exist $x_0,x_\star\in C$ with $x_\star\in\arg\min_C f$, $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$, where $R\ge0$ and $t,\Delta,\varepsilon>0$. The setup requires fixed-radius ball-proximal iteration: each call returns any exact minimizer over $C\cap\overline B(x_k,t)$. Target: $x_K\in C$ and $f(x_K)-f(x_\star)\le\varepsilon$ almost surely. Accuracy-dependent bounds below use $0<\varepsilon<\Delta$.}\par\smallskip
+\caption{Exact ball-proximal optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConvexBallProximal.lean}{ConvexBallProximal}.}\label{tab:ConvexBallProximal}
+\parbox{\linewidth}{\footnotesize A finite-dimensional real inner-product space; $f$ is convex on $C$ with closed restricted epigraph. A minimizer $x_\star\in C$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$, where $x_0\in C$, $R\ge0$, and $t,\Delta,\varepsilon>0$. The setup requires fixed-radius ball-proximal iteration: each oracle call returns an exact minimizer over $C\cap\overline B(x_k,t)$. Target: feasible last iterate with $f(x_K)-f(x_\star)\le\varepsilon$, for every admissible tie-breaking choice (hence almost surely).}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BallProximalSharpProfile.lean}{Ball\allowbreak{}Proximal\allowbreak{}Sharp\allowbreak{}Profile} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BallProximalSharpProfile.md}{(review)}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt h(r)\right\}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BallProximalSharpProfile.lean}{Ball\allowbreak Proximal\allowbreak Sharp\allowbreak Profile} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BallProximalSharpProfile.md}{(review)} & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt h(r)\right\}\right)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BallProximalGaussian.lean}{Ball\allowbreak Proximal\allowbreak Gaussian} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BallProximalGaussian.md}{(review)} & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt{\log_+(1/r)}\right\}\right)$ & & \\
 \midrule[1.2pt]
-\citep[Thm.~3.4]{cbpRichtarikLi2026v1}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt \ell\right\}\right)$
-& \textbf{(1)}: matches known order; sharper explicit coefficient (factor up to $1.18$ at $r=1/2$); gain vanishes as $r\to0$.
-& --- \\
+\textbf{(3)} \citep{cbpRichtarikLi2026v1}, Thm.~3.4, (43) & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt{\log(1/r)}\right\}\right)$, $0<r<1$ & \textbf{(1)}: uniformly no larger budget; same high-accuracy order. At $r=1/5$, $R/t=1000$: 842 versus 897 calls. \textbf{(2)}: matches known rate; Lean formalization. &  \\
 \midrule
-\citep[Rem.~3.5]{cbpRichtarikLi2026v1}, refined implicit bound
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt{(1-r^2)\ell}\right\}\right)$\par Large-$K$ asymptotic cost, fixed $r$.
-& i) \textbf{(1)}: up to approximately $4.4\%$ asymptotic constant gain near $r=0.2$.\newline ii) \textbf{(1)}: supporting lemmas characterize exact worst cases and sharp leading constants; public export gives budget.
-& \textbf{(1)}: no finite-$K$ dominance; baseline exact at $K=1$. Gain vanishes as $r\to0,1$. \\
+\textbf{(4)} \citep{cbpRichtarikLi2026v1}, Remark~3.5; derived asymptotic bound & $\mathcal{O}\!\left(1+\frac Rt\sqrt{(1-r^2)\log(1/r)}\right)$\newline Fixed $0<r<1$, $R/t\to\infty$. & \textbf{(1)}: approximately $4.4\%$ maximum asymptotic coefficient gain, vanishing as $r\to0,1$. Supporting lemmas characterize the exact worst case and sharp coefficient; public theorem exports only the budget. & \textbf{(1)}: no finite-$K$ dominance; \textbf{(4)} is exact at $K=1$. \textbf{(2)}: weaker finite-$K$ bound. \\
 \midrule
-\citep[Thm.~4.5]{cbpRichtarikLi2026v1}, dimension-dependent termination
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},C_d\frac Rt\right\}\right)$
-& \textbf{(1)}: dimension-independent accuracy bound; smaller uncapped term when $\sqrt \ell\ll C_d$ and $r<1/2$.
-& \textbf{(1)}: larger bound if $\min\{R/t,\sqrt \ell\}\gg C_d$; baseline reaches exact optimum. \\
+\textbf{(5)} \citep{cbpRichtarikLi2026v1}, Thm.~4.5 & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},C_d\frac Rt\right\}\right)$\newline Exact minimization. & \textbf{(1)}, \textbf{(2)}: dimension-free accuracy bounds; smaller displayed cost when $1\ll\sqrt{\log(1/r)}\ll\min\{C_d,R/t\}$. & \textbf{(1)}, \textbf{(2)}: worse displayed cost when $C_d\ll\min\{\sqrt{\log(1/r)},R/t\}$; \textbf{(5)} has no accuracy dependence. \\
 \midrule
-\citep[Thm.~8.1(iii), Cor.~8.2]{cbpGruntkowskaEtAl2025v2}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{\ell}{\log(1+t/R)}\right\}\right)$
-& \textbf{(1)}: $\sqrt \ell$ instead of $\ell$ before saturation; total gain when $1\ll \ell\ll R/t$; already achieved by the 2026 bound.
-& --- \\
-\midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BallProximalGaussian.lean}{Ball\allowbreak{}Proximal\allowbreak{}Gaussian} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BallProximalGaussian.md}{(review)}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt \ell\right\}\right)$
-& ---
-& --- \\
-\midrule
-\citep[Thm.~3.4, Eqs.~(42)--(43)]{cbpRichtarikLi2026v1}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt \ell\right\}\right)$
-& \textbf{(2)}: Matches known rate and exact Gaussian budget; Lean formalization.
-& \textbf{(2)}: weaker than the rational gap factor and refined implicit bound; \textbf{(1)} has a pointwise no-larger budget. \\
-\midrule
-\citep[Thm.~8.1(iii), Cor.~8.2]{cbpGruntkowskaEtAl2025v2}
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{\ell}{\log(1+t/R)}\right\}\right)$
-& \textbf{(2)}: $\sqrt \ell$ instead of $\ell$ for $R\ge t$ before saturation; $\sqrt \ell$-factor gain when $1\ll\ell\ll R/t$, already established in 2026.
-& --- \\
-\midrule
-\citep[Thm.~4.5]{cbpRichtarikLi2026v1}, dimension-dependent termination
-& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},C_d\frac Rt\right\}\right)$
-& \textbf{(2)}: No established improvement over the published Gaussian guarantee.
-& \textbf{(2)}: larger bound when $\min\{R/t,\sqrt \ell\}\gg C_d$; baseline reaches exact optimum. \\
+\textbf{(6)} \citep{cbpGruntkowskaEtAl2025v2}, Thm.~8.1(iii), Cor.~8.2 & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{\log(1/r)}{\log(1+t/R)}\right\}\right)$, $R>0$, $0<r<1$ & \textbf{(1)}, \textbf{(2)}: $\mathcal{O}((R/t)\sqrt{\ell})$ versus $\mathcal{O}((R/t)\ell)$ when $1\ll\ell\ll(R/t)^2$; this order improvement was already established by \textbf{(3)}. &  \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} Costs count exact ball-minimization calls. $r=\varepsilon/\Delta$, $\ell=\log(\Delta/\varepsilon)$; $h(r)=1-r$ for $1/2\le r<1$, and $h(r)=\sqrt{\log(1/r)}$ for $0<r<1/2$. $d=\dim E$; $C_d$ is the dimension-dependent self-contracted-curve length constant. The logarithmic quotient is interpreted by continuity at $R=0$.
+\item[] \textbf{Abbr:} Costs count exact ball-oracle calls. $r=\varepsilon/\Delta$, $\ell=\log(1/r)$, $\log_+u=\max\{0,\log u\}$; $h(r)=\sqrt{\log(1/r)}$ for $0<r<1/2$, and $h(r)=(1-r)_+$ for $r\ge1/2$, with $(a)_+=\max\{a,0\}$. $d=\dim E$; $C_d$ is the self-contracted-curve length constant: $C_1=2$ and $C_d=4\sqrt d(1+4\sqrt d)^d$ for $d\ge2$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
