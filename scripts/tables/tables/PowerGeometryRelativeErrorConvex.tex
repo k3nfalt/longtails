@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Relative-error acceleration in power geometry: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PowerGeometryRelativeErrorConvex.lean}{Power\allowbreak{}Geometry\allowbreak{}Relative\allowbreak{}Error\allowbreak{}Convex}.}\label{tab:PowerGeometryRelativeErrorConvex}
-\parbox{\linewidth}{\footnotesize Finite-dimensional real normed space; differentiable convex $f$ with $L$-Lipschitz derivative, $L>0$, and a global minimizer $x_\star$ with $\|x_\star-x_0\|\le R$, $R\ge0$. The differentiable function $\psi(x)=\|x-x_0\|^2/2$ satisfies $D_\psi(y,x)\ge c\|y-x\|^p/(\|y-x_0\|+\|x-x_0\|)^{p-2}$ for all $x,y$, with $p>2$, $c>0$ (the ratio is zero at $x=y=x_0$). Every reply obeys $\|g-Df(x)\|_*\le\alpha\|Df(x)\|_*$, $0\le\alpha\le1/4$; bias and dependence on calls and seeds are allowed. Target: $f(x_K)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, for every seed, hence almost surely under the execution law.}\par\smallskip
+\caption{Power-geometry acceleration with relative gradient error. \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PowerGeometryRelativeErrorConvex.lean}{PowerGeometryRelativeErrorConvex}.}\label{tab:PowerGeometryRelativeErrorConvex}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real normed space, $f$ is differentiable and convex, $\|Df(x)-Df(y)\|_*\le L\|x-y\|$, and a global minimizer satisfies $\|x^*-x_0\|\le R$. Here $L,c>0$, $p>2$, $R\ge0$, and $0\le\alpha\le1/4$. The differentiable function $\psi(x)=\|x-x_0\|^2/2$ satisfies $D_\psi(y,x)\ge c\|y-x\|^p/(\|y-x_0\|+\|x-x_0\|)^{p-2}$ for all $x,y$ (zero at $x=y=x_0$). Every oracle reply obeys $\|g-Df(x)\|_*\le\alpha\|Df(x)\|_*$, allowing biased, call-dependent errors. Target: $f(x_K)-f(x^*)\le\varepsilon$, $\varepsilon>0$, almost surely under every execution law; the constructed squared-norm dual-averaging output satisfies it for every seed.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,28 +9,28 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PowerGeometryRelativeErrorAcceleration.lean}{Power\allowbreak{}Geometry\allowbreak{}Relative\allowbreak{}Error\allowbreak{}Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PowerGeometryRelativeErrorAcceleration.md}{(review)}
-& $\mathcal{O}\!\left(1+(CT)^{p/(p+2)}+\alpha^2T\right)$ relative-gradient calls
-& --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PowerGeometryRelativeErrorAcceleration.lean}{Power\allowbreak Geometry\allowbreak Relative\allowbreak Error\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PowerGeometryRelativeErrorAcceleration.md}{(review)}
+& $\mathcal{O}\!\left(1+(CT)^{p/(p+2)}+\alpha^2T\right)$ gradient calls.
+& & \\
 \midrule[1.2pt]
-Bregman acceleration \citep[Cor.~4.10, \S5.1.2]{pgrDGJ2016v3}
-& $\mathcal{O}_p\!\left(1+T^{p/(p+2)}\right)$ exact-gradient calls; $\ell_p$ specialization on $B_p(x_0,R)$, $\alpha=0$
-& \textbf{(1)}: i) Scope: biased relative errors.\newline ii) Adaptivity: no $R$ in updates; budget still uses $R$.\newline iii) Matches known rate at $\alpha=0$.
-& \textbf{(1)}: larger $p$-dependent constant. \\
+\textbf{(2)} \citep{pgDAspremont2016v3}, Cor.~4.10, \S5.1.2
+& $\mathcal{O}_p\!\left(1+T^{p/(p+2)}\right)$ exact-gradient calls. Special case: $\ell_p^d$, $\alpha=0$, optimization on $B_p(x_0,R)$ containing a global minimizer.
+& \textbf{(1)}: extends to biased relative error; matches the exact-gradient rate for fixed $p$. Updates need neither $R$, $\varepsilon$, nor horizon; the stopping budget still does.
+& \textbf{(1)} has larger $p$-dependent constants; on $\ell_p^d$, $C=p(p-1)2^{7(p-2)/2}$ (1536 at $p=4$). \\
 \midrule
-Derived bound: Euclidean regularization \citep[Thm.~7.2]{vasinGasnikov2026CompositeV1}
-& $\mathcal{O}\!\left(1+(d^s\sqrt{T}+\alpha d^{3s}T)\right.$\newline $\left.{}\times[1+\log(d^{2s}T)]\right)$ relative-gradient calls; $\ell_p^d$, $T>1$, $d^s\alpha\le1/3$
-& \textbf{(1)}: i) Dimension-free cost; gains for fixed $p$, $d\gtrsim T^{p/(p+2)}$.\newline ii) Allows $d^s\alpha\ge1$.\newline iii) Accelerated order retained for $\alpha\lesssim_p T^{-1/(p+2)}$.
-& \textbf{(1)}: slower accuracy dependence at $\alpha=0$, $d=1$; no uniform dominance. \\
+\textbf{(3)} Derived bound: \citep{pgVasinGasnikov2026v1}, Thm.~7.2
+& $\mathcal{O}\!\bigl(1+(d^s\sqrt T+\alpha d^{3s}T)$\par ${}\cdot[1+\log(d^{2s}T)]\bigr)$ gradient calls. On $\ell_p^d$ via Euclidean conversion, with $d^{2s}T>1$ and $d^s\alpha\le1/3$.
+& \textbf{(1)}: dimension-free; for fixed $p$ and $d\gtrsim T^{p/(p+2)}$, removes dimension factors and logarithm, with $\alpha^2T$ instead of $\alpha d^{3s}T$. At $p=4$, $d=T^2$, $\alpha=T^{-1/6}\le1/4$: $\mathcal{O}(1+T^{2/3})$; \textbf{(3)} is inapplicable.
+& \textbf{(1)} loses at $\alpha=0$, fixed $p,d$, $T\to\infty$: $T^{p/(p+2)}$ versus $\sqrt T(1+\log T)$. At $d=1$, excludes $1/4<\alpha\le1/3$. \\
 \midrule
-SODA \citep[Cor.~3.2]{pgrPethick2026v1}
-& $\mathcal{O}_p\!\left(1+T^{p/(p+2)}\right)$ exact-gradient calls on the $\ell_p$ overlap, $\alpha=0$
-& \textbf{(1)}: i) Matches known rate at $\alpha=0$.\newline ii) $R$-free updates.\newline iii) Pathwise biased-relative-error guarantee; stochastic noise models incomparable.
-& \textbf{(1)}: does not cover unbiased additive heavy-tailed noise, for which SODA gives expected accuracy. \\
+\textbf{(4)} SODA \citep{pgPethick2026v1}, Cor.~3.2
+& $\mathcal{O}_{p,\tau_q}\!\bigl(1+T^{p/(p+2)}+(\sigma_qR/\varepsilon)^p\bigr)$ stochastic-gradient calls, one per step. On $\ell_p^d$: unbiased gradients with $q$-moment gradient variation (Assumptions~3--4); expected objective gap $\le\varepsilon$.
+& \textbf{(1)}: matches the rate on the exact-gradient overlap; removes $R$ from updates. Covers arbitrary relative bias with pathwise accuracy; no stochastic-rate comparison outside that overlap.
+& \textbf{(1)} does not cover additive heavy-tailed noise allowed by \textbf{(4)}; the noisy oracle models are incomparable. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $C=\max\{1,32^{(p-2)/2}/c\}$; $D_\psi(y,x)=\psi(y)-\psi(x)-D\psi(x)[y-x]$; $\|\cdot\|_*$ is the dual norm; $d$ is dimension; $s=1/2-1/p$; $\mathcal{O}_p$ and $\lesssim_p$ allow constants depending on fixed $p$. For the $\ell_p$ comparisons, $c=2^{2-p}/[p(p-1)]$, hence $C=p(p-1)2^{7(p-2)/2}$. Euclidean conversion uses $L_2\le L$, $R_2\le d^sR$, $\alpha_2=d^s\alpha$. $x_K$ is the constructed squared-norm dual-averaging method's final steepest-step iterate.
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $C=\max\{1,32^{(p-2)/2}/c\}$; $D_\psi(y,x)=\psi(y)-\psi(x)-D\psi(x)[y-x]$; $\|\cdot\|_*$ is the dual norm. For $\ell_p^d$, $d$ is dimension, $s=1/2-1/p$, and $c=2^{2-p}/[p(p-1)]$ is admissible. $\mathcal{O}_p$ permits constants depending on fixed $p$. In \textbf{(4)}, $q=p/(p-1)$; $\sigma_q$ and $\tau_q\ge1$ are the additive scale and multiplicative factor in the $L^q$ gradient-variation bound; $\mathcal{O}_{p,\tau_q}$ permits dependence on these subscripts.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

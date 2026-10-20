@@ -1,32 +1,30 @@
 \begin{table}[tp]
 \centering
-\caption{Accelerated composite generalized-smooth optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGeneralizedSmooth.lean}{Composite\allowbreak{}Generalized\allowbreak{}Smooth}.}\label{tab:CompositeGeneralizedSmooth}
-\parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f:E\to\mathbb{R}$ is convex with continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$ for all $x,y\in E$; $\psi:E\to\mathbb{R}$ is convex on $Q$. Exact gradient and proximal queries are available, with the proximal minimum attained for every positive step. For the same minimizer $x_\star\in Q$, $x_0\in Q$, $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$, where $L_0,R,\Delta,\varepsilon>0$ and $L_1,G\ge0$. Target: $x\in Q$ and $F(x)-F(x_\star)\le\varepsilon$, deterministically.}\par\smallskip
+\caption{Accelerated composite optimization under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGeneralizedSmooth.lean}{CompositeGeneralizedSmooth}.}\label{tab:CompositeGeneralizedSmooth}
+\parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f$ is convex and continuously differentiable on the whole space, with $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|\nabla f\|\le M$ on $[x,y]$; $\psi$ is convex on $Q$, and exact gradient and proximal queries are available. Here $L_0,R,\Delta,\varepsilon>0$, $L_1,G\ge0$, $x_0\in Q$, and some minimizer $x_\star\in Q$ satisfies $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$. Target: a feasible output $x$ with $F(x)-F(x_\star)\le\varepsilon$, deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeGeneralizedAccelerated.lean}{Composite\allowbreak{}Generalized\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeGeneralizedAccelerated.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&\sqrt{\frac{(L_0+L_1G)R^2}{\varepsilon}}\\[-2pt]&+(1+L_1R)\Bigl[1+\log\!\Bigl(1\\[-2pt]&\qquad +(1+L_1R)\sqrt{\frac{\Delta}{L_0R^2}}\Bigr)\Bigr]\end{aligned}\right)$\newline Total gradient and proximal calls.
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeGeneralizedAccelerated.lean}{Composite\allowbreak Generalized\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeGeneralizedAccelerated.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}\sqrt{\frac{(L_0+L_1G)R^2}{\varepsilon}}\\ {}+(1+L_1R)\log\!\left(2+(1+L_1R)\sqrt{\frac{\Delta}{L_0R^2}}\right)\end{gathered}\right)$ gradient/prox calls ($3K$ total). & & \\
 \midrule[1.2pt]
-AC-FGM \citep[Cor.~1 and local-smoothness remark]{LiLan2024ACFGMv3}
-& $\mathcal{O}\!\left(1+\sqrt{\bar L B/\varepsilon}\right)$\newline Total gradient, value and proximal calls.
-& \textbf{(1)}: no function values. Rates not comparable in setup parameters: $\bar L$ depends on the trajectory. Applies for $E=\mathbb{R}^d$, closed $Q,\psi$.\newline Cor.~1 tuning, arbitrary $\eta_1>0$, no initialization search.
-& \textbf{(1)} needs $L_0,L_1,R,\Delta$ for updates and $G$ for its stopping budget; AC-FGM updates need none. \\
+\textbf{(2)} \citep{cgsTyurin2026v2}, Thm.~4.3. Special case: $Q=\mathbb{R}^d$, $\psi=0$, $G=0$; twice differentiable $f$; $R=\|x_0-x_\star\|$.
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}1+\sqrt{\frac{L_0R^2}{\varepsilon}}\\ {}+L_1R\log_+\!\left(\min\!\left\{\frac{L_1^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\right)\\ {}+\log_+\!\frac{\Delta}{L_0R^2}\end{gathered}\right)$ gradient calls; $\bar R=R$, $\Gamma_0=2\Delta/R^2$.
+& \textbf{(1)}: Scope extends acceleration to constrained/composite objectives with $\nabla f(x_\star)\ne0$. Matches the leading rate on the overlap, up to logarithmic terms.
+& \textbf{(1)}: Larger logarithmic term can occur when $L_1>0$, $\varepsilon>L_0/L_1^2$; worse leading constant on the overlap. \\
 \midrule
-AGD \citep[Thm.~4.3]{Tyurin2026GeneralizedV2}
-& $\mathcal{O}\!\left(\begin{aligned}&1+\sqrt{\frac{L_0R^2}{\varepsilon}}+\log_+\!\frac{\Delta}{L_0R^2}\\[-2pt]&+L_1R\log_+\!\min\!\left\{\frac{L_1^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\end{aligned}\right)$\newline Gradient calls; $\Gamma_0=2\Delta/R^2$, $\bar R=R=\|x_0-x_\star\|$.
-& \textbf{(1)}: Scope: accelerated composite/constrained guarantee with $\nabla f(x_\star)\ne0$. Baseline restricted to $Q=E=\mathbb{R}^d$, $\psi=0$, $G=0$; matched leading rate there.
-& \textbf{(1)} has a potentially larger logarithmic term when $L_1>0$, $\varepsilon>L_0/L_1^2$; no rate improvement on the overlap. \\
+\textbf{(3)} AC-FGM \citep{cgsLiLan2024v3}, Cor.~1 and local-smoothness remark. Finite-dimensional, closed $Q$ and closed convex $\psi$.
+& $\displaystyle\mathcal{O}\!\left(1+\sqrt{\frac{\bar L(R^2+d_1^2)}{\varepsilon}}\right)$ gradient, value and prox calls in total; arbitrary initial $\eta_1>0$, fixed $\beta=1/10$.
+& \textbf{(1)}: No function values; explicit accelerated composite bound in setup parameters. Rates are not comparable through an unspecified trajectory curvature $\bar L$.
+& \textbf{(1)}: Needs $L_0,L_1,R,\Delta$ for updates and $G$ for its stopping budget; \textbf{(3)} has parameter-free updates. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $[x,y]$ is the line segment; $\log_+t=\max\{0,\log t\}$. A prox query returns $\arg\min_{u\in Q}\{\|u-z\|^2/(2a)+\langle v,u-z\rangle+\psi(u)\}$, $a>0$; each primitive query counts once. For AC-FGM, $z_0=x_0$, $d_1=\|z_1-x_0\|$, $\ell_1=\|\nabla f(z_1)-\nabla f(x_0)\|/d_1$ ($0/0=0$), $\beta$ is any fixed constant in $(0,1-\sqrt6/3]$, $\eta_2=\min\{(1-\beta)\eta_1,1/(4\ell_1)\}$, and $B=R^2/\beta+\eta_2(5\ell_1/2-1/\eta_1)d_1^2$. The constant $\bar L\ge\sup_t\widehat L_t$ bounds the observed curvature estimates, including the initialization term $1/[4(1-\beta)\eta_1]$.
+\item[] \textbf{Abbr:} Each gradient, value or prox evaluation counts as one call. A prox query minimizes $\|u-z\|^2/(2a)+\langle v,u-z\rangle+\psi(u)$ over $u\in Q$, $a>0$. $\log_+t=\max\{0,\log t\}$ for $t>0$, with $\log_+0=0$. In \textbf{(3)}, $z_0=x_0$, $d_1=\|z_1-z_0\|$, and $\bar L=\sup_{t\ge1}\max\{[4(1-\beta)\eta_1]^{-1},\ell_1,\ldots,\ell_t\}$; $\ell_t$ are the curvature estimates in Eqs.~(2.12)--(2.13), distinct from $L_0,L_1$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

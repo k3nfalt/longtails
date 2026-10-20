@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Known-value smooth convex optimization with an exact local linear oracle: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean}{Known\allowbreak{}Value\allowbreak{}Smooth\allowbreak{}Convex\allowbreak{}Local\allowbreak{}Linear}.}\label{tab:KnownValueSmoothConvexLocalLinear}
-\parbox{\linewidth}{\footnotesize A closed convex set $C$ in a real Hilbert space, $x_0\in C$, and a differentiable objective satisfying, for $x,y\in C$, $f(x)+\langle\nabla f(x),y-x\rangle\le f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\tfrac L2\|y-x\|^2$. Known inputs: $L>0$, $R\ge0$, $\varepsilon>0$, and the exact minimum $f_\star=f(x_\star)$, with $x_\star\in\arg\min_C f$ and $\|x_0-x_\star\|\le R$. Exact value--gradient and point-only local linear oracles are supplied. Target: a feasible output $y$ with $f(y)-f_\star\le\varepsilon$ almost surely; \textbf{(1)} guarantees its last primal iterate for every seed and oracle tie-breaking.}\par\smallskip
+\caption{Known-value convex optimization with exact local linear minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean}{KnownValueSmoothConvexLocalLinear}.}\label{tab:KnownValueSmoothConvexLocalLinear}
+\parbox{\linewidth}{\footnotesize A real Hilbert space, a closed convex set $C$, and $x_0\in C$. The differentiable objective satisfies $0\le f(y)-f(x)-\langle\nabla f(x),y-x\rangle\le (L/2)\|y-x\|^2$ for $x,y\in C$. Known inputs are $L>0$, $R\ge0$, $\varepsilon>0$, and $f_\star=f(x_\star)$ for a minimizer $x_\star\in C$ with $\|x_0-x_\star\|\le R$. Exact oracles return $(f(x),\nabla f(x))$ and a minimizer of $\langle g,v\rangle$ over $v\in C\cap B(x,r)$. Target: feasible $y$ with $f(y)-f(x_\star)\le\varepsilon$; \textbf{(1)} guarantees its last primal iterate for every seed and oracle tie-breaking choice.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,34 +9,33 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SplitBroxKnownValue.lean}{Split\allowbreak{}Brox\allowbreak{}Known\allowbreak{}Value} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SplitBroxKnownValue.md}{(review)}
-& $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$ total value--gradient and local-linear calls, including rejected trials
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SplitBroxKnownValue.lean}{Split\allowbreak Brox\allowbreak Known\allowbreak Value} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SplitBroxKnownValue.md}{(review)}
+& $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$ total value-gradient and local-LMO calls, including all trials.
+& & \\
 \midrule[1.2pt]
-BroxGD \citep[Thm.~3.2(ii)]{kvBrox2026v2}; finite-dimensional, $R>0$, smooth open convex neighborhood of $C$
-& $\mathcal{O}(1+LR^2/\varepsilon)$ total value--gradient and local-linear calls
-& \textbf{(1)}: i) Rate: $\sqrt{LR^2/\varepsilon}$ instead of $LR^2/\varepsilon$ when $LR^2/\varepsilon\ge1$.\newline ii) Scope: models on $C$ only.\newline iii) Last instead of best iterate.
-& \textbf{(1)}: needs exact $f_\star,L$ in addition; baseline updates need only $R,K$. \\
+\textbf{(2)} BroxGD \citep[Thm.~3.2(ii), Cor.~D.2]{kvBrox2026v2}
+& $\mathcal{O}(1+LR^2/\varepsilon)$ total value-gradient and local-LMO calls. Finite-dimensional; $R>0$; $L$-Lipschitz gradient on an open convex neighborhood of $C$.
+& \textbf{(1)}: factor $\sqrt{LR^2/\varepsilon}$ fewer calls when $LR^2/\varepsilon\ge1$; last instead of best iterate. Scope: quadratic models only on $C$ suffice.
+& \textbf{(1)} needs exact $f_\star$ and $L$ additionally; \textbf{(2)} uses only $R,K$ to set radii. \\
 \midrule
-Polyak-radius BroxGD \citep[Thm.~3.5]{kvBrox2026v2}; finite-dimensional, smooth open neighborhood of $C$
-& $\mathcal{O}\!\left(1+\frac{(\|\nabla f(x_\star)\|+LR)^2R^2}{\varepsilon^2}\right)$ total value--gradient and local-linear calls
-& \textbf{(1)}: i) Rate: $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ for general constrained minimizers; removes $\|\nabla f(x_\star)\|$ dependence.\newline ii) Last iterate instead of averaging.
-& \textbf{(1)}: needs $L,R$ in addition to exact $f_\star$; baseline updates need neither. \\
+\textbf{(3)} Polyak-radius BroxGD \citep[Thm.~3.5, Eq.~(24)]{kvBrox2026v2}
+& $\mathcal{O}\!\left(1+\dfrac{(\|\nabla f(x_\star)\|+LR)^2R^2}{\varepsilon^2}\right)$ total value-gradient and local-LMO calls. Finite-dimensional; smooth on an open neighborhood of $C$; known $f_\star$.
+& \textbf{(1)}: $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ in this general guarantee, without $\|\nabla f(x_\star)\|$ dependence; last instead of averaged iterate.
+& \textbf{(1)} needs $L,R$ additionally. \\
 \midrule
-APMM \citep[Alg.~1, Thm.~2.1]{kvAPMM2026v3}; $C\subseteq\mathbb{R}^d$, smooth case, no functional constraints, $X_k=C$
-& $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$ total value--gradient evaluations and exact projections onto $C\cap\{\ell_f\le f_\star\}$
-& \textbf{(1)}: i) Oracle: point-only local linear minimization replaces exact cut projections, without a logarithmic search factor.\newline ii) Last primal iterate instead of value-selected output; rates use different oracles.
-& \textbf{(1)}: needs $L,R$; APMM updates need neither. \\
+\textbf{(4)} APMM \citep[Alg.~1, Thm.~2.1]{kvAPMM2026v3}; $\rho=1$, $X_k=C$, no functional constraints
+& $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$ total value-gradient evaluations and exact projections onto $C\cap\{\ell_f\le f_\star\}$. Finite-dimensional smooth case.
+& \textbf{(1)} matches the accelerated order using point-only local LMOs, with no logarithmic search overhead. Different oracles prevent a direct cost comparison.
+& \textbf{(1)} needs $L,R$ additionally; \textbf{(4)} is parameter-free apart from $f_\star,\varepsilon$. \\
 \midrule
-CGS \citep{kvCGS2016verified}; special case: compact $C\subseteq\mathbb{R}^d$, diameter $D$, Lipschitz gradient on $C$
-& $\mathcal{O}\!\left(1+\sqrt{LD^2/\varepsilon}+LD^2/\varepsilon\right)$ total gradient and global-linear calls; gradients: $\mathcal{O}\!\left(1+\sqrt{LD^2/\varepsilon}\right)$
-& \textbf{(1)}: i) Scope: unbounded $C$ allowed.\newline ii) On bounded overlap, $R\le D$, $LD^2/\varepsilon\ge1$: local-linear cost $\sqrt{LR^2/\varepsilon}$ instead of global-linear cost $LD^2/\varepsilon$.
-& \textbf{(1)}: needs exact $f_\star$ and a stronger local oracle; CGS needs only global linear minimization. \\
+\textbf{(5)} CGS \citep[Cor.~3, 2014 preprint]{kvCGS2016}; special case: bounded $C\subseteq\mathbb{R}^d$ of diameter $D$
+& $\mathcal{O}(1+LD^2/\varepsilon)$ total gradient and global-LMO calls; gradient calls alone: $\mathcal{O}(1+\sqrt{LD^2/\varepsilon})$.
+& \textbf{(1)}: for $R\le D$ and $LD^2/\varepsilon\ge1$, at least a factor $\sqrt{LD^2/\varepsilon}$ fewer linear-oracle calls. Scope: unbounded $C$ allowed.
+& \textbf{(1)} needs $f_\star$ and the stronger local LMO; \textbf{(5)} needs only global linear minimization over $C$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $K$: iteration horizon; $D=\sup_{u,v\in C}\|u-v\|$; local linear oracle: a point in $\arg\min\{\langle g,v\rangle:v\in C,\ \|v-x\|\le r\}$; global linear oracle: a point in $\arg\min_{v\in C}\langle g,v\rangle$ (a local query with $r\ge D$ on bounded $C$); $\ell_f(v;z)=f(z)+\langle\nabla f(z),v-z\rangle$; total cost sums the indicated primitive calls.
+\item[] \textbf{Abbr:} LMO: linear minimization oracle; local LMO: one point minimizing a linear function on $C\cap B(x,r)$; $B(x,r)$: closed ball; $D=\sup_{x,y\in C}\|x-y\|$; $K$: iteration horizon; $\ell_f(v;z)=f(z)+\langle\nabla f(z),v-z\rangle$. Costs count each oracle invocation once.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

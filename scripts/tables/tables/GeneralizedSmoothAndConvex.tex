@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Convex optimization under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothAndConvex.lean}{Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:GeneralizedSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a real Hilbert space, with differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ everywhere; $L_0,R,\Delta,\varepsilon>0$, $L_1\ge0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. Exact gradient access; target $f(x_K)-f(x_\star)\le\varepsilon$.}\par\smallskip
+\caption{Oracle-complexity upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothAndConvex.lean}{GeneralizedSmoothAndConvex}.}\label{tab:GeneralizedSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb R$ on a real Hilbert space has a differentiable gradient satisfying $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ everywhere. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$, with $L_0,R,\Delta,\varepsilon>0$ and $L_1\ge0$. Exact gradients are available; $L_0,L_1,R,\Delta$ are public inputs. The target is $f(x_{\rm out})-f(x_\star)\le\varepsilon$ almost surely; our constructions guarantee it for every seed. The setup imposes no algorithm restriction.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,49 +9,32 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean}{Generalized\allowbreak{}Self\allowbreak{}Normalized\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedSelfNormalizedConvex.md}{(review)}
-& $\begin{aligned}[t]
-&\mathcal{O}\!\Bigl(1+\sqrt{L_0R^2/\varepsilon}\\
-&\quad+\min\{\lceil q^{2/3}\rceil\ell, \ell+(q\ell)^{2/3}\}\Bigr)
-\end{aligned}$ gradients
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean}{Generalized\allowbreak Self\allowbreak Normalized\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedSelfNormalizedConvex.md}{(review)}
+& $\begin{aligned}[t]\mathcal{O}\Bigl(&1+\sqrt{L_0R^2/\varepsilon}\\ &+\min\{\lceil q^{2/3}\rceil\ell,\\ &\qquad\ell+(q\ell)^{2/3}\}\Bigr)\end{aligned}$ gradients
+& & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedAcceleratedConvex.lean}{Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedAcceleratedConvex.md}{(review)}
-& $\mathcal{O}\!\bigl(1+\sqrt{L_0R^2/\varepsilon}+\lceil q^{2/3}\rceil\ell\bigr)$ gradients
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedAcceleratedConvex.lean}{Generalized\allowbreak Accelerated\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedAcceleratedConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{L_0R^2/\varepsilon}+\lceil q^{2/3}\rceil\ell\right)$ gradients
+& & \\
 \midrule[1.2pt]
-AGD \citep[Thm.~4.3]{GeneralizedSmoothAndConvex_Tyurin2026GeneralizedV2}\newline Euclidean restriction; Derived bound via a flat coordinate
-& $\begin{aligned}[t]
-&\mathcal{O}\!\Bigl(1+\sqrt{L_0R^2/\varepsilon}\\
-&\quad+q\log\!\bigl(1+\min\{\tfrac{L_1^2\Delta}{L_0},\tfrac{\Delta}{\varepsilon}\}\bigr)\\
-&\quad+\log(1+\tfrac{\Delta}{L_0R^2})\Bigr)
-\end{aligned}$ gradients; $\bar R=R$, $\Gamma_0=2\Delta/R^2$ on $\bar f(x,t)=f(x)$
-& i) \textbf{(1)}: never worse up to constants.\newline
- ii) At $\Delta=L_0R^2$, $\varepsilon=L_0R^2q^{-4/3}$, $q\to\infty$: $q\log q$ becomes $(q\log q)^{2/3}$ for \textbf{(1)}, $q^{2/3}\log q$ for \textbf{(2)}.
-& \textbf{(2)}: nonsaturating logarithm can cost more when $\varepsilon<L_0/L_1^2$ and $q^{2/3}\ell>\sqrt{L_0R^2/\varepsilon}$ (requiring $\ell\gtrsim q^{1/3}$).\newline
-\textbf{(1)}, \textbf{(2)}: exclude general Hessian growth and open domains. \\
+\textbf{(3)} AGD \citep[Theorem~4.3, v2]{cgsTyurin2026v2}\par $E=\mathbb R^d$; derived bound
+& $\begin{aligned}[t]\mathcal{O}\Bigl(&1+\sqrt{L_0R^2/\varepsilon}\\ &+q\log\!\left(1+\min\!\left\{\frac{L_1^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\right)\\ &+\log\!\left(1+\frac{\Delta}{L_0R^2}\right)\Bigr)\end{aligned}$ gradients.\par $\bar R=R$, $\Gamma_0=2\Delta/R^2$, using a flat-coordinate extension.
+& \textbf{(1)}: for $q\to\infty$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2q^{-4/3}$, total $\mathcal{O}(q\log q)\to\mathcal{O}((q\log q)^{2/3})$.\par \textbf{(2)}: $\mathcal{O}(q^{2/3}\log q)$ in that regime. Matches the leading $\varepsilon^{-1/2}$ rate.
+& \textbf{(2)}: startup can be worse when $\varepsilon<L_0/L_1^2$ and $q^{2/3}\ell>\sqrt{L_0R^2/\varepsilon}$; its logarithm does not saturate.\par \textbf{(1)}, \textbf{(2)}: two gradients per iteration instead of one; restricted to full domains. \\
 \midrule
-AGMsDR \citep[Thm.~6.2]{VankovEtAl2025GeneralizedV3}\newline Euclidean, $C^2$ restriction
-& $ \mathcal{O}\!\Bigl((1+\nu)\bigl[1+\sqrt{L_0R^2/\varepsilon} +\lceil q^{2/3}\rceil\ell\bigr]\Bigr) $ value/gradient calls; $\nu$ unbounded in setup parameters, so primitive costs are not comparable
-& i) \textbf{(1)}, \textbf{(2)}: gradients only; no exact segment minimization.\newline
- ii) \textbf{(2)}: matches the iteration rate.\newline
- iii) \textbf{(1)}: startup $q^{2/3}\ell\to(q\ell)^{2/3}$ for $q\ge\sqrt\ell$; total gain when $\ell\to\infty$ and $\sqrt{L_0R^2/\varepsilon}=o(q^{2/3}\ell)$.
+\textbf{(4)} AGMsDR \citep[Theorem~6.2, v3]{gscVankov2025v3}\par $E=\mathbb R^d$, $f\in C^2$
+& $\begin{aligned}[t]\mathcal{O}\Bigl((1+\nu)\bigl[&1+\sqrt{L_0R^2/\varepsilon}\\ &+\lceil q^{2/3}\rceil\ell\bigr]\Bigr)\end{aligned}$ gradient/value calls, including exact segment searches; $\nu$ has no parameter bound.
+& \textbf{(1)}: startup $q^{2/3}\ell\to(q\ell)^{2/3}$ for $q\ge\sqrt\ell$.\par \textbf{(2)}: matches iteration rate.\par \textbf{(1)}, \textbf{(2)}: bounded gradient-only cost; no values or exact search. Total-call rates are not comparable with unbounded $\nu$.
 & \textbf{(1)}, \textbf{(2)}: need $R,\Delta$ in addition. \\
 \midrule
-Accelerated GRAAL \citep[Cor.~3]{BorodichKovalev2025GRAALV2}\newline Euclidean, $C^2$ restriction, $L_1>0$
-& $\begin{aligned}[t]
-&\mathcal{O}\!\Bigl(1+\sqrt{L_0R^2/\varepsilon}+q^3\\
-&\qquad+(1+q^2)\log\tfrac{1}{\eta_0L_0}\Bigr)
-\end{aligned}$ gradient and value calls; $0<\eta_0\le e^{-q}/L_0$
-& i) \textbf{(1)}, \textbf{(2)}: no function values.\newline
- ii) \textbf{(1)}, \textbf{(2)}: $q^3\to q^2$ at $\eta_0=e^{-q}/L_0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2q^{-4}$, $q\to\infty$.
-& \textbf{(1)}, \textbf{(2)}: need $L_0,L_1,R,\Delta$; baseline updates need only sufficiently small $\eta_0$. Startup depends on $\varepsilon$. \\
+\textbf{(5)} Accelerated GRAAL \citep[Corollary~3, v2]{gscBorodichKovalev2025v2}\par $E=\mathbb R^d$, $f\in C^2$, $L_1>0$
+& $\begin{aligned}[t]\mathcal{O}\Bigl(&1+\sqrt{L_0R^2/\varepsilon}+q^3\\ &+(1+q^2)\log\frac1{\eta_0L_0}\Bigr)\end{aligned}$ gradient/value calls, for $0<\eta_0\le e^{-q}/L_0$.
+& \textbf{(1)}, \textbf{(2)}: no values. For $q\to\infty$, $\eta_0=e^{-q}/L_0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2q^{-4}$, total $\mathcal{O}(q^3)\to\mathcal{O}(q^2)$.\par \textbf{(2)}: startup $q^3\to q^{2/3}\ell$ when $\ell\ll q^{7/3}$.
+& \textbf{(1)}, \textbf{(2)}: need $L_0,L_1,R,\Delta$; \textbf{(5)} updates need only an admissible $\eta_0$. Our startup depends on accuracy. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $q=L_1R$; $\ell=1+\log(1+\Delta/\varepsilon)$; $\nu$ is the primitive oracle cost of one exact segment minimization; $\eta_0$ is the initial step size. Costs include every gradient and function-value evaluation.
+\item[] \textbf{Abbr:} $q=L_1R$; $\ell=1+\log(1+\Delta/\varepsilon)$; $\nabla^2 f=D\nabla f$; $\eta_0$ is the initial stepsize; $\nu$ is the maximum gradient/value call cost of one exact segment minimization. Costs count all gradient evaluations, including trials, and values where used.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

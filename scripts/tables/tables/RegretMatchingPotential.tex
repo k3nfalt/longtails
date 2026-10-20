@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Exact potential games: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RegretMatchingPotential.lean}{Regret\allowbreak{}Matching\allowbreak{}Potential}.}\label{tab:RegretMatchingPotential}
-\parbox{\linewidth}{\footnotesize Two players have $m,n\ge1$ actions and payoff matrices $A,C$. Unilateral payoff differences equal those of an exact potential $P\in[0,B]^{m\times n}$, with $B,\varepsilon>0$; payoff levels are unrestricted. One oracle call returns $(Ay,C^\top x)$. The setup requires zero-initialized simultaneous RM$^+$, with public inputs $m,n,\varepsilon$; $B$ determines the horizon, not the updates. Target: a mixed profile $(x,y)\in\Delta_m\times\Delta_n$ with $\max_i(Ay)_i-x^\top Ay\le\varepsilon$ and $\max_j(C^\top x)_j-x^\top Cy\le\varepsilon$. The output is a saved certified pre-update profile.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RegretMatchingPotential.lean}{RegretMatchingPotential}.}\label{tab:RegretMatchingPotential}
+\parbox{\linewidth}{\footnotesize Two-player exact potential games with $m,n\geq1$, $B,\varepsilon>0$, payoff matrices $A,C$, and an exact potential $P\in[0,B]^{m\times n}$: unilateral payoff differences equal potential differences; payoff levels are unrestricted. Each oracle call returns $(Ay,C^\top x)$ exactly. The setup fixes zero-initialized, undiscounted simultaneous RM+; public inputs are $m,n,\varepsilon$, while $B$ determines the horizon. Its saved certified pre-update profile $(x,y)\in\Delta_m\times\Delta_n$ satisfies $\max_i(Ay)_i-x^\top Ay\leq\varepsilon$ and $\max_j(C^\top x)_j-x^\top Cy\leq\varepsilon$ for every seed. Prior methods are compared on these games in paired-vector calls; alternating sweeps cost two calls.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,39 +9,37 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RegretMatchingPotential.lean}{Regret\allowbreak{}Matching\allowbreak{}Potential} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RegretMatchingPotential.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{B^2(m+n)^4}{\varepsilon^2}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RegretMatchingPotential.lean}{Regret\allowbreak Matching\allowbreak Potential} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RegretMatchingPotential.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{B^2(m+n)^4}{\varepsilon^2}\right)$ & & \\
 \midrule[1.2pt]
-Lazy alternating discounted RM$^+$ \citep[Cor.~3.5]{rmpAnagnostides2025v2}
-& $\mathcal{O}\!\left(1+\frac{B^2\max\{m,n\}}{\varepsilon^2}\right)$; discount $1/2$
-& \textbf{(1)}: analysis of undiscounted simultaneous updates; no established equilibrium-computation improvement.
-& \textbf{(1)}: $(m+n)^4$ instead of $\max\{m,n\}$; only two players. \\
+\textbf{(2)} $\varepsilon$-lazy discounted alternating RM+ \citep[Cor.~3.5]{rmpAnagnostides2025v2}, $\gamma=1/2$
+& $\mathcal{O}\!\left(1+\dfrac{B^2\max(m,n)}{\varepsilon^2}\right)$
+& \textbf{(1)}: Analysis of plain simultaneous RM+, with uniformly bounded regret states; no equilibrium-computation improvement.
+& \textbf{(1)}: Dimension factor $(m+n)^4$ instead of $\max(m,n)$; only two players instead of arbitrary player counts. \\
 \midrule
-Lazy alternating RM$^+$ \citep[Thm.~3.4]{rmpAnagnostides2025v2}
-& $\mathcal{O}\!\left(1+\frac{B^4\max\{m,n\}^2}{\varepsilon^4}\right)$; zero initialization allowed
-& \textbf{(1)}: i) $B^2/\varepsilon^2$ instead of $B^4/\varepsilon^4$; smaller nonconstant bound when $\varepsilon<B\max\{m,n\}/(m+n)^2$.\newline ii) Non-lazy simultaneous analysis.
-& \textbf{(1)}: worse dimension dependence; only two players. No uniform dominance. \\
+\textbf{(3)} $\varepsilon$-lazy alternating RM+ \citep[Thm.~3.4]{rmpAnagnostides2025v2}
+& $\mathcal{O}\!\left(1+\dfrac{B^4\max(m,n)^2}{\varepsilon^4}\right)$
+& \textbf{(1)}: $\varepsilon^{-2}$ instead of $\varepsilon^{-4}$; smaller bound when $0<\varepsilon<B\max(m,n)/(m+n)^2$. Always-updating simultaneous play.
+& \textbf{(1)}: Larger bound above that threshold for $\varepsilon\leq B$; only two players. \\
 \midrule
-Lazy simultaneous RM$^+$ \citep[Thm.~3.12]{rmpAnagnostides2025v2}
-& Derived bound: $\mathcal{O}\!\left(1+\frac{B^8(m+n)^{10}}{\varepsilon^8}\right)$ for $0<\varepsilon\le B$, zero initialization
-& \textbf{(1)}: i) $B^2(m+n)^4/\varepsilon^2$ instead of $B^8(m+n)^{10}/\varepsilon^8$.\newline ii) Always-updating simultaneous analysis.
-& \textbf{(1)}: only two-player bilinear potentials; baseline covers smooth product-simplex objectives. \\
+\textbf{(4)} Zero-initialized $\varepsilon$-lazy simultaneous RM+ \citep[Thm.~3.12, App.~C.1]{rmpAnagnostides2025v2}
+& Derived bound on these games:\par $\mathcal{O}\!\left(1+\dfrac{B^8(m+n)^{10}}{\varepsilon^8}\right)$, $0<\varepsilon\leq B$.
+& \textbf{(1)}: Dominant bound smaller by $B^6(m+n)^6/\varepsilon^6$ for $0<\varepsilon\leq B$; no lazy skipping.
+& \textbf{(1)}: Only two-player bilinear potentials; \textbf{(4)} also covers smooth objectives on arbitrary products of simplices. \\
 \midrule
-Unilateral improvement \citep[Lem.~4.2]{rmpMondererShapley1996}
-& Derived bound: $\mathcal{O}(1+B/\varepsilon)$; pure $\varepsilon$-Nash profile
-& \textbf{(1)}: No established improvement.
-& \textbf{(1)}: worse bound for $0<\varepsilon\le B$; mixed rather than pure certificate. \\
+\textbf{(5)} Matrix recovery and potential maximization \citep[Lem.~2.1]{rmpMondererShapley1996}
+& Derived bound: $\mathcal{O}(\max(m,n))$; exact pure Nash equilibrium, using paired basis queries and uncharged arithmetic.
+& \textbf{(1)}: No established improvement in equilibrium computation; analyzes simultaneous RM+ rather than centralized reconstruction.
+& \textbf{(1)}: Larger bound for $0<\varepsilon\leq B$; only approximate mixed-profile accuracy, not exact pure equilibrium. \\
 \midrule
-Matrix recovery and potential maximization \citep{rmpMondererShapley1996}
-& Derived bound: $\mathcal{O}(\max\{m,n\})$; exact pure Nash profile; centralized reconstruction, arithmetic uncharged
-& \textbf{(1)}: No established improvement.
-& \textbf{(1)}: worse bound for $0<\varepsilon\le B$; approximate mixed rather than exact pure certificate. \\
+\textbf{(6)} Unilateral improvement \citep[Lem.~4.2]{rmpMondererShapley1996}
+& Derived bound: $\mathcal{O}(1+B/\varepsilon)$; pure $\varepsilon$-Nash profile, one paired call per tested profile.
+& \textbf{(1)}: No established complexity improvement; analyzes simultaneous RM+ without coordinating unilateral deviations.
+& \textbf{(1)}: Larger bound for $0<\varepsilon\leq B$; does not guarantee a pure profile. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $m,n$: action counts; $B$: potential range bound; $\varepsilon$: additive Nash tolerance; $\Delta_d$: probability simplex on $d$ actions; RM$^+$: regret matching with nonnegative regret truncation. Costs count paired-vector calls, including two calls per alternating round. Prior RM$^+$ bounds use shift invariance and normalization by $B$; the simultaneous derived bound uses smoothness $\sqrt{mn}$ for $P/B$.
+\item[] \textbf{Abbr:} $\Delta_d$ is the probability simplex on $d$ actions; RM+ is regret matching with nonnegative clipping; $\gamma$ is the geometric discount parameter. An $\varepsilon$-lazy update skips a player whose deviation gain is at most $\varepsilon$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Finite-sum convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumSmoothAndConvex.lean}{Finite\allowbreak{}Sum\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteSumSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Let $F=n^{-1}\sum_{i=1}^{n}f_i$ on a real Hilbert space $E$ with a measurable-space structure. Each $f_i$ is convex with $L$-Lipschitz gradient; $n\ge1$, $L>0$, $R\ge0$, and $\varepsilon>0$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. One oracle call returns one exact component gradient. The target is a measurable output $\widehat x$ with integrable gap and $\mathbb{E}[F(\widehat x)-F(x_\star)]\le\varepsilon$.}\par\smallskip
+\caption{Finite-sum smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumSmoothAndConvex.lean}{FiniteSumSmoothAndConvex}.}\label{tab:FiniteSumSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize $F=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space $E$ equipped with a measurable structure; $n\ge1$, each $f_i$ is convex with $L$-Lipschitz gradient, $L>0$. A minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$, $R\ge0$. One oracle call returns an exact component gradient. Target: measurable output $\widehat x$ with integrable gap and $\int [F(\widehat x(\omega))-F(x^\star)]\,dP(\omega)\le\varepsilon$, $\varepsilon>0$, where $P$ is the algorithm's sampling law. The setup imposes no algorithm restriction.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,39 +9,40 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedFiniteSumConvex.md}{(review)}
-& $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedFiniteSumConvex.lean}{Accelerated\allowbreak Finite\allowbreak Sum\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedFiniteSumConvex.md}{(review)}
+& $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{nLR^2/\varepsilon}\right)$ & & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SvrgConvex.md}{(review)}
-& $\mathcal{O}\!\left(1+n\log\!\left(1+\frac{LR^2}{\varepsilon}\right)+\frac{LR^2}{\varepsilon}\right)$
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SvrgConvex.lean}{Svrg\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SvrgConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+n\log(1+LR^2/\varepsilon)+LR^2/\varepsilon\right)$ & & \\
 \midrule[1.2pt]
-VRADA \citep[Thm.~1]{fscSongJiangMa2020V4}\newline Stated on $E=\mathbb{R}^d$; composite term $=0$.
-& $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$
-& \textbf{(1)}: Matches known rate; formalized Hilbert-space proof.
-& i) \textbf{(1)}, \textbf{(2)}: no composite term.\newline ii) \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{nLR^2/\varepsilon}$ for $LR^2/\varepsilon\gg n$. \\
+\textbf{(3)} VRADA \citep[Thm.~1, (9)--(11)]{finiteSumSong2021v4}. $E=\mathbb R^d$; $l=0$, $\sigma=0$, $m=n$.
+& $\mathcal{O}\!\left(n[1+\log\log(n+2)]+\sqrt{nLR^2/\varepsilon}\right)$
+& \textbf{(1)}: Matches known rate; Lean formalization on Hilbert spaces. \textbf{(2)}: Smaller startup when $1\ll T\ll\log n$.
+& \textbf{(2)}: $T$ instead of $\sqrt{nT}$ for high accuracy. \textbf{(1)}, \textbf{(2)} do not cover the additional composite objective supported by \textbf{(3)}. \\
 \midrule
-SVRG++ \citep[Thm.~4.1]{fscAllenZhuYuan2016V3}\newline Stated on $E=\mathbb{R}^d$; $\Psi=0$.
-& $\mathcal{O}\!\left(n[1+\log_+(\Delta/\varepsilon)]+\frac{LR^2}{\varepsilon}\right)$\newline
-& \textbf{(2)}: Matches known rate for $\Delta\asymp LR^2$; formalized Hilbert-space proof.\newline Gap tuning: $m_0=\lceil LR^2/\Delta\rceil$, $0<\varepsilon\le\Delta$.
-& \textbf{(2)}: $n\log(1+LR^2/\varepsilon)$ instead of gap-tuned $n[1+\log_+(\Delta/\varepsilon)]$; no composite term. \\
+\textbf{(4)} ANITA \citep[Thm.~1, Cor.~1]{finiteSumLi2022v3}. $E=\mathbb R^d$.
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}&n\!\left[1+\min\!\left\{\log_+\!\frac{LR^2}{\varepsilon\sqrt n},\log\sqrt n\right\}\right]\\[-2pt]&{}+\sqrt{nLR^2/\varepsilon}\end{aligned}\right)$\par Expected call count.
+& \textbf{(1)}: Intermediate-accuracy savings for $\sqrt n\log n\lesssim T\lesssim n\log^2 n$; at $T=n$, $\mathcal{O}(n\log\log n)$ versus \textbf{(4)}'s $\mathcal{O}(n\log n)$ for the shared expected-gap target.
+& \textbf{(1)}: At $T\le\sqrt n$, $\mathcal{O}(n\log\log n)$ versus \textbf{(4)}'s $\mathcal{O}(n)$. Epoch average instead of last iterate; $\varepsilon$ needed for stopping, while \textbf{(4)}'s updates are accuracy-independent. \\
 \midrule
-Katyusha + AdaptReg \citep[arXiv v6, Cor.~3.5]{fscAllenZhu2018V6}\newline Stated on $E=\mathbb{R}^d$; $\psi=0$.
-& $\mathcal{O}\!\left(n[1+\log_+(\Delta/\varepsilon)]+\sqrt{\frac{nLR^2}{\varepsilon}}\right)$\newline $0<\varepsilon\le\Delta$; reduction costs included.
+\textbf{(5)} SVRG++ \citep[Thm.~4.1]{finiteSumAllenZhuYuan2016}. $E=\mathbb R^d$, $\Psi=0$, $m_0=1$.
+& $\mathcal{O}\!\left(n[1+\log(1+LR^2/\varepsilon)]+LR^2/\varepsilon\right)$
+& \textbf{(1)}: At $T=n$, $\mathcal{O}(n\log\log n)$ versus \textbf{(5)}'s $\mathcal{O}(n\log n)$; accuracy term $\sqrt{nT}$ instead of $T$ when $T>n$. \textbf{(2)}: Matches known rate; dimension-free Lean formalization.
+& \textbf{(1)}, \textbf{(2)} omit the composite term supported by \textbf{(5)}. \\
+\midrule
+\textbf{(6)} SVRG++ \citep[Thm.~4.1]{finiteSumAllenZhuYuan2016}. $E=\mathbb R^d$, $\Psi=0$; $m_0=\lceil LR^2/\Delta\rceil$, $0<\varepsilon<\Delta$.
+& $\mathcal{O}\!\left(n[1+\log(\Delta/\varepsilon)]+LR^2/\varepsilon\right)$
+& \textbf{(2)}: Matches known rate when $\Delta\asymp LR^2$.
+& \textbf{(2)}: Uses $\log(1+LR^2/\varepsilon)$ instead of $1+\log(\Delta/\varepsilon)$; can lose when $\Delta\ll LR^2$. No composite term. \\
+\midrule
+\textbf{(7)} Katyusha + AdaptReg \citep[Cor.~3.5]{AllenZhu2018KatyushaComposite}. $E=\mathbb R^d$, $\psi=0$; $0<\varepsilon<\Delta$.
+& $\mathcal{O}\!\left(n[1+\log(\Delta/\varepsilon)]+\sqrt{nLR^2/\varepsilon}\right)$
 & \textbf{(2)}: No established improvement.
-& \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{nLR^2/\varepsilon}$; up to $\sqrt{LR^2/(n\varepsilon)}$ slower for $LR^2/\varepsilon\gg n$. \\
-\midrule
-ANITA \citep[Cor.~1]{fscLi2022V3}\newline Stated on $E=\mathbb{R}^d$.
-& $\mathcal{O}\!\left(\begin{aligned}&n\!\left[1+\min\!\left\{\log_+\!\frac{LR^2}{\varepsilon\sqrt n},\log\sqrt n\right\}\right]\\&{}+\sqrt{nLR^2/\varepsilon}\end{aligned}\right)$\newline Expected component-gradient calls.
-& \textbf{(1)}: for large $n$, conditional gain for $\sqrt n\log n\lesssim (LR^2/\varepsilon)\lesssim n\log^2n$; factor $\log n/\log\log n$ at $LR^2/\varepsilon=n$, already attained by VRADA.
-& i) \textbf{(1)}: for large $n$, $n\log\log n$ instead of $n$ for $LR^2/\varepsilon\le\sqrt n$.\newline ii) \textbf{(1)}: epoch average instead of last iterate. \\
+& \textbf{(2)}: $T$ instead of $\sqrt{nT}$; up to $\sqrt{T/n}$ higher total cost for $T\gg n$. \textbf{(1)}, \textbf{(2)} omit the composite term supported by \textbf{(7)}. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\Delta=F(x_0)-F(x_\star)\le LR^2/2$; $m_0$ is the initial epoch-length parameter; $\log_+u=\max\{0,\log u\}$; $\log_+0=0$. Costs count all component gradients, including full-gradient refreshes; fixed budgets unless marked expected. Expectations are over sampled indices.
+\item[] \textbf{Abbr:} $n$: component count; $L$: component smoothness; $R$: initial-distance bound; $\varepsilon$: expected-gap tolerance; $T=LR^2/\varepsilon$; $\Delta=F(x_0)-F(x^\star)\le LR^2/2$; $\log_+u=\max\{0,\log u\}$ (zero at $u=0$). Costs count component gradients, including full-gradient refreshes; \textbf{(4)} counts calls in expectation. $l,\Psi,\psi$: optional convex composite terms; $\sigma$: strong-convexity parameter; $m,m_0$: epoch-length parameters.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

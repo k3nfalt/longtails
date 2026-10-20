@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic cohypomonotone inclusions: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticCohypomonotoneInclusion.lean}{Stochastic\allowbreak{}Cohypomonotone\allowbreak{}Inclusion}.}\label{tab:StochasticCohypomonotoneInclusion}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner product space, $F$ is $L$-Lipschitz and $G$ is monotone with an everywhere-defined exact resolvent $J_{\gamma G}$ for every $\gamma>0$. For $v\in(F+G)(x)$ and $w\in(F+G)(y)$, $\langle v-w,x-y\rangle\ge-\rho\|v-w\|^2$, with $L>0$, $\rho\ge0$, $2\rho L<1$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$. The jointly measurable stochastic oracle uses IID samples, is unbiased, and has integrable squared error bounded in expectation by $\sigma^2$. Here $R,\sigma\ge0$, $\varepsilon>0$. Target: a measurable pair $(\bar x,u)$ with $u\in G(\bar x)$ on every sample path and $\mathbb{E}\|F(\bar x)+u\|\le\varepsilon$. The tuning uses $L,\rho,R,\sigma,\varepsilon$. Costs count all operator samples and resolvent calls.}\par\smallskip
+\caption{Stochastic cohypomonotone inclusions: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticCohypomonotoneInclusion.lean}{StochasticCohypomonotoneInclusion}.}\label{tab:StochasticCohypomonotoneInclusion}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $F$ is $L$-Lipschitz and $G$ is monotone with an everywhere-defined exact resolvent $J_{\gamma G}$ for every $\gamma>0$. For $v\in(F+G)(x)$ and $w\in(F+G)(y)$, $\langle v-w,x-y\rangle\ge-\rho\|v-w\|^2$, with $L>0$ and $0\le2\rho L<1$. A zero $x^\star$ satisfies $\|x_0-x^\star\|\le R$. The jointly measurable oracle $g$ has integrable samples and squared errors, $\int g(x,\omega)\,dp=F(x)$ and $\int\|g(x,\omega)-F(x)\|^2\,dp\le\sigma^2$; samples are IID with law $p$ under $P$. Target: a measurable pair $(\bar x,u)$ with $u\in G(\bar x)$ on every path and $\int\|F(\bar x)+u\|\,dP\le\varepsilon$. Parameters $L,\rho,R,\sigma,\varepsilon$ are supplied; $R,\sigma\ge0$, $\varepsilon>0$. Costs count every $F$ sample and every resolvent evaluation.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,37 +9,38 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RegularizedProxExtragradientCohypomonotone.lean}{Regularized\allowbreak{}Prox\allowbreak{}Extragradient\allowbreak{}Cohypomonotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RegularizedProxExtragradientCohypomonotone.md}{(review)}
-& $\begin{gathered}\mathcal{O}\!\bigl(\tau^{-8}(1+LR/\varepsilon+\sigma^2/\varepsilon^2)\\{}\cdot[\ell+\log(1/\tau)]^4\bigr)\end{gathered}$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RegularizedProxExtragradientCohypomonotone.lean}{Regularized\allowbreak Prox\allowbreak Extragradient\allowbreak Cohypomonotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RegularizedProxExtragradientCohypomonotone.md}{(review)}
+& $\mathcal{O}\!\left(\tau^{-8}\left(1+\frac{LR}{\varepsilon}+\frac{\sigma^2}{\varepsilon^2}\right)\right.$\newline
+$\left.{}\cdot\left[\ell+\log(1/\tau)\right]^4\right)$
+& & \\
 \midrule[1.2pt]
-Inexact Halpern \citep[Rem.~C.7]{sciAKW2026v3}
-& $\mathcal{O}\!\left(\frac{L^2R^2\sigma^2}{d^4\varepsilon^4}\operatorname{polylog}\!\left(2+\frac{LR}{d\varepsilon}+\frac{\sigma}{\varepsilon}\right)\right)$\newline
-$\varepsilon\le\min\{LR,\sigma\}$; includes final residual conversion: one forward--backward step and $\mathcal{O}\!(1+\sigma^2/\varepsilon^2)$ samples.
-& i) \textbf{(1)}: $\varepsilon^{-2}$ instead of $\varepsilon^{-4}$, up to logs, for fixed $L,R,\sigma>0$, $\rho L<1/2$, sufficiently small $\varepsilon$.\newline ii) \textbf{(1)}: direct strong-residual certificate instead of resolvent residual plus conversion.
-& \textbf{(1)}: $\rho L<1/2$ instead of $\rho L<1$; $\tau^{-8}$ diverges as $\rho L\uparrow1/2$, while $d^{-4}$ stays bounded. \\
+\textbf{(2)} \citep[Cor.~4.1, Rem.~C.7]{cohypAKWv3}; stochastic, $\rho<1/L$
+& $\mathcal{O}\!\left(\frac{L^2R^2\sigma^2}{d^4\varepsilon^4}\right.$\newline
+$\left.{}\cdot\operatorname{polylog}\!\left(\frac{LR}{d\varepsilon},\frac{\sigma}{\varepsilon},\frac1d\right)\right)$, for $LR,\sigma\ge\varepsilon$.
+Resolvent residual; conversion to the target adds $\mathcal{O}(1+\sigma^2/\varepsilon^2)$ calls, absorbed here.
+& \textbf{(1)}: $\varepsilon^{-4}\to\varepsilon^{-2}$ up to logs for fixed $L,R,\sigma>0$, $\rho L<1/2$, and small $\varepsilon$. Strong residual with an explicit certificate.
+& \textbf{(1)} requires $\rho<1/(2L)$ instead of $1/L$; $\tau^{-8}$ diverges at $1/(2L)$ while $d^{-4}$ remains bounded. \\
 \midrule
-RAIN$^{++}$ \citep[Thm.~5.4, Prop.~5.3]{sciChenLuo2024v4}\newline
-$G=0$, $F$ a smooth saddle-gradient operator
-& $\begin{gathered}\mathcal{O}\!\bigl((1+LR/\varepsilon+\sigma^2/\varepsilon^2)\\{}\cdot\operatorname{polylog}(2+LR/\varepsilon+\sigma/\varepsilon)\bigr)\end{gathered}$\newline Expected sample count, including conversion to $\mathbb{E}\|F(\bar x)\|\le\varepsilon$.
-& i) \textbf{(1)}: Scope: extends to general composite inclusions.\newline ii) \textbf{(1)}: fixed budget instead of expected random cost.\newline \textbf{(1)}: matches polynomial parameter dependence on the overlap.
-& \textbf{(1)}: polynomial $\tau^{-8}$ loss; excludes $\rho L=1/2$. No established logarithmic improvement. \\
+\textbf{(3)} RAIN$^{++}$ \citep[Thm.~5.4, Prop.~5.3]{sciChenLuo2024v4}; $G=0$, saddle-gradient $F$, $\rho\le1/(2L)$
+& $\mathcal{O}\!\left(\left(1+\frac{LR}{\varepsilon}+\frac{\sigma^2}{\varepsilon^2}\right)\right.$\newline
+$\left.{}\cdot\operatorname{polylog}(L,R,\sigma,\varepsilon^{-1})\right)$ expected $F$ samples, including conversion to the original residual.
+& \textbf{(1)}: Scope extends to composite inclusions. On the unconstrained overlap, matches polynomial parameter dependence, with a fixed budget instead of expected random cost.
+& \textbf{(1)} incurs $\tau^{-8}$ and excludes $\rho=1/(2L)$. \\
 \midrule
-Accumulative regularization \citep[Thm.~2.2]{sciJiLanZhu2026v2}\newline
-Monotone $F$, $G=N_X$, $x_0\in X$; closed convex $X$
-& $\mathcal{O}\!\left(\left(\frac{LR}{\varepsilon}+\frac{\sigma^2\ell^3}{\varepsilon^2}\right)\operatorname{polylog}(2+\ell)\right)$\newline $0<\varepsilon\le LR$; samples plus projections; $\sqrt{\mathbb{E}\operatorname{res}_F(\bar x)^2}\le\varepsilon$.
-& \textbf{(1)}: nonmonotone $F+G$ and general resolvents instead of monotone $F$ and projections. Matches polynomial parameter dependence on the overlap.
-& \textbf{(1)} at $\rho=0$: $\ell^4$ instead of $\ell^3$ noise factor (up to iterated logs); larger deterministic logarithmic overhead; mean residual instead of RMS. \\
+\textbf{(4)} AR \citep[Thm.~2.2]{sciJiLanZhu2026v2}; monotone $F$, $G=N_X$, closed convex $X$, $0<\varepsilon\le LR$
+& $\mathcal{O}\!\left(1+\frac{LR}{\varepsilon}h+\frac{\sigma^2}{\varepsilon^2}\ell^3h^2\right)$ samples and projections; $\sqrt{\mathbb{E}[\operatorname{res}_F(\bar x)^2]}\le\varepsilon$.
+& \textbf{(1)}: Scope extends from monotone constrained VIs to nonmonotone cohypomonotone inclusions with general resolvents; matches polynomial accuracy dependence on the overlap.
+& \textbf{(1)} has larger logarithmic overhead at $\rho=0$ and proves expected norm, rather than root-mean-square residual accuracy. \\
 \midrule
-Inexact Halpern, deterministic \citep[Cor.~2.2, Rem.~2.3]{sciAKW2026v3}\newline $\sigma=0$
-& $\mathcal{O}\!\left(\frac{LR}{d^2\varepsilon}\left[1+\log\!\left(1+\frac{LR}{d\varepsilon}\right)\right]\right)$\newline $0<\varepsilon\le LR$; evaluations plus resolvents; strong residual after conversion.
-& \textbf{(1)}: No established improvement on $\sigma=0$.
-& \textbf{(1)}: narrower $\rho$ range; $\tau^{-8}$ loss and fourth-power rather than single-logarithm overhead. \\
+\textbf{(5)} \citep[Thm.~2.1, Cor.~2.2]{cohypAKWv3}; deterministic, $\sigma=0$, $\rho<1/L$
+& $\mathcal{O}\!\left(\left(1+\frac{LR}{d^2\varepsilon}\right)\right.$\newline
+$\left.{}\cdot\left[1+\log\!\left(1+\frac{LR}{d\varepsilon}\right)\right]\right)$ exact $F$ and resolvent calls.
+& \textbf{(1)}: Scope extends to noisy oracles; no established improvement when $\sigma=0$.
+& \textbf{(1)} has larger logarithmic and $\rho$ dependence, and requires $\rho<1/(2L)$ instead of $1/L$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\tau=1-2\rho L$, $d=1-\rho L$, $\ell=1+\log(1+LR/\varepsilon)$; $R$ bounds initial distance, $\sigma^2$ bounds variance. $J_{\gamma G}=(I+\gamma G)^{-1}$; $N_X$ is the normal cone; $\operatorname{res}_F(x)=\operatorname{dist}(0,F(x)+N_X(x))$. $\operatorname{polylog}(t)$ denotes the unspecified polynomial in $1+\log t$ retained from a cited logarithm-suppressed guarantee; it need not be the same polynomial across rows.
+\item[] \textbf{Abbr:} $\tau=1-2\rho L$; $d=1-\rho L$; $\ell=1+\log(1+LR/\varepsilon)$; $h=1+\log\ell$; $J_{\gamma G}=(I+\gamma G)^{-1}$; $N_X$ is the normal cone; $\operatorname{res}_F(x)=\operatorname{dist}(0,F(x)+N_X(x))$; $\mathbb{E}$ is expectation under the sampling law; $\operatorname{polylog}$ denotes the cited guarantee's unspecified logarithmic factors in the displayed parameters, with logarithms bounded below by one.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

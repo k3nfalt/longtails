@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Heavy-tailed stochastic optimization on the simplex: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdaptiveHeavyTailSimplex.lean}{Adaptive\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Simplex}.}\label{tab:AdaptiveHeavyTailSimplex}
-\parbox{\linewidth}{\footnotesize On $\Delta_d=\{x\in\mathbb{R}^d:x\ge0,\ \sum_i x_i=1\}$, $d\ge2$, let $f:\mathbb{R}^d\to\mathbb{R}$ be convex on $\Delta_d$, differentiable there, with a constrained minimizer $x_\star$ and $\|\nabla f(x)-\nabla f(y)\|_\infty\le L\|x-y\|_1$ for $x,y\in\Delta_d$, $L>0$. The jointly measurable oracle uses IID samples, is integrable and unbiased, and satisfies $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|_\infty^p\le\sigma^p$, $1<p\le2$, $\sigma\ge0$. Target: $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$, $\varepsilon>0$, $0<\delta<1$. Costs count individual stochastic-gradient calls.}\par\smallskip
+\caption{Heavy-tailed stochastic convex optimization on the simplex: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdaptiveHeavyTailSimplex.lean}{AdaptiveHeavyTailSimplex}.}\label{tab:AdaptiveHeavyTailSimplex}
+\parbox{\linewidth}{\footnotesize On $\Delta_d=\{x\in\mathbb R^d:x_i\ge0,\ \sum_i x_i=1\}$, $d\ge2$, $f$ is convex, has an ambient gradient at every feasible point, and satisfies $\|\nabla f(x)-\nabla f(y)\|_\infty\le L\|x-y\|_1$ for feasible $x,y$, with $L>0$. A constrained minimizer $x_\star$ exists. The jointly measurable oracle uses IID samples of law $\nu$, with integrable replies and noise moments, $\int g(x,\omega)\,d\nu=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|_\infty^p\,d\nu\le\sigma^p$, $1<p\le2$, $\sigma\ge0$. Target: a measurable feasible output with $P\{f(\mathrm{output})-f(x_\star)>\varepsilon\}\le\delta$, $\varepsilon>0$, $0<\delta<1$. Public inputs are $d,L,\delta$; the stopping budget also uses $p,\sigma,\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,34 +9,50 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveEntropicHeavyTailConvex.lean}{Adaptive\allowbreak{}Entropic\allowbreak{}Heavy\allowbreak{}Tail\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveEntropicHeavyTailConvex.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&\gamma+\sqrt{\frac{Lb}{\varepsilon}\left[\gamma+\log\!\left(2+\frac{Lb}{\varepsilon}\right)\right]}\\[-1pt]&{}+b\left(\frac{2^{38}\sigma}{\varepsilon}\right)^q\end{aligned}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveEntropicHeavyTailConvex.lean}{Adaptive\allowbreak Entropic\allowbreak Heavy\allowbreak Tail\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveEntropicHeavyTailConvex.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}\gamma+\sqrt{\frac{LH}{\varepsilon}\left[\gamma+\log\!\left(2+\frac{LH}{\varepsilon}\right)\right]}\\ {}+H\left(\frac{2^{38}\sigma}{\varepsilon}\right)^q\end{gathered}\right)$ & & \\
 \midrule[1.2pt]
-Clipped-SMD \citep[Thm.~3.1]{ahtNguyen2023v2}; Derived bound; entropy geometry, global smoothness; includes pilot calls
-& $\mathcal{O}\!\left(\gamma+\frac{\gamma[Lh+\sqrt h(G_0+\sigma)]}{\varepsilon} {}+\gamma\left(\frac{\sigma\sqrt h}{\varepsilon}\right)^q\right)$
-& i) \textbf{(1)}: $\varepsilon^{-1}\to\varepsilon^{-1/2}$ up to logs; removes $G_0$.\newline ii) \textbf{(1)}: no $p,\sigma$ in updates.\newline iii) \textbf{(1)}: noise factor $\gamma h^{q/2}\to2^{38q}b$ when smaller.
-& \textbf{(1)}: stationary IID and simplex only; stopping needs $p,\sigma,\varepsilon$. Noise gain requires very large $d$ for fixed $p<2,\delta$. \\
+\textbf{(2)} Clipped-SMD \citep{nguyen2023heavyv2}, Thm.~3.1 (known horizon); entropic specialization with global smoothness and pilot
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}\gamma+\frac{\gamma[LD+\sqrt D(G_0+\sigma)]}{\varepsilon}\\ {}+\gamma\left(\frac{\sigma\sqrt D}{\varepsilon}\right)^q\end{gathered}\right)$
+& \textbf{(1)}: No $p,\sigma$ in updates; smoothness term $\varepsilon^{-1/2}$ up to logs instead of $\varepsilon^{-1}$; removes $G_0$. For fixed $p<2,\delta$, stochastic dimension factor $D^{q/2}\to D$.
+& \textbf{(1)}: Stationary IID rather than conditional moments; simplex rather than general Bregman geometry. Large $2^{38q}$ penalty: dimensional gain requires roughly $D^{q/2-1}\gg2^{38q}$. \\
 \midrule
-Clipped-ASMD \citep[Thm.~4.1]{ahtNguyen2023v2}; special case $\nabla f(x_\star)=0$; global smoothness
-& $\mathcal{O}\!\left(1+\gamma\sqrt{\frac{Lh}{\varepsilon}}+\gamma\left(\frac{\sigma\sqrt h}{\varepsilon}\right)^q\right)$
-& i) \textbf{(1)}: arbitrary constrained minimizers.\newline ii) \textbf{(1)}: no $p,\sigma,T$ in updates.\newline iii) \textbf{(1)}: smaller noise term if $2^{38q}b<\gamma h^{q/2}$; smaller deterministic term if $b[\gamma+\log(2+Lb/\varepsilon)]<\gamma^2h$.
-& \textbf{(1)}: extra $\sqrt{\log(L/\varepsilon)}$ deterministic factor at fixed $d,\delta$, $\varepsilon\downarrow0$; stationary IID, simplex only. Budget still needs $p,\sigma,\varepsilon$. \\
-\midrule
-Prox-clipped-SSTM-shift \citep[Thm.~2.7]{ahtGorbunov2024v2}; $n=1$, Euclidean assumptions on $B_{5\sqrt2R}(x_\star)$
-& $\mathcal{O}\!\left(\begin{aligned}&\left(1+\sqrt{\frac{L_2R^2}{\varepsilon}}\right)\ell^2\\[-1pt]&{}+\sqrt{\frac{R\zeta_\star}{\varepsilon}}\ell^{3/2}+\left(\frac{\sigma_2R}{\varepsilon}\right)^q\ell\end{aligned}\right)$
-& i) \textbf{(1)}: no $p,\sigma$ in updates.\newline ii) \textbf{(1)}: on a common neighborhood extension, worst-case $L_2=dL$, $\sigma_2=\sqrt d\sigma$, $R\le\sqrt2$ gives polynomial-to-logarithmic dimension dependence.
-& \textbf{(1)}: simplex only; baseline allows composite objectives and unbounded domains. Otherwise not comparable; if $L_2=L$, $\sigma_2=\sigma$, \textbf{(1)} retains extra dimension logarithms. \\
-\midrule
-ASMD \citep[Thm.~3.3]{ahtLiu2026v1}; Derived bound via Markov, entropy geometry, $M=0$
-& $\mathcal{O}\!\left(\begin{aligned}&1+\delta^{-1/p}\sqrt{\frac{Lh}{\varepsilon}}\\[-1pt]&{}+\delta^{-2/(p-1)}\left(\frac{\sigma\sqrt h}{\varepsilon}\right)^q\end{aligned}\right)$
-& i) \textbf{(1)}: logarithmic instead of polynomial confidence dependence.\newline ii) \textbf{(1)}: no $p,\sigma$ in updates; this tuned bound needs them. Unknown-$p$ alternative is slower, requiring $p>4/3$.
-& \textbf{(1)}: requires ambient gradients and simplex geometry; stopping still needs $p,\sigma,\varepsilon$. \\
+\textbf{(3)} Clipped-ASMD \citep{nguyen2023heavyv2}, Thm.~4.1; globally smooth special case $\nabla f(x_\star)=0$
+& $\displaystyle\mathcal{O}\!\left(1+\gamma\sqrt{\frac{LD}{\varepsilon}}+\gamma\left(\frac{\sigma\sqrt D}{\varepsilon}\right)^q\right)$
+& \textbf{(1)}: Scope: arbitrary constrained minimizers. Updates need neither $p$ nor $\sigma$. On the overlap, deterministic term improves when $H[\gamma+\log(2+LH/\varepsilon)]\ll\gamma^2D$; no improved accuracy exponent.
+& \textbf{(1)}: At fixed $d,\delta$, deterministic term loses $\sqrt{\log(L/\varepsilon)}$ as $L/\varepsilon\to\infty$; larger noise constant. Stationary IID and simplex restriction; stopping still needs $p,\sigma,\varepsilon$. \\
+
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $q=p/(p-1)$, $h=\log d$, $\gamma=1+\log(1/\delta)$, $b=\log(d/\delta)$; $x_0=(1/d,\ldots,1/d)$, $G_0=\|\nabla f(x_0)\|_\infty$; $T$ is the update horizon. $L_2,\sigma_2$ are Euclidean smoothness and noise constants, $R\ge\|x_0-x_\star\|_2$, $\zeta_\star\ge\|\nabla f(x_\star)\|_2$; $\ell=1+\log\!\bigl((1+\sqrt{L_2R^2/\varepsilon}+\sqrt{R\zeta_\star/\varepsilon}+(\sigma_2R/\varepsilon)^q)/\delta\bigr)$. $M$ is the nonsmooth component of Liu's $(L,M)$-smoothness condition. Baseline $\mathcal{O}$ constants are for fixed $p$; the displayed $2^{38q}$ is not uniform as $p\downarrow1$.
+\item[] \textbf{Abbr:} $q=p/(p-1)$, $D=\log d$, $\gamma=1+\log(1/\delta)$, $H=D+\gamma$; $x_0=(1/d,\ldots,1/d)$ and $G_0=\|\nabla f(x_0)\|_\infty$. Costs count individual stochastic-gradient replies, including the pilot in \textbf{(2)}; prior entropic bounds use entropy radius at most $\log d$. In \textbf{(4)}, $L_2$ and $\sigma_2$ are Euclidean smoothness and noise-moment constants, $R\ge\|x_0-x_\star\|_2$, $\zeta_\star\ge\|\nabla f(x_\star)\|_2$, and $\ell=1+\log\!\bigl((2+\sqrt{L_2R^2/\varepsilon}+\sqrt{R\zeta_\star/\varepsilon}+(\sigma_2R/\varepsilon)^q)/\delta\bigr)$. Prior-work big-$\mathcal{O}$ constants may depend on fixed $p$; the explicit $2^{38q}$ in \textbf{(1)} is retained because it is nonuniform as $p\downarrow1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
+\begin{table}[tp]
+\centering
+\caption{AdaptiveHeavyTailSimplex (continued).}
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(4)} Prox-clipped-SSTM-shift \citep{gorbunov2024heavyv2}, Thm.~2.7, $n=1$; Euclidean regularity on $B_{5\sqrt2 R}(x_\star)$
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}\left(1+\sqrt{\frac{L_2R^2}{\varepsilon}}\right)\ell^2\\ {}+\sqrt{\frac{R\zeta_\star}{\varepsilon}}\,\ell^{3/2}+\left(\frac{\sigma_2R}{\varepsilon}\right)^q\ell\end{gathered}\right)$
+& \textbf{(1)}: Updates need neither $p$ nor $\sigma$. Rates not comparable on the full setup. On a common regular extension, worst-case $L_2=dL$, $\sigma_2=\sqrt d\sigma$, $R\le\sqrt2$ give polynomial rather than logarithmic dimension factors.
+& \textbf{(1)}: Simplex only; \textbf{(4)} covers composite objectives and unbounded domains. Conversion gains need not hold when $L_2=L$, $\sigma_2=\sigma$; \textbf{(1)} retains its noise factor $H$. \\
+\midrule
+\textbf{(5)} ASMD \citep{liu2026expectationv1}, Thm.~3.3, known-$p,\sigma,T$ tuning; Derived bound (Markov)
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}1+\delta^{-1/p}\sqrt{\frac{LD}{\varepsilon}}\\ {}+\delta^{-2/(p-1)}\left(\frac{\sigma\sqrt D}{\varepsilon}\right)^q\end{gathered}\right)$
+& \textbf{(1)}: Logarithmic instead of polynomial confidence cost for the shared probability target; updates need neither $p$ nor $\sigma$. \textbf{(5)} derives from a bound on $\mathbb E[\mathrm{gap}^{p/2}]$.
+& \textbf{(1)}: Requires an ambient gradient and the simplex; \textbf{(5)} allows general composite Bregman problems. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=p/(p-1)$, $D=\log d$, $\gamma=1+\log(1/\delta)$, $H=D+\gamma$; $x_0=(1/d,\ldots,1/d)$ and $G_0=\|\nabla f(x_0)\|_\infty$. Costs count individual stochastic-gradient replies, including the pilot in \textbf{(2)}; prior entropic bounds use entropy radius at most $\log d$. In \textbf{(4)}, $L_2$ and $\sigma_2$ are Euclidean smoothness and noise-moment constants, $R\ge\|x_0-x_\star\|_2$, $\zeta_\star\ge\|\nabla f(x_\star)\|_2$, and $\ell=1+\log\!\bigl((2+\sqrt{L_2R^2/\varepsilon}+\sqrt{R\zeta_\star/\varepsilon}+(\sigma_2R/\varepsilon)^q)/\delta\bigr)$. Prior-work big-$\mathcal{O}$ constants may depend on fixed $p$; the explicit $2^{38q}$ in \textbf{(1)} is retained because it is nonuniform as $p\downarrow1$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

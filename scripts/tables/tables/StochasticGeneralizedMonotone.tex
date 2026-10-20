@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic generalized-Lipschitz monotone root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Monotone}.}\label{tab:StochasticGeneralizedMonotone}
-\parbox{\linewidth}{\footnotesize A continuous monotone map $F:E\to E$ on a finite-dimensional real Hilbert space satisfies $\|F(x)-F(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|F(z)\|)\|x-y\|$ and has a root $x_\star$ with $\|x_0-x_\star\|\le R$. The jointly measurable oracle uses IID samples, with integrable $g(x,\xi)$ and squared error, $\mathbb{E} g(x,\xi)=F(x)$, and $\mathbb{E}\|g(x,\xi)-F(x)\|^2\le\sigma^2$. Here $L_0,L_1,R,\sigma\ge0$, $\varepsilon>0$, and $0<\delta<1$. Target: $\mathbb{P}(\|F(X)\|>\varepsilon)\le\delta$.}\par\smallskip
+\caption{Stochastic generalized monotone root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedMonotone.lean}{StochasticGeneralizedMonotone}.}\label{tab:StochasticGeneralizedMonotone}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space, $F$ is continuous and monotone, $F(x^\star)=0$, $\|x_0-x^\star\|\le R$, and $\|F(x)-F(y)\|\le(L_0+L_1\sup_{z\in[x,y]}\|F(z)\|)\|x-y\|$. The jointly measurable oracle satisfies $\int g(x,\omega)\,dp=F(x)$ and $\int\|g(x,\omega)-F(x)\|^2\,dp\le\sigma^2$, with integrable values and squared errors, and IID samples of law $p$ under $P$. Here $L_0,L_1,R,\sigma\ge0$, $\varepsilon>0$, $0<\delta<1$. Target: measurable output $X$ with $P\{\|F(X)\|>\varepsilon\}\le\delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,33 +9,30 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedMonotone.md}{(review)}
-& $\begin{gathered}\mathcal{O}\!\left(\left[1+\tfrac{L_0R}{\varepsilon}+(L_1R)^2+\tfrac{\sigma^2}{\varepsilon^2}\right]\right.\\[-2pt]\left.{}\cdot\ell^3[\ell+\log(1/\delta)]\right)\end{gathered}$\par
-All samples, batches and repetitions included.
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedMonotone.lean}{Stochastic\allowbreak Generalized\allowbreak Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedMonotone.md}{(review)}
+& $\mathcal{O}\!\left(\left[1+\frac{L_0R}{\varepsilon}+(L_1R)^2+\frac{\sigma^2}{\varepsilon^2}\right]\right.$\newline
+$\left.{}\cdot\log^3 Q\,\log(Q/\delta)\right)$ stochastic calls, including batches and repetitions.
+& & \\
 \midrule[1.2pt]
-Accumulative regularization \citep[Thm.~2.2]{sgmJiLanZhu2026v1}
-& $\begin{gathered}\mathcal{O}\!\left(\left[1+\tfrac{L_0R}{\varepsilon}\right](1+\log\ell_0)\right.\\[-2pt]\left.{}+\tfrac{\sigma^2}{\varepsilon^2}\ell_0^3(1+\log\ell_0)^2\right)\end{gathered}$\par
-Special case $L_1=0$, $0<\varepsilon\le L_0R$; stochastic calls for $\mathbb{E}\|F(X)\|^2\le\varepsilon^2$.
-& i) \textbf{(1)}: Scope: permits $L_1>0$.\newline ii) \textbf{(1)}: high probability under finite variance.\newline iii) \textbf{(1)}: matches polynomial accuracy dependence at $L_1=0$.
-& \textbf{(1)}: extra logarithmic overhead at $L_1=0$; covers roots only, not constrained VIs. \\
+\textbf{(2)} \citep{sgmJiLanZhu2026v1}, Thm.~2.2; globally Lipschitz special case $L_1=0$, $L_0>0$
+& $\mathcal{O}\!\left(\frac{L_0R}{\varepsilon}h+\frac{\sigma^2}{\varepsilon^2}\ell^3h^2\right)$ stochastic calls; $\varepsilon\le L_0R$; $\bigl(\mathbb E\|F(X)\|^2\bigr)^{1/2}\le\varepsilon$ on the unconstrained restriction.
+& \textbf{(1)}: Scope extends to $L_1>0$ with polynomial dependence and additive variance cost. At $L_1=0$, matches polynomial accuracy dependence; gives high-probability accuracy under finite variance.
+& \textbf{(1)}: Extra logarithmic overhead at $L_1=0$, including confidence dependence; no constrained-VI guarantee. \\
 \midrule
-Clipped Korpelevich \citep[Thm.~4.4]{sgmVankovNedicSankar2025v2}
-& No comparable residual budget: expected squared-distance guarantee, with two stochastic calls per iteration.\par
-Restricted to $p$-quasi-sharp operators ($p\ge2$, $\mu>0$) and $0<\alpha\le\tfrac12$ for rates.
-& i) \textbf{(1)}: no quasi-sharpness.\newline ii) \textbf{(1)}: residual guarantee at $\alpha=1$; high probability instead of expected distance. Rates not comparable.
-& \textbf{(1)}: requires monotonicity; excludes the baseline's constrained and structured non-monotone problems. \\
+\textbf{(3)} \citep{sgmVankov2025v2}, Thm.~4.4, $p=2$; quasi-sharp, $0<\alpha\le\tfrac12$
+& $\mathcal{O}\!\left(1+\frac{dR}{a\sqrt\tau}+\frac{\sigma^2+K_1\sigma^{2\alpha}}{a^2\tau}\right)$ stochastic calls for $\mathbb E\,\mathrm{dist}^2(X,X^\star)\le\tau$; two calls per iteration.
+& \textbf{(1)}: No quasi-sharpness assumption; permits $\alpha=1$, including monotone operators with $\langle F(x),x-x^\star\rangle=0$ near roots. Residual and distance rates are not comparable.
+& \textbf{(1)}: Does not cover constrained or structured non-monotone problems covered by \textbf{(3)}. \\
 \midrule
-Anchored extragradient \citep{sgmAnchoredRepository2026}
-& $\begin{gathered}\mathcal{O}\!\left(1+\tfrac{L_0R}{\varepsilon}\right.\\[-2pt]\left.{}+(1+L_1R)\log\!\left[1+\tfrac{(L_0+L_1G)R}{\varepsilon}\right]\right)\end{gathered}$\par
-Exact calls; special case $\sigma=0$, $L_0>0$, $\|F(x_0)\|\le G$.
-& i) \textbf{(1)}: scope permits $\sigma>0$.\newline ii) \textbf{(1)}: no initial-residual bound $G$ in stopping budget.
-& \textbf{(1)} at $\sigma=0$: quadratic $L_1R$ term and extra logarithms; loses the anytime deterministic last-iterate guarantee; needs $R,\sigma,\varepsilon,\delta$ in updates. \\
+\textbf{(4)} Anchored extragradient \citep{cgmRepositoryAnchored}; exact-oracle special case $\sigma=0$, $L_0>0$
+& $\mathcal{O}\!\left(1+\frac{L_0R}{\varepsilon}+(1+L_1R)\right.$\newline
+$\left.{}\cdot\log\!\left(1+\frac{(L_0+L_1G)R}{\varepsilon}\right)\right)$ exact calls; deterministic residual accuracy.
+& \textbf{(1)}: Scope extends to noisy finite-variance oracles; no initial-residual bound $G$ needed for its budget.
+& \textbf{(1)}: At $\sigma=0$, quadratic rather than linear $L_1R$ term, with additional logarithms; loses anytime last-iterate guarantee. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\ell=1+\log(1+L_0R/\varepsilon+L_1R)$; $\ell_0=1+\log(1+L_0R/\varepsilon)$; $G$ bounds $\|F(x_0)\|$; $[x,y]$ is the line segment. In the quasi-sharp baseline, $X^\star$ is the solution set, $p$ and $\mu$ satisfy $\langle F(x),x-x_\star\rangle\ge\mu\,\operatorname{dist}(x,X^\star)^p$ for all $x_\star\in X^\star$, and $\alpha$ is the exponent on $\|F\|$ in generalized Lipschitz continuity. Costs count individual oracle evaluations; $\log$ is natural.
+\item[] \textbf{Abbr:} $Q=2+L_0R/\varepsilon+L_1R$, $\ell=1+\log(L_0R/\varepsilon)$ and $h=1+\log\ell$ in \textbf{(2)}; $G\ge\|F(x_0)\|$ in \textbf{(4)}. In \textbf{(3)}, $X^\star$ is the solution set, $\tau>0$ is squared-distance accuracy, $R^2\ge\mathbb E\,\mathrm{dist}^2(x_0,X^\star)$, and quasi-sharpness means $\langle F(x),x-x^\star\rangle\ge\mu\,\mathrm{dist}^2(x,X^\star)$, $\mu>0$. The exponent $\alpha$ replaces $1$ on the segment operator norm in generalized Lipschitz continuity; its constants are denoted $\bar L_0,\bar L_1$. Set $c_\alpha=2^{\alpha^2/(1-\alpha)}$, $K_0=\bar L_0(c_\alpha+1)$, $K_1=\bar L_1c_\alpha3^\alpha$, $K_2=\bar L_1^{1/(1-\alpha)}c_\alpha3^\alpha(1-\alpha)^{\alpha/(1-\alpha)}$, $a=\mu\min\{1,[2(C_F+\sigma)]^{-1}\}$, $d=\max\{4\mu,2\sqrt3(K_0+K_1+K_2)\}$, where $C_F\ge\sup_k\mathbb E\|F(x_k)\|$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

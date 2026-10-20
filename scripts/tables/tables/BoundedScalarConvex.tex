@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedScalarConvex.lean}{Bounded\allowbreak{}Scalar\allowbreak{}Convex}.}\label{tab:BoundedScalarConvex}
-\parbox{\linewidth}{\footnotesize On $C=[\mathrm{lower},\mathrm{upper}]\subset\mathbb{R}$, $f$ is convex and $H$-Lipschitz, $H>0$. A minimizer $x_\star\in C$ satisfies $|x_0-x_\star|\le R$, with $x_0\in C$ and $R\ge0$. Jointly measurable replies $g_t$ obey $|g_t|\le H$ almost surely and $\mathbb{E}[g_t\mid\mathcal{F}_{t-1}]\in\partial_C f(x_t)$ for every past-measurable query in $C$. Target: measurable feasible output with integrable gap and $\int(f(\widehat x)-f(x_\star))\,dP\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedScalarConvex.lean}{BoundedScalarConvex}.}\label{tab:BoundedScalarConvex}
+\parbox{\linewidth}{\footnotesize Convex, $H$-Lipschitz $f$ on $C=[\mathrm{lower},\mathrm{upper}]\subset\mathbb R$, with $H>0$, $x_0\in C$, and a minimizer $x_\star\in C$ satisfying $|x_0-x_\star|\le R$, $R\ge0$. Replies are jointly measurable in query and seed; at every query measurable with respect to the revealed-seed past $\mathcal F_t$, $|g_t|\le H$ almost surely and $\mathbb E_P[g_t\mid\mathcal F_t]\in\partial_C f(x_t)$. No independence is assumed. Target: measurable $x_{\rm out}\in C$ with integrable gap and $\int(f(x_{\rm out})-f(x_\star))\,dP\le\varepsilon$, $\varepsilon>0$. The setup imposes no algorithm restriction; \textbf{(1)} constructs constant-step projected SGD and returns its last iterate.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,29 +9,27 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BoundedScalarConvex.lean}{Bounded\allowbreak{}Scalar\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BoundedScalarConvex.md}{(review)}
-& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BoundedScalarConvex.lean}{Bounded\allowbreak Scalar\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BoundedScalarConvex.md}{(review)}
+& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$ & & \\
 \midrule[1.2pt]
-Linear-decay SGD \citep[Thm.~3.4]{liu2026lastv4momentum}
+\textbf{(2)} Linear-decay SGD \citep[Thm.~3.4, v4]{bscLiuZhou2026}
 & $\mathcal{O}(1+H^2R^2/\varepsilon^2)$
-& \textbf{(1)}: Matches known rate; same last-iterate guarantee and $H,R,\varepsilon$ tuning; constant-step projected SGD.
-& \textbf{(1)}: scalar compact interval and bounded replies; baseline permits any dimension, unbounded domains, finite-variance noise. \\
+& \textbf{(1)}: Matches known rate and last-iterate guarantee; constant-step analysis instead of linear decay. No parameter-knowledge gain.
+& \textbf{(1)} requires scalar, compact domains and bounded replies; \textbf{(2)} allows arbitrary dimension, unbounded domains and finite-variance noise. \\
 \midrule
-Scheduled SGD \citep[Thm.~1]{bscJain2019v2}\newline Independent-noise restriction
-& $\mathcal{O}(1+H^2D^2/\varepsilon^2)$
-& \textbf{(1)}: i) $R^2$ instead of $D^2$ when $R<D$; already matched by linear decay.\newline ii) Adapted instead of independent noise.
-& \textbf{(1)}: scalar only; baseline permits any dimension. \\
+\textbf{(3)} Scheduled SGD \citep[Thm.~1, full version]{bscJainEtAl2019}
+& $\mathcal{O}(1+H^2D^2/\varepsilon^2)$\newline Independent-noise restriction.
+& \textbf{(1)}: $R^2$ instead of $D^2$; factor $(D/R)^2$ when $0<R<D$, $\varepsilon\le HR$. Allows adapted replies. \textbf{(2)} already removes diameter dependence.
+& \textbf{(1)} is scalar; \textbf{(3)} allows arbitrary dimension. \\
 \midrule
-Constant-step SGD \citep[Thm.~2]{bscBeretta2026v1}\newline Additive IID, state-independent noise
-& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$\newline On the bounded-reply overlap.
-& \textbf{(1)}: constant-step analysis extends to adapted, state- and time-dependent bounded replies; matches the rate on the overlap.
-& \textbf{(1)}: requires bounded replies and a compact interval; baseline permits unbounded noise and domains. \\
+\textbf{(4)} Constant-step scalar SGD \citep[Thm.~2, Eq.~(2), v1]{bscBerettaEtAl2026}
+& $\mathcal{O}(1+H^2R^2/\varepsilon^2)$\newline Bounded-reply overlap; additive, state-independent i.i.d. noise, $L=H$, $\sigma\le H$.
+& \textbf{(1)}: Matches rate; extends constant-step last-iterate analysis to bounded, history-, state- and time-dependent replies.
+& \textbf{(1)} requires bounded replies and compact intervals; \textbf{(4)} permits unbounded finite-variance noise and unbounded intervals. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $D=\mathrm{upper}-\mathrm{lower}$; $\mathcal{F}_{t-1}$ is the revealed-seed past; $\partial_C f$ denotes relative subgradients; $P$ is the execution law. Costs count individual stochastic-subgradient calls. All displayed guarantees concern expected last-iterate objective gaps.
+\item[] \textbf{Abbr:} Costs count stochastic-subgradient calls. $D=\mathrm{upper}-\mathrm{lower}$; $P$ is the oracle trajectory law; $\partial_C$ denotes relative subgradients. In \textbf{(4)}, $L$ is the Lipschitz bound and $\sigma^2$ bounds noise variance.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

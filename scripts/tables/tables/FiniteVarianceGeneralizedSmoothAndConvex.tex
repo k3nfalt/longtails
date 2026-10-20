@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Finite-variance accelerated convex optimization under generalized smoothness. Setup: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean}{Finite\allowbreak{}Variance\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:FiniteVarianceGeneralizedSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space has differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. IID samples feed a jointly measurable oracle $g$, with $\mathbb{E} g(x,\xi)=\nabla f(x)$ and $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$; the vector and squared error are integrable. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$. Costs count all stochastic-gradient samples, including pilot/correction batches and padding.}\par\smallskip
+\caption{Finite-variance generalized-smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteVarianceGeneralizedSmoothAndConvex.lean}{FiniteVarianceGeneralizedSmoothAndConvex}.}\label{tab:FiniteVarianceGeneralizedSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex $f$ on a separable real Hilbert space has differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$ and $f(x_0)-f(x^\star)\le\Delta$. IID samples with marginal $p$ and joint law $P$ feed a jointly measurable oracle $g$, with integrable $g(x,\cdot)$ and squared error, $\int g(x,\omega)\,dp=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp\le\sigma^2$. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: measurable final output $\hat x$ with $P\{f(\hat x)-f(x^\star)>\varepsilon\}\le\delta$. Costs count all stochastic-gradient samples, including pilots, corrections, and padding.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,47 +9,39 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveRobustGeneralizedAcceleratedConvex.lean}{Adaptive\allowbreak{}Robust\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveRobustGeneralizedAcceleratedConvex.md}{(review)}
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveRobustGeneralizedAcceleratedConvex.lean}{Adaptive\allowbreak Robust\allowbreak Generalized\allowbreak Accelerated\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveRobustGeneralizedAcceleratedConvex.md}{(review)}
 & $\begin{aligned}[t]
-\mathcal{O}\!\Bigl(& (W+\sqrt V\,\ell)\\
-&\times\Bigl[1+\frac{\log(eM/\delta)}{\log(e+W\sqrt M/(V\ell^2))}\Bigr]\\
-&+V\ell+\sqrt V\,\ell\log(eM/\delta)\Bigr)
+\mathcal{O}\Bigl(& (W+v\ell)\Bigl[1+\frac{\log(eM/\delta)}{\log(e+W\sqrt M/(v^2\ell^2))}\Bigr]\\
+&+v^2\ell+v\ell\log(eM/\delta)\Bigr).
 \end{aligned}$
-& ---
-& --- \\
+\par For fixed $c>0$, $\delta\ge(e+W)^{-c}$ implies $\mathcal{O}_c(W+v^2\ell)$.
+& & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteVarianceGeneralizedAcceleratedConvex.lean}{Finite\allowbreak{}Variance\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteVarianceGeneralizedAcceleratedConvex.md}{(review)}
-& $\mathcal{O}\!\bigl((W+V\ell^2)\Lambda\bigr)$
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteVarianceGeneralizedAcceleratedConvex.lean}{Finite\allowbreak Variance\allowbreak Generalized\allowbreak Accelerated\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteVarianceGeneralizedAcceleratedConvex.md}{(review)}
+& $\mathcal{O}\!\left((W+v^2\ell^2)\log\frac{e(1+T+q+\lambda)}{\delta}\right)$ & & \\
 \midrule[1.2pt]
-RCSAG \citep[Thm.~9, App.~C]{ldg2026heavyv1}\newline Derived bound: $E=\mathbb{R}^d$, $p=2$, constant variance, $\Delta>\varepsilon$.
-& $\begin{aligned}[t]\mathcal{O}\!\Bigl(&\Bigl[\lambda+R\sqrt{L_0/\varepsilon}\\&+L_1R J+V\Bigr]\log\frac{e(1+\lambda)}{\delta}\Bigr)\end{aligned}$
-& i) \textbf{(1)}, \textbf{(2)}: curvature $L_1RJ\to(L_1R\lambda)^{2/3}$, up to logarithms. Total gain: $L_1R\to\infty$, $L_0R^2=\varepsilon$, $\sigma R\le\varepsilon$, $\Delta=4\varepsilon$, $\delta=1/2$.\newline
- ii) \textbf{(1)}: $\mathcal{O}_c(W+V\ell)$ if $\delta\ge(e+W)^{-c}$; removes optimization confidence logarithm.\newline
- iii) \textbf{(1)}, \textbf{(2)}: Scope: separable Hilbert spaces; baseline stated on $\mathbb{R}^d$.
-& \textbf{(1)}, \textbf{(2)}: require Hessian bound; exclude $p<2$ and gradient/gap-dependent noise.\newline
-\textbf{(2)}: noise $V\ell^2\Lambda$ instead of $V\log\frac{e(1+\lambda)}\delta$; extra optimization logarithm.\newline
-\textbf{(1)}: $\sqrt V\,\ell^2$ can worsen total cost for tiny $\delta$. \\
+\textbf{(3)} RCSAG \citep{fvLobanov2026v1}, Thm.~9, App.~C; derived bound on $\mathbb R^d$, $p=2$, constant variance, $\Delta>\varepsilon$.
+& $\mathcal{O}\!\left((\lambda+\sqrt T+qJ+v^2)\log\frac{e(1+\lambda)}{\delta}\right)$
+& \textbf{(1)}: removes the $\ell$ factor on $\sqrt T$ when $\delta\ge(e+W)^{-c}$ and optimization dominates.
+\par \textbf{(1)}, \textbf{(2)}: for $T=1$, $v\le1$, $\Delta=4\varepsilon$, $\delta=1/2$, $q\to\infty$, cost $\mathcal{O}(q)$ becomes $\mathcal{O}(q^{2/3})$, $\mathcal{O}(q^{2/3}\log q)$, respectively. Extend to separable Hilbert spaces.
+& \textbf{(1)}, \textbf{(2)}: require a Hessian bound and finite variance; \textbf{(3)} permits first-order local smoothness, $p<2$, gradient/gap-dependent noise.
+\par \textbf{(1)}: worse for $T=v=1$, $q=0$, $\Delta=2\varepsilon$, $\delta\to0$: $\mathcal{O}(\ell^2)$ versus $\mathcal{O}(\ell)$.
+\par \textbf{(2)}: extra noise and optimization logarithms. \\
 \midrule
-Clipped accelerated mirror descent \citep[Thm.~4.1]{nen2023clippedv2}\newline Special case: $E=\mathbb{R}^d$, $L_1=0$, $p=2$, Euclidean geometry.
-& $\mathcal{O}\!\bigl(1+R\sqrt{L_0/\varepsilon}\,\ell+V\ell\bigr)$
-& i) \textbf{(1)}, \textbf{(2)}: scope $L_1\ge0$.\newline
- ii) \textbf{(1)}: $R\sqrt{L_0/\varepsilon}\,\ell\to R\sqrt{L_0/\varepsilon}$ if $\delta\ge(e+L_0R^2/\varepsilon)^{-c}$, using $\Delta\le L_0R^2/2$. Noise unchanged; total gain requires optimization dominance; none at constant confidence.
-& \textbf{(1)}, \textbf{(2)}: need $\Delta$ in addition; Hessian regularity; exclude $p<2$ and general mirror geometries.\newline
-\textbf{(1)}: tiny-$\delta$ overhead.\newline
-\textbf{(2)}: extra logarithmic overhead. \\
+\textbf{(4)} Clipped accelerated mirror descent \citep{fvNguyen2023v2}, Thm.~4.1; special case $L_1=0$, $p=2$, Euclidean geometry.
+& $\mathcal{O}\!\left(1+(\sqrt T+v^2)\ell\right)$
+& \textbf{(1)}: $\mathcal{O}(\sqrt T)$ versus $\mathcal{O}(\sqrt T\log T)$ for $T\to\infty$, $\delta=T^{-1}$, $v^2\ell\le\sqrt T$, using $\Delta\le L_0R^2/2$. No gain at constant $\delta$. \textbf{(1)}, \textbf{(2)} extend to $L_1>0$.
+& \textbf{(1)}, \textbf{(2)} need $\Delta$ and differentiable gradients; \textbf{(4)} allows $p<2$ and mirror geometries. \textbf{(1)} has the tiny-$\delta$ loss shown against \textbf{(3)}. \\
+\midrule
+\textbf{(5)} \citep{fvTyurin2026v2}, Thm.~4.3; special case $\sigma=0$, exact gradients, $\Delta>\varepsilon$.
+& $\begin{aligned}[t]\mathcal{O}\Bigl(&1+\sqrt T+q\bigl[1+\log_+\min\{\tfrac{L_1^2\Delta}{L_0},\tfrac{\Delta}{\varepsilon}\}\bigr]\\
+&+\log_+\tfrac{\Delta}{L_0R^2}\Bigr)\end{aligned}$
+& \textbf{(2)}: at $T=1$, $\Delta=4\varepsilon$, $\delta=1/2$, $q\to\infty$, $\mathcal{O}(q^{2/3}\log q)$ versus $\mathcal{O}(q)$. \textbf{(1)}, \textbf{(2)} extend to finite-variance stochastic gradients.
+& \textbf{(2)} pays $\log(e(1+T+q+\lambda)/\delta)$ on $\sqrt T$ when it dominates, even with exact gradients. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\ell=\log(e/\delta)$, $\lambda=1+\log(1+\Delta/\varepsilon)$, $V=\sigma^2R^2/\varepsilon^2$,
-$W=1+R\sqrt{L_0/\varepsilon}+\lambda+(L_1R\lambda)^{2/3}$,
-$M=1+L_0R^2/\varepsilon+L_1R+\lambda+V\ell^2$,
-$\Lambda=\log\bigl(e(1+L_0R^2/\varepsilon+L_1R+\lambda)/\delta\bigr)$,
-$J=1+\min\{\log(\Delta/\varepsilon),\log_+(L_1^2\Delta/L_0)\}$;
-$\log_+ t=\max\{0,\log t\}$ with $\log_+0=0$.
-At $V=0$, the logarithmic ratio in \textbf{(1)} is interpreted by its limit $0$.
-$c>0$ is fixed; $\mathcal{O}_c$ permits constants depending on $c$; $p$ denotes the noise moment order.
+\item[] \textbf{Abbr:} $T=L_0R^2/\varepsilon$, $q=L_1R$, $v=\sigma R/\varepsilon$, $\ell=\log(e/\delta)$, $\lambda=1+\log(1+\Delta/\varepsilon)$, $W=1+\sqrt T+\lambda+(q\lambda)^{2/3}$, $M=1+T+q+\lambda+v^2\ell^2$; $J=1+\min\{\log(\Delta/\varepsilon),\log_+(L_1^2\Delta/L_0)\}$ in \textbf{(3)}. $\log_+u=\max\{0,\log u\}$, with $\log_+0=0$. The logarithmic fraction in \textbf{(1)} is zero at $v=0$. $c>0$ is fixed; constants in $\mathcal{O}_c$ may depend on $c$. $p$ in prior-work rows denotes the noise moment order.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

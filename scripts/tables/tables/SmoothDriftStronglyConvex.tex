@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Tracking under smooth minimizer drift: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothDriftStronglyConvex.lean}{Smooth\allowbreak{}Drift\allowbreak{}Strongly\allowbreak{}Convex}.}\label{tab:SmoothDriftStronglyConvex}
-\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel structure, each $f_k$ is differentiable, $\mu$-strongly convex and $L$-smooth, $0<\mu\le L$. Deterministic minimizers satisfy $\|x_0-x_0^*\|\le R$, $\|x_1^*-x_0^*\|\le V$, and $\|x_{k+2}^*-2x_{k+1}^*+x_k^*\|\le\Gamma$. Jointly measurable stochastic gradients are unbiased, with integrable squared error bounded by $\sigma^2$ uniformly in the query; seeds are independent with common law $p$. Here $R,V,\Gamma,\sigma\ge0$, $\varepsilon>0$, and $9792\Gamma^2(2L/\mu+99\sigma^2/(\mu^2\varepsilon))^4\le\varepsilon$. The constructed velocity tracker guarantees $\int\|x_N(\omega)-x_{N-1}^*\|^2\,d p^{\otimes\mathbb{N}}(\omega)\le\varepsilon$ at every $N$ beyond its budget. Updates use $\mu,L,\sigma,\varepsilon$, not $R,V,\Gamma$; the setup restricts the output clock, not the update family.}\par\smallskip
+\caption{Tracking under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothDriftStronglyConvex.lean}{SmoothDriftStronglyConvex}.}\label{tab:SmoothDriftStronglyConvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, each deterministic $f_k$ is differentiable, $\mu$-strongly convex and $L$-smooth, with $0<\mu\le L$. Minimizers satisfy $\|x_0-x_0^\star\|\le R$, $\|x_1^\star-x_0^\star\|\le V$ and $\|x_{k+2}^\star-2x_{k+1}^\star+x_k^\star\|\le\Gamma$. Jointly measurable stochastic gradients use independent samples with common law $p$, are unbiased and have variance at most $\sigma^2$ uniformly in $x$; the relevant first and second moments are integrable. For $\varepsilon>0$ and $R,V,\Gamma,\sigma\ge0$, admissibility requires $9792\Gamma^2(2L/\mu+99\sigma^2/(\mu^2\varepsilon))^4\le\varepsilon$. The target is $\int\|x_N(\omega)-x_{N-1}^\star\|^2\,dP(\omega)\le\varepsilon$, where $P=p^{\otimes\mathbb N}$. The setup requires the output time to count oracle calls, not a particular update rule.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,28 +9,29 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/VelocityTrackingSmoothDrift.lean}{Velocity\allowbreak{}Tracking\allowbreak{}Smooth\allowbreak{}Drift} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/VelocityTrackingSmoothDrift.md}{(review)}
-& $\mathcal{O}\!\left(1+H+S\log\!\left(1+\frac{R^2+V^2S^2}{\varepsilon}\right)\right)$ stochastic-gradient calls. Certified accuracy floor: $\varepsilon\gtrsim (\Gamma^2\sigma^8/\mu^8)^{1/5}+\kappa^4\Gamma^2$; none when $\Gamma=0$.
-& --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/VelocityTrackingSmoothDrift.lean}{Velocity\allowbreak Tracking\allowbreak Smooth\allowbreak Drift} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/VelocityTrackingSmoothDrift.md}{(review)}
+& $\mathcal{O}\!\left(1+H+A\log\!\left(1+\frac{R^2+V^2A^2}{\varepsilon}\right)\right)$ stochastic gradients; every later $N$ succeeds. Updates know $\mu,L,\sigma,\varepsilon$, not $\Gamma,R,V$.
+& & \\
 \midrule[1.2pt]
-SGD tracking \citep[Thms.~3, 4, 28]{sdscCutler2023v4}\newline Bounded-speed restriction
-& Derived bound: $\mathcal{O}\!\left(1+\kappa\log\!\left(1+\frac{R^2}{\varepsilon}\right)+\frac{\sigma^2}{\mu^2\varepsilon}\right)$ gradient calls, with step decay; $\varepsilon\gtrsim(\Delta\sigma^2/\mu^2)^{2/3}+\kappa^2\Delta^2$. Common setup: finite dimension, deterministic speed $\le\Delta$; $V\le\Delta$, $\Gamma\le2\Delta$.
-& i) \textbf{(1)}: Scope: permits unbounded speed.\newline ii) \textbf{(1)}: lower certified floor when $(\Gamma^2\sigma^8/\mu^8)^{1/5}+\kappa^4\Gamma^2\ll\varepsilon\ll(\Delta\sigma^2/\mu^2)^{2/3}$.
-& i) \textbf{(1)}: extra noise logarithm and $V$ initialization term on overlap.\newline ii) \textbf{(1)}: deterministic drift, uniform variance required.\newline iii) \textbf{(1)}: $\Gamma\asymp\Delta$ gives $\kappa^4\Delta^2$ instead of $\kappa^2\Delta^2$. \\
+\textbf{(2)} SGD with step decay \citep{sdscCutler2023}, Thms.~4, 28
+& $\mathcal{O}\!\left(1+\kappa\log\!\left(1+\frac{R^2}{\varepsilon}\right)+\frac{\sigma^2}{\mu^2\varepsilon}\right)$ gradients to the certified MSE scale $\varepsilon\asymp\kappa^2\Delta^2+(\Delta\sigma^2/\mu^2)^{2/3}$. Speed-bounded restriction: $\mathbb E\|x_{k+1}^\star-x_k^\star\|^2\le\Delta^2$; deterministic overlap has $V\le\Delta$, $\Gamma\le2\Delta$.
+& \textbf{(1)}: lower certified error when $F_\Gamma\ll\varepsilon\ll(\Delta\sigma^2/\mu^2)^{2/3}$; every $\varepsilon>0$ if $\Gamma=0$. Scope: allows growing speed. No faster cost on the common admissible regime.
+& \textbf{(1)}: extra noise logarithm and velocity initialization term; deterministic drift and uniform variance. For $\Gamma\asymp\Delta$, requires $\kappa^4\Delta^2$ rather than $\kappa^2\Delta^2$ accuracy scale. \\
 \midrule
-Romberg NLMS \citep[Thm.~8, Cor.~9]{sdscMoulines2005}\newline Quadratic, stable time-varying autoregression
-& $\mathcal{O}(n)$ sample updates (two chains per sample); mean-square error $\mathcal{O}(n^{-4/5})$ for $C^2$ coefficients, smoothly varying covariance, bounded innovation/initial moments of order $>8$, after a fixed-fraction burn-in; constants non-explicit.
-& i) \textbf{(1)}: nonlinear objectives, arbitrarily changing Hessians under uniform variance.\newline ii) \textbf{(1)}: explicit finite-time budget.\newline iii) \textbf{(1)}: matches floor exponent when $\Gamma\asymp n^{-2}$, not a faster rate.
-& \textbf{(1)}: excludes multiplicative random-design noise. Different oracle models; total costs not comparable. \\
+\textbf{(3)} Romberg NLMS \citep{sdscMoulines2005}, Thm.~8, Cor.~9
+& No explicit parameter-dependent call budget. MSE $\mathcal{O}(n^{-4/5})$ at smoothness $\beta=2$, after a fixed-fraction burn-in; two NLMS updates per sample. Special case: stable time-varying autoregression, smooth coefficients/covariance, bounded innovation and initial moments of order $q>8$.
+& \textbf{(1)}: explicit finite-time extension to nonlinear objectives with arbitrarily changing shape. Matches floor exponent $n^{-4/5}$ for $\Gamma\asymp n^{-2}$; oracle complexities are not comparable.
+& \textbf{(1)} excludes the multiplicative random-design noise allowed by \textbf{(3)}. \\
 \midrule
-Stochastic SHARP \citep[Thms.~4.4, 5.5]{sdscKamijima2025v1}\newline Smooth trajectories; strongly convex sample losses
-& No finite-time mean-square call budget; asymptotic first-moment guarantee uses sample-function inner solves. Vanishing polynomial-regression bound additionally requires unbiased sample minimizers and sufficiently accurate inner solves.
-& i) \textbf{(1)}: no per-sample strong convexity or sample-minimizer unbiasedness.\newline ii) \textbf{(1)}: one fresh gradient per step, no repeated sample solves.\newline iii) \textbf{(1)}: finite-time mean square instead of asymptotic first moment.
-& \textbf{(1)}: uniform variance instead of variance only at minimizers; no convex regularizer. Rates not comparable. \\
+\textbf{(4)} Prediction--correction \citep{sdscKamijima2025v1}, Thm.~5.5 ($q=2$)
+& No comparable total-call bound. $\limsup_k\mathbb E\|\hat x_k-x_k^\star\|=\mathcal{O}\!\left(b+\gamma s+(s+1)h^{2/5}\right)$. Requires bounded second trajectory derivative, per-sample strong convexity/smoothness, and correction contracting to sample minimizers with $\gamma\|\alpha\|_1<1$; history length $\Theta(h^{-4/5})$.
+& \textbf{(1)}: finite-time mean square, one fresh gradient per step; removes per-sample convexity and repeated sample solves. The $h^{2/5}$ rate in \textbf{(4)} requires $b=0$, $\gamma=\mathcal{O}(h^{2/5})$.
+& \textbf{(1)} needs variance uniform in $x$, not just at $x_k^\star$, and excludes convex regularizers. Different oracles and error criteria prevent a cost comparison. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\kappa=L/\mu$; $S=L/\mu+\sigma^2/(\mu^2\varepsilon)$; $H\in\mathbb{N}$ is additional elapsed steps, each costing one call; $\Delta$ bounds minimizer speed; $n$ is the autoregression sampling resolution; $\gtrsim$ suppresses universal constants; NLMS: normalized least mean squares.
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $A=\kappa+\sigma^2/(\mu^2\varepsilon)$, $F_\Gamma=\kappa^4\Gamma^2+(\Gamma^2\sigma^8/\mu^8)^{1/5}$; $H\in\mathbb N$ is the supplied horizon slack. MSE: mean-square distance; NLMS: normalized least mean squares; $n$: sample count in \textbf{(3)}. In \textbf{(4)}, $h$ is the sampling period, $b$ bounds sample-minimizer bias, $s^2$ bounds its mean-square deviation, $\gamma$ is the correction contraction factor, and $\alpha$ is the polynomial prediction coefficient vector. $\asymp$ and $\ll$ denote comparison up to universal factors and asymptotic separation, respectively.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
+\clearpage

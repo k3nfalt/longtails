@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic convex optimization under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Convex $f:E\to\mathbb{R}$ on a separable real Hilbert space with its Borel structure, differentiable gradient, and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$. IID samples drive a jointly measurable, unbiased gradient oracle $g$, with $\mathbb{E}\|g(x)-\nabla f(x)\|^2\le\sigma^2$ and, for $\sigma>0$, $\mathbb{E}\exp(\|g(x)-\nabla f(x)\|^2/\sigma^2)\le e$; $\sigma=0$ denotes exact gradients. Known parameters satisfy $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, $0<\delta<1$. Target: measurable $\widehat x$ with $\mathbb{P}\{f(\widehat x)-f(x_\star)>\varepsilon\}\le\delta$. Costs count individual stochastic-gradient samples, including all batches.}\par\smallskip
+\caption{High-probability convex optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean}{StochasticGeneralizedSmoothAndConvex}.}\label{tab:StochasticGeneralizedSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex $f$ on a separable real Hilbert space has differentiable gradient and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. A minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$ and $f(x_0)-f(x^\star)\le\Delta$. The jointly measurable oracle is unbiased, with integrable gradient and squared error, $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$, and $\mathbb E\exp(\|g(x,\xi)-\nabla f(x)\|^2/\sigma^2)\le e$ for $\sigma>0$; $\sigma=0$ means exact gradients almost surely. Samples are IID with marginal $p$ under probability law $P$. Parameters $L_0,R,\Delta,\varepsilon>0$, $L_1,\sigma\ge0$, and $\delta\in(0,1)$ are supplied. Target: measurable $\hat x$ with $P\{f(\hat x)-f(x^\star)>\varepsilon\}\le\delta$. Costs count individual stochastic-gradient samples, including batches and trials.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,29 +9,28 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak{}Generalized\allowbreak{}Accelerated\allowbreak{}Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedAcceleratedConvex.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&1+R\sqrt{L_0/\varepsilon} +\min\{\lceil q^{2/3}\rceil\ell,\\&\qquad\ell+(q\ell)^{2/3}\} +\sigma^2R^2\lambda/\varepsilon^2\end{aligned}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedAcceleratedConvex.lean}{Stochastic\allowbreak Generalized\allowbreak Accelerated\allowbreak Convex} \textbf{(Ours)} $(\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedAcceleratedConvex.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+\sqrt{\frac{L_0R^2}{\varepsilon}}\\&+\min\{\lceil t^{2/3}\rceil\ell,\,\ell+(t\ell)^{2/3}\}\\&+\frac{\sigma^2R^2}{\varepsilon^2}\log\frac e\delta\end{aligned}\right)$
+& & \\
 \midrule[1.2pt]
-ARC-SG \citep[Thms.~1, 3]{sgscDvinskikh2026v1}\par $E=\mathbb{R}^d$; supplied $\Delta$
-& $\mathcal{O}\!\left(\begin{aligned}&\Bigl[1+q+(1+q)^{1/2}R\sqrt{L_0/\varepsilon}\\&+(1+q)^3\sigma^2R^2/\varepsilon^2\\&+(1+q)^3\sigma^2L_1^2/L_0^2\Bigr]\operatorname{polylog} U\end{aligned}\right)$
-& i) \textbf{(1)}: removes $(1+q)^{1/2}$ optimization and $(1+q)^3$ noise factors, plus burn-in; polynomial term gains for $q\gg1$.\newline ii) \textbf{(1)}: Hilbert-space scope; no ball projections.
-& \textbf{(1)}: $\ell+(q\ell)^{2/3}$ can exceed $q$ through logarithms when $\ell^2\gtrsim q$; no uniform dominance. \\
+\textbf{(2)} ARC-SG \citep[Thm.~3]{gssgDvinskikh2026}\newline Finite-dimensional case.
+& $\displaystyle\widetilde{\mathcal{O}}\!\left(\begin{aligned}&1+t+\sqrt{\frac{(1+t)L_0R^2}{\varepsilon}}\\&+(1+t)^3\frac{\sigma^2R^2}{\varepsilon^2}\\&+(1+t)^3\frac{\sigma^2L_1^2}{L_0^2}\end{aligned}\right)$
+& \textbf{(1)} removes $(1+t)^{1/2}$ from optimization and $(1+t)^3$ from noise, plus burn-in: polynomial termwise gains for $t\gg1$. Scope: separable Hilbert spaces.
+& \textbf{(1)}'s curvature term $\ell+(t\ell)^{2/3}$ can exceed $t$ through logarithms when $\ell^2\gtrsim t$; no uniform total-cost dominance. \\
 \midrule
-RCSAG \citep[Thm.~9]{ldg2026heavyv1}\par Contemporaneous; $E=\mathbb{R}^d$, $Q=B(x_0,R)$, $p=2$, $\sigma_0=\sigma$, $\sigma_1=\sigma_2=0$
-& Derived bound:\par $\mathcal{O}\!\left(\begin{aligned}&\bigl(\ell+R\sqrt{L_0/\varepsilon}+tJ\\&\quad+\sigma^2R^2/\varepsilon^2\bigr) \cdot[1+\log(\ell/\delta)]\end{aligned}\right)$
-& \textbf{(1)}: curvature $tJ\to\ell+(q\ell)^{2/3}$. For $\sigma=0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2/q^{4/3}$, $q\to\infty$: $q\log q\to q^{2/3}(\log q)^{2/3}$, apart from confidence/phase logarithms.
-& \textbf{(1)}: needs light tails and batching; prior allows finite $p$th moments and gradient/gap-dependent noise. Can lose logarithms when $L_1^2\Delta\lesssim L_0$, $\ell^2\gg q$. \\
+\textbf{(3)} RCSAG \citep[Thm.~9]{gssgLobanov2026}\newline Derived bound: finite-dimensional case, $p=2$, additive noise, $Q=B(x_0,R)$.
+& $\displaystyle\mathcal{O}\!\left(\left[\begin{aligned}&\ell+\sqrt{\frac{L_0R^2}{\varepsilon}}+tJ\\&+\frac{\sigma^2R^2}{\varepsilon^2}\end{aligned}\right]\log\frac{e\ell}{\delta}\right)$
+& \textbf{(1)}: $tJ$ becomes $\ell+(t\ell)^{2/3}$. For $\sigma=0$, $\Delta=L_0R^2$, $\varepsilon=L_0R^2/t^{4/3}$, $t\to\infty$, fixed $\delta$: $\mathcal{O}(t^{2/3}\log^{2/3}t)$ versus \textbf{(3)}'s $\mathcal{O}(t\log t\log\log t)$. Otherwise unchanged terms can dominate.
+& \textbf{(1)} needs light tails and batching; \textbf{(3)} allows finite $p$th moments, $1<p\le2$, and gradient/gap-dependent noise. Logarithmic losses possible when $L_1^2\Delta\lesssim L_0$ and $\ell^2\gg t$. \\
 \midrule
-Clipped SGD \citep[Thm.~1]{sgscGaash2025v2}\par $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left(1+(L_0R^2/\varepsilon+q^2)h+\sigma^2R^2h^3/\varepsilon^2\right)$\par Includes two samples per step.
-& i) \textbf{(1)}: $L_0R^2/\varepsilon\to R\sqrt{L_0/\varepsilon}$ when $\sigma^2\lambda\le L_0\varepsilon$; curvature $q^2\to\ell+(q\ell)^{2/3}$ when smaller.\newline ii) \textbf{(1)}: noise logarithm $h^3\to\lambda$.\newline iii) \textbf{(1)}: Hilbert-space scope; stopped iterate instead of averaging.
-& \textbf{(1)}: needs $\Delta$ in addition and batching. Noise-dominated gain is logarithmic; curvature gain depends on $\ell$. \\
+\textbf{(4)} Clipped SGD \citep[Thm.~1]{sgacGaash2025v2}\newline Finite-dimensional case.
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+\left(\frac{L_0R^2}{\varepsilon}+t^2\right)\log\frac{eT}{\delta}\\&+\frac{\sigma^2R^2}{\varepsilon^2}\log^3\frac{eT}{\delta}\end{aligned}\right)$
+& \textbf{(1)}: optimization $L_0R^2/\varepsilon\to\sqrt{L_0R^2/\varepsilon}$; startup $t^2\to\ell+(t\ell)^{2/3}$. For $\sigma^2\log(e/\delta)\le L_0\varepsilon$, the optimization-term gain persists; total savings depend on noise/startup. Noise-dominated gain: $\log^3(eT/\delta)\to\log(e/\delta)$. Scope: Hilbert spaces; stopped iterate instead of averaging.
+& \textbf{(1)} additionally needs $\Delta$ and batching. \textbf{(4)} uses two samples per step. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $q=L_1R$, $\ell=1+\log(1+\Delta/\varepsilon)$, $\lambda=1+\log(1/\delta)$, $J=\min\{\ell,1+\log(1+L_1^2\Delta/L_0)\}$, $h=1+\log\bigl((1+L_0R^2/\varepsilon+q^2+\sigma^2R^2/\varepsilon^2)/\delta\bigr)$. RCSAG reduction: $H_0=\mathcal{O}\!(L_0)$, $H_1=\mathcal{O}\!(L_1^2)$. For ARC-SG, $U=2+q+L_1^2\Delta/L_0+L_0R^2/\varepsilon+1/\delta$; $\operatorname{polylog} U$ denotes the unspecified polynomial logarithmic factors.
+\item[] \textbf{Abbr:} $t=L_1R$, $\ell=1+\log(1+\Delta/\varepsilon)$, $J=\min\{\ell,1+\log(1+L_1^2\Delta/L_0)\}$. In \textbf{(3)}, $H_0=\mathcal{O}(L_0)$, $H_1=\mathcal{O}(L_1^2)$, $\sigma_0=\sigma$, $\sigma_1=\sigma_2=0$; $p$ there is the moment order. $T$ is the sufficient step count in \textbf{(4)} (two calls per step), defined implicitly by its bound. $\widetilde{\mathcal{O}}$ in \textbf{(2)} suppresses polylogarithms in $1+t$, $1+L_1^2\Delta/L_0$, $1+L_0R^2/\varepsilon$, and $1/\delta$. $\lceil\cdot\rceil$ denotes upward rounding.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

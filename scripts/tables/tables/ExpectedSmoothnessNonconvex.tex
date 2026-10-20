@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ExpectedSmoothnessNonconvex.lean}{Expected\allowbreak{}Smoothness\allowbreak{}Nonconvex}.}\label{tab:ExpectedSmoothnessNonconvex}
-\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel structure, $f$ is differentiable, $L$-smooth and bounded below by $\ell$, with $f(x_0)-\ell\le\Delta$. The jointly measurable oracle is unbiased, has integrable gradients and squared errors/differences, and satisfies $\mathbb{E}_p\|g(x,\xi)-g(y,\xi)\|^2\le L^2\|x-y\|^2$ and $\mathbb{E}_p\|g(x,\xi)-\nabla f(x)\|^2\le2A(f(x)-\ell)+C$. Here $L,\varepsilon>0$ and $A,C,\Delta\ge0$. Samples are IID with marginal $p$; each query returns two gradients sharing a sample. Target: $\int\|\nabla f(x_{\rm out}(\omega))\|\,dP(\omega)\le\varepsilon$. Prior-work comparisons below use $E=\mathbb{R}^d$.}\par\smallskip
+\caption{Expected-smoothness nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ExpectedSmoothnessNonconvex.lean}{ExpectedSmoothnessNonconvex}.}\label{tab:ExpectedSmoothnessNonconvex}
+\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel measurable structure, $f$ is differentiable, $\nabla f$ is $L$-Lipschitz, $f\geq f_{\rm low}$, and $f(x_0)-f_{\rm low}\leq\Delta$. The jointly measurable unbiased oracle $g$ uses IID samples from $p$, with integrable gradients and squared noise/differences, and satisfies $\mathbb E_p\|g(x)-g(y)\|^2\leq L^2\|x-y\|^2$ and $\mathbb E_p\|g(x)-\nabla f(x)\|^2\leq2A(f(x)-f_{\rm low})+C$. Here $L,\varepsilon>0$ and $A,C,\Delta\geq0$. Same-sample pairs are available. The target is a measurable output with $\int\|\nabla f(x_{\rm out}(\omega))\|\,dP(\omega)\leq\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,37 +9,34 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NormalizedStormExpectedSmoothness.lean}{Normalized\allowbreak{}Storm\allowbreak{}Expected\allowbreak{}Smoothness} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NormalizedStormExpectedSmoothness.md}{(review)}
-& $\mathcal{O}\!\left(\begin{gathered}1+\frac AL+\frac{L\Delta+A\Delta+C}{\varepsilon^2}\\{}+\frac{L\Delta\sqrt{A\Delta+C}}{\varepsilon^3}\end{gathered}\right)$
-& --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NormalizedStormExpectedSmoothness.lean}{Normalized\allowbreak Storm\allowbreak Expected\allowbreak Smoothness} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NormalizedStormExpectedSmoothness.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&1+\frac AL+\frac{L\Delta+A\Delta+C}{\varepsilon^2}\\&+\frac{L\Delta\sqrt{A\Delta+C}}{\varepsilon^3}\end{aligned}\right)$
+& & \\
 \midrule[1.2pt]
-NSTORM \citep[Thm.~2(i)]{esnUpadhyay2026v1}; Derived bound
-& $\mathcal{O}\!\left(1+\frac{(L\Delta)^2}{\varepsilon^4}+\frac{(A\Delta+C)L\Delta}{\varepsilon^2}\right)$\par
-$\gamma_0=\sqrt{\Delta/L}$; $L\Delta\ge1$, $\varepsilon^2\le L\Delta$, $\varepsilon\sqrt{A\Delta+C}\le L\Delta$.
-& \textbf{(1)}: $\varepsilon^{-3}$ instead of $\varepsilon^{-4}$ at fixed positive parameters; no larger order in the displayed regime.
-& \textbf{(1)}: needs ABC structure; distance-dependent BG noise alone is insufficient. \\
+\textbf{(2)} NSTORM \citep{ESNUpadhyay2026}, Thm.~2(i), derived bound
+& $\mathcal{O}\!\left(\begin{aligned}&1+\frac{(L\Delta)^2}{\varepsilon^4}\\&+\frac{(A\Delta+C)L\Delta}{\varepsilon^2}\\&+\frac{(A\Delta+C)^{3/2}}{\varepsilon}\end{aligned}\right)$\newline $L\Delta\geq1$, $\gamma_0=\sqrt{\Delta/L}$; initialization included.
+& \textbf{(1)}: $\varepsilon^{-3}$ instead of $\varepsilon^{-4}$ at fixed positive parameters. No worse order when $L\Delta\geq1$, $\varepsilon^2\leq L\Delta$.
+& \textbf{(1)} needs ABC structure; \textbf{(2)} also handles distance-growing BG noise beyond ABC. \\
 \midrule
-SGD \citep[Cor.~1]{esnKhaled2020v3}
-& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta(A\Delta+C)}{\varepsilon^4}\right)$\par Some-iterate expected gradient norm.
-& \textbf{(1)}: leading noise term reduced by $\sqrt{A\Delta+C}/\varepsilon$ when $\varepsilon\le\min\{\sqrt{A\Delta+C},\sqrt{L\Delta}\}$.
-& \textbf{(1)}: needs MSS and same-sample pairs; two gradients per call. SGD needs only population smoothness, potentially $L_f<L$. \\
+\textbf{(3)} SGD \citep{ESNKhaled2020v3}, Cor.~1
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta(A\Delta+C)}{\varepsilon^4}\right)$
+& \textbf{(1)} reduces the leading stochastic term by $\asymp\sqrt{A\Delta+C}/\varepsilon$ when $\varepsilon\leq\min\{\sqrt{A\Delta+C},\sqrt{L\Delta}\}$.
+& \textbf{(1)} needs MSS and same-sample pairs (two gradients); \textbf{(3)} needs single gradients and only objective smoothness $L_F\leq L$. \\
 \midrule
-SPIDER \citep[Thm.~4]{esnChen2023v2}; Derived bound, affine-variance restriction
-& $\mathcal{O}\!\left(\begin{gathered}1+\frac{L\Delta(1+\Gamma^2)+\Lambda^2}{\varepsilon^2}\\{}+\frac{L\Delta(1+\Gamma)\Lambda}{\varepsilon^3}\end{gathered}\right)$\par
-$\operatorname{var}g(x)\le\Gamma^2\|\nabla f(x)\|^2+\Lambda^2$; $A=L\Gamma^2$, $C=\Lambda^2$. Retuning: $q=\max\{1,\Lambda/(\max\{1,\Gamma\}\varepsilon)\}$; $\varepsilon^2\le\min\{1,L\Delta\}$, $\Lambda\varepsilon\le\max\{1,\Gamma\}\min\{1,L\Delta\}$.
-& i) \textbf{(1)}: Scope: extends to ABC without affine variance.\newline
- ii) \textbf{(1)}: $\varepsilon^{-3}$ coefficient gains factor $\asymp\min\{\Gamma,\Lambda/\sqrt{L\Delta}\}$ for $\Gamma\ge1$, $\Lambda\ge\sqrt{L\Delta}$; strict when this factor grows.
-& \textbf{(1)}: worse cubic term if $\Lambda\ll\Gamma\sqrt{L\Delta}/(1+\Gamma)$; near $\Lambda=0$, retains $\varepsilon^{-3}$ versus $\varepsilon^{-2}$. No uniform dominance. \\
+\textbf{(4)} SPIDER \citep{ESNChen2023}, Thm.~4, derived bound; affine-variance special case
+& $\mathcal{O}\!\left(\begin{aligned}&1+\frac{L\Delta(1+\Gamma^2)+\Lambda^2}{\varepsilon^2}\\&+\frac{L\Delta(1+\Gamma)\Lambda}{\varepsilon^3}\end{aligned}\right)$\newline $\operatorname{Var}_p g(x)\leq\Gamma^2\|\nabla f(x)\|^2+\Lambda^2$; MSS restriction, $A=L\Gamma^2$, $C=\Lambda^2$. Retuning valid for $\varepsilon\leq\min\{1,\sqrt{L\Delta}\}$, $\Lambda\varepsilon\leq1+\Gamma$.
+& \textbf{(1)}: scope extends to ABC without affine variance. For $\Gamma\geq1$, $\Lambda\geq\sqrt{L\Delta}$, the $\varepsilon^{-3}$ coefficient improves by $\asymp\min\{\Gamma,\Lambda/\sqrt{L\Delta}\}$ within the stated range.
+& \textbf{(1)} has a worse $\varepsilon^{-3}$ coefficient when $\Lambda\ll\Gamma\sqrt{L\Delta}/(1+\Gamma)$; at $\Lambda=0$, $\Gamma\Delta>0$, it loses $\varepsilon^{-1}$ against \textbf{(4)}. \\
 \midrule
-SPIDER \citep[Thm.~1]{esnFang2018v2}; bounded-variance restriction $A=0$
-& $\mathcal{O}\!\left(1+\frac{L\Delta+C}{\varepsilon^2}+\frac{L\Delta\sqrt C}{\varepsilon^3}\right)$\par $0<\varepsilon\le\sqrt C$.
-& i) \textbf{(1)}: Scope: extends from bounded variance to ABC.\newline
- ii) \textbf{(1)}: matches known rate on $A=0$.
-& --- \\
+\textbf{(5)} SPIDER-SFO \citep{ESNFang2018v2}, Thm.~1; bounded-variance special case $A=0$, $C=\sigma^2$
+& $\mathcal{O}\!\left(1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{L\Delta\sigma}{\varepsilon^3}\right)$\newline $0<\varepsilon\leq\sigma$.
+& \textbf{(1)} matches the known rate at $A=0$; scope extends to function-value-dependent, potentially unbounded variance.
+& \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} Complexity counts individual stochastic-gradient evaluations, including all batches (one pair call costs two evaluations). $\Delta$ is the initial gap bound; $\varepsilon$ is the expected gradient-norm tolerance; $P$ is the execution law. MSS: mean-square smoothness; ABC: the displayed function-gap variance bound; BG: $\operatorname{var}g(x)\le B^2\|x-x_0\|^2+G^2$, here $B^2=2L^2$, $G^2=2(2A\Delta+C)$. $\operatorname{var}g(x)=\mathbb{E}_p\|g(x,\xi)-\nabla f(x)\|^2$; $\Gamma,\Lambda$ are affine-variance parameters; $q$ is an epoch length; $\gamma_0$ is the NSTORM step-scale; $L_f$ is population smoothness. $\mathcal{O}$ suppresses universal constants.
+\item[] \textbf{Abbr:} MSS: mean-square smoothness; ABC: the displayed function-gap variance bound; BG: Blum--Gladyshev noise. $\operatorname{Var}_p g(x)=\mathbb E_p\|g(x)-\nabla f(x)\|^2$; $P$: output probability law; $L_F$: objective smoothness constant. Costs count stochastic gradient evaluations, including batches; one pair call costs two evaluations, so the same big-$\mathcal{O}$ bound applies. $\Gamma,\Lambda,\sigma\geq0$ are the variance parameters in their rows. $\asymp$ denotes equality up to universal factors.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
+\clearpage

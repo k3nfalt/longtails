@@ -1,13 +1,10 @@
 \begin{table}[tp]
 \centering
-\caption{Mixed relative and smooth-increment noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MixedRelativeSmoothNonconvex.lean}{Mixed\allowbreak{}Relative\allowbreak{}Smooth\allowbreak{}Nonconvex}.}\label{tab:MixedRelativeSmoothNonconvex}
-\parbox{\linewidth}{\footnotesize
-On a second-countable real Hilbert space with its Borel measurable structure, $f$ is differentiable, $\nabla f$ is $L$-Lipschitz, and $f(x_0)-\inf f\le\Delta$.
-The jointly measurable oracle is unbiased under a probability law $p$; its square-integrable centered error satisfies, for every $x,y$,
-$\int\|e(x,\omega)\|^2\,dp\le r\|\nabla f(x)\|^2+\sigma^2$ and
-$\int\|e(x,\omega)-e(y,\omega)\|^2\,dp\le r(\|\nabla f(x)\|^2+\|\nabla f(y)\|^2)+M^2\|x-y\|^2$.
-Here $L,\varepsilon>0$ and $M,r,\sigma,\Delta\ge0$ are supplied parameters. Independent samples are reused within consecutive call pairs. The target is a measurable output $X$ with integrable gradient norm and $\int\|\nabla f(X)\|\,d\mathbb{P}\le\varepsilon$, where $\mathbb{P}$ includes oracle and algorithm randomness.
-}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MixedRelativeSmoothNonconvex.lean}{MixedRelativeSmoothNonconvex}.}\label{tab:MixedRelativeSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On a second-countable real Hilbert space with its Borel structure, $f$ has $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. Parameters $L,\varepsilon>0$ and $r,M,\sigma,\Delta\ge0$ are supplied. The jointly measurable oracle $g$ is unbiased under a probability measure $p$; $e(x,\xi)=g(x,\xi)-\nabla f(x)$ has integrable squared norm, with
+$\mathbb E_p\|e(x,\xi)\|^2\le r\|\nabla f(x)\|^2+\sigma^2$ and
+$\mathbb E_p\|e(x,\xi)-e(y,\xi)\|^2\le r(\|\nabla f(x)\|^2+\|\nabla f(y)\|^2)+M^2\|x-y\|^2$.
+IID samples are shared within consecutive call pairs. Target: measurable $X$ with integrable gradient norm and $\int\|\nabla f(X)\|\,d\mathbb P\le\varepsilon$, where $\mathbb P$ includes sampling and algorithm randomness.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -15,32 +12,28 @@ Here $L,\varepsilon>0$ and $M,r,\sigma,\Delta\ge0$ are supplied parameters. Inde
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MixedRelativeSmoothNonconvex.lean}{Mixed\allowbreak{}Relative\allowbreak{}Smooth\allowbreak{}Nonconvex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MixedRelativeSmoothNonconvex.md}{(review)}
-& $\mathcal{O}\!\left(\begin{aligned}&1+\frac{(1+r)L\Delta+\sigma^2}{\varepsilon^2}\\[-2pt]&+\min\!\left\{\frac{M\sigma\Delta}{\varepsilon^3},\frac{L\Delta\sigma^2}{\varepsilon^4}\right\}\end{aligned}\right)$
-& --- & --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MixedRelativeSmoothNonconvex.lean}{Mixed\allowbreak Relative\allowbreak Smooth\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MixedRelativeSmoothNonconvex.md}{(review)} &
+$\mathcal{O}\!\left(\begin{gathered}1+\dfrac{(1+r)L\Delta+\sigma^2}{\varepsilon^2}\\ {}+\min\!\left\{\dfrac{M\sigma\Delta}{\varepsilon^3},\dfrac{L\Delta\sigma^2}{\varepsilon^4}\right\}\end{gathered}\right)$ & & \\
 \midrule[1.2pt]
-SGD \citep[Cor.~1]{esnKhaled2020v3}
-& $\mathcal{O}\!\left(1+\frac{(1+r)L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$
-& \textbf{(1)}: replaces $L\Delta\sigma^2/\varepsilon^4$ by $\sigma^2/\varepsilon^2+M\sigma\Delta/\varepsilon^3$ when $\sigma^2\ge(1+r)\varepsilon^2$, $M\varepsilon\le L\sigma$; speedup order $\min\{L\Delta/\varepsilon^2,L\sigma/(M\varepsilon)\}$ when $2L\Delta>\varepsilon^2$.
-& \textbf{(1)}: needs mixed increments and shared-sample pairs; additionally tunes to $M,\Delta$; stores block representatives. \\
+\textbf{(2)} SGD \citep{ESNKhaled2020v3}, Cor.~1 ($A=0$, $B=1+r$, $C=\sigma^2$). &
+$\mathcal{O}\!\left(1+\dfrac{(1+r)L\Delta}{\varepsilon^2}+\dfrac{L\Delta\sigma^2}{\varepsilon^4}\right)$ &
+\textbf{(1)}: No worse in order. For $\varepsilon^2<2L\Delta$, $\sigma^2\ge(1+r)\varepsilon^2$, $M\varepsilon\le L\sigma$, saving factor $\min\{L\Delta/\varepsilon^2,L\sigma/(M\varepsilon)\}$. Random-iterate target follows from \textbf{(2)}'s averaged bound. &
+\textbf{(1)} needs the increment condition, shared-sample pairs and known $M$ additionally; $\mathcal{O}(Td)$ storage and substantially larger leading constant. \\
 \midrule
-Normalized STORM \citep[Thm.~3.3, Cor.~3.4]{mrsnLiu2023v2}
-& $\mathcal{O}\!\left(\begin{aligned}&1+r+\frac{(1+r)\bar L\Delta}{\varepsilon^2}\\[-2pt]&+\frac{(\sigma+\sqrt r G_0)\sqrt{1+r}}{\varepsilon}\\[-2pt]&+\frac{\bar L\sigma\Delta}{\varepsilon^3}+\frac{\sigma^2(\sigma+\sqrt rG_0)}{\sqrt{1+r}\,\varepsilon^3}\end{aligned}\right)$\par
-For $\min_t\mathbb{E}\|\nabla f(x_t)\|\le\varepsilon$; batch size $\Theta(1+r)$.
-& \textbf{(1)}: i) Scope: mixed increments permit rough relative noise without finite raw MSS.\par
- ii) On raw-MSS overlap: $M$ replaces $\bar L$ in the cubic term; removes $\sigma^3/(\sqrt{1+r}\,\varepsilon^3)$ initialization term.\par
- iii) Returned-point guarantee; no established output conversion for this baseline.
-& Raw-MSS overlap only: $E=\mathbb{R}^d$, $g=\nabla_x F(x,\omega)$, $\int\|g(x)-g(y)\|^2dp\le\bar L^2\|x-y\|^2$, $L,M\le\bar L$. \textbf{(1)} needs block storage; baseline uses accuracy-independent batches and also covers generalized smoothness beyond global $L$-smoothness. \\
+\textbf{(3)} Normalized STORM \citep{mrLiu2023v2}, Thm.~3.3 / Cor.~3.4, $L_1=0$. &
+$\mathcal{O}\!\left(\begin{gathered}1+r+\dfrac{(1+r)\bar L\Delta}{\varepsilon^2}\\ {}+\dfrac{(\sigma+\sqrt r G_0)\sqrt{1+r}}{\varepsilon}\\ {}+\dfrac{\bar L\sigma\Delta}{\varepsilon^3}+\dfrac{\sigma^2(\sigma+\sqrt r G_0)}{\sqrt{1+r}\,\varepsilon^3}\end{gathered}\right)$\newline
+Raw MSS; sample-gradient oracles on $\mathbb R^d$. Batch size $\Theta(1+r)$ included. Target: $\min_t\mathbb E\|\nabla f(x_t)\|\le\varepsilon$. &
+\textbf{(1)}: Rate replaces $\bar L$ by centered $M$, removing $\sigma^3/\varepsilon^3$ startup dependence. For $r=1$, $M=0$, fixed positive $L,\bar L,\Delta,\sigma$: $\mathcal{O}(\varepsilon^{-2})$ versus $\mathcal{O}(\varepsilon^{-3})$. Scope includes rough relative noise without finite $\bar L$; identical-output comparison unestablished. &
+\textbf{(1)} uses growing batches and $\mathcal{O}(Td)$ storage; \textbf{(3)} has accuracy-independent batches. Generalized $L_1>0$ smoothness is outside \textbf{(1)}'s scope. \\
 \midrule
-PAGE \citep[Cor.~4]{li2021pagefsnc}
-& $\mathcal{O}\!\left(1+\frac{\sigma^2+\bar L\Delta}{\varepsilon^2}+\frac{\bar L\sigma\Delta}{\varepsilon^3}\right)$\par
-Expected gradient-call cost.\par Special case: $r=0$, $E=\mathbb{R}^d$, stochastic gradients with raw MSS constant $\bar L$; $\sigma>0$.
-& \textbf{(1)}: matches known $\varepsilon^{-3}$ rate at $r=0$ with comparable smoothness constants; no strict rate gain established there.
-& --- \\
+\textbf{(4)} PAGE \citep{fsncLi2021PAGE}, Cor.~4 (online). &
+$\mathcal{O}\!\left(1+\dfrac{\sigma^2+\bar L\Delta}{\varepsilon^2}+\dfrac{\bar L\sigma\Delta}{\varepsilon^3}\right)$\newline
+Expected gradient-call count; $r=0$, raw MSS, sample-gradient oracles on $\mathbb R^d$. &
+\textbf{(1)}: Matches known $\varepsilon^{-3}$ rate at $r=0$; centered $M\le\bar L$. & \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $e(x,\omega)=g(x,\omega)-\nabla f(x)$; $\Delta$ is the initial objective-gap bound; $r$ is relative variance, $\sigma$ absolute noise, $M$ centered-increment constant; $G_0=\|\nabla f(x_0)\|\le\sqrt{2L\Delta}$; MSS means mean-squared smoothness, with raw constant $\bar L$. Costs count individual oracle evaluations, including initialization, batches, and each evaluation in a shared-sample pair. In the speedup formula, $L\sigma/(M\varepsilon)=+\infty$ when $M=0<\sigma$.
+\item[] \textbf{Abbr:} $\Delta$ is the initial objective-gap bound; $r,\sigma$ are relative and absolute noise parameters; $M$ controls centered increments. Raw MSS means $\mathbb E_p\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$, with $L\le\bar L$ and an admissible $M\le\bar L$. $G_0=\|\nabla f(x_0)\|\le\sqrt{2L\Delta}$. $T$ counts iterations of \textbf{(1)}; $d$ denotes dimension when finite. Costs count individual oracle evaluations, including batches and paired evaluations. In the saving factor, $L\sigma/(M\varepsilon)=+\infty$ when $M=0<\sigma$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,13 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Component-oracle complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ContinuizedSimilarQuasar.lean}{Continuized\allowbreak{}Similar\allowbreak{}Quasar}.}\label{tab:ContinuizedSimilarQuasar}
-\parbox{\linewidth}{\footnotesize
-On a real Hilbert space, let $F=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, with differentiable components and exact component gradients. Assume $\nabla F$ is $L$-Lipschitz and, for all $x,y$,
-$n^{-1}\sum_i\|\nabla(f_i-F)(x)-\nabla(f_i-F)(y)\|^2\le\delta^2\|x-y\|^2$.
-A global minimizer $x_\star$ satisfies $F(x_0)-F(x_\star)\le\Delta$ and
-$F(x_\star)\ge F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac\mu2\|x-x_\star\|^2$ for all $x$.
-Here $0<\mu\le L$, $0<\gamma\le1$, $\delta,\Delta\ge0$, and $\varepsilon>0$.
-Target: $\mathbb{E}[F(X)-F(x_\star)]\le\varepsilon$. Costs count all component-gradient calls, including full-gradient refreshes.}\par\smallskip
+\caption{Similar strongly quasar-convex finite sums: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ContinuizedSimilarQuasar.lean}{ContinuizedSimilarQuasar}.}\label{tab:ContinuizedSimilarQuasar}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $F=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, has $L$-Lipschitz gradient; each $f_i$ has a gradient. A global minimizer $x_\star$ satisfies $F(x_0)-F(x_\star)\le\Delta$ and $F(x_\star)\ge F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac\mu2\|x-x_\star\|^2$. For all $x,y$, $n^{-1}\sum_i\|[\nabla f_i-\nabla F](x)-[\nabla f_i-\nabla F](y)\|^2\le\delta^2\|x-y\|^2$. Here $0<\mu\le L$, $0<\gamma\le1$, $\delta,\Delta\ge0$, and $\varepsilon>0$. The oracle returns exact component gradients; interpolation is not required. Target: $\int [F(X(\omega))-F(x_\star)]\,dP(\omega)\le\varepsilon$, with integrable gap and $P$ the execution law. Our constructions have fixed budgets and expected final-iterate accuracy; the setup imposes no algorithm restriction.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -15,39 +9,42 @@ Target: $\mathbb{E}[F(X)-F(x_\star)]\le\varepsilon$. Costs count all component-g
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MovementSimilarQuasar.lean}{Movement\allowbreak{}Similar\allowbreak{}Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MovementSimilarQuasar.md}{(review)}
-& $\mathcal{O}\!\left(n+\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{(n\delta/\mu)^{2/3}}{\gamma^{4/3}}\right]\ell_\gamma\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MovementSimilarQuasar.lean}{Movement\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MovementSimilarQuasar.md}{(review)}
+& $\mathcal{O}\!\left(n+\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{(n\delta/\mu)^{2/3}}{\gamma^{4/3}}\right]\ell_\gamma\right)$ component gradients.
+& & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ContinuizedSimilarQuasar.lean}{Continuized\allowbreak{}Similar\allowbreak{}Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ContinuizedSimilarQuasar.md}{(review)}
-& $\mathcal{O}\!\left(\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{\delta^2}{\gamma^3\mu^2}\right](1+\ell_\gamma)\right)$
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ContinuizedSimilarQuasar.lean}{Continuized\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ContinuizedSimilarQuasar.md}{(review)}
+& $\mathcal{O}\!\left(\left[n+\frac{\sqrt\kappa}{\gamma}+\frac{\delta^2}{\gamma^3\mu^2}\right](1+\ell_\gamma)\right)$ component gradients.
+& & \\
 \midrule[1.2pt]
-PAGE via PL \citep[Thm.~5, Cor.~6]{csqLi2021}\par Derived bound; $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left(\left[n+\frac{\sqrt n\sqrt{L^2+\delta^2}}{\gamma^2\mu}\right]\ell_0\right)$\par Expected component-gradient calls.
-& i) \textbf{(1)}: no worse polynomial dependence; $\kappa^{3/2}\to\kappa^{4/3}$ at $\gamma=1$, $n=\kappa$, $\delta=L$.\newline ii) \textbf{(2)}: no worse if $\delta^2\le\gamma\sqrt n L\mu$; $\kappa^{3/2}\to\kappa$ at $\gamma=1$, $n=\kappa$, $\delta=0$.\newline iii) \textbf{(1)}, \textbf{(2)}: deterministic budgets.
-& \textbf{(1)}, \textbf{(2)}: quasar structure beyond PL; extra $\log(1/\gamma)$ overhead. \textbf{(2)}: $\kappa^2$ versus $\kappa^{3/2}$ at $\gamma=1$, $n=\kappa$, $\delta=L$. \\
+\textbf{(3)} PAGE \citep{csqLi2021}, Thm.~5, Cor.~6. Derived bound on $\mathbb{R}^d$ via PL constant $\gamma^2\mu$.
+& $\mathcal{O}\!\left(n+\left[n+\frac{\sqrt n\sqrt{L^2+\delta^2}}{\gamma^2\mu}\right]\ell_1\right)$ expected component gradients.
+& \textbf{(1)}: no worse polynomial dependence; extra accuracy logarithm. For $\gamma=1$, $n=\kappa$, $\varepsilon\le\Delta$: $\delta=L$ gives $\mathcal{O}(\kappa^{4/3}\ell_1)$ instead of $\mathcal{O}(\kappa^{3/2}\ell_1)$; $\delta=0$ gives $\mathcal{O}(\kappa\ell_1)$ for \textbf{(1)}, \textbf{(2)}. Fixed budgets instead of expected counts.
+& \textbf{(1)}, \textbf{(2)} require quasar structure; \textbf{(3)} only PL. Extra $\log(1/\gamma)$. At $\gamma=1$, $n=\kappa$, $\delta=L$, $\varepsilon\le\Delta$, \textbf{(2)} costs $\mathcal{O}(\kappa^2\ell_1)$. \\
 \midrule
-Full-batch acceleration \citep[Thm.~1]{csqHinder2020}\par $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left(\frac{n\sqrt\kappa}{\gamma}\log(1+\kappa/\gamma)(1+\ell_\gamma)\right)$\par Component values plus gradients; deterministic accuracy.
-& i) \textbf{(1)}, \textbf{(2)}: no function values.\newline ii) \textbf{(1)}, \textbf{(2)} at $\delta=0$: $n\sqrt\kappa/\gamma$ becomes $n+\sqrt\kappa/\gamma$, removing the search logarithm.
-& \textbf{(1)}, \textbf{(2)}: expected accuracy; similarity-dependent costs. \textbf{(1)} worse for $\begin{gathered}\delta\gg\sqrt{n\gamma}\,\mu\kappa^{3/4}\\{}\cdot\log^{3/2}(1+\kappa/\gamma)\end{gathered}$; \textbf{(2)} also loses for large $\delta$. \\
+\textbf{(4)} Full-batch acceleration \citep{csqHinder2020}, Thm.~1; $\mathbb{R}^d$.
+& $\mathcal{O}\!\left(\frac{n\sqrt\kappa}{\gamma}[1+\log(\kappa/\gamma)](1+\ell_\gamma)\right)$ component values and gradients; deterministic accuracy.
+& \textbf{(1)}, \textbf{(2)}: gradients only. At $\delta=0$, save a factor $\asymp\min(n,\sqrt\kappa/\gamma)[1+\log(\kappa/\gamma)]$ for $\varepsilon\le\Delta$. \textbf{(2)} retains this gain if $\delta^2\lesssim\gamma^3\mu^2(n+\sqrt\kappa/\gamma)$.
+& \textbf{(1)}, \textbf{(2)} give expected accuracy. \textbf{(1)} loses for $\delta\gg\sqrt{n\gamma}\,\mu^{1/4}L^{3/4}[1+\log(\kappa/\gamma)]^{3/2}$; \textbf{(2)} can also lose at large $\delta$. \\
 \midrule
-QASVRG \citep[Cor.~3.6, Option~I]{csqFu2023}\par Special case: $E=\mathbb{R}^d$, interpolation, $L_{\max}$-smooth components.
-& $\begin{aligned}\mathcal{O}\!\Big(&\Big[n+\min\!\left\{\frac{\kappa_{\max}}{\gamma^2},\frac{n\sqrt{\kappa_{\max}}}{\gamma}\right\}\\[-2pt]&\quad\cdot\log(1+1/\gamma)\log(1+\kappa_{\max}/\gamma)\Big]\ell_0\Big)\end{aligned}$\par Component values plus gradients.
-& i) \textbf{(1)}, \textbf{(2)}: no interpolation or function values.\newline ii) \textbf{(2)}: conditional rate gain on the overlap when $\begin{gathered}\delta^2/(\gamma^3\mu^2)\lesssim n\\{}+\min\{\kappa_{\max}/\gamma^2,n\sqrt{\kappa_{\max}}/\gamma\}\end{gathered}$.
-& \textbf{(2)}: similarity cost $\kappa_{\max}^2/\gamma^3$ at $\delta=L_{\max}$; no uniform rate gain. Scope extension beyond interpolation does not imply rate dominance. \\
+\textbf{(5)} QASVRG \citep{csqFu2023}, Cor.~3.6, Option I. Special case: $\mathbb{R}^d$, interpolation, $L_{\max}$-smooth components.
+& $\begin{aligned}
+&\mathcal{O}\!\Bigl(\Bigl[n+\min\!\Bigl\{\frac{\kappa_{\max}}{\gamma^2},\frac{n\sqrt{\kappa_{\max}}}{\gamma}\Bigr\}\\
+&\quad{}\cdot[1+\log(1/\gamma)]\\
+&\quad{}\cdot[1+\log(\kappa_{\max}/\gamma)]\Bigr](1+\ell_\gamma)\Bigr)
+\end{aligned}$ component values and gradients.
+& \textbf{(1)}, \textbf{(2)}: scope extends to non-interpolating sums; gradients only on the overlap. For \textbf{(2)}, a rate gain requires controlling $\delta^2/(\gamma^3\mu^2)$ relative to $n+\min\{\kappa_{\max}/\gamma^2,n\sqrt{\kappa_{\max}}/\gamma\}$.
+& Small similarity is needed for a rate gain. On the overlap, \textbf{(2)} has quadratic $\kappa_{\max}$ dependence at $\delta=L_{\max}$; \textbf{(5)} has at most linear dependence, apart from logarithms. \\
 \midrule
-AccSVRS \citep[v2, Sec.~3.3, App.~E]{csqLin2023v2}\par Special case: $E=\mathbb{R}^d$, $\gamma=1$, $F$ $\mu$-strongly convex, $f_1$ $L$-smooth, $\mu\le\delta\le L$.
-& $\begin{aligned}\mathcal{O}\!\Big(&[n+n^{3/4}(\sqrt{\delta/\mu}+\sqrt{L/\delta})\\[-2pt]&+\sqrt{n\kappa}]\log\!\left(1+\frac{\sqrt n\delta+L}{\mu}\right)\ell_0\Big)\end{aligned}$\par Expected component-gradient calls, including inner solves.
-& i) \textbf{(1)}: nonconvex $F$; $\delta$ outside $[\mu,L]$; no $L$-smooth $f_1$ requirement.\newline ii) \textbf{(1)} on overlap, $\delta=\mu$, $n\le\sqrt\kappa$: $n^{3/4}\sqrt\kappa\to\sqrt\kappa$, apart from logarithms.
-& \textbf{(1)}: at $\delta=L$, $\kappa>\sqrt n$, worse polynomial dependence by $(\kappa^2/n)^{1/12}$; similarity dependence is not optimal on this convex overlap. \\
+\textbf{(6)} AccSVRS \citep{csqLin2023v2}, \S3.3, App.~E. Special case: $\mathbb{R}^d$, $\gamma=1$, strongly convex $F$, $L$-smooth $f_1$, $\mu\le\delta\le L$.
+& $\mathcal{O}\!\left(\left[n+n^{3/4}\left(\sqrt{\delta/\mu}+\sqrt{L/\delta}\right)\right.\right.$\newline
+$\left.\left.{}+\sqrt{n\kappa}\right]\left[1+\log\frac{\sqrt n\delta+L}{\mu}\right](1+\ell_1)\right)$ expected component gradients, including inner solves.
+& \textbf{(1)}: at $\delta=\mu$, $n\le\sqrt\kappa$, $\varepsilon\le\Delta$, $\mathcal{O}(\sqrt\kappa\ell_1)$ instead of $\mathcal{O}(n^{3/4}\sqrt\kappa[1+\log\kappa]\ell_1)$. Scope: \textbf{(1)}, \textbf{(2)} allow nonconvex $F$, $\delta\notin[\mu,L]$, and no $L$-smoothness requirement on $f_1$.
+& \textbf{(1)} has worse polynomial cost at $\delta=L$, $\kappa>\sqrt n$: factor $(\kappa^2/n)^{1/12}$, excluding logarithms. Similarity dependence is not optimal on this convex overlap. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\kappa_{\max}=L_{\max}/\mu$; $\ell_\gamma=\log(1+\Delta/(\gamma\varepsilon))$; $\ell_0=1+\log(1+\Delta/\varepsilon)$. Interpolation means $x_\star\in\bigcap_i\arg\min f_i$. PL denotes the Polyak--\L{}ojasiewicz inequality; here its constant is $\gamma^2\mu$, and mean-square smoothness is at most $\sqrt{L^2+\delta^2}$. Rate arrows compare polynomial factors; $\lesssim$ suppresses universal constants.
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\kappa_{\max}=L_{\max}/\mu$; $L_{\max}$ is a common component smoothness bound. $\ell_a=\log(1+\Delta/(a\varepsilon))$ for $a\in\{1,\gamma\}$. PL means $\|\nabla F(x)\|^2\ge2\gamma^2\mu[F(x)-F(x_\star)]$. Costs count every component query, including full-gradient refreshes, batches, searches, and inner solves. $\lesssim$ suppresses universal constants.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

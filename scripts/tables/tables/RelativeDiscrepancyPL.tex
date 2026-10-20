@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeDiscrepancyPL.lean}{Relative\allowbreak{}Discrepancy\allowbreak{}PL}.}\label{tab:RelativeDiscrepancyPL}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with $L$-Lipschitz gradient, has a minimizer $x_\star$, and satisfies $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ for every $x$. Assume $0<\mu\le L$, $D,\Delta\ge0$, $\varepsilon>0$, and $f(x_0)-f(x_\star)\le\Delta$. Deterministic replies satisfy $\|\sum_{i=0}^{n-1}(g_{s+i}(x)-\nabla f(x))\|\le D\|\nabla f(x)\|$ for every $s,n,x$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
+\caption{Relative temporal discrepancy under the PL condition: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeDiscrepancyPL.lean}{RelativeDiscrepancyPL}.}\label{tab:RelativeDiscrepancyPL}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with $L$-Lipschitz gradient, attains its minimum at $x_\star$, and satisfies $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ for every $x$. Assume $0<\mu\le L$, $D,\Delta\ge0$, $\varepsilon>0$, and $f(x_0)-f(x_\star)\le\Delta$. Deterministic replies satisfy $\|\sum_{i=0}^{n-1}(g_{s+i}(x)-\nabla f(x))\|\le D\|\nabla f(x)\|$ for all $s,n,x$. Target: $f(x_{\rm out})-f(x_\star)\le\varepsilon$ almost surely under any execution law; \textbf{(1)} attains it for every seed.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,32 +9,17 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DiscrepancyBatchedGD.lean}{Discrepancy\allowbreak{}Batched\allowbreak{}GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DiscrepancyBatchedGD.md}{(review)}
-& $\mathcal{O}\!\left((1+D)\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DiscrepancyBatchedGD.lean}{Discrepancy\allowbreak Batched\allowbreak GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DiscrepancyBatchedGD.md}{(review)} & $\mathcal{O}((1+D)[1+\kappa\log(1+\Delta/\varepsilon)])$ replies. & & \\
 \midrule[1.2pt]
-Batched GD, Derived bound \citep[\S3, (9)--(11)]{rdplPuchinin2023v3}
-& $\mathcal{O}\!\left((1+D)\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$
-\newline $b=\max\{1,\lceil3D\rceil\}$, $\alpha\le1/3$.
-& \textbf{(1)}: Matches known rate; Lean formalization. Hilbert-space statement versus published $\mathbb{R}^d$ statement; same inner-product argument.
-& --- \\
+\textbf{(2)} Derived bound: fixed-step GD \citep{rdplPuchinin2023v3}, \S3, (9)--(11) & $\mathcal{O}((1+D)[1+\kappa\log(1+\Delta/\varepsilon)])$ replies; batches $\max\{1,\lceil3D\rceil\}$, relative error $\le1/3$. & \textbf{(1)}: Matches known rate; Lean formalization on Hilbert spaces. The inner-product argument of \textbf{(2)} extends from $\mathbb R^d$ and permits time-varying replies. & \\
 \midrule
-GD \citep[Thm.~2.1]{SmoothPLKarimi2020v4}
-\newline Exact-gradient special case: $D=0$, $\mathbb{R}^d$.
-& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right)$
-& \textbf{(1)}: Matches known rate at $D=0$.
-& --- \\
+\textbf{(3)} Exact GD \citep{rdplKarimi2020v4}, Thm.~2.1; $D=0$, $E=\mathbb R^d$ & $\mathcal{O}(1+\kappa\log(1+\Delta/\varepsilon))$ exact-gradient calls. & \textbf{(1)}: Matches known rate at $D=0$. & \textbf{(1)}: Larger leading iteration constant at $D=0$. \\
 \midrule
-RE-AGM \citep[Thm.~4]{vasinEtAl2025RelativeV3}
-\newline Special case: $\mu$-strongly convex, $\mathbb{R}^d$, $D=0$.
-& $\mathcal{O}\!\left(1+\sqrt{\frac{L}{\mu}}\log\left(1+\frac{L\Delta}{\mu\varepsilon}\right)\right)$
-& \textbf{(1)}: Scope: PL without strong convexity. Updates do not need $\mu$; stopping budget does.
-& \textbf{(1)}: on this subclass, $L/\mu$ instead of $\sqrt{L/\mu}$, up to the displayed logarithms. \\
+\textbf{(4)} Derived bound: RE-AGM \citep{igsVasinEtAl2025v3}, Thm.~4; strongly convex, $E=\mathbb R^d$ & $\mathcal{O}((\sqrt\kappa+D\kappa)\log(1+\kappa\Delta/\varepsilon))$ replies, $0<\varepsilon<\Delta$. Batches $\max\{1,\lceil D/\alpha\rceil\}$, $\alpha=c/\sqrt\kappa$, $0<c<(\sqrt2-1)/(18\sqrt2)$; assumes batch averages define a fixed relative-error oracle. & \textbf{(1)}: Scope: PL without strong convexity. On \textbf{(4)}\textquotesingle s restriction, $D\ge1$: matches $D\kappa$ dependence, with $\log(1+\Delta/\varepsilon)$ instead of $\log(1+\kappa\Delta/\varepsilon)$. Updates need no $\mu$; stopping still does. & On \textbf{(4)}\textquotesingle s restriction, $D\le\kappa^{-1/2}$: \textbf{(1)} costs $\mathcal{O}(\kappa\log(1+\Delta/\varepsilon))$, versus $\mathcal{O}(\sqrt\kappa\log(1+\kappa\Delta/\varepsilon))$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $\mu$: PL constant; $D$: relative temporal discrepancy; $\Delta$: initial gap bound; $\varepsilon$: target gap. Costs count individual oracle replies, including batches. $b$: consecutive replies averaged at one point; $\alpha$: relative gradient-error bound. RE-AGM uses $\|x_0-x_\star\|^2\le2\Delta/\mu$ on its strongly convex subclass.
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\Delta$ bounds the initial objective gap; $D$ is the relative window-discrepancy bound; $\varepsilon$ is the target objective gap; $\alpha$ is relative gradient error. Costs count individual replies, including all batch members. A fixed batch-average oracle returns the same averaged vector at a point across batches.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

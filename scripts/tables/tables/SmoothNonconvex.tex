@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Exact-gradient stationarity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothNonconvex.lean}{Smooth\allowbreak{}Nonconvex}.}\label{tab:SmoothNonconvex}
-\parbox{\linewidth}{\footnotesize A differentiable $f:E\to\mathbb{R}$ on a real Hilbert space with a measurable-space structure satisfies $\|\nabla f(x)-\nabla f(y)\|\le L\|x-y\|$, $f\ge f_{\mathrm{low}}$, and $f(x_0)-f_{\mathrm{low}}\le\Delta$, where $L>0$, $\Delta\ge0$, and $\varepsilon>0$. The oracle returns exact gradients. Target: $\int\|\nabla f(\widehat x(\omega))\|^2\,dP(\omega)\le\varepsilon^2$; the returned point is deterministic, so this is $\|\nabla f(\widehat x)\|\le\varepsilon$.}\par\smallskip
+\caption{Smooth nonconvex stationarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothNonconvex.lean}{SmoothNonconvex}.}\label{tab:SmoothNonconvex}
+\parbox{\linewidth}{\footnotesize A differentiable $f:E\to\mathbb R$ on a real Hilbert space with a measurable structure has $L$-Lipschitz gradient, $L>0$, and a lower bound $\ell$ satisfying $f(x_0)-\ell\le\Delta$, $\Delta\ge0$. The oracle returns exact gradients. For $\varepsilon>0$, the target is $\int\|\nabla f(\widehat x(\omega))\|^2\,dP(\omega)\le\varepsilon^2$, where $P$ is the execution law. Result \textbf{(1)} constructs GD with step $1/L$ and returns the deterministic queried point of smallest gradient norm; the setup does not restrict the algorithm.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,24 +9,27 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GdNonconvex.lean}{Gd\allowbreak{}Nonconvex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GdNonconvex.md}{(review)}
-& $\mathcal{O}\!(1+L\Delta/\varepsilon^2)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GdNonconvex.lean}{Gd\allowbreak Nonconvex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GdNonconvex.md}{(review)}
+& $\mathcal{O}(1+L\Delta/\varepsilon^2)$ & & \\
 \midrule[1.2pt]
-Classical GD \citep[p.~2]{SmoothNcAdKZ2021v3}
-& $\mathcal{O}\!(1+L\Delta/\varepsilon^2)$
-& \textbf{(1)}: Matches known rate; Lean formalization.\newline \textbf{(1)}: order optimal in sufficiently high dimension \citep[Thms.~1--2, $p=1$]{SmoothNcCarmon2019v3}; no fixed-low-dimension claim.
-& \textbf{(1)}: needs $\Delta$ in addition to $L$ for its fixed budget; gradient-norm stopping does not. \\
+\textbf{(2)} Classical GD, $\eta=1/L$ \citep[\S1]{sncAdKZ2022v3}
+& $\mathcal{O}(1+L\Delta/\varepsilon^2)$
+& \textbf{(1)}: Matches known rate; machine-checked formalization. Already order-optimal in sufficiently high dimension \citep[Thms.~1--2, $p=1$]{sncCarmon2020v3}.
+& \textbf{(1)} needs $\Delta$ for its fixed budget; gradient-norm stopping does not. \\
 \midrule
-Sharper GD bounds \citep[Thm.~2]{SmoothNcAdKZ2021v3}
-& $\mathcal{O}\!(1+L\Delta/\varepsilon^2)$\par $E=\mathbb{R}^n$, $f$ attains its minimum, $\Delta>0$; steps $1/L$ or $\sqrt{4/3}/L$.
-& \textbf{(1)}: matches the rate on this finite-dimensional restriction; no established improvement.
-& \textbf{(1)}: larger leading call constant for $L\Delta/\varepsilon^2\gg1$, even at the same step $1/L$. \\
+\textbf{(3)} GD, $\eta=1/L$ \citep[Thm.~2, (16)]{sncAdKZ2022v3}
+& $\mathcal{O}(1+L\Delta/\varepsilon^2)$\par $E=\mathbb R^d$, attained minimum.
+& \textbf{(1)}: Matches known rate on this finite-dimensional restriction; no established improvement.
+& \textbf{(1)} has about $1.5$ times the leading call constant when $L\Delta/\varepsilon^2\gg1$. \\
+\midrule
+\textbf{(4)} GD, $\eta=\sqrt{4/3}/L$ \citep[Thm.~2, (15)]{sncAdKZ2022v3}
+& $\mathcal{O}(1+L\Delta/\varepsilon^2)$\par $E=\mathbb R^d$, attained minimum.
+& \textbf{(1)}: Matches known rate on this finite-dimensional restriction; no established improvement.
+& \textbf{(1)} has about $1.54$ times the leading call constant when $L\Delta/\varepsilon^2\gg1$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} GD: gradient descent; $L$: gradient Lipschitz constant; $\Delta$: initial gap bound; $\varepsilon$: gradient-norm tolerance; $f_{\mathrm{low}}$: global lower bound; $P$: probability law; $\widehat x$: returned point; $n$: dimension. Costs count exact gradient calls, including the final gradient used for selection or stopping.
+\item[] \textbf{Abbr:} GD: gradient descent; $\eta$: step size; $L$: gradient Lipschitz constant; $\Delta$: initial objective-gap bound; $\varepsilon$: target gradient norm; $d$: dimension. Costs count exact gradient evaluations, including the terminal gradient used for selection or stopping.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

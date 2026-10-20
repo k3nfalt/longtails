@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Exact coordinate-oracle complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CoordinateSmoothStronglyConvex.lean}{Coordinate\allowbreak{}Smooth\allowbreak{}Strongly\allowbreak{}Convex}.}\label{tab:CoordinateSmoothStronglyConvex}
-\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, is $\mu$-strongly convex in the Euclidean norm, with $0<\mu\le L_i$ and $f(x+te_i)\le f(x)+t\partial_i f(x)+L_it^2/2$ for all $x,i,t$. A minimizer $x_\star$ satisfies $f(x_0)-f(x_\star)\le\Delta$, where $\Delta\ge0$. Queries return exact partial derivatives; $L_i,\mu,\Delta,\varepsilon$ are supplied. Target: $\mathbb{E}[f(y_K)-f(x_\star)]\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\caption{Exact coordinate-oracle complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CoordinateSmoothStronglyConvex.lean}{CoordinateSmoothStronglyConvex}.}\label{tab:CoordinateSmoothStronglyConvex}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, is $\mu$-strongly convex in the Euclidean norm and satisfies $f(x+te_i)\le f(x)+t\partial_i f(x)+L_i t^2/2$ for every $x,i,t$. A minimizer $x_\star$ satisfies $f(x_0)-f(x_\star)\le\Delta$, with $L_i\ge\mu>0$, $\Delta\ge0$, and $\varepsilon>0$. Queries return exact $\partial_i f(x)$; $L_i,\mu,\Delta,\varepsilon,x_0$ are supplied. Target: $\mathbb{E}[f(y_K)-f(x_\star)]\le\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,19 +9,17 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedCoordinateStronglyConvex.lean}{Accelerated\allowbreak{}Coordinate\allowbreak{}Strongly\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedCoordinateStronglyConvex.md}{(review)}
-& $\mathcal{O}\!\left(\sum_{i=1}^d\sqrt{L_i/\mu}\,\bigl[1+\log(1+\Delta/\varepsilon)\bigr]\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedCoordinateStronglyConvex.lean}{Accelerated\allowbreak Coordinate\allowbreak Strongly\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedCoordinateStronglyConvex.md}{(review)}
+& $\mathcal{O}\!\left(\sum_{i=1}^{d}\sqrt{L_i/\mu}\,[1+\log(1+\Delta/\varepsilon)]\right)$ & & \\
 \midrule[1.2pt]
-NU\_ACDM \citep[Thm.~5.1, $\beta=0$]{CoordAllenZhu2016}
-& $\mathcal{O}\!\left(\sum_{i=1}^d\sqrt{L_i/\mu}\,\bigl[1+\log(1+\Delta/\varepsilon)\bigr]\right)$
-& \textbf{(1)}: Matches known rate; Lean formalization.
-& \textbf{(1)}: worse universal constants from rounded sampling weights and smaller coupling parameter. \\
+\textbf{(2)} NU\_ACDM \citep[arXiv v3, Theorem~5.1, $\beta=0$]{allenZhuQuRichtarikYuan2016Coordinate}
+& $\mathcal{O}\!\left(\sum_{i=1}^{d}\sqrt{L_i/\mu}\,[1+\log(1+\Delta/\varepsilon)]\right)$
+& \textbf{(1)}: Matches known rate; Lean formalization. The coordinate upper model gives no scope extension; tuning knowledge and expected last-iterate guarantee are unchanged.
+& \textbf{(1)}: Worse constants from integer-rounded sampling weights and a smaller coupling parameter. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $d$: dimension; $L_i$: coordinate smoothness constants; $\mu$: strong-convexity modulus; $\Delta$: initial-gap bound; $\varepsilon$: target accuracy; $e_i$: coordinate unit vector; $y_K$: returned iterate; $K$: number of partial-derivative calls. Expectation is over coordinate sampling; $\log$ is natural.
+\item[] \textbf{Abbr:} Costs count individual partial-derivative queries. $e_i$: coordinate unit vector; $L_i$: coordinate smoothness constants; $\mu$: strong-convexity modulus; $\Delta$: initial-gap bound; $y_K$: returned iterate; $\mathbb{E}$: expectation over coordinate sampling; $\log$: natural logarithm.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

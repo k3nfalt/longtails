@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Bounded temporal discrepancy with a Lipschitz Hessian: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean}{Hessian\allowbreak{}Lipschitz\allowbreak{}Temporal\allowbreak{}Discrepancy}.}\label{tab:HessianLipschitzTemporalDiscrepancy}
-\parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space, $f\in C^2$ is $\mu$-strongly convex, has $L$-Lipschitz gradient and $M$-Lipschitz Hessian, with $0<\mu\le L$, $M,D,\Delta\ge0$, and $\varepsilon>0$. A minimizer $x_\star$ satisfies $f(x_0)-f(x_\star)\le\Delta$. Call $k$ returns $\nabla f(x)+e_k$, with hidden, query- and seed-independent errors satisfying $\sup_n\|\sum_{k<n}e_k\|\le D$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$ almost surely. All setup parameters are supplied; the setup imposes no algorithm restriction. Costs count individual oracle calls, including batches and padding.}\par\smallskip
+\caption{Temporal-discrepancy acceleration under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzTemporalDiscrepancy.lean}{HessianLipschitzTemporalDiscrepancy setup}.}\label{tab:HessianLipschitzTemporalDiscrepancy}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space, $f\in C^2$ is $\mu$-strongly convex, $L$-smooth, and $\|\nabla^2 f(x)-\nabla^2 f(y)\|\le M\|x-y\|$, with $0<\mu\le L$. A minimizer $x_*$ exists and $f(x_0)-f(x_*)\le\Delta$. Call $k$ returns $\nabla f(x)+e_k$, with hidden, query- and seed-independent errors satisfying $\sup_n\|\sum_{k<n}e_k\|\le D$. Here $M,D,\Delta\ge0$, $\varepsilon>0$; all parameters are supplied. The target is $f(x_{\rm out})-f(x_*)\le\varepsilon$; \textbf{(1)} achieves it for every seed. Costs count all gradient replies, including batches and padding. The reviews identify no concrete application establishing this exact cancellation model.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,24 +9,23 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonlinearTemporalAcceleration.lean}{Nonlinear\allowbreak{}Temporal\allowbreak{}Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonlinearTemporalAcceleration.md}{(review)}
-& $\mathcal{O}\!\left(\left[\sqrt{\kappa}\left(1+\frac{MD}{\mu^2}\right)+\frac{D}{\sqrt{\mu\varepsilon}}+1\right]\ell\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonlinearTemporalAcceleration.lean}{Nonlinear\allowbreak Temporal\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonlinearTemporalAcceleration.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\left[\sqrt{\kappa}\left(1+\frac{MD}{\mu^2}\right)+\frac{D}{\sqrt{\mu\varepsilon}}\right]\ell\right)$
+& & \\
 \midrule[1.2pt]
-Derived bound: restarted, batched AGD+ \citep[Lem.~3.2, Eq.~(3.2)]{hltdCohen2018}
-& $\mathcal{O}\!\left(1+\sqrt{\kappa}\left[\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right]\right)$
-& \textbf{(1)}: noise cost $\sqrt{\kappa}D/\sqrt{\mu\varepsilon}\to D\ell/\sqrt{\mu\varepsilon}$. Total speedup $\asymp\sqrt{\kappa}/\ell$ when $\sqrt{\kappa}\gg\ell$, $D\gg\ell\sqrt{\mu\varepsilon}$, $M\sqrt{\varepsilon}\ell\ll\mu^{3/2}$.
-& \textbf{(1)}: needs $C^2$, Lipschitz Hessian and known $M$ in addition; adds $\sqrt{\kappa}MD\ell/\mu^2$ and logarithmic overhead. Loses when $M\sqrt{\varepsilon}\ell\gg\mu^{3/2}$; no uniform low-noise gain. \\
+\textbf{(2)} Restarted, batched AGD+ \citep{hltCohen2018}; Derived bound from Lemma~3.2 and Eq.~(3.2).
+& $\displaystyle\mathcal{O}\!\left(\sqrt{\kappa}\left[\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right]\right)$
+& \textbf{(1)}: noise cost $D\ell/\sqrt{\mu\varepsilon}$ instead of $\sqrt{\kappa}D/\sqrt{\mu\varepsilon}$. Total speedup $\asymp\sqrt{\kappa}/\ell$ when $\sqrt{\kappa}\ge C\ell$, $D\ge C\ell\sqrt{\mu\varepsilon}$, $M\sqrt{\varepsilon}\ell\le\mu^{3/2}/C$.\par For $\mu=M=D=\Delta=1$, $L=\varepsilon^{-1}$, $\varepsilon\to0$: $\mathcal{O}(\varepsilon^{-1/2}\log(1/\varepsilon))$ instead of $\mathcal{O}(\varepsilon^{-1})$.
+& \textbf{(1)} needs Lipschitz Hessian and known $M$; adds $\sqrt{\kappa}MD\ell/\mu^2$. Can lose for small noise or $M\sqrt{\varepsilon}\gg\mu^{3/2}$. \\
 \midrule
-Derived bound: batching and dilation \citep[Prop.~4, v2]{hltdSchmidt2011v2}; quadratics only ($M=0$)
-& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right)$
-& \textbf{(1)}: Scope: extends from quadratics to nonlinear objectives with Lipschitz Hessian; dilation reduction requires affine gradients.
-& \textbf{(1)}: at $M=0$, extra $\ell_0$ on the noise term; no rate gain. \\
+\textbf{(3)} Quadratic dilation reduction \citep{hltSchmidt2011v2}, Prop.~4; specialization to $M=0$.
+& $\displaystyle\mathcal{O}\!\left(\sqrt{\kappa}\,\ell_0+\frac{D}{\sqrt{\mu\varepsilon}}\right)$
+& \textbf{(1)}: scope extends from quadratics to nonlinear Hessian-Lipschitz objectives. The dilation reduction requires affine gradients. Matches known acceleration when $D=0$.
+& \textbf{(1)} at $M=0$: extra $\ell_0$ factor on the noise term. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell_0=1+\log(1+\Delta/\varepsilon)$; $\ell=1+\log(1+\Delta/\varepsilon+M^2\Delta/\mu^3)$; $\nabla^2 f$ denotes the Hessian, whose Lipschitz constant is $M$ in operator norm; $\widehat x$ denotes the returned point. $\ll,\gg$ denote separation by sufficiently small/large universal factors; $\asymp$ denotes equality up to universal factors.
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell_0=1+\log(1+\Delta/\varepsilon)$; $\ell=1+\log(1+\Delta/\varepsilon+M^2\Delta/\mu^3)$; $C$ is a sufficiently large universal constant. $\asymp$ denotes equality up to universal factors; $\log$ is natural.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

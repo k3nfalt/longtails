@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Composite finite-sum strongly convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeFiniteSumStronglyConvex.lean}{Composite\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Strongly\allowbreak{}Convex}.}\label{tab:CompositeFiniteSumStronglyConvex}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space, $F=\frac1n\sum_{i=1}^n f_i+\psi$, with convex differentiable $L$-smooth components and an everywhere finite $\mu$-strongly convex regularizer. Exact component-gradient and proximal oracles are available. A minimizer $x_\star$ exists with $F(x_0)-F(x_\star)\le\Delta$; $n\ge1$, $L,\mu,\varepsilon>0$, $\Delta\ge0$. Target: $\mathbb{E}[F(\widetilde x_S)-F(x_\star)]\le\varepsilon$.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeFiniteSumStronglyConvex.lean}{CompositeFiniteSumStronglyConvex}.}\label{tab:CompositeFiniteSumStronglyConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, minimize $F(x)=n^{-1}\sum_{i=1}^{n}f_i(x)+\psi(x)$, with $n\ge1$, convex differentiable $L$-smooth components, and an everywhere finite $\mu$-strongly convex regularizer. Exact component gradients and exact proximal minimizers are available. Assume $L,\mu,\varepsilon>0$, $\Delta\ge0$, and a minimizer $x_\star$ with $F(x_0)-F(x_\star)\le\Delta$. Target: $\int [F(\widehat x(\omega))-F(x_\star)]\,dP(\omega)\le\varepsilon$, where $P$ is the algorithm's random-sampling law.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,20 +9,13 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/KatyushaCompositeStronglyConvex.lean}{Katyusha\allowbreak{}Composite\allowbreak{}Strongly\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/KatyushaCompositeStronglyConvex.md}{(review)}
-& $\mathcal{O}\!\left((n+\sqrt{nL/\mu})\log(1+\Delta/\varepsilon)\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/KatyushaCompositeStronglyConvex.lean}{Katyusha\allowbreak Composite\allowbreak Strongly\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/KatyushaCompositeStronglyConvex.md}{(review)} & $\mathcal{O}\!\left((n+\sqrt{nL/\mu})\log(1+\Delta/\varepsilon)\right)$ & & \\
 \midrule[1.2pt]
-Katyusha \citep[Thm.~2.1, Option~I]{AllenZhu2018KatyushaComposite}
-\newline Restriction: $E=\mathbb{R}^d$.
-& $\mathcal{O}\!\left((n+\sqrt{nL/\mu})\log(1+\Delta/\varepsilon)\right)$
-& \textbf{(1)}: Matches known rate on $\mathbb{R}^d$; Lean formalization with explicit deterministic call budget.\newline Hilbert-space scope.
-& \textbf{(1)}: Excludes extended-valued regularizers, including indicator constraints; larger universal budget constants. \\
+\textbf{(2)} Katyusha \citep{AllenZhu2018KatyushaComposite}, Theorem 2.1, Option I; $E=\mathbb{R}^d$ & $\mathcal{O}\!\left((n+\sqrt{nL/\mu})\log(1+\Delta/\varepsilon)\right)$ & \textbf{(1)}: Matches known rate on $\mathbb{R}^d$, including $\mu>L$. Formalization with an explicit deterministic call budget; scope extends to real Hilbert spaces. & \textbf{(1)}: Requires everywhere finite $\psi$, excluding indicator constraints; worse numerical constants. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $n$: component count; $L$: component smoothness; $\mu$: regularizer strong-convexity modulus; $\Delta$: initial objective-gap bound; $\varepsilon$: target expected gap; $\widetilde x_S$: final weighted epoch snapshot. Complexity counts component-gradient plus proximal calls, including full-gradient refreshes; $\log$ is the natural logarithm.
+\item[] \textbf{Abbr:} $n$: component count; $L$: component-gradient Lipschitz constant; $\mu$: regularizer strong-convexity modulus; $\Delta$: initial-gap bound; $\varepsilon$: target expected gap. Costs count component-gradient and proximal calls in total, including full-gradient refreshes; $\log$ is natural logarithm.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,49 +1,47 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGeneralizedParameterFree.lean}{Composite\allowbreak{}Generalized\allowbreak{}Parameter\allowbreak{}Free}.}\label{tab:CompositeGeneralizedParameterFree}
-\parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f$ is convex with continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|\nabla f\|\le M$ on $[x,y]$. The finite-valued $\psi$ is convex on $Q$; exact gradients and exact proximal minimization over $Q$ are available. For $x_0\in Q$, some minimizer $x_\star\in Q$ satisfies $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$. Here $h_0,L_0,R,\Delta,\varepsilon>0$ and $L_1,G\ge0$. Target: $\widehat x\in Q$ with $F(\widehat x)-F(x_\star)\le\varepsilon$. Costs count individual oracle calls, including rejected trials.}\par\smallskip
+\caption{Composite optimization with parameter-free updates: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGeneralizedParameterFree.lean}{CompositeGeneralizedParameterFree}.}\label{tab:CompositeGeneralizedParameterFree}
+\parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f$ is convex with continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|\nabla f(z)\|\le M$ on $[x,y]$; $\psi$ is finite-valued and convex on $Q$. Exact gradients and minimizers of $\psi(u)+\langle v,u-z\rangle+\|u-z\|^2/(2a)$ over $u\in Q$ are available for every $a>0,z,v$. There is a minimizer $x_\star\in Q$ with $x_0\in Q$, $\|x_0-x_\star\|\le R$, $F(x_0)-F(x_\star)\le\Delta$, and $\|\nabla f(x_\star)\|\le G$. Here $L_0,R,\Delta,h_0,\varepsilon>0$ and $L_1,G\ge0$. Target: deterministic $\widehat x\in Q$ with $F(\widehat x)-F(x_\star)\le\varepsilon$. The constructed method receives only $(x_0,h_0)$; its stopping budget depends on all setup parameters.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BacktrackingCompositeGeneralized.lean}{Backtracking\allowbreak{}Composite\allowbreak{}Generalized} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BacktrackingCompositeGeneralized.md}{(review)}
-& $\begin{gathered}
-\mathcal{O}\!\Bigl(\sqrt{L_\star R^2/\varepsilon}
-\\ +(1+q)\log\bigl(2+q+(L_\star h_0)^{-1}
- +L_1^2\Delta/L_\star\bigr)
-\\ +\log(2+L_\star h_0+L_1^2\Delta h_0)\Bigr)
-\end{gathered}$\par Gradient and proximal calls; three per trial.
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BacktrackingCompositeGeneralized.lean}{Backtracking\allowbreak Composite\allowbreak Generalized} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BacktrackingCompositeGeneralized.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}
+&\sqrt{L_\star R^2/\varepsilon}\\
+&+(1+s)\log\!\left(2+s+\frac{1}{L_\star h_0}+\frac{L_1^2\Delta}{L_\star}\right)\\
+&+\log(2+L_\star h_0+L_1^2\Delta h_0)
+\end{aligned}\right)$\par Gradient and prox calls; all rejected trials included.
+& & \\
 \midrule[1.2pt]
-Accelerated proximal gradient \citep[App.~B, Thm.~B.1]{cgpfLiEtAl2026v3}
-& $\begin{gathered}
-\mathcal{O}\!\Bigl(\sqrt{L_\star R^2/\varepsilon}
- +\log(2+\Delta/(L_\star R^2))
-\\ +(1+q)\log(2+\Delta/\varepsilon)\Bigr)
-\end{gathered}$\par Gradient and proximal calls.
-& i) \textbf{(1)}: no $L_0,L_1,G,R,\Delta$ in updates; stopping still needs them.\newline ii) \textbf{(1)}: Hilbert-space, first-order smoothness scope.\newline iii) \textbf{(1)}: matched leading rate; $\varepsilon$-free logarithms improve overhead when $h_0\asymp L_\star^{-1}$, $L_1>0$, $\varepsilon\ll\min\{L_\star/L_1^2,\Delta/(1+q)\}$.\newline $\Gamma_0=2\Delta/R^2$, $\tau=G$. $E=\mathbb{R}^d$, twice-differentiable $f$, $\|\nabla^2 f\|\le L_0+L_1\|\nabla f\|$; $\psi+\iota_Q$ proper closed convex.
-& \textbf{(1)}: extra logarithmic cost can occur for $\varepsilon\gtrsim L_\star/L_1^2$; poor $h_0$ adds mismatch costs. Roughly threefold calls per accepted step. Finite $\psi$, versus extended-valued penalties. \\
+\textbf{(2)} Accelerated proximal gradient \citep[Thm.~B.1]{LiLaiAnHuWen2026v3Composite}\par Twice-differentiable $f$ on $\mathbb R^d$, $\|\nabla^2f\|\le L_0+L_1\|\nabla f\|$; proper closed convex proximable $h=\psi+\iota_Q$.
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}
+&\sqrt{L_\star R^2/\varepsilon}\\
+&+\log\!\left(2+\frac{\Delta}{L_\star R^2}\right)\\
+&+(1+s)\log(2+\Delta/\varepsilon)
+\end{aligned}\right)$\par Gradient and prox calls; $\Gamma_0=2\Delta/R^2$.
+& \textbf{(1)}: Updates need no $L_0,L_1,G,R,\Delta$; matched leading rate. Hilbert-space, first-order smoothness scope. With $h_0\asymp L_\star^{-1}$, logarithmic overhead improves for $L_1>0$, $\varepsilon\ll\min\{L_\star/L_1^2,\Delta/(1+s)\}$.
+& \textbf{(1)}: Roughly threefold call overhead per accepted step; $h_0$-mismatch logs. For $h_0\asymp L_\star^{-1}$, $\varepsilon\gtrsim L_\star/L_1^2$ can lose a logarithm. Finite-valued $\psi$ rather than general extended-valued $h$. \\
 \midrule
-Accelerated GRAAL \citep[Cor.~3]{BorodichKovalev2025GRAALV2}\par Special case: $Q=\mathbb{R}^d$, $\psi=0$, $G=0$.
-& $\begin{gathered}
-\mathcal{O}\!\Bigl(1+\sqrt{L_0R^2/\varepsilon}+q^3
-\\ +(1+q^2)\log(1/(\eta_0L_0))\Bigr)
-\end{gathered}$\par Gradient and value calls; $\eta_0L_0e^q\le1$. Requires $f\in C^2$, $\|\nabla^2 f\|\le L_0+L_1\|\nabla f\|$.
-& i) \textbf{(1)}: Scope: extends to composite constraints, $G>0$.\newline ii) \textbf{(1)}: any $h_0$; no values on overlap (prox is explicit).\newline iii) \textbf{(1)}: startup $q^3\to\mathcal{O}\!(q^2)$ for $q\gg1$, $h_0\asymp L_0^{-1}$, $L_1^2\Delta/L_0\lesssim e^q$; total gain requires $\varepsilon\gtrsim L_0R^2/q^6$.
-& \textbf{(1)}: backtracking adds a constant-factor call overhead; unrestricted $h_0$ retains mismatch costs. \\
+\textbf{(3)} Accelerated GRAAL \citep[Cor.~3]{BorodichKovalev2025v2Composite}\par Special case: $Q=\mathbb R^d$, $\psi=0$, $G=0$; $C^2$ Hessian condition as in \textbf{(2)}.
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}
+&1+\sqrt{L_0R^2/\varepsilon}+s^3\\
+&+(1+s^2)\log\!\frac{1}{\eta_0L_0}
+\end{aligned}\right)$\par Gradient and value calls; requires $\eta_0L_0e^s\le1$.
+& \textbf{(1)}: Composite scope; no values (prox is closed form here); arbitrary $h_0$. On the overlap, $s\gg1$, $h_0\asymp L_0^{-1}$, $\eta_0=e^{-s}/L_0$, $L_1^2\Delta/L_0\lesssim e^s$: $\mathcal{O}(1+\sqrt{L_0R^2/\varepsilon}+s^2)$ versus $\mathcal{O}(1+\sqrt{L_0R^2/\varepsilon}+s^3)$; total gain when $\varepsilon\gg L_0R^2/s^6$.
+& \textbf{(1)}: Constant-factor backtracking overhead. \\
 \midrule
-AC-FGM \citep[Cor.~1 and following remark]{LiLan2024ACFGMv3}\par Initial-search variant; closed convex $Q\subseteq\mathbb{R}^d$, closed convex $\psi$.
-& $\mathcal{O}\!\left(1+\sqrt{\bar L R^2/\varepsilon}+\log_+(\bar L/\ell_{\rm init})\right)$\par Gradient, value and proximal calls, including initial trials.
-& \textbf{(1)}: no function values; explicit setup-parameter bound. Baseline uses trajectory curvature $\bar L$; no polynomial setup-parameter bound established. Rates not comparable.
-& \textbf{(1)}: backtracking beyond initialization; no parameter-free-update advantage. \\
+\textbf{(4)} AC-FGM \citep[Cor.~1 and subsequent remark]{LiLan2024v3Composite}\par Initial-search variant; closed convex $Q\subseteq\mathbb R^d$, closed convex $\psi$; local Lipschitz bound $\bar L$ covering search points and trials.
+& $\displaystyle\mathcal{O}\!\left(1+\sqrt{\bar L R^2/\varepsilon}+\log_+\!\frac{\bar L}{\ell}\right)$\par Value, gradient and prox calls, including initialization; initial curvature estimate $0<\ell\le\bar L$.
+& \textbf{(1)}: No function values; explicit polynomial parameter dependence. Rates are not comparable: no polynomial bound on $\bar L$ in $L_0,L_1,G,R,\Delta$ is established here.
+& \textbf{(1)}: Repeated backtracking instead of initial search only. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $L_\star=L_0+L_1G$; $q=L_1R$; $\iota_Q$ is the convex indicator of $Q$; $\eta_0$ is GRAAL's initial step; $\bar L$ bounds AC-FGM's local curvature estimates and initialization smoothness; $\ell_{\rm init}>0$ is its initial curvature estimate; $\log_+(t)=\max\{0,\log t\}$; $\asymp,\lesssim$ suppress universal factors.
+\item[] \textbf{Abbr:} $L_\star=L_0+L_1G$; $s=L_1R$; $\log_+t=\max\{0,\log t\}$. $\eta_0$ is the initial step in \textbf{(3)}; $\bar L$ bounds the local Lipschitz estimates and initial trials in \textbf{(4)}, and $\ell$ is its initial curvature estimate. $\iota_Q$ is $0$ on $Q$ and $+\infty$ outside. Costs count individual exact oracle calls; $\asymp$ and $\lesssim$ suppress universal factors.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

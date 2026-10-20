@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Weakly convex optimization with heavy-tailed noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeaklyConvexHeavyTailed.lean}{Weakly\allowbreak{}Convex\allowbreak{}Heavy\allowbreak{}Tailed}.}\label{tab:WeaklyConvexHeavyTailed}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner product space, $X$ is closed and convex, $x_0\in X$, and $f(y)\ge f(x)+\langle v(x),y-x\rangle-\frac{\rho}{2}\|y-x\|^2$ for $x,y\in X$, with $\|v(x)\|\le G$. A lower bound $\ell\le f|_X$ satisfies $f(x_0)-\ell\le\Delta$. The jointly measurable oracle uses IID samples, with $\mathbb{E} g(x,\xi)=v(x)$ and $\mathbb{E}\|g(x,\xi)-v(x)\|^\alpha\le\sigma^\alpha$ (the corresponding integrability holds); exact projection onto $X$ is available. Here $\rho,G,\varepsilon>0$, $\sigma,\Delta\ge0$, and $1<\alpha\le2$. Target: $\mathbb{E}\|2\rho(x_J-\widehat x_J)\|^2\le\varepsilon^2$ for a uniformly sampled iterate.}\par\smallskip
+\caption{Weakly convex optimization with heavy-tailed noise (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeaklyConvexHeavyTailed.lean}{WeaklyConvexHeavyTailed}).}\label{tab:WeaklyConvexHeavyTailed}
+\parbox{\linewidth}{\footnotesize A finite-dimensional real inner-product space, closed convex $X$, $x_0\in X$, and a selection $v$ satisfying $f(y)\ge f(x)+\langle v(x),y-x\rangle-\rho\|y-x\|^2/2$ and $\|v(x)\|\le G$ on $X$. Here $\rho,G>0$, $f\ge f_{\rm low}$ on $X$, and $f(x_0)-f_{\rm low}\le\Delta$. The jointly measurable oracle uses IID samples with $\mathbb E g(x,\xi)=v(x)$ and $\mathbb E\|g(x,\xi)-v(x)\|^\alpha\le\sigma^\alpha$, $1<\alpha\le2$, $\sigma\ge0$, with these integrals finite; exact projection onto $X$ is available. The setup requires constant-step, constant-threshold projected clipped subgradient iterations. The target is $\mathbb E\|\nabla\phi(x_J)\|^2\le\varepsilon^2$ for a uniformly sampled iterate, $\varepsilon>0$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,29 +9,30 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/WeaklyConvexClippedSubgradient.lean}{Weakly\allowbreak{}Convex\allowbreak{}Clipped\allowbreak{}Subgradient} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/WeaklyConvexClippedSubgradient.md}{(review)}
-& $\mathcal{O}\!\Bigl(1+\frac{\rho\Delta(G^2+\sigma^\alpha G^{2-\alpha})}{\varepsilon^4} +\frac{\rho\Delta\sigma^{\alpha/(\alpha-1)}}{\varepsilon^{(3\alpha-2)/(\alpha-1)}}\Bigr)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/WeaklyConvexClippedSubgradient.lean}{Weakly\allowbreak Convex\allowbreak Clipped\allowbreak Subgradient} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/WeaklyConvexClippedSubgradient.md}{(review)} &
+$\mathcal{O}\!\left(\begin{aligned}&1+\frac{\rho\Delta(G^2+\sigma^\alpha G^{2-\alpha})}{\varepsilon^4}\\&{}+\frac{\rho\Delta\sigma^{\alpha/(\alpha-1)}}{\varepsilon^{(3\alpha-2)/(\alpha-1)}}\end{aligned}\right)$ & & \\
 \midrule[1.2pt]
-Clip-SGD \citep[Thm.~5, Eq.~(27)]{wchtZhu2025v1}; $\eta_0=1$, batch size $1$. Requires bounded all subgradients, attained minimum, $X\subset\operatorname{int}(\operatorname{dom}f)$
-& $\begin{aligned}\mathcal{O}\!\Bigl(1&+\frac{(\Delta+G+\rho)^2G^2}{\varepsilon^4}\\&+\Bigl(\frac{(\Delta+G+\rho)\sigma}{\varepsilon^2}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr)\end{aligned}$
-& \textbf{(1)}: noise exponent $\frac{3\alpha-2}{\alpha-1}$ instead of $\frac{2\alpha}{\alpha-1}$; smaller noise term if $\sigma>0$ and $\varepsilon^{(2-\alpha)/(\alpha-1)}<\frac{(\Delta+G+\rho)^{\alpha/(\alpha-1)}}{\rho\Delta}$ ($\Delta>0$). Method-specific gain for $\alpha<2$; none in the exponent at $\alpha=2$.
-& \textbf{(1)}: needs $\rho,\Delta,\varepsilon$ in addition for tuning. Expectation only; baseline also gives high-probability bounds. Deterministic coefficients not comparable: baseline coefficient is dimensionally inhomogeneous. \\
+\textbf{(2)} Clip-SGD \citep[Thm.~5, Eq.~(27)]{wchZhu2025v1}; expectation, $\eta_0=1$, batch size $1$; bounded subgradients on $X\subset\operatorname{int}(\operatorname{dom}f)$ &
+$\mathcal{O}\!\left(\begin{aligned}&1+\frac{(\Delta+G+\rho)^2G^2}{\varepsilon^4}\\&{}+\left(\frac{(\Delta+G+\rho)\sigma}{\varepsilon^2}\right)^{\!\alpha/(\alpha-1)}\end{aligned}\right)$ &
+\textbf{(1)}: Clip-SGD noise exponent improves for $\alpha<2$; for $\sigma,\Delta>0$, smaller noise term when $\varepsilon^{(2-\alpha)/(\alpha-1)}<(\Delta+G+\rho)^{\alpha/(\alpha-1)}/(\rho\Delta)$. Fixed positive parameters, $\alpha=3/2$, $\varepsilon\to0$: $\mathcal{O}(\varepsilon^{-5})$ instead of $\mathcal{O}(\varepsilon^{-6})$. No exponent gain at $\alpha=2$. &
+\textbf{(1)}: tuning needs $\rho,\Delta,\varepsilon$ in addition to $G,\sigma,\alpha$ and the horizon. \\
 \midrule
-Derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; $X=\mathbb{R}^d$, closed-form ball projection
-& $\mathcal{O}\!\Bigl(\Bigl(1+\frac{\rho\Delta}{\varepsilon^2}\Bigr) \cdot\Bigl[1+\frac{G^2}{\varepsilon^2}+\Bigl(\frac{\sigma}{\varepsilon}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr]\Bigr)$
-& \textbf{(1)}: Matches known rate for $\varepsilon<2G$, $\varepsilon^2\le\rho\Delta$; single loop instead of nested loops. Scope: also constrained $X$ with only $\Pi_X$.
-& --- \\
+\textbf{(3)} Clip-SGD \citep[Thm.~3, Eq.~(22)]{wchZhu2025v1}; probability $1-\delta$, $\eta_0=1$, batch size $1$; bounded subgradients on $X\subset\operatorname{int}(\operatorname{dom}f)$ &
+$\mathcal{O}\!\left(1+\frac{C_\delta^2G^2}{\varepsilon^4}+\left(\frac{C_\delta\sigma}{\varepsilon^2}\right)^{\!\alpha/(\alpha-1)}\right)$\par Guarantees $T^{-1}\sum_{t=1}^T\|\nabla\phi(x_t)\|^2\le\varepsilon^2$ with probability $1-\delta$. &
+\textbf{(1)}: for fixed positive parameters and confidence, $\alpha=3/2$, $\varepsilon\to0$, expected accuracy costs $\mathcal{O}(\varepsilon^{-5})$ versus $\mathcal{O}(\varepsilon^{-6})$ for this stronger guarantee. &
+\textbf{(1)} gives expectation only, losing the probability guarantee of \textbf{(3)}; needs $\rho,\Delta$ for tuning. \\
 \midrule
-Derived bound: proximal point \citep[Sec.~3]{wchtDavisGrimmer2019} + \citep[Thm.~9]{tcLZ2023v3}; bounded $X$, diameter $D$, only $\Pi_X$
-& $\begin{aligned}\mathcal{O}\!\Bigl(&\Bigl(1+\frac{\rho\Delta}{\varepsilon^2}\Bigr)\\&\cdot\Bigl[1+\frac{(G+\rho D)^2}{\varepsilon^2}+\Bigl(\frac{\sigma}{\varepsilon}\Bigr)^{\!\alpha/(\alpha-1)}\Bigr]\Bigr)\end{aligned}$
-& \textbf{(1)}: i) For $\varepsilon<2G$, $\varepsilon^2\le\rho\Delta$: $G^2$ instead of $(G+\rho D)^2$; same leading noise term. Gain in deterministic term when $\rho D>G$.\newline ii) Scope: unbounded constrained $X$ with only $\Pi_X$; reduction there unresolved.
-& --- \\
+\textbf{(4)} Derived bound: proximal point \citep[Sec.~3]{wchDavis2018v5} with \citep[Thm.~9]{wchLiu2023v3}; $X=\mathbb R^d$ &
+$\mathcal{O}\!\left(1+\frac{\rho\Delta G^2}{\varepsilon^4}+\frac{\rho\Delta\sigma^{\alpha/(\alpha-1)}}{\varepsilon^{(3\alpha-2)/(\alpha-1)}}\right)$\par $\varepsilon<G$, $\varepsilon^2\le\rho\Delta$; all inner calls counted; ball projection is closed-form. &
+\textbf{(1)}: matches known rate on $X=\mathbb R^d$ in this regime, with one loop instead of nested loops. Scope extends to constrained $X$ using $\Pi_X$. & \\
+\midrule
+\textbf{(5)} Derived bound: proximal point \citep[Sec.~3]{wchDavis2018v5} with \citep[Thm.~9]{wchLiu2023v3}; bounded $X$, diameter $D$ &
+$\mathcal{O}\!\left(\begin{aligned}&1+\frac{\rho\Delta(G+\rho D)^2}{\varepsilon^4}\\&{}+\frac{\rho\Delta\sigma^{\alpha/(\alpha-1)}}{\varepsilon^{(3\alpha-2)/(\alpha-1)}}\end{aligned}\right)$\par $\varepsilon<G$, $\varepsilon^2\le\rho\Delta$; all inner calls counted; only $\Pi_X$ needed. &
+\textbf{(1)}: deterministic term smaller by $(1+\rho D/G)^2$ when $\rho D>G$; noise order matches in this regime. Scope: unbounded $X$ with $\Pi_X$; this reduction there remains unresolved. & \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\widehat x=\arg\min_{y\in X}\{f(y)+\rho\|y-x\|^2\}$; $\Pi_X$ is Euclidean projection; $D=\operatorname{diam}X$. Costs count stochastic subgradient and projection calls, including every inner step. Rates use fixed $\alpha$; $\mathcal{O}$ suppresses constants depending on $\alpha$.
+\item[] \textbf{Abbr:} $\phi(x)=\min_{y\in X}\{f(y)+\rho\|y-x\|^2\}$; $\nabla\phi(x)=2\rho(x-\operatorname{prox}_{f+I_X,1/(2\rho)}(x))$; $I_X$: convex indicator of $X$. $\Pi_X$: Euclidean projection; $D=\operatorname{diam}X$; $\delta\in(0,1)$; $C_\delta=\Delta+(G+\rho)(1+\log(1/\delta))$. Costs count stochastic subgradient and projection calls separately, including every inner iteration; a closed-form projection adds no oracle requirement.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

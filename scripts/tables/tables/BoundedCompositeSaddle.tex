@@ -1,42 +1,38 @@
 \begin{table}[tp]
 \centering
-\caption{Bounded composite saddle problems: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedCompositeSaddle.lean}{Bounded\allowbreak{}Composite\allowbreak{}Saddle}.}\label{tab:BoundedCompositeSaddle}
-\parbox{\linewidth}{\footnotesize Convex sets $X,Y$ in real inner product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The continuous linear map $K$ satisfies $\|K\|\le L$; $g,h$ are convex and $M$-Lipschitz on their respective sets. Assume $R,L,\varepsilon>0$, $M\ge0$, and exact adjoint and constrained proximal oracles. For $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$, the target is deterministic feasibility and $\sup_{x\in X,y\in Y}[\Phi(\bar x_T,y)-\Phi(x,\bar y_T)]\le\varepsilon$.}\par\smallskip
+\caption{Bounded composite saddle problems: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedCompositeSaddle.lean}{BoundedCompositeSaddle}.}\label{tab:BoundedCompositeSaddle}
+\parbox{\linewidth}{\footnotesize Convex sets $X\subset E$, $Y\subset F$ in real inner-product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The objective is $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$, where $K$ is continuous linear, $\|K\|\le L$, and $g,h$ are convex and $M$-Lipschitz on their respective domains; $R,L,\varepsilon>0$, $M\ge0$. Exact $K,K^*$ and constrained proximal maps are available. The setup restricts algorithms to constant-step Arrow--Hurwicz. The target is a feasible pair $(\bar x,\bar y)$ with $\Phi(\bar x,y)-\Phi(x,\bar y)\le\varepsilon$ for every $(x,y)\in X\times Y$, deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Uniform\allowbreak{}Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{LR^2+MR}{\varepsilon}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak Hurwicz\allowbreak Uniform\allowbreak Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{LR^2+MR}{\varepsilon}\right)$ & & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak{}Hurwicz\allowbreak{}Bounded\allowbreak{}Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)}
-& $\mathcal{O}\!\left(1+\left(\frac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak Hurwicz\allowbreak Bounded\allowbreak Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)}
+& $\mathcal{O}\!\left(1+\left(\dfrac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$ & & \\
 \midrule[1.2pt]
-PDHG \citep[Eq.~(16)]{BCSChambollePock2010}\newline Derived bound
-& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\right)$\newline Exact proximal queries; $\tau=\sigma=1/(2L)$; bounded comparators; inner-product-space extension.
-& \textbf{(1)}: Matches known rate for $M\le LR$.\newline \textbf{(2)}: No established improvement.
-& i) \textbf{(1)}: extra $MR/\varepsilon$.\newline ii) \textbf{(2)}: exponent $4/3$ instead of $1$ for $LR^2/\varepsilon\gg1$.\newline iii) \textbf{(1)}, \textbf{(2)}: additionally require bounded domains and Lipschitz $g,h$. \\
+\textbf{(3)} PDHG \citep[Thm.~1(b), Eq.~(16)]{cp2010boundedcomparison}; $\theta=1$. Derived bound.
+& $\mathcal{O}\!\left(1+\dfrac{LR^2}{\varepsilon}\right)$
+& \textbf{(1)}: Matches known rate when $M\le LR$, with an Arrow--Hurwicz guarantee. \textbf{(2)}: No established improvement.
+& \textbf{(1)}: extra $MR/\varepsilon$. \textbf{(2)}: worse accuracy exponent. \textbf{(1)}, \textbf{(2)}: require Lipschitz terms; \textbf{(3)} needs only bounded comparator sets. \\
 \midrule
-Arrow--Hurwicz \citep[\S3.2, Eq.~(20)]{BCSChambollePock2010}\newline Derived bound
-& $\mathcal{O}\!\left(1+\frac{L^2R^4}{\varepsilon^2}\right)$\newline Exact proximal queries; bounded updated domain and comparators; $\tau=\sigma=\sqrt{2}/(L\sqrt{T})$.
-& Method-specific rate:\newline i) \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$, fixed $R,L,M$.\newline ii) \textbf{(2)}: gain when $\frac{R(LR+M)}{\varepsilon}\ll\left(\frac{LR^2}{\varepsilon}\right)^{3/2}$; speedup $\left(\frac{LR^2}{\varepsilon}\right)^{2/3}$ if $M\le LR$, $LR^2\gg\varepsilon$.
-& \textbf{(1)}, \textbf{(2)}: additionally require bounded primal domain and Lipschitz $g,h$.\newline \textbf{(2)}: worse if $M\gg L^{3/2}R^2/\sqrt{\varepsilon}$. \\
+\textbf{(4)} Arrow--Hurwicz \citep[\S3.2, Eq.~(20)]{cp2010boundedcomparison}. Derived bound.
+& $\mathcal{O}\!\left(1+\dfrac{L^2R^4}{\varepsilon^2}\right)$
+& For $M\le LR$, $\varepsilon\le LR^2$, method-specific costs: \textbf{(1)} $\mathcal{O}(1+LR^2/\varepsilon)$; \textbf{(2)} $\mathcal{O}(1+(LR^2/\varepsilon)^{4/3})$, versus \textbf{(4)}'s quadratic dependence. \textbf{(1)}: step independent of accuracy.
+& \textbf{(1)}, \textbf{(2)}: add bounded primal domain and Lipschitz terms. \textbf{(2)} is worse when $M\gg L^{3/2}R^2/\sqrt\varepsilon$. \\
 \midrule
-AltGDA \citep[Thm.~1, v1]{BCSNanEtAl2026}\newline Matrix games only
-& $\mathcal{O}\!\left(1+\frac{L}{\delta\varepsilon}\right)$\newline $X,Y$ probability simplices; $g=h=0$, $R=1$, $M=0$; $\eta=\delta/(2\sqrt{2}L)$.
-& i) \textbf{(1)}, \textbf{(2)}: Scope: general bounded convex sets and Lipschitz composite terms.\newline ii) \textbf{(1)}: $L/\varepsilon$ instead of $L/(\delta\varepsilon)$; step needs only $L$.\newline iii) \textbf{(2)}: no $\delta$ tuning; faster when $\delta\ll(\varepsilon/L)^{1/3}$ and $L/\varepsilon\gg1$.
-& \textbf{(2)}: worse when $\delta\gg(\varepsilon/L)^{1/3}$.\newline \textbf{(1)}: larger numerical constants can offset gains for large $\delta$. \\
+\textbf{(5)} AltGDA \citep[Thm.~1, v1]{nan2026matrixcomparison}. Special case: simplices, $g=h=0$, $R=1$.
+& $\mathcal{O}\!\left(1+\dfrac{L}{\delta\varepsilon}\right)$; $\eta=\delta/(2\sqrt2 L)$.
+& \textbf{(1)}: $\mathcal{O}(1+L/\varepsilon)$ removes $1/\delta$ and knowledge of $\delta$ in the step. \textbf{(1)}, \textbf{(2)}: extend to bounded convex domains and Lipschitz composites. \textbf{(2)} gains when $\delta\ll(\varepsilon/L)^{1/3}$, $\varepsilon\le L$.
+& \textbf{(1)}: larger leading constant for large $\delta$. \textbf{(2)}: worse when $\delta\gg(\varepsilon/L)^{1/3}$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $T$: iterations; $(\bar x_T,\bar y_T)$: uniform iterate averages. One iteration costs four primitive calls: $K$, $K^*$, $\operatorname{prox}_{\eta(g+\iota_X)}$, $\operatorname{prox}_{\eta(h+\iota_Y)}$; $\iota_C$ is the convex indicator of $C$. On simplices the proximal maps are Euclidean projections. $\delta\in(0,1]$: minimum positive support probability and off-support payoff slack divided by $L$, at a chosen Goldman--Tucker equilibrium (empty off-support sets omitted).
+\item[] \textbf{Abbr:} $R$ bounds domain norms; $L$ bounds $\|K\|$; $M$ bounds the Lipschitz constants; $\varepsilon$ is the full saddle-gap tolerance. Costs count each $K$, $K^*$ and proximal evaluation separately (four calls per iteration, including two simplex projections in \textbf{(5)}). $\delta\in(0,1]$ is the minimum positive support probability and off-support payoff slack divided by $L$ at a selected strictly complementary equilibrium, omitting absent off-support terms. Derived bounds specialize the cited comparator inequalities to radius $R$ and the stated exact proximal oracles.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

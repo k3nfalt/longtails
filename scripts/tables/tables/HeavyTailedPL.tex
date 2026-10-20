@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{High-probability optimization under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedPL.lean}{Heavy\allowbreak{}Tailed\allowbreak{}PL setup}.}\label{tab:HeavyTailedPL}
-\parbox{\linewidth}{\footnotesize On a separable real Hilbert space with its Borel structure, $f$ is differentiable, bounded below, globally $L$-smooth and satisfies $2\mu(f(x)-f_\star)\le\|\nabla f(x)\|^2$, where $0<\mu\le L$ and $f(x_0)-f_\star\le\Delta$. The jointly measurable, unbiased oracle has IID samples and uniform central moments $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$ and $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^q\le\nu^q$, with $\sigma,\nu>0$, $q>2$. The setup requires plain SGD with positive deterministic steps and last-iterate output. Target: $\mathbb{P}\{f(x_T)-f_\star>\varepsilon\}\le\delta$, $\varepsilon>0$, $0<\delta<1$.}\par\smallskip
+\caption{High-probability PL optimization under finite-moment noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedPL.lean}{HeavyTailedPL}.}\label{tab:HeavyTailedPL}
+\parbox{\linewidth}{\footnotesize A differentiable, bounded-below $f$ on a separable real Hilbert space with its Borel structure has globally $L$-Lipschitz gradient and satisfies $2\mu(f(x)-\inf f)\leq\|\nabla f(x)\|^2$, $0<\mu\leq L$, and $f(x_0)-\inf f\leq\Delta$. The jointly measurable oracle is unbiased, with uniformly bounded central moments $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\leq\sigma^2$ and $\mathbb E\|g(x,\xi)-\nabla f(x)\|^q\leq\nu^q$, where $\sigma,\nu>0$ and $q>2$; samples are IID. The setup restricts algorithms to plain SGD with positive deterministic steps and last-iterate output. Target: $P\{f(x_T)-\inf f>\varepsilon\}\leq\delta$, for $\varepsilon>0$, $0<\delta<1$. Costs count individual stochastic-gradient calls.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,29 +9,40 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HeavyTailedPLLastIterate.lean}{Heavy\allowbreak{}Tailed\allowbreak{}PL\allowbreak{}Last\allowbreak{}Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HeavyTailedPLLastIterate.md}{(review)}
-& $\mathcal{O}\!\left(1+\kappa\sqrt{\Delta/\varepsilon}+\frac{\sigma^2(\kappa+\ell)}{\mu\varepsilon}+B\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HeavyTailedPLLastIterate.lean}{Heavy\allowbreak Tailed\allowbreak PL\allowbreak Last\allowbreak Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HeavyTailedPLLastIterate.md}{(review)}
+& $\mathcal{O}\!\left(1+\kappa\sqrt{\Delta/\varepsilon}+\dfrac{\sigma^2(\kappa+\ell)}{\mu\varepsilon}+H\right)$
+& & \\
 \midrule[1.2pt]
-Clipped-SGD \citep[Thm.~E.4, $\alpha=2$]{htplSadiev2023v2}; finite-dimensional competitor
-& $\mathcal{O}\!\left(\begin{aligned}&1+\kappa a\log(e+\kappa a/\delta)\\&+\frac{\kappa\sigma^2h}{\mu\varepsilon}\bigl[1+\log_+(\Delta h/\varepsilon)\bigr]^2\end{aligned}\right)$
-& i) \textbf{(1)}: logarithmic-factor gain when $\varepsilon\lesssim\sigma^4/(\mu^2\Delta)$, $B\lesssim\kappa\sigma^2/(\mu\varepsilon)$; fixed $\kappa,\delta,q,\nu/\sigma$, $\varepsilon\to0$: $\log^3(1/\varepsilon)$ factor.\newline ii) \textbf{(1)}: updates need only $L,\mu$, not $\Delta,\sigma,T,\delta$; stopping remains parameter-dependent.
-& \textbf{(1)}: global $q>2$ moments instead of local variance; excludes $\alpha<2$. Worse initialization, $\sqrt{\Delta/\varepsilon}$ versus $\log(\Delta/\varepsilon)$; polynomial-confidence burn-in can dominate. \\
+\textbf{(2)} Clipped-SGD \citep[Thm.~E.4, $\alpha=2$]{htplSadiev2023v2}
+\par Finite-dimensional competitor; finite variance suffices locally.
+& $\mathcal{O}\!\Bigl(1+\kappa\ell_\Delta\log\!\dfrac{e\kappa\ell_\Delta}{\delta}$\par
+$\quad+\dfrac{\kappa\sigma^2}{\mu\varepsilon}\ell_N$\par
+$\qquad\cdot[1+\log_+\!\dfrac{\Delta}{\varepsilon\ell_N}]^2\Bigr)$
+& \textbf{(1)}: for fixed positive $\Delta,\sigma,\kappa,\delta,q,\nu/\sigma$ and $\varepsilon\to0$, $\mathcal{O}(\varepsilon^{-1})$ versus $\mathcal{O}(\varepsilon^{-1}\log^3(1/\varepsilon))$; noise regime $\varepsilon\lesssim\sigma^4/(\mu^2\Delta)$, $H\lesssim\kappa\sigma^2/(\mu\varepsilon)$.
+\par Adaptivity: steps need only $L,\mu$; \textbf{(2)} tunes with $\Delta,\sigma,T,\delta$. Stopping still needs $\sigma,\nu,q,\Delta,\varepsilon,\delta$.
+& \textbf{(1)} needs global assumptions and $q>2$ moments; excludes infinite variance. Polynomial initialization and confidence burn-in can outweigh savings at moderate accuracy or small $\delta$.
+\\
 \midrule
-SGD \citep[Thm.~8]{htplMadden2024}; finite-dimensional, conditionally norm-sub-Gaussian noise of scale $\sigma$
-& $\mathcal{O}\!\left(1+\kappa\sqrt{\Delta\ell/\varepsilon}+\frac{\kappa\sigma^2\ell}{\mu\varepsilon}\right)$
-& i) \textbf{(1)}: finite $q$-moment instead of sub-Gaussian tails.\newline ii) \textbf{(1)}: noise term $\kappa\ell\to\kappa+\ell$; factor $\min\{\kappa,\ell\}$ on uniform IID overlap, $q=2+2\ell$, $\nu\lesssim\sigma\sqrt q$,\par $\varepsilon\lesssim\min\!\left\{\frac{\sigma^2}{\mu\kappa^{1+2/\ell}\ell},\frac{\sigma^4\ell^2}{\mu^2\Delta}\right\}$.
-& \textbf{(1)}: uniform-in-$x$ IID oracle instead of adapted martingale noise; extra burn-in $B$. \\
+\textbf{(3)} SGD \citep[Thm.~8]{htplMadden2024}
+\par Special case: conditionally norm-sub-Gaussian noise in $\mathbb R^d$.
+& $\mathcal{O}\!\left(1+\kappa\sqrt{\dfrac{\Delta\ell}{\varepsilon}}+\dfrac{\kappa\sigma^2\ell}{\mu\varepsilon}\right)$
+\par Derived bound retaining initialization; here $\sigma$ also bounds the norm-sub-Gaussian scale.
+& \textbf{(1)}: scope extends plain SGD to one finite $q>2$ moment.
+\par Noise term: $\kappa\ell\to\kappa+\ell$, factor $\min\{\kappa,\ell\}$ on the overlap with $q=2+2\ell$, $\nu\lesssim\sigma\sqrt q$; total gain requires $\kappa\sqrt{\Delta/\varepsilon}+H\lesssim\sigma^2(\kappa+\ell)/(\mu\varepsilon)$.
+& \textbf{(1)} requires IID sampling and uniform-in-$x$ moments; \textbf{(3)} allows adapted martingale noise. \textbf{(1)} adds burn-in $H$.
+\\
 \midrule
-SGD \citep[Thm.~3.7]{htplTong2026v1}; preprint; finite-dimensional empirical risk, uniformly smooth sample losses, conditional $\beta$-Orlicz noise, $\beta>1$; $\eta_t\|\nabla f(x_t)\|\le G$
-& $\mathcal{O}(T)$ calls; implicit sufficient horizon $T\ge2$:\par $T\ge\frac{C}{\varepsilon}\exp\!\bigl(2\log^{1/\beta}(T/\delta)\bigr)$\par $\hfill{}\times\sqrt{\log T\log(e/\delta)}$.\par $C$ has unspecified initialization, smoothness, PL, trajectory and Orlicz-scale dependence; bounded initial sample gradients required.
-& i) \textbf{(1)}: removes finite-data restriction and trajectory cap; one finite moment replaces Orlicz tails.\newline ii) \textbf{(1)}: on overlap, fixed other parameters and $\varepsilon\to0$, removes the super-polylogarithmic accuracy factor.
-& \textbf{(1)}: uniform-in-$x$ moments exclude heterogeneous-curvature finite sums; polynomial $1/\delta$ burn-in. Classes incomparable; full parameter rates are not comparable. \\
+\textbf{(4)} SGD \citep[Thm.~3.7]{htplTong2026v1}
+\par Finite-data empirical risk in $\mathbb R^d$; conditional $\beta$-Orlicz noise, $\beta>1$.
+& $T=\mathcal{O}\!\left(1+\dfrac{e^{2\log^{1/\beta}(T/\delta)}}{\varepsilon}\sqrt{\log T\,\ell}\right)$, implicitly in $T\geq2$.
+\par Requires smooth component losses, bounded initial component gradients, and $\eta_t\|\nabla f(x_t)\|\leq G$. Constants depend on smoothness, PL, initialization, $G$, and Orlicz parameters; full parameter rates are not comparable.
+& \textbf{(1)}: removes finite-data and trajectory-cap restrictions; needs one moment instead of all moments. On the overlap, fixed $\delta$ and other parameters, $\varepsilon\to0$: $\mathcal{O}(\varepsilon^{-1})$ removes the super-polylogarithmic overhead.
+& \textbf{(1)} requires uniform-in-$x$ moments, excluding heterogeneous-curvature finite sums allowed by \textbf{(4)}; scopes are incomparable. Its burn-in is polynomial in $1/\delta$.
+\\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $f_\star=\inf_x f(x)$; $\kappa=L/\mu$; $\ell=\log(3/\delta)$; $\log_+u=\max\{0,\log u\}$ (with $\log_+0=0$); $a=\log(e+\Delta/\varepsilon)$; $h=\log(e+\kappa\sigma^2/(\mu\varepsilon\delta))$; $B=(64\kappa^2\nu^2\ell/\sigma^2)^{q/(q-2)}(3/\delta)^{2/(q-2)}$ is the burn-in. $T$ counts individual stochastic-gradient calls. $\beta$ is the Orlicz tail index, $G$ the trajectory cap, and $C$ the baseline's problem-dependent constant.
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $\ell=\log(3/\delta)$, $\log_+u=\max\{0,\log u\}$ (with $\log_+0=0$), $\ell_\Delta=1+\log_+(\Delta/\varepsilon)$, $\ell_N=1+\log_+(\kappa\sigma^2/(\mu\varepsilon\delta))$; $H=[(64\kappa^2(\nu/\sigma)^2\ell)^q(3/\delta)^2]^{1/(q-2)}$ is the burn-in. $T$ is the number of oracle calls. The $\beta$-Orlicz function is $\Psi_\beta(u)=\exp(\log^\beta(1+u))-1$; $G$ is the trajectory cap.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

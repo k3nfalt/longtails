@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic smooth convex minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{Stochastic\allowbreak{}Smooth\allowbreak{}And\allowbreak{}Convex}.}\label{tab:StochasticSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb{R}$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra; $\nabla f$ is $L$-Lipschitz. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. IID samples $\xi\sim p$ provide a jointly measurable, integrable oracle $g$ with $\mathbb{E}g(x,\xi)=\nabla f(x)$ and integrable squared error $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\mathbb{E}[f(\widehat x)-f(x_\star)]\le\varepsilon$.}\par\smallskip
+\caption{Stochastic smooth convex minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{StochasticSmoothAndConvex}.}\label{tab:StochasticSmoothAndConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb R$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra; $\nabla f$ is $L$-Lipschitz and a global minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. The jointly measurable oracle $g$ has integrable values and squared errors, with $\int g(x,\omega)\,dp(\omega)=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)\le\sigma^2$ for a probability law $p$. Samples are IID, $P=p^{\otimes\mathbb N}$. The target is measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x)-f(x_\star)]\,dP\le\varepsilon$. The setup imposes no algorithm restriction.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,31 +9,30 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedStochasticConvex.lean}{Accelerated\allowbreak{}Stochastic\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedStochasticConvex.md}{(review)}
-& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedStochasticConvex.lean}{Accelerated\allowbreak Stochastic\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedStochasticConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak{}Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SgdConvex.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& ---
-& --- \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SgdConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & & \\
 \midrule[1.2pt]
-AC-SA \citep[Prop.~7, (4.10)--(4.11)]{sscGhadimiLan2012}
-\par Finite-dimensional, unconstrained specialization
+\textbf{(3)} AC-SA \citep{sscGhadimiLan2012}, Prop.~7, (4.10)--(4.11). Unconstrained Euclidean specialization.
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& i) \textbf{(1)}: Matches known rate.\newline ii) \textbf{(2)}: matches when $\sigma^2\ge L\varepsilon$.\newline iii) \textbf{(1)}, \textbf{(2)}: Hilbert-space Lean formalizations; dimension-free classical analysis.
-& i) \textbf{(2)}: $LR^2/\varepsilon$ instead of $\sqrt{LR^2/\varepsilon}$; worse deterministic term when $LR^2/\varepsilon>1$.\newline ii) \textbf{(1)}, \textbf{(2)}: no high-probability guarantee; baseline additionally requires light-tailed noise and finite domain radius. \\
+& \textbf{(1)}: Matches known rate; Lean formalization in Hilbert space of a dimension-free analysis. \textbf{(2)}: Matches when $\sigma^2\ge L\varepsilon$.
+& \textbf{(2)}: At $\sigma=0$, $LR^2/\varepsilon\ge1$, costs $\mathcal{O}(LR^2/\varepsilon)$ versus $\mathcal{O}(\sqrt{LR^2/\varepsilon})$. \\
 \midrule
-Stochastic mirror descent \citep[Thm.~6.3 and proof]{sscBubeck2015v2}
-\par Derived bound: Euclidean unconstrained case, finite-dimensional
-& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$\par Uses initial distance $\|x_0-x_\star\|\le R$ in the telescoping bound.
-& i) \textbf{(2)}: Matches known rate; Lean formalization.\newline ii) \textbf{(1)}: $\sqrt{LR^2/\varepsilon}$ instead of $LR^2/\varepsilon$ when $LR^2/\varepsilon>1$; unchanged noise term can mask gain.
-& --- \\
+\textbf{(4)} Smooth SGD \citep{sscBubeck2015v2}, Thm.~6.3 proof. Derived bound: unconstrained Euclidean quadratic mirror map.
+& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
+& \textbf{(2)}: Matches known rate; Lean formalization. Step omits $R$, but stopping still needs it; no reduction in required information.
+& \\
+\midrule
+\textbf{(5)} AC-SA \citep{sscGhadimiLan2012}, Prop.~7, (4.5), (4.10)--(4.12). Bounded convex $X\subset\mathbb R^d$.
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2(R^2+D_X^2)\ell^2}{\varepsilon^2}\right)$ stochastic gradients and projections onto $X$; $\Pr\{f(\widehat x)-\min_X f\le\varepsilon\}\ge1-\delta$. Requires $D_X<\infty$, $\sigma>0$, and $\int\exp(\|g-\nabla f\|^2/\sigma^2)\,dp\le e$ at every $x\in X$.
+& \textbf{(1)}, \textbf{(2)}: No established improvement for this probability target. Different domain and accuracy guarantees prevent direct rate comparison.
+& \textbf{(1)}, \textbf{(2)}: Expectation only; no corresponding high-probability guarantee. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls; $L$ is smoothness, $R$ the initial-distance bound, $\sigma^2$ the variance bound, and $\varepsilon$ the expected-gap tolerance. $\mathbb{E}$ denotes expectation over the independent samples.
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls; in \textbf{(5)} each call also uses one projection. $R$ bounds initial distance to the relevant minimizer; $\sigma^2$ is the variance bound; $\varepsilon$ is objective-gap accuracy. In \textbf{(5)}, $D_X=\sup_{x\in X}\|x-x_\star\|$, $\delta\in(0,1)$, $\ell=1+\log(1/\delta)$. Euclidean specializations use $V(u,v)=\|u-v\|^2/2$ and zero composite term; \textbf{(4)} uses initial Bregman distance rather than domain diameter.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Gap-dependent smoothness with strong-growth noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GapSmoothStrongGrowth.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth}.}\label{tab:GapSmoothStrongGrowth}
-\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a separable real Hilbert space; a minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $F(x_0)\le\Delta$, where $F=f-f(x_\star)$. For $(2\sqrt3+\sqrt6)\sqrt{H_1}\|y-x\|\le1$, assume $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+(H_0+H_1F(x))\|y-x\|^2$. The jointly measurable oracle, sampled IID, satisfies $\mathbb{E} g(x,\xi)=\nabla f(x)$ and $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\le(\rho-1)\|\nabla f(x)\|^2$, with integrable gradients and squared errors. Parameters: $H_0,H_1\ge0$, $R,\Delta>0$, $\rho\ge1$, $0<\varepsilon\le\Delta$, $0<\delta<1$. Target: $\mathbb{P}(F(\widehat x)>\varepsilon)\le\delta$. Costs count individual stochastic-gradient samples, including all batches and trials.}\par\smallskip
+\caption{High-probability optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GapSmoothStrongGrowth.lean}{GapSmoothStrongGrowth}.}\label{tab:GapSmoothStrongGrowth}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a separable real Hilbert space with its Borel $\sigma$-algebra; a minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$ and $f(x_0)-f(x^\star)\le\Delta$. For all $x,y$ with $(2\sqrt3+\sqrt6)\sqrt{H_1}\|y-x\|\le1$, $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+(H_0+H_1[f(x)-f(x^\star)])\|y-x\|^2$. The jointly measurable oracle is integrable, unbiased, and has integrable squared error satisfying $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)\le(\rho-1)\|\nabla f(x)\|^2$; samples are IID with marginal probability measure $p$ and joint law $P$. Parameters satisfy $H_0,H_1\ge0$, $R,\Delta>0$, $\rho\ge1$, $0<\varepsilon\le\Delta$, $0<\delta<1$. Target: a measurable output $\widehat x$ with $P(f(\widehat x)-f(x^\star)>\varepsilon)\le\delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,34 +9,48 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GapSmoothStrongGrowthHighProbability.lean}{Gap\allowbreak{}Smooth\allowbreak{}Strong\allowbreak{}Growth\allowbreak{}High\allowbreak{}Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GapSmoothStrongGrowthHighProbability.md}{(review)}
-& $\mathcal{O}\!\left(\rho c\left[(1+R\sqrt{H_1})\ell+R\sqrt{H_0/\varepsilon}\right]\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GapSmoothStrongGrowthHighProbability.lean}{Gap\allowbreak Smooth\allowbreak Strong\allowbreak Growth\allowbreak High\allowbreak Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GapSmoothStrongGrowthHighProbability.md}{(review)}
+& $\mathcal{O}\!\left(\rho\ell_\delta\left[(1+R\sqrt{H_1})\ell_\Delta\right.\right.$\newline
+$\left.\left.{}+R\sqrt{H_0/\varepsilon}\right]\right)$
+& & \\
 \midrule[1.2pt]
-RCSAG \citep[Thm.~9]{gssgLobanov2026v1}\newline $E=\mathbb{R}^d$; $p=2$, pure strong growth; $Q=B(x_0,R)$
-& $\mathcal{O}\!\left((c+\log(1+\ell))\right.$\newline $\left.{}\cdot\left[\ell+R\sqrt{H_0/\varepsilon}+R\sqrt{H_1}J\right.\right.$\newline $\left.\left.{}+(\rho-1)R^2(H_0/\varepsilon+H_1J)\right]\right)$
-& i) \textbf{(1)}: noise $\varepsilon^{-1}\to\varepsilon^{-1/2}$ when $R\sqrt{H_0/\varepsilon}\gg\rho c/(\rho-1)$ and noise dominates.\newline ii) \textbf{(1)}: $R^2H_1\to R\sqrt{H_1}$ term gain when $(\rho-1)R\sqrt{H_1}J\gg\rho c\ell$.\newline Up to baseline logarithms.
-& \textbf{(1)}: requires IID pure second-moment strong growth; excludes additive/gap noise and $p<2$. Near $\rho=1$, no uniform gain; curvature factor $\ell$ instead of $J$. \\
+\textbf{(2)} RCSAG \citep[Thm.~9, v1]{gssgLobanov2026}
+& $\mathcal{O}\!\left(\ell_S\left[S+R\sqrt{H_0/\varepsilon}\right.\right.$\newline
+\({}+R\sqrt{H_1}J_H\)\newline
+$\left.\left.{}+(\rho-1)R^2(H_0/\varepsilon+H_1J_H)\right]\right)$.\par
+$\mathbb R^d$; pure second-moment specialization; $Q=B(x_0,R)$.
+& \textbf{(1)}: at fixed $\rho=2$, positive $H_0,H_1,R,\Delta,\delta$, $\varepsilon\to0$: $\mathcal{O}(\varepsilon^{-1/2})$ instead of $\mathcal{O}(\ell_S\varepsilon^{-1})$. More generally, stochastic-term gain when $R\sqrt{H_0/\varepsilon}\gg\rho\ell_\delta/(\rho-1)$.\par
+$H_1$-term gain if $(\rho-1)R\sqrt{H_1}J_H\gg\rho\ell_\delta\ell_\Delta$.
+& \textbf{(1)} excludes additive/gap noise, moments below two, and martingale sampling. Near $\rho=1$, its curvature term uses $\ell_\Delta$ instead of $J_H$; no uniform dominance. \\
 \midrule
-ARC-SG \citep[App.~I, Thm.~7]{gssgDvinskikh2026v1}\newline $E=\mathbb{R}^d$; convex $(L_0,L_1)$-smooth components; almost-sure strong growth
-& $\mathcal{O}\!\left(\rho\left[1+L_1R\right.\right.$\newline $\left.\left.{}+(1+L_0R^2/\varepsilon)^3\right]\operatorname{polylog} U\right)$\newline $L_0>0$; supplied gap certificate $\Delta$; $H_0\asymp L_0$, $H_1\asymp L_1^2$ on the overlap
-& i) \textbf{(1)}: $\varepsilon^{-3}\to\varepsilon^{-1/2}$ as $\varepsilon\to0$ with other parameters fixed.\newline ii) \textbf{(1)}: second moments instead of almost-sure strong growth; no samplewise convexity/smoothness or component-gradient requirement.
-& --- \\
+\textbf{(3)} \citep[App.~I, Thm.~7, v1]{gssgDvinskikh2026}
+& $\mathcal{O}\!\left(\rho\left[1+L_1R\right.\right.$\newline
+$\left.\left.{}+(1+L_0R^2/\varepsilon)^3\right]\operatorname{polylog}(Z)\right)$.\par
+$\mathbb R^d$, $L_0,L_1>0$; convex $(L_0,L_1)$-smooth components, almost-sure strong growth; supplied gap certificate $\Delta$.
+& \textbf{(1)}: $\varepsilon^{-3}\to\varepsilon^{-1/2}$ at fixed positive parameters on the overlap $H_0\asymp L_0$, $H_1\asymp L_1^2$. Scope: second moments replace almost-sure strong growth; no componentwise regularity.
+& \\
 \midrule
-Accelerated SGD \citep[Thm.~2]{gssgVaswani2019}\newline $H_1=0$, $E=\mathbb{R}^d$
-& Expected gap: $\mathcal{O}\!(1+\rho R\sqrt{H_0/\varepsilon})$.\newline Markov conversion to target:\newline $\mathcal{O}\!(1+\rho R\sqrt{H_0/(\varepsilon\delta)})$
-& \textbf{(1)}: matches known $\varepsilon^{-1/2}$ rate; confidence dependence $\delta^{-1/2}\to c$ versus Markov when $\ell=\mathcal{O}\!(1+R\sqrt{H_0/\varepsilon})$.
-& \textbf{(1)}: batches $\lceil\rho\rceil$ samples; retains initialization cost $\rho c\ell$. \\
+\textbf{(4)} Accelerated SGD \citep[Thm.~2]{gssgVaswani2019}
+& $\mathcal{O}(1+\rho\sqrt T)$.\par
+$H_1=0$, $\mathbb R^d$; expected target $\mathbb E[f(\widehat x)-f(x^\star)]\le\varepsilon$.
+& \textbf{(1)}: scope extends to $H_1>0$; matches known $\rho\sqrt T$ accuracy dependence at $H_1=0$, with logarithmic confidence overhead.
+& \textbf{(1)} uses batches $\lceil\rho\rceil$; its high-probability budget includes $\ell_\delta$ and $\ell_\Delta$, absent from this expected guarantee. \\
 \midrule
-Derived bound: AGNES with proxBoost \citep[Thm.~15]{gssgGupta2025v3}\citep[Thm.~3]{gssgDavis2020}\newline $H_1=0$, $E=\mathbb{R}^d$
-& $\mathcal{O}\!\left((1+\rho R\sqrt{H_0/\varepsilon}) {}\cdot\ell_0[c+\log\ell_0]\right)$
-& \textbf{(1)}: matches polynomial rate; removes the outer $\ell_0$ factor when $\ell=\mathcal{O}\!(1+R\sqrt{H_0/\varepsilon})$.
-& \textbf{(1)}: batches $\lceil\rho\rceil$ samples; retains initialization cost $\rho c\ell$. \\
+\textbf{(5)} Derived bound: Markov conversion of \citep[Thm.~2]{gssgVaswani2019}
+& $\mathcal{O}(1+\rho\sqrt{T/\delta})$.\par
+$H_1=0$, $\mathbb R^d$; high-probability target.
+& \textbf{(1)}: if $\Delta\le LR^2$ and $T\ge1$, costs $\mathcal{O}(\rho\sqrt T\,\ell_\delta)$ instead; confidence gain $1/(\sqrt\delta\,\ell_\delta)$.
+& \textbf{(1)} uses batches $\lceil\rho\rceil$. \\
+\midrule
+\textbf{(6)} Derived bound: AGNES + proxBoost \citep[Thm.~15, v3]{gssgGupta2025}\citep[Thm.~7]{gssgDavis2020}
+& $\mathcal{O}\!\left(\rho(1+\sqrt T)\ell_T[1+\log(\ell_T/\delta)]\right)$.\par
+$H_1=0$, $\mathbb R^d$; high-probability target.
+& \textbf{(1)}: for $\Delta\le LR^2$, $T\ge1$, removes the $\ell_T$ overhead, up to nested confidence logarithms. Scope extends to $H_1>0$; smooth-case acceleration is already known.
+& \textbf{(1)} uses batches $\lceil\rho\rceil$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $c=1+\log(1/\delta)$; $\ell=\log(1+\Delta/\varepsilon)$; $\ell_0=1+\log(1+H_0R^2/\varepsilon)$; $J=\min\{\lceil\log_2(\Delta/\varepsilon)\rceil,\lceil\log_2^+(H_1\Delta/H_0)\rceil\}$ for $H_0,H_1>0$, with $J=0$ if $H_1=0$ and $J=\lceil\log_2(\Delta/\varepsilon)\rceil$ if $H_0=0<H_1$; $\log_2^+t=\max\{0,\log_2t\}$. $U=2+\rho+L_1R+L_0R^2/\varepsilon+L_1^2\Delta/L_0+\Delta/\varepsilon+\delta^{-1}$; $\operatorname{polylog} U$ denotes unspecified polynomial logarithmic factors, including dependence on the supplied certificate. $L_0,L_1$ are component generalized-smoothness constants; almost-sure strong growth means $\|\nabla f_\xi(x)\|^2\le\rho\|\nabla f(x)\|^2$. $\asymp$ denotes equality up to universal factors.
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient samples, including batches and trials. $\ell_\delta=1+\log(1/\delta)$, $\ell_\Delta=\log(1+\Delta/\varepsilon)$, $S=\lceil\log_2(\Delta/\varepsilon)\rceil$, $\ell_S=1+\log((1+S)/\delta)$. For $H_0,H_1>0$, $J_H=\min\{S,\lceil\max\{0,\log_2(H_1\Delta/H_0)\}\rceil\}$; $J_H=0$ if $H_1=0$ and $J_H=S$ if $H_0=0<H_1$. $L=2H_0$, $T=LR^2/\varepsilon$, $\ell_T=1+\log(1+T)$. $L_0,L_1$ are component generalized-smoothness constants: $\|\nabla f_\omega(y)-\nabla f_\omega(x)\|\le(L_0+L_1\|\nabla f_\omega(x)\|)\|y-x\|$ for $\|y-x\|\le1/L_1$; almost-sure strong growth means $\|\nabla f_\omega(x)\|^2\le\rho\|\nabla f(x)\|^2$. $Z=2+L_1R+L_1^2\Delta/L_0+L_0R^2/\varepsilon+1/\delta$; $\operatorname{polylog}(Z)$ denotes the cited bound's unspecified fixed polynomial in $1+\log Z$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarSignedBias.lean}{Quasar\allowbreak{}Signed\allowbreak{}Bias}.}\label{tab:QuasarSignedBias}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with $\|\nabla f(x)\|\le M$, and has a global minimizer $x_\star$ with $\|x_0-x_\star\|\le R$ and $\tau(f(x)-f(x_\star))\le\langle\nabla f(x),x-x_\star\rangle$ for every $x$. Here $M,\varepsilon>0$, $B,R\ge0$, and $0<\tau\le1$. Call $k$ returns $(f(x),\nabla f(x)+b_{k+1}-b_k)$ for one fixed, query-independent sequence with $b_0=0$ and $\|b_k\|\le B$. Target: $f(\widehat x)-f(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarSignedBias.lean}{QuasarSignedBias}.}\label{tab:QuasarSignedBias}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is everywhere differentiable, $\|\nabla f(x)\|\le M$, and a global minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$ and $\tau(f(x)-f(x^\star))\le\langle\nabla f(x),x-x^\star\rangle$ for every $x$. Here $M,\varepsilon>0$, $B,R\ge0$, and $0<\tau\le1$. Call $k$ returns $(f(x),\nabla f(x)+b_{k+1}-b_k)$ for one fixed, query-independent sequence with $b_0=0$ and $\|b_k\|\le B$. The target is $f(\widehat x)-f(x^\star)\le\varepsilon$ almost surely under any seed law; \textbf{(1)} returns the best-valued queried iterate and succeeds for every seed.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,24 +9,28 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarSignedBias.lean}{Quasar\allowbreak{}Signed\allowbreak{}Bias} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarSignedBias.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{R^2M(M+B)}{\tau^2\varepsilon^2}\right)$ value--gradient calls
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarSignedBias.lean}{Quasar\allowbreak Signed\allowbreak Bias} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarSignedBias.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{R^2M(M+B)}{\tau^2\varepsilon^2}\right)$ value-and-corrupted-gradient calls.
+& & \\
 \midrule[1.2pt]
-Derived bound: EF analysis \citep[App.~B.6]{qsbKarimireddy2019}
-& $\mathcal{O}\!\left(1+\frac{R^2M(M+B)}{\varepsilon^2}\right)$ biased-gradient calls; convex $f$, deterministic gradients, $\|e_k\|\le\eta B$, $e_0=0$
-& \textbf{(1)}: i) Scope: quasar-convex instead of convex.\newline ii) Matches known rate on convex overlap ($\tau=1$); formalizes the transferred bound.
-& \textbf{(1)}: needs exact values and differentiability; no unbiased stochastic noise, unlike EF-SGD. \\
+\textbf{(2)} \citep{qsbJin2020v3}, Thm.~5.1; special case $B=0$, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(1+\dfrac{R^2G^2}{\tau^2\varepsilon^2}\right)$ unbiased gradient calls; expected mean gap $\le\varepsilon$. Deterministically $G=M$; exact values select the best iterate at the same total order.
+& \textbf{(1)}: Matches known rate at $B=0$. Scope: telescoping bias and Hilbert spaces; the argument for \textbf{(2)} is dimension-free.
+& \textbf{(1)} needs exact values and excludes stochastic gradient noise permitted by \textbf{(2)}. \\
 \midrule
-Subgradient descent \citep[Thm.~5.1]{qsbJin2020v3}
-& $\mathcal{O}\!\left(1+\frac{R^2M^2}{\tau^2\varepsilon^2}\right)$ value--gradient calls; $B=0$, $E=\mathbb{R}^d$; deterministic specialization, best-value selection
-& \textbf{(1)}: i) Scope: telescoping bias and Hilbert spaces.\newline ii) Matches known rate at $B=0$; no rate gain.
-& \textbf{(1)}: excludes unbiased stochastic noise; needs exact values. \\
+\textbf{(3)} Derived bound, \citep{qsbKarimireddy2019}, App.~B.6; convex $f$, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(1+\dfrac{R^2M(M+B)}{\varepsilon^2}\right)$ corrupted-subgradient calls; averaged output. Deterministic subgradients bounded by $M$, residual $\|e_k\|\le\eta B$, $e_0=0$.
+& \textbf{(1)}: Scope extends convexity to quasar-convexity. Matches known rate for convex $f$, $\tau=1$; formalizes the transferred virtual-iterate bound.
+& \textbf{(1)} requires differentiability and exact values; best-iterate selection replaces averaging without improving the guarantee. \\
+\midrule
+\textbf{(4)} EF-SGD \citep{qsbKarimireddy2019}, Thm.~III; convex $f$, $E=\mathbb R^d$
+& $\mathcal{O}\!\left(1+\dfrac{R^2\sigma^2}{\varepsilon^2}\left(1+\dfrac{\sqrt{1-\delta}}{\delta}\right)\right)$ stochastic subgradient calls and compressor applications; expected averaged gap $\le\varepsilon$. Unbiased subgradients; $\delta$-contractive compression.
+& \textbf{(1)}: Scope permits nonconvex quasar-convex objectives and bounded telescoping bias without a compressor. No rate improvement established; arbitrary bias and compressor-generated errors are not generally comparable.
+& \textbf{(1)} requires exact values, differentiability, deterministic errors and query-independent cancellation; no concrete application of this exact error model is established. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $M$: gradient bound; $B$: cumulative-bias bound; $R$: initial-distance bound; $\tau$: quasar parameter; $\varepsilon$: objective accuracy; $d$: dimension; EF: error feedback; $e_k$: EF residual; $\eta$: step size. In \textbf{(1)}, $\eta=\tau\varepsilon/(M^2+2MB)$ and $\widehat x$ is the best-valued queried iterate; the derived convex bound uses the averaged iterate. $\mathcal{O}$ hides universal constants.
+\item[] \textbf{Abbr:} $M$: gradient bound; $B$: cumulative-bias bound; $R$: initial distance bound; $\tau$: quasar parameter; $\varepsilon$: objective accuracy; $\eta$: constant step size; $e_k$: error-feedback residual. In \textbf{(2)}, $\mathbb E\|g\|^2\le G^2$; in \textbf{(4)}, $\mathbb E\|g\|^2\le\sigma^2$, $0<\delta\le1$, and $\|C(v)-v\|^2\le(1-\delta)\|v\|^2$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

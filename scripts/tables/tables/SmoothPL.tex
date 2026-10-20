@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Smooth PL optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothPL.lean}{Smooth\allowbreak{}PL}.}\label{tab:SmoothPL}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space $E$, $f:E\to\mathbb{R}$ is differentiable with $L$-Lipschitz gradient and a global minimizer $x_\star$. Assume $f(x_0)-f(x_\star)\le\Delta$, $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ for every $x$, $0<\mu\le L$, $\Delta\ge0$, and $\varepsilon>0$. The oracle returns exact gradients. Target: $f(x_K)-f(x_\star)\le\varepsilon$.}\par\smallskip
+\caption{Smooth PL optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothPL.lean}{SmoothPL}.}\label{tab:SmoothPL}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ has an $L$-Lipschitz gradient and a global minimizer $x_\star$, with $f(x_0)-f(x_\star)\le\Delta$ and $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$ for all $x$. Here $0<\mu\le L$, $\Delta\ge0$, and $\varepsilon>0$; convexity is not required. The oracle returns exact gradients. Target: $f(x_K)-f(x_\star)\le\varepsilon$ deterministically. The setup does not restrict the algorithm; \textbf{(1)} constructs GD with step $1/L$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,19 +9,23 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GdPL.lean}{Gd\allowbreak{}PL} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GdPL.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right)$
-& ---
-& --- \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GdPL.lean}{Gd\allowbreak PL} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GdPL.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right)$ gradient calls
+& & \\
 \midrule[1.2pt]
-Gradient descent \citep[Thm.~1]{SmoothPLKarimi2020v4}\newline Stated on $\mathbb{R}^d$
-& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right)$
-& \textbf{(1)}: i) Matches known rate.\newline ii) Hilbert-space formalization; classical proof is dimension-independent.\newline iii) Deterministic first-order optimality up to constants for $L/\mu>C$, $\varepsilon\le\Delta/16$ \citep[Thms.~2--3]{SmoothPLYue2023v2}.
-& \textbf{(1)}: needs a supplied $\Delta$ for its stopping budget. \\
+\textbf{(2)} GD \citep[Theorem~1, arXiv v4]{smoothPLKarimi2016v4}
+& $\mathcal{O}\!\left(1+\frac{L}{\mu}\log_+\frac{\Delta}{\varepsilon}\right)$ gradient calls; stated on $\mathbb{R}^d$
+& \textbf{(1)}: Matches known rate for $\varepsilon\le\Delta/2$. Lean formalization on Hilbert spaces; the dimension-independent classical proof extends unchanged.
+& \textbf{(1)}: Explicit stopping budget needs a known $\Delta$; \textbf{(2)} states convergence in the actual initial gap. \\
+\midrule
+\textbf{(3)} Lower bound \citep[Theorems~2--3, arXiv v2]{smoothPLYue2023v2}
+& $\Omega\!\left(\frac{L}{\mu}\log\frac{\Delta}{\varepsilon}\right)$ gradient calls; deterministic first-order methods, $L/\mu>C$, $0<\varepsilon\le\Delta/16$
+& \textbf{(1)}: Matches \textbf{(3)} up to constants in this regime. A problem-class lower bound, not a competing algorithm; randomized methods are not covered.
+& \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} PL: Polyak--\L{}ojasiewicz; $L$: gradient Lipschitz constant; $\mu$: PL constant; $\Delta$: initial objective-gap bound; $\varepsilon$: target gap; $x_K$: gradient-descent iterate with step $1/L$; $C$: universal constant. Costs count exact-gradient calls.
+\item[] \textbf{Abbr:} GD: gradient descent; PL: Polyak--\L{}ojasiewicz; $L$: gradient Lipschitz constant; $\mu$: PL constant; $\Delta$: initial objective-gap bound; $\varepsilon$: target gap; $K$: gradient-call count; $\log_+t=\max\{0,\log t\}$ for $t>0$, with $\log_+0=0$; $C$: universal positive constant.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
