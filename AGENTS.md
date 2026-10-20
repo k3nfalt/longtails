@@ -97,6 +97,9 @@ project preferences; newer explicit user requests take precedence.
 - No `sorry`, `admit`, or added axioms. Keep noise and initialization terms when
   the proof requires them; do not claim a stronger complexity bound than proved.
 - Use the pinned `lean-toolchain` and `lake-manifest.json`.
+- After changing Python code, run `ruff check .` and `ruff format --check .`
+  using the Ruff version documented in `REQUIREMENTS.md`. Fix all reported
+  issues before finishing; use `ruff format` on changed files as needed.
 - After changing Lean declarations or imports, run `./build.sh` and `./lint.sh`.
   Both must pass before submitting a PR. For new results, run
   `python3 run_comparator.py <TheoremName>.lean` for each new theorem to audit its

@@ -143,27 +143,40 @@ def main(argv=None):
             "Surface the independent review, local verification, and PR evidence in the conversation."
         )
     environment = os.environ.copy()
-    environment["LONGTAILS_STARTUP"] = json.dumps({
-        "agent": args.agent,
-        "model": environment.get("LONGTAILS_MODEL") or None,
-        "vendor": environment.get("LONGTAILS_VENDOR") or None,
-        "proposal": str(args.proposal) if args.proposal is not None else None,
-        "direction": args.direction,
-        "research_direction": args.research_direction,
-        "requirements": args.requirements,
-    }, ensure_ascii=False)
+    environment["LONGTAILS_STARTUP"] = json.dumps(
+        {
+            "agent": args.agent,
+            "model": environment.get("LONGTAILS_MODEL") or None,
+            "vendor": environment.get("LONGTAILS_VENDOR") or None,
+            "proposal": str(args.proposal) if args.proposal is not None else None,
+            "direction": args.direction,
+            "research_direction": args.research_direction,
+            "requirements": args.requirements,
+        },
+        ensure_ascii=False,
+    )
     try:
         subprocess.run(
-            ["git", "config", "--local", "core.hooksPath",
-             str(scripts.parent / "infra/hooks")],
-            cwd=scripts.parent, check=False,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            [
+                "git",
+                "config",
+                "--local",
+                "core.hooksPath",
+                str(scripts.parent / "infra/hooks"),
+            ],
+            cwd=scripts.parent,
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
     except OSError:
         pass
     try:
         return subprocess.run(
-            [*command, *agent_args, prompt], cwd=scripts.parent, env=environment, check=False
+            [*command, *agent_args, prompt],
+            cwd=scripts.parent,
+            env=environment,
+            check=False,
         ).returncode
     except FileNotFoundError:
         parser.error(f"{args.agent} was not found in PATH")
