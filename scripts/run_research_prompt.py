@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -140,9 +142,28 @@ def main(argv=None):
             "Do not dispatch or monitor workflows or automatically modify failed PRs. "
             "Surface the independent review, local verification, and PR evidence in the conversation."
         )
+    environment = os.environ.copy()
+    environment["LONGTAILS_STARTUP"] = json.dumps({
+        "agent": args.agent,
+        "model": environment.get("LONGTAILS_MODEL") or None,
+        "vendor": environment.get("LONGTAILS_VENDOR") or None,
+        "proposal": str(args.proposal) if args.proposal is not None else None,
+        "direction": args.direction,
+        "research_direction": args.research_direction,
+        "requirements": args.requirements,
+    }, ensure_ascii=False)
+    try:
+        subprocess.run(
+            ["git", "config", "--local", "core.hooksPath",
+             str(scripts.parent / "infra/hooks")],
+            cwd=scripts.parent, check=False,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+    except OSError:
+        pass
     try:
         return subprocess.run(
-            [*command, *agent_args, prompt], cwd=scripts.parent, check=False
+            [*command, *agent_args, prompt], cwd=scripts.parent, env=environment, check=False
         ).returncode
     except FileNotFoundError:
         parser.error(f"{args.agent} was not found in PATH")

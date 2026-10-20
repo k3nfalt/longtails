@@ -115,6 +115,11 @@ Environment:
         "-c",
         str(Path(__file__).resolve().parent.parent),
     ]
+    if args.prompt == "research":
+        tmux.extend((
+            "-e", f"LONGTAILS_MODEL={args.model or ''}",
+            "-e", f"LONGTAILS_VENDOR={'openrouter' if args.openrouter else ''}",
+        ))
     if args.agent == "claude" and args.dangerous:
         tmux.extend(("-e", "IS_SANDBOX=1"))
     if proxy := os.environ.get("PROXY_URL"):
