@@ -892,6 +892,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{2097152 \\cdot \\sqrt{\\left(\\mu + s\\right) \\cdot \\left(L + \\mu + s\\right)}}{\\mu} \\cdot \\log\\left(2 + \\frac{s}{\\mu}\\right) \\cdot \\log\\left(2 + \\frac{R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HiddenPotentialStronglyMonotone.spec.Params → ℕ",
+      "value": "fun p => ⌈2097152 * √((p.μ + p.s) * (p.L + p.μ + p.s)) / p.μ * Real.log (2 + p.s / p.μ) * Real.log (2 + p.R / p.ε)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{2097152 \\cdot \\sqrt{\\left(\\mu + s\\right) \\cdot \\left(L + \\mu + s\\right)}}{\\mu} \\cdot \\log\\left(2 + \\frac{s}{\\mu}\\right) \\cdot \\log\\left(2 + \\frac{R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HiddenPotentialStronglyMonotone.spec.Params → ℕ",
+        "value": "fun p => ⌈2097152 * √((p.μ + p.s) * (p.L + p.μ + p.s)) / p.μ * Real.log (2 + p.s / p.μ) * Real.log (2 + p.R / p.ε)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.HiddenPotentialOracleComplexity",
+    "namespace": "LongTails.Setups.HiddenPotentialStronglyMonotone",
+    "setup": "LongTails.Setups.HiddenPotentialStronglyMonotone",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.HiddenPotentialStronglyMonotone.spec OracleTemplate.HiddenPotential.budget",
+    "theorem": "OracleTemplate.HiddenPotential.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil 40 \\cdot \\left(\\frac{16 \\cdot L \\cdot R}{\\varepsilon} + 2 \\cdot \\left(\\frac{8 \\cdot H \\cdot R^{\\alpha}}{\\varepsilon}\\right)^{\\frac{1}{\\alpha}} + \\log_{2}\\left(\\frac{R}{r0}\\right) + 2\\right) \\cdot \\log\\left(\\frac{\\left(\\frac{32 \\cdot L \\cdot R}{\\varepsilon} + 4 \\cdot \\left(\\frac{8 \\cdot H \\cdot R^{\\alpha}}{\\varepsilon}\\right)^{\\frac{1}{\\alpha}} + 4\\right) \\cdot R}{r0}\\right) \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.HolderMonotone.spec.Params → ℕ",
@@ -1141,6 +1162,27 @@
     "setup": "LongTails.Setups.NearZeroSumGames",
     "statement": "OracleTemplate.Convergence LongTails.Setups.NearZeroSumGames.spec OracleTemplate.NearZeroSum.OwnGradients.budget",
     "theorem": "OracleTemplate.NearZeroSum.OwnGradients.result"
+  },
+  {
+    "budget": {
+      "latex": "2 + 2 \\cdot \\left\\lceil \\frac{400 \\cdot L^{2} \\cdot D}{\\mu \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.NonEuclideanWeakMinty.spec.Params → ℕ",
+      "value": "fun p => 2 + 2 * ⌈400 * p.data.L ^ 2 * p.D / (p.data.μ * p.ε ^ 2)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "2 + 2 \\cdot \\left\\lceil \\frac{400 \\cdot L^{2} \\cdot D}{\\mu \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NonEuclideanWeakMinty.spec.Params → ℕ",
+        "value": "fun p => 2 + 2 * ⌈400 * p.data.L ^ 2 * p.D / (p.data.μ * p.ε ^ 2)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient",
+    "namespace": "LongTails.Setups.NonEuclideanWeakMinty",
+    "setup": "LongTails.Setups.NonEuclideanWeakMinty",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.NonEuclideanWeakMinty.spec\n  LongTails.Theorems.NonEuclideanWeakMintyExtragradient.budget",
+    "theorem": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient.result"
   },
   {
     "budget": {

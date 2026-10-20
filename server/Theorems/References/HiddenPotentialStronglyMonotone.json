@@ -1,0 +1,93 @@
+{
+  "setup": "LongTails.Setups.HiddenPotentialStronglyMonotone",
+  "searched_at": "2026-10-20T20:25:01.652792+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{2097152 \\cdot \\sqrt{\\left(\\mu + s\\right) \\cdot \\left(L + \\mu + s\\right)}}{\\mu} \\cdot \\log\\left(2 + \\frac{s}{\\mu}\\right) \\cdot \\log\\left(2 + \\frac{R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HiddenPotentialStronglyMonotone.spec.Params → ℕ",
+        "value": "fun p => ⌈2097152 * √((p.μ + p.s) * (p.L + p.μ + p.s)) / p.μ * Real.log (2 + p.s / p.μ) * Real.log (2 + p.R / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{2097152 \\cdot \\sqrt{\\left(\\mu + s\\right) \\cdot \\left(L + \\mu + s\\right)}}{\\mu} \\cdot \\log\\left(2 + \\frac{s}{\\mu}\\right) \\cdot \\log\\left(2 + \\frac{R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HiddenPotentialStronglyMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈2097152 * √((p.μ + p.s) * (p.L + p.μ + p.s)) / p.μ * Real.log (2 + p.s / p.μ) * Real.log (2 + p.R / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HiddenPotentialOracleComplexity",
+      "namespace": "LongTails.Setups.HiddenPotentialStronglyMonotone",
+      "setup": "LongTails.Setups.HiddenPotentialStronglyMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HiddenPotentialStronglyMonotone.spec OracleTemplate.HiddenPotential.budget",
+      "theorem": "OracleTemplate.HiddenPotential.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HiddenPotentialOracleComplexity",
+      "theorem": "OracleTemplate.HiddenPotential.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Find a zero of a μ-strongly monotone operator F:E→E on a real Hilbert space: ⟨F(x)−F(y),x−y⟩≥μ‖x−y‖². A zero x⋆ exists with ‖x0−x⋆‖≤R. This is an operator root-finding problem; no objective minimization or saddle representation is assumed.",
+        "evidence": "LongTails/Setups/HiddenPotentialStronglyMonotone.lean: spec.Instance and spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Public."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One exact operator-evaluation oracle returns F(x) at any queried x, independently of call index and seed. Neither φ nor ∇φ nor the residual F−∇φ is separately available. The budget counts all evaluations of F and is fixed by public parameters.",
+        "evidence": "LongTails/Setups/HiddenPotentialStronglyMonotone.lean: spec.Query, spec.Reply, spec.admissible and spec.publicInput; LongTails/Template.lean: execute and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "A hidden differentiable potential φ exists with L-Lipschitz gradient, and the hidden residual H=F−∇φ is s-Lipschitz: ‖H(x)−H(y)‖≤s‖x−y‖. Neither convexity of φ nor monotonicity of H is assumed. This is a structural decomposition, not oracle noise or a pointwise error bound. E, x0, L, μ, s, R and ε are public, with μ>0, L≥0, s≥0, R≥0 and ε>0; F and the decomposition are hidden. E may be infinite-dimensional.",
+        "evidence": "LongTails/Setups/HiddenPotentialStronglyMonotone.lean: Public, spec.publicInput, spec.valid and the existential potential clause of spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The returned point must satisfy ‖output−x⋆‖≤ε for a zero x⋆ of F. The criterion uses the norm itself, not its square. Strong monotonicity makes the zero unique.",
+        "evidence": "LongTails/Setups/HiddenPotentialStronglyMonotone.lean: spec.successful and spec.admissible."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The distance bound must hold almost surely under the joint algorithm-seed and oracle-seed law after the fixed oracle budget. Randomized algorithms are permitted; an expectation bound alone is insufficient.",
+        "evidence": "LongTails/Setups/HiddenPotentialStronglyMonotone.lean: spec.successful; LongTails/Template.lean: Algorithm and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines strongly monotone root finding with an existential smooth-potential decomposition and a Lipschitz residual, while providing only evaluations of their sum. This hidden structure is an unusual information restriction. The classification does not assert novelty; no qualifying prior reference was verified."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HiddenPotential.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HiddenPotentialOracleComplexity",
+          "theorem": "OracleTemplate.HiddenPotential.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

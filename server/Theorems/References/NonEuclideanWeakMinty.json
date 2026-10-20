@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.NonEuclideanWeakMinty",
+  "searched_at": "2026-10-20T20:24:58.255836+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 + 2 \\cdot \\left\\lceil \\frac{400 \\cdot L^{2} \\cdot D}{\\mu \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NonEuclideanWeakMinty.spec.Params → ℕ",
+        "value": "fun p => 2 + 2 * ⌈400 * p.data.L ^ 2 * p.D / (p.data.μ * p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 + 2 \\cdot \\left\\lceil \\frac{400 \\cdot L^{2} \\cdot D}{\\mu \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NonEuclideanWeakMinty.spec.Params → ℕ",
+          "value": "fun p => 2 + 2 * ⌈400 * p.data.L ^ 2 * p.D / (p.data.μ * p.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient",
+      "namespace": "LongTails.Setups.NonEuclideanWeakMinty",
+      "setup": "LongTails.Setups.NonEuclideanWeakMinty",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NonEuclideanWeakMinty.spec\n  LongTails.Theorems.NonEuclideanWeakMintyExtragradient.budget",
+      "theorem": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient",
+      "theorem": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained root finding for a possibly nonmonotone operator F:E→E*, satisfying a weak Minty inequality at some root x*: ⟨F(x),x−x*⟩≥−ρ‖F(x)‖_*² for every x. No objective function or saddle representation is required.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact operator-value oracle: each query x returns the full dual vector F(x), independently of call index and oracle seed. F need not be a gradient. The supplied fixed budget is 2+2⌈400L²D/(με²)⌉ calls.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: spec.Query, spec.Reply, spec.admissible; supplied extracted budget for LongTails.Theorems.NonEuclideanWeakMintyExtragradient.result."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "non_euclidean_geometry",
+        "details": "E has an arbitrary norm, with its induced dual norm on E*. The public differentiable function h satisfies B_h(u,x)≥(μ/2)‖u−x‖², μ>0. No Lipschitz bound on its derivative or upper quadratic bound on B_h is imposed.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: Public, Public.bregman, Public.Valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real normed vector space; no dimension bound is supplied.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: Public.finiteE, Public.normedE, Public.linearE."
+      },
+      {
+        "label": "other",
+        "details": "F is globally L-Lipschitz from the primal norm to the dual norm, L>0. A root x* satisfies B_h(x*,x0)≤D and the weak Minty inequality with 0≤ρ≤1/(20L). E,L,ρ,μ,h,x0 are public; D≥0 and ε>0 enter the execution budget but are not algorithm inputs, and F and x* are hidden.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: Public.Valid, Params, spec.publicInput, spec.admissible; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound must hold almost surely under the joint algorithm and oracle seed law after the fixed oracle budget.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "other",
+        "details": "Return a single point x with operator residual ‖F(x)‖_*≤ε, rather than an objective gap or distance-to-root guarantee.",
+        "evidence": "LongTails/Setups/NonEuclideanWeakMinty.lean: spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Combines positive weak Minty tolerance with arbitrary normed geometry and a differentiable strongly convex Bregman generator without a smoothness bound. Repository implementations and proofs were not inspected; no qualifying reference is not a novelty claim."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.NonEuclideanWeakMintyExtragradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient",
+          "theorem": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
