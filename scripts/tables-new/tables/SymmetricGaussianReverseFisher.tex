@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Reverse Fisher gradient descent for symmetric Gaussian mixtures: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricGaussianReverseFisher.lean}{SymmetricGaussianReverseFisher}.}\label{tab:SymmetricGaussianReverseFisher}
+\parbox{\linewidth}{\footnotesize In $\mathbb{R}^d$, $d\ge1$, let $p_\theta=\tfrac12\mathcal N(\theta,I)+\tfrac12\mathcal N(-\theta,I)$ and $F_\mu(\theta)=\int\|\nabla\log p_\theta(x)-\nabla\log p_\mu(x)\|^2\,p_\theta(dx)$. Exact population gradients are available; $0\le s\le\|\mu\|\le B$ and $\varepsilon,\delta\in(0,1]$ are supplied. The setup requires positive-step GD and its current iterate as output, allowing state-dependent steps. The target is $\mathbb P\{\min(\|\theta_K-\mu\|^2,\|\theta_K+\mu\|^2)\le\varepsilon\}\ge1-\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SymmetricReverseFisherGlobalGD.lean}{Symmetric\allowbreak Reverse\allowbreak Fisher\allowbreak Global\allowbreak GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SymmetricReverseFisherGlobalGD.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{(1+B)(1+s^2)}{\max\{s^2,\varepsilon\}}\left[1+\log\dfrac{d(1+B)}{\delta\varepsilon}\right]\right)$ exact-gradient calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: adaptive GD
+& $\mathcal{O}(1)$ exact-gradient calls (at most two); exact recovery almost surely. Uses exact one-dimensional Gaussian integrals and scalar inversion.
+& \textbf{(1)}: No established improvement.
+& \textbf{(1)}: Larger budget; needs $B,s,\varepsilon,\delta$ in addition to $d$; approximate recovery with failure probability $\delta$ instead of almost-sure exact recovery. \\
+\midrule
+\textbf{(3)} GD \citep{srfTyurin2026v1}, Thm.~3.2/E.1; two untied students, teachers $\pm\mu$
+& $\mathcal{O}(L_R^2H^2/\varepsilon)$ full-gradient calls. Independent sphere initialization of radius $R_0\gtrsim\max\{1,B^2\sqrt d/\delta,B\sqrt{1+\log_+B}\}$; $d\gtrsim1+\log(1/\delta)$ and $\|\mu\|\gtrsim\sqrt{(L_R+\log(1/\varepsilon))H}$.
+& \textbf{(1)}: Scope of constant-step analysis extends to zero separation. For $s>0$, logarithmic accuracy dependence once $\varepsilon\le s^2$; different student parameterizations prevent a rate comparison.
+& \textbf{(1)}: Only tied, antipodal components; one fixed terminal iterate, whereas \textbf{(3)} controls every subsequent iterate and permits general component counts. \\
+\midrule
+\textbf{(4)} GD \citep{srfTyurin2026v1}, Thm.~2.1/Cor.~2.5; special case $\mu=0$, two students
+& $\mathcal{O}\!\left(\varepsilon^{-1}+1+\log_+\dfrac{R_0^2}{\varepsilon}\right)$ full-gradient calls; arbitrary initialization, deterministic squared-distance accuracy.
+& \textbf{(1)}: Scope extends from a single Gaussian teacher to every $\|\mu\|\le B$ in the symmetric model.
+& \textbf{(1)}: At $\mu=0$, $R_0=1$, extra factor $(1+B)[1+\log\frac{d(1+B)}{\delta\varepsilon}]$; probabilistic instead of deterministic guarantee; tied students only. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $s,B$: supplied signal bounds; $\varepsilon$: squared-distance tolerance; $\delta$: failure probability; GD: gradient descent; $\log_+t=\max\{0,\log t\}$ for $t>0$, with $\log_+0=0$; $R_0$: sphere radius in \textbf{(3)}, maximum initial distance to the teacher mean in \textbf{(4)}; $L_R=1+\log R_0$ in \textbf{(3)}; $H=1+\log(d/\delta)$; $\gtrsim$: at least a sufficiently large universal multiple. Full gradients in \textbf{(3)}, \textbf{(4)} differentiate all student means; \textbf{(1)}, \textbf{(2)} differentiate the tied parameter.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

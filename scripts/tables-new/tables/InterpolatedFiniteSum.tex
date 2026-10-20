@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/InterpolatedFiniteSum.lean}{InterpolatedFiniteSum}.}\label{tab:InterpolatedFiniteSum}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $m\ge1$ differentiable convex components have $L$-Lipschitz gradients, $L>0$, and a common minimizer $x_\star$ with $\|x_0-x_\star\|\le R$, $R\ge0$. The oracle returns exact component gradients. The setup fixes cyclic gradient steps of size $1/L$; the target is $F(x_{\rm out})-F(x_\star)\le\varepsilon$, $\varepsilon>0$, almost surely, for the last complete-pass iterate. The guarantee holds for every outcome. Updates use $m,L,x_0$; stopping additionally uses $R,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CyclicGradientInterpolation.lean}{Cyclic\allowbreak{}Gradient\allowbreak{}Interpolation} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CyclicGradientInterpolation.md}{(review)}
+& $\mathcal{O}\!\left(m+\dfrac{m^4LR^2}{\varepsilon}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} FISTA on $F$ \citep[Thm.~4.4]{ifsBeckTeboulle2009}
+& $\mathcal{O}\!\left(m+m\sqrt{\dfrac{LR^2}{\varepsilon}}\right)$\newline Finite-dimensional specialization; $m$ component calls per accelerated step.
+& \textbf{(1)}: No established improvement in optimization complexity.
+& \textbf{(1)}: Larger bound by order $m^3\sqrt{T}$ for $T\ge2$; additionally requires interpolation. \\
+\midrule
+\textbf{(3)} Cyclic IGD \citep[Thm.~2.3]{ifsCaiDiakonikolas2024v2}
+& $\mathcal{O}\!\left(m+\dfrac{mLR^2}{\varepsilon}\sqrt{\log(2+T)}\right)$\newline Derived bound: finite dimension, interpolation; step $\eta=[mL\sqrt{\beta}]^{-1}$, $\beta=4\max\{1,\log K\}$.
+& \textbf{(1)}: Removes $\sqrt{\log(2+T)}$ but adds $m^3$; lower total order only when $\log(2+T)\gg m^6$. Scope: Hilbert spaces. Full-step analysis; horizon-independent updates, parameter-dependent stopping.
+& \textbf{(1)}: Requires interpolation, unlike the general theorem. On the common class, worse accuracy term when $\log(2+T)\ll m^6$. \\
+\midrule
+\textbf{(4)} Cyclic projections \citep[Prop.~4.13]{ifsEvronEtAl2023}, $m\ge3$
+& $\mathcal{O}\!\left(m+\dfrac{m^4L^2R^4}{\varepsilon^2}\right)$\newline Derived bound: $f_i=\tfrac L2 d(\cdot,C_i)^2$, closed convex $C_i\subset\mathbb R^d$ with nonempty intersection; converted from maximum distance.
+& \textbf{(1)}: On this subclass, $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$, saving factor $T$ for $T\gg1$. Scope: arbitrary smooth interpolating losses; full-step cyclic analysis.
+& \textbf{(1)}: Certifies average loss, not maximum distance. Projection specialization is not formalized. \\
+\midrule
+\textbf{(5)} Cyclic subspace projections \citep[Thm.~1, Lem.~2]{ifsSwartworthEtAl2023}
+& $\mathcal{O}\!\left(m+\dfrac{m^3LR^2}{\varepsilon}\right)$\newline Derived bound: $f_i=\tfrac L2 d(\cdot,C_i)^2$ for linear subspaces $C_i\subset\mathbb R^d$; one component call per projection.
+& \textbf{(1)}: Scope extends from subspace squared distances to nonlinear convex sets and arbitrary smooth interpolating losses, retaining full-step cyclic updates.
+& \textbf{(1)}: Accuracy term is larger by factor $m$ on the subspace subclass. \\
+\midrule
+\textbf{(6)} Cyclic projections \citep[Prop.~4.13]{ifsEvronEtAl2023}, $m=2$
+& $\mathcal{O}\!\left(1+\dfrac{LR^2}{\varepsilon}\right)$\newline Derived bound: $f_i=\tfrac L2 d(\cdot,C_i)^2$, closed convex $C_i\subset\mathbb R^d$ with nonempty intersection.
+& \textbf{(1)}: Matches known rate for $m=2$; extends squared-distance losses to arbitrary smooth interpolating losses.
+& \textbf{(1)}: Average loss instead of maximum-distance guarantee; projection specialization is not formalized. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $F=m^{-1}\sum_{i=1}^m f_i$; $T=LR^2/\varepsilon$; $K$ is the number of complete passes; $d(x,C)=\inf_{y\in C}\|x-y\|$. Costs count individual component-gradient calls; on squared-distance losses, one call implements one exact projection. $\mathcal{O}$ suppresses universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

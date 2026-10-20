@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Local hidden-convex stochastic optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LocalHiddenConvexStochastic.lean}{LocalHiddenConvexStochastic}.}\label{tab:LocalHiddenConvexStochastic}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real Hilbert space, $F$ is globally $L$-smooth and has a global minimizer $x_\star\in\overline B(x_0,R)$. On $B(x_0,3R)$, $F=H\circ c$, with $H$ convex and differentiable on an open convex set $U$. On $\overline B(x_0,2R)$, $c(x)\in U$, $Dc(x)=J(x)$, $\|J(x)v\|\ge\mu\|v\|$, and $J$ is $L_J$-Lipschitz; $32L_JR\le\mu$. Here $L,R,\mu,\varepsilon>0$ and $L_J,\sigma\ge0$. IID samples have law $p$; the jointly measurable oracle $g$ satisfies $\int g(x,\omega)\,dp=\nabla F(x)$ and $\int\|g(x,\omega)-\nabla F(x)\|^2\,dp\le\sigma^2$, with the required integrability. Target: $\int[F(x_K)-F(x_\star)]\,dP\le\varepsilon$, $P=p^{\otimes\mathbb N}$. Result \textbf{(1)} constructs safeguarded similar triangles, using $L,R,\sigma,x_0$; stopping also needs $\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HiddenConvexAcceleratedStochastic.lean}{Hidden\allowbreak Convex\allowbreak Accelerated\allowbreak Stochastic} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HiddenConvexAcceleratedStochastic.md}{(review)}
+& $\mathcal{O}\!\left(1+\left(\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)\ell^2\right)$ stochastic-gradient calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Momentum P-SGD \citep[Thm.~8]{lhcsFatkhullin2024v2}
+& $\mathcal{O}\!\left(\left(1+\frac{Ld^2}{\varepsilon}+\frac{Ld^4\sigma^2}{\varepsilon^3}\right)\ell_0\right)$ calls, including initialization. Restriction: compact convex $X\ni x_0,x_\star$, convex $c(X)$, and $c^{-1}$ is $1/\mu_c$-Lipschitz; $d=D_U/\mu_c$.
+& \textbf{(1)}: On the overlap $d\asymp R$, $\varepsilon^{-1}\to\varepsilon^{-1/2}$ and $LR^4\sigma^2/\varepsilon^3\to\sigma^2R^2/\varepsilon^2$, up to logarithms; total gain for fixed parameters and sufficiently small $\varepsilon$. Scope: no compact convex image required. Adaptivity: updates need neither $\varepsilon,D_U,\mu_c$; stopping needs $\varepsilon$.
+& \textbf{(1)} adds local $C^{1,1}$ regularity and $32L_JR\le\mu$; requires an unconstrained global minimizer. Classes are incomparable. \\
+\midrule
+\textbf{(3)} \citep[Thm.~5.4]{lhcsBhaskara2025}
+& $\mathcal{O}\!\left(1+D_2\rho+\frac{D_2^4G^3\rho}{(\alpha\beta)^4\varepsilon^3}\right)$ calls. Restriction: global invertible $c$, $\|J\|\le1/\alpha$, $\|J^{-1}\|\le1/\beta$, $\rho$-Lipschitz $J$; $G$-Lipschitz $H$, $\|g\|\le G$ a.s.; known radii $D_1,D_2$ with the radial level-set ordering of (A3).
+& \textbf{(1)}: On the smooth overlap, fixed positive parameters and $\varepsilon\downarrow0$, $\varepsilon^{-3}\to\varepsilon^{-2}\ell^2$. Scope: bounded variance replaces bounded gradients; local replaces global Jacobian regularity. Full parameter bounds are not comparable.
+& \textbf{(1)} requires global $L$-smoothness and $32L_JR\le\mu$; loses nonsmooth objectives and the unrestricted global regime. \\
+\midrule
+\textbf{(4)} AC-SA \citep[Cor.~1]{lhcsLan2012}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ calls. Special case: $L_J=0$, with optimization restricted to $\overline B(x_0,R)$, where $F$ is convex.
+& \textbf{(1)}: Scope extends convex optimization to locally near-affine hidden convexity, including nonconvex, non-quasar-convex objectives.
+& \textbf{(1)} loses a factor $\ell^2$ on the convex overlap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $R$: initial-distance bound; $\sigma^2$: variance bound; $\varepsilon$: expected objective-gap target; $\mu$: least singular-value bound for $J$; $L_J$: Jacobian Lipschitz constant; $\ell=\log(2+LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2)$. In \textbf{(2)}, $D_U=\operatorname{diam}(c(X))$, $d=D_U/\mu_c$, and $\ell_0=\log(2+(LR^2+\sigma^2/L)/\varepsilon)$ for one-sample gradient initialization. In \textbf{(3)}, $G$ denotes the paper's bound $H$, $\rho$ its Jacobian Lipschitz constant, $\alpha,\beta$ its distortion parameters, and $D_1,D_2$ its radial bounds about $x_0$; radial ordering means $F(y)\ge F(x)$ whenever $\|x-x_0\|=D_1$, $\|y-x_0\|=D_2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth convex--concave saddle points: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothConvexConcave.lean}{SmoothConvexConcave}.}\label{tab:SmoothConvexConcave}
+\parbox{\linewidth}{\footnotesize Nonempty compact convex sets $X\subset E$, $Y\subset F$ in real Hilbert spaces have product diameter at most $D\ge0$. The function $\varphi:E\times F\to\mathbb R$ is convex--concave on $X\times Y$, with partial gradients everywhere; the exact oracle $G=(\nabla_x\varphi,-\nabla_y\varphi)$ is globally $L$-Lipschitz, $L>0$. For $\varepsilon>0$, the target is a feasible output with $\int\operatorname{Gap}(z(\omega))\,dP(\omega)\le\varepsilon$. Result \textbf{(1)} constructs deterministic projected extragradient with step $1/(2L)$ and averages its extrapolated points; its gap is at most $\varepsilon$ for every seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SmoothConvexConcave.lean}{Smooth\allowbreak Convex\allowbreak Concave} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SmoothConvexConcave.md}{(review)}
+& $\mathcal{O}(1+LD^2/\varepsilon)$ exact $G$ calls; one product projection per call.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Mirror-Prox \citep[Thm.~3.2, (3.10)]{sccNemirovski2004}. Euclidean specialization; finite dimensions.
+& $\mathcal{O}(1+LD^2/\varepsilon)$ exact $G$ calls; one product projection per call.
+& \textbf{(1)}: Matches known rate on finite-dimensional overlap; Lean formalization. Scope: compact subsets of Hilbert spaces instead of finite-dimensional spaces.
+& \textbf{(1)} needs ambient differentiability and Lipschitz continuity; \textbf{(2)} needs them only on $X\times Y$. No general Bregman-geometry guarantee in \textbf{(1)}. \\
+\midrule
+\textbf{(3)} Lower bound \citep[Thm.~9]{sccOuyangXu2018v1}. Bilinearly coupled problems on Euclidean balls.
+& $\Omega(LD^2/\varepsilon)$ calls in the regime $L_f=\|A\|\asymp L$, $R_X\asymp R_Y\asymp D$, $LD^2/\varepsilon\gg1$. Oracle: $(\nabla f(x),Ax,A^\top y)$.
+& \textbf{(1)} matches the worst-case order for deterministic first-order methods when $8<m\le n$ and the call horizon satisfies $t<m/4-2$.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\operatorname{Gap}(x,y)=\sup_{v\in Y}\varphi(x,v)-\inf_{u\in X}\varphi(u,y)$; $P$ is the execution probability law. $L,D$ use the max product norm $\|(x,y)\|=\max\{\|x\|,\|y\|\}$. A product projection projects onto $X$ and $Y$. In \textbf{(3)}, $\varphi(x,y)=f(x)+\langle Ax-b,y\rangle$, $L_f$ is the Lipschitz constant of $\nabla f$, $R_X,R_Y$ are ball radii, $n,m$ their dimensions, and $t$ the oracle-call horizon; $\Omega$ denotes a lower bound, $\asymp$ equality up to universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,48 @@
+\begin{table}[tp]
+\centering
+\caption{Annealed SGD for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RiverValleyHillNoise.lean}{RiverValleyHillNoise}.}\label{tab:RiverValleyHillNoise}
+\parbox{\linewidth}{\footnotesize
+In a finite-dimensional real inner-product space, $f(x)=h(Qx)+\tfrac12\langle A(Px-\phi(Qx)),Px-\phi(Qx)\rangle$, with unknown orthogonal split, $\phi(E)\subseteq K$, symmetric $A$ preserving $K$, and $\mu I\preceq A|_K\preceq L_v I$.
+The nonconvex river satisfies $\|\nabla h\|\le G$; $\nabla h,\nabla^2h,D\phi,D^2\phi$ have Lipschitz constants $L_h,\rho_h,L_J,\rho_J$, respectively, and $\|AD\phi(y)Q\|\le\Gamma\mu$.
+Assume $f(x_0)-\inf f\le\Delta$, $0<\mu\le L_v$, $\varepsilon>0$, nonnegative remaining parameters, $16\Gamma\le1$, $64c\le\mu$, $64d\sigma_u\le\mu L_v$, and $32L_h\log R_0\le\mu$.
+The jointly measurable, integrable oracle is IID and unbiased, with river/hill error second moments at most $\sigma_u^2,\sigma_v^2$.
+The setup requires two-phase constant-step SGD; tuning knows the scalar parameters, but not $K,\phi,A$.
+Target: $\int\|\nabla f(x_{\rm out}(\omega))\|\,d\mathbb P(\omega)\le\varepsilon$, for the last iterate after a uniformly randomized first-phase duration and a fixed cooldown.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AnnealedSgdRiverValley.lean}{Annealed\allowbreak Sgd\allowbreak River\allowbreak Valley} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AnnealedSgdRiverValley.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+\frac{L_v\Delta}{\varepsilon^2}+\frac{\Delta B}{\varepsilon^4}\\&+\log^2R\left(\frac{L_v}{\mu}+\frac{W}{\mu^2\varepsilon^2}\right)\end{aligned}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Randomized SGD \citep{rvGhadimiLan2013v1}, Cor.~2.2. Affine-river restriction: $L_J=\rho_J=0$, $L\asymp L_v$.
+& $\displaystyle\mathcal{O}\!\left(1+\frac{L_v\Delta}{\varepsilon^2}+\frac{L_v\Delta s^2}{\varepsilon^4}\right)$
+& \textbf{(1)}: affine-river noise coefficient $L'$ instead of $L_v$; gain $\asymp\min\{\sigma^2/\varepsilon^2,\allowbreak L_v/L',\allowbreak \mu^2\Delta/(L_v\varepsilon^2\log^2R)\}$ when this minimum exceeds one. Scope: curved rivers at the displayed rate; unknown split.
+& \textbf{(1)}: extra cooldown can dominate when $L_v\varepsilon^2\log^2R>\mu^2\Delta$; same order for $\sigma\lesssim\varepsilon$. Needs river structure and regularity; expected norm instead of expected squared norm. \\
+\midrule
+\textbf{(3)} SGD \citep{rvLiEtAl2023v2}, Thm.~5.3. Generalized smoothness; covers curved rivers.
+& $\displaystyle\mathcal{O}\!\left(1+\frac{\ell(2H)F}{\varepsilon^2}+\frac{H^2F^2}{\varepsilon^4}\right)$\newline
+$\Pr\{T^{-1}\sum_{t<T}\|\nabla f(x_t)\|^2\le\varepsilon^2\}\ge1-\delta$.
+& \textbf{(1)}: expected stationarity of one output on curved rivers. Rates are not comparable with \textbf{(3)}'s high-probability average criterion.
+& \textbf{(1)}: narrower quadratic-hill structure, bounded river gradient and higher regularity; no high-probability average guarantee. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $P=P_K$, $Q=P_{K^\perp}$; $\mathbb P$ is the execution law (IID samples and stopping randomization). Costs count individual stochastic-gradient calls, including cooldown.
+$s^2=\sigma_u^2+\sigma_v^2$, $\sigma=\max\{\sigma_u,\sigma_v\}$;
+$c=\Gamma L_h+2L_JG$, $d=2G\rho_J+2L_JL_h+\Gamma\rho_h+GL_J^2$.
+$B=2L_h\sigma_u^2+7(256c^2/\mu+32\Gamma c+2d\sigma_u/L_v)s^2+c\sigma_u\sigma_v+d\sigma_u^3/\mu+d\Gamma G\sigma_u^2/L_v+2L_J^2\sigma_u^4/L_v$.
+$W=2G\rho_h\sigma_u^2+\mu^2\sigma_u^2+4L_v^2\sigma_v^2+8L_vL_J^2\sigma_u^4/\mu$;
+$V=(2G\rho_h+L_h^2)\sigma_u^2+4L_v^2\sigma_v^2+20\Gamma^2\mu^2\sigma_u^2+8L_vL_J^2\sigma_u^4/\mu+\Gamma\mu GL_J\sigma_u^2/4$.
+$R=3+L_v^2/\mu^2+4L_v^2W/[\mu^3(L_v\varepsilon^2+8B)]$; $R_0$ replaces $W$ by $V$ in $R$.
+$L'=L_h+\Gamma\rho_h\sigma/\mu+\Gamma^2\rho_hG/L_v$ (affine-river comparison, $L'>0$).
+For \textbf{(3)}, $\delta\in(0,1)$, $\ell(u)=L_h+(1+\Gamma)^2L_v+L_Ju$ bounds $\|\nabla^2f\|$ at gradient norm $u$;
+$F=8(\Delta+s)/\delta$, $H=\sup\{u\ge0:u^2\le2\ell(2u)F\}$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

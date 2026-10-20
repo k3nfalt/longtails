@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Paired zeroth-order optimization under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdaptivePairedZerothOrder.lean}{AdaptivePairedZerothOrder setup}.}\label{tab:AdaptivePairedZerothOrder}
+\parbox{\linewidth}{\footnotesize Convex, $M$-Lipschitz $f=\mathbb E F(\cdot,\omega)$ on $Q+\gamma_{\max}B_2\subset\mathbb R^d$; compact convex $Q$ of diameter at most $D>0$, $x_0\in Q$, exact projection, and $x_\star\in\arg\min_Q f$. Samples are continuous with locally integrable weak gradients $G$ satisfying $\mathbb E\|G(x,\omega)\|^2\le M_2^2$ pointwise in the interior; $F,G$ are jointly measurable, $F(x,\cdot)$ integrable. Successive pairs share one sample, independent across pairs, and return $F(x,\omega)+b(x)$ with measurable $|b(x)|\le\Delta$. The smooth case additionally has $L$-Lipschitz gradient in the interior. Target: feasible measurable $\hat x$ with $\Pr\{f(\hat x)-f(x_\star)>\varepsilon\}\le\rho$. For \textbf{(1)}, choose the smallest admissible $N,T$; require $\Delta\le\varepsilon\gamma/(16384\sqrt d D)$, with $\gamma=\min\{\gamma_{\max},D/N\}$ (smooth) or $\min\{\gamma_{\max},d^{1/4}D/N\}$ (nonsmooth).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptivePairedZerothOrderConfidence.lean}{Adaptive\allowbreak{}Paired\allowbreak{}Zeroth\allowbreak{}Order\allowbreak{}Confidence} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptivePairedZerothOrderConfidence.md}{(review)}
+& $\mathcal{O}\!\left((d+\ell)(1+V)+N\right)$ scalar evaluations; includes all $6T+4N$ calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} ZO-clipped-SSTM \citep{apzoKornilov2023v1}, Thms.~1, 3. Special case: globally Lipschitz samples, $\mathbb E\operatorname{Lip}(F)^2\le M_2^2$, $\Delta=0$, global minimizer in $Q$.
+& $\mathcal{O}\!\left(1+\left(dV+\frac{d^{1/4}M_2D}{\varepsilon}\right)h\right)$ scalar evaluations, including batches; initial-distance bound set to $D$.
+& \textbf{(1)} Scope: pointwise weak-gradient moments replace square-integrable sample Lipschitz constants.
+& \textbf{(1)} needs compact $Q$, diameter $D$, exact projection and finite variance; \textbf{(2)} permits unbounded domains and moments $\alpha\in(1,2]$. Large leading constant in \textbf{(1)}. \\
+\midrule
+\textbf{(3)} Derived bound: \citep{apzoLiu2026v3}, Thm.~1, spherical smoothing. Lipschitz-sample special case, $\mathbb E\operatorname{Lip}(F)^2\le M_2^2$, $\Delta=0$.
+& $\begin{aligned}&\mathcal{O}\!\bigl(1+(d+\sqrt d\,\ell)V\\&\qquad{}+\sqrt d\,\ell MD/\varepsilon\bigr)\end{aligned}$ scalar evaluations; smoothing radius $\min\{\gamma_{\max},\varepsilon/(2M)\}$.
+& \textbf{(1)} Rate: $\ell$ instead of $\sqrt d\,\ell$ in the noise term; gain needs $\ell\gg\sqrt d$. For $V\ge1$, $\ell\asymp d$, $N\lesssim dV$: $\mathcal{O}(dV)$ versus $\mathcal{O}(d^{3/2}V)$.
+& \textbf{(1)} adds $N$; its nonsmooth radius cost dominates its statistical term when $\gamma_{\max}\ll\frac{\sqrt d\,M\varepsilon^3}{(d+\ell)^2M_2^4D^2}$. Requires compactness. No noise-term gain for $\ell\lesssim\sqrt d$. \\
+\midrule
+\textbf{(4)} Derived bound: \citep{apzoZhang2026v1}, Thm.~2.2, spherical smoothing. Lipschitz-sample special case, $\mathbb E\operatorname{Lip}(F)^2\le M_2^2$, $\Delta=0$, $\rho<1/10$.
+& $\mathcal{O}\!\left(1+(d+\ell)V+\frac{\ell MD}{\varepsilon}\right)$ scalar evaluations, including rejected samples; same smoothing radius as \textbf{(3)}.
+& \textbf{(1)} matches the statistical oracle order when $V\ge1$, $N\lesssim(d+\ell)V$, using polynomially many exact-real operations; \textbf{(4)} permits exponentially large internal computation.
+& \textbf{(1)} adds dimension/confidence overhead and $N$, including dependence on $\gamma_{\max}$ in the nonsmooth case. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $B_2$: Euclidean unit ball; $d\ge1$: dimension; $D$: diameter bound; $M$: objective Lipschitz bound; $M_2$: weak-gradient moment bound; $L$: smoothness bound; $\gamma_{\max}>0$: query-neighborhood radius; $\Delta$: fixed value-bias bound; $\varepsilon>0$: objective tolerance; $0<\rho<1$: failure probability; $\ell=\log(8/\rho)$; $V=M_2^2D^2/\varepsilon^2$; $h=1+\log((1+dV)/\rho)$. In \textbf{(1)}, $N\asymp1+\sqrt{LD^2/\varepsilon}$ (smooth), or $N\asymp1+d^{1/4}MD/\varepsilon+d^{1/4}D\sqrt{M/(\gamma_{\max}\varepsilon)}$ (nonsmooth), and $T\asymp(d+\ell)(1+V)+N$, with the setup's admissible universal constants. Costs count individual scalar value evaluations, two per paired estimate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

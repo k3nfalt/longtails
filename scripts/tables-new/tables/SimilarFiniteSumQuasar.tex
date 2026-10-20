@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SimilarFiniteSumQuasar.lean}{SimilarFiniteSumQuasar}.}\label{tab:SimilarFiniteSumQuasar}
+\parbox{\linewidth}{\footnotesize
+On a real Hilbert space, $F=n^{-1}\sum_{i=1}^{n}f_i$, $n\ge1$, with differentiable components and exact component-gradient access. The gradient $\nabla F$ is $L$-Lipschitz and each $\nabla f_i-\nabla F$ is $\delta$-Lipschitz. Parameters satisfy $0<\mu\le L$, $0<\gamma\le1$, $\delta\ge0$, $384\delta^2\le\gamma^3\mu^2$, $\Delta\ge0$, $\varepsilon>0$. A minimizer $x_\star$ satisfies $F(x_0)-F(x_\star)\le\Delta$ and, for every $x$, $F(x_\star)\ge F(x)+\gamma^{-1}\langle\nabla F(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2$ and $F(x)-F(x_\star)\ge\frac{\gamma\mu}{2(2-\gamma)}\|x-x_\star\|^2$.
+For every $x,y$, $F(y)\ge F(x)+\langle\nabla F(x),y-x\rangle-\frac{\gamma\sqrt{\mu L}}{2}\|y-x\|^2$.
+Target: $F(\widehat x)-F(x_\star)\le\varepsilon$ almost surely; \textbf{(1)} constructs a deterministic output and satisfies this pathwise.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CachedSimilarQuasar.lean}{Cached\allowbreak Similar\allowbreak Quasar} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CachedSimilarQuasar.md}{(review)}
+& $\mathcal{O}\!\left(n+\dfrac{n\ell}{\log(\gamma^3\mu^2/\delta^2)}+\dfrac{\sqrt{\kappa}}{\gamma}\ell\right)$ component gradients
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Nesterov acceleration \citep[Theorem 2, v3]{sfqHermant2026v3}
+& $\mathcal{O}\!\left(n\gamma^{-1}\sqrt{\kappa}\,\ell\right)$ component gradients; full gradients on $\mathbb{R}^d$
+& \textbf{(1)}: replaces multiplicative $n\gamma^{-1}\sqrt{\kappa}$ by additive costs under $384\delta^2\le\gamma^3\mu^2$; savings grow with $n$ and $\gamma^{-1}\sqrt{\kappa}$.
+& \textbf{(1)} needs finite-sum similarity and knowledge of $\delta$; \textbf{(2)} requires neither. \\
+\midrule
+\textbf{(3)} Derived bound: gradient sliding \citep[Theorem 3]{sfqKovalev2022v1}
+& $\mathcal{O}\!\left((n+\sqrt{\kappa})[1+\log(1+\kappa\Delta/\varepsilon)]\right)$ component gradients. Special case: $\mathbb{R}^d$, $\gamma=1$, $F$ $\mu$-strongly convex; $q=f_0$, $p=F-f_0$, $L_p=\mu$.
+& \textbf{(1)}: on this overlap, divides the $n\ell$ term by $\log(\mu^2/\delta^2)$, retaining $n$; removes $\kappa$ inside the accuracy logarithm. Scope: nonconvex quasar objectives, including $\gamma<1$.
+& \textbf{(1)} needs $\delta\le\mu/\sqrt{384}$ at $\gamma=1$; \textbf{(3)} also permits $\mu\le\delta\le L$ when $q$ is convex. Classes are incomparable. \\
+\midrule
+\textbf{(4)} Quasar acceleration \citep[Theorem 1]{csqHinder2020}
+& $\mathcal{O}\!\left(\dfrac{n\sqrt{\kappa}}{\gamma}[1+\log(\kappa/\gamma)]\ell\right)$ component value/gradient calls, using full evaluations on $\mathbb{R}^d$
+& \textbf{(1)}: on the stated curvature/similarity subclass, replaces the multiplicative $n$ cost by additive terms and removes $1+\log(\kappa/\gamma)$; needs no function values.
+& \textbf{(1)} needs the lower-curvature bound and similarity; \textbf{(4)} applies without these restrictions. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$; the fraction with denominator $\log(\gamma^3\mu^2/\delta^2)$ is interpreted as $0$ at $\delta=0$. Each full gradient costs $n$ component-gradient calls; each full value costs $n$ component-value calls. In \textbf{(3)}, squared-distance tolerance is $2\varepsilon/L$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

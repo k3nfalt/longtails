@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic two-sided PL minimax optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticTwoSidedPL.lean}{StochasticTwoSidedPL}.}\label{tab:StochasticTwoSidedPL}
+\parbox{\linewidth}{\footnotesize
+Real inner-product spaces $E,F$, with $E$ finite-dimensional and $F$ complete and second-countable, carry their Borel structures. Partial gradients are $L$-Lipschitz in $\|x-x'\|+\|y-y'\|$; $f(\cdot,y)$ and $-f(x,\cdot)$ satisfy PL inequalities against every competitor, with $0<\mu_x,\mu_y\le L$. Every maximization in $y$ is attained. Jointly measurable partial-gradient oracles are unbiased, integrable, and have integrable squared errors of expectation at most $\sigma^2$; calls use independent samples with common probability law $p$. The setup restricts algorithms to stochastic Smoothed-AGDA. Given $\sigma,\Delta\ge0$ and $\varepsilon>0$, the target is $\int[\Phi(\hat x)-\Phi^*+\Phi(\hat x)-f(\hat x,\hat y)]\,dP\le\varepsilon$, with measurable output and integrable gap; $P$ includes the sample stream and output randomization.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticTwoSidedPLSmoothedAgda.lean}{Stochastic\allowbreak Two\allowbreak Sided\allowbreak PL\allowbreak Smoothed\allowbreak Agda} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticTwoSidedPLSmoothedAgda.md}{(review)}
+& $\mathcal{O}\!\left(\left[\dfrac{L^2}{\mu_x\mu_y}+\dfrac{L^3\sigma^2}{\mu_x^2\mu_y^2\varepsilon}\right]\ell\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: restarted Smoothed-AGDA \citep{stplYang2022}, Thm.~4.1 plus two-sided PL; Euclidean spaces
+& $\mathcal{O}\!\left(\dfrac{L^2\ell}{\mu_x\mu_y}+\dfrac{L^3\sigma^2}{\mu_x^2\mu_y^2\varepsilon}\right)$\par Conditional on deterministic expected-gap bounds remaining valid at random restart points.
+& \textbf{(1)}: Matches deterministic rate; extends $F$ to Hilbert space. Single-run potential-PL analysis and formalization; no complexity gain on the Euclidean overlap.
+& \textbf{(1)}: Extra factor $\ell$ in the noise term, conditional on the stated restart bounds. \\
+\midrule
+\textbf{(3)} Stoc-AGDA \citep{stplYang2020}, Thm.~3.3; Euclidean spaces, attained minima and a saddle point
+& $\mathcal{O}\!\left(1+\dfrac{L^3D_0}{\mu_x\mu_y^2\varepsilon}+\dfrac{L^5\sigma^2}{\mu_x^2\mu_y^4\varepsilon}\right)$
+& \textbf{(1)}: Noise term smaller by $\kappa_y^2/\ell$ when $\ell<\kappa_y^2$, for the shared expected-gap target; not an identical-output speedup.
+& \textbf{(1)}: Random second-half iterate instead of last iterate; needs $\sigma,\varepsilon,\Delta$ in addition. Its initialization bound includes $\|\nabla_x f(x_0,y_0)\|^2/L$. \\
+\midrule
+\textbf{(4)} Warm-started Stoc-AGDA \citep{stplYang2020}, Thms.~3.1, 3.3 and Remark~3; Euclidean spaces, attained minima and a saddle point
+& $\mathcal{O}\!\left(\dfrac{L^3\ell}{\mu_x\mu_y^2}+\dfrac{L^5\sigma^2}{\mu_x^2\mu_y^4\varepsilon}\right)$\par Includes the constant-step warm start; uses the common initial bound $D_0\le\Delta$.
+& \textbf{(1)}: Deterministic term $\kappa_x\kappa_y\ell$ instead of $\kappa_x\kappa_y^2\ell$; noise gain $\kappa_y^2/\ell$ when $\ell<\kappa_y^2$.
+& \textbf{(1)}: Random iterate instead of last iterate. Noise term loses when $\ell>\kappa_y^2$; no uniform dominance. \\
+\midrule
+\textbf{(5)} FESS-GDA \citep{stplShen2024v2}, Thm.~3.5, $M=1$; Euclidean spaces, attained minima and a saddle point
+& Distance target: $\mathbb{E}[\|x_T-x^*\|^2+\|y_T-y^*\|^2]\le\delta^2$. Rates are not comparable to the gap target.
+& \textbf{(1)}: Scope: no saddle-point existence assumption. No established complexity comparison across these accuracy criteria.
+& \textbf{(1)}: Does not provide the distance guarantee of \textbf{(5)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\Phi(x)=\max_y f(x,y)$, $\Phi^*=\inf_x\Phi(x)$; $D_0=2\Phi(x_0)-\Phi^*-f(x_0,y_0)$; $\Delta\ge D_0+\|\nabla_x f(x_0,y_0)\|^2/L$; $\ell=1+\log(1+\Delta/\varepsilon)$; $\kappa_x=L/\mu_x$, $\kappa_y=L/\mu_y$. Costs count individual partial-gradient calls, including calls to each branch. $\delta$ is distance accuracy, $(x^*,y^*)$ a saddle point, and $M$ the client count.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

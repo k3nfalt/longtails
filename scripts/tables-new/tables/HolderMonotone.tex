@@ -1,0 +1,43 @@
+\begin{table}[tp]
+\centering
+\caption{Monotone root finding under mixed Lipschitz--H\"older continuity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HolderMonotone.lean}{HolderMonotone}.}\label{tab:HolderMonotone}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F:E\to E$ is monotone and satisfies $\|F(x)-F(y)\|\le L\|x-y\|+H\|x-y\|^\alpha$, with $L,H\ge0$ and $0<\alpha\le1$. A zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$, and $0<r_0\le R$, $\varepsilon>0$. The exact oracle returns $F(x)$; the target is $\|F(\hat x)\|\le\varepsilon$. Result \textbf{(1)} uses only $x_0,r_0,\varepsilon$ and returns a stopped iterate deterministically; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/UniversalHolderMonotone.lean}{Universal\allowbreak Holder\allowbreak Monotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/UniversalHolderMonotone.md}{(review)}
+& $\mathcal{O}\!\left((S+\log\rho)[1+\log(S\rho)]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} PolyakEG-LS \citep{hmYoon2026v1}, Thm.~3.4(12), Prop.~3.5.
+& $\begin{aligned}\mathcal{O}\bigl(&1+R^2(2M/\varepsilon)^{2/\nu}\\&+(\lambda R/\varepsilon)^2\\&+\log_+\!\tfrac{(2M)^{1/\nu}}{\lambda\varepsilon^{(1-\nu)/\nu}}\bigr)\end{aligned}$.
+Pure H\"older: $L=0$, $(M,\nu)=(H,\alpha)$; pure Lipschitz: $H=0$, $(M,\nu)=(L,1)$.
+& \textbf{(1)}: For $L=0$, $\alpha=1/2$, $H=R=r_0=1$, fixed $\lambda$, $\varepsilon\downarrow0$: $\mathcal{O}(\varepsilon^{-2}\log(1/\varepsilon))$ instead of $\mathcal{O}(\varepsilon^{-4})$. Scope: mixed continuity. Matches parameter-free updates. At $H=0$, fixed $L,R,r_0,\lambda$, $\varepsilon\downarrow0$: $\mathcal{O}(\varepsilon^{-1}\log(1/\varepsilon))$ instead of $\mathcal{O}(\varepsilon^{-2})$. & \\
+\midrule
+\textbf{(3)} Fast composite extragradient \citep{hmZhang2026v1}, Thm.~2.
+& $\mathcal{O}_{H,R,\alpha}\!\left(1+[\varepsilon^{-2}\ell_\alpha]^{1/(3\alpha-1)}\right)$.
+Comparison: $L=0$, $G=0$, one H\"older operator, $\alpha>1/3$. Parameter dependence not explicit.
+& \textbf{(1)}: Fixed $H,R,r_0$, $1/3<\alpha<1$, $\varepsilon\downarrow0$: exponent $1/\alpha$ instead of $2/(3\alpha-1)$; no knowledge of $H,\alpha$. Also covers $\alpha\le1/3$.
+& \textbf{(1)}: Stopped rather than last iterate; extra logarithm at $\alpha=1$. Equations in finite dimension rather than Hilbert-space inclusions with sums of operators. \\
+\midrule
+\textbf{(4)} Tseng splitting \citep{hmZhang2026v1}, Thm.~1.
+& $\mathcal{O}_{H,R,\alpha}\!\left(1+[\varepsilon^{-2}\ell_\alpha]^{1/\alpha}\right)$.
+Comparison: $L=0$, $G=0$, one H\"older operator. Parameter dependence not explicit.
+& \textbf{(1)}: Fixed $H,R,r_0,\alpha$, $\varepsilon\downarrow0$: exponent $1/\alpha$ instead of $2/\alpha$, up to logarithms; no knowledge of $H,\alpha$.
+& \textbf{(1)}: Equations in finite dimension rather than Hilbert-space inclusions with sums of operators. \\
+\midrule
+\textbf{(5)} Anchored extragradient \citep{bscYoonRyu2021}, Cor.~2, Sec.~2.3.
+& $\mathcal{O}(1+LR/\varepsilon)$. Special case $H=0$; known $L$.
+& \textbf{(1)}: No knowledge of $L$; scope extends to mixed Lipschitz--H\"older continuity.
+& \textbf{(1)}: Logarithmic overhead at $H=0$ (also radius-guess overhead); stopped rather than last iterate. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $S=1+LR/\varepsilon+(8HR^\alpha/\varepsilon)^{1/\alpha}$; $\rho=R/r_0$; $\ell_\alpha=1+(1-\alpha)\log_+(1/\varepsilon)$; $\log_+t=\max\{0,\log t\}$, with $\log_+0=0$. Costs count all evaluations of $F$, including rejected trials. In \textbf{(2)}, $\lambda>0$ is the initial inverse-step estimate; line-search constants are fixed at $A=1/2$, $\beta=3$. In \textbf{(3)}, \textbf{(4)}, $G$ is the set-valued inclusion term; $\mathcal{O}_{H,R,\alpha}$ holds these parameters fixed.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

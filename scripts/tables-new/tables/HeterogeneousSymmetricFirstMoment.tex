@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeterogeneousSymmetricFirstMoment.lean}{HeterogeneousSymmetricFirstMoment}.}\label{tab:HeterogeneousSymmetricFirstMoment}
+\parbox{\linewidth}{\footnotesize $f:\mathbb R^{b+h}\to\mathbb R$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. The jointly measurable, integrable oracle $g(x,\xi)$ is unbiased, with IID samples of law $p$. For $z=g-\nabla f$, body coordinates are individually symmetric, $\mathbb E_p\|z_b(x,\xi)\|_1\le\sigma_b$, and $\mathbb E_p\|z_h(x,\xi)\|_2^2\le\sigma_h^2$. Almost surely, $|z_i(x,\xi)-z_i(y,\xi)|\le K(\xi)\|x-y\|_2$ for every body coordinate and all $x,y$, with measurable $K\ge0$ and $\mathbb E_pK\le M$. Here $b+h>0$, $L,\Delta,\varepsilon,\delta>0$ and $M,\sigma_b,\sigma_h\ge0$. The setup restricts algorithms to bias-corrected body Adam with $(\beta_1,\beta_2)=(0.9,0.999)$ and head AdaGrad. Target: $\int\|\nabla f(x_J)\|_2\,d\mathbb P\le\varepsilon$, where $J$ is independent and uniform over executed iterates and $\mathbb P$ includes the IID sample law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HeterogeneousAdamFirstMoment.lean}{Heterogeneous\allowbreak Adam\allowbreak First\allowbreak Moment} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HeterogeneousAdamFirstMoment.md}{(review)}
+& $\mathcal{O}\!\left(Q[1+\log((1+\sigma_b)Q)]^4\right)$ single-sample gradient calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: median-of-three + SGD \citep[Cor.~2.2]{canGhadimiLan2013}
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta(\sigma_b^2+\sigma_h^2)}{\varepsilon^4}\right)$ gradient calls, counting three samples per step. Body medians; one sampled head. Full target problem class; no $K$ assumption.
+& \textbf{(1)}: No established improvement. Method-specific fixed-memory Adam/AdaGrad analysis; no adaptivity gain: updates use $L,\Delta,d,T$.
+& \textbf{(1)} needs $K$; noise coefficient inflated by at least $d^2(1+M/L)^2$, plus logarithms. For $b\delta>0$, noiseless cost retains $\varepsilon^{-4}$; large universal constant. \\
+\midrule
+\textbf{(3)} Median method \citep{hsfmMedianRepository}. Special case $h=0$; paired-query oracle.
+& $\mathcal{O}\!\left([1+\log(1+L\Delta/\varepsilon^2)]^2\right.$\par
+$\left.{}\cdot\left[1+\frac{L\Delta+\sigma_b^2}{\varepsilon^2}+\frac{\sqrt b M\sigma_b\Delta}{\varepsilon^3}\right]\right)$ paired calls (two gradients at a shared sample per call), including median batches.
+& \textbf{(1)}: Single-point oracle on $h=0$ overlap. Scope: also permits a nonsymmetric finite-variance head.
+& \textbf{(1)}: $\varepsilon^{-4}$ versus $\varepsilon^{-3}$ for fixed positive $M,\sigma_b$; stronger samplewise noise regularity. Different oracle access. \\
+\midrule
+\textbf{(4)} Adam \citep[Thm.~1.2]{hsfmDereich2026v2}. Strongly convex expected $C^2$ loss, bounded IID data and uniformly bounded iterates; initialization independent of samples.
+& $\mathcal{O}(nB)$ gradient calls; $L^p$ parameter error $\mathcal{O}_{\beta}(B^{-1}+\sqrt{\gamma_n})$ for fixed $\beta$. Requires $\beta_1^2<\beta_2$, $\beta_2\ge1/p$, $\gamma_n\downarrow0$, and
+$\frac{\gamma_n-\gamma_{n+1}}{\gamma_n^2}+\sum_{m=n}^{\infty}\gamma_m^p\to0$. No comparable stationarity budget.
+& \textbf{(1)}: Adam-specific scope extends to nonconvex objectives and unbounded symmetric first-moment body noise, including atoms, with fixed memory. Classes are incomparable.
+& \textbf{(1)} requires body symmetry and $K$; expected random-iterate stationarity replaces $L^p$ parameter accuracy. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $b,h$: body/head dimensions; $d=b+h$; $\delta$: Adam stabilizer; $\Delta$: initial gap bound; $\sigma_b,\sigma_h$: noise bounds; $M$: mean noise-Lipschitz modulus.
+$A=1+d^2(L+M)^2\Delta/L$;
+$Q=1+A(b\delta+\sigma_b+\sqrt h\,\sigma_h)^2/\varepsilon^4+[A+h(1+L\Delta+h\sigma_h^2)\sqrt A]/\varepsilon^2$.
+$T$: horizon. In \textbf{(3)}, the full-vector first-moment and averaged noise-Lipschitz bounds are $\sigma_b$ and $\sqrt b M$. In \textbf{(4)}, $B$: batch size, $n$: steps, $\gamma_n$: step size, $\beta$: memory parameters, and integer $p$ bounds iterate norms and specifies the error moment; $\mathcal{O}_{\beta}$ holds for fixed problem data and $\beta$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

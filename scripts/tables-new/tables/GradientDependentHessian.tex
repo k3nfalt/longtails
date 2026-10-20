@@ -1,0 +1,39 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GradientDependentHessian.lean}{GradientDependentHessian}.}\label{tab:GradientDependentHessian}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^3$ satisfies $\|\nabla^3 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ and $f(x_0)-f(x)\le\Delta$ for every $x$, with $\|\nabla f(x_0)\|\le G_0$. Here $L_0,\Delta,\varepsilon>0$, $L_1,G_0\ge0$, and $m\in\mathbb N$, $m\ge1$. Exact gradient and Hessian oracles are available. The target is $\|\nabla f(x_{\rm out})\|\le\varepsilon$; \textbf{(1)} attains it deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/EnergyHessianReuse.lean}{Energy\allowbreak Hessian\allowbreak Reuse} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/EnergyHessianReuse.md}{(review)}
+& $\mathcal{O}\!\left(\sqrt m\,A+m\ell\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Parameter-free CRN \citep{gdhFang2026v1}, Cor.~1
+& $\mathcal{O}\!\left(m\left[A+J+\Delta\left(\frac{L_0^2}{\delta^3}+\frac{L_1}{\delta}\right)\right]\right)$\newline
+Includes backtracking trials; $\delta=\infty$ gives the shared target.
+& \textbf{(1)}: $\sqrt m$ instead of $m$ in the accuracy cost; factor-$\sqrt m$ saving when $A\ge\sqrt m\,\ell$. For $m=10^4$, $L_0=\Delta=1$, $L_1G_0\le1$, $\varepsilon\le10^{-2}$: $\mathcal{O}(100A+10^4)$ versus $\mathcal{O}(10^4(A+J))$ at $\delta=\infty$.
+& \textbf{(1)} needs $L_0,L_1,\Delta,G_0,\varepsilon$ for tuning; loses parameter-free updates and, for finite $\delta$, the extra guarantee $\nabla^2f(x_{\rm out})\succeq-\delta I$. \\
+\midrule
+\textbf{(3)} LazyCRN \citep{gdhDoikov2023}, Thm.~3.1, Cor.~3.7
+& $\mathcal{O}\!\left(m+\sqrt{mL_0}\,\Delta\varepsilon^{-3/2}\right)$\newline
+Special case: $L_1=0$, globally $L_0$-Lipschitz Hessian.
+& \textbf{(1)}: Scope extends Hessian reuse to gradient-dependent third derivatives, including unbounded Hessian variation. Matches known rate at $L_1=0$.
+& \textbf{(1)} needs $\Delta,\varepsilon$ for tuning in addition to $L_0,m$; lacks the separate curvature guarantee $\min_i[-\lambda_{\min}(\nabla^2f(x_i))]_+$ $=\mathcal{O}(\sqrt{mL_0\varepsilon})$. \\
+\midrule
+\textbf{(4)} NALEN \citep{CompositeLHChen2026}, Thm.~4.1
+& $\mathcal{O}\!\left(m+m^{1/3}\sqrt H\,\Delta\varepsilon^{-3/2}\right)$\newline
+Special case: globally $H$-Lipschitz Hessian; $H=L_0$ when $L_1=0$.
+& \textbf{(1)}: Scope beyond globally Lipschitz Hessians. On the intersection, smaller accuracy term if $H\gg m^{1/3}(L_0+L_1\varepsilon)$; initialization can mask this gain.
+& \textbf{(1)} has $m^{1/2}$ instead of $m^{1/3}$: an $m^{1/6}$ loss in the accuracy term when $L_1=0$ and $H=L_0$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs are $N_g+mN_H$, with $m$ gradient units per Hessian call; function-value calls in \textbf{(2)} cost one unit each and are included. $A=\Delta(\sqrt{L_0}\varepsilon^{-3/2}+\sqrt{L_1}\varepsilon^{-1})$, $\ell=1+\log(1+L_1G_0/(mL_0))$. $J=1+\log_+\!\bigl(\max\{\sigma_{\rm init},L_1G_0\}/(L_0+L_1^{3/2}\Delta)\bigr)+\log_+\!\bigl((L_0+L_1^{3/2}\Delta)/\sigma_{\rm init}\bigr)$, where $\sigma_{\rm init}>0$ is the initial cubic regularization in \textbf{(2)}. $\log_+t=\max\{0,\log t\}$, $[t]_+=\max\{0,t\}$; $\delta$ is the second-order tolerance and $1/\infty=0$. $H$ denotes a global Lipschitz constant of $\nabla^2f$; $N_g,N_H$ count gradient and Hessian evaluations.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

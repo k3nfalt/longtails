@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-value optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ZerothOrderMatrixGeneralizedSmooth.lean}{ZerothOrderMatrixGeneralizedSmooth}.}\label{tab:ZerothOrderMatrixGeneralizedSmooth}
+\parbox{\linewidth}{\footnotesize Convex $f:\mathbb{R}^d\to\mathbb{R}$ has a differentiable gradient and a minimizer $x^\star$, with $\|x_0-x^\star\|\le R$ and $f(x_0)-f(x^\star)\le\Delta$. An unknown symmetric matrix $0\prec H\preceq I$ satisfies $\operatorname{tr}H\le r$ and $\nabla^2f(x)\preceq(L_0+L_1\|\nabla f(x)\|_{H^{-1}})H$. Here $d\ge1$, $L_0,r,R,\Delta,\varepsilon>0$, $L_1\ge0$, and $0<\delta<1$. Access is to exact function values; the target is $\Pr\{f(\hat x)-f(x^\star)>\varepsilon\}\le\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ZerothOrderMatrixGeneralizedAccelerated.lean}{Zeroth\allowbreak Order\allowbreak Matrix\allowbreak Generalized\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ZerothOrderMatrixGeneralizedAccelerated.md}{(review)}
+& $\mathcal{O}\!\left(D\left[\sqrt{\frac{d(r+1)L_0R^2}{\varepsilon}}\right.\right.$\newline
+$\left.\left.{}+(r+1+L_1R\sqrt{d(r+1)})\ell\right]\right)$ function values, including independent runs and output selection.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} RS-NAG \citep{zmgsOmiya2026v1}, Thm.~3.3, Prop.~5.2. Derived bound: independent runs, best-value selection.
+& $\mathcal{O}\!\left(D\left[1+\sqrt{\frac{d(r+1)L_0R^2}{\varepsilon}}\right]\right)$ directional-derivative and selection-value calls. Special case $L_1=0$, $d\ge2$; same probability target.
+& \textbf{(1)}: Scope extends to $L_1>0$. Values replace directional derivatives; at $L_1=0$, matches the leading rate.
+& \textbf{(1)}: Adds $\mathcal{O}(D(r+1)\ell)$ at $L_1=0$. \\
+\midrule
+\textbf{(3)} AGD \citep{cgsTyurin2026v2}, Thm.~4.3; Euclidean reduction.
+& $\mathcal{O}\!\left(1+\sqrt{\frac{L_0R^2}{\varepsilon}}\right.$\newline
+$\left.{}+L_E R\log_+\min\!\left\{\frac{L_E^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\right.$\newline
+$\left.{}+\log_+\frac{\Delta}{L_0R^2}\right)$ exact-gradient calls. Here $R=\|x_0-x^\star\|$, $\varepsilon<\Delta$; deterministic accuracy.
+& \textbf{(1)}: Values suffice; no $\mu_H^{-1/2}$ dependence from $L_E$. No established function-value cost comparison with \textbf{(3)}.
+& \textbf{(1)}: Probabilistic instead of deterministic accuracy; needs $r$ additionally. \\
+\midrule
+\textbf{(4)} Uniform coordinate acceleration \citep{zmgsLobanov2026v1}, Thm.~6.
+& $\mathcal{O}\!\left(d\widetilde R\sqrt{\frac{H_0}{\varepsilon}} +(1+d\widetilde R\sqrt{H_1})\ell_F\right)$ partial-derivative, value, and exact segment-solve calls. Expected gap $\le\varepsilon$; gap local model (Assump.~2), known $f^\star,\widetilde R<\infty$, $\varepsilon\le F_0$.
+& \textbf{(1)}: Values replace derivatives and exact segment solves; $R,\Delta$ replace $f^\star,\widetilde R$. Function-value rates are not comparable: segment-solve cost is unbounded here.
+& \\
+\midrule
+\textbf{(5)} Importance-sampled coordinate acceleration \citep{zmgsLobanov2026v1}, Thm.~8.
+& $\mathcal{O}\!\left(\frac{\widetilde R\sum_i\sqrt{H_{0,i}}}{\sqrt{\varepsilon}}\right.$\newline
+$\left.{}+(1+\widetilde R\sum_i\sqrt{H_{1,i}})\ell_F\right)$ partial-derivative, value, and exact segment-solve calls. Expected gap $\le\varepsilon$; coordinate local model (Assump.~7), known $f^\star,\widetilde R<\infty$, $\varepsilon\le F_0$.
+& \textbf{(1)}: No coordinate-curvature inputs; $H$ remains unknown. Values replace derivatives and exact segment solves. Function-value rates are not comparable without segment-solve costs.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $D=1+\log(1/\delta)$; $\ell=\log(e+\Delta/\varepsilon)$; $\log_+t=\max\{0,\log t\}$, with $\log_+0=0$; $\mu_H=\lambda_{\min}(H)$; $L_E=L_1/\sqrt{\mu_H}$ (or $L_E=L_1$ when $H=I$); $\|g\|_{H^{-1}}=\sqrt{g^\top H^{-1}g}$; $f^\star=f(x^\star)$; $F_0=f(x_0)-f^\star$; $\ell_F=1+\log(F_0/\varepsilon)$; $\widetilde R=\sup_{f(x)\le f(x_0)}\|x-x^\star\|$. $H_0,H_1$ and $H_{0,i},H_{1,i}$ are the scalar and coordinate gap-local-model coefficients in \textbf{(4)} and \textbf{(5)}; they are not the matrix $H$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

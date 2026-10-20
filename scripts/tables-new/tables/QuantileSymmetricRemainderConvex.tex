@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Quantile-controlled symmetric-remainder noise: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuantileSymmetricRemainderConvex.lean}{QuantileSymmetricRemainderConvex}.}\label{tab:QuantileSymmetricRemainderConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:\mathbb R^d\to\mathbb R$ has $L$-Lipschitz gradient and a minimizer $x^\star$ with $\|x_0-x^\star\|\le R$. The jointly measurable oracle uses IID samples. For every point and coordinate, the noise law $\mu=S+A$ has nonnegative measures $S,A$, reflection-symmetric $S$, $\int z\,dA=0$, $\int z^2\,dA\le M$, and $\mu\{|z|>r\}\le1/64$; the stated remainder integrals are integrable. Here $d\ge1$, $L,R,r,\varepsilon>0$, $M\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x)-f(x^\star)]\,dP\le\varepsilon$ under the execution law $P$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuantileRemainderMinimaxConvex.lean}{Quantile\allowbreak Remainder\allowbreak Minimax\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuantileRemainderMinimaxConvex.md}{(review)}
+& $\begin{gathered}\mathcal{O}\!\left(\left[1+\sqrt{LR^2/\varepsilon}+Q^2\right]\right.\\[-2pt]\left.{}\cdot[1+\log(1+Q)]\right)\end{gathered}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Clipped-SSTM/SMoM \citep{qsrcPuchkin2024v2}, Cor.~5.8, Eq.~(117). Derived bound; density/convolution-tail subclass, $\beta\ge1$; $(p(u)-p(-u))/2$ centered, absolute second moment $\le M$.
+& $\begin{gathered}\mathcal{O}_{B,\beta,\theta}\!\left(\left[1+M+\frac{\sqrt d MR}{\varepsilon}\right]\right.\\[-2pt]\left.{}\cdot\left[1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{dR^2}{\varepsilon^2}\right]\ell_2\right)\end{gathered}$\par Fixed $B,\beta,\theta>0$; probability $1-\delta$.
+& \textbf{(1)} Scope: quantile-only noise admits atoms and symmetric backgrounds without any positive moment. Removes \textbf{(2)}'s density and convolution bound $s^{*k}(u)\le Bk/(k^{(\beta+1)/\beta}+|u|^{1+\beta})$.
+& \textbf{(1)}: expectation, not \textbf{(2)}'s high probability. On the overlap, fixed positive parameters and $\varepsilon\to0$: $\varepsilon^{-4}$ versus $\varepsilon^{-3}$, up to logarithms; remainder-dominated ratio $\sqrt d MR/\varepsilon$. \\
+\midrule
+\textbf{(3)} Clipped-SSTM/median \citep{qsrcPuchkin2024v2}, Prop.~4.1 + Thm.~5.7. Derived bound; $M=0$, symmetric densities $p(u)\le B/(1\vee|u|^{1+\beta})$, $\beta>0$.
+& $\begin{gathered}\mathcal{O}\!\left(m\left[1+\sqrt{\frac{LR^2}{\varepsilon}}\right.\right.\\[-2pt]\left.\left.{}+\frac{dmVR^2}{\varepsilon^2}\right]\ell_3\right)\end{gathered}$\par Probability $1-\delta$.
+& \textbf{(1)} Scope: at $M=0$, replaces \textbf{(3)}'s polynomial density tails with a quantile. Matches the $\varepsilon^{-2}$ power, up to logarithms, for fixed remaining parameters.
+& \textbf{(1)}: expectation instead of \textbf{(3)}'s high probability; noise-scale term $(LR+r)^2$ includes $L^2R^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count raw stochastic-gradient calls, including batches. $Q=\sqrt d R(LR+r)/\varepsilon+dMR^2/\varepsilon^2$; $m=1+\lceil3/\beta\rceil$, $V=\max\{1,(4B/\beta)^{2/\beta}\}$. $\delta\in(0,1)$ is failure probability; $\ell_j=1+\log((2+\sqrt{LR^2/\varepsilon}+v_jR^2/\varepsilon^2)/\delta)$, $v_2=d$, $v_3=dmV$. $B,\beta$ are uniform coordinate density-tail constants; $\theta$ is Gaussian smoothing scale; the subscript on $\mathcal{O}_{B,\beta,\theta}$ permits dependence on these fixed constants. $s(u)=(p(u)+p(-u))/2$; $*$ denotes convolution.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

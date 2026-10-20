@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Temporal gradient discrepancy on quadratics: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticTemporalDiscrepancy.lean}{QuadraticTemporalDiscrepancy}.}\label{tab:QuadraticTemporalDiscrepancy}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f(x)=\tfrac12\|A(x-x_*)\|^2$ for bounded linear $A$, with $\mu\|v\|^2\le\|Av\|^2\le L\|v\|^2$, $0<\mu\le L$, and $f(x_0)\le\Delta$. Call $k$ returns $A^*A(x-x_*)+e_k$, where deterministic, query-independent errors satisfy $\sup_n\|\sum_{k<n}e_k\|\le D$. Here $D,\Delta\ge0$ and $\varepsilon>0$. Target: $f(x_{\rm out})-f(x_*)\le\varepsilon$ for every seed. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/TemporalAcceleratedQuadratic.lean}{Temporal\allowbreak{}Accelerated\allowbreak{}Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/TemporalAcceleratedQuadratic.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell+\dfrac{D}{\sqrt{\mu\varepsilon}}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: batching and dilation, \citep[Prop.~4, v2]{hltSchmidt2011v2}; Hilbert-space extension
+& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell+\dfrac{D}{\sqrt{\mu\varepsilon}}\right)$; includes initial batch and all dilated queries; smooth specialization.
+& \textbf{(1)}: Matches known rate. No precision-dependent dilation; updates need neither $D$ nor $\varepsilon$. Stopping still needs $D,\Delta,\varepsilon$; no adaptive stopping guarantee.
+& \textbf{(1)}: Tail average instead of the last iterate. \\
+\midrule
+\textbf{(3)} Derived bound: batching without dilation, \citep[Prop.~4, v2]{hltSchmidt2011v2}; Hilbert-space extension
+& $\mathcal{O}\!\left(1+\sqrt{\kappa}\,\ell\left[1+\dfrac{\sqrt{\kappa}D}{\sqrt{\mu\varepsilon}}\right]\right)$, $\Delta>\varepsilon$; counts every batch sample; smooth specialization.
+& \textbf{(1)}: Noise term $D/\sqrt{\mu\varepsilon}$ instead of $\kappa\ell D/\sqrt{\mu\varepsilon}$; gain for $D\ge\sqrt{\mu\varepsilon}$, $\kappa\gg1$. Updates need neither $D$ nor $\varepsilon$; stopping does. \textbf{(2)} already matches \textbf{(1)}.
+& \textbf{(1)}: Tail average instead of the last iterate. \\
+\midrule
+\textbf{(4)} Subsequent repository result \citep{qtdNonlinearTemporalRepository}; finite-dimensional quadratic restriction
+& $\mathcal{O}\!\left(\left[1+\sqrt{\kappa}+\dfrac{D}{\sqrt{\mu\varepsilon}}\right]\log\!\left(2+\dfrac{\Delta}{\varepsilon}\right)\right)$, with $M=0$.
+& \textbf{(1)}: Removes $\log(2+\Delta/\varepsilon)$ from the noise term on the quadratic overlap; also permits infinite-dimensional Hilbert spaces.
+& \textbf{(1)}: Quadratics only; \textbf{(4)} also covers nonquadratic objectives with Lipschitz Hessian. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=\log(1+\Delta/\varepsilon)$; $M$ is the Lipschitz constant of $\nabla^2 f$. Costs count primitive gradient-oracle calls. The tail average in \textbf{(1)} averages iterates $K+1,\ldots,2K$ over $2K$ calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

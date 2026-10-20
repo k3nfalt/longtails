@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Relative gradient error: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeErrorSmoothConvex.lean}{RelativeErrorSmoothConvex}.}\label{tab:RelativeErrorSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a real Hilbert space satisfies $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\frac L2\|y-x\|^2$, with $L>0$, a minimizer $x^\star$, and $\|x_0-x^\star\|\le R$, $R\ge0$. Every oracle reply satisfies $\|g-\nabla f(x)\|\le\alpha\|\nabla f(x)\|$, $0\le\alpha<1$, for every call and seed. Target: $f(x_N)-f(x^\star)\le\varepsilon$, $\varepsilon>0$, almost surely under the execution measure (indeed, for every seed). Parameters $L,\alpha,R,\varepsilon$ are supplied.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedRelativeErrorConvex.lean}{Accelerated\allowbreak Relative\allowbreak Error\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedRelativeErrorConvex.md}{(review)}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{T}{1-\alpha}}+\frac{\alpha^2T}{1-\alpha}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Regularized RE-AGM \citep[Thm.~7.2]{igsVasinGasnikov2026v1}
+& $\mathcal{O}\!\left((\sqrt T+\alpha T)(1+\log T)\right)$.
+$T>1$, $\alpha\le1/3$; Euclidean space.
+& \textbf{(1)}: $\alpha^2T$ instead of $\alpha T$; removes logarithm on $T>1$, $\alpha\le1/3$. At $\alpha=T^{-1/4}$, $T\ge81$: $\mathcal{O}(T^{3/4}(1+\log T))\to\mathcal{O}(\sqrt T)$. Scope: every $\alpha<1$.
+& \\
+\midrule
+\textbf{(3)} Regularized GD \citep[Thm.~7.1]{igsVasinGasnikov2026v1}
+& $\mathcal{O}\!\left(\frac{(1+\alpha)^2}{(1-\alpha)^6}T(1+\log T)\right)$.
+$T>1$, $\alpha<1/2$; Euclidean space.
+& \textbf{(1)}: $\mathcal{O}(\sqrt T+\alpha^2T)$ on $T>1$, $\alpha<1/2$; logarithmic saving throughout. For $\alpha\le T^{-1/4}$: $\mathcal{O}(T(1+\log T))\to\mathcal{O}(\sqrt T)$. Scope: every $\alpha<1$.
+& \\
+\midrule
+\textbf{(4)} ISTM, $p=2$ \citep[Thm.~3.1]{rescKornilov2023v1}
+& $\mathcal{O}(1+\sqrt T)$ when $\alpha\le c\min\{1,T^{-1/2}\}$; Euclidean space. Certified accuracy floor of order $\alpha^2LR^2$.
+& \textbf{(1)}: matches $\mathcal{O}(\sqrt T)$ for $T>1$, $\alpha\lesssim T^{-1/2}$; extends acceleration to $\alpha\lesssim T^{-1/4}$ with $\alpha\le1/3$. Arbitrary accuracy for every $\alpha<1$.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; complexity counts relative-error gradient calls; $c>0$ is a sufficiently small universal constant; $\lesssim$ suppresses a universal constant. GD: gradient descent; RE-AGM: relative-error accelerated gradient method; ISTM: intermediate similar triangle method.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

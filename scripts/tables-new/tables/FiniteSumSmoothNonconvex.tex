@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-sum nonconvex optimization under mean-squared smoothness (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumSmoothNonconvex.lean}{FiniteSumSmoothNonconvex}).}\label{tab:FiniteSumSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space $E$ equipped with a measurable structure, let $F=n^{-1}\sum_{i=1}^n f_i$, with differentiable $f_i$ and $n\ge1$. Assume $n^{-1}\sum_i\|\nabla f_i(x)-\nabla f_i(y)\|^2\le L^2\|x-y\|^2$ for all $x,y$, and $F\ge\ell$ with $F(x_0)-\ell\le\Delta$, where $L>0$, $\Delta\ge0$. The oracle returns exact component gradients. For $\varepsilon>0$, the target is a measurable output $X$ with integrable squared gradient and $\int\|\nabla F(X(\omega))\|^2\,dP(\omega)\le\varepsilon^2$, where $P$ is the algorithm's randomization law. Convexity and attainment of the infimum are not assumed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecursiveGradientNonconvex.lean}{Recursive\allowbreak Gradient\allowbreak Nonconvex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecursiveGradientNonconvex.md}{(review)}
+& $\mathcal{O}\!\left(n+\frac{\sqrt n\,L\Delta}{\varepsilon^2}\right)$ deterministic calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Minibatch SARAH \citep[Thm.~2, Cor.~3]{fsncNguyen2019v2}. $E=\mathbb{R}^d$.
+& $\mathcal{O}\!\left(n+\frac{\sqrt n\,L\Delta}{\varepsilon^2}\right)$ deterministic calls; batch and epoch lengths $\asymp\sqrt n$.
+& \textbf{(1)}: Matches known rate, formalized in Lean. Scope: Hilbert spaces. With-replacement instead of without-replacement batches; no rate or tuning-knowledge improvement.
+& \\
+\midrule
+\textbf{(3)} SpiderBoost \citep[Thm.~1; App.~G, Thm.~9]{fsncWang2020v3}. $E=\mathbb{R}^d$; each $\nabla f_i$ is $L$-Lipschitz.
+& $\mathcal{O}\!\left(n+\frac{\sqrt n\,L\Delta}{\varepsilon^2}\right)$ deterministic calls; squared-gradient guarantee from App.~G.
+& \textbf{(1)}: Scope: mean-squared smoothness instead of componentwise smoothness; Hilbert spaces. Matches rate on the common setup. The smoothness relaxation is already covered by \textbf{(2)}.
+& \\
+\midrule
+\textbf{(4)} PAGE \citep[Thm.~1, Cor.~2; App.~A.1, Eq.~(23)]{fsncLi2021PAGE}. $E=\mathbb{R}^d$; $F^*=\min F$ in the stated gap.
+& $\mathcal{O}\!\left(n+\frac{\sqrt n\,L\Delta}{\varepsilon^2}\right)$ expected calls; squared-gradient guarantee from App.~A.1.
+& \textbf{(1)}: Deterministic rather than expected call budget, at matched order on the common setup; this budget guarantee already holds for \textbf{(2)}.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $n$: number of components; $L$: mean-squared smoothness bound; $\ell$: objective lower bound; $\Delta$: initial gap bound; $\varepsilon$: root-mean-square gradient tolerance. Calls count individual component-gradient evaluations, including full refreshes and two evaluations per sampled difference. Prior-work gaps are bounded by $\Delta$ on the common setup; $\asymp$ denotes equality up to universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

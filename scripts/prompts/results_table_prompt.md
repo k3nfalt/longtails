@@ -100,6 +100,14 @@ LAYOUT AND STYLE
    these columns ONLY in prior-work rows, always from our results' perspective:
    Novelty states what ours improves over that baseline; Limitations states
    what ours loses (e.g. worse noise dependence or stronger assumptions).
+   Lead Novelty with our strongest supported result against that row, including
+   its validity regime and a quantitative gain where available. A limitation
+   must not erase a supported gain. Ensure the review's substantive contribution
+   is visible in the comparisons, not only in the star rating; do not invent
+   improvements to justify that rating.
+   If prior work also guarantees a stronger output, still state a supported cost
+   saving for the shared target in Novelty, with its regime; put the lost extra
+   guarantee in Limitations. Do not present this as a speedup for identical outputs.
    Keep conditions attached to their claims. Do not invent disadvantages for
    symmetry: leave the cell empty if none is established. Do not fill it with
    "No additional restriction identified" or generic caveats. A deterioration
