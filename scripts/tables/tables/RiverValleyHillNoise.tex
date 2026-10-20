@@ -1,7 +1,13 @@
 \begin{table}[tp]
 \centering
 \caption{Annealed SGD for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RiverValleyHillNoise.lean}{RiverValleyHillNoise}.}\label{tab:RiverValleyHillNoise}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $f(x)=h(Qx)+\frac12\langle A(Px-\phi(Qx)),Px-\phi(Qx)\rangle$, with an unknown orthogonal split, $\phi(E)\subseteq K$, symmetric $A$ preserving $K$, and $\mu I\preceq A|_K\preceq L_vI$. The gradient and Hessian of $h$ are $L_h$- and $\rho_h$-Lipschitz, $\|\nabla h\|\le G$; $J_\phi,DJ_\phi$ are $L_J$- and $\rho_J$-Lipschitz, and $\|AJ_\phi Q\|\le\Gamma\mu$. The initial gap is at most $\Delta$. Jointly measurable, integrable, IID unbiased stochastic gradients have river/hill error second moments at most $\sigma_u^2,\sigma_v^2$. Parameters are nonnegative, $\epsilon>0$, $0<\mu\le L_v$, $16\Gamma\le1$, $64c\le\mu$, $64d\sigma_u\le\mu L_v$, and $32L_h\log R_0\le\mu$. The setup requires two-phase SGD: a uniformly randomized warmup length followed by a fixed cooldown, with positive constant steps in each phase. Target: $\mathbb E\|\nabla f(x_{\rm out})\|\le\epsilon$ for its terminal output. Tuning uses public bounds, not $K,\phi,A$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize
+In a finite-dimensional real inner-product space, $f(x)=h(Qx)+\tfrac12\langle A(Px-\phi(Qx)),Px-\phi(Qx)\rangle$, with unknown orthogonal split, $\phi(E)\subseteq K$, symmetric $A$ preserving $K$, and $\mu I\preceq A|_K\preceq L_v I$.
+The nonconvex river satisfies $\|\nabla h\|\le G$; $\nabla h,\nabla^2h,D\phi,D^2\phi$ have Lipschitz constants $L_h,\rho_h,L_J,\rho_J$, respectively, and $\|AD\phi(y)Q\|\le\Gamma\mu$.
+Assume $f(x_0)-\inf f\le\Delta$, $0<\mu\le L_v$, $\varepsilon>0$, nonnegative remaining parameters, $16\Gamma\le1$, $64c\le\mu$, $64d\sigma_u\le\mu L_v$, and $32L_h\log R_0\le\mu$.
+The jointly measurable, integrable oracle is IID and unbiased, with river/hill error second moments at most $\sigma_u^2,\sigma_v^2$.
+The setup requires two-phase constant-step SGD; tuning knows the scalar parameters, but not $K,\phi,A$.
+Target: $\int\|\nabla f(x_{\rm out}(\omega))\|\,d\mathbb P(\omega)\le\varepsilon$, for the last iterate after a uniformly randomized first-phase duration and a fixed cooldown.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,35 +15,33 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AnnealedSgdRiverValley.lean}{Annealed\allowbreak{}Sgd\allowbreak{}River\allowbreak{}Valley} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AnnealedSgdRiverValley.md}{(review)}
-& $\mathcal{O}\!\left(\dfrac{L_v\Delta}{\epsilon^2}+\dfrac{\Delta B}{\epsilon^4}\right.$\newline
-$\left.{}+\log^2R\left[\dfrac{L_v}{\mu}+\dfrac{W}{\mu^2\epsilon^2}\right]\right)$ stochastic-gradient calls, including warmup and cooldown.
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AnnealedSgdRiverValley.lean}{Annealed\allowbreak Sgd\allowbreak River\allowbreak Valley} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AnnealedSgdRiverValley.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{aligned}&1+\frac{L_v\Delta}{\varepsilon^2}+\frac{\Delta B}{\varepsilon^4}\\&+\log^2R\left(\frac{L_v}{\mu}+\frac{W}{\mu^2\varepsilon^2}\right)\end{aligned}\right)$
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} Randomized SGD \citep{canGhadimiLan2013}, Cor.~2.2.
-\newline Special case: affine river, $L_J=\rho_J=0$.
-& $\mathcal{O}\!\left(1+\dfrac{L_v\Delta}{\epsilon^2}+\dfrac{L_v\Delta(\sigma_u^2+\sigma_v^2)}{\epsilon^4}\right)$ stochastic-gradient calls.
-\newline $\mathbb E\|\nabla f(x_R)\|^2\le\epsilon^2$; $L\asymp L_v$ on this restriction.
-& \textbf{(1)}: Scope extends to curved rivers. On affine rivers, noise coefficient $L'$ replaces $L_v$; hill transmission costs $\Gamma^2L_h\sigma_v^2$. For $\sigma\gg\epsilon$, $L'\asymp L_h\ll L_v$, and $\epsilon^2\log^2R\ll\mu^2\Delta/L_v$, an $L_v/L_h$-type gain.
-& \textbf{(1)}: Requires quadratic hills, bounded river gradients, higher regularity and valley conditions. Only expected norm accuracy. Hill-noise cooldown can dominate when $L_v\epsilon^2\log^2R>\mu^2\Delta$. \\
+\textbf{(2)} Randomized SGD \citep{rvGhadimiLan2013v1}, Cor.~2.2. Affine-river restriction: $L_J=\rho_J=0$, $L\asymp L_v$.
+& $\displaystyle\mathcal{O}\!\left(1+\frac{L_v\Delta}{\varepsilon^2}+\frac{L_v\Delta s^2}{\varepsilon^4}\right)$
+& \textbf{(1)}: affine-river noise coefficient $L'$ instead of $L_v$; gain $\asymp\min\{\sigma^2/\varepsilon^2,\allowbreak L_v/L',\allowbreak \mu^2\Delta/(L_v\varepsilon^2\log^2R)\}$ when this minimum exceeds one. Scope: curved rivers at the displayed rate; unknown split.
+& \textbf{(1)}: extra cooldown can dominate when $L_v\varepsilon^2\log^2R>\mu^2\Delta$; same order for $\sigma\lesssim\varepsilon$. Needs river structure and regularity; expected norm instead of expected squared norm. \\
 \midrule
-\textbf{(3)} SGD \citep{rvLi2023}, Thm.~5.3 (arXiv v2).
-\newline Generalized-smooth class, including curved rivers.
-& $\mathcal{O}\!\left(1+\dfrac{\ell(2H)F}{\epsilon^2}+\dfrac{H^2F^2}{\epsilon^4}\right)$ stochastic-gradient calls.
-\newline $\Pr\!\left\{T^{-1}\sum_{t<T}\|\nabla f(x_t)\|^2\le\epsilon^2\right\}\ge1-\delta$.
-& \textbf{(1)}: Expected stationarity of a single terminal output on curved rivers. Rates are not comparable with the high-probability average guarantee in \textbf{(3)}.
-& \textbf{(1)}: Narrower quadratic-hill structure, bounded river gradients, higher regularity and valley conditions; no high-probability guarantee. \\
+\textbf{(3)} SGD \citep{rvLiEtAl2023v2}, Thm.~5.3. Generalized smoothness; covers curved rivers.
+& $\displaystyle\mathcal{O}\!\left(1+\frac{\ell(2H)F}{\varepsilon^2}+\frac{H^2F^2}{\varepsilon^4}\right)$\newline
+$\Pr\{T^{-1}\sum_{t<T}\|\nabla f(x_t)\|^2\le\varepsilon^2\}\ge1-\delta$.
+& \textbf{(1)}: expected stationarity of one output on curved rivers. Rates are not comparable with \textbf{(3)}'s high-probability average criterion.
+& \textbf{(1)}: narrower quadratic-hill structure, bounded river gradient and higher regularity; no high-probability average guarantee. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $P=\operatorname{proj}_K$, $Q=I-P$, $J_\phi=D\phi$, $\Delta\ge f(x_0)-\inf f$; expectations include IID samples and stopping randomness. $c=\Gamma L_h+\allowbreak 2L_JG$, $d=2G\rho_J+\allowbreak 2L_JL_h+\allowbreak \Gamma\rho_h+\allowbreak GL_J^2$;
-$B=2L_h\sigma_u^2+\allowbreak (1792c^2/\mu+\allowbreak 224\Gamma c+\allowbreak 14d\sigma_u/L_v)(\sigma_u^2+\allowbreak \sigma_v^2)+\allowbreak c\sigma_u\sigma_v+\allowbreak d\sigma_u^3/\mu+\allowbreak d\Gamma G\sigma_u^2/L_v+\allowbreak 2L_J^2\sigma_u^4/L_v$;
-$W=G\rho_h\sigma_u^2+\allowbreak \mu^2\sigma_u^2+\allowbreak L_v^2\sigma_v^2+\allowbreak L_vL_J^2\sigma_u^4/\mu$;
-$R=3+\allowbreak L_v^2/\mu^2+\allowbreak L_vW/(\mu^3\epsilon^2)$;
-$R_0=3+\allowbreak L_v^2/\mu^2+\allowbreak 4L_v^2V/[\mu^3(L_v\epsilon^2+\allowbreak 8B)]$, where
-$V=(2G\rho_h+\allowbreak L_h^2)\sigma_u^2+\allowbreak 4L_v^2\sigma_v^2+\allowbreak 20\Gamma^2\mu^2\sigma_u^2+\allowbreak 8L_vL_J^2\sigma_u^4/\mu+\allowbreak \Gamma\mu GL_J\sigma_u^2/4$.
-For \textbf{(2)}, $\sigma=\max\{\sigma_u,\sigma_v\}$ and $L'=L_h+\allowbreak \Gamma\rho_h\sigma/\mu+\allowbreak \Gamma^2\rho_hG/L_v$.
-For \textbf{(3)}, $s=\sqrt{\sigma_u^2+\allowbreak \sigma_v^2}$, $F=8(\Delta+\allowbreak s)/\delta$, $0<\delta<1$, $H=\sup\{r\ge0:r^2\le2\ell(2r)F\}$; $\ell$ is a continuous nondecreasing subquadratic Hessian envelope, $\|\nabla^2f\|\le\ell(\|\nabla f\|)$, here of order $L_h+\allowbreak (1+\allowbreak \Gamma)^2L_v+\allowbreak L_Jr$.
+\item[] \textbf{Abbr:} $P=P_K$, $Q=P_{K^\perp}$; $\mathbb P$ is the execution law (IID samples and stopping randomization). Costs count individual stochastic-gradient calls, including cooldown.
+$s^2=\sigma_u^2+\sigma_v^2$, $\sigma=\max\{\sigma_u,\sigma_v\}$;
+$c=\Gamma L_h+2L_JG$, $d=2G\rho_J+2L_JL_h+\Gamma\rho_h+GL_J^2$.
+$B=2L_h\sigma_u^2+7(256c^2/\mu+32\Gamma c+2d\sigma_u/L_v)s^2+c\sigma_u\sigma_v+d\sigma_u^3/\mu+d\Gamma G\sigma_u^2/L_v+2L_J^2\sigma_u^4/L_v$.
+$W=2G\rho_h\sigma_u^2+\mu^2\sigma_u^2+4L_v^2\sigma_v^2+8L_vL_J^2\sigma_u^4/\mu$;
+$V=(2G\rho_h+L_h^2)\sigma_u^2+4L_v^2\sigma_v^2+20\Gamma^2\mu^2\sigma_u^2+8L_vL_J^2\sigma_u^4/\mu+\Gamma\mu GL_J\sigma_u^2/4$.
+$R=3+L_v^2/\mu^2+4L_v^2W/[\mu^3(L_v\varepsilon^2+8B)]$; $R_0$ replaces $W$ by $V$ in $R$.
+$L'=L_h+\Gamma\rho_h\sigma/\mu+\Gamma^2\rho_hG/L_v$ (affine-river comparison, $L'>0$).
+For \textbf{(3)}, $\delta\in(0,1)$, $\ell(u)=L_h+(1+\Gamma)^2L_v+L_Ju$ bounds $\|\nabla^2f\|$ at gradient norm $u$;
+$F=8(\Delta+s)/\delta$, $H=\sup\{u\ge0:u^2\le2\ell(2u)F\}$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,8 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticFiniteSum.lean}{QuadraticFiniteSum}.}\label{tab:QuadraticFiniteSum}
-\parbox{\linewidth}{\footnotesize
-On a real Hilbert space with its Borel measurable structure, let $F(x)=n^{-1}\sum_{i=1}^n(\langle x,A_ix\rangle/2+\langle b_i,x\rangle)$, where $A_i$ are bounded self-adjoint operators, $\|A_i\|\le L$, and $n^{-1}\sum_i A_i\succeq\mu I$. Here $n\ge1$, $0<\mu\le L$, $R,G\ge0$, and $\varepsilon>0$. A stationary minimizer $x_*$ satisfies $\|x_0-x_*\|\le R$ and $\max_i\|A_ix_*+b_i\|\le G$; components may be indefinite. One oracle call returns an exact component gradient $A_ix+b_i$. The target is $\int[F(\widehat x(\omega))-F(x_*)]\,dP(\omega)\le\varepsilon$. Result \textbf{(1)} constructs constant-step random reshuffling with independent uniform permutations and final endpoint $\widehat x$; the setup does not restrict the algorithm. Comparisons below use $n\ge2$ and $0<\varepsilon<LR^2/2$.}\par\smallskip
+\caption{Quadratic finite sums: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuadraticFiniteSum.lean}{QuadraticFiniteSum}.}\label{tab:QuadraticFiniteSum}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space with its Borel measurable structure, let $F(x)=n^{-1}\sum_{i=1}^n(\langle x,A_i x\rangle/2+\langle b_i,x\rangle)$, where $n\ge1$, $A_i=A_i^*$, $\|A_i\|\le L$, and $n^{-1}\sum_i A_i\succeq\mu I$, with $0<\mu\le L$. Components may be indefinite. A minimizer $x_*$ satisfies $\|x_0-x_*\|\le R$ and $\max_i\|A_ix_*+b_i\|\le G$, with $R,G\ge0$. The exact oracle returns $A_ix+b_i$; $n,L,\mu,R,G,\varepsilon$ are supplied. Target: $\mathbb E[F(x_{\rm out})-F(x_*)]\le\varepsilon$. Row \textbf{(1)} constructs constant-step random reshuffling with independent uniform permutations per epoch; the setup imposes no algorithm restriction. Comparisons below use $0<\varepsilon<LR^2$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -11,31 +10,30 @@ On a real Hilbert space with its Borel measurable structure, let $F(x)=n^{-1}\su
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RandomReshufflingQuadratic.lean}{Random\allowbreak Reshuffling\allowbreak Quadratic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RandomReshufflingQuadratic.md}{(review)}
-& $\begin{aligned}[t]\mathcal{O}\Bigl(n+\Bigl[n\kappa&+\frac{L^{3/2}G}{\mu^2\sqrt{\varepsilon}}\\ &+\Bigl(\frac{n^2L^3G^2}{\mu^4\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$ & & \\
+& $\displaystyle\mathcal{O}\!\left(n+\left[\frac{nL}{\mu}+\frac{L^{3/2}G}{\mu^2\sqrt\varepsilon}\right.\right.$\newline
+$\displaystyle\left.\left.{}+\left(\frac{n^2L^3G^2}{\mu^4\varepsilon}\right)^{1/3}\right]\ell\right)$
+& & \\
 \midrule[1.2pt]
-\textbf{(2)} Nesterov acceleration \citep[Thm.~3.18]{qfsBubeck2015}
-& $\mathcal{O}(n+n\sqrt{\kappa}\,\ell)$; deterministic accuracy; $n$ component calls per full gradient.
+\textbf{(2)} AGD \citep[Thm.~3.18]{qfsBubeck2015}
+& $\mathcal{O}(n+n\sqrt{L/\mu}\,\ell)$
 & \textbf{(1)}: No established improvement.
-& \textbf{(1)}: $n\kappa$ instead of $n\sqrt{\kappa}$, plus heterogeneity costs; needs $G$; expected rather than deterministic accuracy. \\
+& \textbf{(1)}: $nL/\mu$ instead of $n\sqrt{L/\mu}$, plus heterogeneity terms; needs $G$ additionally. Expected rather than deterministic accuracy. \\
 \midrule
-\textbf{(3)} Katyusha X \citep[Cor.~4.4, v1]{qfsAllenZhu2018v1}; finite-dimensional restriction, $b=1$, $\ell_1=\ell_2=L$.
-& $\mathcal{O}((n+n^{3/4}\sqrt{\kappa})\ell)$ expected component calls.
-& \textbf{(1)}: Deterministic call budget. Scope: Hilbert-space statement instead of finite dimension; the analyses are dimension-independent.
-& \textbf{(1)}: Larger bound on the common finite-dimensional setup: $n\kappa\ge n^{3/4}\sqrt{\kappa}$, with additional $G$-dependent costs. \\
+\textbf{(3)} Katyusha X \citep[Cor.~4.4, v1]{qfsAllenZhu2018v1}; finite-dimensional restriction, $b=1$, $\ell_1=\ell_2=L$
+& $\mathcal{O}((n+n^{3/4}\sqrt{L/\mu})\ell)$ expected calls
+& \textbf{(1)}: Deterministic budget instead of expected cost. Scope: Hilbert-space statement; the dimension extension is formal.
+& \textbf{(1)}: On finite-dimensional overlap, $nL/\mu\ge n^{3/4}\sqrt{L/\mu}$, with additional $G$-dependent terms. \\
 \midrule
-\textbf{(4)} Random reshuffling \citep[Thm.~2, App.~B.2--B.3, v2]{qfsAhnYunSra2020v2}; derived bound, finite-dimensional restriction.
-& $\begin{aligned}[t]\mathcal{O}\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\}\\ &+\frac{L^{3/2}G}{\mu^2\sqrt{\varepsilon}}\\ &+\Bigl(\frac{n^2L^3G^2\log(en)}{\mu^4\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$
-& \textbf{(1)}: Transient improves by $\sqrt{\kappa/n}$ when $L>36n\mu$, $G\le n\mu\sqrt{\varepsilon/L}$. Removes $(\log(en))^{1/3}$ from the cubic term; accuracy exponents unchanged. Method-specific gain.
+\textbf{(4)} RandomShuffle \citep[App.~B, Lemmas~6--8, v2]{qfsAhnYunSra2020v2}; derived bound, finite-dimensional restriction
+& $\displaystyle\mathcal{O}\!\left(n+\left[\frac{nL}{\mu}\max\!\left\{1,\sqrt{\frac{L}{n\mu}}\right\}\right.\right.$\newline
+$\displaystyle{}+\frac{L^{3/2}G}{\mu^2\sqrt\varepsilon}$\newline
+$\displaystyle\left.\left.{}+\left(\frac{n^2L^3G^2\log n}{\mu^4\varepsilon}\right)^{1/3}\right]\ell\right)$
+& \textbf{(1)}: Method-specific transient gain $\sqrt{L/(n\mu)}$ when $L>36n\mu$, $G\le n\mu\sqrt{\varepsilon/L}$. Removes $(\log n)^{1/3}$ from the cubic-root term for growing $n$; no class-wide acceleration.
 & \\
-\midrule
-\textbf{(5)} Tail-averaged reshuffling \citep[Thm.~14, App.~C.1, v2]{qfsAhnYunSra2020v2}; derived bound, finite-dimensional restriction.
-& $\begin{aligned}[t]\mathcal{O}\Bigl(n+\Bigl[&n\kappa\max\{1,\sqrt{\kappa/n}\}\\ &+\frac{LG}{\mu^{3/2}\sqrt{\varepsilon}}\\ &+\Bigl(\frac{n^2L^2G^2\log(en)}{\mu^3\varepsilon}\Bigr)^{1/3}\Bigr]\ell\Bigr)\end{aligned}$
-& \textbf{(1)}: Final endpoint instead of tail average. Transient improves by $\sqrt{\kappa/n}$ when $L>36n\mu$, $G\le n\mu\sqrt{\varepsilon/L}$; no uniform total-cost gain.
-& \textbf{(1)}: Bias cost larger by $\sqrt{\kappa}$; cubic cost larger by $(\kappa/\log(en))^{1/3}$ when $\kappa>\log(en)$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=\log(1+LR^2/\varepsilon)$; $P$ is the algorithm's probability law. Costs count all component-gradient calls; $\mathcal{O}$ hides universal constants. $b$ is batch size; $\ell_1,\ell_2$ are upper and lower component smoothness bounds.
+\item[] \textbf{Abbr:} $\ell=\log(1+LR^2/\varepsilon)$; $L$ bounds component operator norms, $\mu$ is average strong convexity, $R$ is initial distance, and $G$ bounds component gradients at $x_*$. Costs count component-gradient calls, including full-gradient snapshots; one full gradient costs $n$ calls. Expectation in \textbf{(1)} is over the epoch permutations. AGD denotes accelerated gradient descent.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,38 +1,25 @@
 \begin{table}[tp]
 \centering
 \caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MarkovQuadraticInterpolation.lean}{MarkovQuadraticInterpolation}.}\label{tab:MarkovQuadraticInterpolation}
-\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, finitely many self-adjoint operators satisfy $0\preceq H_i\preceq LI$ and $f(x)-f(u)=\frac12\sum_i\pi_i\langle x-u,H_i(x-u)\rangle$, with $\|x_0-u\|\le R$. The oracle returns $H_{s_t}(x-u)$ along a Markov chain with arbitrary initial law, stationary distribution $\pi$, and $\kappa(i,\cdot)\ge\alpha\pi$. Here $L>0$, $R\ge0$, $0<\alpha\le1$, and $\varepsilon>0$. The target is $\int[f(\widehat x(\omega))-f(u)]\,dP(\omega)\le\varepsilon$. The setup permits any output; \textbf{(1)} constructs plain SGD's last iterate.}\par\smallskip
+\parbox{\linewidth}{\footnotesize On a real separable Hilbert space with its Borel measurable structure, let $0\preceq H_i\preceq LI$ be self-adjoint operators indexed by a finite state space, with $f(x)-f(x_\star)=\frac12\sum_i\pi_i\langle x-x_\star,H_i(x-x_\star)\rangle$ and $\|x_0-x_\star\|\le R$. The oracle returns $H_{s_t}(x-x_\star)$ along a Markov chain with stationary law $\pi$, arbitrary initial law, and $\kappa(i,\cdot)\ge\alpha\pi$. Here $L>0$, $R\ge0$, $0<\alpha\le1$, and $\varepsilon>0$. The target is $\int[f(\widehat x)-f(x_\star)]\,dP\le\varepsilon$; the setup imposes no algorithm or output-rule restriction.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MarkovQuadraticLastIterate.lean}{Markov\allowbreak Quadratic\allowbreak Last\allowbreak Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MarkovQuadraticLastIterate.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{LR^2}{\alpha\varepsilon}\right)$ & & \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MarkovQuadraticLastIterate.lean}{Markov\allowbreak Quadratic\allowbreak Last\allowbreak Iterate} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MarkovQuadraticLastIterate.md}{(review)} & $\mathcal{O}\!\left(1+\frac{LR^2}{\alpha\varepsilon}\right)$\newline Last-iterate SGD, $\eta=\alpha/(10^4L)$. & & \\
 \midrule[1.2pt]
-\textbf{(2)} Averaged SGD, derived bound
-& $\mathcal{O}\!\left(1+\frac{LR^2}{\alpha\varepsilon}\right)$
-& \textbf{(1)}: Matches known rate; last iterate instead of averaging, with no total-complexity or scope gain.
-& \textbf{(1)}: Much larger proved constant; needs $\alpha$ in its step size, not only its budget. Requires stationarity of $\pi$; \textbf{(2)} does not. \\
+\textbf{(2)} Derived bound: averaged SGD & $\mathcal{O}\!\left(1+\frac{LR^2}{\alpha\varepsilon}\right)$\newline $\eta=1/L$; same class, even without stationarity of $\pi$. & \textbf{(1)}: Matches known rate; last iterate instead of averaging. No problem-class complexity gain. & \textbf{(1)}: Much larger proved constant; needs $\alpha$ in updates, whereas \textbf{(2)} needs it only for stopping; requires stationarity. \\
 \midrule
-\textbf{(3)} Thinned SGD, derived bound \citep{mqNagaraj2020,mqDerezinskiDong2026v1}
-& $\mathcal{O}\!\left(\left(1+\frac{LR^2}{\alpha\varepsilon}\right)\right.$\newline
-$\left.\vphantom{\frac{LR^2}{\alpha\varepsilon}}\quad\cdot\left[1+\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right]\right)$\newline
-Finite-dimensional restriction; skipped transitions included.
-& \textbf{(1)}: Removes the logarithm for last-iterate accuracy on the finite-dimensional overlap; uses every sample. This is a method-specific gain, not improved problem-class complexity.
-& \textbf{(1)}: Proved constants yield a smaller budget only for $\log(LR^2/\varepsilon)\gtrsim10^{15}$. \\
+\textbf{(3)} Derived bound: thinned SGD using \citep{mqDereziDong2026v1}, Thm.~3.1 & $\mathcal{O}\!\left(\left(1+\frac{LR^2}{\alpha\varepsilon}\right)\log\left(2+\frac{LR^2}{\varepsilon}\right)\right)$\newline Finite-dimensional restriction; skipped transitions included. & \textbf{(1)}: Removes $\log(2+LR^2/\varepsilon)$ for last-iterate accuracy on the finite-dimensional overlap; uses every sample. & \textbf{(1)}: Larger proved constants; the reported cost crossover requires $\log(LR^2/\varepsilon)\gtrsim10^{15}$. \\
 \midrule
-\textbf{(4)} MC-SGD \citep[Theorem~5.6]{mqEven2023}
-& $\mathcal{O}\!\left(\frac{L}{\mu}\left[1+\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right]\right)$\newline
-Finite-dimensional restriction: every $H_i\succeq\mu I$, $\mu>0$.
-& \textbf{(1)}: Scope extends to singular operators and infinite dimensions. On overlap, a smaller-order bound requires $\frac{\mu R^2}{\alpha\varepsilon}=o\!\left(\log\!\left(1+\frac{LR^2}{\varepsilon}\right)\right)$ as $\varepsilon\to0$.
-& \textbf{(1)}: Needs refresh minorization; \textbf{(4)} allows any sampling order. For fixed $\mu,\alpha,L,R>0$, polynomial rather than logarithmic accuracy dependence. \\
+\textbf{(4)} \citep{mqEven2023}, Thm.~5.6, interpolation & $\mathcal{O}\!\left(\frac{L}{\mu}\log\left(2+\frac{LR^2}{\varepsilon}\right)\right)$\newline Special case: $E=\mathbb R^d$, $H_i\succeq\mu I$, $\mu>0$; arbitrary sampling order. & \textbf{(1)}: Scope includes singular operators and infinite dimension. On overlap with $LR^2/\varepsilon\ge1$, lower-order cost when $\mu R^2\ll\alpha\varepsilon\log(2+LR^2/\varepsilon)$; no uniform dominance. & \textbf{(1)}: Requires refresh and known $\alpha$; for fixed $\mu,\alpha>0$, has $\varepsilon^{-1}$ rather than logarithmic accuracy dependence. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $P$: Markov path law; $u$: common minimizer; $L$: component curvature bound; $R$: initial-distance bound; $\alpha$: refresh parameter; $\mu$: component strong-convexity lower bound. Costs count component-gradient oracle calls, including discarded Markov transitions. $o(\cdot)$ denotes asymptotically smaller order.
+\item[] \textbf{Abbr:} $P$: Markov path law; $x_\star$: common minimizer; $L$: component Hessian upper bound; $R$: initial-distance bound; $\alpha$: refresh lower bound; $\mu$: component strong-convexity lower bound; $\eta$: step size. Costs count component-gradient oracle calls, including calls at discarded transitions.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Relative-gradient optimization under strong quasar-convexity. \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeGradientStrongQuasar.lean}{RelativeGradientStrongQuasar setup}.}\label{tab:RelativeGradientStrongQuasar}
-\parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space with its Borel measurable structure, $f$ is differentiable with $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $f(x_0)-f(x_\star)\leq\Delta$ and, for every $x$, $f(x_\star)\geq f(x)+\gamma^{-1}\langle\nabla f(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2$. Here $L,\mu>0$, $0<\gamma\leq1$, $\Delta\geq0$, $\varepsilon>0$. The oracle returns a fixed measurable $g$ with $\|g(x)-\nabla f(x)\|\leq\delta\|\nabla f(x)\|$, $0\leq\delta<1$. Target: $\mathbb E[f(x_K)-f(x_\star)]\leq\varepsilon$ after a fixed number of calls; randomness is internal to the constructed method.}\par\smallskip
+\caption{Relative-gradient acceleration under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeGradientStrongQuasar.lean}{RelativeGradientStrongQuasar}.}\label{tab:RelativeGradientStrongQuasar}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real Hilbert space with its Borel measurable structure, $f$ has an $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $f(x_0)-f(x_\star)\le\Delta$ and $f(x_\star)\ge f(x)+\gamma^{-1}\langle\nabla f(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2$ for all $x$. Here $L,\mu,\varepsilon>0$, $0<\gamma\le1$, $\Delta\ge0$, and $0\le\delta<1$. Each oracle call returns the same measurable $g(x)$, with $\|g(x)-\nabla f(x)\|\le\delta\|\nabla f(x)\|$. Target: $\int(f(x_K(\omega))-f(x_\star))\,dP(\omega)\le\varepsilon$, with integrable gap and $P$ the algorithm's randomization law. The setup does not restrict the algorithm; \textbf{(1)} constructs a randomized continuized method.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,37 +10,33 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedRelativeQuasar.lean}{Accelerated\allowbreak Relative\allowbreak Quasar} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedRelativeQuasar.md}{(review)}
-& $\mathcal{O}\!\left(\left[1+\frac{\sqrt{\kappa/(1-\delta)}}{\gamma}+\frac{\delta^2\kappa}{\gamma^2(1-\delta)}\right]\ell\right)$ relative-gradient calls.
+& $\mathcal{O}\!\left(\left[1+\frac{\sqrt{\kappa/(1-\delta)}}{\gamma}+\frac{\delta^2\kappa}{\gamma^2(1-\delta)}\right]\ell\right)$ calls; deterministic budget.
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} Derived bound: GD, unpublished sketch \citep{rqDerivedGD}
-& $\mathcal{O}\!\left(\left[1+\frac{\kappa}{\gamma}+\frac{\delta^2\kappa}{\gamma^2}\right]\ell\right)$ relative-gradient calls, $\delta\leq\frac12$.
-& \textbf{(1)}: $\sqrt\kappa/\gamma$ instead of $\kappa/\gamma$; unchanged bias term. For $\kappa\gg1$, $\delta^2\lesssim\gamma/\sqrt\kappa$: $\mathcal{O}(\sqrt\kappa\,\ell/\gamma)$ versus $\mathcal{O}(\kappa\ell/\gamma)$. No order gain when $\delta^2\gtrsim\gamma$.
-& \textbf{(1)}: Expected rather than deterministic accuracy; requires fixed $g$ instead of call-dependent adversarial errors. \\
+\textbf{(2)} Continuized acceleration \citep{rqWangWibisono2023}, Thm.~2; $\delta=0$.
+& $\mathcal{O}\!\left((1+\sqrt{\kappa}/\gamma)\ell\right)$ expected gradient calls at fixed continuous time; expected gap $\le\varepsilon$.
+& \textbf{(1)}: Scope extends to fixed relative bias. Retains $\mathcal{O}((1+\sqrt\kappa/\gamma)\ell)$ when $\delta\le\frac12$, $\delta^2\lesssim\gamma/\sqrt\kappa$; matches $\delta=0$ rate with fixed-call expected accuracy.
+& \textbf{(1)}: Roughly fourfold larger leading constants in the exact-gradient comparison. \\
 \midrule
-\textbf{(3)} Continuized acceleration \citep[Theorem 2]{rqWangWibisono2023v1}
-& $\mathcal{O}\!\left((1+\sqrt\kappa/\gamma)\ell\right)$ expected exact-gradient calls at fixed continuous time; $\delta=0$.
-& \textbf{(1)}: Matches known rate at $\delta=0$; fixes the call budget. The discrete theorem instead controls an exponentially weighted gap at random arrival times.
-& \textbf{(1)}: Roughly fourfold larger leading constants at $\delta=0$. \\
+\textbf{(3)} Continuized acceleration \citep{rqWangWibisono2023}, Cor.~2; $\delta=0$.
+& $\mathcal{O}\!\left((1+\sqrt{\kappa}/\gamma)\ell\right)$ gradient calls for gap $\le\varepsilon$ with fixed success probability $3/4$.
+& \textbf{(1)}: Extends to $\delta<1$; matches the exact-gradient complexity order for the expected-accuracy target.
+& \textbf{(1)}: Expected accuracy instead of the stated probability guarantee. \\
 \midrule
-\textbf{(4)} Continuized acceleration \citep[Corollary 2]{rqWangWibisono2023v1}
-& $\mathcal{O}\!\left((1+\sqrt\kappa/\gamma)\ell\right)$ exact-gradient calls for fixed confidence, $\delta=0$.
-& \textbf{(1)}: Scope extends to relative bias; accelerated order survives for $\delta\leq\frac12$ and $\delta^2\lesssim\gamma/\sqrt\kappa$.
-& \textbf{(1)}: Expected accuracy rather than the stated high-probability guarantee. \\
+\textbf{(4)} Restarted CG \citep{rqKuruzovStonyakin2026v3}, Thm.~3.3; additionally $f(x)-f_\star\ge\frac\mu2\|x-x_\star\|^2$.
+& $\mathcal{O}\!\left((1+\sqrt\kappa/\gamma)[1+\log(1+\Delta/\varepsilon)]\right)$ calls \emph{and} exact two-dimensional solves (gradient cost unspecified). Requires $\|g-\nabla f\|\le\delta_1$, $\delta_1^2\lesssim\gamma^2\mu\varepsilon$, and $\|g(\hat x_k)\|\ge2\delta_1$ at every inner query.
+& \textbf{(1)}: On the common exact-gradient, quadratic-growth restriction, removes subspace solves. For nonzero errors, absolute versus relative models make rates noncomparable.
+& \textbf{(1)}: Expected instead of deterministic accuracy. \\
 \midrule
-\textbf{(5)} Restarted CG \citep[Theorem 3.3]{rqKuruzovStonyakin2026v3}
-& $\mathcal{O}\!\left(\left[1+\frac{\sqrt{L/m}}{\gamma}\right]\left[1+\log(1+\Delta/\varepsilon)\right]\right)$ absolute-error gradient calls and exact two-dimensional subspace solves. Requires $m$-quadratic growth, $a^2\lesssim\gamma^2m\varepsilon$, and $\|g(\hat x_k)\|\geq2a$ throughout.
-& \textbf{(1)}: Uses relative gradients alone, without exact subspace minimization. Different error models and curvature parameters; rates are not comparable.
-& \textbf{(1)}: Expected rather than deterministic accuracy on the exact-gradient overlap. \\
-\midrule
-\textbf{(6)} Strongly convex acceleration \citep{rqInexactStronglyConvex}
-& $\mathcal{O}\!\left(1+\left[\sqrt{\frac{\kappa}{1-\delta}}+\frac{\delta^2\kappa}{1-\delta}\right]\log(1+LR^2/\varepsilon)\right)$ relative-gradient calls; $\mu$-strong convexity, $\gamma=1$, no additive error.
-& \textbf{(1)}: Scope extends to nonconvex strongly quasar-convex objectives; matches polynomial rate dependence on the strongly convex overlap.
-& \textbf{(1)}: Fixed errors and expectation only. \textbf{(6)} allows call-dependent errors and additive error $a$ when $a^2\lesssim\mu(1-\delta)^2\varepsilon$, with deterministic accuracy. \\
+\textbf{(5)} Inexact acceleration \citep{rqInexactRepository}; $\mu$-strong convexity, $\gamma=1$, purely relative error.
+& $\mathcal{O}\!\left(\left[1+\sqrt{\frac\kappa{1-\delta}}+\frac{\delta^2\kappa}{1-\delta}\right]\right.$\par
+$\left.{}\cdot[1+\log(1+\kappa\Delta/\varepsilon)]\right)$ calls, using $R^2=2\Delta/\mu$.
+& \textbf{(1)}: Scope extends to nonconvex strongly quasar-convex objectives; matches polynomial dependence on the strongly convex overlap.
+& \textbf{(1)}: Requires fixed errors rather than call-dependent errors; expected rather than deterministic accuracy. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$; $R\geq\|x_0-x_\star\|$; $a$ is an absolute gradient-error bound; $m$ is the quadratic-growth constant, $f(x)-f(x_\star)\geq\frac m2\|x-x_\star\|^2$; $\hat x_k$ denotes an inner query. Fixed confidence means a fixed success probability strictly between zero and one. $\lesssim$ suppresses a universal constant (sufficiently small in error restrictions).
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\ell=1+\log(1+\Delta/(\gamma\varepsilon))$; $f_\star=f(x_\star)$; $R$ is an initial-distance bound; $\delta_1$ is an absolute gradient-error bound; $\hat x_k$ are the inner query points of \textbf{(4)}; CG denotes conjugate gradient. The symbol $\lesssim$ hides a universal constant, chosen sufficiently small in admissibility conditions.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

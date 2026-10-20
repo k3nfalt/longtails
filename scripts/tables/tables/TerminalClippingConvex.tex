@@ -1,12 +1,11 @@
 \begin{table}[tp]
 \centering
-\caption{High-probability convex optimization under distance-growing moments: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/TerminalClippingConvex.lean}{TerminalClippingConvex}.}\label{tab:TerminalClippingConvex}
-\parbox{\linewidth}{\footnotesize
-Let $X\subseteq\mathbb R^d$ be closed and convex, $f:\mathbb R^d\to\mathbb R$ measurable and convex on $X$, and $x_0,x_\star\in X$, with $x_\star$ minimizing $f$ on $X$ and $\|x_0-x_\star\|\le R$. Exact projection onto $X$ is available. IID samples of law $\nu$ under probability law $P$ drive a jointly measurable, square-integrable oracle with $m(x)=\int g(x,\omega)\,d\nu(\omega)$ satisfying $f(x)-f(y)\le\langle m(x),x-y\rangle$ and $\int\|g(x,\omega)\|^2\,d\nu(\omega)\le B^2\|x-x_0\|^2+G^2$ for $x,y\in X$. Here $B,G,\varepsilon>0$, $R\ge0$, $0<\delta<1$. The setup restricts algorithms to projected clipped subgradient updates with nonnegative steps and thresholds. Result \textbf{(1)} constructs influence-dependent clipping and returns the actual last iterate $x_T$, with $P\{f(x_T)-f(x_\star)>\varepsilon\}\le\delta$.}\par\smallskip
+\caption{High-probability convex optimization under distance-growing second moments: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/TerminalClippingConvex.lean}{TerminalClippingConvex}.}\label{tab:TerminalClippingConvex}
+\parbox{\linewidth}{\footnotesize Measurable $f$ is convex on closed convex $X\subseteq\mathbb R^d$; $x_0,x^\star\in X$, $x^\star\in\arg\min_X f$, and $\|x_0-x^\star\|\le R$. IID samples have law $\nu$ and joint law $P$. The jointly measurable oracle satisfies $\int g(x,\omega)\,d\nu(\omega)\in\partial_X f(x)$ and $\int\|g(x,\omega)\|^2\,d\nu(\omega)\le B^2\|x-x_0\|^2+G^2$ on $X$; exact measurable projection onto $X$ is available. Here $B,G,\varepsilon>0$, $R\ge0$, $0<\delta<1$. The setup restricts algorithms to projected clipped subgradient updates with the current iterate as output. Target: $P\{f(x_T)-f(x^\star)>\varepsilon\}\le\delta$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
-\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.18}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
@@ -14,53 +13,51 @@ Let $X\subseteq\mathbb R^d$ be closed and convex, $f:\mathbb R^d\to\mathbb R$ me
 & $\mathcal{O}\!\left(1+\dfrac{(BR^2+G^2/B)^2\ell^2}{\varepsilon^2}\right)$ & & \\
 \midrule[1.2pt]
 \textbf{(2)} Projected Halpern \citep[Thm.~3.6]{tcAMW2026v3}; derived bound via Markov
-& $\mathcal{O}\!\left(1+\dfrac{A^2}{\varepsilon^2\delta^2}\left[1+\log_+\!\dfrac{A}{\varepsilon\delta}\right]^2\right)$
-& \textbf{(1)}: Same BG class; replaces polynomial confidence cost by $\ell^2$ and removes the accuracy logarithm at fixed confidence, relative to this Markov conversion.
-& \textbf{(1)}: Requires a fixed horizon; substantially larger proved numerical constant. \\
+& $\mathcal{O}\!\left(1+\dfrac{A^2}{\varepsilon^2\delta^2}\left[1+\log\!\left(1+\dfrac{A}{\varepsilon\delta}\right)\right]^2\right)$
+& \textbf{(1)}: On the same moment class, logarithmic instead of polynomial confidence cost; removes the accuracy logarithm at fixed confidence. Comparison is specifically with Markov conversion.
+& \textbf{(1)} needs a fixed horizon instead of an anytime schedule; substantially larger proved numerical constants. \\
 \midrule
-\textbf{(3)} Clipped SGD \citep[Thm.~3, $p=2$]{tcLZ2023v3}. Special case: $G_L$-bounded subgradients, variance $\sigma^2$.
-& $\mathcal{O}\!\left(1+\dfrac{(\beta+R^2/\beta)^2(G_L^2+\sigma^2)\ell^2}{\varepsilon^2}\right)$, $\beta>0$; known $\sigma$.
-& \textbf{(1)}: Matches rate for $G^2=G_L^2+\sigma^2$, $B=G/\beta$; last iterate instead of averaging. Scope: allows non-Lipschitz objectives and distance-growing moments.
-& \\
+\textbf{(3)} Clipped SGD \citep[Thm.~3]{tcLZ2023v3}, $p=2$
+& $\mathcal{O}\!\left(1+\dfrac{(\beta+R^2/\beta)^2(M^2+\sigma^2)\ell^2}{\varepsilon^2}\right)$\par Special case: $M$-bounded subgradients, uniform variance $\sigma^2$; $\beta>0$, known $\sigma$, fixed horizon.
+& \textbf{(1)}: Matches this rate for $G^2=M^2+\sigma^2$, $B=G/\beta$, with last iterate instead of averaging. Scope: allows non-Lipschitz objectives and growing moments.
+& \textbf{(1)}: The $G^4/(B^2\varepsilon^2)$ term diverges as $B\downarrow0$; bounded-moment tuning $B=G/R$ needs $R>0$ known. \\
 \midrule
-\textbf{(4)} Distance-adaptive clipped SGD \citep[Thm.~6, $p=2$]{tcLZ2023v3}. Special case: $G_L$-bounded subgradients, variance $\sigma^2$.
-& Derived bound, $w_t=1+\log^2t$:\par
-$\mathcal{O}\!\left(Q+\dfrac{H^2(G_L^2+\sigma^2\ell)}{\varepsilon^2}\log^2 Q\right)$; known $\sigma$, arbitrary $r>0$.
-& \textbf{(1)}: Last iterate instead of a selected weighted average; extends to BG growth without bounded subgradients.
-& \textbf{(1)}: Not $R$-adaptive; bounded-moment tuning $B\asymp G/R$ needs $R$. Pays quadratic mismatch in $(\beta+R^2/\beta)^2$, rather than logarithmic underspecification of $r$. \\
+\textbf{(4)} Distance-adaptive clipped SGD \citep[Thm.~6]{tcLZ2023v3}, $p=2$
+& $\mathcal{O}\!\left(h+\dfrac{aM\ell}{\varepsilon}+z^2[1+\log(1+z)]^2\right)$\par Special case: $M$-bounded subgradients, known uniform variance bound $\sigma^2$; $r>0$, $w_t=1+\log^2t$.
+& \textbf{(1)}: Last iterate instead of a selected weighted average; extends to non-Lipschitz objectives with growing moments.
+& \textbf{(1)} is not distance-adaptive: $(\beta+R^2/\beta)^2$ mismatch when $B=G/\beta$. Loses anytime tuning. \\
 
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\ell=1+\log(1/\delta)$, $\log_+u=\max\{0,\log u\}$, $A=BR^2+G^2/B$; BG denotes the displayed full second-moment condition. Costs count stochastic subgradient and projection calls separately (one of each per iteration); \textbf{(6)} counts stochastic gradients on $\mathbb R^d$. $\sigma^2$ bounds the central variance; $G_L,M$ bound subgradients in the indicated Lipschitz special cases; $L$ is gradient Lipschitzness. For \textbf{(4)}, $H=(r+R)[1+\log(1+R/r)]$ and $Q=1+\log(1+R/r)+HG_L\ell/\varepsilon+H^2(G_L^2+\sigma^2\ell)/\varepsilon^2$. For \textbf{(6)}, $D=\max\{R\sigma,L^{1/5}R^{6/5}\sigma^{4/5},L^{1/3}R^{4/3}\sigma^{2/3}\}$ and $h=1+\log((1+LR^2/\varepsilon+D^3/\varepsilon^3)/\delta)$; its comparison uses $R,L,\sigma>0$ and $G^2=2L^2R^2+\sigma^2$. $T$ denotes the iteration horizon, $\beta,r>0$ are tuning scales, and $\alpha$ is the noise moment order.
+\item[] \textbf{Abbr:} $\partial_X f(x)=\{v:f(y)\ge f(x)+\langle v,y-x\rangle\ \forall y\in X\}$; $\ell=1+\log(1/\delta)$; $A=BR^2+G^2/B$. Costs count subgradient calls plus projection calls (one of each per update); on $X=\mathbb R^d$ projection is the identity. $M$ bounds deterministic subgradients; $\sigma$ is the central-noise scale; $L$ is gradient Lipschitzness; $p,\alpha$ are central moment orders. In \textbf{(4)}, $h=1+\log(1+R/r)$, $a=(r+R)h$, $z=a\sqrt{M^2+\sigma^2\ell}/\varepsilon$. In \textbf{(6)}, $D=\max\{R\sigma,L^{1/5}R^{6/5}\sigma^{4/5},L^{1/3}R^{4/3}\sigma^{2/3}\}$ and $\ell_s=1+\log((1+LR^2/\varepsilon+D^3/\varepsilon^3)/\delta)$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 \clearpage
 \begin{table}[tp]
 \centering
-\addtocounter{table}{-1}
-\caption{High-probability convex optimization under distance-growing moments (continued).}
+\caption{TerminalClippingConvex (continued).}
 \begin{threeparttable}
 \footnotesize
-\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.18}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(5)} SGD \citep[Thm.~3.5]{bscLiuZhou2026v4}. Special case: $M$-Lipschitz objective, sub-Gaussian noise of scale $\sigma$.
-& $\mathcal{O}\!\left(1+\dfrac{(M^2+\sigma^2\ell)R^2}{\varepsilon^2}\right)$; $R$-tuned.
-& \textbf{(1)}: Finite second moments replace sub-Gaussian tails; BG growth replaces uniform Lipschitzness.
-& \textbf{(1)}: At $G^2=M^2+\sigma^2$, $B=G/R$, costs $\mathcal{O}(1+(M^2+\sigma^2)R^2\ell^2/\varepsilon^2)$: loses up to $\ell^2$, or $\ell$ in the noise term. \\
+\textbf{(5)} SGD \citep[Thm.~3.5]{tcLZ2026v4}
+& $\mathcal{O}\!\left(1+\dfrac{(M^2+\sigma^2\ell)R^2}{\varepsilon^2}\right)$\par Special case: $M$-Lipschitz objective, sub-Gaussian noise of scale $\sigma$; $R$-tuned.
+& \textbf{(1)}: Extends the high-probability last-iterate guarantee to finite second moments and non-Lipschitz objectives with growing moments.
+& On the overlap, $G^2=M^2+\sigma^2$, $B=G/R$, $R>0$: \textbf{(1)} costs $\mathcal{O}\!\left(1+\dfrac{(M^2+\sigma^2)R^2\ell^2}{\varepsilon^2}\right)$, losing up to $\ell^2$. \\
 \midrule
-\textbf{(6)} Clipped SGD \citep[Thm.~1, Cor.~1]{tcCPPG2026}. Special case: unconstrained, $L$-smooth, variance $\sigma^2$ ($\alpha=2$).
-& $\mathcal{O}\!\left(1+\dfrac{LR^2h^2}{\varepsilon}+\dfrac{D^3h^6}{\varepsilon^3}\right)$
-& \textbf{(1)}: Removes smoothness. On this overlap, $\mathcal{O}(1+(LR^2+\sigma^2/L)^2\ell^2/\varepsilon^2)$; improves $\varepsilon^{-3}$ to $\varepsilon^{-2}$ for positive noise, with gain when $\varepsilon\lesssim\min\{\sigma^3/(L^2R),L^2R^3/\sigma\}$. Updates use $B=\sqrt2L$, supplied $G^2\ge2\|\nabla f(x_0)\|^2+\sigma^2$, rather than $R$.
-& \textbf{(1)}: Deterministic term $L^2R^4/\varepsilon^2$ versus $LR^2/\varepsilon$, before logarithms. Requires fixed $T$; does not cover $\alpha<2$. \\
+\textbf{(6)} Clipped SGD \citep[Thm.~1, Cor.~1]{tcCPPG2026}, $\alpha=2$
+& $\mathcal{O}\!\left(1+\dfrac{LR^2\ell_s^2}{\varepsilon}+\dfrac{D^3\ell_s^6}{\varepsilon^3}\right)$\par Special case: $X=\mathbb R^d$, $L$-smooth, uniform variance $\sigma^2$; $L,R,\sigma>0$.
+& \textbf{(1)}: With $B=\sqrt2L$, $G^2=2L^2R^2+\sigma^2$, costs $\mathcal{O}\!\left(1+\dfrac{(LR^2+\sigma^2/L)^2\ell^2}{\varepsilon^2}\right)$; improves the accuracy dependence when $\varepsilon\le\min\{\sigma^3/(L^2R),L^2R^3/\sigma\}$. Scope: no smoothness needed. Updates can use supplied $G^2\ge2\|\nabla f(x_0)\|^2+\sigma^2$ instead of $R$.
+& \textbf{(1)} loses anytime tuning and coverage of $\alpha<2$; worse deterministic term: $L^2R^4/\varepsilon^2$ instead of $LR^2/\varepsilon$, apart from logarithms. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\ell=1+\log(1/\delta)$, $\log_+u=\max\{0,\log u\}$, $A=BR^2+G^2/B$; BG denotes the displayed full second-moment condition. Costs count stochastic subgradient and projection calls separately (one of each per iteration); \textbf{(6)} counts stochastic gradients on $\mathbb R^d$. $\sigma^2$ bounds the central variance; $G_L,M$ bound subgradients in the indicated Lipschitz special cases; $L$ is gradient Lipschitzness. For \textbf{(4)}, $H=(r+R)[1+\log(1+R/r)]$ and $Q=1+\log(1+R/r)+HG_L\ell/\varepsilon+H^2(G_L^2+\sigma^2\ell)/\varepsilon^2$. For \textbf{(6)}, $D=\max\{R\sigma,L^{1/5}R^{6/5}\sigma^{4/5},L^{1/3}R^{4/3}\sigma^{2/3}\}$ and $h=1+\log((1+LR^2/\varepsilon+D^3/\varepsilon^3)/\delta)$; its comparison uses $R,L,\sigma>0$ and $G^2=2L^2R^2+\sigma^2$. $T$ denotes the iteration horizon, $\beta,r>0$ are tuning scales, and $\alpha$ is the noise moment order.
+\item[] \textbf{Abbr:} $\partial_X f(x)=\{v:f(y)\ge f(x)+\langle v,y-x\rangle\ \forall y\in X\}$; $\ell=1+\log(1/\delta)$; $A=BR^2+G^2/B$. Costs count subgradient calls plus projection calls (one of each per update); on $X=\mathbb R^d$ projection is the identity. $M$ bounds deterministic subgradients; $\sigma$ is the central-noise scale; $L$ is gradient Lipschitzness; $p,\alpha$ are central moment orders. In \textbf{(4)}, $h=1+\log(1+R/r)$, $a=(r+R)h$, $z=a\sqrt{M^2+\sigma^2\ell}/\varepsilon$. In \textbf{(6)}, $D=\max\{R\sigma,L^{1/5}R^{6/5}\sigma^{4/5},L^{1/3}R^{4/3}\sigma^{2/3}\}$ and $\ell_s=1+\log((1+LR^2/\varepsilon+D^3/\varepsilon^3)/\delta)$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

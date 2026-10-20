@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Smooth quasar-convex optimization with summable LMO errors: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarAmortizedLMO.lean}{QuasarAmortizedLMO}.}\label{tab:QuasarAmortizedLMO}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with globally $L$-Lipschitz gradient, $L\ge0$. The convex set $C$ contains $x_0$ and a minimizer $x_\star$, has diameter at most $D\ge0$, and satisfies $\tau(f(x)-f(x_\star))\le\langle\nabla f(x),x-x_\star\rangle$ for $x\in C$, $0<\tau\le1$. Gradients are exact. At iteration $k$, the LMO returns $s_k(v)\in C$ with $\langle v,s_k(v)\rangle\le\langle v,u\rangle+\delta_k$ for every $u\in C$, direction $v$, and oracle seed; $\delta_k\ge0$ and $\sum_{k<n}\delta_k\le\Gamma$ for every $n$, $\Gamma\ge0$. Target: feasible output with $f(x)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, almost surely under the execution measure $P$. Result \textbf{(1)} constructs Frank--Wolfe with $\eta_k=2/(\tau k+2)$ and a last iterate satisfying this for every seed; the setup imposes no algorithm restriction. Updates use $\tau,x_0$; stopping uses $L,D,\tau,\Gamma,\varepsilon$.}\par\smallskip
+\caption{Smooth quasar-convex optimization with amortized LMO errors: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarAmortizedLMO.lean}{QuasarAmortizedLMO}.}\label{tab:QuasarAmortizedLMO}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable with globally $L$-Lipschitz gradient. The convex set $C$ contains $x_0$, has diameter at most $D$, and admits a minimizer $x_\star$ satisfying $\tau(f(x)-f(x_\star))\le\langle\nabla f(x),x-x_\star\rangle$ for every $x\in C$. Here $L,D,\Gamma\ge0$, $0<\tau\le1$, and $\varepsilon>0$. Gradients are exact; the LMO returns $v_k\in C$ with $\langle v,v_k\rangle\le\langle v,u\rangle+\delta_k$ for every direction $v$, $u\in C$, and seed, where $\delta_k\ge0$ and $\sum_{k<n}\delta_k\le\Gamma$ for every $n$. The target is a feasible output with $f(x_K)-f(x_\star)\le\varepsilon$ almost surely under the execution measure $P$. The constructed Frank--Wolfe method uses $\eta_k=2/(\tau k+2)$; the setup does not restrict the algorithm.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -12,24 +12,24 @@
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarAmortizedLMO.lean}{Quasar\allowbreak Amortized\allowbreak LMO} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarAmortizedLMO.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}+\frac{\Gamma}{\tau\varepsilon}\right)$ & & \\
 \midrule[1.2pt]
-\textbf{(2)} Frank--Wolfe \citep[Thm.~9, Alg.~3, line~6]{qalmMR2026v3}. Exact LMO; compact $C\subset\mathbb{R}^d$.
-& $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}\right)$
-& \textbf{(1)}: Matches known rate at $\Gamma=0$, including the constant. Oracle: summable LMO errors. Scope: bounded convex Hilbert-space domains. Lean formalization.
+\textbf{(2)} Frank--Wolfe \citep[Thm.~9, Alg.~3, line~6]{qalmMartinezRubio2026v3}
+& $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}\right)$\newline Exact LMO; compact $C\subset\mathbb{R}^d$.
+& \textbf{(1)}: Summably inexact LMO; bounded Hilbert-space domains without closedness. Matches known rate at $\Gamma=0$, including its constant. Lean formalization.
 & \\
 \midrule
-\textbf{(3)} Short-step Frank--Wolfe \citep[Prop.~12]{qalmMR2026v3}. Exact LMO; compact $C\subset\mathbb{R}^d$.
-& $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}\right)$
-& \textbf{(1)}: Matches known rate at $\Gamma=0$; extends to summable LMO errors and bounded convex Hilbert-space domains. Updates need no $L$.
+\textbf{(3)} Short-step Frank--Wolfe \citep[Prop.~12]{qalmMartinezRubio2026v3}
+& $\mathcal{O}\!\left(1+\frac{LD^2}{\tau^2\varepsilon}\right)$\newline Exact LMO; compact $C\subset\mathbb{R}^d$.
+& \textbf{(1)}: Matches known rate at $\Gamma=0$; extends to summable LMO errors and Hilbert-space domains. Updates need no $L$.
 & \textbf{(1)} needs $\tau$ in updates; \textbf{(3)} does not. \\
 \midrule
-\textbf{(4)} Derived bound \citep[Thm.~5.1, Rem.~5.1]{qalmFG2016v2}. Convex $f$ ($\tau=1$); compact $C\subset\mathbb{R}^d$; summable-error specialization.
-& $\mathcal{O}\!\left(1+\frac{LD^2+\Gamma}{\varepsilon}\right)$
-& \textbf{(1)}: Matches known rate on the convex overlap. Scope: quasar-convex objectives with summable LMO errors.
-& \textbf{(1)} requires summable errors; \textbf{(4)}'s theorem also permits nonsummable errors, including constant errors with an accuracy floor. No smaller convex leading constant. \\
+\textbf{(4)} Derived bound \citep[Thm.~5.1, Rem.~5.1]{qalmFreundGrigas2016}
+& $\mathcal{O}\!\left(1+\frac{LD^2+\Gamma}{\varepsilon}\right)$\newline Convex $f$, $\tau=1$, compact $C\subset\mathbb{R}^d$; $\sum_k\delta_k\le\Gamma$.
+& \textbf{(1)}: Scope extends from convex to quasar-convex objectives. Matches known rate on the convex overlap.
+& \textbf{(1)} requires summable errors; \textbf{(4)} also handles constant errors with an accuracy floor. No smaller convex leading constant. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} LMO: linear minimization oracle. Costs count gradient and LMO calls in total, one of each per iteration, including initialization. $L$: gradient Lipschitz constant; $D$: diameter bound; $\tau$: quasar parameter; $\Gamma$: cumulative LMO-error bound; $\varepsilon$: objective accuracy; $P$: execution probability measure. In \textbf{(4)}, the curvature is at most $LD^2$ and the steps are $2/(k+2)$.
+\item[] \textbf{Abbr:} LMO: linear minimization oracle; $L$: gradient Lipschitz constant; $D$: diameter bound; $\tau$: quasar parameter; $\Gamma$: cumulative additive LMO-error bound; $\varepsilon$: objective accuracy; $x_K$: returned iterate. Costs count gradient plus LMO calls, including initialization; each iteration uses one of each.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

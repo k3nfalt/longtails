@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Fixed-parameter proximal optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DouglasRachfordSmoothConvex.lean}{DouglasRachfordSmoothConvex}.}\label{tab:DouglasRachfordSmoothConvex}
-\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f:E\to\mathbb R$ is differentiable and convex with the quadratic upper bound of $L$-smoothness; $C$ is convex and $g:E\to\mathbb R$ is convex on $C$. Exact proximal minimizers of $f$ and of $g$ over $C$ are available at one fixed $\gamma$. A minimizer $x_\star\in C$ exists with $\|w_1-x_\star-\gamma\nabla f(x_\star)\|\le R$. Assume $L,R,\varepsilon,\gamma>0$, $0<\lambda\le1$, and $4\gamma L\le\lambda$. Target: $y_N\in C$ and $F(y_N)-F(x_\star)\le\varepsilon$, deterministically.}\par\smallskip
+\caption{Fast Douglas--Rachford splitting under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DouglasRachfordSmoothConvex.lean}{DouglasRachfordSmoothConvex setup}.}\label{tab:DouglasRachfordSmoothConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ is differentiable and convex with the global quadratic upper bound of parameter $L>0$; $C$ is convex and $g$ is convex on $C$. Exact proximal minimizers of $f$ and of $g$ over $C$ are available at fixed $\gamma$. A minimizer $x^\star\in C$ exists with $\|w_1-x^\star-\gamma\nabla f(x^\star)\|\le R$. Assume $R,\varepsilon,\gamma>0$, $0<\lambda\le1$, and $4\gamma L\le\lambda$. The constructed fast Douglas--Rachford method guarantees $y_N\in C$ and $F(y_N)-F(x^\star)\le\varepsilon$ deterministically for its last iterate.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,29 +10,20 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedDouglasRachfordConvex.lean}{Accelerated\allowbreak Douglas\allowbreak Rachford\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedDouglasRachfordConvex.md}{(review)}
-& $\mathcal{O}\!\left(1+\frac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ total prox calls.
-For $\lambda=1$, $\gamma=1/(4L)$: $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$.
+& $\mathcal{O}\!\left(1+\dfrac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ proximal calls.
+At $\lambda=1$, $\gamma=1/(4L)$: $\mathcal{O}(1+\sqrt{LR^2/\varepsilon})$.
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} Fast DRS \citep[Theorem~5]{drsPatrinos2014v2}
-& $\mathcal{O}\!\left(1+\frac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ total prox calls.
-Special case: $E=\mathbb R^d$, quadratic $f$, closed proper $g+\iota_C$; $0<\gamma<1/L$, $\lambda=(1-\gamma L)/(1+\gamma L)$.
-& \textbf{(1)}: Scope: extends this fast DRS guarantee to nonquadratic smooth $f$. Matches known rate on quadratics in the common step range.
-& \textbf{(1)}: Requires $4\gamma L\le\lambda$; excludes the optimal tuning $\gamma=(\sqrt2-1)/L$ of \textbf{(2)}. \\
-\midrule
-\textbf{(3)} Accelerated DRS conjecture \citep[Section~5.2]{drsAbbaszadehpeivasti2025v2}
-& No proved total-cost guarantee. Conjectures accelerated objective decay for $0<\gamma\le1/L$, $0<\lambda\le1$, with momentum $k/(k+3)$.
-& \textbf{(1)}: Proves the conjectured $\mathcal{O}(N^{-2})$ order for $4\gamma L\le\lambda$, using the different $(k-2)/(k+1)$ momentum. No comparison of proved rates.
-& \\
-\midrule
-\textbf{(4)} FDR on the Fenchel dual \citep[Section~2]{drsChari2026v2}
-& $\mathcal{O}(1+LD/\sqrt{\delta})$ varying-parameter prox calls for squared dual distance $\le\delta$. Applies with $E=\mathbb R^d$ and closed proper $g+\iota_C$; dual strong convexity is $1/L$.
-& \textbf{(1)}: Fixed $\gamma$ instead of varying parameters; primal objective accuracy instead of dual distance. Rates are not comparable.
-& \\
+\textbf{(2)} Fast Douglas--Rachford \citep[Theorem~5]{patrinosStellaBemporad2014DRv2}
+& $\mathcal{O}\!\left(1+\dfrac{R}{\sqrt{\lambda\gamma\varepsilon}}\right)$ proximal calls.
+Special case: finite-dimensional quadratic $f$, closed proper $g+\iota_C$; $0<\gamma<1/L$, $\lambda=(1-\gamma L)/(1+\gamma L)$.
+& \textbf{(1)}: Scope: extends the same method's accelerated last-iterate guarantee to nonquadratic smooth convex $f$. Matches the rate on the quadratic overlap; no problem-class speedup established.
+& \textbf{(1)} needs $4\gamma L\le\lambda$; excludes \textbf{(2)}'s optimal $\gamma=(\sqrt2-1)/L$. Tuned finite-iteration constants are worse for $N\le4$.
+\\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $F=f+g$ on $C$; $\iota_C$ is the convex indicator of $C$; $R$ bounds the initial DR fixed-point distance; $\gamma$ is the proximal parameter; $\lambda$ is relaxation; $N$ counts iterations (two prox calls each); $y_N$ is the final constrained proximal iterate. In \textbf{(4)}, $\delta>0$ is squared-distance accuracy and $D^2=\|s_0-s_\star\|^2+\|v_0-v_\star\|^2$ is the joint initial primal--dual distance for the Fenchel-dual problem. All costs count each proximal evaluation separately.
+\item[] \textbf{Abbr:} $F=f+g$ on $C$; $\iota_C$ is the convex indicator of $C$; $L$ is the smoothness parameter; $R$ bounds the initial distance to $x^\star+\gamma\nabla f(x^\star)$; $\gamma$ is the proximal parameter; $\lambda$ is the relaxation; $N$ is the iteration count; $\varepsilon$ is the objective-gap tolerance. Costs count one evaluation of each proximal map per iteration.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

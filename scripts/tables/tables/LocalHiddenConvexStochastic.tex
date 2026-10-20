@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Stochastic optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LocalHiddenConvexStochastic.lean}{local hidden convexity}.}\label{tab:LocalHiddenConvexStochastic}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real Hilbert space, $F$ is globally $L$-smooth and has a global minimizer $x_\star$ with $\|x_0-x_\star\|\le R$. On $B(x_0,3R)$, $F=H\circ c$, with $H$ convex and differentiable on an open convex set $U$. On $\overline B(x_0,2R)$, $c(x)\in U$, $Dc(x)=J(x)$, $\|J(x)v\|\ge\mu\|v\|$, and $J$ is $L_J$-Lipschitz; $32L_JR\le\mu$. Here $L,R,\mu,\varepsilon>0$ and $L_J,\sigma\ge0$. The jointly measurable oracle $g$ has integrable values and squared errors, $\int g(x,\omega)\,dp=\nabla F(x)$ and $\int\|g(x,\omega)-\nabla F(x)\|^2\,dp\le\sigma^2$. Samples are IID with law $p$. Target: $\int[F(\widehat x)-F(x_\star)]\,dP\le\varepsilon$, where $P=p^{\otimes\mathbb N}$. The setup imposes no algorithm restriction; (1) constructs safeguarded similar triangles using $L,R,\sigma,x_0$.}\par\smallskip
+\caption{Local hidden-convex stochastic optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LocalHiddenConvexStochastic.lean}{LocalHiddenConvexStochastic}.}\label{tab:LocalHiddenConvexStochastic}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real Hilbert space, $F$ is globally $L$-smooth and has a global minimizer $x_\star\in\overline B(x_0,R)$. On $B(x_0,3R)$, $F=H\circ c$, with $H$ convex and differentiable on an open convex set $U$. On $\overline B(x_0,2R)$, $c(x)\in U$, $Dc(x)=J(x)$, $\|J(x)v\|\ge\mu\|v\|$, and $J$ is $L_J$-Lipschitz; $32L_JR\le\mu$. Here $L,R,\mu,\varepsilon>0$ and $L_J,\sigma\ge0$. IID samples have law $p$; the jointly measurable oracle $g$ satisfies $\int g(x,\omega)\,dp=\nabla F(x)$ and $\int\|g(x,\omega)-\nabla F(x)\|^2\,dp\le\sigma^2$, with the required integrability. Target: $\int[F(x_K)-F(x_\star)]\,dP\le\varepsilon$, $P=p^{\otimes\mathbb N}$. Result \textbf{(1)} constructs safeguarded similar triangles, using $L,R,\sigma,x_0$; stopping also needs $\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,28 +10,26 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HiddenConvexAcceleratedStochastic.lean}{Hidden\allowbreak Convex\allowbreak Accelerated\allowbreak Stochastic} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HiddenConvexAcceleratedStochastic.md}{(review)}
-& $\mathcal{O}\!\left(1+(\sqrt T+S)\ell^2\right)$ stochastic-gradient calls. & & \\
+& $\mathcal{O}\!\left(1+\left(\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)\ell^2\right)$ stochastic-gradient calls. & & \\
 \midrule[1.2pt]
-\textbf{(2)} P-SGD with momentum \citep[Thm.~8]{lhcsFHH2024v2}
-& $\mathcal{O}\!\left((T+TS)\log(2+T+S/T)\right)$ stochastic-gradient calls, including initialization, on the overlap $D_U/\mu_c\asymp R$, $T\ge1$.
-\par Restriction: compact convex $X\ni x_0,x_\star$, convex $c(X)$ of diameter $D_U$, and $c^{-1}$ $1/\mu_c$-Lipschitz.
-& \textbf{(1)}: $T\to\sqrt T$ and $TS\to S$ before logarithms. Scope: no convex-image requirement. Adaptivity: updates need neither $\varepsilon,D_U,\mu_c$; stopping still needs $\varepsilon$.
-& \textbf{(1)} needs local $C^{1,1}$ regularity, $32L_JR\le\mu$, and an unconstrained global minimizer; \textbf{(2)} permits constrained minima without that regime. \\
+\textbf{(2)} Momentum P-SGD \citep[Thm.~8]{lhcsFatkhullin2024v2}
+& $\mathcal{O}\!\left(\left(1+\frac{Ld^2}{\varepsilon}+\frac{Ld^4\sigma^2}{\varepsilon^3}\right)\ell_0\right)$ calls, including initialization. Restriction: compact convex $X\ni x_0,x_\star$, convex $c(X)$, and $c^{-1}$ is $1/\mu_c$-Lipschitz; $d=D_U/\mu_c$.
+& \textbf{(1)}: On the overlap $d\asymp R$, $\varepsilon^{-1}\to\varepsilon^{-1/2}$ and $LR^4\sigma^2/\varepsilon^3\to\sigma^2R^2/\varepsilon^2$, up to logarithms; total gain for fixed parameters and sufficiently small $\varepsilon$. Scope: no compact convex image required. Adaptivity: updates need neither $\varepsilon,D_U,\mu_c$; stopping needs $\varepsilon$.
+& \textbf{(1)} adds local $C^{1,1}$ regularity and $32L_JR\le\mu$; requires an unconstrained global minimizer. Classes are incomparable. \\
 \midrule
-\textbf{(3)} \citep[Thm.~5.4]{lhcsBCKP2025}
-& $\mathcal{O}\!\left(1+\dfrac{D_2^4G^3\rho}{(\alpha\beta)^4\varepsilon^3}\right)$ stochastic-gradient calls, for $\varepsilon\le GD_2/(\alpha\beta)$.
-\par Restriction: global invertible $c$, $\|J\|\le1/\alpha$, $\|J^{-1}\|\le1/\beta$, $\rho$-Lipschitz $J$, $G$-Lipschitz $H$, $\|g\|\le G$ almost surely; known radii $D_1,D_2$ with sphere ordering $F(y)\ge F(x)$ for $\|x\|=D_1$, $\|y\|=D_2$, and $D_2\ge\max\{R,\alpha\beta/\rho\}$ (center $x_0=0$).
-& \textbf{(1)}: on smooth overlap, $\varepsilon^{-3}\to\varepsilon^{-2}\ell^2$ for fixed positive parameters, sufficiently small $\varepsilon$. Scope: bounded variance replaces bounded gradients; local replaces global Jacobian regularity. Full parameter bounds are incomparable.
-& \textbf{(1)} needs global $L$-smoothness and $32L_JR\le\mu$; \textbf{(3)} allows nonsmooth $H$ and no near-affine restriction. \\
+\textbf{(3)} \citep[Thm.~5.4]{lhcsBhaskara2025}
+& $\mathcal{O}\!\left(1+D_2\rho+\frac{D_2^4G^3\rho}{(\alpha\beta)^4\varepsilon^3}\right)$ calls. Restriction: global invertible $c$, $\|J\|\le1/\alpha$, $\|J^{-1}\|\le1/\beta$, $\rho$-Lipschitz $J$; $G$-Lipschitz $H$, $\|g\|\le G$ a.s.; known radii $D_1,D_2$ with the radial level-set ordering of (A3).
+& \textbf{(1)}: On the smooth overlap, fixed positive parameters and $\varepsilon\downarrow0$, $\varepsilon^{-3}\to\varepsilon^{-2}\ell^2$. Scope: bounded variance replaces bounded gradients; local replaces global Jacobian regularity. Full parameter bounds are not comparable.
+& \textbf{(1)} requires global $L$-smoothness and $32L_JR\le\mu$; loses nonsmooth objectives and the unrestricted global regime. \\
 \midrule
 \textbf{(4)} AC-SA \citep[Cor.~1]{lhcsLan2012}
-& $\mathcal{O}(1+\sqrt T+S)$ stochastic-gradient calls.
-\par Special case: $F$ convex on $\overline B(x_0,R)$, including $L_J=0$; Euclidean ball projection.
-& \textbf{(1)} extends accelerated polynomial dependence to locally hidden-convex objectives that can be nonconvex and non-quasar-convex. & \textbf{(1)} incurs the extra $\ell^2$ factor on the convex overlap. \\
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ calls. Special case: $L_J=0$, with optimization restricted to $\overline B(x_0,R)$, where $F$ is convex.
+& \textbf{(1)}: Scope extends convex optimization to locally near-affine hidden convexity, including nonconvex, non-quasar-convex objectives.
+& \textbf{(1)} loses a factor $\ell^2$ on the convex overlap. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$, $S=\sigma^2R^2/\varepsilon^2$, $\ell=\log(2+T+S)$; $\asymp$ denotes equality up to universal factors. $D_U=\operatorname{diam}(c(X))$, $\mu_c$ is the inverse-map lower Lipschitz constant. In \textbf{(3)}, $G$ bounds the outer Lipschitz constant and oracle norm; $\alpha,\beta$ control the Jacobian and its inverse, $\rho$ is its Lipschitz constant, and $D_1,D_2$ are sphere radii.
+\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $R$: initial-distance bound; $\sigma^2$: variance bound; $\varepsilon$: expected objective-gap target; $\mu$: least singular-value bound for $J$; $L_J$: Jacobian Lipschitz constant; $\ell=\log(2+LR^2/\varepsilon+\sigma^2R^2/\varepsilon^2)$. In \textbf{(2)}, $D_U=\operatorname{diam}(c(X))$, $d=D_U/\mu_c$, and $\ell_0=\log(2+(LR^2+\sigma^2/L)/\varepsilon)$ for one-sample gradient initialization. In \textbf{(3)}, $G$ denotes the paper's bound $H$, $\rho$ its Jacobian Lipschitz constant, $\alpha,\beta$ its distortion parameters, and $D_1,D_2$ its radial bounds about $x_0$; radial ordering means $F(y)\ge F(x)$ whenever $\|x-x_0\|=D_1$, $\|y-x_0\|=D_2$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

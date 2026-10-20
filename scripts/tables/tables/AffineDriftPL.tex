@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Value-oracle optimization under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineDriftPL.lean}{AffineDriftPL}.}\label{tab:AffineDriftPL}
-\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, has an $L$-Lipschitz gradient and a global minimizer $x_\star$, with $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$, $0<\mu\le L$, and $f(x_0)-f(x_\star)\le\Delta$. Query $k$ returns $f(x)+a_t+b_tj+e_k(x)$, where $t=\lfloor k/(d+2)\rfloor$, $j=k\bmod(d+2)$, $a_t,b_t$ are arbitrary, and $|e_k(x)|\le\nu$. Assume $\Delta,\nu\ge0$, $\varepsilon>0$, and $4dL\nu\le\mu\varepsilon$. Target: $f(x_K)-f(x_\star)\le\varepsilon$ for every outcome. The setup imposes no algorithm restriction.}\par\smallskip
+\caption{Value-oracle optimization with aligned affine drift: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineDriftPL.lean}{AffineDriftPL}.}\label{tab:AffineDriftPL}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, has an $L$-Lipschitz gradient and a global minimizer $x_\star$, with $0<\mu\le L$, $2\mu(f(x)-f(x_\star))\le\|\nabla f(x)\|^2$, and $f(x_0)-f(x_\star)\le\Delta$. Query $k$ returns $f(x)+a_t+b_tj+e_k(x)$, where $t=\lfloor k/(d+2)\rfloor$, $j=k\bmod(d+2)$, $a_t,b_t$ are arbitrary, and $|e_k(x)|\le\nu$. Assume $\Delta,\nu\ge0$, $\varepsilon>0$, and $4dL\nu\le\mu\varepsilon$. Target: $f(x_K)-f(x_\star)\le\varepsilon$ almost surely under the oracle law; the constructed deterministic method satisfies it for every outcome.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,27 +10,26 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DriftCorrectedGD.lean}{Drift\allowbreak Corrected\allowbreak GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DriftCorrectedGD.md}{(review)}
-& $\mathcal{O}\!\left(d\left[1+\frac{L}{\mu}\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$ value calls; $d+2$ per update.
-& & \\
+& $\mathcal{O}\!\left(d\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$ value calls. & & \\
 \midrule[1.2pt]
-\textbf{(2)} Forward-difference GD, derived bound: \citep[Thm.~2.1]{affineBerahas2022}; \citep[Lem.~2.1, Eq.~(2.4)]{affineFriedlander2012}
-& $\mathcal{O}\!\left(d\left[1+\frac{L}{\mu}\log\!\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$ value calls; $d+1$ per update. Drift-free restriction $a_t=b_t=0$; same noise condition, $h=\sqrt{\mu\varepsilon/d}/L$, step $1/L$; PL reduction.
-& \textbf{(1)}: Matches known rate on drift-free oracles. Scope: tolerates arbitrary affine drift within aligned query batches. Formalizes the drift-tolerant guarantee.
-& \textbf{(1)}: One extra value call per update on the drift-free restriction. \\
+\textbf{(2)} Forward-difference GD, derived bound \citep{AffineDriftBerahas2022,AffineDriftFriedlander2012}; Thm.~2.1 and the PL form of Lemma~2.1
+& $\mathcal{O}\!\left(d\left[1+\frac{L}{\mu}\log\left(1+\frac{\Delta}{\varepsilon}\right)\right]\right)$ value calls. Special case: $a_t=b_t=0$; $4dL\nu\le\mu\varepsilon$.
+& \textbf{(1)}: Matches known rate; formalizes the PL guarantee. Scope: permits arbitrary affine drift within exactly aligned $(d+2)$-query blocks.
+& \textbf{(1)}: One extra value query per iteration, including on the drift-free restriction. \\
 \midrule
-\textbf{(3)} TOBYQA \citep[v2, Sec.~3.2]{affineYao2026}
-& Algebraic gradient invariance under global affine temporal drift; full-rank augmented sample matrix. No optimization budget in this guarantee.
-& \textbf{(1)}: Extends global affine-drift cancellation to arbitrary affine drift and jumps across aligned $(d+2)$-call blocks.
-& \textbf{(1)}: Requires exact batch alignment; does not cover the $C^2$ nonlinear temporal drift handled by a bias bound in \textbf{(3)}. \\
+\textbf{(3)} TOBYQA \citep{AffineDriftYao2026}, v2, \S3.2, affine-drift invariance
+& Gradient-recovery guarantee for $f(x)+\beta k+e_k(x)$; full-rank augmented interpolation matrix. No objective-gap budget.
+& \textbf{(1)}: Scope extends global affine drift to arbitrary jumps between aligned blocks; affine-drift cancellation itself is already known.
+& \\
 \midrule
-\textbf{(4)} TOBYQA \citep[v2, Sec.~4.4]{affineYao2026}
-& Expected stopping time for $\|\nabla f(x)\|\le\tau$, above its noise-resolution floor; assumes probabilistic model accuracy, radius bounds, controlled acceptance residuals, and regularization confinement. Rates not comparable.
-& \textbf{(1)}: Deterministic objective-gap guarantee instead of stationarity with an expected stopping budget; assumes PL and bounded noise.
-& \textbf{(1)}: Needs PL and $\nu\le\mu\varepsilon/(4dL)$; \textbf{(4)} permits general smooth nonconvex objectives. \\
+\textbf{(4)} TOBYQA \citep{AffineDriftYao2026}, v2, \S4.4, expected stationarity
+& Expected hitting time for $\|\nabla f(x)\|\le\tau$ for $\tau\ge C\kappa_{eg}\max\{\delta_{\rm hi},\sigma/\delta_{\rm lo}\}$. Assumes probabilistically fully-linear models, bounded sample radii, controlled acceptance bias, sub-Gaussian innovations, and regularization confinement. Rates not comparable.
+& \textbf{(1)}: Deterministic objective-gap guarantee under PL, instead of expected stationarity; no identical-output speedup asserted.
+& \textbf{(1)}: Needs PL and $4dL\nu\le\mu\varepsilon$; no coverage of general nonconvex objectives or $C^2$ nonlinear drift with controlled residual bias. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} PL: Polyak--\L{}ojasiewicz inequality; GD: gradient descent; $d$: dimension; $L$: gradient Lipschitz constant; $\mu$: PL constant; $\Delta$: initial objective-gap bound; $\nu$: absolute value-error bound; $\varepsilon$: objective-gap tolerance; $h$: finite-difference radius; $\tau$: gradient-norm tolerance; $K$: update count. Costs count individual value queries.
+\item[] \textbf{Abbr:} PL: Polyak--\L{}ojasiewicz inequality; $d$: dimension; $L$: gradient Lipschitz constant; $\mu$: PL constant; $\Delta$: initial objective-gap bound; $\nu$: value-error bound; $\varepsilon$: objective accuracy; $K$: iteration count; $\tau$: gradient-norm tolerance; $\beta$: global drift slope. Costs count individual value queries. In \textbf{(4)}, $\delta_{\rm lo},\delta_{\rm hi}$ bound sample radii, $\sigma$ is the noise scale, $\kappa_{eg}$ is the model-error constant, and $C$ is universal.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

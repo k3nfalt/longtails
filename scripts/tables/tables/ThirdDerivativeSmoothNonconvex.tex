@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean}{ThirdDerivativeSmoothNonconvex}.}\label{tab:ThirdDerivativeSmoothNonconvex}
-\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^3$ has $L_3$-Lipschitz third derivative, $f(x_0)-f(x)\leq\Delta$ for every $x$, and $\|\nabla^2f(x_0)\|\leq H_0$, with $L_3,\Delta,\varepsilon>0$ and $H_0\geq0$. Exact $(f,\nabla f)$ and full-Hessian oracles are available. The target is $\|\nabla f(x_{\mathrm{out}})\|\leq\varepsilon$ almost surely; \textbf{(1)} guarantees it for every seed. No algorithm family is imposed by the setup.}\par\smallskip
+\caption{Third-derivative-smooth nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ThirdDerivativeSmoothNonconvex.lean}{ThirdDerivativeSmoothNonconvex}.}\label{tab:ThirdDerivativeSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^3$ has $L_3$-Lipschitz third derivative, $f(x_0)-\inf f\le\Delta$, and $\|\nabla^2f(x_0)\|\le H_0$, where $L_3,\Delta,\varepsilon>0$ and $H_0\ge0$. Exact value/gradient and full-Hessian oracles are available. The target is $\|\nabla f(x_{\rm out})\|\le\varepsilon$ almost surely; \textbf{(1)} guarantees it for every seed. No global gradient- or Hessian-Lipschitz bound or algorithm restriction is imposed.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,27 +10,30 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LazyQuarticHessianTradeoff.lean}{Lazy\allowbreak Quartic\allowbreak Hessian\allowbreak Tradeoff} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LazyQuarticHessianTradeoff.md}{(review)}
-& $\mathcal{O}\!\left(\begin{gathered}(1+S^{5/4})\log\Gamma\\{}+m(1+S^{3/4})\end{gathered}\right)$ total.\par Hessian calls: $\mathcal{O}(1+S^{3/4})$.
+& $\mathcal{O}\!\left((1+S^{5/4})\ell+m(1+S^{3/4})\right)$ total; $\mathcal{O}(1+S^{3/4})$ Hessian calls.
 & & \\
 \midrule[1.2pt]
 \textbf{(2)} \citep{tdsDoikovGrapiglia2025v1}, Thm.~3.5, Cor.~3.6 ($p=3$)
-& $\mathcal{O}\!\left(m\left[\begin{gathered}d^{1/3}\Delta\widehat L^{1/3}\varepsilon^{-4/3}\\{}+d(1+\log(\widehat L/L_{\mathrm{init}}))\end{gathered}\right]\right)$.\par Full second-order calls; includes trials and finite differences.
-& \textbf{(1)}: Dimension-free counts; for $S\geq1$, $L_{\mathrm{init}}\asymp L_3$, Hessian bound $S^{3/4}$ versus $d^{1/3}S+d$. Total gain if $md^{1/3}\gg S^{1/4}\log\Gamma$.\par Example: $m=d$, $H_0\leq\beta$, $S\geq1$: $\mathcal{O}(d^{4/3}S+d^2)$ becomes $\mathcal{O}(S^{5/4}\log(2+S)+dS^{3/4})$.
-& \textbf{(1)} needs $L_3,\Delta,H_0$; \textbf{(2)} adapts to unknown $L_3$. At $m=d=1$, $L_{\mathrm{init}}\asymp L_3$, $S\gg1$: $S^{5/4}\log\Gamma$ versus $S$. \\
+& $\mathcal{O}\!\left(m\left[d^{1/3}\Delta\bar L^{1/3}\varepsilon^{-4/3}\right.\right.$\newline
+$\left.\left.{}+d\{1+\log_+(L_3/L_{\rm init})\}\right]\right)$ total, counting trials and finite differences; $L_{\rm init}>0$.
+& \textbf{(1)}: Dimension-free; for $S\ge1$, $L_{\rm init}\asymp L_3$, Hessians $S^{3/4}$ instead of $d^{1/3}S+d$; total gain when $md^{1/3}\gg S^{1/4}\ell$.
+\newline Example: $m=d$, $H_0\le\beta$, $L_{\rm init}\asymp L_3$: $\mathcal{O}(d^{4/3}S+d^2)$ becomes $\mathcal{O}(S^{5/4}[1+\log S]+dS^{3/4})$.
+& \textbf{(1)} needs $L_3,\Delta,H_0$; \textbf{(2)} adapts to $L_3$. For $m=d=1$, $L_{\rm init}\asymp L_3$, $S\ge1$: $\mathcal{O}(S)$ becomes $\mathcal{O}(S^{5/4}\ell)$. \\
 \midrule
-\textbf{(3)} \citep{tdsHinder2018v2}, first-order variant after (8)\par Special case: global $L_1$-Lipschitz gradient
-& $\mathcal{O}\!\left(d(1+S)\left[1+\log_+\!\frac{L_1^3}{L_3\varepsilon^2}\right]\right)$ value/gradient calls; no Hessians.
-& \textbf{(1)}: Scope extends beyond global $L_1$; dimension-free counts. On the overlap, for $S\geq1$, total gain when $d\gg S^{1/4}$ and $m\ll dS^{1/4}$, up to logarithms.
-& \textbf{(1)} requires Hessians; worse when $d\lesssim S^{1/4}$, up to logarithms. \\
+\textbf{(3)} \citep{tdsHinder2018v2}, first-order variant after (8); globally $L_1$-Lipschitz gradient
+& $\mathcal{O}\!\left(d(1+S)\left[1+\log_+\!\left(\frac{L_1^3}{L_3\varepsilon^2}\right)\right]\right)$ expected value/gradient calls; no Hessians.
+& \textbf{(1)}: Scope extends beyond global $L_1$; dimension-free. On the overlap, for $S\ge1$, gains when $d\gg S^{1/4}$ and $m\ll dS^{1/4}$, up to logarithms.
+& \textbf{(1)} needs Hessians; larger cost when $d\lesssim S^{1/4}$, up to logarithms. \\
 \midrule
-\textbf{(4)} \citep{tdsCarmonEtAl2017}, Thm.~2\par Special case: global $L_1$-Lipschitz gradient
-& $\mathcal{O}\!\left(\begin{gathered}\Delta L_1^{1/2}L_3^{1/6}\varepsilon^{-5/3}\\{}\cdot[1+\log_+(L_1\Delta/\varepsilon^2)]\end{gathered}\right)$ value/gradient calls.\par Requires $\varepsilon^{2/3}\leq\min\{\delta^{1/2}L_3^{1/6},\,L_1/(8L_3^{1/3})\}$.
-& \textbf{(1)}: Scope extends beyond global $L_1$. On the overlap, $\sqrt{L_1}$ becomes $(L_3\Delta)^{1/4}$; total gain for $L_1\gg\beta$ and $m\ll\Delta^{1/4}L_1^{1/2}L_3^{-1/12}\varepsilon^{-2/3}$, up to logarithms.
-& \textbf{(1)} requires Hessians and $H_0$; worse for $L_1\lesssim\beta$ within \textbf{(4)}'s admissible range, up to logarithms. \\
+\textbf{(4)} \citep{tdsCarmonEtAl2017}, Thm.~2; globally $L_1$-Lipschitz gradient
+& $\mathcal{O}\!\left(\frac{\Delta L_1^{1/2}L_3^{1/6}}{\varepsilon^{5/3}}\left[1+\log_+\!\left(\frac{L_1\Delta}{\varepsilon^2}\right)\right]\right)$ value/gradient calls; no Hessians.
+\newline Valid for $\varepsilon^{2/3}\le\delta^{1/2}L_3^{1/6}$ and $8L_3^{1/3}\varepsilon^{2/3}\le L_1$.
+& \textbf{(1)}: Scope extends beyond global $L_1$, including quartic least squares. On the overlap, replaces $\sqrt{L_1}$ by $(L_3\Delta)^{1/4}$; total gain for $L_1\gg\beta$ and $m\ll\Delta^{1/4}L_1^{1/2}L_3^{-1/12}\varepsilon^{-2/3}$, up to logarithms.
+& \textbf{(1)} needs Hessians and $H_0$; larger gradient prefactor when $L_1<\beta$ within \textbf{(4)}'s admissible accuracy range. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $d=\dim E$; $m\geq1$ is the cost of one full Hessian in value/gradient-call units; total cost counts every value/gradient call plus $m$ times every Hessian call. $S=\Delta L_3^{1/3}\varepsilon^{-4/3}$, $\beta=\sqrt{L_3\Delta}$, $\Gamma=2+H_0\Delta/\varepsilon^2+L_3\Delta^3/\varepsilon^4$. $L_1$ denotes a global gradient Lipschitz constant; $\delta=f(x_0)-\inf f\leq\Delta$. $L_{\mathrm{init}}>0$ is \textbf{(2)}'s initial smoothness estimate and $\widehat L=\max\{L_{\mathrm{init}},2L_3\}$. $\log_+t=\max\{0,\log t\}$; $\asymp$ denotes equality up to universal factors.
+\item[] \textbf{Abbr:} $d=\dim E$; $m\ge1$ is the cost of one full Hessian in value/gradient-call units; total cost is $G+mH$, with $G,H$ the respective call counts. $S=\Delta L_3^{1/3}\varepsilon^{-4/3}$; $\beta=\sqrt{L_3\Delta}$; $\ell=1+\log(1+H_0\Delta/\varepsilon^2+L_3\Delta^3/\varepsilon^4)$. $L_1$ is a global gradient-Lipschitz constant; $L_{\rm init}$ is \textbf{(2)}'s initial smoothness estimate and $\bar L=\max\{L_{\rm init},L_3\}$. $\delta=f(x_0)-\inf f\le\Delta$; $\log_+t=\max\{0,\log t\}$; $\asymp$ denotes equality up to universal factors.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

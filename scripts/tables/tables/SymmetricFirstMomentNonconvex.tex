@@ -1,8 +1,8 @@
 \begin{table}[tp]
 \centering
-\caption{Symmetric first-moment nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricFirstMomentNonconvex.lean}{SymmetricFirstMomentNonconvex}.}\label{tab:SymmetricFirstMomentNonconvex}
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SymmetricFirstMomentNonconvex.lean}{SymmetricFirstMomentNonconvex}.}\label{tab:SymmetricFirstMomentNonconvex}
 \parbox{\linewidth}{\footnotesize
-$f:\mathbb{R}^d\to\mathbb{R}$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$; $L,\varepsilon>0$ and $\Lambda,\sigma,\Delta\ge0$. The jointly measurable, integrable oracle is unbiased and returns $(g(x,\xi),g(y,\xi))$ using the same sample, with IID samples of law $p$ under $P$. For $\zeta(x,\xi)=g(x,\xi)-\nabla f(x)$, $\int\|\zeta(x,\xi)\|\,dp\le\sigma$ and $\int\|\zeta(x,\xi)-\zeta(y,\xi)\|\,dp\le\Lambda\|x-y\|$; every coordinate of $\zeta(x,\xi)$ has a symmetric marginal distribution. Target: measurable output with integrable gradient norm and $\int\|\nabla f(x_{\rm out})\|\,dP\le\varepsilon$.}\par\smallskip
+$f:\mathbb{R}^d\to\mathbb{R}$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$; $L,\varepsilon>0$ and $\Lambda,\sigma,\Delta\ge0$. The jointly measurable, integrable oracle $g$ is unbiased. IID samples supply paired evaluations $(g(x,\xi),g(y,\xi))$ with the same sample. For $\zeta(x,\xi)=g(x,\xi)-\nabla f(x)$, $\mathbb{E}\|\zeta(x,\xi)\|\le\sigma$, $\mathbb{E}\|\zeta(x,\xi)-\zeta(y,\xi)\|\le\Lambda\|x-y\|$, and every coordinate of $\zeta(x,\xi)$ has a symmetric marginal law. Target: $\mathbb{E}\|\nabla f(x_{\rm out})\|\le\varepsilon$. Costs count primitive stochastic-gradient evaluations, including all median samples and batches; each paired query costs two evaluations.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -14,25 +14,25 @@ $f:\mathbb{R}^d\to\mathbb{R}$ is differentiable with $L$-Lipschitz gradient and 
 & $\mathcal{O}\!\left(\ell^2\left[1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{\Lambda\sigma\Delta}{\varepsilon^3}\right]\right)$
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} Derived bound: median-of-three SGD \citep{canGhadimiLan2013}, Eq.~(2.17)
+\textbf{(2)} Median-of-three SGD; derived bound from \citep[Cor.~2.2]{rvGhadimiLan2013v1}
 & $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$
-& \textbf{(1)}: stochastic term $L\Delta\sigma^2/\varepsilon^4$ becomes $\ell^2\Lambda\sigma\Delta/\varepsilon^3$; smaller when $\varepsilon\ell^2\Lambda\ll L\sigma$. This alone does not ensure total-cost dominance.
-& \textbf{(1)}: adds $\ell^2$ and $\ell^2\sigma^2/\varepsilon^2$; worse stochastic term when $\Lambda\gg L\sigma/\varepsilon$. \\
+& \textbf{(1)}: Stochastic term $L\Delta\sigma^2/\varepsilon^4$ becomes $\ell^2\Lambda\sigma\Delta/\varepsilon^3$; smaller when $\varepsilon\ell^2\ll L\sigma/\Lambda$, $\sigma^2\gtrsim\varepsilon^2$. Median replacement plus centered dyadic analysis enables this gain.
+& \textbf{(1)}: Extra $\ell^2$ overhead and $\sigma^2/\varepsilon^2$ initialization; worse stochastic term when $\Lambda\gg L\sigma/\varepsilon$. \\
 \midrule
-\textbf{(3)} NSGD-MVR \citep{mshFradin2026v2}, Thm.~4.2 ($q=1$)
-& $\mathcal{O}\!\left(1+\left(\frac{\sigma_p}{\varepsilon}\right)^r+\frac{(L+\Lambda)\Delta}{\varepsilon^2}\right.$\newline
-$\left.\displaystyle{}+\frac{\Lambda\Delta\sigma_p^r}{\varepsilon^{2+r}}\right)$
-& \textbf{(1)}: first moments suffice. On symmetric overlap, $\sigma\le\sigma_p$; fixed positive parameters give $\varepsilon^{-(2+r)}$ versus $\ell^2\varepsilon^{-3}$.
-& \textbf{(1)} needs coordinatewise symmetry. \textbf{(3)} instead requires $\mathbb{E}\|\zeta(x)\|^p\le\sigma_p^p$, $1<p\le2$, without symmetry. \\
+\textbf{(3)} NSGD-MVR \citep[Thm.~4.2, $q=1$]{mshFradin2026v2}
+& $\mathcal{O}\!\left(\begin{aligned}&1+\left(\frac{\sigma_p}{\varepsilon}\right)^{p/(p-1)}+\frac{(L+\Lambda)\Delta}{\varepsilon^2}\\[-2pt]&+\frac{\Lambda\Delta}{\varepsilon^2}\left(\frac{\sigma_p}{\varepsilon}\right)^{p/(p-1)}\end{aligned}\right)$
+& \textbf{(1)}: Scope extends to first moments only. On symmetric overlap, $\sigma\le\sigma_p$: accuracy exponent $2+p/(p-1)\ge4$ becomes $3$, up to $\ell^2$, for fixed positive parameters and $\varepsilon\to0$.
+& \textbf{(1)} requires coordinatewise symmetry. \textbf{(3)} requires $\mathbb{E}\|\zeta(x,\xi)\|^p\le\sigma_p^p$, $1<p\le2$, but permits asymmetric noise. \\
 \midrule
-\textbf{(4)} Derived bound: median-of-three SPIDER \citep{esncFang2018v2}, Thm.~1
-& $\mathcal{O}\!\left(\frac{\bar L\sigma\Delta}{\varepsilon^3}+\frac{\sigma^2}{\varepsilon^2}+\frac{\sigma}{\varepsilon}\right)$
-& \textbf{(1)}: permits infinite second-moment increments. On overlap, matches the $\varepsilon^{-3}$ power; smaller cubic-term coefficient only if $\Lambda\ell^2\ll\bar L$.
-& \textbf{(1)} adds $\ell^2$. \textbf{(4)} applies when $\mathbb{E}\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$ and $\varepsilon\le\sigma$; take $L\le\bar L$, $\Lambda\le2\bar L$. \\
+\textbf{(4)} Median-of-three SPIDER; derived bound from \citep[Thm.~1]{ESNFang2018v2}
+& $\mathcal{O}\!\left(1+\frac{\bar L\sigma\Delta}{\varepsilon^3}+\frac{\sigma^2}{\varepsilon^2}+\frac{\sigma}{\varepsilon}\right)$, $0<\varepsilon\le\sigma$.
+\par Special case: $\mathbb{E}\|g(x,\xi)-g(y,\xi)\|^2\le\bar L^2\|x-y\|^2$.
+& \textbf{(1)}: Scope includes infinite second-moment increments. On overlap, $L\le\bar L$, $\Lambda\le2\bar L$: matches the $\varepsilon^{-3}$ power; coupling term improves when $\Lambda\ell^2\ll\bar L$.
+& \textbf{(1)} pays $\ell^2$ overhead on the common setup; no uniform total-cost improvement. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\ell=\log(2+L\Delta/\varepsilon^2)$; $r=p/(p-1)$; $\sigma_p$ is the $p$th central-moment scale; $\bar L$ is the raw mean-squared smoothness constant. Costs count all primitive gradient evaluations, including median triples and batches; each paired query uses two evaluations. Expectations use the indicated sampling laws.
+\item[] \textbf{Abbr:} $\ell=\log(2+L\Delta/\varepsilon^2)$; expectations use the sampling law and any output randomization. $\sigma_p$ is the $p$th central-moment scale; $\bar L$ is the raw mean-squared smoothness constant. Median-of-three means the coordinatewise median of three independent samples.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

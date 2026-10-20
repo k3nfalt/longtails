@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Stochastic smooth convex minimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticSmoothAndConvex.lean}{StochasticSmoothAndConvex}.}\label{tab:StochasticSmoothAndConvex}
-\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb R$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra, $L$-Lipschitz gradient, and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. Jointly measurable stochastic gradients $g(x,\xi)$ are integrable and unbiased, with integrable squared error and $\mathbb E_p\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$; samples are IID with law $p$. Here $L,\varepsilon>0$, $R,\sigma\ge0$. Target: measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x)-f(x_\star)]\,dP\le\varepsilon$, where $P=p^{\otimes\mathbb N}$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:E\to\mathbb R$ on a second-countable real Hilbert space with its Borel $\sigma$-algebra; $\nabla f$ is $L$-Lipschitz and a global minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. The jointly measurable oracle $g$ has integrable values and squared errors, with $\int g(x,\omega)\,dp(\omega)=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)\le\sigma^2$ for a probability law $p$. Samples are IID, $P=p^{\otimes\mathbb N}$. The target is measurable output $\widehat x$ with integrable gap and $\int[f(\widehat x)-f(x_\star)]\,dP\le\varepsilon$. The setup imposes no algorithm restriction.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -15,23 +15,24 @@
 \textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SgdConvex.lean}{Sgd\allowbreak Convex} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SgdConvex.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$ & & \\
 \midrule[1.2pt]
-\textbf{(3)} AC-SA \citep[Prop.~7, (4.10)--(4.11), June 2012 revision]{sscvGhadimiLan2012}
-\par Unconstrained Euclidean specialization.
+\textbf{(3)} AC-SA \citep{sscGhadimiLan2012}, Prop.~7, (4.10)--(4.11). Unconstrained Euclidean specialization.
 & $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-& \textbf{(1)}: Matches known rate. \textbf{(2)}: Matches when $\sigma^2\ge L\varepsilon$.
-\par \textbf{(1)}, \textbf{(2)}: Lean formalization in Hilbert spaces; the classical analysis is dimension-free. Same tuning information $L,\sigma,R$.
-& \textbf{(2)}: Worse deterministic term. At $\sigma=0$, $LR^2/\varepsilon\gg1$: $\mathcal{O}(LR^2/\varepsilon)$ versus $\mathcal{O}(\sqrt{LR^2/\varepsilon})$; unchanged noise can mask this loss. \\
+& \textbf{(1)}: Matches known rate; Lean formalization in Hilbert space of a dimension-free analysis. \textbf{(2)}: Matches when $\sigma^2\ge L\varepsilon$.
+& \textbf{(2)}: At $\sigma=0$, $LR^2/\varepsilon\ge1$, costs $\mathcal{O}(LR^2/\varepsilon)$ versus $\mathcal{O}(\sqrt{LR^2/\varepsilon})$. \\
 \midrule
-\textbf{(4)} Derived bound: smooth SGD \citep[Thm.~6.3 and proof]{qfsBubeck2015}
-\par Unconstrained Euclidean specialization, quadratic mirror map.
+\textbf{(4)} Smooth SGD \citep{sscBubeck2015v2}, Thm.~6.3 proof. Derived bound: unconstrained Euclidean quadratic mirror map.
 & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}+\frac{\sigma^2R^2}{\varepsilon^2}\right)$
-\par Uses the proof's initial-distance bound, not the statement's domain radius.
-& \textbf{(2)}: Matches known rate; Lean formalization. Step uses $\varepsilon$ instead of $R$, but the budget still needs $R$: no overall information gain.
+& \textbf{(2)}: Matches known rate; Lean formalization. Step omits $R$, but stopping still needs it; no reduction in required information.
 & \\
+\midrule
+\textbf{(5)} AC-SA \citep{sscGhadimiLan2012}, Prop.~7, (4.5), (4.10)--(4.12). Bounded convex $X\subset\mathbb R^d$.
+& $\mathcal{O}\!\left(1+\sqrt{\frac{LR^2}{\varepsilon}}+\frac{\sigma^2(R^2+D_X^2)\ell^2}{\varepsilon^2}\right)$ stochastic gradients and projections onto $X$; $\Pr\{f(\widehat x)-\min_X f\le\varepsilon\}\ge1-\delta$. Requires $D_X<\infty$, $\sigma>0$, and $\int\exp(\|g-\nabla f\|^2/\sigma^2)\,dp\le e$ at every $x\in X$.
+& \textbf{(1)}, \textbf{(2)}: No established improvement for this probability target. Different domain and accuracy guarantees prevent direct rate comparison.
+& \textbf{(1)}, \textbf{(2)}: Expectation only; no corresponding high-probability guarantee. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $R$: initial-distance bound; $\sigma^2$: gradient-noise variance bound; $\varepsilon$: expected-gap tolerance. Costs count individual stochastic-gradient calls, one per iteration. $\mathcal{O}$ hides universal constants.
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls; in \textbf{(5)} each call also uses one projection. $R$ bounds initial distance to the relevant minimizer; $\sigma^2$ is the variance bound; $\varepsilon$ is objective-gap accuracy. In \textbf{(5)}, $D_X=\sup_{x\in X}\|x-x_\star\|$, $\delta\in(0,1)$, $\ell=1+\log(1/\delta)$. Euclidean specializations use $V(u,v)=\|u-v\|^2/2$ and zero composite term; \textbf{(4)} uses initial Bregman distance rather than domain diameter.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

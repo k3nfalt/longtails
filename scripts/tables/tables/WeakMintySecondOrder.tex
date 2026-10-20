@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
-\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeakMintySecondOrder.lean}{WeakMintySecondOrder}.}\label{tab:WeakMintySecondOrder}
-\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is $L_1$-Lipschitz and differentiable with $L_2$-Lipschitz Jacobian, where $L_1,L_2>0$. There exists $x_\star$ with $F(x_\star)=0$, $\|x_0-x_\star\|\le R$, and $\langle F(x),x-x_\star\rangle\ge-\rho\|F(x)\|^2/2$ for every $x$, where $R,\rho\ge0$ and $\rho L_1<2$. Exact values and full Jacobians are available. Target: $\|F(x_{\mathrm{out}})\|\le\varepsilon$, $\varepsilon>0$, almost surely. The construction in \textbf{(1)} needs no $R$; the setup imposes no algorithm restriction.}\par\smallskip
+\caption{Second-order weak Minty root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeakMintySecondOrder.lean}{WeakMintySecondOrder}.}\label{tab:WeakMintySecondOrder}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is differentiable, $L_1$-Lipschitz, and has an $L_2$-Lipschitz Jacobian, with $L_1,L_2>0$. A root $x^\star$ satisfies $\|x_0-x^\star\|\le R$ and $\langle F(x),x-x^\star\rangle\ge-\frac{\rho}{2}\|F(x)\|^2$ for every $x$, where $R,\rho\ge0$ and $\rho L_1<2$. Exact value and full-Jacobian queries are available. The target is $\|F(x_{\mathrm{out}})\|\le\varepsilon$, $\varepsilon>0$, almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,33 +9,33 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FullRangeSecondOrderWeakMinty.lean}{Full\allowbreak Range\allowbreak Second\allowbreak Order\allowbreak Weak\allowbreak Minty} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FullRangeSecondOrderWeakMinty.md}{(review)}
-& $\mathcal{O}\!\left((1+L_2R^2/\varepsilon)\delta^{-5}\ell\right)$ total $F$ and full-Jacobian calls, including Picard trials.
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FullRangeSecondOrderWeakMinty.lean}{Full\allowbreak{}Range\allowbreak{}Second\allowbreak{}Order\allowbreak{}Weak\allowbreak{}Minty} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FullRangeSecondOrderWeakMinty.md}{(review)}
+& $\mathcal{O}\!\left((1+L_2R^2/\varepsilon)\delta^{-5}\ell\right)$ total value and full-Jacobian calls. Updates need no $R$.
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} \citep{wmsoPethick2025}, Thm.~6.1, Cor.~6.3; $A=0$
-& Derived bound: $\mathcal{O}\!\left((1+L_1^2R^2/\varepsilon^2)\delta^{-3}\ell\right)$ $F$-calls, including inner iterations. The resolvent is the identity.
-& \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$ when $\varepsilon\ll\delta^2L_1^2/L_2$ and $\varepsilon\lesssim L_2R^2$. Fixed $\delta$, $L_1=L_2=R=1$: $\mathcal{O}(\varepsilon^{-1})$ versus $\mathcal{O}(\varepsilon^{-2})$ as $\varepsilon\to0$.
-& \textbf{(1)}: Requires Lipschitz full Jacobians and exact cubic-model solves; arithmetic uncounted. Worse margin dependence, $\delta^{-5}$ versus $\delta^{-3}$; no uniform gain at large $\varepsilon$. \\
+\textbf{(2)} \citep{wmsoPethick2025}, Thm.~6.1 / Cor.~6.3; $A=0$
+& Derived bound: $\mathcal{O}\!\left((1+L_1^2R^2/\varepsilon^2)\delta^{-3}\ell\right)$ value calls, including inner iterations. Full range $\rho L_1<2$; no Jacobian needed.
+& \textbf{(1)}: $\varepsilon^{-1}$ instead of $\varepsilon^{-2}$ when $\varepsilon\ll\delta^2L_1^2/L_2$ and $\varepsilon\lesssim L_2R^2$. Fixed $\delta$, $L_1=L_2=R=1$: $\mathcal{O}(\varepsilon^{-1})$ versus $\mathcal{O}(\varepsilon^{-2})$.
+& \textbf{(1)} needs Lipschitz full Jacobians and exact cubic-model roots; arithmetic uncounted. Worse $\delta$ dependence; loses at large $\varepsilon$. No constrained extension. \\
 \midrule
-\textbf{(3)} \citep{wmsoVyas2023v1}, Thm.~B.1, $p=q=2$; trajectory-restricted special case
-& Exact $F$ and full-Jacobian calls; cubic-model subproblems.
-& \textbf{(1)}: Scope extends from trajectory-dependent smallness of $\rho$ to every $R$ with $\rho L_1<2$. No established rate improvement on the overlap.
+\textbf{(3)} \citep{wmsoVyas2023v1}, Thm.~B.1, $p=q=2$; restricted standard weak Minty
+& Value and full-Jacobian calls. At $\rho=0$: $\mathcal{O}(1+L_2R^2/\varepsilon)$.
+& \textbf{(1)}: Scope extends trajectory-dependent smallness of $\rho$ to every $\rho L_1<2$, independently of initial distance. Matches known rate at $\rho=0$.
 & \\
 \midrule
-\textbf{(4)} \citep{wmsoVyas2023v1}, Thm.~3.5, $p=2$; Minty specialization $\rho'=0$
-& $\mathcal{O}(1+L_2R^2/\varepsilon)$ total $F$ and full-Jacobian calls.
-& \textbf{(1)}: Matches known rate at $\rho=0$; extends this guarantee to squared-defect weak Minty with $\rho L_1<2$.
-& \textbf{(1)}: Additionally requires globally $L_1$-Lipschitz $F$. \\
+\textbf{(4)} \citep{wmsoVyas2023v1}, Thm.~3.5, $p=2$; $3/2$-power defect
+& At $\rho'=0$: $\mathcal{O}(1+L_2R^2/\varepsilon)$ value and full-Jacobian calls. General condition: $\langle F(x),x-x^\star\rangle\ge-\frac{\rho'}2\|F(x)\|^{3/2}$, with sufficiently small $\rho'$.
+& \textbf{(1)} matches known rate at $\rho=\rho'=0$. Away from Minty, defect classes are incomparable; rates are not comparable without additional restrictions.
+& \textbf{(1)} additionally requires global $L_1$-Lipschitz continuity of $F$. \\
 \midrule
-\textbf{(5)} \citep{wmsoVyas2026v1}, Thm.~B.3, order two; bounded-operator special case
-& Exact $F$ and full-Jacobian calls; requires $\sup_x\|F(x)\|\le D$ and $D$-dependent smallness of $\rho$.
-& \textbf{(1)}: Allows unbounded $F$ and the full range $\rho L_1<2$, without a $D$-dependent restriction. No established rate improvement on the overlap.
+\textbf{(5)} \citep{wmsoVyas2026v1}, Thm.~B.3; bounded-operator special case
+& Value and full-Jacobian calls; requires $\sup_x\|F(x)\|\le D$ and a $D$-dependent smallness condition on $\rho$.
+& \textbf{(1)}: Scope extends to unbounded operators throughout $\rho L_1<2$. No established rate improvement on the overlap.
 & \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\delta=1-\rho L_1/2\in(0,1]$; $\ell=1+\log(1/\delta)$; $J=DF$ is the full Jacobian; each value or full-Jacobian query counts once. $D$ bounds the operator norm. $\rho'$ denotes the coefficient of $\|F(x)\|^{3/2}/2$ in the alternative weak-Minty defect; $\rho'=0$ is Minty. $\lesssim$ suppresses universal factors.
+\item[] \textbf{Abbr:} $\delta=1-\rho L_1/2\in(0,1]$; $\ell=1+\log(1/\delta)$; $R$ bounds initial root distance. Each full-Jacobian query counts as one call. $A=0$ denotes the unconstrained specialization (its resolvent is the identity). $\rho'$ is the $3/2$-power defect coefficient; $D$ bounds operator norms. Minty means zero defect.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

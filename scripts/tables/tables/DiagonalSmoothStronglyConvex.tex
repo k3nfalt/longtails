@@ -1,7 +1,10 @@
 \begin{table}[tp]
 \centering
 \caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DiagonalSmoothStronglyConvex.lean}{DiagonalSmoothStronglyConvex}.}\label{tab:DiagonalSmoothStronglyConvex}
-\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, satisfies $\frac{\mu}{2}\|y-x\|_w^2\le f(y)-f(x)-\langle\nabla f(x),y-x\rangle\le\frac12\|y-x\|_w^2$ for all $x,y$, with unknown $w_i>0$, $0<\mu\le1$. The attained minimum $f_\star=f(x_\star)$ is known; $f(x_0)-f_\star\le\Delta$, $\Delta\ge0$. Target: $f(\hat x)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, deterministically (hence almost surely). Calls return exact $(f,\nabla f)$. In \textbf{(1)}, updates use only $d,x_0,f_\star$; the stopping budget uses $\mu,\Delta,\varepsilon$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\ge1$, satisfies
+$\frac{\mu}{2}\|y-x\|_w^2\le f(y)-f(x)-\langle\nabla f(x),y-x\rangle\le\frac12\|y-x\|_w^2$
+for all $x,y$, with unknown $w_i>0$ and $0<\mu\le1$. A minimizer $x_\star$ exists, its value $f_\star$ is known, and $f(x_0)-f_\star\le\Delta$, $\Delta\ge0$.
+The target is $f(\hat x)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, deterministically, using exact $(f,\nabla f)$ calls. In \textbf{(1)}, updates use only $d,x_0,f_\star$; the stopping budget uses $\mu,\Delta,\varepsilon$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,19 +12,38 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/OnlineMetricAccelerated.lean}{Online\allowbreak{}Metric\allowbreak{}Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/OnlineMetricAccelerated.md}{(review)} & $\mathcal{O}\bigl((\sqrt{\kappa_\star}+\log(2d))\ell+W\bigr)$ & & \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/OnlineMetricAccelerated.lean}{Online\allowbreak Metric\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/OnlineMetricAccelerated.md}{(review)}
+& $\mathcal{O}\!\left((\sqrt{\kappa_\star}+\log(2d))\ell+H\right)$ & & \\
 \midrule[1.2pt]
-\textbf{(2)} Derived bound: secant diagonal + restarted AGD \citep[Prop.~4.1]{diagRoulet2019v2} & $\mathcal{O}(d+\kappa_\star\ell)$. $s_i=\partial_i f(x_0+e_i)-\partial_i f(x_0)$; $\mu w_i\le s_i\le w_i$, metric condition $\le\kappa_\star^2$. Known $f_\star$. & \textbf{(1)}: $\kappa_\star\to\sqrt{\kappa_\star}$ in the accuracy term. Total gain when $\sqrt{\kappa_\star}\gg\log(2d)$ and $\ell\gg d^3\log^2(2d)\log\kappa_\star/\sqrt{\kappa_\star}$; speedup approaches $\sqrt{\kappa_\star}$ as $\varepsilon\to0$. & \textbf{(1)}: larger warm-up $W$ can dominate at moderate accuracy or large $d$; larger proved constants. \\
+\textbf{(2)} Derived bound: secant diagonal + restarted AGD \citep[Prop.~4.1]{diagRoulet2019v2}
+& $\mathcal{O}(d+\kappa_\star\ell)$.
+Secants $s_i=\partial_i f(x_0+e_i)-\partial_i f(x_0)$; $\mu w_i\le s_i\le w_i$.
+& \textbf{(1)}: $\sqrt{\kappa_\star}$ instead of $\kappa_\star$ in the accuracy term; total gain when $\sqrt{\kappa_\star}\gg\log(2d)$ and $\ell\gg H/\kappa_\star$.
+& \textbf{(1)}: larger warm-up at moderate accuracy or large $d$; larger leading constants. \\
 \midrule
-\textbf{(3)} Multidimensional backtracking, ellipsoid \citep[Thms.~1.1, 5.3]{diagKunstner2023v1} & $\mathcal{O}\bigl(\sqrt d\,\kappa_\star\ell+d\log_+(L/\alpha_0)\bigr)$, including rejected trials. Initial ellipsoid $\mathcal S_0$ must contain an optimal diagonal preconditioner. & \textbf{(1)}: accuracy coefficient $\sqrt d\,\kappa_\star\to\sqrt{\kappa_\star}+\log(2d)$; removes initial-guess dependence. For $\sqrt{\kappa_\star}\gg\log(2d)$, speedup approaches $\sqrt{d\kappa_\star}$ as $\varepsilon\to0$. & \textbf{(1)}: needs $f_\star$; adds polynomial-in-$d$ warm-up $W$. \\
+\textbf{(3)} Ellipsoid multidimensional backtracking \citep[Thm.~5.3, Prop.~3.2]{diagKunstner2023v1}
+& $\mathcal{O}\!\left(\sqrt d\,\kappa_\star\ell+d[1+\log_+(L/\alpha_0)]\right)$, including rejected trials. Initial ellipsoid must contain an optimal diagonal preconditioner.
+& \textbf{(1)}: leading coefficient $\sqrt{\kappa_\star}+\log(2d)$ instead of $\sqrt d\,\kappa_\star$; asymptotic gain approaches $\sqrt{d\kappa_\star}$ when $\sqrt{\kappa_\star}\gg\log(2d)$. Removes initial-guess logarithm.
+& \textbf{(1)} needs $f_\star$; adds $H$ warm-up. Total saving requires sufficiently small $\varepsilon$. \\
 \midrule
-\textbf{(4)} Lookahead OSGM-R \citep[Eq.~(5), Thms.~6.1--6.2]{diagGao2025v2} & $\mathcal{O}\!\left(\min\!\left\{\begin{array}{l}\kappa_E\ell,\\ \kappa_F[\ell+L^2\|L^{-1}I-P_\star\|_F^2]\end{array}\right\}\right)$. $P_1=L^{-1}I$; two oracle calls per iteration; known $f_\star,L$. & \textbf{(1)}: warm-up independent of weight spread. When $\kappa_F\asymp\kappa_\star$, improves the accuracy coefficient for $\sqrt{\kappa_\star}\gg\log(2d)$; total gain requires sufficiently small $\varepsilon$. & \textbf{(1)}: loses full-matrix gains when $\kappa_F\ll\kappa_\star$ and can lose to the $\kappa_E\ell$ branch. \\
+\textbf{(4)} Lookahead OSGM-R \citep[Eq.~(5), Thms.~6.1--6.2]{diagGao2025v2}
+& $\mathcal{O}\!\left(\min\{\kappa_E\ell,\right.$\newline
+$\left.\kappa_F[\ell+L^2\|L^{-1}I-P_F\|_F^2]\}\right)$.
+$P_1=L^{-1}I$; two gradient evaluations per iteration, counted as paired calls.
+& \textbf{(1)}: $\sqrt{\kappa_\star}+\log(2d)$ instead of $\kappa_F$ in the accuracy term; gain for $\kappa_F\asymp\kappa_\star\gg\log^2(2d)$ and sufficiently small $\varepsilon$. Warm-up independent of weight spread.
+& \textbf{(1)} can lose when full-matrix scaling gives $\kappa_F\ll\kappa_\star$, or when the $\kappa_E\ell$ branch is small. \\
 \midrule
-\textbf{(5)} Euclidean AGD + known-gap restarts \citep[Prop.~4.1]{diagRoulet2019v2} & $\mathcal{O}(\sqrt{\kappa_E}\,\ell)$, with supplied Euclidean smoothness bound $L$ and known $f_\star$. & \textbf{(1)}: gains for small $\varepsilon$ when $\sqrt{\kappa_E}\gg\sqrt{\kappa_\star}+\log(2d)$; possible with large weight spread, since $\kappa_E\le\kappa_\star\max_i w_i/\min_i w_i$ can be tight. & \textbf{(1)}: warm-up $W$ makes the bound worse when Euclidean conditioning is already good. \\
+\textbf{(5)} Euclidean AGD + known-value restarts \citep[Prop.~4.1]{diagRoulet2019v2}
+& $\mathcal{O}(\sqrt{\kappa_E}\,\ell)$.
+$\kappa_E\le\kappa_\star\max_i w_i/\min_i w_i$; equality is possible.
+& \textbf{(1)}: gain for $\kappa_E\gg\kappa_\star+\log^2(2d)$ and $\ell\gg H/\sqrt{\kappa_E}$, including sufficiently anisotropic worst-case instances.
+& \textbf{(1)} pays $H$; can lose when Euclidean conditioning is already favorable. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\|v\|_w^2=\sum_i w_i v_i^2$; $\kappa_\star=1/\mu$; $\log_+t=\max\{0,\log t\}$ (zero at $t=0$); $\ell=1+\log_+(\Delta/\varepsilon)$; $W=d^2\log^2(2d)\sqrt{\kappa_\star}(1+d\log\kappa_\star)$. $L,m$ are Euclidean smoothness and strong-convexity constants, $\kappa_E=L/m$ (one may use $L=\max_i w_i$, $m=\mu\min_i w_i$). $P_\star,\kappa_F$ denote the optimal full-matrix ratio-feedback comparator and condition number of \textbf{(4)}, distinct from the supplied diagonal bound $\kappa_\star$. $\|\cdot\|_F$ is the Frobenius norm; $e_i$ is a coordinate vector; $\alpha_0$ is the uniform initial ellipsoid parameter of \textbf{(3)}. AGD: accelerated gradient descent. All costs count paired value/gradient oracle calls.
+\item[] \textbf{Abbr:} $\|v\|_w^2=\sum_i w_i v_i^2$; $\kappa_\star=1/\mu$; $\ell=1+\log_+(\Delta/\varepsilon)$; $\log_+t=\max\{0,\log t\}$ for $t>0$, $\log_+0=0$;
+$H=d^2\log^2(2d)\sqrt{\kappa_\star}(1+d\log\kappa_\star)$.
+$L,m$ are Euclidean smoothness and strong-convexity constants, $\kappa_E=L/m$; $\kappa_F$ and $P_F$ are the optimal full-matrix condition number and corresponding scaling in \textbf{(4)}. $\|\cdot\|_F$ is the Frobenius norm; $I$ is the identity; $e_i$ is the $i$th coordinate vector; $\alpha_0$ is the initial ellipsoid parameter in \textbf{(3)}; AGD denotes accelerated gradient descent.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

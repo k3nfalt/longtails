@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Gradient sliding for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SlidingGeneralizedSmooth.lean}{SlidingGeneralizedSmooth}.}\label{tab:SlidingGeneralizedSmooth}
-\parbox{\linewidth}{\footnotesize Minimize $F=f+h$ over convex $Q$ in a real Hilbert space. The convex differentiable $f$ has continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$ on the whole space. Oracles supply exact gradients, exact projections onto $Q$, and possibly adversarial subgradients of $h$, valid on $Q$ and bounded by $M$. For $x_0,x^*\in Q$, $x^*$ minimizes $F$, $\|x_0-x^*\|\le R$, $F(x_0)-F(x^*)\le\Delta$, and $\|\nabla f(x^*)\|\le G$. Here $L_0,R,\Delta,\varepsilon>0$ and $L_1,M,G\ge0$. Target: a feasible output $x$ with $F(x)-F(x^*)\le\varepsilon$ almost surely.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Minimize $F=f+h$ over convex $Q$ in a real Hilbert space. The convex differentiable $f$ has continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le [L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|]\|x-y\|$ on the whole space. Oracles supply exact gradients, exact projections onto $Q$, and possibly adversarial vectors $s(u)$ with $\|s(u)\|\le M$ and $h(v)\ge h(u)+\langle s(u),v-u\rangle$ for $u,v\in Q$. There is $x^\star\in\arg\min_Q F$ with $x_0\in Q$, $\|x_0-x^\star\|\le R$, $F(x_0)-F(x^\star)\le\Delta$, and $\|\nabla f(x^\star)\|\le G$. Here $L_0,R,\Delta,\varepsilon>0$ and $L_1,M,G\ge0$. Target: a feasible output $x$ with $F(x)-F(x^\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -10,27 +10,27 @@
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedGradientSliding.lean}{Generalized\allowbreak{}Gradient\allowbreak{}Sliding} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedGradientSliding.md}{(review)}
-& Total: $\mathcal{O}\!\left(\sqrt{AR^2/\varepsilon}+(1+L_1R)\ell+\frac{M^2R^2}{\varepsilon^2}\right)$\par
-Gradients: $\mathcal{O}\!\left(\sqrt{AR^2/\varepsilon}+(1+L_1R)\ell\right)$
+& Total: $\mathcal{O}\!\left(\begin{gathered}\sqrt{AR^2/\varepsilon}+(1+L_1R)\ell\\{}+M^2R^2/\varepsilon^2\end{gathered}\right)$.
+\par Gradients: $\mathcal{O}\!\left(\sqrt{\frac{AR^2}{\varepsilon}}+(1+L_1R)\ell\right)$.\par $G$ is used only in the gradient-count cap.
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} Gradient sliding \citep{sgsLan2016v2}, Cor.~1(a). Derived bound; finite-dimensional Euclidean restriction.
-& Total: $\mathcal{O}\!\left(1+\sqrt{Ae^{3L_1R}R^2/\varepsilon}+\frac{M^2R^2}{\varepsilon^2}\right)$\par
-Gradients: $\mathcal{O}\!\left(1+\sqrt{Ae^{3L_1R}R^2/\varepsilon}\right)$\par
-Uses $X=Q\cap B(x_0,2R)$ and $L=Ae^{3L_1R}$.
-& \textbf{(1)}: Polynomial-constant generalized-smooth sliding; matches the leading rate for $L_1R\lesssim1$. Gradient gain $e^{3L_1R/2}$ when $L_1R\gg1$ and square-root terms dominate; total gain requires exceeding $M^2R^2/\varepsilon^2$. Needs only $\Pi_Q$, not $\Pi_X$; for $Q=E$, $\Pi_X$ is closed form.
-& \textbf{(1)}: At $L_1=0$, adds an initialization cost $\mathcal{O}(\ell)$. Omits the Bregman geometry and extra simple prox term covered by Cor.~1(a). \\
+\textbf{(2)} Gradient sliding \citep{sgsLan2016}, Cor.~1(a), arXiv v2. Derived bound: finite-dimensional localization to $X=Q\cap\overline B(x_0,2R)$.
+& Total: $\mathcal{O}\!\left(1+\sqrt{\frac{Ae^{3L_1R}R^2}{\varepsilon}}+\frac{M^2R^2}{\varepsilon^2}\right)$.
+\par Gradients: $\mathcal{O}\!\left(1+\sqrt{\frac{Ae^{3L_1R}R^2}{\varepsilon}}\right)$.
+\par Uses $L=Ae^{3L_1R}$ and exact $\Pi_X$; at $L_1=0$, use $X=Q$, $L=L_0$.
+& \textbf{(1)}: gradient saving $e^{3L_1R/2}$ when $L_1R\gg1$ and $\sqrt{AR^2/\varepsilon}\gg(1+L_1R)\ell$; total saving additionally requires $M^2R^2/\varepsilon^2\ll\sqrt{AR^2/\varepsilon}$. Only $\Pi_Q$ needed. Matches leading rate for $L_1R\lesssim1$; scope extends global smoothness.
+& \textbf{(1)}: extra $\ell$ term at $L_1=0$; no Bregman geometry or additional simple prox term. \\
 \midrule
-\textbf{(3)} Normalized subgradient method \citep{sgsGrimmer2019v3}, Thm.~2. Derived bound; finite-dimensional restriction.
-& Total and gradients:\par
-$\mathcal{O}\!\left(1+\frac{(G+M)^2R^2}{\varepsilon^2}+\frac{AR^2}{\varepsilon}+L_1^2R^2\right)$.\par
-Counts $\nabla f$, $h'$ and $\Pi_Q$, plus $F$ values to select the best iterate.
-& \textbf{(1)}: Gradients $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ for fixed $G+M>0$; no $F$ values. For $Q=E$, choose $G\le M$: matched total order when the shared nonsmooth term dominates; possible gains require $\varepsilon A\gg M^2$ or $\varepsilon L_1\gg M$. For constrained $Q$, removes $G^2R^2/\varepsilon^2$ when $G\gg M$.
-& \textbf{(1)}: Updates need $L_0,L_1,M,\Delta$ in addition to $R$ and the horizon/accuracy. Initialization can cost more when $\log(\Delta/(L_0R^2))\gtrsim L_1R$; no uniform total-cost dominance. \\
+\textbf{(3)} Normalized subgradient \citep{sgsGrimmer2019}, Thm.~2, arXiv v3. Derived bound, $E=\mathbb R^d$; best iterate selected using $F$ values.
+& Total and gradients:
+$\mathcal{O}\!\left(\begin{gathered}1+(G+M)^2R^2/\varepsilon^2\\{}+AR^2/\varepsilon+L_1^2R^2\end{gathered}\right)$.
+\par Includes $\nabla f$, $h'$ and $\Pi_Q$ calls, plus $F$ values for selection; $\Pi_Q$ is unnecessary when $Q=E$.
+& \textbf{(1)}: gradients $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ for fixed parameters, $G+M>0$; no $F$ values. Total gains can occur for constrained $G\gg M$. For $Q=E$, take $G=M$: matched total order unless $\varepsilon A\gg M^2$ or $\varepsilon L_1\gg M$; initialization can mask gains.
+& \textbf{(1)}: updates additionally need $L_0,L_1,M,\Delta,\varepsilon$; \textbf{(3)} needs only $R,T$. Initialization term $(1+L_1R)\ell$ exceeds $L_1^2R^2$ when $\ell\gg L_1R\ge1$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $A=L_0+L_1G$; $\ell=\log\!\left(2+(1+L_1R)\sqrt{\Delta/(L_0R^2)}\right)$; $h'$ denotes a valid subgradient; $\Pi_C$ denotes Euclidean projection onto $C$; $B(x,r)$ is the closed radius-$r$ ball. Total counts all indicated primitive oracle calls; gradients count only calls to $\nabla f$.
+\item[] \textbf{Abbr:} $A=L_0+L_1G$; $\ell=1+\log\!\left(1+(1+L_1R)\sqrt{\Delta/(L_0R^2)}\right)$; $\Pi_C$ is exact Euclidean projection onto $C$; $h'$ denotes a returned subgradient; $T$ is the iteration horizon in \textbf{(3)}. Total cost counts all primitive oracle calls.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

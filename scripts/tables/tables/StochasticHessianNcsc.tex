@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Stochastic minimax optimization with Lipschitz Hessians: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticHessianNcsc.lean}{StochasticHessianNcsc}.}\label{tab:StochasticHessianNcsc}
-\parbox{\linewidth}{\footnotesize On finite-dimensional real inner-product spaces, $f(x,y)$ has an $L$-Lipschitz joint gradient, a $\rho$-Lipschitz joint Hessian $\nabla^2 f$, and is $\mu$-strongly concave in $y$. Let $\Phi(x)=\max_y f(x,y)$, with $\Phi(x_0)-\inf\Phi\le\Delta$ and $\|\nabla_y f(x_0,y_0)\|\le G$. Here $0<\mu\le L$, $\rho,\sigma,\varepsilon>0$, and $\Delta,G\ge0$. Each call returns a jointly measurable, unbiased joint-gradient estimate with total variance at most $\sigma^2$, using fresh IID samples. The target is $\mathbb E\|\nabla\Phi(\widehat x)\|\le\varepsilon$, over sampling and algorithm randomness; \textbf{(1)} constructs normalized SGDA with implicit gradient transport and a uniformly sampled iterate.}\par\smallskip
+\parbox{\linewidth}{\footnotesize On finite-dimensional real inner-product spaces, $f(x,y)$ is jointly $L$-smooth, $\mu$-strongly concave in $y$, and has $\rho$-Lipschitz Hessian $\nabla^2 f$. Let $\Phi(x)=\max_y f(x,y)$, $\Phi(x_0)-\inf_x\Phi(x)\le\Delta$, and $\|\nabla_y f(x_0,y_0)\|\le G$. Here $0<\mu\le L$, $\rho,\sigma,\varepsilon>0$, and $\Delta,G\ge0$. Each call returns a jointly measurable, unbiased joint stochastic gradient with total variance at most $\sigma^2$, using a fresh IID sample. The target is $\int\|\nabla\Phi(\widehat x(\omega))\|\,d\mathbb P(\omega)\le\varepsilon$, where $\mathbb P$ includes the sampling and algorithm randomness.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -15,41 +15,42 @@
 &\cdot(1+\rho\varepsilon K/L^2)\\
 &\cdot\bigl[K\Delta\sqrt Q/\varepsilon+1+\sigma/\varepsilon\\
 &\qquad+\log(1+G^2Q/\mu^2)\bigr]\Bigr)
-\end{aligned}$ joint-gradient calls.
+\end{aligned}$ joint-gradient calls, including initialization.
 & & \\
 \midrule[1.2pt]
-\textbf{(2)} \citep{shncWu2026v1}, Theorem 3.4
+\textbf{(2)} \citep[Thm.~3.4, v1]{shncscWu2026v1}
 & $\begin{aligned}[t]
 \mathcal{O}\!\Bigl(\Lambda^{10}\bigl[&\sqrt\kappa L\Delta/\varepsilon^2\\
 &+\kappa L\Delta\sigma^2/\varepsilon^4\\
 &+\kappa^2\sigma^2/\varepsilon^2\\
-&+\sqrt\kappa\bigl(1+\log(1\\
-&\quad+\kappa^2(G^2+L\Delta)/\varepsilon^2)\bigr)\bigr]\Bigr)
-\end{aligned}$ joint-gradient calls; success probability $\ge2/3$. Valid for $\kappa\ge\kappa_0$, $L\Delta\ge C_0\varepsilon^2$.
-& \textbf{(1)}: Leading noise cost $\mathcal{O}(\kappa^{7/2}\sqrt\rho\Delta\sigma^2/\varepsilon^{7/2})$ instead of $\mathcal{O}(\kappa L\Delta\sigma^2/\varepsilon^4)$, up to logarithms, when $\sigma\ge\varepsilon$ and
-$\varepsilon\lesssim\min\{L^2/(\rho\kappa^5),\sigma/\kappa^2,L\Delta/(\kappa\sigma)\}$.
-Expected norm implies the same probability target by tuning to $\varepsilon/3$.
-& \textbf{(1)}: Needs known Hessian regularity $\rho$; noise dependence $\kappa^{7/2}$ versus $\kappa$. Small-noise gap term $\kappa^3L\Delta/\varepsilon^2$ versus $\sqrt\kappa L\Delta/\varepsilon^2$ (up to logarithms); large numerical constants. No uniform gain at moderate accuracy. \\
+&+\sqrt\kappa\bigl(1+\log(1+\\
+&\quad\kappa^2(G^2+L\Delta)/\varepsilon^2)\bigr)\bigr]\Bigr)
+\end{aligned}$ joint-gradient calls; success probability $2/3$. Applies for $\kappa\ge\kappa_0$, $L\Delta\ge C_0\varepsilon^2$ (universal thresholds).
+& \textbf{(1)}: $\varepsilon^{-7/2}$ instead of $\varepsilon^{-4}$ for fixed positive parameters as $\varepsilon\to0$. More generally, gain up to logarithms when $\sigma\ge\varepsilon$ and
+$\varepsilon\ll\min\{L^2/(\rho\kappa^5),\sigma/\kappa^2,L\Delta/(\kappa\sigma)\}$.
+Expected stationarity implies the shared probability target by tuning to $\varepsilon/3$.
+& \textbf{(1)} needs a known Hessian-Lipschitz bound; leading noise dependence $\kappa^{7/2}$ instead of $\kappa$. Low-noise gap term worse by $\kappa^{5/2}$ when $\rho\varepsilon K\le L^2$; larger proved constants. \\
 \midrule
-\textbf{(3)} HCMM-1 \citep{shncCai2026v3}, Theorem 1
-& $\mathcal{O}(\varepsilon^{-3})$ stochastic joint-gradient and Hessian--vector calls in total, for fixed remaining parameters and sufficiently small $\varepsilon$; expected norm target. Requires bounded joint gradients and unbiased, bounded-variance stochastic Hessians.
-& \textbf{(1)}: Removes bounded-gradient and stochastic-Hessian requirements. Rates are not comparable under the supplied gradient-only oracle.
-& \textbf{(1)}: Accuracy exponent $7/2$ instead of $3$ when the stronger oracle and additional assumptions are available. \\
+\textbf{(3)} HCMM-1 \citep[Thm.~1, v3]{shncscCai2026v3}
+& $\mathcal{O}(\varepsilon^{-3})$ stochastic-gradient and stochastic Hessian--vector-product calls in total, for fixed remaining parameters and initialization; their dependence is unspecified. Requires bounded gradients and unbiased, bounded-variance stochastic Hessians.
+& \textbf{(1)}: no stochastic Hessian oracle or bounded-gradient assumption. Rates are not comparable under the supplied gradient-only oracle.
+& \textbf{(1)} has exponent $7/2$ instead of $3$ with other parameters fixed, under the respective oracle models. \\
 \midrule
-\textbf{(4)} NIGT \citep{shncCutkosky2020}, Theorem 3 (arXiv v2); separable case only: $f(x,y)=F(x)-\frac\mu2\|y\|^2$
-& $\begin{aligned}[t]
+\textbf{(4)} NIGT \citep[Thm.~3]{shncscCutkosky2020}
+& Derived bound:
+$\begin{aligned}[t]
 \mathcal{O}\!\Bigl(&1+L\Delta/\varepsilon^2\\
 &+\Delta\sigma^2\sqrt\rho/\varepsilon^{7/2}\\
 &+\frac{\sigma^{13/3}}{\Delta^{4/3}\rho^{2/3}\varepsilon^{7/3}}\Bigr)
-\end{aligned}$ gradient calls, $\Delta>0$; expected norm target.
-& \textbf{(1)}: Extends single-level analysis to coupled minimax problems. Matches the leading $\varepsilon^{-7/2}$ rate on the separable overlap with $\mu=L$ ($K=2$).
-& \textbf{(1)}: Additional $\mathcal{O}(L\Delta\sigma/\varepsilon^3+\sigma^3/\varepsilon^3)$ terms for $\mu=L$, $\sigma\ge\varepsilon$, $\rho\varepsilon\lesssim L^2$; these do not imply uniform total-cost deterioration. \\
+\end{aligned}$ gradient calls, $\Delta>0$. Special case $f(x,y)=F(x)-\frac\mu2\|y\|^2$; shift $\inf F$ to zero.
+& \textbf{(1)} extends single-level optimization to coupled minimax problems. Matches the leading $\varepsilon^{-7/2}$ rate on the overlap ($\mu=L$, fixed positive parameters).
+& \textbf{(1)} retains extra $L\Delta\sigma/\varepsilon^3$-type terms even at $\mu=L$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\kappa=L/\mu$, $K=1+\kappa$, $Q=\rho K/\varepsilon+L^2/(\varepsilon+\sigma)^2$;
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $K=1+\kappa$, $Q=\rho K/\varepsilon+L^2/(\varepsilon^2+\sigma^2)$;
 $\Lambda=1+\log(1+\kappa)+\log(1+L\Delta/\varepsilon^2)+\log(1+\kappa^2\sigma^2/\varepsilon^2)$.
-$\kappa_0,C_0$ are universal constants; $\lesssim$ suppresses universal factors. IID means independent and identically distributed; SGDA means stochastic gradient descent--ascent. In \textbf{(4)}, $\Delta$ bounds $F(x_0)-\inf F$.
+IID: independent, identically distributed. One joint-gradient call returns the $x$ and $y$ components together.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

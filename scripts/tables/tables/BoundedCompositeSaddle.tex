@@ -1,7 +1,7 @@
 \begin{table}[tp]
 \centering
 \caption{Bounded composite saddle problems: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedCompositeSaddle.lean}{BoundedCompositeSaddle}.}\label{tab:BoundedCompositeSaddle}
-\parbox{\linewidth}{\footnotesize Convex sets $X\subset E$, $Y\subset F$ in real inner-product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The continuous linear map $K$ satisfies $\|K\|\le L$; $g,h$ are convex and $M$-Lipschitz on their respective sets. Here $R,L,\varepsilon>0$ and $M\ge0$. Exact calls to $K$, its adjoint, and the constrained proximal maps of $g,h$ are available. The setup requires positive constant-step Arrow--Hurwicz (primal update, then dual update). Our uniform averages are feasible and deterministically satisfy $\Phi(\bar x,y)-\Phi(x,\bar y)\le\varepsilon$ for every $(x,y)\in X\times Y$, where $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$.}\par\smallskip
+\parbox{\linewidth}{\footnotesize Convex sets $X\subset E$, $Y\subset F$ in real inner-product spaces satisfy $\|x\|,\|y\|\le R$, with $(x_0,y_0)\in X\times Y$. The objective is $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$, where $K$ is continuous linear, $\|K\|\le L$, and $g,h$ are convex and $M$-Lipschitz on their respective domains; $R,L,\varepsilon>0$, $M\ge0$. Exact $K,K^*$ and constrained proximal maps are available. The setup restricts algorithms to constant-step Arrow--Hurwicz. The target is a feasible pair $(\bar x,\bar y)$ with $\Phi(\bar x,y)-\Phi(x,\bar y)\le\varepsilon$ for every $(x,y)\in X\times Y$, deterministically.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
@@ -9,28 +9,30 @@
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak Hurwicz\allowbreak Uniform\allowbreak Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)} & $\mathcal{O}\!\left(1+\frac{LR^2+MR}{\varepsilon}\right)$; $\eta=1/(2L)$. & & \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczUniformRate.lean}{Arrow\allowbreak Hurwicz\allowbreak Uniform\allowbreak Rate} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczUniformRate.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{LR^2+MR}{\varepsilon}\right)$ & & \\
 \midrule
-\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak Hurwicz\allowbreak Bounded\allowbreak Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)} & $\mathcal{O}\!\left(1+\left(\frac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$; $\eta=R/((LR+M)T^{1/4})$. & & \\
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ArrowHurwiczBoundedSaddle.lean}{Arrow\allowbreak Hurwicz\allowbreak Bounded\allowbreak Saddle} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ArrowHurwiczBoundedSaddle.md}{(review)}
+& $\mathcal{O}\!\left(1+\left(\dfrac{R(LR+M)}{\varepsilon}\right)^{4/3}\right)$ & & \\
 \midrule[1.2pt]
-\textbf{(3)} PDHG ($\theta=1$), \citep{CP2010BoundedSaddleReport}, Thm.~1(b), (16). Derived bound from the comparator inequality.
-& $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\right)$; $\tau=\sigma=1/(2L)$. Same exact oracles; comparator inequality extends to the stated inner-product setting.
-& \textbf{(1)}: Matches known rate when $M\le LR$, with Arrow--Hurwicz. \textbf{(2)}: No established improvement.
-& \textbf{(1)}: extra $MR/\varepsilon$. \textbf{(2)}: slower accuracy exponent, $4/3$ versus $1$. \textbf{(1)}, \textbf{(2)}: require Lipschitz composite terms; \textbf{(3)} needs only bounded comparator sets. \\
+\textbf{(3)} PDHG \citep[Thm.~1(b), Eq.~(16)]{cp2010boundedcomparison}; $\theta=1$. Derived bound.
+& $\mathcal{O}\!\left(1+\dfrac{LR^2}{\varepsilon}\right)$
+& \textbf{(1)}: Matches known rate when $M\le LR$, with an Arrow--Hurwicz guarantee. \textbf{(2)}: No established improvement.
+& \textbf{(1)}: extra $MR/\varepsilon$. \textbf{(2)}: worse accuracy exponent. \textbf{(1)}, \textbf{(2)}: require Lipschitz terms; \textbf{(3)} needs only bounded comparator sets. \\
 \midrule
-\textbf{(4)} Arrow--Hurwicz, \citep{CP2010BoundedSaddleReport}, \S3.2, (20). Derived bound, exchanging primal/dual roles.
-& $\mathcal{O}\!\left(1+\frac{L^2R^4}{\varepsilon^2}\right)$; $\tau=\sigma=\sqrt{2}/(L\sqrt{T})$, diameter bound $2R$.
-& \textbf{(2)}: improves when $\frac{R(LR+M)}{\varepsilon}\ll(\frac{LR^2}{\varepsilon})^{3/2}$. For $M\le LR$, $q=LR^2/\varepsilon\ge1$: \textbf{(1)}, \textbf{(2)} cost $\mathcal{O}(1+q)$, $\mathcal{O}(1+q^{4/3})$ versus $\mathcal{O}(1+q^2)$. \textbf{(1)}: horizon-independent step.
-& \textbf{(1)}, \textbf{(2)}: additionally require the other domain bounded and Lipschitz $g,h$. \textbf{(2)}: worse when $M\gg L^{3/2}R^2/\sqrt{\varepsilon}$. \\
+\textbf{(4)} Arrow--Hurwicz \citep[\S3.2, Eq.~(20)]{cp2010boundedcomparison}. Derived bound.
+& $\mathcal{O}\!\left(1+\dfrac{L^2R^4}{\varepsilon^2}\right)$
+& For $M\le LR$, $\varepsilon\le LR^2$, method-specific costs: \textbf{(1)} $\mathcal{O}(1+LR^2/\varepsilon)$; \textbf{(2)} $\mathcal{O}(1+(LR^2/\varepsilon)^{4/3})$, versus \textbf{(4)}'s quadratic dependence. \textbf{(1)}: step independent of accuracy.
+& \textbf{(1)}, \textbf{(2)}: add bounded primal domain and Lipschitz terms. \textbf{(2)} is worse when $M\gg L^{3/2}R^2/\sqrt\varepsilon$. \\
 \midrule
-\textbf{(5)} AltGDA, \citep{NanEtAl2026AltGDAVone}, Thm.~1. Special case: finite-dimensional simplices, $g=h=0$, $R=1$.
-& $\mathcal{O}\!\left(1+\frac{L}{\delta\varepsilon}\right)$; $\eta=\delta/(2\sqrt{2}L)$. Two matrix-vector calls and two simplex projections per iteration.
-& \textbf{(1)}, \textbf{(2)}: arbitrary bounded convex domains and Lipschitz composite terms; no $\delta$ in tuning. On simplices, \textbf{(1)} removes $1/\delta$; \textbf{(2)} improves when $\delta\ll(\varepsilon/L)^{1/3}$.
-& \textbf{(1)}: larger leading constant for large $\delta$. \textbf{(2)}: worse accuracy exponent; slower when $\delta\gg(\varepsilon/L)^{1/3}$. \\
+\textbf{(5)} AltGDA \citep[Thm.~1, v1]{nan2026matrixcomparison}. Special case: simplices, $g=h=0$, $R=1$.
+& $\mathcal{O}\!\left(1+\dfrac{L}{\delta\varepsilon}\right)$; $\eta=\delta/(2\sqrt2 L)$.
+& \textbf{(1)}: $\mathcal{O}(1+L/\varepsilon)$ removes $1/\delta$ and knowledge of $\delta$ in the step. \textbf{(1)}, \textbf{(2)}: extend to bounded convex domains and Lipschitz composites. \textbf{(2)} gains when $\delta\ll(\varepsilon/L)^{1/3}$, $\varepsilon\le L$.
+& \textbf{(1)}: larger leading constant for large $\delta$. \textbf{(2)}: worse when $\delta\gg(\varepsilon/L)^{1/3}$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $T$: iteration count; $\eta,\tau,\sigma$: step sizes; $q=LR^2/\varepsilon$; $\theta$: extrapolation parameter. Costs count all four primitive calls per iteration; constrained proximal calls become projections when $g=h=0$. For \textbf{(5)}, $\delta\in(0,1]$ is the minimum of positive support probabilities and $L$-normalized off-support payoff slacks at a selected strictly complementary equilibrium (empty off-support sets omitted).
+\item[] \textbf{Abbr:} $R$ bounds domain norms; $L$ bounds $\|K\|$; $M$ bounds the Lipschitz constants; $\varepsilon$ is the full saddle-gap tolerance. Costs count each $K$, $K^*$ and proximal evaluation separately (four calls per iteration, including two simplex projections in \textbf{(5)}). $\delta\in(0,1]$ is the minimum positive support probability and off-support payoff slack divided by $L$ at a selected strictly complementary equilibrium, omitting absent off-support terms. Derived bounds specialize the cited comparator inequalities to radius $R$ and the stated exact proximal oracles.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

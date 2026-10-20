@@ -1,32 +1,30 @@
 \begin{table}[tp]
 \centering
 \caption{Curvature-aligned stochastic nonconvex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CurvatureAlignedNoiseNonconvex.lean}{CurvatureAlignedNoiseNonconvex}.}\label{tab:CurvatureAlignedNoiseNonconvex}
-\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f$ is differentiable, $f\ge f_{\rm low}$, and $f(x_0)-f_{\rm low}\le\Delta$. For every $x,u$, a linear map $Q(x)$ satisfies $f(x+u)\le f(x)+\langle\nabla f(x),u\rangle+\frac12\langle Q(x)u,u\rangle$ and $\langle Q(x)\nabla f(x),\nabla f(x)\rangle\le L_g\|\nabla f(x)\|^2$. A jointly measurable oracle uses IID samples with law $p$: $\int g(x,\omega)\,dp=\nabla f(x)$, $\int\|\zeta\|^2\,dp\le\sigma^2$, and $\int\langle Q(x)\zeta,\zeta\rangle\,dp\le L_\xi\int\|\zeta\|^2\,dp$, with these quantities integrable. Here $L_g,\varepsilon>0$ and $L_\xi,\sigma,\Delta\ge0$; $Q$ need not be symmetric, positive semidefinite, or uniformly bounded. Target: measurable output $\hat x$ with $\int\|\nabla f(\hat x)\|\,dP\le\varepsilon$, where $P$ is the execution law.}\par\smallskip
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f$ is differentiable, $f\geq f_{\rm low}$, and $f(x_0)-f_{\rm low}\leq\Delta$. For every $x,u$, a linear map $Q(x)$ satisfies $f(x+u)\leq f(x)+\langle\nabla f(x),u\rangle+\frac12\langle Q(x)u,u\rangle$ and $\langle Q(x)\nabla f(x),\nabla f(x)\rangle\leq L_g\|\nabla f(x)\|^2$. The jointly measurable oracle $g$ uses IID samples with law $P_0$, is integrable and unbiased, and has integrable noise moments satisfying $\mathbb E_{P_0}\|\zeta\|^2\leq\sigma^2$ and $\mathbb E_{P_0}\langle Q(x)\zeta,\zeta\rangle\leq L_\xi\mathbb E_{P_0}\|\zeta\|^2$. Here $L_g>0$, $L_\xi,\sigma,\Delta\geq0$, $\varepsilon>0$. Target: measurable output with integrable gradient norm and $\int\|\nabla f(\widehat x)\|\,dP\leq\varepsilon$. \textbf{(1)} constructs constant-step SGD with a uniformly random iterate; the setup imposes no algorithm restriction. Prior costs are converted from expected squared-gradient accuracy to this target.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CurvatureAlignedSgdNonconvex.lean}{Curvature\allowbreak Aligned\allowbreak Sgd\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CurvatureAlignedSgdNonconvex.md}{(review)}
 & $\mathcal{O}\!\left(1+\frac{L_g\Delta}{\varepsilon^2}+\frac{L_\xi\sigma^2\Delta}{\varepsilon^4}\right)$ & & \\
 \midrule[1.2pt]
-\textbf{(2)} Randomized SGD \citep{canGhadimiLan2013}, Eq.~(2.17).
-\newline Special case: $L$-Lipschitz gradient.
+\textbf{(2)} Randomized SGD \citep[Cor.~2.2]{canGhadimiLan2013}. Special case: $L$-Lipschitz gradient.
 & $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\sigma^2\Delta}{\varepsilon^4}\right)$
-& \textbf{(1)} Scope: one-sided global models. Rate: $L_g,L_\xi$ replace $L$; no worse when $L_g,L_\xi\le L$. Noise-dominated gain at least of order $L/L_\xi$ when $L_\xi\sigma^2\ge L_g\varepsilon^2$ and the nonconstant cost dominates. Accuracy exponents unchanged; formally verified SGD refinement.
-& \textbf{(1)} Exploiting smaller constants requires certifying global $Q$ and joint problem--oracle alignment; a local Hessian does not suffice. \\
+& \textbf{(1)}: $L_g,L_\xi$ replace $L$. For $L_g,L_\xi\leq L$, noise-dominated costs improve by $\Omega(L/L_\xi)$ when $L_\xi\sigma^2\geq L_g\varepsilon^2$ and $L_\xi\sigma^2\Delta/\varepsilon^4\geq1$. Scope: no Lipschitz-gradient requirement. Accuracy exponents unchanged; formally verified refinement.
+& \textbf{(1)}'s sharper constants require certified global $Q$ and noise alignment; a local Hessian alone is insufficient. \\
 \midrule
-\textbf{(3)} SGD \citep{canLiuPanZhang2025}, Thm.~D.2 (arXiv v2).
-\newline Special case: anisotropic smoothness and coordinate variances.
-& $\mathcal{O}\!\left(1+\frac{\|\mathbf L\|_\infty\Delta}{\varepsilon^2}+\frac{\|\mathbf L\|_\infty\|\boldsymbol\sigma\|_2^2\Delta}{\varepsilon^4}\right)$
-\newline Batch size one; uniform random iterate.
-& \textbf{(1)} Scope: state-dependent $Q$. For $Q=\operatorname{diag}(\mathbf L)$, $L_g\le\|\mathbf L\|_\infty$, $\sigma^2=\|\boldsymbol\sigma\|_2^2$, and $L_\xi\sigma^2=\sum_iL_i\sigma_i^2$, the noise-term gain is $\frac{\|\mathbf L\|_\infty\|\boldsymbol\sigma\|_2^2}{\sum_iL_i\sigma_i^2}$; it can reach $d$. Total gains require noise dominance. & \\
+\textbf{(3)} SGD \citep[Thm.~D.3]{canLiuPanZhang2025}. Special case: $\|\nabla f(x)-\nabla f(y)\|_{D^{-1}}\leq\|x-y\|_D$, $D=\operatorname{diag}(\mathbf L)>0$, $\mathbb E\zeta_i^2\leq\sigma_i^2$.
+& $\mathcal{O}\!\left(1+\frac{\|\mathbf L\|_\infty\Delta}{\varepsilon^2}+\frac{\|\mathbf L\|_\infty\|\boldsymbol\sigma\|_2^2\Delta}{\varepsilon^4}\right)$, batch size $1$.
+& \textbf{(1)}: for admissible $Q=\operatorname{diag}(\mathbf L)$, $L_g\leq\|\mathbf L\|_\infty$, $\sigma^2=\|\boldsymbol\sigma\|_2^2$, $L_\xi\sigma^2=S$, noise coefficient becomes $S$. Gain $\|\mathbf L\|_\infty\|\boldsymbol\sigma\|_2^2/S$ when $S\Delta/\varepsilon^4\geq\max\{1,\|\mathbf L\|_\infty\Delta/\varepsilon^2\}$, potentially $d$-fold. Scope: state-dependent, nondiagonal $Q$.
+&  \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $\zeta=g(x,\omega)-\nabla f(x)$; $\Delta$ bounds the initial gap; $L_g,L_\xi$ bound gradient and noise curvature. Costs count individual stochastic-gradient calls. In \textbf{(3)}, $d$ is the dimension, $\mathbf L=(L_i)>0$, $\boldsymbol\sigma=(\sigma_i)>0$, $\int\zeta_i^2\,dp\le\sigma_i^2$, and anisotropic smoothness means $\|\nabla f(x)-\nabla f(y)\|_{D^{-1}}\le\|x-y\|_D$, with $D=\operatorname{diag}(\mathbf L)$ and $\|v\|_D^2=v^\top Dv$.
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls. $\zeta=g(x,\omega)-\nabla f(x)$; $P$ is the execution probability law, including output randomization; $\Delta$ bounds the initial objective gap. $\mathbf L=(L_i)_{i=1}^d$, $\boldsymbol\sigma=(\sigma_i)_{i=1}^d$, $S=\sum_iL_i\sigma_i^2$, $\|v\|_D^2=v^\top Dv$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

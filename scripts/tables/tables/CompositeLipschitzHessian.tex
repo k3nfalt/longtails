@@ -1,35 +1,35 @@
 \begin{table}[tp]
 \centering
-\caption{Composite optimization with Lipschitz Hessians: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeLipschitzHessian.lean}{CompositeLipschitzHessian}.}\label{tab:CompositeLipschitzHessian}
-\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space $E$, minimize $F=f+\psi$ over $C$. The function $f:E\to\mathbb R$ is convex and $C^2$, with $\|\nabla^2 f(x)-\nabla^2 f(y)\|\le H\|x-y\|$ globally; $\psi$ is convex on $C$ and its epigraph over $C$ is closed. A minimizer $x_\star\in C$ exists, $x_0\in C$, and $\|x_0-x_\star\|\le R$. Parameters $H,R,\varepsilon>0$ and integer $m\ge1$ are supplied. Oracles return exact gradients, Hessians, and composite cubic/positive-definite quadratic model solutions. The target is feasible $x$ with $F(x)-F(x_\star)\le\varepsilon$; \textbf{(1)} guarantees this for every oracle seed.}\par\smallskip
+\caption{Composite optimization with a Lipschitz Hessian: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeLipschitzHessian.lean}{CompositeLipschitzHessian}.}\label{tab:CompositeLipschitzHessian}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space $E$, $f\in C^2(E)$ is convex and $\|\nabla^2 f(x)-\nabla^2 f(y)\|\le H\|x-y\|$ globally. The function $\psi$ is convex on $C$ with closed epigraph over $C$; $x_0,x_\star\in C$, $x_\star$ minimizes $F=f+\psi$ on $C$, and $\|x_0-x_\star\|\le R$. Parameters $H,R,\varepsilon>0$ and integer $m\ge1$ are supplied. Oracles provide exact gradients, Hessians, and exact convex cubic/positive-definite quadratic composite model solves. Target: a feasible $x$ with $F(x)-F(x_\star)\le\varepsilon$ almost surely.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
-\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeLazyCubicAcceleration.lean}{Composite\allowbreak{}Lazy\allowbreak{}Cubic\allowbreak{}Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeLazyCubicAcceleration.md}{(review)}
-& $\mathcal{O}\!\left(\Lambda(m+m^{1/7}T^{2/7})\right)$ & & \\
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeLazyCubicAcceleration.lean}{Composite\allowbreak Lazy\allowbreak Cubic\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeLazyCubicAcceleration.md}{(review)}
+& $\begin{aligned}\mathcal{O}\bigl(&\log^4(2+m)\log(2+T/m^3)\\ &\cdot(m+m^{1/7}T^{2/7})\bigr)\end{aligned}$ & & \\
 \midrule[1.2pt]
-\textbf{(2)} A-NPE \citep{clhMonteiroSvaiter2013}, Thms.~6.4, 7.15 (2012 revision)
-& $\mathcal{O}\!\left(m(1+T^{2/7})\ell\right)$; includes line-search trials and quadratic model solves.
-& \textbf{(1)}: $m^{1/7}$ instead of $m$ in the accuracy term. Gain when $\min\{m^{6/7},T^{2/7}\}\gg\Lambda/\ell$; none at $m=1$. For $m=T^{1/3}$, $T\to\infty$: $\mathcal{O}(T^{1/3}\log^4(2+T))$ instead of $\mathcal{O}(T^{13/21}\ell)$.
-& \textbf{(1)} needs global Hessian regularity and exact cubic solves; \textbf{(2)} permits local regularity and inexact quadratic solves. Model-solve bound grows by $m^{1/7}+m/T^{2/7}$, up to logs, for $T\ge1$. \\
+\textbf{(2)} A-NPE \citep{CompositeLHMonteiroSvaiter2013}, Thms.~6.4, 7.15 (2012 revision)
+& $\mathcal{O}\bigl(m(1+T^{2/7})\ell\bigr)$
+& \textbf{(1)}: at $m=T^{1/3}\to\infty$, $\mathcal{O}(T^{1/3}\log^4(2+T))$ instead of $\mathcal{O}(T^{13/21}\ell)$. Requires gradients/model solves costing $1/m$ of Hessians; no gain at $m=1$.
+& \textbf{(1)} needs global smoothness, exact cubic solves rather than inexact quadratic solves; up to $m^{1/7}+m/T^{2/7}$ more solves, ignoring logs ($T\ge1$). \\
 \midrule
-\textbf{(3)} \citep{clhZhangChenLiuZhang2026v1}, Thm.~4.1
-& $\mathcal{O}\!\left((m+m^{1/7}T^{2/7})\log^{11/3}(2+m)\right)$\par Special case: $\psi=0$, $C=E$; $m\ge2$.
-& \textbf{(1)} extends scope to closed convex composite objectives and constraints, using an exact composite model oracle; matches polynomial dependence on the smooth overlap.
-& \textbf{(1)} loses $\log^{1/3}(2+m)\log(2+T/m^3)$ on the overlap and has larger explicit constants. \\
+\textbf{(3)} \citep{CompositeLHZhang2026}, Thm.~4.1, v1 (preprint)
+& $\mathcal{O}\bigl((m+m^{1/7}T^{2/7})\log^{11/3}(2+m)\bigr)$
+& \textbf{(1)} extends \textbf{(3)} from $\psi=0$, $C=E$ to closed convex composite objectives using exact composite model solves; matches polynomial dependence on the overlap.
+& \textbf{(1)} loses a factor $\log^{1/3}(2+m)\log(2+T/m^3)$ on the overlap, with much larger explicit constants. \\
 \midrule
-\textbf{(4)} CALEN \citep{clhChenLiuLuoZhang2026v3}, Thm.~5.1
-& $\mathcal{O}\!\left((m+m^{13/21}T^{2/7})\log(2+m)\right)$\par Special case: $\psi=0$, $C=E$; $m\ge2$.
-& \textbf{(1)} extends scope to composite objectives via exact model solves. On the smooth overlap: $m^{1/7}$ instead of $m^{13/21}$ in the accuracy term, up to logs; \textbf{(3)} already attains this power.
-& \textbf{(1)} has extra logarithmic overhead $\log^3(2+m)\log(2+T/m^3)$ and larger explicit constants. \\
+\textbf{(4)} CALEN \citep{CompositeLHChen2026}, Thm.~5.1, v3
+& $\mathcal{O}\bigl((m+m^{13/21}T^{2/7})\log(2+m)\bigr)$, $m\ge2$
+& \textbf{(1)} extends \textbf{(4)} from $\psi=0$, $C=E$ to composite objectives. On the overlap: $m^{1/7}$ instead of $m^{13/21}$ in the accuracy term, before logarithms; \textbf{(3)} already attains this power.
+& \textbf{(1)} adds logarithmic overhead and much larger explicit constants; the improved power does not imply uniform total-cost dominance. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $T=HR^3/\varepsilon$; $\Lambda=\log^4(2+m)\log(2+T/m^3)$; $\ell=1+|\log\varepsilon|+|\log H|+|\log R|$. Costs are $G+M+mN_H$, where $G,M,N_H$ count gradient, model-solve, and Hessian calls; gradient and model calls have unit cost, Hessians cost $m$. On $\psi=0$, $C=E$, model solves use only the query coefficients and are internal computation, so the comparable oracle cost is $G+mN_H$.
+\item[] \textbf{Abbr:} $T=HR^3/\varepsilon$; $\ell=1+|\log\varepsilon|+|\log H|+|\log R|$. Costs are $G+M+m\mathcal{H}$, where $G,M,\mathcal{H}$ count gradient, composite model, and Hessian calls, including inner iterations and search trials. For $\psi=0$, $C=E$, model solutions use only query data and are internal computation, so oracle cost is $G+m\mathcal{H}$. Logarithms are natural.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

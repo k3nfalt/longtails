@@ -1,35 +1,35 @@
 \begin{table}[tp]
 \centering
-\caption{Heavy-tailed Adam: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedAdam.lean}{HeavyTailedAdam}.}\label{tab:HeavyTailedAdam}
-\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$ has $L$-Lipschitz gradient and $f(x_0)-f(x)\leq\Delta$ for every $x$, with $L>0$, $\Delta,\sigma\geq0$, $1<\alpha\leq2$, and $\varepsilon>0$. The jointly measurable, integrable oracle is unbiased and satisfies $\mathbb{E}\sum_i|g_i(x,\xi)-\partial_i f(x)|^\alpha\leq\sigma^\alpha$, with IID samples. The setup restricts algorithms to coordinate Adam. Target: $\mathbb{E}\|\nabla f(x_I)\|_2\leq\varepsilon$ under the sampling and output law. Result \textbf{(1)} uses a uniformly random pre-update iterate, no bias correction, $\beta_1=0.9$, and damping outside the square root; tuning uses $L,\Delta,\sigma,\alpha,\varepsilon$.}\par\smallskip
+\caption{Heavy-tailed Adam under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedAdam.lean}{HeavyTailedAdam setup}.}\label{tab:HeavyTailedAdam}
+\parbox{\linewidth}{\footnotesize $f:\mathbb{R}^d\to\mathbb{R}$ is differentiable, $\nabla f$ is $L$-Lipschitz, and $f(x_0)-\inf f\le\Delta$, with $L>0$, $\Delta\ge0$. A jointly measurable, integrable oracle uses IID samples of law $\mu$, with $\int g(x,\omega)\,d\mu=\nabla f(x)$ and $\int\sum_i|g_i(x,\omega)-\partial_i f(x)|^\alpha\,d\mu\le\sigma^\alpha$, $1<\alpha\le2$, $\sigma\ge0$. The setup restricts algorithms to coordinate Adam. \textbf{(1)} uses no bias correction, $\beta_1=0.9$, and damping outside the square root; its uniform pre-update output satisfies $\int\|\nabla f(x_I)\|_2\,dP\le\varepsilon$, $\varepsilon>0$, under execution law $P$.}\par\smallskip
 \begin{threeparttable}
 \footnotesize
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
 \midrule
 \textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdamHeavyTailedFixedMomentum.lean}{Adam\allowbreak Heavy\allowbreak Tailed\allowbreak Fixed\allowbreak Momentum} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdamHeavyTailedFixedMomentum.md}{(review)}
-& $\mathcal{O}\!\left(1+\dfrac{\Delta L}{\varepsilon^2}\left[1+\left(\dfrac{10^5\sigma}{\varepsilon}\right)^r\right]\right)$ & & \\
+& $\mathcal{O}\!\left(1+\dfrac{L\Delta}{\varepsilon^2}\left[1+c_\alpha\left(\dfrac{\sigma}{\varepsilon}\right)^r\right]\right)$ & & \\
 \midrule[1.2pt]
-\textbf{(2)} NSGD-M \citep{htaHubler2025v3}, Cor.~19
-& $\mathcal{O}\!\left(1+\dfrac{\Delta L}{\varepsilon^2}\left[1+\left(\dfrac{\sigma_2}{\varepsilon}\right)^r\right]\right)$
-& \textbf{(1)}: Matches known accuracy exponent using Adam with fixed $\beta_1$, without normalization, instead of horizon-tuned momentum. No problem-class rate improvement.
-& \textbf{(1)}: Stronger coordinate noise condition; Euclidean conversion costs $d^{(2-\alpha)/(2(\alpha-1))}$ in the noise term. Much larger constants, including $10^{5r}$. \\
+\textbf{(2)} NSGD-M \citep[Cor.~19, arXiv v3]{htaHubler2025}
+& $\mathcal{O}\!\left(1+\dfrac{L\Delta}{\varepsilon^2}\left[1+\left(\dfrac{\sigma_2}{\varepsilon}\right)^r\right]\right)$
+& \textbf{(1)}: Matches known accuracy exponent with fixed $\beta_1$ and no normalization; method-specific advance, no problem-class rate improvement. No tuning-knowledge gain.
+& \textbf{(1)}: Larger constants; narrower noise model. Euclidean-scale conversion multiplies its noise term by $d^{(2-\alpha)/(2(\alpha-1))}$. \\
 \midrule
-\textbf{(3)} SGD \citep{htaLiu2026v1}, Thm.~4.1, horizon-tuned constant step
-& $\mathcal{O}\!\left(1+\dfrac{\Delta L}{\varepsilon^2}+\left(\dfrac{\sigma_2\sqrt{L\Delta}}{\varepsilon^2}\right)^r\right)$\par $\varepsilon\leq\sqrt{2L\Delta}$.
-& \textbf{(1)}: Polynomial noise-term gain $(\sqrt{L\Delta}/\varepsilon)^{(2-\alpha)/(\alpha-1)}$ at $\sigma=\sigma_2$; Euclidean conversion replaces the ratio by $\sqrt{L\Delta}/(\sqrt d\,\varepsilon)$. Gain requires $\alpha<2$ and that ratio $>1$; none at $\alpha=2$.
-& \textbf{(1)}: Coordinate noise condition; weaker target than $\mathbb{E}(T^{-1}\sum_t\|\nabla f(x_t)\|_2^2)^{\alpha/2}$ $\leq\varepsilon^\alpha$. \\
+\textbf{(3)} SGD \citep[Thm.~4.1, constant steps]{htaLiu2026}
+& $\mathcal{O}\!\left(1+\dfrac{L\Delta}{\varepsilon^2}+\left(\dfrac{\sigma_2\sqrt{L\Delta}}{\varepsilon^2}\right)^r\right)$\par $\varepsilon\le\sqrt{2L\Delta}$.
+& \textbf{(1)}: For fixed $\alpha<2$, noise-term gain scales as $(\sqrt{L\Delta}/\varepsilon)^{(2-\alpha)/(\alpha-1)}$ at equal scales; after Euclidean conversion, $(\sqrt{L\Delta}/(\sqrt d\,\varepsilon))^{(2-\alpha)/(\alpha-1)}$ when $\sqrt{L\Delta}>\sqrt d\,\varepsilon$. No exponent gain at $\alpha=2$.
+& \textbf{(1)}: Coordinate-noise penalty and large constants; loses the stronger guarantee $\mathbb{E}[(K^{-1}\sum_{k=1}^K\|\nabla f(x_k)\|_2^2)^{\alpha/2}]$ $\le\varepsilon^\alpha$. Gain concerns the shared expected-norm target. \\
 \midrule
-\textbf{(4)} Vector Adam \citep{htaPang2026v2}, Thm.~6.4
-& Different target: relaxed $(\lambda,\varepsilon)$-stationarity, $\alpha>4/3$, bounded gradients. Rates not comparable.
-& \textbf{(1)}: Ordinary expected gradient norm; no bounded-gradient assumption; covers $1<\alpha\leq4/3$. These are scope and criterion differences, not a rate comparison.
-& \textbf{(1)} needs smoothness; uses $1-\beta_2\leq10^{-12}$ and accuracy-dependent damping instead of a fixed stabilizer. \\
+\textbf{(4)} Vector Adam \citep[Thm.~6.4, v2]{htaPang2026}\par $G$-Lipschitz differentiable objectives; $\alpha>4/3$.
+& $\mathcal{O}\!\left(1+\left(\dfrac{B}{\varepsilon}\right)^{\frac{8\alpha-4}{3\alpha-4}}\left[1+\log\dfrac{G+\sigma_2}{\varepsilon}\right]\right.$\par $\left.{}+\dfrac{\Delta\sqrt\lambda\,B^{\frac{5\alpha}{3\alpha-4}}}{\varepsilon^{\frac{5\alpha}{3\alpha-4}+3/2}}\right)$\par Expected relaxed $(\lambda,\varepsilon)$-stationarity; $0<\varepsilon<G+\sigma_2$, fixed $\alpha$ and memory coupling.
+& \textbf{(1)}: Ordinary expected gradient norm; no bounded-gradient assumption; includes $1<\alpha\le4/3$. Different criteria and classes: rates not comparable.
+& \textbf{(1)}: Requires smoothness. Accuracy-dependent damping replaces a fixed stabilizer; $1-\beta_2\le10^{-12}$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
-\item[] \textbf{Abbr:} $r=\alpha/(\alpha-1)$; $\Delta$ is an initial objective-gap bound. Costs count individual stochastic-gradient calls. $\sigma_2$ satisfies $\mathbb{E}\|g-\nabla f\|_2^\alpha\leq\sigma_2^\alpha$: the coordinate model permits $\sigma_2=\sigma$, whereas Euclidean-to-coordinate conversion uses $\sigma=d^{1/\alpha-1/2}\sigma_2$. Prior-work big-$\mathcal{O}$ bounds and polynomial comparisons hold for fixed $\alpha$; $10^{5r}$ in \textbf{(1)} is retained because it diverges as $\alpha\downarrow1$. $T$ denotes iterations. In \textbf{(4)}, $\lambda>0$ weights the variance in $\inf_{\mathbb{E}Y=x}\{\|\mathbb{E}\nabla f(Y)\|_2+\lambda\mathbb{E}\|Y-x\|_2^2\}$, the relaxed stationarity measure.
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls. $r=\alpha/(\alpha-1)$; $c_\alpha=10^{5\alpha/(\alpha-1)}$; $K$ is the iteration count. $\sigma_2$ bounds $(\mathbb{E}\|g-\nabla f\|_2^\alpha)^{1/\alpha}$: the setup implies $\sigma_2\le\sigma$, while Euclidean noise permits $\sigma=d^{1/\alpha-1/2}\sigma_2$. Rate comparisons hold at fixed $\alpha$; prior-work constants may depend on $\alpha$. In \textbf{(4)}, $G$ bounds $\|\nabla f\|_2$, $\lambda>0$ is the relaxation parameter, $B=CG+\sigma_2$, and $C$ is the regret constant in Thm.~6.4 (bounded for fixed memory coupling and sufficiently small accuracy). Relaxed stationarity uses $\inf_{\mathbb{E}Y=x}\{\|\mathbb{E}\nabla f(Y)\|_2+\lambda\mathbb{E}\|Y-x\|_2^2\}$. In \textbf{(1)}, $\beta_2=1-\rho$, $\tau=\varepsilon/(10^5\sqrt\rho)$, and $\rho=(10^{12}+(10^5\sigma/\varepsilon)^r)^{-1}$; tuning uses $L,\Delta,\sigma,\alpha,\varepsilon$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
