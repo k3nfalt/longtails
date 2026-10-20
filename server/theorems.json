@@ -429,6 +429,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\min\\left\\{ \\left(\\frac{R}{t}\\right)^{2}, \\frac{R}{t} \\cdot \\frac{\\sqrt{\\max\\left\\{ 0, \\log\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\}}}{\\sqrt{2}} \\right\\} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.ConvexBallProximal.spec.Params → ℕ",
+      "value": "fun p => ⌈min ((p.R / p.t) ^ 2) (p.R / p.t * (√(max 0 (Real.log (p.Δ / p.ε))) / √2))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\min\\left\\{ \\left(\\frac{R}{t}\\right)^{2}, \\frac{R}{t} \\cdot \\frac{\\sqrt{\\max\\left\\{ 0, \\log\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\}}}{\\sqrt{2}} \\right\\} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ConvexBallProximal.spec.Params → ℕ",
+        "value": "fun p => ⌈min ((p.R / p.t) ^ 2) (p.R / p.t * (√(max 0 (Real.log (p.Δ / p.ε))) / √2))⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.BallProximalGaussian",
+    "namespace": "LongTails.Setups.ConvexBallProximal",
+    "setup": "LongTails.Setups.ConvexBallProximal",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.ConvexBallProximal.spec OracleTemplate.BallProximalGaussian.budget",
+    "theorem": "OracleTemplate.BallProximalGaussian.result"
+  },
+  {
+    "budget": {
       "latex": "2 \\cdot \\left(\\sum_{i=0}^{d-1} \\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{L\\left(i\\right)}{\\mu}} \\right\\rceil_{+} \\right\\}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{2 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right)",
       "oracle": 0,
       "type": "LongTails.Setups.CoordinateSmoothStronglyConvex.spec.Params → ℕ",

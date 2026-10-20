@@ -33,6 +33,26 @@
 & $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{\ell}{\log(1+t/R)}\right\}\right)$
 & \textbf{(1)}: $\sqrt \ell$ instead of $\ell$ before saturation; total gain when $1\ll \ell\ll R/t$; already achieved by the 2026 bound.
 & --- \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BallProximalGaussian.lean}{Ball\allowbreak{}Proximal\allowbreak{}Gaussian} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BallProximalGaussian.md}{(review)}
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt \ell\right\}\right)$
+& ---
+& --- \\
+\midrule
+\citep[Thm.~3.4, Eqs.~(42)--(43)]{cbpRichtarikLi2026v1}
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac Rt\sqrt \ell\right\}\right)$
+& \textbf{(2)}: Matches known rate and exact Gaussian budget; Lean formalization.
+& \textbf{(2)}: weaker than the rational gap factor and refined implicit bound; \textbf{(1)} has a pointwise no-larger budget. \\
+\midrule
+\citep[Thm.~8.1(iii), Cor.~8.2]{cbpGruntkowskaEtAl2025v2}
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},\frac{\ell}{\log(1+t/R)}\right\}\right)$
+& \textbf{(2)}: $\sqrt \ell$ instead of $\ell$ for $R\ge t$ before saturation; $\sqrt \ell$-factor gain when $1\ll\ell\ll R/t$, already established in 2026.
+& --- \\
+\midrule
+\citep[Thm.~4.5]{cbpRichtarikLi2026v1}, dimension-dependent termination
+& $\mathcal{O}\!\left(1+\min\left\{\frac{R^2}{t^2},C_d\frac Rt\right\}\right)$
+& \textbf{(2)}: No established improvement over the published Gaussian guarantee.
+& \textbf{(2)}: larger bound when $\min\{R/t,\sqrt \ell\}\gg C_d$; baseline reaches exact optimum. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize
