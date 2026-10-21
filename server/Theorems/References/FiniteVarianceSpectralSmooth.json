@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.FiniteVarianceSpectralSmooth",
+  "searched_at": "2026-10-21T20:14:30.391704+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & 2 \\cdot L \\cdot \\Delta \\leq \\varepsilon^{2} \\\\ \\left\\lceil 2^{45} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\sqrt{1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}} \\cdot \\left(\\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)}{\\delta}\\right)\\right)^{2}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteVarianceSpectralSmooth.spec.Params → ℕ",
+        "value": "fun p =>\n  if 2 * p.L * p.Δ ≤ p.ε ^ 2 then 0\n  else\n    ⌈2 ^ 45 * (1 + p.s ^ 2 / p.ε ^ 2) *\n        (1 + p.L * p.Δ / p.ε ^ 2 +\n          √(1 + p.L * p.Δ / p.ε ^ 2) *\n            Real.log (2 ^ 56 * (1 + p.s ^ 2 / p.ε ^ 2) * (1 + p.L * p.Δ / p.ε ^ 2) / p.δ) ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & 2 \\cdot L \\cdot \\Delta \\leq \\varepsilon^{2} \\\\ \\left\\lceil 2^{45} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\sqrt{1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}} \\cdot \\left(\\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)}{\\delta}\\right)\\right)^{2}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteVarianceSpectralSmooth.spec.Params → ℕ",
+          "value": "fun p =>\n  if 2 * p.L * p.Δ ≤ p.ε ^ 2 then 0\n  else\n    ⌈2 ^ 45 * (1 + p.s ^ 2 / p.ε ^ 2) *\n        (1 + p.L * p.Δ / p.ε ^ 2 +\n          √(1 + p.L * p.Δ / p.ε ^ 2) *\n            Real.log (2 ^ 56 * (1 + p.s ^ 2 / p.ε ^ 2) * (1 + p.L * p.Δ / p.ε ^ 2) / p.δ) ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FiniteVarianceMuonHighProbability",
+      "namespace": "LongTails.Setups.FiniteVarianceSpectralSmooth",
+      "setup": "LongTails.Setups.FiniteVarianceSpectralSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteVarianceSpectralSmooth.spec\n  LongTails.Theorems.FiniteVarianceMuonHighProbability.budget",
+      "theorem": "LongTails.Theorems.FiniteVarianceMuonHighProbability.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FiniteVarianceMuonHighProbability",
+      "theorem": "LongTails.Theorems.FiniteVarianceMuonHighProbability.result",
+      "references": "- Rui Pan, Yang Luo, Yuxing Liu, Yang You, Tong Zhang. [Unbiased Gradient Low-Rank Projection](https://arxiv.org/html/2510.17802v1). 2025, preprint v1. Complexity: $O(1+L\\Delta/\\varepsilon^2+v^2/\\varepsilon^2+L\\Delta v^2/\\varepsilon^4)$ stochastic-gradient calls for GUM with sampling probability $q=1/2$, achieving expected nuclear gradient norm at most $\\varepsilon$ at a uniformly sampled period-start iterate; $v=\\|V\\|_*$, where the noise $Z(X)$ satisfies $\\mathbb E[Z(X)Z(X)^\\top]\\preceq VV^\\top$ uniformly.\n- Hongyi Tao, Dingzhi Yu, Lijun Zhang. [When and Why SignSGD Outperforms SGD: A Theoretical Study Based on ℓ₁-norm Lower Bounds](https://arxiv.org/html/2605.06615v1). 2026, preprint v1. Complexity: $O((1+L\\Delta/\\varepsilon^2)(1+v^2/\\varepsilon^2))$ stochastic-gradient calls, including batches, for minibatched Muon achieving $\\mathbb E\\|\\nabla f(X_R)\\|_*\\le\\varepsilon$ at a uniformly sampled iterate; $v=\\operatorname{tr}(\\Sigma)$, where $\\mathbb E[Z(X)Z(X)^\\top]\\preceq\\Sigma^2$ uniformly and $\\Sigma\\succeq0$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f on real m×n matrices may be nonconvex. A global lower bound fmin exists with f(x0)−fmin≤Δ; attainment is not required.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call returns a jointly measurable, integrable sample G(X,ξ) with E[G(X,ξ)]=∇f(X). Fresh IID seeds drive successive calls, including repeated queries for batching. The algorithm receives gradient samples, not function values or the hidden noise profile.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Noise may be heavy-tailed: only the specified rowwise second moments are required, with no bounded-support or exponential-tail assumption.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel.row_profile and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "A fixed hidden orthonormal basis (bi) and nonnegative profile (σi) satisfy ∑iσi≤s and E‖(G(X,ξ)−∇f(X))ᵀbi‖₂²≤σi² for every X and i. No independence between rows is assumed.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel.row_profile."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Global smoothness uses the spectral/nuclear dual pair: ‖∇f(X)−∇f(Y)‖*≤L‖X−Y‖op. Stationarity is measured in nuclear norm.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: spectralNorm, nuclearNorm, spec.admissible, spec.successful."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace ℝ (Fin m × Fin n), identified with real m×n matrices; m,n are public natural numbers.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: MatrixPolar.Space, matrixEquiv, Public."
+      },
+      {
+        "label": "other",
+        "details": "Public information is m,n,L,Δ,s,ε,δ,x0, with L,Δ,s≥0, ε>0 and 0<δ<1. Allowed algorithms belong to MuonFamily: polar momentum training followed by uniform candidate sampling and robust batch-based selection, or constant output x0 when 2LΔ≤ε². All gradient calls count toward a fixed budget.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: Public, spec.valid, MuonFamily, FollowsMuon, spec.allowedAlgorithm; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned matrix X must satisfy ‖∇f(X)‖*≤ε, using the unsquared nuclear norm. The output is measurable and selected according to MuonFamily; no last-iterate guarantee is required.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: spec.successful, MuonFamily and FollowsMuon."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(‖∇f(X)‖*>ε)≤δ under the product of algorithm randomness and IID oracle randomness, after the prescribed fixed oracle budget.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines spectral-to-nuclear smoothness, a hidden summable rowwise variance profile, nuclear-norm high-probability stationarity, and a restricted algorithm family. This classification does not assert novelty; the cited expected guarantees do not establish the full supplied statement."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FiniteVarianceMuonHighProbability.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FiniteVarianceMuonHighProbability",
+          "theorem": "LongTails.Theorems.FiniteVarianceMuonHighProbability.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

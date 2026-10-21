@@ -660,6 +660,27 @@
   },
   {
     "budget": {
+      "latex": "\\begin{cases} 0 & 2 \\cdot L \\cdot \\Delta \\leq \\varepsilon^{2} \\\\ \\left\\lceil 2^{45} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\sqrt{1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}} \\cdot \\left(\\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)}{\\delta}\\right)\\right)^{2}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+      "oracle": 0,
+      "type": "LongTails.Setups.FiniteVarianceSpectralSmooth.spec.Params → ℕ",
+      "value": "fun p =>\n  if 2 * p.L * p.Δ ≤ p.ε ^ 2 then 0\n  else\n    ⌈2 ^ 45 * (1 + p.s ^ 2 / p.ε ^ 2) *\n        (1 + p.L * p.Δ / p.ε ^ 2 +\n          √(1 + p.L * p.Δ / p.ε ^ 2) *\n            Real.log (2 ^ 56 * (1 + p.s ^ 2 / p.ε ^ 2) * (1 + p.L * p.Δ / p.ε ^ 2) / p.δ) ^ 2)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\begin{cases} 0 & 2 \\cdot L \\cdot \\Delta \\leq \\varepsilon^{2} \\\\ \\left\\lceil 2^{45} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\sqrt{1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}} \\cdot \\left(\\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{s^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)}{\\delta}\\right)\\right)^{2}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteVarianceSpectralSmooth.spec.Params → ℕ",
+        "value": "fun p =>\n  if 2 * p.L * p.Δ ≤ p.ε ^ 2 then 0\n  else\n    ⌈2 ^ 45 * (1 + p.s ^ 2 / p.ε ^ 2) *\n        (1 + p.L * p.Δ / p.ε ^ 2 +\n          √(1 + p.L * p.Δ / p.ε ^ 2) *\n            Real.log (2 ^ 56 * (1 + p.s ^ 2 / p.ε ^ 2) * (1 + p.L * p.Δ / p.ε ^ 2) / p.δ) ^ 2)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.FiniteVarianceMuonHighProbability",
+    "namespace": "LongTails.Setups.FiniteVarianceSpectralSmooth",
+    "setup": "LongTails.Setups.FiniteVarianceSpectralSmooth",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteVarianceSpectralSmooth.spec\n  LongTails.Theorems.FiniteVarianceMuonHighProbability.budget",
+    "theorem": "LongTails.Theorems.FiniteVarianceMuonHighProbability.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil 134217728 \\cdot \\left(1 + -\\log\\left(\\delta\\right)\\right) \\cdot \\left(\\left(1 + R \\cdot \\sqrt{H1}\\right) \\cdot \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) + R \\cdot \\sqrt{\\frac{H0}{\\varepsilon}}\\right) \\right\\rceil_{+} \\cdot \\left\\lceil \\rho \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.GapSmoothStrongGrowth.spec.Params → ℕ",
@@ -678,6 +699,27 @@
     "setup": "LongTails.Setups.GapSmoothStrongGrowth",
     "statement": "OracleTemplate.Convergence LongTails.Setups.GapSmoothStrongGrowth.spec OracleTemplate.GapStrongGrowth.budget",
     "theorem": "OracleTemplate.GapStrongGrowth.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\left(1 + 8 \\cdot \\log\\left(components\\right)\\right) \\cdot \\left(\\frac{upper}{lower}\\right)^{2} \\cdot \\left(2 \\cdot \\log\\left(1 + \\frac{radius^{2}}{lower}\\right) + \\frac{4 \\cdot components \\cdot \\min\\left\\{ components, dimension \\right\\} \\cdot upper}{accuracy}\\right) \\right\\rceil_{+} + 1",
+      "oracle": 0,
+      "type": "LongTails.Setups.GeneralCovarianceReverseFisher.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈(1 + 8 * Real.log ↑↑p.components) * (p.upper / p.lower) ^ 2 *\n        (2 * Real.log (1 + p.radius ^ 2 / p.lower) +\n          4 * ↑↑p.components * min ↑↑p.components ↑↑p.dimension * p.upper / p.accuracy)⌉₊ +\n    1"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\left(1 + 8 \\cdot \\log\\left(components\\right)\\right) \\cdot \\left(\\frac{upper}{lower}\\right)^{2} \\cdot \\left(2 \\cdot \\log\\left(1 + \\frac{radius^{2}}{lower}\\right) + \\frac{4 \\cdot components \\cdot \\min\\left\\{ components, dimension \\right\\} \\cdot upper}{accuracy}\\right) \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralCovarianceReverseFisher.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(1 + 8 * Real.log ↑↑p.components) * (p.upper / p.lower) ^ 2 *\n        (2 * Real.log (1 + p.radius ^ 2 / p.lower) +\n          4 * ↑↑p.components * min ↑↑p.components ↑↑p.dimension * p.upper / p.accuracy)⌉₊ +\n    1"
+      }
+    ],
+    "module": "LongTails.Theorems.GeneralCovarianceReverseFisherGD",
+    "namespace": "LongTails.Setups.GeneralCovarianceReverseFisher",
+    "setup": "LongTails.Setups.GeneralCovarianceReverseFisher",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralCovarianceReverseFisher.spec\n  LongTails.Theorems.GeneralCovarianceReverseFisherGD.budget",
+    "theorem": "LongTails.Theorems.GeneralCovarianceReverseFisherGD.result"
   },
   {
     "budget": {
@@ -1018,6 +1060,27 @@
   },
   {
     "budget": {
+      "latex": "128 \\cdot \\left\\lceil \\frac{64 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}} \\right\\rceil_{+} \\cdot \\left(\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+} + 1\\right) + \\left(2^{\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+}} - 1\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{32 \\cdot \\rho \\cdot R^{4}}{\\varepsilon}\\right)}{\\log\\left(4\\right)} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.LocalSmoothStronglyConvexLora.spec.Params → ℕ",
+      "value": "fun p =>\n  128 * ⌈64 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)⌉₊ *\n      (⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ + 1) +\n    (2 ^ ⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ - 1) *\n      ⌈Real.log (1 + 32 * p.ρ * p.R ^ 4 / p.ε) / Real.log 4⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "128 \\cdot \\left\\lceil \\frac{64 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}} \\right\\rceil_{+} \\cdot \\left(\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+} + 1\\right) + \\left(2^{\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+}} - 1\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{32 \\cdot \\rho \\cdot R^{4}}{\\varepsilon}\\right)}{\\log\\left(4\\right)} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.LocalSmoothStronglyConvexLora.spec.Params → ℕ",
+        "value": "fun p =>\n  128 * ⌈64 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)⌉₊ *\n      (⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ + 1) +\n    (2 ^ ⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ - 1) *\n      ⌈Real.log (1 + 32 * p.ρ * p.R ^ 4 / p.ε) / Real.log 4⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.SilverLoraLocalConvergence",
+    "namespace": "LongTails.Setups.LocalSmoothStronglyConvexLora",
+    "setup": "LongTails.Setups.LocalSmoothStronglyConvexLora",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.LocalSmoothStronglyConvexLora.spec\n  LongTails.Theorems.SilverLoraLocalConvergence.budget",
+    "theorem": "LongTails.Theorems.SilverLoraLocalConvergence.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil 2 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\log\\left(1 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.LocalStrongAiming.spec.Params → ℕ",
@@ -1204,6 +1267,25 @@
     "setup": "LongTails.Setups.NormalizedSamStronglyConvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.NormalizedSamStronglyConvex.spec\n  LongTails.Theorems.NormalizedSamStronglyConvex.budget",
     "theorem": "LongTails.Theorems.NormalizedSamStronglyConvex.result"
+  },
+  {
+    "budget": {
+      "latex": "D \\cdot G \\cdot \\sqrt{T}",
+      "type": "LongTails.Setups.OnlineConvexBoundedGradient.Params → OracleTemplate.Horizon → ℝ",
+      "value": "fun p T => p.D * p.G * √↑T"
+    },
+    "budgets": [
+      {
+        "latex": "D \\cdot G \\cdot \\sqrt{T}",
+        "type": "LongTails.Setups.OnlineConvexBoundedGradient.Params → OracleTemplate.Horizon → ℝ",
+        "value": "fun p T => p.D * p.G * √↑T"
+      }
+    ],
+    "module": "LongTails.Theorems.OnlineGradientDescent",
+    "namespace": "LongTails.Setups.OnlineConvexBoundedGradient",
+    "setup": "LongTails.Setups.OnlineConvexBoundedGradient",
+    "statement": "OracleTemplate.OnlineConvergence LongTails.Setups.OnlineConvexBoundedGradient.spec\n  OracleTemplate.OnlineGradientDescent.bound",
+    "theorem": "OracleTemplate.OnlineGradientDescent.result"
   },
   {
     "budget": {
@@ -2010,6 +2092,48 @@
     "setup": "LongTails.Setups.UncalibratedSharp",
     "statement": "OracleTemplate.Convergence LongTails.Setups.UncalibratedSharp.spec OracleTemplate.UncalibratedSharp.budget",
     "theorem": "OracleTemplate.UncalibratedSharp.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 400 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 40 \\cdot \\log_{2}\\left(2 + \\frac{\\Delta + L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + 300",
+      "oracle": 0,
+      "type": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear.spec.Params → ℕ",
+      "value": "fun p => ⌈400 * √(p.L * p.R ^ 2 / p.ε) + 40 * Real.logb 2 (2 + (p.Δ + p.L * p.R ^ 2) / p.ε)⌉₊ + 300"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 400 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 40 \\cdot \\log_{2}\\left(2 + \\frac{\\Delta + L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + 300",
+        "oracle": 0,
+        "type": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear.spec.Params → ℕ",
+        "value": "fun p => ⌈400 * √(p.L * p.R ^ 2 / p.ε) + 40 * Real.logb 2 (2 + (p.Δ + p.L * p.R ^ 2) / p.ε)⌉₊ + 300"
+      }
+    ],
+    "module": "LongTails.Theorems.CertifiedLevelBroxUnknownValue",
+    "namespace": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
+    "setup": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.UnknownValueSmoothConvexLocalLinear.spec\n  OracleTemplate.CertifiedLevelBrox.budget",
+    "theorem": "OracleTemplate.CertifiedLevelBrox.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\frac{10^{16}}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{10^{20} \\cdot dimension \\cdot \\left(1 + centre\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.UntiedGaussianReverseFisher.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈10 ^ 16 / max (p.lower ^ 2) p.accuracy *\n      Real.log (10 ^ 20 * ↑↑p.dimension * (1 + p.centre) / (p.failure * p.accuracy))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{10^{16}}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{10^{20} \\cdot dimension \\cdot \\left(1 + centre\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.UntiedGaussianReverseFisher.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈10 ^ 16 / max (p.lower ^ 2) p.accuracy *\n      Real.log (10 ^ 20 * ↑↑p.dimension * (1 + p.centre) / (p.failure * p.accuracy))⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.UntiedReverseFisherGlobalGD",
+    "namespace": "LongTails.Setups.UntiedGaussianReverseFisher",
+    "setup": "LongTails.Setups.UntiedGaussianReverseFisher",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.UntiedGaussianReverseFisher.spec\n  LongTails.Theorems.UntiedReverseFisherGlobalGD.budget",
+    "theorem": "LongTails.Theorems.UntiedReverseFisherGlobalGD.result"
   },
   {
     "budget": {

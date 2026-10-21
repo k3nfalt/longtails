@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Constant-step reverse-Fisher GD for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/UntiedGaussianReverseFisher.lean}{UntiedGaussianReverseFisher}.}\label{tab:UntiedGaussianReverseFisher}
+\parbox{\linewidth}{\footnotesize Teacher and student are equal-weight, two-component Gaussian mixtures in $\mathbb R^d$, $d\ge1$, with identity covariances and untied means. The teacher satisfies $0\le s\le\Delta\le1$ and $\|\bar u\|\le B$, with $B\ge0$ and $\varepsilon,\delta\in(0,1]$. The oracle returns the exact gradient of the population reverse Fisher loss. The setup requires positive constant-step GD returning its current iterate. Target: $\Pr\{\min_{\pi\in S_2}\sum_{i=0}^1\|\theta_i^K-\bar\mu_{\pi(i)}\|^2\le\varepsilon\}\ge1-\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/UntiedReverseFisherGlobalGD.lean}{Untied\allowbreak Reverse\allowbreak Fisher\allowbreak Global\allowbreak GD} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/UntiedReverseFisherGlobalGD.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{1+\log\!\frac{d(1+B)}{\delta\varepsilon}}{\max\{s^2,\varepsilon\}}\right)$.\par Step $1/32$; start $(w,-w)$, with $w$ a normalized uniform-cube point. & & \\
+\midrule[1.2pt]
+\textbf{(2)} GD \citep{srfTyurin2026v1}, Cor.~2.5; single teacher ($\Delta=0$), $n=2$
+& $\mathcal{O}\!\left(\varepsilon^{-1}+\log\!\frac{1+B}{\varepsilon}\right)$ for the same initial-radius bound.
+& \textbf{(1)}: Scope: extends constant-step GD recovery from $\Delta=0$ to $0<\Delta\le1$ with unknown centre; no rate improvement at $\Delta=0$.
+& \textbf{(1)}: Logarithmically worse accuracy term; mirrored random start and one stopping time, versus arbitrary starts and deterministic accuracy for every $k\ge K$; only two components. \\
+\midrule
+\textbf{(3)} GD \citep{srfTyurin2026v1}, Thm.~E.1 (explicit Thm.~3.2), $n=m=2$
+& $\mathcal{O}\!\left(\dfrac{(1+\log R_0)^2(1+\log(d/\delta))^2}{\varepsilon}\right)$.
+\par Large-sphere initialization:
+$R_0\ge C\bigl[1+\sqrt d\,\Delta^2/\delta$
+$\quad +(B+\Delta)\sqrt{1+\log(1+B+\Delta)}\bigr]$;
+$d\ge C(1+\log(1/\delta))$,
+$\Delta\ge C\sqrt{(1+\log(R_0/\varepsilon))(1+\log(d/\delta))}$.\par Each student reaches squared distance $\varepsilon$ from its initially closest teacher, with probability $1-\delta$.
+& \textbf{(1)}: Scope: covers $0\le\Delta\le1$, $d\ge1$, a complementary GD regime. Permutation recovery instead of closest-teacher accuracy. Disjoint separation classes: rates not comparable.
+& \textbf{(1)}: Only two student and teacher components; no coverage of $\Delta>1$, including the intermediate-separation gap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\Delta=\|\bar\mu_0-\bar\mu_1\|$; $\bar u=(\bar\mu_0+\bar\mu_1)/2$; $s$ is the supplied separation lower bound; $B$ is the centre bound; $S_2$ is the permutation group; $K$ counts full population-gradient calls. $w$ is the random initial direction; $R_0$ is the sphere radius in \textbf{(3)}; $C$ denotes sufficiently large universal constants; $n,m$ count student and teacher components.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

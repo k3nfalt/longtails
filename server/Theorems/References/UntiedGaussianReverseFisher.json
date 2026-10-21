@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.UntiedGaussianReverseFisher",
+  "searched_at": "2026-10-21T20:11:44.056733+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{10^{16}}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{10^{20} \\cdot dimension \\cdot \\left(1 + centre\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.UntiedGaussianReverseFisher.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈10 ^ 16 / max (p.lower ^ 2) p.accuracy *\n      Real.log (10 ^ 20 * ↑↑p.dimension * (1 + p.centre) / (p.failure * p.accuracy))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{10^{16}}{\\max\\left\\{ lower^{2}, accuracy \\right\\}} \\cdot \\log\\left(\\frac{10^{20} \\cdot dimension \\cdot \\left(1 + centre\\right)}{failure \\cdot accuracy}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.UntiedGaussianReverseFisher.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈10 ^ 16 / max (p.lower ^ 2) p.accuracy *\n      Real.log (10 ^ 20 * ↑↑p.dimension * (1 + p.centre) / (p.failure * p.accuracy))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.UntiedReverseFisherGlobalGD",
+      "namespace": "LongTails.Setups.UntiedGaussianReverseFisher",
+      "setup": "LongTails.Setups.UntiedGaussianReverseFisher",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.UntiedGaussianReverseFisher.spec\n  LongTails.Theorems.UntiedReverseFisherGlobalGD.budget",
+      "theorem": "LongTails.Theorems.UntiedReverseFisherGlobalGD.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.UntiedReverseFisherGlobalGD",
+      "theorem": "LongTails.Theorems.UntiedReverseFisherGlobalGD.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Population reverse-Fisher minimization over two unrestricted means θ∈(ℝ^d)². The expectation is under the student mixture, not the target. For distinct target means, the two permuted target configurations minimize the loss, while their midpoint generally does not, so the permitted objectives are nonconvex.",
+        "evidence": "LongTails/Setups/UntiedGaussianReverseFisher.lean: Means, weight, score, loss, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each call returns the full Euclidean gradient ∇θ loss(μ,θ), exactly for every history and oracle seed. No target samples, separate target-score queries, or function-value oracle are supplied.",
+        "evidence": "LongTails/Setups/UntiedGaussianReverseFisher.lean: spec.Query, spec.Reply, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient parameter space is (ℝ^d)² with its Euclidean product norm; d is a public positive integer.",
+        "evidence": "LongTails/Setups/UntiedGaussianReverseFisher.lean: Params.dimension, Space, Means."
+      },
+      {
+        "label": "other",
+        "details": "Student and target are equally weighted two-component Gaussian mixtures with identity covariance. Hidden target means satisfy ℓ≤‖μ₀−μ₁‖≤1 and ‖(μ₀+μ₁)/2‖≤C. Public parameters satisfy C≥0, 0≤ℓ≤1, and ε,δ∈(0,1]; coincident target means are allowed when ℓ=0. Both student means are unrestricted and independently parameterized.\nAlgorithms must use one positive constant step size, query their current parameter, update θ←θ−γg, and output that parameter. Initialization may be randomized and depend on public parameters, but not directly on the hidden target means.",
+        "evidence": "LongTails/Setups/UntiedGaussianReverseFisher.lean: Params, weight, loss, spec.publicInput, spec.valid, spec.admissible.\nLongTails/Setups/UntiedGaussianReverseFisher.lean: constantStepGD, spec.allowedAlgorithm; LongTails/Template.lean: Algorithm, Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The measurable final output must satisfy minπ∈S₂ ∑ᵢ₌₀¹ ‖θᵢ−μ_{π(i)}‖²≤ε. This is squared parameter-recovery error up to permutation, rather than loss or distributional error.",
+        "evidence": "LongTails/Setups/UntiedGaussianReverseFisher.lean: matchingError, spec.successful, constantStepGD."
+      },
+      {
+        "label": "high_probability",
+        "details": "The parameter-error event must have probability at least 1−δ under the joint algorithm and oracle seed law, with a fixed oracle budget. Exact oracle replies do not require deterministic initialization.",
+        "evidence": "LongTails/Setups/UntiedGaussianReverseFisher.lean: spec.successful, spec.admissible; LongTails/Template.lean: Algorithm.law, execute, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This is a specialized population reverse-Fisher problem with exact full-gradient access, unrestricted two-mean fitting, small or vanishing target separation, and high-probability parameter recovery under constant-step GD. Repository implementations and proofs were not inspected; the literature outcome does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.UntiedReverseFisherGlobalGD.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.UntiedReverseFisherGlobalGD",
+          "theorem": "LongTails.Theorems.UntiedReverseFisherGlobalGD.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

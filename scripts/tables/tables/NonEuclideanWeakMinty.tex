@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-operator residual complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NonEuclideanWeakMinty.lean}{NonEuclideanWeakMinty}.}\label{tab:NonEuclideanWeakMinty}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real normed space $E$, $F:E\to E^*$ is $L$-Lipschitz from the primal to the dual norm, $L>0$. A root $x_\star$ satisfies $\langle F(x),x-x_\star\rangle\ge-\rho\|F(x)\|_*^2$ for all $x$, with $0\le\rho L\le1/20$. The differentiable mirror $h$ satisfies $D_h(u,x)\ge(\mu/2)\|u-x\|^2$, $\mu>0$, and $D_h(x_\star,x_0)\le D$, $D\ge0$. Exact $F$ evaluations are counted; the target is $\|F(x_{\rm out})\|_*\le\varepsilon$, $\varepsilon>0$, almost surely.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonEuclideanWeakMintyExtragradient.lean}{Non\allowbreak Euclidean\allowbreak Weak\allowbreak Minty\allowbreak Extragradient} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonEuclideanWeakMintyExtragradient.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{L^2D}{\mu\varepsilon^2}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Mirror extragradient \citep{newmZhangDai2022v2}, Thm.~2, Lemma~3
+& $\mathcal{O}\!\left(1+\frac{L_0L^2D}{\mu^3\varepsilon^2}\right)$\par $h$ additionally $L_0$-smooth; $\rho L\le\mu^2/(16L_0)$.
+& \textbf{(1)}: Accuracy term smaller by $L_0/\mu$ on the overlap; no mirror-gradient smoothness. Range $\rho L\le1/20$ independent of geometry. Spectral/Frobenius example: $\mathcal{O}(1+L^2R_F^2/\varepsilon^2)$ instead of $\mathcal{O}(1+rL^2R_F^2/\varepsilon^2)$.
+& \textbf{(1)}: Larger leading constant. For the Euclidean quadratic mirror, narrower range: $1/20$ versus $\rho L<1/8$. \\
+\midrule
+\textbf{(3)} EG+ \citep{newmDDJ2021v2}, Thm.~3.2; Euclidean special case
+& $\mathcal{O}\!\left(1+\frac{L^2R_2^2}{\varepsilon^2}\right)$\par On $\rho L\le1/20$; Euclidean quadratic mirror.
+& \textbf{(1)}: Matches known rate on this restriction; extends scope to arbitrary norms.
+& \textbf{(1)}: Narrower admissible range: $\rho L\le1/20$ versus $\rho L<1/8$. \\
+\midrule
+\textbf{(4)} EG$_p^+$ \citep{newmDDJ2021v2}, Thm.~4.2(i); $\ell_p$ special case
+& $\mathcal{O}\!\left(1+\frac{L^2R_p^2}{(p-1)^2\varepsilon^2}\right)$\par $1<p\le2$, $\rho=0$; $h=\frac12\|\cdot-x_0\|_p^2$.
+& \textbf{(1)}: $\mathcal{O}(1+L^2R_p^2/((p-1)\varepsilon^2))$ at $\rho=0$: accuracy term smaller by $1/(p-1)$. Extends this geometry to $0<\rho L\le1/20$.
+& \\
+\midrule
+\textbf{(5)} \citep{newmPethick2025}, Thm.~6.1, Cor.~6.3; Euclidean unconstrained restriction
+& $\mathcal{O}\!\left(1+\frac{L^2R_2^2}{\varepsilon^2}\right)$\par On $\rho L\le1/20$, including inner evaluations; the extra resolvent is the identity.
+& \textbf{(1)}: Extends scope to arbitrary norms; no established rate improvement on the Euclidean restriction.
+& \textbf{(1)}: Narrower admissible range: $\rho L\le1/20$ versus $\rho L<1$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $D_h(u,x)=h(u)-h(x)-Dh(x)[u-x]$; $\|\cdot\|_*$ is the dual norm; $L_0$ is the Lipschitz constant of $Dh$. $R_p=\|x_\star-x_0\|_p$; in row \textbf{(4)}, $\mu=p-1$, $D=R_p^2/2$. Euclidean comparisons use $h=\frac12\|\cdot-x_0\|_2^2$, $\mu=1$, $D=R_2^2/2$. In the spectral-norm example, $r=\min(m,n)$, $R_F=\|X_\star-X_0\|_F$, and the Frobenius mirror has $\mu=1$, $L_0=r$, $D=R_F^2/2$. All ranges use the displayed setup's convention for $\rho$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

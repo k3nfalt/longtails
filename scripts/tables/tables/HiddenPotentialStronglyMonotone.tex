@@ -1,0 +1,44 @@
+\begin{table}[tp]
+\centering
+\caption{Hidden-potential strongly monotone root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HiddenPotentialStronglyMonotone.lean}{HiddenPotentialStronglyMonotone}.}\label{tab:HiddenPotentialStronglyMonotone}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $F$ is $\mu$-strongly monotone and admits an unknown decomposition $F=\nabla\varphi+S$, with differentiable $\varphi$, $L$-Lipschitz $\nabla\varphi$, and $s$-Lipschitz $S$. Neither convexity of $\varphi$ nor monotonicity of $S$ is assumed. Public parameters satisfy $\mu,\varepsilon>0$ and $L,s,R\ge0$; $F(x^\star)=0$ and $\|x_0-x^\star\|\le R$. Only exact evaluations of $F$ are available. Target: $\|x_{\rm out}-x^\star\|\le\varepsilon$, deterministically for \textbf{(1)}. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HiddenPotentialOracleComplexity.lean}{Hidden\allowbreak Potential\allowbreak Oracle\allowbreak Complexity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HiddenPotentialOracleComplexity.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\frac{\sqrt{(\mu+s)(L+\mu+s)}}{\mu}h\ell\right)$ combined calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Past extragradient \citep[Thm.~1]{hpGidel2020v5}
+& $\displaystyle\mathcal{O}\!\left(1+\frac{L+s}{\mu}\ell\right)$ combined calls; one per step.
+& \textbf{(1)}: gain $\sqrt{(L+s)/(\mu+s)}/h$ when $L+s\gg(\mu+s)h^2$. At $s\le\mu$, $\mathcal{O}(\sqrt\kappa\ell)$ versus $\mathcal{O}(\kappa\ell)$; at $s=\sqrt{L\mu}$, $\mathcal{O}(\kappa^{3/4}(1+\log\kappa)\ell)$ versus $\mathcal{O}(\kappa\ell)$, for $\kappa\gg1$.
+& \textbf{(1)}: loses factor $h$ when $s\gtrsim L$; needs $L,s$ separately instead of $L+s$. \\
+\midrule
+\textbf{(3)} \citep[Thm.~3]{hpWangLi2020v2}
+& $\displaystyle\mathcal{O}\!\left(\sqrt{\frac L\mu+\frac{\bar Ls}{\mu^2}}(1+\log(\bar L/\mu))^3\right.$\newline
+$\displaystyle\left.{}\times\left[1+\log\!\left(1+\frac{\bar L^2R}{\mu^2\varepsilon}\right)\right]\right)$ combined calls. Finite-dimensional public saddle partition; block moduli $\mu$, smoothness $L$, coupling $s$.
+& \textbf{(1)}: on bilinear overlap with $s\le L$, matches polynomial order, removes roughly $\log^2(L/\mu)$ and condition dependence inside accuracy log. Scope: hidden decomposition, nonlinear residuals without blocks.
+& \textbf{(1)} does not cover the general nonlinear-coupling saddle class of \textbf{(3)}; outside the bilinear overlap, rates are not comparable. \\
+\midrule
+\textbf{(4)} APDG \citep[Thm.~4.2, Sec.~5.1]{hpKovalev2022v2}
+& $\displaystyle\mathcal{O}\!\left(1+\left[\sqrt{L/\mu}+s/\mu\right]\right.$\newline
+$\displaystyle\left.{}\times[1+\log_+(C/\varepsilon^2)]\right)$ combined calls, including component recovery. Finite-dimensional bilinear saddle; public partition, $\mu$-strongly convex, $L$-smooth components, $\|A\|\le s$. Initialization constant $C$ unexpanded.
+& \textbf{(1)}: scope extends to hidden partitions and nonlinear residuals. On the stated restriction, component gradients and matrix products require only constantly many combined calls.
+& \textbf{(1)} has worse polynomial dependence for $\mu\ll s\ll L$: $\sqrt{Ls}/\mu$ versus $\sqrt{L/\mu}+s/\mu$, with additional logarithms. \\
+\midrule
+\textbf{(5)} Restarted AG-EG \citep[Cor.~2.8]{hpYuan2023}
+& $\displaystyle\mathcal{O}\!\left(\left[\sqrt{L/\mu}+s/\mu\right]\ell\right)$ total split evaluations of $\nabla\varphi$ and $S$, zero noise. Finite-dimensional; $\varphi$ $\mu$-strongly convex, $S$ monotone.
+& \textbf{(1)}: only combined $F$ access; no revealed decomposition, convexity of $\varphi$, or monotonicity of $S$ required.
+& \textbf{(1)} has larger polynomial cost when $\mu\ll s\ll L$: $\sqrt{Ls}/\mu$ versus $\sqrt{L/\mu}+s/\mu$. Oracles differ; this is not an identical-access comparison. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+R/\varepsilon)$; $h=1+\log(1+s/\mu)$; $\kappa=L/\mu$; $\bar L=\max\{L,s\}$; $\log_+t=\max\{0,\log t\}$. Combined call: one evaluation of $F$; split call: one evaluation of $\nabla\varphi$ or $S$. $C>0$ is the initialization and parameter dependent squared-distance scale in \textbf{(4)}. Bilinear overlap: $F(x,y)=(\nabla f(x)+A^\top y,\nabla g(y)-Ax)$, with $f,g$ $\mu$-strongly convex and $L$-smooth, $\|A\|\le s$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

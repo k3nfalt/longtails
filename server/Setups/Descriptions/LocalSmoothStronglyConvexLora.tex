@@ -1,0 +1,81 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Locally Initialized Low-Rank Gradient Optimization}
+We consider minimizing a differentiable, strongly convex, smooth function $f:\mathbb{R}^{m\times n}\to\mathbb{R}$ through factors $x=(A,B)\in\mathbb{R}^{m\times r}\times\mathbb{R}^{r\times n}$, where $m,n,r$ are integers with $0<r<\min\{m,n\}$. A global minimizer $X^\star=A^\star B^\star$ admits factors with controlled linearization and positive lower singular-value bounds. The given factors $x^0$ lie in a prescribed neighborhood of $(A^\star,B^\star)$. Each oracle call returns the exact matrix gradient $\nabla f(AB)$. Algorithms take positive gradient steps in the generally nonconvex factor parametrization. Given $\varepsilon>0$, the final factors $\bar{x}=(\bar{A},\bar{B})$ must satisfy $f(\bar{A}\bar{B})-f(X^\star)\leq\varepsilon$ almost surely.
+
+Equip the matrix space with the Frobenius inner product and norm, and equip the factor space $\mathcal{F}=\mathbb{R}^{m\times r}\times\mathbb{R}^{r\times n}$ with the product Euclidean norm
+\[
+\|(A,B)\|^2=\|A\|_F^2+\|B\|_F^2.
+\]
+The factorized optimization problem is
+\[
+\min_{x=(A,B)\in\mathcal{F}} f(AB).
+\]
+The public parameters are $(m,n,r,\mu,\rho,s,R,\varepsilon,x^0)$, where
+\[
+0<\mu\leq\rho,\qquad 0<s\leq R,\qquad \varepsilon>0,
+\]
+and $x^0\in\mathcal{F}$. The objective and oracle satisfy the following conditions.
+
+\begin{assumption}[Strong convexity and smoothness]
+The function $f$ is differentiable everywhere. For every $X,Y\in\mathbb{R}^{m\times n}$,
+\[
+\begin{aligned}
+f(Y)&\geq f(X)+\langle\nabla f(X),Y-X\rangle_F
+       +\frac{\mu}{2}\|Y-X\|_F^2,\\
+\|\nabla f(X)-\nabla f(Y)\|_F
+       &\leq\rho\|X-Y\|_F.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizing factors and local initialization]
+There exist factors $x^\star=(A^\star,B^\star)\in\mathcal{F}$ such that $X^\star=A^\star B^\star$ is a global minimizer over the full matrix space:
+\[
+f(X^\star)\leq f(X)\qquad\text{for every }X\in\mathbb{R}^{m\times n}.
+\]
+The derivative of the product map at these factors obeys, for every $(H_A,H_B)\in\mathcal{F}$,
+\[
+\|H_A B^\star+A^\star H_B\|_F
+\leq R\|(H_A,H_B)\|.
+\]
+Both factors satisfy the lower bounds
+\[
+\begin{aligned}
+\|A^\star w\|_2&\geq s\|w\|_2,\\
+\|(B^\star)^\top w\|_2&\geq s\|w\|_2
+\end{aligned}
+\qquad\text{for every }w\in\mathbb{R}^r.
+\]
+The initialization satisfies
+\[
+\|x^0-x^\star\|\leq\frac{\mu s^2}{256\rho R}.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact-gradient oracle]
+Oracle $0$, queried at any matrix $X\in\mathbb{R}^{m\times n}$, returns $\nabla f(X)$ for every history and every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\end{assumption}
+
+The objective is accessed through this oracle, and the algorithm is selected using only the public parameter tuple. The minimizing factors are not supplied to it. Admissible algorithms start at $x^0$ and query oracle $0$ only at their current product $A^kB^k$. With reply $G^k=\nabla f(A^kB^k)$, their updates must have the form
+\[
+\begin{aligned}
+A^{k+1}&=A^k-\eta_k G^k(B^k)^\top,\\
+B^{k+1}&=B^k-\eta_k(A^k)^\top G^k,
+\end{aligned}
+\qquad \eta_k>0.
+\]
+The step size may depend on the algorithm's current information and the current reply; it must be positive for every possible reply. Both updates use the same current factors and the same oracle reply, so each iteration costs one call.
+
+For a call budget $K\in\mathbb{N}$, which may depend on the full public parameter tuple, the required output is the final factor pair $\bar{x}=x^K=(\bar{A},\bar{B})$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a global minimizer $X^\star$ such that
+\[
+f(\bar{A}\bar{B})-f(X^\star)\leq\varepsilon
+\qquad\mathbb{P}\text{-almost surely}.
+\]
+The minimizing matrix supplied by the local initialization assumption may be used in this criterion.
+\end{document}

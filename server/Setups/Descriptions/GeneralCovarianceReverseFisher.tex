@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{General-Covariance Reverse-Fisher Optimization}
+We optimize the means of an equally weighted mixture of $m\geq 1$ Gaussians in $\mathbb{R}^d$, $d\geq 1$, against a single Gaussian with hidden mean $x^\star$ and the same hidden covariance $\Sigma$. The objective is the mixture expectation of the squared difference between their log-density gradients. Public bounds $0<a\leq b$ constrain the eigenvalues of $\Sigma$, and public initial means $x_i^0$ satisfy $\|x_i^0-x^\star\|\leq R$ for a public radius $R\geq 0$. Each call returns the exact objective gradient. Positive-step gradient descent must return means $\bar{x}_i$ satisfying $\|\bar{x}_i-x^\star\|^2\leq\varepsilon$ for every component and every random realization, where $\varepsilon>0$ is public.
+
+Write $E=\mathbb{R}^d$ with its Euclidean inner product, and equip the space of means $E^m$ with the product inner product and norm
+\[
+\|x\|_{E^m}^2=\sum_{i=1}^m\|x_i\|^2.
+\]
+The hidden model consists of an invertible linear map $A:E\to E$ and the target mean $x^\star\in E$, with $\Sigma=AA^\top$. For any collection of centers $c=(c_1,\ldots,c_k)$, define
+\[
+\ell_{A,c}(y)=\log\left(\sum_{i=1}^k
+\exp\left(-\frac{\|A^{-1}(y-c_i)\|^2}{2}\right)\right).
+\]
+Its gradient with respect to $y$ equals the log-density gradient of the corresponding equally weighted Gaussian mixture. Let $\gamma_d=\mathcal{N}(0,I_d)$ denote the standard Gaussian probability measure on $E$. The optimization problem is
+\[
+\min_{x\in E^m} F(x),
+\]
+where the reverse-Fisher objective is
+\[
+\begin{aligned}
+F(x)&=\frac{1}{m}\sum_{i=1}^m\int_E
+\bigl\|\nabla_y\ell_{A,x}(x_i+Az)\\
+&\hspace{2em}-\nabla_y\ell_{A,(x^\star)}(x_i+Az)\bigr\|^2
+\,\gamma_d(dz).
+\end{aligned}
+\]
+Here $(x^\star)$ denotes the single-center collection. The gradient $\nabla F$ is taken with respect to all means in the product inner product on $E^m$.
+
+\begin{assumption}[Covariance bounds]
+For every $v\in E$, the covariance root satisfies
+\[
+a\|v\|^2\leq\|A^\top v\|^2\leq b\|v\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial localization]
+The prescribed initial configuration $x^0=(x_1^0,\ldots,x_m^0)\in E^m$ satisfies
+\[
+\|x_i^0-x^\star\|\leq R,
+\qquad i=1,\ldots,m.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact-gradient oracle]
+Oracle $0$, the sole oracle, returns $\nabla F(x)\in E^m$ at any query $x\in E^m$. This identity holds for every call history and every realization of oracle randomness. Each query returns the full gradient and costs one oracle call. Internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+\begin{assumption}[Gradient-descent restriction]
+The algorithm starts at the prescribed configuration $x^0$, queries only its current configuration, and updates according to
+\[
+\begin{aligned}
+g^t&=\nabla F(x^t),\\
+x^{t+1}&=x^t-\eta_t g^t,
+\qquad \eta_t>0.
+\end{aligned}
+\]
+The step size may depend on the algorithm's information before the current reply, including its internal randomness and previous replies. The output is the current configuration at termination.
+\end{assumption}
+
+The public input is exactly $(d,m,a,b,R,\varepsilon,x^0)$. The covariance root $A$ and target mean $x^\star$ are hidden, and objective information is supplied through the gradient oracle. Queries are unrestricted in $E^m$, subject to the gradient-descent restriction. A call budget $K\in\mathbb{N}$ may depend on the public input and counts each full-gradient query once.
+
+After $K$ calls, the output is the last configuration $\bar{x}=x^K$. Success requires
+\[
+\|\bar{x}_i(\omega)-x^\star\|^2\leq\varepsilon
+\qquad\text{for every }\omega\text{ and every }i=1,\ldots,m,
+\]
+where $\omega$ ranges over all joint realizations of algorithm and oracle randomness, including realizations of probability zero.
+\end{document}

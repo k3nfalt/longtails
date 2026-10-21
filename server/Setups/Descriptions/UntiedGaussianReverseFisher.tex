@@ -1,0 +1,77 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Untied Gaussian Reverse-Fisher Optimization}
+We consider recovering two unknown means $\mu_0,\mu_1\in\mathbb{R}^d$ of an equally weighted Gaussian mixture with identity covariance, where $d\geq1$. Their separation lies in $[a,1]$, and their midpoint has norm at most $C$, with $0\leq a\leq1$ and $C\geq0$. The reverse-Fisher loss averages the squared difference of candidate and target scores under the candidate mixture. Each oracle call returns its exact gradient on $(\mathbb{R}^d)^2$. Using constant-step gradient descent and public inputs $(d,C,a,\varepsilon,\delta)$, the goal is total squared mean error under the best permutation at most $\varepsilon$, with probability at least $1-\delta$, where $\varepsilon,\delta\in(0,1]$.
+
+Write $E=\mathbb{R}^d$ with its Euclidean norm and equip the space of mean pairs $H=E\times E$ with the product inner product, so that
+\[
+\|\theta\|_H^2=\|\theta_0\|^2+\|\theta_1\|^2.
+\]
+For a candidate pair $\theta\in H$ and a point $x\in E$, define the mixture weights and score by
+\[
+\begin{aligned}
+w_i(\theta,x)
+&=\frac{\exp(-\|x-\theta_i\|^2/2)}
+{\sum_{j=0}^1\exp(-\|x-\theta_j\|^2/2)},
+\qquad i\in\{0,1\},\\
+s_\theta(x)&=\sum_{i=0}^1 w_i(\theta,x)\theta_i-x.
+\end{aligned}
+\]
+Let $\gamma_d=\mathcal{N}(0,I_d)$ be the standard Gaussian probability measure on $E$. For the target pair $\mu=(\mu_0,\mu_1)$, the optimization problem is
+\[
+\min_{\theta\in H} F_\mu(\theta),
+\qquad
+F_\mu(\theta)=\frac12\sum_{i=0}^1
+\int_E \|s_\theta(\theta_i+z)-s_\mu(\theta_i+z)\|^2
+\,\gamma_d(dz).
+\]
+Both candidate means are free variables, and the averaging distribution depends on the candidate pair. The target and permitted access satisfy the following conditions.
+
+\begin{assumption}[Public parameters and target geometry]
+The public parameters obey
+\[
+\begin{aligned}
+&d\in\mathbb{N},\quad d\geq1,\quad C\geq0,\quad 0\leq a\leq1,\\
+&0<\varepsilon\leq1,\qquad 0<\delta\leq1.
+\end{aligned}
+\]
+The unknown target pair $\mu\in H$ satisfies
+\[
+a\leq\|\mu_0-\mu_1\|\leq1,
+\qquad
+\left\|\frac{\mu_0+\mu_1}{2}\right\|\leq C.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact-gradient access]
+The oracle returns $\nabla F_\mu(\theta)\in H$ at any query $\theta\in H$, where the gradient is taken with respect to the product inner product. This identity holds for every call, every preceding query and reply history, and every realization of oracle randomness. Each query costs one oracle call. Internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+\begin{assumption}[Constant-step gradient descent]
+The algorithm uses a fixed scalar step size $\eta>0$. Starting from a possibly random initial pair $\theta^0\in H$, it queries its current pair and updates according to
+\[
+\theta^{k+1}=\theta^k-\eta\nabla F_\mu(\theta^k).
+\]
+Its output is the current pair. The algorithm, including its initialization rule and step size, is selected using only $(d,C,a,\varepsilon,\delta)$.
+\end{assumption}
+
+The target pair is accessed through the oracle. An externally specified budget $K\in\mathbb{N}$ may depend on the public parameter tuple; after $K$ calls, the output is the last pair $\bar{\theta}=\theta^K$. Define its permutation-invariant squared error by
+\[
+\begin{aligned}
+D(\mu,\bar{\theta})=\min\bigl\{&
+\|\bar{\theta}_0-\mu_0\|^2+\|\bar{\theta}_1-\mu_1\|^2,\\
+&\|\bar{\theta}_0-\mu_1\|^2+\|\bar{\theta}_1-\mu_0\|^2
+\bigr\}.
+\end{aligned}
+\]
+Writing $\mathbb{P}$ for the joint probability law of algorithm and oracle randomness, the output must be a measurable $H$-valued random variable and satisfy
+\[
+\mathbb{P}\bigl(D(\mu,\bar{\theta})\leq\varepsilon\bigr)
+\geq1-\delta.
+\]
+\end{document}

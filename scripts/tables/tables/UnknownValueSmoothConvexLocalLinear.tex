@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Unknown optimal value with an exact local linear oracle: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean}{UnknownValueSmoothConvexLocalLinear}.}\label{tab:UnknownValueSmoothConvexLocalLinear}
+\parbox{\linewidth}{\footnotesize In a real Hilbert space, $C$ is closed and convex, $x_0\in C$, and $f$ is differentiable on $C$ with the convex lower model and quadratic upper model of curvature $L\ge0$. A minimizer $x_\star\in C$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$, with $R,\Delta\ge0$. Access comprises exact value--gradient queries and exact point-only minimization of $\langle g,v\rangle$ over $C\cap\overline B(x,r)$, with arbitrary ties. Inputs are $x_0,R$ and $\varepsilon>0$; $L,\Delta$ appear only in the budget. The target is feasible $y$ with $f(y)-f(x_\star)\le\varepsilon$; \textbf{(1)} returns a best-observed point for every seed. The gap bound $\Delta$ need not be bounded by $LR^2$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CertifiedLevelBroxUnknownValue.lean}{Certified\allowbreak{}Level\allowbreak{}Brox\allowbreak{}Unknown\allowbreak{}Value} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CertifiedLevelBroxUnknownValue.md}{(review)} & $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}+\log\!\left(2+\frac{\Delta}{\varepsilon}+LR^2/\varepsilon\right)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Frank--Wolfe \citep[Thm.~1]{uvJaggi2013}\newline Derived bound on $C\cap\overline B(x_0,R)$ & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\right)$; steps $2/(k+2)$, one value--gradient and one local-LMO call per iteration. & \textbf{(1)}: $\mathcal{O}(\sqrt{LR^2/\varepsilon})$ versus $\mathcal{O}(LR^2/\varepsilon)$ when $LR^2/\varepsilon\ge\max\{1,\log^2(2+\Delta/\varepsilon)\}$; same oracle and no $L,f_\star$ input. & \textbf{(1)} pays $\log(2+\Delta/\varepsilon)$: at $L=0$, \textbf{(2)} is exact in one iteration. Needs $\varepsilon$; best-observed rather than last iterate. \\
+\midrule
+\textbf{(3)} BroxGD \citep[Thm.~3.2(ii)]{kvBrox2026v2} & $\mathcal{O}\!\left(1+\frac{LR^2}{\varepsilon}\right)$; $C\subseteq\mathbb R^d$, $R>0$, $\nabla f$ $L$-Lipschitz on an open convex neighborhood of $C$. & \textbf{(1)}: $LR^2/\varepsilon\to\sqrt{LR^2/\varepsilon}$ when $LR^2/\varepsilon\ge\max\{1,\log^2(2+\Delta/\varepsilon)\}$. Adaptivity: no $L$ for certification. Scope: Hilbert spaces; upper model only on $C$. & \textbf{(1)} adds $\log(2+\Delta/\varepsilon)$, which can dominate when $LR^2/\varepsilon$ is small. \\
+\midrule
+\textbf{(4)} Polyak-radius Local LMO \citep[Thm.~4, $\vartheta=1$]{uvRichtarikMahran2026v1} & $\mathcal{O}\!\left(1+\frac{LR^2+G_\star R}{\varepsilon}\right)$; $C\subseteq\mathbb R^d$, globally convex differentiable $f$ with $L$-Lipschitz gradient; exact $f_\star$ supplied. & \textbf{(1)}: $\varepsilon^{-1/2}$ rather than $\varepsilon^{-1}$ for fixed $L,R>0,\Delta,G_\star$ as $\varepsilon\downarrow0$. Adaptivity: no $f_\star$ required. & \textbf{(1)} needs $R$ as input; \textbf{(4)} does not. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $f_\star=f(x_\star)$; $G_\star=\|\nabla f(x_\star)\|$; $\overline B(x,r)$ is the closed radius-$r$ ball. LMO: linear minimization oracle. Costs count all value--gradient and local-LMO calls together.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

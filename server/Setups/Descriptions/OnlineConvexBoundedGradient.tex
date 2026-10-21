@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Online Convex Bounded-Gradient Optimization}
+We consider online convex optimization over a nonempty compact convex set $K\subseteq\mathbb{R}^d$, where $d$ is a nonnegative integer. The public inputs are $K$, $d$, a point $x^0\in K$, a positive integer horizon $T$, and positive bounds $D$ and $G$ on the diameter and loss-gradient norms. Each loss $f_t:\mathbb{R}^d\to\mathbb{R}$ is convex on $K$ and differentiable at its points. At round $t$, querying $x_t\in K$ returns the exact gradient $\nabla f_t(x_t)$. For a prescribed real bound $B$, success requires $\sum_{t=0}^{T-1}(f_t(x_t)-f_t(u))\leq B$ for every $u\in K$ and every randomness realization.
+
+The learner selects one feasible point per round, with the objective of controlling cumulative loss relative to every fixed feasible comparator. The ambient space carries its Euclidean inner product and norm. The loss sequence $(f_t)_{t\geq 0}$ is fixed as part of the problem instance, and the admissible domain, losses, and oracle satisfy the following conditions.
+
+\begin{assumption}[Feasible set and public parameters]
+The set $K$ is compact and convex, $x^0\in K$, and
+\[
+\begin{aligned}
+ d&\in\{0,1,2,\ldots\}, & T&\in\{1,2,\ldots\},\\
+ D&>0, & G&>0.
+\end{aligned}
+\]
+The diameter bound is
+\[
+\|x-y\|\leq D
+\qquad\text{for all }x,y\in K.
+\]
+The complete public input is $(d,K,x^0,D,G,T)$.
+\end{assumption}
+
+\begin{assumption}[Convex losses and bounded gradients]
+For every integer $t\geq 0$, the function $f_t:\mathbb{R}^d\to\mathbb{R}$ is differentiable in the ambient space at every point of $K$. For all $x,y\in K$ and $\lambda\in[0,1]$,
+\[
+\begin{aligned}
+ f_t((1-\lambda)x+\lambda y)
+ &\leq (1-\lambda)f_t(x)+\lambda f_t(y),\\
+ \|\nabla f_t(x)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Sequential exact-gradient access]
+The single oracle, with ID $0$, returns $\nabla f_t(x)$ at any query $x\in K$ made after exactly $t$ previous calls. This identity holds for every query history and every realization of oracle randomness. Each query costs one oracle call. Internal algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+At each round $t\in\{0,\ldots,T-1\}$, the learner chooses $x_t\in K$ using the public inputs, its internal randomness, and the replies from previous rounds, then receives $\nabla f_t(x_t)$. The losses are accessed through this oracle. The horizon supplies a budget of exactly $T$ calls, one per round.
+
+The performance requirement concerns the queried points themselves; there is no additional terminal decision. Given a prescribed bound $B=B(d,K,x^0,D,G,T)\in\mathbb{R}$, success means
+\[
+\sum_{t=0}^{T-1} f_t(x_t)
+-
+\sum_{t=0}^{T-1} f_t(u)
+\leq B
+\qquad\text{for every }u\in K.
+\]
+This inequality must hold for every realization of both the algorithm and oracle randomness, uniformly over all admissible loss sequences and oracles.
+\end{document}

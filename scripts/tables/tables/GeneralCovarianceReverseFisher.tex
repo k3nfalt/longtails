@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Reverse Fisher GD with general shared covariance: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralCovarianceReverseFisher.lean}{GeneralCovarianceReverseFisher}.}\label{tab:GeneralCovarianceReverseFisher}
+\parbox{\linewidth}{\footnotesize An equal-weight mixture $p_\theta=n^{-1}\sum_{i=1}^n\mathcal{N}(\theta_i,\Sigma)$ fits a single teacher $q=\mathcal{N}(\bar\mu,\Sigma)$ in $\mathbb{R}^d$, with $n,d\ge1$, $0<s_{\min}I\preceq\Sigma\preceq s_{\max}I$ and $\max_i\|\theta_i^0-\bar\mu\|\le R$. The oracle returns the exact full gradient of $\mathcal{L}(\theta)=\int\|\nabla_x\log p_\theta-\nabla_x\log q\|^2p_\theta(x)\,dx$. The setup requires positive-step GD from the supplied initialization and its last iterate; the target is $\max_i\|\theta_i^K-\bar\mu\|^2\le\varepsilon$, deterministically, for $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralCovarianceReverseFisherGD.lean}{General\allowbreak Covariance\allowbreak Reverse\allowbreak Fisher\allowbreak GD} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralCovarianceReverseFisherGD.md}{(review)}
+& $\begin{aligned}\mathcal{O}\Bigl(1+&(1+\log n)\kappa^2\\ &\cdot\bigl[\log(1+R^2/s_{\min})\\ &\quad+n\min\{n,d\}s_{\max}/\varepsilon\bigr]\Bigr)\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} GD \citep{srfTyurin2026v1}, Thm.~2.1, Cor.~2.5; rescaled to $\Sigma=\sigma^2I$
+& $\begin{aligned}\mathcal{O}\Bigl(1+&(1+\log n)\\ &\cdot\bigl[\log(1+nR^2/\varepsilon)\\ &\quad+n\min\{n,d\}\sigma^2/\varepsilon\bigr]\Bigr)\end{aligned}$
+& \textbf{(1)}: Scope extends GD analysis to arbitrary SPD covariance, with $\kappa^2$ overhead. At $\Sigma=\sigma^2I$, matches known rate; improves constants and removes the redundant accuracy logarithm from the initialization term.
+& \\
+\midrule
+\textbf{(3)} Derived bound: collapsed means, conjugate gradients \citep{gcrfHestenesStiefel1952}, \S3
+& $\mathcal{O}(d+1)$ exact-gradient calls, including initialization; exact recovery. Same problem and oracle, without the GD-family restriction.
+& \textbf{(1)}: Analyzes GD from arbitrary supplied means; no established problem-class complexity improvement.
+& \textbf{(1)}: Polynomial $\varepsilon^{-1}$ cost versus finite exact recovery. Needs spectral bounds and $R$ for its budget; \textbf{(3)} needs neither, nor $\varepsilon$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $n$: student components; $d$: dimension; $s_{\min},s_{\max}$: covariance spectral bounds; $\kappa=s_{\max}/s_{\min}$; $R$: initial radius; $\varepsilon$: squared-distance tolerance; $\sigma^2$: isotropic covariance scale; GD: gradient descent; SPD: symmetric positive definite. Costs count full population-gradient calls in exact arithmetic.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

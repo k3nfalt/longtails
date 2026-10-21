@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
+  "searched_at": "2026-10-21T20:12:26.104837+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 400 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 40 \\cdot \\log_{2}\\left(2 + \\frac{\\Delta + L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + 300",
+        "oracle": 0,
+        "type": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear.spec.Params → ℕ",
+        "value": "fun p => ⌈400 * √(p.L * p.R ^ 2 / p.ε) + 40 * Real.logb 2 (2 + (p.Δ + p.L * p.R ^ 2) / p.ε)⌉₊ + 300"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 400 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 40 \\cdot \\log_{2}\\left(2 + \\frac{\\Delta + L \\cdot R^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + 300",
+          "oracle": 0,
+          "type": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear.spec.Params → ℕ",
+          "value": "fun p => ⌈400 * √(p.L * p.R ^ 2 / p.ε) + 40 * Real.logb 2 (2 + (p.Δ + p.L * p.R ^ 2) / p.ε)⌉₊ + 300"
+        }
+      ],
+      "module": "LongTails.Theorems.CertifiedLevelBroxUnknownValue",
+      "namespace": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
+      "setup": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.UnknownValueSmoothConvexLocalLinear.spec\n  OracleTemplate.CertifiedLevelBrox.budget",
+      "theorem": "OracleTemplate.CertifiedLevelBrox.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CertifiedLevelBroxUnknownValue",
+      "theorem": "OracleTemplate.CertifiedLevelBrox.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a differentiable convex function over a nonempty closed convex set C in a real Hilbert space. On C, f(y) lies between f(x)+⟨∇f(x),y−x⟩ and that quantity plus (L/2)‖y−x‖², with L≥0. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: Public, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query at any feasible x returns the exact pair (f(x),∇f(x)), for every history and seed. There is no gradient error or sampling assumption.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: spec.admissible, .inl query clause."
+      },
+      {
+        "label": "function_value",
+        "details": "Exact function values accompany gradients in one joint query; they are not separately charged.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: spec.admissible, .inl reply clause; LongTails/Setups/KnownValueSmoothConvexLocalLinear.lean: OracleTemplate.SplitBrox.Query and Reply."
+      },
+      {
+        "label": "linear_minimization",
+        "details": "For feasible x, radius r≥0, and arbitrary direction g, a query returns an exact minimizer of ⟨g,v⟩ over v∈C∩B(x,r). Selection among minimizers may depend on history and seed. Local linear minimizations and joint value-gradient evaluations consume the same oracle budget, one call per query. No projection or membership oracle is supplied.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: spec.admissible, .inr query clause; LongTails/Template.lean: _run and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "L≥0 is hidden from the algorithm. Public inputs are E, R, ε, and x0; Δ≥0 is also hidden, and the optimal objective value is not supplied. The complexity budget may depend on hidden L and Δ.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: Public, Params, spec.publicInput, spec.valid; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is any complete real inner-product space, without a finite-dimensional restriction. A minimizer x⋆ exists with ‖x0−x⋆‖≤R and f(x0)−f(x⋆)≤Δ. R≥0 is public. C need not be bounded or explicitly represented; geometric access is through exact linear minimization on intersections with query-centered balls.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: Public, Instance, spec.admissible, minimizer-existence and local-linear-oracle clauses."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point x must satisfy f(x)−f(x⋆)≤ε for a constrained global minimizer x⋆, with ε>0.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to C.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound hold almost surely under the joint algorithm-seed and oracle-seed law, within the supplied fixed oracle budget. An expectation-only guarantee does not suffice.",
+        "evidence": "LongTails/Setups/UnknownValueSmoothConvexLocalLinear.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth constrained convex minimization is classical, but this setup combines exact linear minimization over arbitrary feasible-set/ball intersections with hidden smoothness and initial-gap bounds, no supplied optimum value, and a shared budget counting both geometric and value-gradient queries."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CertifiedLevelBrox.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CertifiedLevelBroxUnknownValue",
+          "theorem": "OracleTemplate.CertifiedLevelBrox.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
