@@ -77,7 +77,8 @@ structure Setup where
     Oracle (Query (publicInput p)) (Reply (publicInput p)) numOracles → Prop
   successful : {Ω : Type} → [MeasurableSpace Ω] →
     (p : Params) → Instance (publicInput p) →
-    (Ω → Output (publicInput p)) → ProbabilityMeasure Ω → Prop
+    (Ω → Output (publicInput p)) → ProbabilityMeasure Ω → Prop :=
+    fun _ _ _ _ => False
   successfulWithTrace : {Ω : Type} → [MeasurableSpace Ω] →
     (p : Params) → Instance (publicInput p) →
     (Ω → Output (publicInput p) ×

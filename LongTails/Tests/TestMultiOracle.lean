@@ -87,9 +87,25 @@ theorem insufficient_budget : ¬ Convergence spec (fun _ => ![0, 2]) := by
   change (0 : ℕ) = 15 at h
   omega
 
+abbrev missingSuccessSpec : Setup where
+  numOracles := 2
+  Params := Unit
+  Public := Unit
+  Instance _ := Unit
+  Query _ := ℕ
+  Reply _ := ℕ
+  Output _ := ℕ
+  publicInput := id
+  valid _ := True
+  admissible _ _ O := O = oracle
+  allowedAlgorithm _ A := A = algorithm
+
+theorem missing_success (budget : Unit → Fin 2 → ℕ) : ¬ Convergence missingSuccessSpec budget := by
+  rintro ⟨_, hCorrect, _⟩
+  exact hCorrect () True.intro () oracle rfl
+
 abbrev traceSpec : Setup :=
-  { spec with
-    successful := fun _ _ _ _ => False
+  { missingSuccessSpec with
     successfulWithTrace := fun _ _ result _ =>
       ∀ ω, result ω = (15, [((0, 7), 14), ((1, 14), 15)]) }
 
@@ -108,6 +124,7 @@ theorem trace_success : Convergence traceSpec (fun _ => ![1, 1]) := by
 
 #print axioms separate_budgets
 #print axioms insufficient_budget
+#print axioms missing_success
 #print axioms trace_success
 
 end OracleTemplate.MultiOracleTests
