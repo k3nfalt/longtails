@@ -45,7 +45,7 @@ jobs:
         run: ./lint.sh 2>&1 | tee lint.log
 
       - name: Test comparator rejection checks
-        run: python3 -m unittest discover -s tests -p 'test_comparator.py' -v 2>&1 | tee comparator-tests.log
+        run: python3 -m unittest discover -s tests -p 'test*comparator.py' -v 2>&1 | tee comparator-tests.log
 
       - name: Audit convergence results and budgets
         env:
@@ -69,6 +69,28 @@ jobs:
             fi
           } 2>&1 | tee comparator.log
 
+      - name: Audit online results, algorithms, and bounds
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          {
+            if [ -n "$PR_HEAD" ]; then
+              git diff --name-only --diff-filter=A --no-renames -z "$PR_BASE...$PR_HEAD" \
+                -- ':(glob)LongTailsOnline/Theorems/*.lean' > "$RUNNER_TEMP/new-online-theorems"
+              found=false
+              while IFS= read -r -d '' theorem; do
+                found=true
+                python3 -u run_online_comparator.py "$theorem" -j 2
+              done < "$RUNNER_TEMP/new-online-theorems"
+              if [ "$found" = false ]; then
+                echo 'No new online results in this PR; skipping online comparator.'
+              fi
+            else
+              python3 -u run_online_comparator.py -j 2
+            fi
+          } 2>&1 | tee online-comparator.log
+
       - name: Upload verification logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -78,6 +100,7 @@ jobs:
             build.log
             lint.log
             comparator.log
+            online-comparator.log
             comparator-tests.log
           retention-days: 14
 

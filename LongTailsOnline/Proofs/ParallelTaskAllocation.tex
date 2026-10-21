@@ -1,0 +1,311 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\A}{\mathcal A}
+\title{Stationary parallel task allocation: a quota-bucket candidate}
+\author{}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+\noindent\textbf{Verification status.}
+This is a mathematical derivation under review, not a completed Lean or Comparator
+certificate. The setup, a causal measurable policy, its execution through the online
+protocol, prefix statistics, uniform confidence, and confidence validity along the
+actual trajectory are formalized separately. A proved reduction turns a
+deterministic regret bound on the confidence event into an expected-regret bound
+with an additive cost at most one. The schedule cost and the sum of phase costs
+still require Lean proofs before the final theorem can be exported and audited
+by Comparator. The Python implementation is a numerical research prototype.
+Its tests do not certify the stochastic regret theorem below.
+
+The Lean policy uses clipped intervals alone and updates them at phase boundaries,
+after completing the planned quotas. The Python prototype additionally intersects
+raw sub-Gaussian intervals and permits early phase completion. The argument below
+applies to both variants; execution equivalence between the two implementations
+has not been claimed.
+
+\paragraph{Model and criterion.}
+There are $n\ge1$ workers, $B\ge1$ tasks per round, and $K\ge1$ rounds.
+For each worker, observations form an IID sequence; all sequences are mutually
+independent. An observation $X_{i,j}$ is strictly positive almost surely, has
+unknown mean $\mu_i\in(0,1]$, and satisfies
+\[
+ \E\exp(\lambda(X_{i,j}-\mu_i))\le\exp(\sigma^2\lambda^2/2),\qquad\lambda\in\R.
+\]
+The common upper bound $\sigma\ge0$ is known. Observations need not be at most one.
+An action is $a\in\A=\{a\in\mathbb N^n:\sum_i a_i=B\}$; its feedback consists of
+the next $a_i$ observations of worker $i$. There is no feedback before the action.
+Write $\ell_v(a)=\max_i a_i v_i$,
+$L(v)=\min_{a\in\A}\ell_v(a)$, $L^*=L(\mu)$, and
+\[
+ R_K=\sum_{k=1}^K(\ell_\mu(a_k)-L^*).
+\]
+The target is $\E R_K/K$, the expected average proxy regret, not realized makespan regret.
+Every oracle below solves its finite integer minimization exactly. The heap
+implementation selects the $B$ smallest slots $jv_i$, including a capacity
+restriction when specified. Zero weights are permitted, and ties use worker index.
+
+\paragraph{Explicit parameters.}
+Put
+\[
+ d=B/n+n/B,\quad \bar\sigma=\max(1,\sigma),\quad
+ t=\log\bigl(64nB^2K^3(1+\bar\sigma)\bigr),\quad
+ H=1+\bar\sigma\sqrt{2t},\quad \chi=Ht,
+\]
+\[
+ \beta=(1+\bar\sigma)e^{-t},\quad \varepsilon=\sqrt{d/K},\quad
+ J_*=2+\left\lceil\log_2(162\chi B^2K)\right\rceil,\quad
+ P_*=1+\left\lceil\log_2(1+B\sqrt K)\right\rceil.
+\]
+In particular, $t>1$, $\chi\ge1$, and $\beta\le\varepsilon/(16B)$.
+
+\paragraph{Confidence intervals.}
+Maintain nested intervals $[s_i,u_i]$, initially $[0,1]$. Store both the raw
+observations and $Z_{i,j}=\min(X_{i,j},H)$. For $N_i>0$ and a previously valid
+upper endpoint $v_i$, intersect the old interval and $[0,1]$ with the intervals
+centered at the raw and clipped empirical means and having radii
+\[
+ r_i^{\rm raw}=\sigma\sqrt{2t/N_i},\qquad
+ r_i^{\rm clip}=2\sqrt{v_i\chi/N_i}+2\chi/N_i+\beta.
+\]
+No update is made when $N_i=0$. Inside a phase, $v_i$ is frozen at that phase's
+initial upper endpoint. Empty intersections trigger a feasible balanced fallback
+for all remaining rounds. This also specifies the policy outside the confidence event.
+
+\begin{lemma}[Uniform validity]
+With probability at least $1-4nBK e^{-t}$, every interval update through round
+$K$ contains its corresponding mean.
+\end{lemma}
+\begin{proof}
+First consider a bounded random variable $0\le Z\le H$ with mean $\nu$.
+For $|\lambda|H\le1$, the elementary inequality $e^x\le1+x+x^2$ for $|x|\le1$
+and $Z^2\le HZ$ give
+\[
+ \E e^{\lambda(Z-\nu)}
+ \le e^{-\lambda\nu}(1+\lambda\nu+\lambda^2H\nu)
+ \le e^{\lambda^2H\nu}.
+\]
+Independence, exponential Markov, and the choice
+$\lambda=\min\{\sqrt{t/(N\nu H)},1/H\}$ give, in both tails,
+\[
+ \Prb\left\{\left|N^{-1}\sum_{j=1}^N Z_j-\nu\right|
+       >2\sqrt{\nu Ht/N}+2Ht/N\right\}\le2e^{-t}.
+\]
+For $\nu=0$, nonnegativity implies $Z=0$ almost surely and the assertion follows
+directly. To check the optimization, if the square-root branch is selected,
+the quadratic MGF term is $t$ and the square-root part of the threshold contributes
+$2t$ to the negative exponent. On the other branch $N\nu/H\le t$, while the
+linear threshold term contributes $2t$. Replacing $\lambda$ by $-\lambda$
+proves the other tail.
+
+For $Z=\min(X,H)$, let $\lambda=\sqrt{2t}/\bar\sigma$. Pointwise,
+$(X-H)_+\le e^{\lambda(X-H)}/\lambda$. Since $\mu\le1$,
+\[
+ 0\le\mu-\nu\le\lambda^{-1}
+      e^{-\lambda(H-\mu)+\sigma^2\lambda^2/2}
+ \le\frac{\bar\sigma}{\sqrt{2t}}e^{-t}\le\beta.
+\]
+Thus $\nu\le\mu\le v_i$ implies the clipped radius stated above. The raw
+sub-Gaussian bound has failure probability $2e^{-t}$ for each prefix as well.
+Take a union over workers, both interval constructions, and all prefix lengths
+$1\le N\le BK$. On this single event, induction justifies every adaptive
+choice of the previously valid $v_i$, without conditioning on adaptive counts.
+\end{proof}
+
+\paragraph{Policy.}
+Set $\theta=B$. At a phase boundary compute the upper oracle value $V=L(u)$ on
+the currently active set. Permanently remove each worker with $s_i>V$, using
+strict inequality, and recompute the oracle values. Set
+\[
+ C_i=\begin{cases}\min\{B,\lfloor V/s_i\rfloor\},&s_i>0,\\B,&s_i=0,\end{cases}
+ \qquad D_i=C_i(u_i-s_i)
+\]
+on the active set, and $C_i=D_i=0$ elsewhere. If every $D_i\le\theta/2$, halve
+$\theta$ and repeat this check. Once $\theta\le\varepsilon$ or $V\le\varepsilon$,
+use the upper oracle for all remaining rounds. Otherwise start a phase and freeze
+$u,s,V,C,\theta$ for its allocation schedule. Give each active worker the quota
+\[
+ q_i=\left\lceil256\chi u_iC_i^2/\theta^2+32\chi C_i/\theta\right\rceil+1.
+\]
+Group workers by $2^j\le q_i<2^{j+1}$. In each group write $q=2^j$ and let $m$
+be its size. Set $b=\min\{\min_i C_i,2q,\max(1,\lfloor B/m\rfloor)\}$.
+Explore each worker for $2q$ new observations, in increments of at most $b$,
+splitting the group into chunks of at most $\lfloor B/b\rfloor$ workers.
+Process groups in increasing $j$, and chunks in worker order. This specifies
+an exploration vector $e$ satisfying $e_i\le C_i$ and $\sum_i e_i\le B$ each round.
+
+For every such vector, choose the upper-oracle residual allocation with capacities
+$C_i-e_i$ and residual batch size $B-\sum_i e_i$. Play exploration plus residual.
+Update intervals after receiving the entire batch, using the phase's frozen $u$
+in its clipped radius. A phase may finish early when the updated geometry satisfies
+$\max_i D_i\le\theta/2$. Only then halve $\theta$ and start the next phase.
+At an exhausted horizon, record a pending phase as unfinished. Exhausting a quota
+schedule without reaching its target triggers fallback, never a forced transition.
+There is no positive-lower-bound warm-up in this variant.
+
+The conservative capacity $\lfloor V/u_i\rfloor$ cannot replace $C_i$ in the
+precision test. For $B=1$, $s=(0.2,0)$, $u=(0.2,1)$, and $\mu=(0.2,0.1)$,
+these conservative capacities are $(1,0)$ and their corresponding uncertainties
+are both zero. Nevertheless the upper oracle chooses worker one and has regret
+$0.1$. Optimistic capacities correctly retain uncertainty on worker two.
+
+\begin{lemma}[Oracle and interval geometry]
+On the simultaneous confidence event, $L(s)\le L^*\le V$,
+$0\le V-L(s)\le\max_i D_i$, and every true optimal allocation avoids permanently
+eliminated workers. If $\max_i D_i\le\theta$, the upper oracle has regret at most
+$\theta$, and every allocation satisfying $a_i\le C_i$ has regret at most $2\theta$.
+For positive upper endpoints on $m$ active workers,
+\[
+ V\sum_{i\text{ active}}u_i^{-1}\le B+m-1\le B+n.
+\]
+Throughout execution, $V\le G:=\lceil B/n\rceil\le B/n+1$.
+\end{lemma}
+\begin{proof}
+Monotonicity gives the sandwich. A lower-oracle minimizer $a^-$ satisfies
+$a_i^-s_i\le L(s)\le V$, hence $a_i^-\le C_i$, including $s_i=0$. Therefore
+$V\le\ell_u(a^-)\le L(s)+\max_iD_i$.
+An eliminated worker has $\mu_i\ge s_i>V\ge L^*$ and cannot occur in any true
+optimum. An upper-oracle minimizer itself never uses a worker with $s_i>V$,
+so elimination does not increase $V$. Nested upper endpoints then make $V$
+nonincreasing. Initially, balanced allocation at $u_i=1$ gives $V=G$.
+
+For a capacity-feasible action, $a_is_i\le V$ and
+$a_i(\mu_i-s_i)\le C_i(u_i-s_i)\le\theta$. Consequently its true loss is at most
+$V+\theta$, and its regret at most $2\theta$. The upper oracle has loss at most $V$.
+
+For the harmonic inequality let $c_i=\lceil V/u_i\rceil-1$. Every slot counted
+in $c_i$ has cost strictly below $V$. If $\sum_i c_i\ge B$, trimming those counts
+to total $B$ would give an allocation of loss strictly below the optimum $V$.
+Thus $\sum_i c_i\le B-1$. Now sum $V/u_i\le c_i+1$.
+The case $V=0$ is immediate; under the good event and $B\ge1$, $V>0$.
+\end{proof}
+
+\begin{lemma}[Feasible residual filling]
+Let $b=\operatorname{RAS}(u,B)$, $b_i\le C_i$, and $e_i\le C_i$, $\sum_i e_i\le B$.
+There is a residual $r$ with $r_i\le b_i$, $e_i+r_i\le C_i$, and
+$\sum_i(e_i+r_i)=B$. In particular the capped residual oracle has loss at most $V$.
+The resulting action has loss at most $V+\max_i e_i u_i$.
+\end{lemma}
+\begin{proof}
+The residual capacities $\min\{b_i,C_i-e_i\}$ sum to at least
+$\sum_i(b_i-e_i)=B-\sum_i e_i$. Trim them to the required residual batch.
+This is a feasible residual of loss at most $\ell_u(b)=V$.
+Finally $\max_i(e_i+r_i)\mu_i\le\max_i e_i u_i+\max_i r_i u_i$.
+\end{proof}
+
+\begin{lemma}[Quota-bucket scheduling]
+For positive quotas and capacities let
+$Q=\max_i q_i u_i$, $A=\max_i q_i/C_i$, and let $J$ be the number of nonempty
+dyadic groups. The complete exploration schedule satisfies
+\[
+ N_{\rm round}\le4\sum_iq_i/B+2J(A+1),\qquad
+ \sum_{\rm rounds}\max_i e_i u_i\le4Q(J+n/B).
+\]
+It collects between $q_i$ and $2q_i$ observations of each worker.
+\end{lemma}
+\begin{proof}
+In a group $q\le q_i<2q$, hence $u_i\le Q/q$.
+If $m\le B$, every worker fits in one chunk. There are $\lceil2q/b\rceil$ rounds,
+at most $2q/\min_iC_i+2+2q/\lfloor B/m\rfloor
+\le2A+2+4mq/B$. Total exploration load is at most
+$(2q+b)Q/q\le4Q$.
+If $m>B$, $b=1$ and the group needs $2q\lceil m/B\rceil\le4mq/B$ rounds, with
+total exploration load at most $4Qm/B$. Sum over the groups and use
+$mq\le\sum_{i\text{ in group}}q_i$.
+\end{proof}
+
+\begin{lemma}[Completion and phase costs]
+Every phase starts with $\max_iD_i\le\theta$. If its complete quota schedule fits
+within the horizon, the confidence event implies completion at its target.
+With $G=\lceil B/n\rceil$, its regret, including any incomplete prefix, is at most
+\[
+ \begin{cases}
+ 20000\chi Jd,&\theta\ge V,\\
+ 21792\chi Jd/\theta+12J\theta,&\theta<V.
+ \end{cases}
+\]
+\end{lemma}
+\begin{proof}
+The invariant holds initially since $C_i=B$, $u_i-s_i=1$ and $\theta=B$.
+Nested intervals and decreasing $V$ make capacities and uncertainties nonincreasing.
+After a completed phase it follows from the transition test.
+
+After $q_i$ new samples, $N_i\ge q_i$ and the clipped interval's width is at most
+\[
+ 4\sqrt{u_i\chi/N_i}+4\chi/N_i+2\beta
+ \le\theta/(4C_i)+\theta/(8C_i)+\theta/(8C_i)=\theta/(2C_i).
+\]
+Updated capacities are at most the frozen $C_i$, proving completion.
+
+Since $C_i u_i\le V+\theta$, the quotas imply
+\[
+ q_i u_i\le Q_0:=256\chi(V+\theta)^2/\theta^2+32\chi(V+\theta)/\theta+2,
+\]
+\[
+ q_i/C_i\le A_0:=256\chi(V+\theta)/\theta^2+32\chi/\theta+2,
+ \qquad \sum_iq_i\le Q_0(B+n)/V.
+\]
+The last inequality uses the harmonic oracle lemma. By the two regret bounds,
+the phase costs at most both $2\theta N_{\rm round}$ and
+$4Q_0(J+n/B)+(V-L^*)N_{\rm round}$, where $V-L^*\le\min(V,\theta)$.
+
+For $\theta\ge V$, $Q_0\le1090\chi$ and $A_0\le544\chi/\theta+2$.
+Substitution in the latter bound gives at most
+$9808\chi J(1+n/B)+6JG\le20000\chi Jd$.
+For $\theta<V$, $Q_0\le1090\chi V^2/\theta^2$ and
+$A_0\le544\chi V/\theta^2+2$.
+Substitution in the former bound gives at most
+$10896\chi JV(1+n/B)/\theta+12J\theta$.
+Use $V(1+n/B)\le(B/n+1)(1+n/B)=d+2\le2d$.
+
+All bounds also hold for an unfinished phase: its frozen schedule extends
+deterministically to a complete schedule, every summand of both bounding costs
+is nonnegative, and no confidence assertion after the experimental horizon is used.
+\end{proof}
+
+\begin{theorem}[Candidate upper bound]
+The policy described above satisfies
+\[
+ \frac{\E R_K}{K}\le
+ \min\left\{B,\frac{100000\chi J_*(P_*+1)(d+\sqrt{dK})+1}{K}\right\}.
+\]
+\end{theorem}
+\begin{proof}
+Any started phase has $\theta>\varepsilon$. Its quotas are bounded by
+$256\chi B^2/\varepsilon^2+32\chi B/\varepsilon+2
+\le162\chi B^2K$, so $J\le J_*$. There are at most $P_*$ started phases.
+The geometric precisions give $\sum_{\rm fine}1/\theta\le2/\varepsilon$.
+Every fine precision is below $V\le G$, so $\sum_{\rm fine}\theta\le2G$.
+Thus the exploration regret on the good event is at most
+\[
+ 20000\chi J_*P_*d+43584\chi J_*d/\varepsilon+24J_*G.
+\]
+The final exploitation regret is at most $K\varepsilon$: stopping on precision
+uses the interval lemma, and stopping on $V$ uses $\ell_\mu(\operatorname{RAS}(u))\le V$.
+This also covers a run which starts directly in exploitation.
+Use $G\le3d/2$, $d/\varepsilon=K\varepsilon=\sqrt{dK}$, and $\chi,J_*\ge1$.
+On the complement event, every feasible action still has regret between zero
+and $B$, so its contribution to expectation is at most
+$BK\cdot4nBK e^{-t}\le1$. Integrability follows from $0\le R_K\le BK$.
+\end{proof}
+
+\paragraph{Lower-bound comparison and limits.}
+For $n\ge2$ and $K\ge\max\{B/n,n/B\}$, the stationary specialization of
+Theorem 13 of \href{https://arxiv.org/abs/2610.18265}{Begunov et al. (2026)}
+gives $\Omega(\sqrt{nK/B})$ for $B<n$ and $\Omega(\sqrt{BK/n})$ for $B\ge n$.
+Its positive observations are bounded by one, so they are a subclass of the
+present model for a fixed suitable sub-Gaussian parameter. Since
+$d$ is within a factor two of $\max\{B/n,n/B\}$, the candidate bound matches
+these powers of $n,B,K$ up to logarithmic factors for fixed $\sigma>0$.
+For smaller fixed positive $\sigma$, scale the bounded hard instances;
+the constant in the lower bound changes. This comparison does not establish
+optimal dependence on $\sigma$, a bound without logarithms, or a nonstationary result.
+In the degenerate case $n=1$, regret is exactly zero.
+The full stochastic theorem and its execution connection still require Lean
+formalization and Comparator verification.
+\end{document}

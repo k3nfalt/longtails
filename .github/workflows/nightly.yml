@@ -46,6 +46,7 @@ jobs:
           Build: ./build.sh passed
           Lint: ./lint.sh passed
           Audit: python3 -u run_comparator.py -j 2 passed
+          Online audit: python3 -u run_online_comparator.py -j 2 passed
           Permitted axioms: propext, Classical.choice, Quot.sound
           Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT
           EOF

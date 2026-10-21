@@ -3,6 +3,17 @@
 Read these instructions before working in this repository. They record the user's
 project preferences; newer explicit user requests take precedence.
 
+## Library scope
+
+- `LongTails/` contains oracle optimization; `LongTailsOnline/` contains online learning.
+  Both libraries share the pinned toolchain, dependencies, and Comparator engine.
+- The path, `execute`, `Convergence`, and budget rules below describe `LongTails/`.
+  Online paths, execution, result statements, bounds, and audit commands are specified
+  in `LongTailsOnline/AGENTS.md`. General style and mathematical integrity rules apply
+  to both libraries. Online probability and dependence models follow their own setups.
+- `LongTailsOnline/Template.lean` contains the online protocol and its supporting
+  lemmas. Keep application algorithms and proofs in the online library.
+
 ## File layout and style
 
 - Use UpperCamelCase for Lean module filenames and new module directories

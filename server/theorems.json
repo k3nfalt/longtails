@@ -1718,6 +1718,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{4 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{8 \\cdot L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}} \\right\\rceil_{+} + 1",
+      "oracle": 0,
+      "type": "LongTails.Setups.StochasticSmoothNonconvex.spec.Params → ℕ",
+      "value": "fun p => ⌈4 * p.L * p.Δ / p.ε ^ 2 + 8 * p.L * p.Δ * p.σ ^ 2 / p.ε ^ 4⌉₊ + 1"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{4 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{8 \\cdot L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌈4 * p.L * p.Δ / p.ε ^ 2 + 8 * p.L * p.Δ * p.σ ^ 2 / p.ε ^ 4⌉₊ + 1"
+      }
+    ],
+    "module": "LongTails.Theorems.SgdNonconvex",
+    "namespace": "LongTails.Setups.StochasticSmoothNonconvex",
+    "setup": "LongTails.Setups.StochasticSmoothNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticSmoothNonconvex.spec OracleTemplate.StochasticNonconvex.budget",
+    "theorem": "OracleTemplate.StochasticNonconvex.result"
+  },
+  {
+    "budget": {
       "latex": "4 \\cdot \\left\\lceil \\frac{2^{18} \\cdot L^{2}}{\\mu x \\cdot \\mu y} \\cdot \\left(3 + \\frac{2^{24} \\cdot L \\cdot \\sigma^{2}}{\\mu x \\cdot \\mu y \\cdot \\varepsilon}\\right) \\cdot \\left(2 + \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+} + 2",
       "oracle": 0,
       "type": "LongTails.Setups.StochasticTwoSidedPL.spec.Params → ℕ",

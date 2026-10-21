@@ -1,6 +1,6 @@
 name = "LongTails"
 version = "0.1.0"
-defaultTargets = ["LongTails"]
+defaultTargets = ["LongTails", "LongTailsOnline"]
 
 [[require]]
 name = "mathlib"
@@ -13,11 +13,15 @@ rev = "7a751b750301cb7ae12b59be70b5fb38b0e2d39a"
 name = "LongTails"
 globs = ["LongTails.*"]
 
+[[lean_lib]]
+name = "LongTailsOnline"
+globs = ["LongTailsOnline.*"]
+
 [[lean_exe]]
 name = "runLinterNoDocString"
 root = "RunLinterNoDocString"
 srcDir = "tools"
-needs = ["LongTails"]
+needs = ["LongTails", "LongTailsOnline"]
 supportInterpreter = true
 
 [[require]]
