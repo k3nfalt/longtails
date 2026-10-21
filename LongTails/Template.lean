@@ -79,12 +79,6 @@ structure Setup where
     (p : Params) → Instance (publicInput p) →
     (Ω → Output (publicInput p)) → ProbabilityMeasure Ω → Prop :=
     fun _ _ _ _ => False
-  successfulWithTrace : {Ω : Type} → [MeasurableSpace Ω] →
-    (p : Params) → Instance (publicInput p) →
-    (Ω → Output (publicInput p) ×
-      List ((Fin numOracles × Query (publicInput p)) × Reply (publicInput p))) →
-    ProbabilityMeasure Ω → Prop :=
-    fun p I result P => successful p I (fun ω => (result ω).1) P
   allowedAlgorithm : (p : Public) → Algorithm (Query p) (Reply p) (Output p) numOracles → Prop :=
     fun _ _ => True
 
@@ -97,8 +91,8 @@ def Convergence (S : Setup)
         S.admissible p I oracle →
           let A := makeAlgorithm (S.publicInput p)
           let result := fun seed : A.Seed × ((k : ℕ) → oracle.Seed k) =>
-            executeWithTrace oracle A (budget p) seed.1 seed.2
-          S.successfulWithTrace p I result
+            execute oracle A (budget p) seed.1 seed.2
+          S.successful p I result
             ⟨(A.law : Measure _).prod (oracle.law : Measure _), inferInstance⟩) ∧
     ∀ p, S.valid p → S.allowedAlgorithm (S.publicInput p) (makeAlgorithm (S.publicInput p))
 
