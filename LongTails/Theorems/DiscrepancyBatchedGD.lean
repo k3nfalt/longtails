@@ -22,6 +22,6 @@ theorem result : Convergence LongTails.Setups.RelativeDiscrepancyPL.spec budget 
   · rintro ⟨⟨⟩, ξ⟩
     obtain ⟨y, hy, hacc⟩ := (execute_accuracy p f O hp ho ξ K (by simpa only [show p.L / (3 * p.μ / 4) = 4 * p.L / (3 * p.μ) by ring] using hK))
     have he : f y = f xstar := le_antisymm (hy (Set.mem_univ _)) (hmin (Set.mem_univ _))
-    simpa only [Nat.mul_comm, budget, he, show p.L / (3 * p.μ / 4) = 4 * p.L / (3 * p.μ) by ring] using hacc
+    simpa only [execute, Nat.mul_comm, budget, he, show p.L / (3 * p.μ / 4) = 4 * p.L / (3 * p.μ) by ring] using hacc
 
 end OracleTemplate.RelativeDiscrepancyPL

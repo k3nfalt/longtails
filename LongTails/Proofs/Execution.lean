@@ -12,8 +12,8 @@ lemma execute_eq_of_answer_eq {Query Reply Output : Type*}
     (A : Algorithm Query Reply Output 1) (K : ℕ) (seed : A.Seed) (oracleSeed : (k : ℕ) → oracle.Seed k) :
     execute oracle A (fun _ => K) seed oracleSeed =
       execute { answer := fun _ query _ => g query.2 } A (fun _ => K) seed := by
-  unfold execute
-  congr 1
+  unfold execute executeWithTrace
+  congr 2
   funext k query
   obtain ⟨i, query⟩ := query
   have hi : i = 0 := Subsingleton.elim _ _
@@ -27,7 +27,7 @@ lemma execute_indexed {Query Reply Output : Type*} (oracle : Oracle Query Reply)
       A.output ((fun sc : A.State × ℕ =>
           (A.update sc.1 (oracle.answer sc.2 (A.query sc.1) (ξ sc.2)), sc.2 + 1))^[K]
           (A.initial seed, 0)).1 := by
-  unfold execute
+  unfold execute executeWithTrace
   simp only [Fin.sum_univ_one]
   generalize A.initial seed = state
   generalize (0 : ℕ) = call
@@ -35,7 +35,7 @@ lemma execute_indexed {Query Reply Output : Type*} (oracle : Oracle Query Reply)
   | zero => rfl
   | succ k ih =>
       rw [Function.iterate_succ_apply]
-      change (if k + 1 = 0 then _ else _) = _
+      change (if k + 1 = 0 then (A.output state, []) else _).1 = _
       simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, ite_false]
       have hr : Function.update (fun _ : Fin 1 => k + 1) (A.query state).1 k = fun _ => k := by
         funext i
@@ -72,7 +72,7 @@ lemma execute_eq_of_safe_prefix {Query Reply Output : Type*} {n : ℕ}
     (hsafe : ∀ k, k < T → 0 < remaining k (A.query (state k)).1)
     (houtput : ∀ k, T ≤ k → A.output (state k) = output)
     (hT : T ≤ ∑ i, budget i) : execute O A budget seed ξ = output := by
-  unfold execute
+  unfold execute executeWithTrace
   generalize hf : (∑ i, budget i) = fuel
   have hbound : T ≤ fuel := hf ▸ hT
   rw [← hstate, ← hremaining]
@@ -82,7 +82,8 @@ lemma execute_eq_of_safe_prefix {Query Reply Output : Type*} {n : ℕ}
   induction fuel generalizing call with
   | zero => exact houtput call (by omega)
   | succ fuel ih =>
-      change (if remaining call (A.query (state call)).1 = 0 then _ else _) = output
+      change (if remaining call (A.query (state call)).1 = 0 then
+        (A.output (state call), []) else _).1 = output
       split_ifs with hz
       · exact houtput call (by by_contra h; have := hsafe call (by omega); omega)
       · dsimp only
@@ -93,9 +94,9 @@ lemma convergence_of_public_budget {S : Setup} (B : S.Public → ℕ)
     (h : ∃ make : (p : S.Public) → Algorithm (S.Query p) (S.Reply p) (S.Output p) S.numOracles,
       (∀ p, S.valid p → ∀ I O, S.admissible p I O →
         let A := make (S.publicInput p)
-        S.successful p I
+        S.successfulWithTrace p I
           (fun seed : A.Seed × ((k : ℕ) → O.Seed k) =>
-            execute O A (fun _ => B (S.publicInput p)) seed.1 seed.2)
+            executeWithTrace O A (fun _ => B (S.publicInput p)) seed.1 seed.2)
           ⟨(A.law : Measure _).prod (O.law : Measure _), inferInstance⟩) ∧
       ∀ p, S.valid p → S.allowedAlgorithm (S.publicInput p) (make (S.publicInput p))) :
     Convergence S (fun p _ => B (S.publicInput p)) := h
@@ -104,8 +105,8 @@ lemma convergence_of_call_budget {S : Setup} (budget : S.Params → ℕ)
     (h : ∃ make : (p : S.Public) → Algorithm (S.Query p) (S.Reply p) (S.Output p) S.numOracles,
       (∀ p, S.valid p → ∀ K, budget p ≤ K → ∀ I O, S.admissible p I O →
         let A := make (S.publicInput p)
-        S.successful p I
-          (fun seed : A.Seed × ((k : ℕ) → O.Seed k) => execute O A (fun _ => K) seed.1 seed.2)
+        S.successfulWithTrace p I
+          (fun seed : A.Seed × ((k : ℕ) → O.Seed k) => executeWithTrace O A (fun _ => K) seed.1 seed.2)
           ⟨(A.law : Measure _).prod (O.law : Measure _), inferInstance⟩) ∧
       ∀ p, S.valid p → S.allowedAlgorithm (S.publicInput p) (make (S.publicInput p))) :
     Convergence S (fun p _ => budget p) := by
@@ -116,9 +117,9 @@ lemma convergence_of_block_budget {S : Setup} (B : S.Params → ℕ) (m : S.Publ
     (h : ∃ make : (p : S.Public) → Algorithm (S.Query p) (S.Reply p) (S.Output p) S.numOracles,
       (∀ p, S.valid p → ∀ N, B p ≤ N → ∀ I O, S.admissible p I O →
         let A := make (S.publicInput p)
-        S.successful p I
+        S.successfulWithTrace p I
           (fun seed : A.Seed × ((k : ℕ) → O.Seed k) =>
-            execute O A (fun _ => m (S.publicInput p) * N) seed.1 seed.2)
+            executeWithTrace O A (fun _ => m (S.publicInput p) * N) seed.1 seed.2)
           ⟨(A.law : Measure _).prod (O.law : Measure _), inferInstance⟩) ∧
       ∀ p, S.valid p → S.allowedAlgorithm (S.publicInput p) (make (S.publicInput p))) :
     Convergence S (fun p _ => m (S.publicInput p) * B p) := by

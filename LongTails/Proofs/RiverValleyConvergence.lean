@@ -110,8 +110,8 @@ theorem convergence_of_le (b : Params → ℕ)
         fun ω => ‖gradF K gh φ Jφ A (schedSeq g (schedOf η ηc ω.1.val) q.x0 ω.2 (ω.1.val + Kc))‖ := by
       funext seed; rw [hexec seed.1 seed.2, hgrad]
     have hmo := measurable_sd_out hgm η ηc T Kc q.x0
-    refine ⟨by rw [hout]; exact hmo, ?_⟩
-    rw [hfun]
+    refine ⟨by erw [hout]; exact hmo, ?_⟩
+    erw [hfun]
     change Integrable (fun ω : Fin (T + 1) × (ℕ → q.Ω) =>
         ‖gradF K gh φ Jφ A (schedSeq g (schedOf η ηc ω.1.val) q.x0 ω.2 (ω.1.val + Kc))‖)
         ((PMF.uniformOfFintype (Fin (T + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧

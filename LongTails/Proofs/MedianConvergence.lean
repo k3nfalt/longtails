@@ -114,11 +114,11 @@ lemma convergence : Convergence LongTails.Setups.SymmetricFirstMomentNonconvex.s
     funext ω
     exact hexec ω.1 ω.2
   change Measurable _ ∧ Integrable _ _ ∧ _
-  rw [hout]
+  erw [hout]
   refine ⟨hmout, ?_⟩
   have hfun := congrArg (fun out => fun ω => ‖gradient f (out ω)‖) hout
   dsimp only at hfun
-  rw [hfun]
+  erw [hfun]
   change Integrable (fun ω : Fin (cfg.K + 1) × (ℕ → q.Ω) =>
       ‖gradient f (X cfg (oracle g) q.x0 0 (block ω.2) ω.1.val)‖)
       ((PMF.uniformOfFintype (Fin (cfg.K + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧

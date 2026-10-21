@@ -231,8 +231,8 @@ theorem convergence : Convergence LongTails.Setups.PLHessianLipschitzKurtosis.sp
         fun ω => f (sgdSeq g η q.x0 ω.2 (Ta + ω.1.val)) - f u := by
       funext seed; rw [hexec seed.1 seed.2]
     refine ⟨?_, u, hmin, ?_⟩
-    · rw [hout]; exact measurable_window_out hgm η Ta Tb q.x0
-    rw [hfun]
+    · erw [hout]; exact measurable_window_out hgm η Ta Tb q.x0
+    erw [hfun]
     change Integrable (fun ω : Fin (Tb + 1) × (ℕ → q.Ω) =>
         f (sgdSeq g η q.x0 ω.2 (Ta + ω.1.val)) - f u)
         ((PMF.uniformOfFintype (Fin (Tb + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧

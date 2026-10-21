@@ -14,6 +14,6 @@ theorem result : Convergence LongTails.Setups.QuadraticTemporalDiscrepancy.spec 
   intro p hp K hK I O ho
   refine Filter.Eventually.of_forall ?_
   · rintro ⟨⟨⟩, ξ⟩
-    simpa only [budget, one_div, ← Real.sqrt_inv, inv_div] using (execute_accuracy p I O hp ho ξ K (by simpa only [one_div, ← Real.sqrt_inv, inv_div] using hK))
+    simpa only [execute, budget, one_div, ← Real.sqrt_inv, inv_div] using (execute_accuracy p I O hp ho ξ K (by simpa only [one_div, ← Real.sqrt_inv, inv_div] using hK))
 
 end OracleTemplate.TemporalDiscrepancy

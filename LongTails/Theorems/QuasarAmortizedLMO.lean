@@ -18,6 +18,6 @@ theorem result : Convergence LongTails.Setups.QuasarAmortizedLMO.spec budget := 
   · rintro ⟨⟨⟩, ξ⟩
     obtain ⟨v, hv, hvmin, hfeas, hacc⟩ := (execute_accuracy p f O hp ho ξ K hK)
     have he : f v = f u := le_antisymm (hvmin hu) (hmin hv)
-    exact ⟨hfeas, by simpa only [Nat.mul_comm, budget, he] using hacc⟩
+    exact ⟨hfeas, by simpa only [execute, Nat.mul_comm, budget, he] using hacc⟩
 
 end OracleTemplate.QuasarAmortizedLMO

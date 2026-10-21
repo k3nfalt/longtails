@@ -23,6 +23,6 @@ theorem result : Convergence LongTails.Setups.SimilarFiniteSumQuasar.spec budget
   obtain ⟨u, hmin, hacc⟩ := execution_accuracy p f O hp ho
   refine ⟨u, hmin, Filter.Eventually.of_forall ?_⟩
   rintro ⟨seed, ξ⟩
-  simpa only [budget, ← budget_formula p hp.2.2.1.ne', makeAlgorithm, one_mul] using hacc seed ξ
+  simpa only [execute, budget, ← budget_formula p hp.2.2.1.ne', makeAlgorithm, one_mul] using hacc seed ξ
 
 end OracleTemplate.SimilarQuasar

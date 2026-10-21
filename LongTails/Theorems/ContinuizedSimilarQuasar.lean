@@ -25,6 +25,7 @@ theorem result : Convergence LongTails.Setups.ContinuizedSimilarQuasar.spec budg
         (run p g (epochs p) (p.x0, p.x0) seed).1 := by
     rw [hK, execute_eq_of_answer_eq O g (fun k ix ξ => ho.2.1 k ix.1 ix.2 ξ),
       execute_accelerated (g := g)]
+  simp only [execute] at he
   refine ⟨u, hmin, ?_, ?_⟩
   · simp only [he]
     exact hi.comp_fst (O.law : Measure ((k : ℕ) → O.Seed k))

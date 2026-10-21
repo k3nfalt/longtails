@@ -34,6 +34,17 @@ def zeroOracle : Oracle ℕ ℕ 2 where
 theorem adaptive_calls :
     execute zeroOracle algorithm ![2, 3] () (fun _ => ()) = 0 := by decide
 
+theorem ordered_trace :
+    executeWithTrace oracle algorithm ![1, 1] () (fun _ => ()) =
+      (15, [((0, 7), 14), ((1, 14), 15)]) := by decide
+
+theorem empty_trace :
+    executeWithTrace oracle algorithm ![0, 0] () (fun _ => ()) = (0, []) := rfl
+
+theorem trace_stops_at_exhausted_oracle :
+    executeWithTrace zeroOracle algorithm ![2, 3] () (fun _ => ()) =
+      (0, [((0, 7), 0), ((0, 7), 0)]) := by decide
+
 def stochasticOracle (P : ProbabilityMeasure (ℕ → Bool)) : Oracle ℕ ℕ 2 where
   Seed := fun _ => Bool
   law := P
@@ -76,7 +87,27 @@ theorem insufficient_budget : ¬ Convergence spec (fun _ => ![0, 2]) := by
   change (0 : ℕ) = 15 at h
   omega
 
+abbrev traceSpec : Setup :=
+  { spec with
+    successful := fun _ _ _ _ => False
+    successfulWithTrace := fun _ _ result _ =>
+      ∀ ω, result ω = (15, [((0, 7), 14), ((1, 14), 15)]) }
+
+theorem trace_success : Convergence traceSpec (fun _ => ![1, 1]) := by
+  refine ⟨fun _ => algorithm, ?_, fun _ _ => rfl⟩
+  intro p _ I O hO
+  change O = oracle at hO
+  subst O
+  change ∀ seed : Unit × (ℕ → Unit),
+    executeWithTrace oracle algorithm ![1, 1] seed.1 seed.2 =
+      (15, [((0, 7), 14), ((1, 14), 15)])
+  intro seed
+  have hseed : seed = ((), fun _ => ()) := Subsingleton.elim _ _
+  rw [hseed]
+  exact ordered_trace
+
 #print axioms separate_budgets
 #print axioms insufficient_budget
+#print axioms trace_success
 
 end OracleTemplate.MultiOracleTests

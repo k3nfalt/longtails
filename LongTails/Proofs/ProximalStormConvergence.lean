@@ -216,14 +216,14 @@ theorem convergence : Convergence LongTails.Setups.StrongGrowthMeanSquaredSmooth
           s.1 s.2) = fun s => (outerRun g lam eta a T0 (Wm + 1) B q.x0 (seedIndex s.1) s.2 K).2.1 := by
     funext s; exact hexec s.1 s.2
   refine ⟨?_, xstar, hmin, ?_⟩
-  · rw [hout]; exact measurable_outerOut hgm lam eta a T0 Wm B K q.x0
+  · erw [hout]; exact measurable_outerOut hgm lam eta a T0 Wm B K q.x0
   have hfun : (fun s : (proximalStorm lam eta a T0 Wm B K q.x0).Seed × ((k : ℕ) → q.Ω) =>
       f (execute ({ Seed := fun _ => q.Ω, law := P, answer := fun _ (_, z) ω =>
         (g z.1 ω, g z.2 ω) } : Oracle (q.E × q.E) (q.E × q.E))
         (proximalStorm lam eta a T0 Wm B K q.x0) (fun _ => N) s.1 s.2) - f xstar) =
       fun s => f (outerRun g lam eta a T0 (Wm + 1) B q.x0 (seedIndex s.1) s.2 K).2.1 - f xstar := by
     funext s; rw [hexec s.1 s.2]
-  rw [hfun]
+  erw [hfun]
   change Integrable (fun s : (Fin K → Fin (Wm + 1)) × (ℕ → q.Ω) =>
       f (outerRun g lam eta a T0 (Wm + 1) B q.x0 (seedIndex s.1) s.2 K).2.1 - f xstar)
       ((PMF.uniformOfFintype (Fin K → Fin (Wm + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧

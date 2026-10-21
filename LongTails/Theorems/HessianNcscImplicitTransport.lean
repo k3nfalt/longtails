@@ -76,7 +76,7 @@ theorem result : Convergence LongTails.Setups.StochasticHessianNcsc.spec budget 
       fun ω => outRec cfg q.x0 q.y0 ox oy ω.2 ω.1.val cfg.T := by
     funext seed; rw [hexec seed.1 seed.2]
   refine ⟨?_, ⟨ystar H, H.ystar_max⟩, fun ys hys => ?_⟩
-  · rw [hout]; exact measurable_out cfg q.x0 q.y0 hmx hmy
+  · erw [hout]; exact measurable_out cfg q.x0 q.y0 hmx hmy
   have hys : ys = ystar H := funext fun x => H.ystar_unique x (ys x) (hys x)
   subst hys
   have hgrad : ∀ x, gradient (fun x => f x (ystar H x)) x = Gs H x := fun x => (H.Phi_hasGradient x).gradient
@@ -86,7 +86,7 @@ theorem result : Convergence LongTails.Setups.StochasticHessianNcsc.spec budget 
         Oracle (q.E × q.F) (q.E × q.F)) (igtSgda (tunedConfig q) q.x0 q.y0) (fun _ => (budget q 0)) ω.1 ω.2)‖) =
       fun ω => ‖Gs H (outRec cfg q.x0 q.y0 ox oy ω.2 ω.1.val cfg.T)‖ := by
     funext ω; rw [hexec ω.1 ω.2]
-  rw [hfun]
+  erw [hfun]
   change Integrable (fun ω : Fin (cfg.T + 1) × (ℕ → q.Ω) => ‖Gs H (outRec cfg q.x0 q.y0 ox oy ω.2 ω.1.val cfg.T)‖)
       ((PMF.uniformOfFintype (Fin (cfg.T + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧
     ∫ ω : Fin (cfg.T + 1) × (ℕ → q.Ω), ‖Gs H (outRec cfg q.x0 q.y0 ox oy ω.2 ω.1.val cfg.T)‖
