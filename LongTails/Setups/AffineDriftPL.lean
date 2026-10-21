@@ -31,8 +31,8 @@ abbrev spec : Setup where
     (∀ x, HasGradientAt f (gradient f x) x) ∧
     (∀ x y, ‖gradient f x - gradient f y‖ ≤ p.L * ‖x - y‖) ∧
     (∃ (a b : ℕ → ℝ) (e : ℕ → Point p.d → ℝ), (∀ k x, |e k x| ≤ p.ν) ∧
-      ∀ k x seed, O.answer k (0, x) seed = f x + a (k / (p.d + 2)) +
-        b (k / (p.d + 2)) * (k % (p.d + 2) : ℕ) + e k x) ∧
+      ∀ k x seed, O.answer k (0, x) seed = f x + a (k.length / (p.d + 2)) +
+        b (k.length / (p.d + 2)) * (k.length % (p.d + 2) : ℕ) + e k.length x) ∧
     (∃ xstar, IsMinOn f Set.univ xstar ∧ f p.x0 - f xstar ≤ p.Δ ∧
       ∀ x, 2 * p.μ * (f x - f xstar) ≤ ‖gradient f x‖ ^ 2)
   successful p f output P :=

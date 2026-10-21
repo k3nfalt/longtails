@@ -20,3 +20,12 @@ both use `scripts/tables/` by default.
 style linter. It prevents a missing-file warning and suppresses no checks.
 
 GitHub authentication and PR postprocessing live in `infra/`.
+
+Research runs default to `--delivery local`: review and verify the result in
+separate worktrees, retain the files, and report their locations without committing,
+pushing, or requiring GitHub bot credentials. Use `--delivery pr` for the existing
+bot-authenticated PR workflow. These options also work through `run_prompt_tmux.py research`.
+
+PR delivery automatically sets the repository's `core.hooksPath` to `infra/hooks`
+to record startup metadata in commits. Local delivery leaves the existing hook
+configuration untouched; it does not uninstall previously configured hooks.

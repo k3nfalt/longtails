@@ -127,7 +127,7 @@ lemma measurable_execute_output (p : Params) (P : ProbabilityMeasure (ℕ → p.
     ((measurable_rawAdvance p hg K 0).comp ((hi.comp measurable_fst).prodMk measurable_snd))
   convert hh using 1
   funext w
-  rw [StochasticGradient.execute_advance]
+  erw [StochasticGradient.execute_advance]
   rfl
 
 end OracleTemplate.StochasticGeneralized

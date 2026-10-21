@@ -13,31 +13,6 @@ open OracleTemplate MeasureTheory
 open LongTails.Algorithms.MatrixPolar LongTails.Algorithms.ValidatedMuon
 open LongTails.Algorithms.MatrixPolar
 
-lemma trajectory_shift {m n : ℕ} {Ω : Type*} (α η : ℝ)
-    (g : Space m n → Ω → Space m n) (ξ : ℕ → Ω)
-    (state : Space m n × Space m n) (call t : ℕ) :
-    trajectory α η g ξ state call (t + 1) =
-      trajectory α η g ξ (trainingStep α η state (g state.1 (ξ call))) (call + 1) t := by
-  induction t with
-  | zero => simp [trajectory]
-  | succ t ih =>
-    rw [trajectory, ih, trajectory]
-    rw [show call + (t + 1) = call + 1 + t by omega]
-
-lemma sampledEval_trainingPlan {m n : ℕ} {Ω : Type*} (α η : ℝ)
-    (g : Space m n → Ω → Space m n) (ξ : ℕ → Ω) (T : ℕ)
-    (x M : Space m n) (call : ℕ) :
-    QueryPlan.sampledEval g ξ (trainingPlan α η T x M) call =
-      fun i => (trajectory α η g ξ (x, M) call i.val).1 := by
-  induction T generalizing x M call with
-  | zero => ext i; exact Fin.elim0 i
-  | succ T ih =>
-    simp only [trainingPlan, QueryPlan.sampledEval, QueryPlan.sampledEval_map, ih]
-    ext i
-    refine Fin.cases ?_ (fun j => ?_) i
-    · rfl
-    · simp only [Fin.cons_succ, Fin.val_succ, trajectory_shift, trainingStep]
-
 lemma measurable_trainingStep {m n : ℕ} (α η : ℝ) :
     Measurable (fun p : (Space m n × Space m n) × Space m n =>
       trainingStep α η p.1 p.2) := by

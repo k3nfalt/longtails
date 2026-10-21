@@ -13,9 +13,9 @@ noncomputable def path (p : Public) (O : Oracle (p.E ⊕ p.E) p.E)
     (ξ : (k : ℕ) → O.Seed k) : ℕ → p.E
   | 0 => p.x0
   | n + 1 => shortStep p.L (path p O ξ n)
-      (O.answer (2 * n) (0, (Sum.inl (path p O ξ n))) (ξ (2 * n)))
-      (O.answer (2 * n + 1)
-        (0, (Sum.inr (O.answer (2 * n) (0, (Sum.inl (path p O ξ n))) (ξ (2 * n))))) (ξ (2 * n + 1)))
+      (executeAnswerAt O (shortStepFrankWolfe p.L p.x0) () ξ (2 * n) (0, (Sum.inl (path p O ξ n))))
+      (executeAnswerAt O (shortStepFrankWolfe p.L p.x0) () ξ (2 * n + 1)
+        (0, (Sum.inr (executeAnswerAt O (shortStepFrankWolfe p.L p.x0) () ξ (2 * n) (0, (Sum.inl (path p O ξ n)))))))
 
 lemma path_properties (p : Params) (hp : spec.valid p) (I : Instance p.toPublic)
     (O : Oracle (p.E ⊕ p.E) p.E) (hO : spec.admissible p I O)
@@ -31,6 +31,7 @@ lemma path_properties (p : Params) (hp : spec.valid p) (I : Instance p.toPublic)
             (2 * p.L * (2 * p.c / p.a) ^ (2 / p.q)))) := by
   rcases hp with ⟨hL, hD, ha, hq, hc, hr, hε⟩
   rcases hO with ⟨hcompact, hC, hx0, hdiam, hf, hg, hlip, hlmo, xstar, hxstar, hmin, herror⟩
+  let history := fun k => (executeIndexedState O (shortStepFrankWolfe p.L p.x0) () ξ k).2
   have hmem : ∀ n, path p.toPublic O ξ n ∈ I.C := by
     intro n
     induction n with
@@ -38,17 +39,17 @@ lemma path_properties (p : Params) (hp : spec.valid p) (I : Instance p.toPublic)
     | succ n ih =>
       exact short_step_mem hC.convex hL ih (hlmo _ _ _).1 ((hlmo _ _ _).2 _ ih)
   refine ⟨xstar, hxstar, hmin, hmem, fun n => sub_nonneg.mpr (hmin (hmem n)), ?_, ?_⟩
-  · exact short_step_first_gap hC.convex hL hf (hg 0 (ξ 0)) (hlip 0 (ξ 0))
-      hx0 (hlmo 1 (ξ 1) _).1 hxstar (hlmo 1 (ξ 1) _).2
-      (hdiam _ (hlmo 1 (ξ 1) _).1 _ hx0)
+  · exact short_step_first_gap hC.convex hL hf (hg (history 0) (ξ _)) (hlip (history 0) (ξ _))
+      hx0 (hlmo (history 1) (ξ _) _).1 hxstar (hlmo (history 1) (ξ _) _).2
+      (hdiam _ (hlmo (history 1) (ξ _) _).1 _ hx0)
   · intro n
     obtain ⟨y, hy, hmy, hdist⟩ := herror _ (hmem n)
     have heq : I.f y = I.f xstar := le_antisymm (hmy hxstar) (hmin hy)
     have hs := short_step_holder_decrease hL ha hc hq hr hC hf
-      (hg (2 * n) (ξ (2 * n))) (hlip (2 * n) (ξ (2 * n)))
-      (hmem n) (hlmo (2 * n + 1) (ξ (2 * n + 1)) _).1 hy hmy
-      (hlmo (2 * n + 1) (ξ (2 * n + 1)) _).2 (by simpa [heq] using hdist)
-    simpa only [path, heq] using hs
+      (hg (history (2 * n)) (ξ _)) (hlip (history (2 * n)) (ξ _))
+      (hmem n) (hlmo (history (2 * n + 1)) (ξ _) _).1 hy hmy
+      (hlmo (history (2 * n + 1)) (ξ _) _).2 (by simpa [heq] using hdist)
+    simpa [path, heq, executeAnswerAt, history] using hs
 
 lemma bounded_power_recurrence {h : ℕ → ℝ} {H p B : ℝ}
     (hH : 0 < H) (hp : 0 < p) (hB : 0 < B) (hnonneg : ∀ n, 0 ≤ h n)

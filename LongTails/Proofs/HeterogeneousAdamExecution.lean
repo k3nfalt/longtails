@@ -4,6 +4,7 @@ import LongTails.Proofs.AdaptiveIID
 import LongTails.Proofs.AdaptiveHistoryTracking
 import LongTails.Algorithms.HeterogeneousAdam
 import LongTails.Proofs.Execution
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Proofs.AdaptiveHistoryAlgebra
 import LongTails.Proofs.HeavyTailedPLStep
 import Mathlib.MeasureTheory.Function.L2Space
@@ -56,13 +57,15 @@ lemma execute_run (cfg : Config) (x₀ : Point b h)
     (O : Oracle (Point b h) (Point b h)) (seed : Fin (cfg.lastIndex + 1))
     (ξ : (k : ℕ) → O.Seed k) (n : ℕ) :
     execute O (method cfg x₀) (fun _ => n) seed ξ =
-      output (run cfg x₀ seed (fun k x => O.answer k (0, x) (ξ k)) n) := by
-  erw [execute_indexed]
-  change output (((fun sc : State b h × ℕ =>
-    (update cfg sc.1 (O.answer sc.2 (0, sc.1.point) (ξ sc.2)), sc.2 + 1))^[n]
-      (initial cfg x₀ seed, 0)).1) = _
+      output (run cfg x₀ seed
+        (fun k x => executeAnswerAt O (method cfg x₀) seed ξ k (0, x)) n) := by
+  change (executeWithTrace O (method cfg x₀) (fun _ => n)
+    (by simpa [method] using seed) ξ).1 = _
+  rw [executeWithTrace_eq_executeIndexedState]
+  rw [executeIndexedState_eq_executeAnswerAt]
   exact congrArg (fun sc : State b h × ℕ => output sc.1)
-    (indexed_iterate cfg x₀ seed (fun k x => O.answer k (0, x) (ξ k)) n)
+    (indexed_iterate cfg x₀ seed
+      (fun k x => executeAnswerAt O (method cfg x₀) seed ξ k (0, x)) n)
 
 lemma run_selected (cfg : Config) (x₀ : Point b h) (seed : Fin (cfg.lastIndex + 1))
     (g : ℕ → Point b h → Point b h) (n : ℕ) :
@@ -85,7 +88,8 @@ lemma execute_output (cfg : Config) (x₀ : Point b h)
     (O : Oracle (Point b h) (Point b h)) (seed : Fin (cfg.lastIndex + 1))
     (ξ : (k : ℕ) → O.Seed k) :
     execute O (method cfg x₀) (fun _ => cfg.lastIndex + 1) seed ξ =
-      trajectory cfg x₀ (fun k x => O.answer k (0, x) (ξ k)) seed.val := by
+      trajectory cfg x₀
+        (fun k x => executeAnswerAt O (method cfg x₀) seed ξ k (0, x)) seed.val := by
   erw [execute_run]
   exact run_selected cfg x₀ seed _ _ (by omega)
 
@@ -1552,7 +1556,12 @@ lemma execute_uniform_gradient_integral {Ω : Type} [MeasurableSpace Ω] {b h : 
     (fun r => measurable_pi_apply r) t
   have he : out=(fun z : Fin (cfg.lastIndex+1) × (ℕ → Ω) => x z.1 z.2) := by
     funext z
-    exact execute_output cfg x₀ O z.1 z.2
+    change execute O (method cfg x₀) (fun _ => cfg.lastIndex + 1) z.1 z.2 = _
+    rw [execute_output]
+    simp only [executeAnswerAt, x]
+    have hlen (k : ℕ) : (executeIndexedState O (method cfg x₀) z.1 z.2 k).2.length = k :=
+      executeIndexedState_length O (method cfg x₀) z.1 z.2 k
+    simp only [hlen, O]
   have hu := uniform_trajectory_integral x cfg.lastIndex hx hg hi
   change Measurable out ∧ Integrable (fun z => ‖grad (out z)‖)
       ((PMF.uniformOfFintype (Fin (cfg.lastIndex+1))).toMeasure.prod (P : Measure _)) ∧

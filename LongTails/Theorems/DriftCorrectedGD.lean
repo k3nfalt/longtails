@@ -22,6 +22,6 @@ theorem result : Convergence LongTails.Setups.AffineDriftPL.spec budget := by
   · rintro ⟨⟨⟩, ξ⟩
     obtain ⟨v, hv, hacc⟩ := (execute_accuracy p f O hp ho ξ K (by simpa only [show p.Δ / (p.ε / 2) = 2 * p.Δ / p.ε by ring] using hK))
     have he : f v = f u := le_antisymm (hv (Set.mem_univ _)) (hmin (Set.mem_univ _))
-    simpa only [Nat.mul_comm, budget, he, show p.Δ / (p.ε / 2) = 2 * p.Δ / p.ε by ring] using hacc
+    simpa only [execute, Nat.mul_comm, budget, he, show p.Δ / (p.ε / 2) = 2 * p.Δ / p.ε by ring] using hacc
 
 end OracleTemplate.AffineDriftPL

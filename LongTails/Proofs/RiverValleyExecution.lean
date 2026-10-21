@@ -47,7 +47,7 @@ lemma execute_sd [MeasurableSpace Ω] (g : E → Ω → E) (P : MeasureTheory.Pr
     (ηs ηc : ℝ) (T K : ℕ) (x0 : E) (B : ℕ) (τ : Fin (T + 1)) (ξ : ℕ → Ω) (hB : T + K ≤ B) :
     execute (sdOracle g P) (method ηs ηc T K x0) (fun _ => B) τ ξ =
       schedSeq g (schedOf ηs ηc τ.val) x0 ξ (τ.val + K) := by
-  refine (execute_indexed (sdOracle g P) (method ηs ηc T K x0) B τ ξ).trans ?_
+  refine (execute_indexed_of_answer (sdOracle g P) (method ηs ηc T K x0) B τ ξ (fun k q => g q.2 (ξ k)) (fun _ _ => rfl)).trans ?_
   obtain ⟨m, hm⟩ : ∃ m, B = (τ.val + K) + m := ⟨B - (τ.val + K), by have := τ.isLt; omega⟩
   subst hm
   have h := run_sd_frozen g ηs ηc T K x0 ξ τ.val m

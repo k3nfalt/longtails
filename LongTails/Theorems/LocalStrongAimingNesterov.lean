@@ -10,7 +10,7 @@ noncomputable def budget : (let S := spec; S.Params → Fin S.numOracles → ℕ
 
 theorem result : Convergence LongTails.Setups.LocalStrongAiming.spec budget := by
   apply convergence_of_call_budget (S := spec) (fun p => budget p 0)
-  refine ⟨fun p => (certifiedNesterov p).val, ?_, fun _ _ => trivial⟩
+  refine ⟨fun p => (certifiedNesterov p).val, ?_, fun p _ => (certifiedNesterov p.toPublic).property⟩
   intro p hp K hK f oracle hadmissible
   obtain ⟨horacle, hg, xstar, hmin, hgap, hlocal⟩ := hadmissible
   have hrate := nesterov_rate p hp f hg xstar hmin hgap hlocal (K)

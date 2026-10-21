@@ -1,3 +1,4 @@
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Setups.RelativeErrorSmoothConvex
 import LongTails.Algorithms.DampedAccelerated
 import LongTails.Proofs.SgdExecution
@@ -329,12 +330,12 @@ lemma execute_accuracy [CompleteSpace E] {f : E → ℝ} {L α R ε : ℝ} {x0 x
     f (execute O (dampedAccelerated L (damping α N) x0) (fun _ => N) seed ξ) - f xstar ≤ ε := by
   have hβ : 0 < 1 - α := by linarith
   have hminx : ∀ x, f xstar ≤ f x := fun x => hmin (Set.mem_univ x)
-  rw [StochasticGradient.execute_advance]
+  rw [execute_advance_history]
   obtain ⟨hq0, hq8, hqN⟩ := damping_bounds hα1 N
   obtain ⟨hadv, hcount⟩ := advance_potential hL hq0 hα0 hα1 hq8 hcv hup hminx
-    (fun k x => O.answer k (0, x) (ξ k)) (fun k x => herr k x (ξ k)) N 0 (0, x0, x0)
+    (fun k x => executeAnswerAt O (dampedAccelerated L (damping α N) x0) seed ξ k (0, x)) (fun k x => herr _ x (ξ _)) N 0 (0, x0, x0)
   set sN := StochasticGradient.advance
-    (fun k s => step L (damping α N) s (O.answer k (0, (query s)) (ξ k))) N 0 (0, x0, x0) with hsN
+    (fun k s => step L (damping α N) s (executeAnswerAt O (dampedAccelerated L (damping α N) x0) seed ξ k (0, query s))) N 0 (0, x0, x0) with hsN
   show f sN.2.1 - f xstar ≤ ε
   rcases Nat.eq_zero_or_pos N with h0 | hpos
   · have hs : sN = (0, x0, x0) := by

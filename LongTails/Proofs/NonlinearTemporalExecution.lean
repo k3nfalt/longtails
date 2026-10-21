@@ -47,9 +47,14 @@ lemma execute_timed_plan {S : Type} [MeasurableSpace S]
     (law : MeasureTheory.ProbabilityMeasure S) (q0 : Q) (u0 : U)
     (k K : ℕ) (plan : S → QueryPlan Q R U k) (g : ℕ → Q → R)
     (seed : S) (h : k ≤ K) :
-    execute { answer := fun t (_, q) _ => g t q } (QueryPlan.algorithm law q0 u0 k plan) (fun _ => K) seed =
+    execute { answer := fun history (_, q) _ => g history.length q }
+      (QueryPlan.algorithm law q0 u0 k plan) (fun _ => K) seed =
       evaluateFrom g 0 (plan seed) := by
-  erw [StochasticGradient.execute_advance]
+  let O : Oracle Q R := { answer := fun history (_, q) _ => g history.length q }
+  change execute O (QueryPlan.algorithm law q0 u0 k plan) (fun _ => K) seed = _
+  rw [StochasticGradient.execute_advance_of_answer
+    O (QueryPlan.algorithm law q0 u0 k plan) K seed (fun _ => ())
+    (fun k query => g k query.2) (by intro history query; rfl)]
   change QueryPlan.output u0 (StochasticGradient.advance
     (fun t s => QueryPlan.update s (g t (QueryPlan.query q0 s))) K 0 ⟨k, plan seed⟩) = _
   rw [advance_timed_plan g q0 _ h]
@@ -120,7 +125,7 @@ lemma final_list_tail (v : ℕ → E × E) (n : ℕ) :
   simp only [TemporalDiscrepancy.tailAverage, Nat.add_comm n]
 
 lemma execute_twoPhase_trajectory (O : Oracle E E) (g : ℕ → E → E)
-    (hO : ∀ k x seed, O.answer k (0, x) seed = g k x) (θ₀ θ μ : ℝ) (x0 : E)
+    (hO : ∀ history x seed, O.answer history (0, x) seed = g history.length x) (θ₀ θ μ : ℝ) (x0 : E)
     (b n₀ n K : ℕ) (hK : 2 * n + b * n₀ ≤ K)
     (w v : ℕ → E × E) (hw0 : w 0 = (x0, x0)) (hv0 : v 0 = w n₀)
     (hw : ∀ k, w (k + 1) = TemporalDiscrepancy.acceleratedUpdate θ₀ μ (w k)
@@ -131,9 +136,14 @@ lemma execute_twoPhase_trajectory (O : Oracle E E) (g : ℕ → E → E)
     (seed : (twoPhaseAccelerated θ₀ θ μ x0 b n₀ n).Seed) (ξ : (k : ℕ) → O.Seed k) :
     execute O (twoPhaseAccelerated θ₀ θ μ x0 b n₀ n) (fun _ => K) seed ξ =
       TemporalDiscrepancy.tailAverage (fun k => (v k).1) n n := by
-  erw [StochasticGradient.execute_advance]
+  rw [StochasticGradient.execute_advance_of_answer O (twoPhaseAccelerated θ₀ θ μ x0 b n₀ n) K seed ξ
+    (fun k query => g k query.2) (by
+      intro history query
+      rcases query with ⟨i, x⟩
+      have hi : i = 0 := Subsingleton.elim _ _
+      subst i
+      exact hO history x (ξ history.length))]
   simp only [twoPhaseAccelerated, QueryPlan.algorithm]
-  simp_rw [hO]
   change QueryPlan.output x0 (StochasticGradient.advance
     (fun t s => QueryPlan.update s (g t (QueryPlan.query x0 s))) K 0
     ⟨2 * n + b * n₀, twoPhasePlan θ₀ θ μ x0 b n₀ n⟩) = _

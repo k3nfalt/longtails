@@ -32,7 +32,7 @@ lemma execute_constantMomentumSgd (p : ProbabilityMeasure Ξ) (Gr : Ξ → E →
     (x0 : E) (K : ℕ) (ξ : ℕ → Ξ) :
     execute (sampleOracle p Gr) (constantMomentumSgd β γ N x0) (fun _ => K) () ξ =
       (traj Gr β γ N x0 ξ K).1 := by
-  refine (StochasticGradient.execute_advance (sampleOracle p Gr) (constantMomentumSgd β γ N x0)
+  refine (StochasticGradient.execute_advance (sampleOracle p Gr).law (fun x ω => Gr ω x) (constantMomentumSgd β γ N x0)
     K () ξ).trans ?_
   have h := advance_constantMomentumSgd Gr β γ N x0 ξ K 0
   rw [Nat.zero_add] at h

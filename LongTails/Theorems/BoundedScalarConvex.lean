@@ -15,11 +15,13 @@ theorem result : Convergence LongTails.Setups.BoundedScalarConvex.spec budget :=
   apply convergence_of_public_budget (S := spec) (fun p => budget p 0)
   refine ⟨fun q => scalarSgd q.lower q.upper (q.ε/(25*q.H^2)) q.x0, ?_, fun _ _ => trivial⟩
   intro q hq f O ha
+  have hJoint := ha.2.2.2.1
   let η := q.ε/(25*q.H^2)
   let K := max 1 ⌈25*q.H^2*q.R^2/q.ε^2⌉₊
   have hη : 0 < η := by dsimp [η]; positivity [hq.2.1, hq.2.2.2.1]
   have hK : 0 < K := lt_of_lt_of_le Nat.zero_lt_one (le_max_left 1 _)
-  obtain ⟨xstar, hxstar, hmin, hi, hr⟩ := scalar_sgd_rate hq ha hη K hK
+  obtain ⟨xstar, hxstar, hmin, hi, hr⟩ :=
+    scalar_sgd_rate hq ha hη K hK
   have he : (∫ ω, f (scalarIterate O q.lower q.upper η q.x0 K ω)-f xstar
       ∂(O.law : Measure _)) ≤ q.ε := hr.trans (scalar_tuning hq.2.1 hq.2.2.2.1)
   let output := fun seed : Unit × Samples O =>
@@ -33,7 +35,7 @@ theorem result : Convergence LongTails.Setups.BoundedScalarConvex.spec budget :=
     funext ⟨⟨⟩, ξ⟩
     exact (execute_scalarSgd O q.lower q.upper η q.x0 K ξ)
   rw [hexec]
-  refine ⟨(scalarIterate_measurable O _ _ _ _ ha.2.2.2.1 K).comp measurable_snd,
+  refine ⟨(scalarIterate_measurable O _ _ _ _ hJoint K).comp measurable_snd,
     (fun ω => scalarIterate_mem O hq.1 hq.2.2.2.2 K ω.2), xstar, hxstar, hmin, ?_, ?_⟩
   · exact (measurePreserving_snd (μ := Measure.dirac ()) (ν := (O.law : Measure (Samples O)))).integrable_comp_of_integrable hi
   · rw [integral_fun_snd (fun ξ => f (scalarIterate O q.lower q.upper η q.x0 K ξ)-f xstar)]

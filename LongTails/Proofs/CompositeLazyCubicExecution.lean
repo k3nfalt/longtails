@@ -45,7 +45,7 @@ lemma update_agrees {Q R U : Type} {n : ℕ} (g : Fin n × Q → R)
     (P : Fin n × Q → Prop) (q0 : Fin n × Q) (O : Oracle Q R n)
     (hO : ∀ k q seed, P q → O.answer k q seed = g q)
     (state : Σ k, QueryPlan (Fin n × Q) R U k) (h : queriesSatisfy g P state.2)
-    (call : ℕ) (ξ : O.Seed call) :
+    (call : List ((Fin n × Q) × R)) (ξ : O.Seed call.length) :
     update state (O.answer call (query q0 state) ξ) = update state (g (query q0 state)) := by
   obtain ⟨k, plan⟩ := state
   cases plan with
@@ -90,8 +90,9 @@ lemma execute_of_valid_counts {Q R U : Type} {n : ℕ} (g : Fin n × Q → R)
   apply execute_eq_of_safe_prefix O _ budget seed ξ state remaining K (eval g plan)
   · rfl
   · intro k
-    change state (k + 1) = update (state k) (O.answer k (query q0 (state k)) (ξ k))
-    rw [update_agrees g P q0 O hO _ (hvalid k), hstep]
+    change state (k.length + 1) = update (state k.length)
+      (O.answer k (query q0 (state k.length)) (ξ k.length))
+    rw [update_agrees g P q0 O hO _ (hvalid k.length), hstep]
   · rfl
   · exact hremaining
   · intro k hk
@@ -130,7 +131,8 @@ lemma oracle_agreement {p : Params} (F : Problem p) (O : Oracle (p.E ⊕ Model p
     (hg : ∀ k x seed, O.answer k (0, Sum.inl x) seed = Sum.inl (gradient F.f x))
     (hH : ∀ k x seed, O.answer k (1, Sum.inl x) seed = Sum.inr (fderiv ℝ (gradient F.f) x))
     (hm : ∀ k q seed, q.valid → ∃ z, O.answer k (2, Sum.inr q) seed = Sum.inl z ∧ q.solution F z)
-    (k : ℕ) (q : Fin 3 × (p.E ⊕ Model p)) (seed : O.Seed k) (hv : QueryValid q) :
+    (k : List ((Fin 3 × (p.E ⊕ Model p)) × Reply p))
+    (q : Fin 3 × (p.E ⊕ Model p)) (seed : O.Seed k.length) (hv : QueryValid q) :
     O.answer k q seed = canonicalReply F q := by
   obtain ⟨i, x | q⟩ := q
   · change i = 0 ∨ i = 1 at hv

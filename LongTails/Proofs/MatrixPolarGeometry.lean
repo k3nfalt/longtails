@@ -15,6 +15,9 @@ open scoped Topology
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
+noncomputable def closestPoint (K : Set E) (u : E) : E :=
+  Classical.epsilon (fun x => x ∈ K ∧ ∀ y ∈ K, ‖u - x‖ ≤ ‖u - y‖)
+
 lemma supportFace_compact {K : Set E} (hK : IsCompact K) (g : E →L[ℝ] ℝ) :
     IsCompact (supportFace K g) := by
   have hc : IsClosed {x : E | ∀ y ∈ K, g y ≤ g x} := by

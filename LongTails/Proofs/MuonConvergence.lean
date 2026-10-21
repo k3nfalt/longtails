@@ -1,5 +1,6 @@
 import LongTails.Proofs.MuonTraining
 import LongTails.Proofs.MuonValidation
+import LongTails.Proofs.MuonContract
 import LongTails.Proofs.MuonTuning
 
 namespace LongTails.Proofs.MuonConvergence
@@ -89,11 +90,6 @@ lemma execution_accuracy {m n : ℕ} {f : Space m n → ℝ} {s L Δ fmin e a D 
     (Fin (q + 1) → Fin (T + 1))).toMeasure).prod (P : Measure _)) hsub (by finiteness)
   exact hm.trans (hraw.2.trans (by linarith [hdraw.2.2, hblock.2.2]))
 
-lemma simulates_refl {Q R U : Type} (A : Algorithm Q R U) :
-    LongTails.Setups.FiniteVarianceSpectralSmooth.Simulates A A := by
-  refine ⟨id, id, measurable_id, ?_, fun _ => rfl, fun _ => rfl, fun _ _ => rfl, fun _ => rfl⟩
-  exact Measure.map_id
-
 lemma finiteVarianceMuon_allowed (p : LongTails.Setups.FiniteVarianceSpectralSmooth.Public)
     (hp : LongTails.Setups.FiniteVarianceSpectralSmooth.spec.valid p) :
     LongTails.Setups.FiniteVarianceSpectralSmooth.MuonFamily p
@@ -102,7 +98,7 @@ lemma finiteVarianceMuon_allowed (p : LongTails.Setups.FiniteVarianceSpectralSmo
   rcases hp with ⟨hL, hΔ, _hs, hε, hδ, hδ1⟩
   by_cases hcase : 2 * p.L * p.Δ ≤ p.ε ^ 2
   · have hh : LongTails.Setups.FiniteVarianceSpectralSmooth.MuonFamily p (returnInitial p.x0) :=
-      Or.inl ⟨hcase, simulates_refl _⟩
+      Or.inl ⟨hcase, fun _ => rfl⟩
     simpa only [finiteVarianceMuon, ite_eq_left hcase] using hh
   · let e := p.ε / 8
     let γ := p.δ / 4
@@ -129,7 +125,7 @@ lemma finiteVarianceMuon_allowed (p : LongTails.Setups.FiniteVarianceSpectralSmo
     have hh : LongTails.Setups.FiniteVarianceSpectralSmooth.MuonFamily p
         (validatedMuon (1 / a) (p.Δ / (e * T)) (2 * e / 3) (T - 1) b (k - 1) (q - 1) p.x0) :=
       Or.inr ⟨1 / a, p.Δ / (e * T), 2 * e / 3, T - 1, b, k - 1, q - 1,
-        hα, hα1, hη, hρ, hb, simulates_refl _⟩
+        hα, hα1, hη, hρ, hb, MuonContract.validatedMuon_follows _ _ _ _ _ _ _ _ hb⟩
     simpa only [finiteVarianceMuon, ite_eq_right hcase] using hh
 
 lemma initial_success (p : LongTails.Setups.FiniteVarianceSpectralSmooth.Public)

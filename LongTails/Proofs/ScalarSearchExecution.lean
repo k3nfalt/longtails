@@ -1,4 +1,5 @@
 import LongTails.Proofs.QueryPlan
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Algorithms.ScalarSearchPlans
 import Mathlib.Data.List.OfFn
 
@@ -48,11 +49,16 @@ lemma execute_plan {S : Type} [MeasurableSpace S]
     (k K : ℕ) (plan : S → QueryPlan Q R U k)
     (O : Oracle Q R) (seed : S) (ξ : (j : ℕ) → O.Seed j) (h : k ≤ K) :
     execute O (algorithm law q0 u0 k plan) (fun _ => K) seed ξ =
-      evalOracle (fun j q => O.answer j (0, q) (ξ j)) (plan seed) 0 := by
-  erw [StochasticGradient.execute_advance]
+      evalOracle (fun j q => executeAnswerAt O (algorithm law q0 u0 k plan) seed ξ j (0, q))
+        (plan seed) 0 := by
+  erw [execute_advance_history]
   change output u0 (StochasticGradient.advance
-    (fun j s => update s (O.answer j (0, (query q0 s)) (ξ j))) K 0 ⟨k, plan seed⟩) = _
-  rw [advance_plan (fun j q => O.answer j (0, q) (ξ j)) q0 (plan seed) h 0]
+    (fun j s => update s
+      (executeAnswerAt O (algorithm law q0 u0 k plan) seed ξ j (0, (query q0 s))))
+    K 0 ⟨k, plan seed⟩) = _
+  rw [advance_plan
+    (fun j q => executeAnswerAt O (algorithm law q0 u0 k plan) seed ξ j (0, q))
+    q0 (plan seed) h 0]
   rfl
 
 lemma evalOracle_shift (g : ℕ → Q → R) {k : ℕ} (plan : QueryPlan Q R U k) (offset call : ℕ) :

@@ -13,9 +13,9 @@ theorem two_epochs_use_sixteen_component_queries : queryCount 2 2 2 = 16 := rfl
 theorem sampling_changes_output :
     (execute quadraticOracle (svrg 2 (1 : ℝ) 2) (fun _ => (queryCount 2 2 2)) zeroSeed) ≠
       (execute quadraticOracle (svrg 2 (1 : ℝ) 2) (fun _ => (queryCount 2 2 2)) oneSeed) := by
-  have hzero := execute_svrg (fun query => quadraticOracle.answer 0 (0, query) ())
+  have hzero := execute_svrg (fun query => quadraticOracle.answer [] (0, query) ())
     2 (1 : ℝ) 2 zeroSeed
-  have hone := execute_svrg (fun query => quadraticOracle.answer 0 (0, query) ())
+  have hone := execute_svrg (fun query => quadraticOracle.answer [] (0, query) ())
     2 (1 : ℝ) 2 oneSeed
   intro h
   have he := hzero.symm.trans (h.trans hone)
@@ -26,14 +26,14 @@ theorem sampling_changes_output :
 theorem extra_queries_preserve_output (seed : EpochSeeds 2 2 2) :
     (execute quadraticOracle (svrg 2 (1 : ℝ) 2) (fun _ => 100) seed) =
       (execute quadraticOracle (svrg 2 (1 : ℝ) 2) (fun _ => 16) seed) := by
-  exact (execute_svrg_of_le (fun query => quadraticOracle.answer 0 (0, query) ())
+  exact (execute_svrg_of_le (fun query => quadraticOracle.answer [] (0, query) ())
     2 (1 : ℝ) 2 100 (by decide) seed).trans
-    (execute_svrg_of_le (fun query => quadraticOracle.answer 0 (0, query) ())
+    (execute_svrg_of_le (fun query => quadraticOracle.answer [] (0, query) ())
       2 (1 : ℝ) 2 16 (by decide) seed).symm
 
 theorem zero_epochs_preserve_initial_point :
     (execute quadraticOracle (svrg 2 (1 : ℝ) 0) (fun _ => 100) ()) = 1 := by
-  exact execute_svrg_of_le (fun query => quadraticOracle.answer 0 (0, query) ())
+  exact execute_svrg_of_le (fun query => quadraticOracle.answer [] (0, query) ())
     2 (1 : ℝ) 0 100 (by decide) ()
 
 end OracleTemplate.FiniteSum.Tests

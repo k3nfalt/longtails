@@ -140,7 +140,7 @@ lemma execute_normalizedStorm [MeasurableSpace Ω] (g : E → Ω → E) (P : Pro
     (ξ : ℕ → Ω) (hK : b0 + T ≤ K) :
     execute (pairOracle g P) (normalizedStorm η a b0 T x0) (fun _ => K) τ ξ =
       (stormPair g η a b0 x0 ξ (τ : Fin (T + 1)).val).1 := by
-  refine (execute_indexed (pairOracle g P) (normalizedStorm η a b0 T x0) K τ ξ).trans ?_
+  refine (execute_indexed_of_answer (pairOracle g P) (normalizedStorm η a b0 T x0) K τ ξ (fun k q => (g q.2.1 (ξ k), g q.2.2 (ξ k))) (fun _ _ => rfl)).trans ?_
   change Fin (T + 1) at τ
   obtain ⟨m, hm⟩ : ∃ m, K = b0 + τ.val + m := ⟨K - (b0 + τ.val), by have := τ.isLt; omega⟩
   subst hm

@@ -1,3 +1,4 @@
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Proofs.AcceleratedDouglasRachfordPotential
 import LongTails.Proofs.SgdExecution
 
@@ -225,13 +226,13 @@ lemma advance_add {State : Type*} (step : ℕ → State → State) (K1 K2 call :
 noncomputable def drStep (p : Public) (O : Oracle (Query p) p.E) (ξ : (k : ℕ) → O.Seed k) :
     ℕ → State p.E → State p.E :=
   fun k st => (acceleratedDouglasRachford p).update st
-    (O.answer k ((acceleratedDouglasRachford p).query st) (ξ k))
+    (executeAnswerAt O (acceleratedDouglasRachford p) () ξ k ((acceleratedDouglasRachford p).query st))
 
 lemma two_calls (p : Public) (O : Oracle (Query p) p.E) (ξ : (k : ℕ) → O.Seed k) (c : ℕ)
     (s : State p.E) (hx : s.x = none) :
     advance (drStep p O ξ) 2 c s =
-      advanceState p.lam s (O.answer c (0, (.proxF s.w)) (ξ c))
-        (O.answer (c + 1) (0, (.proxG ((2 : ℝ) • O.answer c (0, (.proxF s.w)) (ξ c) - s.w))) (ξ (c + 1))) := by
+      advanceState p.lam s (executeAnswerAt O (acceleratedDouglasRachford p) () ξ c (0, (.proxF s.w)))
+        (executeAnswerAt O (acceleratedDouglasRachford p) () ξ (c + 1) (0, (.proxG ((2 : ℝ) • executeAnswerAt O (acceleratedDouglasRachford p) () ξ c (0, (.proxF s.w)) - s.w)))) := by
   obtain ⟨k, u, w, x, y⟩ := s
   simp only at hx
   subst hx
@@ -280,7 +281,8 @@ lemma execute_accuracy (q : Params) (I : Instance q.toPublic) (O : Oracle (Query
   obtain ⟨n, hn⟩ : ∃ n, N = n + 1 := ⟨N - 1, by omega⟩
   have hceil : Real.sqrt (2 * q.R ^ 2 / (q.lam * q.γ * q.ε)) ≤ (N : ℝ) := (Nat.le_ceil _).trans (Nat.cast_le.mpr hbudget)
   have hsq : 2 * q.R ^ 2 / (q.lam * q.γ * q.ε) ≤ (N : ℝ) ^ 2 := (Real.sqrt_le_left (by positivity)).mp hceil
-  rw [execute_advance]
+  cases seed
+  erw [execute_advance_history]
   have hG := run_good q I O ξ H hpf hpg n
   rw [← hn] at hG
   obtain ⟨hyC, hfin⟩ := good_final H hG

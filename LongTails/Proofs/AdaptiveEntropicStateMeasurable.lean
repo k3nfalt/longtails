@@ -340,7 +340,7 @@ lemma measurable_execute_output (q : Public) {Ω : Type} [MeasurableSpace Ω]
       fun w => (StochasticGradient.advance
         (fun k s => updateState q s (g (queryPoint q s) (w.2 k))) N 0 (initialState q)).y := by
     funext w
-    rw [StochasticGradient.execute_advance]
+    erw [StochasticGradient.execute_advance]
     rfl
   rw [he]
   exact (measurable_y q).comp ((measurable_advance q hg N 0).comp

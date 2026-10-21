@@ -1947,7 +1947,8 @@ lemma execute_algorithm (q : LongTails.Setups.ScalarHolderStochastic.Params) (O 
     (K : ℕ) (hK : executionCalls q ≤ K)
     (seed : (ℕ → ℝ) × (ℕ → Fin (16 * depth q))) (ξ : (k : ℕ) → O.Seed k) :
     execute O (algorithm q) (fun _ => K) seed ξ =
-      ScalarSearchExecution.evalOracle (fun k x => O.answer k (0, x) (ξ k))
+      ScalarSearchExecution.evalOracle
+        (fun k x => executeAnswerAt O (algorithm q) seed ξ k (0, x))
         (plan q seed.1 (fun k => (seed.2 k).val)) 0 :=
   ScalarSearchExecution.execute_plan (seedLaw q) q.x0 q.x0 (executionCalls q) K
     (fun seed => plan q seed.1 (fun k => (seed.2 k).val)) O seed ξ hK
@@ -1982,10 +1983,45 @@ lemma execution_successful (q : LongTails.Setups.ScalarHolderStochastic.Params) 
     have h := hIID.stream_law.map_eq
     change (P : Measure (ℕ → q.Ω)).map id = _ at h
     simpa only [Measure.map_id] using h
+  let O : Oracle ℝ ℝ :=
+    { Seed := fun _ => q.Ω, law := P, answer := fun _ (_, x) ω => oracle x ω }
+  have hreply (w : ((ℕ → ℝ) × (ℕ → Fin (16 * depth q))) × (ℕ → q.Ω))
+      (k : ℕ) (x : ℝ) :
+      executeAnswerAt O (algorithm q) w.1 w.2 k (0, x) = oracle x (w.2 k) := by
+    simp [executeAnswerAt, O, executeIndexedState_length]
+  have heval (w : ((ℕ → ℝ) × (ℕ → Fin (16 * depth q))) × (ℕ → q.Ω)) :
+      ScalarSearchExecution.evalOracle
+        (fun k x => executeAnswerAt O (algorithm q) w.1 w.2 k (0, x))
+        (plan q w.1.1 (fun k => (w.1.2 k).val)) 0 =
+      ScalarSearchExecution.evalOracle (fun k x => oracle x (w.2 k))
+        (plan q w.1.1 (fun k => (w.1.2 k).val)) 0 := by
+    apply ScalarSearchExecution.evalOracle_congr
+    intro j hj hj' x
+    exact hreply w j x
+  have heq : (fun w : ((ℕ → ℝ) × (ℕ → Fin (16 * depth q))) × (ℕ → q.Ω) =>
+        execute O (algorithm q) (fun _ => K) (seed := w.1) (oracleSeed := w.2)) =
+      fun w => ScalarSearchExecution.evalOracle (fun k x => oracle x (w.2 k))
+        (plan q w.1.1 (fun k => (w.1.2 k).val)) 0 := by
+    funext w
+    rw [execute_algorithm q O K hK]
+    exact heval w
   change Measurable _ ∧ _
   constructor
-  · simpa only [execute_algorithm q _ K hK] using measurable_plan_output q ho.measurable
-  · simp only [execute_algorithm q _ K hK]
+  · rw [heq]
+    exact measurable_plan_output q ho.measurable
+  · change ((seedLaw q : Measure ((ℕ → ℝ) × (ℕ → Fin (16 * depth q)))).prod
+      (P : Measure (ℕ → q.Ω))) {w | q.ε < |deriv f
+        (execute O (algorithm q) (fun _ => K) w.1 w.2)|} ≤ _
+    have hset : {w : ((ℕ → ℝ) × (ℕ → Fin (16 * depth q))) × (ℕ → q.Ω) |
+        q.ε < |deriv f (execute O (algorithm q) (fun _ => K)
+          (seed := w.1) (oracleSeed := w.2))|} =
+      {w | q.ε < |deriv f (ScalarSearchExecution.evalOracle
+        (fun k x => oracle x (w.2 k))
+        (plan q w.1.1 (fun k => (w.1.2 k).val)) 0)|} := by
+      exact congrArg
+        (fun g : ((ℕ → ℝ) × (ℕ → Fin (16 * depth q))) × (ℕ → q.Ω) → ℝ =>
+          {w | q.ε < |deriv f (g w)|}) heq
+    rw [hset]
     change ((seedLaw q : Measure ((ℕ → ℝ) × (ℕ → Fin (16 * depth q)))).prod
       (P : Measure (ℕ → q.Ω))) {w | q.ε < |deriv f
         (ScalarSearchExecution.evalOracle (fun k x => oracle x (w.2 k))

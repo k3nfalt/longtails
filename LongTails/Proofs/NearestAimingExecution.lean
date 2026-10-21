@@ -1,4 +1,5 @@
 import LongTails.Setups.LocalStrongAiming
+import LongTails.Algorithms.NearestAimingNesterov
 import LongTails.Proofs.Execution
 import Mathlib.Tactic
 

@@ -4,6 +4,23 @@ import LongTails.Proofs.MatrixSmooth
 import Mathlib.Analysis.Normed.Module.Basic
 import Mathlib.Tactic
 
+namespace LongTails.Algorithms.MatrixPolar
+
+noncomputable def dualMap (m n : ℕ) : Space m n →L[ℝ]
+    ((EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin m)) →L[ℝ] ℝ) :=
+  LinearMap.toContinuousLinearMap
+    { toFun := fun X => (innerSL ℝ X).comp (operatorEquiv m n).symm.toContinuousLinearMap
+      map_add' := by
+        intro X Y
+        ext U
+        simp
+      map_smul' := by
+        intro t X
+        ext U
+        simp }
+
+end LongTails.Algorithms.MatrixPolar
+
 namespace LongTails.Proofs.MuonMomentum
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]

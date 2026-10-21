@@ -29,6 +29,15 @@ private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
     withLetDecl name type value fun x => do
       return current ++ (← statementBudgets (body.instantiate1 x))
   | _ =>
+    if type.isAppOfArity `OracleTemplate.OnlineConvergence 2 then
+      let .const name levels := type.getAppArgs.back!
+        | throwError "Expected a bound definition"
+      let .defnInfo info ← getConstInfo name | throwError "Expected a bound definition"
+      let value := info.value.instantiateLevelParams info.levelParams levels
+      return #[Json.mkObj [
+        ("type", toJson (← ppExpr (← inferType value)).pretty),
+        ("value", toJson (← ppExpr value).pretty),
+        ("latex", toJson (← TheoremDescriptions.budgetLatex value))]]
     if type.isAppOfArity ``OracleTemplate.Convergence 2 then
       let budget := type.getAppArgs.back!
       let value ← if let .const name levels := budget then do

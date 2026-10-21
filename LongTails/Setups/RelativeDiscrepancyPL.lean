@@ -25,7 +25,7 @@ abbrev spec : Setup where
     (∀ x, HasGradientAt f (gradient f x) x) ∧
     (∀ x y, ‖gradient f x - gradient f y‖ ≤ p.L * ‖x - y‖) ∧
     (∃ g : ℕ → p.E → p.E,
-      (∀ k x seed, O.answer k (0, x) seed = g k x) ∧
+      (∀ k x seed, O.answer k (0, x) seed = g k.length x) ∧
       ∀ start n x, ‖∑ i : Fin n, (g (start + i.val) x - gradient f x)‖ ≤
         p.D * ‖gradient f x‖) ∧
     (∃ xstar, IsMinOn f Set.univ xstar ∧ f p.x0 - f xstar ≤ p.Δ ∧

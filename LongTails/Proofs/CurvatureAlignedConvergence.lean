@@ -171,8 +171,8 @@ theorem convergence : Convergence LongTails.Setups.CurvatureAlignedNoiseNonconve
     funext seed; rw [hexec seed.1 seed.2]
   have hmo : Measurable (fun ω : Fin (Tb + 1) × (ℕ → q.Ω) => sgdSeq g η q.x0 ω.2 (0 + ω.1.val)) :=
     measurable_window_out hgm η 0 Tb q.x0
-  refine ⟨by rw [hout]; exact hmo, ?_⟩
-  rw [hfun]
+  refine ⟨by erw [hout]; exact hmo, ?_⟩
+  erw [hfun]
   change Integrable (fun ω : Fin (Tb + 1) × (ℕ → q.Ω) =>
       ‖gradient f (sgdSeq g η q.x0 ω.2 (0 + ω.1.val))‖)
       ((PMF.uniformOfFintype (Fin (Tb + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧

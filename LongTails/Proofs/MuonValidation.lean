@@ -136,7 +136,7 @@ lemma measurable_representative (m n k : ℕ) (ρ : ℝ) :
   have he : representative (m := m) (n := n) (k := k) ρ =
       fun B => ∑ i : Fin (k + 1), if representativeIndex ρ B = i then B i else 0 := by
     funext B
-    simp [representative]
+    simp [representative, LongTails.Setups.FiniteVarianceSpectralSmooth.representative]
   rw [he]
   apply Finset.measurable_sum
   intro i _
@@ -358,8 +358,9 @@ lemma measurable_validation_output {m n : ℕ} {f : Space m n → ℝ} {s : ℝ}
   apply (measurable_bestIndex m n q).comp
   apply Measurable.of_eval
   intro i
-  apply (measurable_representative m n k ρ).comp
-  exact Measurable.of_eval (fun j => MuonProcess.measurable_batch_mean model (hX i) _ b)
+  have hmeans := Measurable.of_eval (fun j : Fin (k + 1) =>
+    MuonProcess.measurable_batch_mean model (hX i) (start + b * (k + 1) * i.val + b * j.val) b)
+  exact (measurable_representative m n k ρ).comp hmeans
 
 lemma product_event_bound {Ω Ξ : Type*} [MeasurableSpace Ω] [MeasurableSpace Ξ]
     {P : Measure Ω} {Q : Measure Ξ} [IsProbabilityMeasure P] [IsProbabilityMeasure Q]

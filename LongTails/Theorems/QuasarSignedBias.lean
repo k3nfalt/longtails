@@ -17,6 +17,6 @@ theorem result : Convergence LongTails.Setups.QuasarSignedBias.spec budget := by
   · rintro ⟨⟨⟩, ξ⟩
     obtain ⟨v, hv, hacc⟩ := (execute_accuracy p f O hp ho ξ)
     have he : f v = f u := le_antisymm (hv (Set.mem_univ _)) (hmin (Set.mem_univ _))
-    simpa only [budget, he] using hacc
+    simpa only [execute, budget, he] using hacc
 
 end OracleTemplate.QuasarSignedBias

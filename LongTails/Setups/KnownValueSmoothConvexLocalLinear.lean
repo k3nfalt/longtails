@@ -1,6 +1,14 @@
-import LongTails.Algorithms.SplitBrox
+import LongTails.Template
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.Convex.Function
+
+namespace OracleTemplate.SplitBrox
+
+abbrev Query (E : Type*) := E ⊕ (E × ℝ × E)
+
+abbrev Reply (E : Type*) := (ℝ × E) ⊕ E
+
+end OracleTemplate.SplitBrox
 
 open Set MeasureTheory
 open scoped RealInnerProductSpace

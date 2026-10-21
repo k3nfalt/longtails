@@ -21,16 +21,16 @@ theorem result :
   rcases hp with ⟨hn, hL, hR, hε⟩
   rcases h with ⟨hc, hg, hlip, xstar, hmin, hdist⟩
   let seed0 := (Classical.choice oracle.law.nonempty) 0
-  let g := fun z => oracle.answer 0 (0, z) seed0
+  let g := fun z => oracle.answer [] (0, z) seed0
   have hanswer : ∀ k z seed, oracle.answer k (0, z) seed = g z :=
-    fun k z seed => (hg k seed z.1 z.2).unique (hg 0 seed0 z.1 z.2)
+    fun k z seed => (hg k seed z.1 z.2).unique (hg [] seed0 z.1 z.2)
   let s := Nat.clog 2 (Nat.clog 2 q.n)
   let t := ⌈Real.sqrt (32 * q.L * q.R ^ 2 / ((q.n : ℝ) * q.ε))⌉₊
   let S := s + t
   let K := 3 * q.n * S
   have hK : K = (q.n + 2 * q.n) * S := by dsimp [K]; ring
   have hrate := vradaRun_rate (g := g) hL hR (NeZero.pos q.n) hc
-    (hg 0 seed0) (hlip 0 seed0) hmin hdist S
+    (hg [] seed0) (hlip [] seed0) hmin hdist S
   have heps := vradaWeight_tuning (m := q.n) (R := q.R) hL (NeZero.pos q.n) hε
   have hexec (seed : VradaSeeds q.n q.n S) (oracleSeed : (k : ℕ) → oracle.Seed k) :
       execute oracle (vrada q.L q.x0 q.n S) (fun _ => K) seed oracleSeed =

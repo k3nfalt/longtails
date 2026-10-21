@@ -1,6 +1,7 @@
 import LongTails.Proofs.ReshuffledConvergence
 import LongTails.Proofs.SgdExecution
 import LongTails.Proofs.Execution
+import LongTails.Proofs.ExecutionHistory
 import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.Probability.ProbabilityMassFunction.Integrals
 
@@ -194,12 +195,17 @@ lemma execute_reshuffled (g : Fin n → E → E) (K : ℕ) (η : ℕ → ℝ) (x
     execute ({ answer := fun _ (_, q) _ => g q.1 q.2 } : Oracle (Fin n × E) E)
         (reshuffledGradient K η x0) (fun _ => T) seed =
       iterate g (schedule seed) η x0 T := by
-  have h := advance_iterate g (schedule seed) η x0 T 0 0
-  rw [Nat.zero_add] at h
-  exact (StochasticGradient.execute_advance
-    ({ answer := fun _ (_, q) _ => g q.1 q.2 } : Oracle (Fin n × E) E)
-    (reshuffledGradient K η x0) T seed (fun _ => ())).trans
-    (congrArg (fun st : (ℕ → Equiv.Perm (Fin n)) × ℕ × E => st.2.2) h)
+  let O : Oracle (Fin n × E) E := { answer := fun _ (_, q) _ => g q.1 q.2 }
+  have h := execute_advance_history O (reshuffledGradient K η x0) T seed (fun _ => ())
+  rw [h]
+  have hiterate := advance_iterate g (schedule seed) η x0 T 0 0
+  rw [Nat.zero_add] at hiterate
+  change (StochasticGradient.advance
+      (fun (_ : ℕ) (st : (ℕ → Equiv.Perm (Fin n)) × ℕ × E) =>
+        (st.1, st.2.1 + 1, st.2.2 - η (st.2.1 / n) •
+          g (st.1 (st.2.1 / n) ⟨st.2.1 % n, Nat.mod_lt st.2.1 (NeZero.pos n)⟩) st.2.2))
+      T 0 (schedule seed, 0, x0)).2.2 = iterate g (schedule seed) η x0 T
+  exact congrArg (fun st : (ℕ → Equiv.Perm (Fin n)) × ℕ × E => st.2.2) hiterate
 
 end Execution
 
@@ -225,8 +231,8 @@ theorem convergence : Convergence spec (fun p _ => p.n * epochs p) := by
   have hans : ∀ k (q : Fin p.n × p.E) seed, O.answer k (0, q) seed = g q.1 q.2 :=
     fun k q seed => (hgrad k seed q.1 q.2).gradient.symm
   have hgradg : ∀ i x, HasGradientAt (f i) (g i x) x := fun i x => by
-    have := hgrad 0 (ξ0 0) i x
-    rw [hans 0 (i, x) (ξ0 0)] at this
+    have := hgrad [] (ξ0 0) i x
+    rw [hans [] (i, x) (ξ0 0)] at this
     exact this
   have hyp : Hyp f g ℓ p.Lavg p.Lmax p.σ xstar :=
     ⟨hLa, hLm, hconv, hgradg, hℓ0, hℓmax, havg, hlip, hmin, hnoise⟩

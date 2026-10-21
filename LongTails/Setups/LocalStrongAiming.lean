@@ -1,7 +1,21 @@
-import LongTails.Algorithms.NearestAimingNesterov
+import LongTails.Template
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import LongTails.Setups.SmoothAndConvex
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Topology.MetricSpace.HausdorffDistance
+
+namespace OracleTemplate.NearestAiming
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+noncomputable def nesterovStep (L μ : ℝ) (state : E × E) (g : E) : E × E :=
+  let s := 1 / (2 * Real.sqrt L)
+  let q := Real.sqrt μ * s
+  (state.1 + s • state.2 - s ^ 2 • g,
+    ((1 - q) / (1 + q)) • (state.2 - s • g))
+
+end OracleTemplate.NearestAiming
 
 open Set Metric
 open scoped RealInnerProductSpace
@@ -57,5 +71,6 @@ abbrev spec : Setup where
   successful p f output P :=
     ∃ xstar, IsMinOn f univ xstar ∧
       ∀ᵐ ω ∂(P : MeasureTheory.Measure _), f (output ω) - f xstar ≤ p.ε
+  allowedAlgorithm := FollowsNesterov
 
 end LongTails.Setups.LocalStrongAiming

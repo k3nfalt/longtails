@@ -38,7 +38,7 @@ abbrev spec : Setup where
     (∀ x, p.μ * ‖x‖ ^ 2 ≤ ‖I.A x‖ ^ 2 ∧ ‖I.A x‖ ^ 2 ≤ p.L * ‖x‖ ^ 2) ∧
     objective I p.x0 ≤ p.Δ ∧
     (∃ e : ℕ → p.E,
-      (∀ k x seed, O.answer k (0, x) seed = exactGradient I x + e k) ∧
+      (∀ k x seed, O.answer k (0, x) seed = exactGradient I x + e k.length) ∧
       ∀ n, ‖∑ k ∈ Finset.range n, e k‖ ≤ p.D)
   successful p I output P :=
     ∀ᵐ ω ∂(P : MeasureTheory.Measure _),

@@ -14,7 +14,7 @@ theorem result : Convergence LongTails.Setups.GeneralizedSmoothAndConvex.spec bu
   rintro q ⟨hL0, hL1, hR, hΔ, hε⟩
   rintro f oracle ⟨hc, hg, hgd, hH, u, hmin, hdist, hgap⟩
   let seed0 := (Classical.choice oracle.law.nonempty) 0
-  let g := fun x => oracle.answer 0 (0, x) seed0
+  let g := fun x => oracle.answer [] (0, x) seed0
   by_cases he : q.Δ ≤ q.ε
   · refine ⟨u, hmin, Filter.Eventually.of_forall ?_⟩
     intro seed
@@ -23,11 +23,11 @@ theorem result : Convergence LongTails.Setups.GeneralizedSmoothAndConvex.spec bu
     rw [hb]
     exact hgap.trans he
   · let K := trials q.toPublic q.ε
-    have hacc := run_accuracy_min hL0 hL1 hR hΔ hε hc (hg 0 seed0) (hgd 0 seed0)
-      (hH 0 seed0) q.x0 u hmin hdist hgap K (Nat.le_ceil _)
+    have hacc := run_accuracy_min hL0 hL1 hR hΔ hε hc (hg [] seed0) (hgd [] seed0)
+      (hH [] seed0) q.x0 u hmin hdist hgap K (Nat.le_ceil _)
     refine ⟨u, hmin, Filter.Eventually.of_forall ?_⟩
     intro seed
-    have hexec := execute_gradient_oracle q.toPublic f g oracle (hg 0 seed0) hg hL0 hL1 hΔ K seed.1 seed.2
+    have hexec := execute_gradient_oracle q.toPublic f g oracle (hg [] seed0) hg hL0 hL1 hΔ K seed.1 seed.2
     change f (execute oracle (algorithm q.toPublic) (budget q) seed.1 seed.2) - f u ≤ q.ε
     have hb : budget q = fun _ => 2 * K := by
       funext i
