@@ -64,8 +64,8 @@ lemma runUpdate_local (R ε : ℝ) (x0 : E) (s : State E) {g : E} {cut : ℝ} {j
   simp only [runUpdate, hp]
 
 lemma inv_run (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
-    {s : State E} {T : ℕ} (hst : s.stage = .run) (hs : Inv c s T) (k : ℕ) (seed : O.Seed k) :
-    Inv c (update c.R c.ε c.x0 s (O.answer k (0, query c.R c.x0 s) seed)) (T + 1) := by
+    {s : State E} {T : ℕ} (hst : s.stage = .run) (hs : Inv c s T) (history : List ((Fin 1 × Query E) × Reply E)) (seed : O.Seed history.length) :
+    Inv c (update c.R c.ε c.x0 s (O.answer history (0, query c.R c.x0 s) seed)) (T + 1) := by
   simp only [Inv, hst] at hs
   obtain ⟨hv, hp, hc, hr⟩ := hs
   have hR := hp.R_pos
@@ -87,7 +87,7 @@ lemma inv_run (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
     have hq2 : SplitBrox.query (phaseK c.R s) (phaseB c.R s) s.inner =
         .inl (mix s.inner.completed s.inner.primal s.inner.momentum) := by
       simp [SplitBrox.query, not_le.mpr hn, hph]
-    rw [hq2, hO.first k seed _ hz, runUpdate_first _ _ _ s hph]
+    rw [hq2, hO.first history seed _ hz, runUpdate_first _ _ _ s hph]
     have hrank : rank s.inner + 1 ≤ rank (SplitBrox.update (phaseK c.R s) (level s) s.inner
         (.inl (c.f (mix s.inner.completed s.inner.primal s.inner.momentum),
           c.grad (mix s.inner.completed s.inner.primal s.inner.momentum)))) :=
@@ -146,7 +146,7 @@ lemma inv_run (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
     obtain ⟨hzpt, hzval, hzg⟩ := hfz
     have hprev : prev ∈ c.C := by
       have := hr.feasible.previous_mem; rw [hph] at this; exact this
-    obtain ⟨v, hv', hvr, hmin, he⟩ := hO.linear k seed s.inner.momentum
+    obtain ⟨v, hv', hvr, hmin, he⟩ := hO.linear history seed s.inner.momentum
       (radius (phaseB c.R s) j) g hr.feasible.momentum_mem (le_of_lt (radius_pos hbpos j))
     have hq2 : SplitBrox.query (phaseK c.R s) (phaseB c.R s) s.inner =
         .inr (s.inner.momentum, radius (phaseB c.R s) j, g) := by

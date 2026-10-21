@@ -1,4 +1,4 @@
-import LongTails.Algorithms.SplitBrox
+import LongTails.Setups.KnownValueSmoothConvexLocalLinear
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.Convex.Function
 

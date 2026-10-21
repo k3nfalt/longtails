@@ -11,17 +11,17 @@ open OracleTemplate.SplitBrox
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 lemma inv_init0 (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
-    {s : State E} {T : ℕ} (hst : s.stage = .init0) (hs : Inv c s T) (k : ℕ) (seed : O.Seed k) :
-    Inv c (update c.R c.ε c.x0 s (O.answer k (0, query c.R c.x0 s) seed)) (T + 1) := by
+    {s : State E} {T : ℕ} (hst : s.stage = .init0) (hs : Inv c s T) (history : List ((Fin 1 × Query E) × Reply E)) (seed : O.Seed history.length) :
+    Inv c (update c.R c.ε c.x0 s (O.answer history (0, query c.R c.x0 s) seed)) (T + 1) := by
   simp only [Inv, hst] at hs
   obtain ⟨hT, rfl⟩ := hs
   have hq : query c.R c.x0 ((algorithm c.R c.ε c.x0).initial ()) = .inl c.x0 := rfl
-  rw [hq, hO.first k seed c.x0 c.x0_mem]
+  rw [hq, hO.first history seed c.x0 c.x0_mem]
   simp [update, algorithm, Inv, hT]
 
 lemma inv_frozen (c : Ctx E) {O : Oracle (Query E) (Reply E)}
-    {s : State E} {T : ℕ} (hst : s.stage = .frozen) (hs : Inv c s T) (k : ℕ) (seed : O.Seed k) :
-    Inv c (update c.R c.ε c.x0 s (O.answer k (0, query c.R c.x0 s) seed)) (T + 1) := by
+    {s : State E} {T : ℕ} (hst : s.stage = .frozen) (hs : Inv c s T) (history : List ((Fin 1 × Query E) × Reply E)) (seed : O.Seed history.length) :
+    Inv c (update c.R c.ε c.x0 s (O.answer history (0, query c.R c.x0 s) seed)) (T + 1) := by
   have hu : ∀ r, update c.R c.ε c.x0 s r = s := by
     intro r; cases r <;> simp [update, hst]
   rw [hu]
@@ -29,11 +29,11 @@ lemma inv_frozen (c : Ctx E) {O : Oracle (Query E) (Reply E)}
   exact hs
 
 lemma inv_init1 (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
-    {s : State E} {T : ℕ} (hst : s.stage = .init1) (hs : Inv c s T) (k : ℕ) (seed : O.Seed k) :
-    Inv c (update c.R c.ε c.x0 s (O.answer k (0, query c.R c.x0 s) seed)) (T + 1) := by
+    {s : State E} {T : ℕ} (hst : s.stage = .init1) (hs : Inv c s T) (history : List ((Fin 1 × Query E) × Reply E)) (seed : O.Seed history.length) :
+    Inv c (update c.R c.ε c.x0 s (O.answer history (0, query c.R c.x0 s) seed)) (T + 1) := by
   simp only [Inv, hst] at hs
   obtain ⟨hT, hf0, hg0, hub, hbest, hph, hd⟩ := hs
-  obtain ⟨v, hv, hvr, hmin, he⟩ := hO.linear k seed c.x0 c.R s.g0 c.x0_mem c.R_nonneg
+  obtain ⟨v, hv, hvr, hmin, he⟩ := hO.linear history seed c.x0 c.R s.g0 c.x0_mem c.R_nonneg
   have hq : query c.R c.x0 s = .inr (c.x0, c.R, s.g0) := by simp [query, hst]
   rw [hq, he]
   have hu : update c.R c.ε c.x0 s (.inr v) =

@@ -37,8 +37,8 @@ lemma final_value_le (c : Ctx E) {s : State E} (hgap : 0 < gap s)
   linarith
 
 lemma inv_check (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
-    {s : State E} {T : ℕ} (hst : s.stage = .check) (hs : Inv c s T) (k : ℕ) (seed : O.Seed k) :
-    Inv c (update c.R c.ε c.x0 s (O.answer k (0, query c.R c.x0 s) seed)) (T + 1) := by
+    {s : State E} {T : ℕ} (hst : s.stage = .check) (hs : Inv c s T) (history : List ((Fin 1 × Query E) × Reply E)) (seed : O.Seed history.length) :
+    Inv c (update c.R c.ε c.x0 s (O.answer history (0, query c.R c.x0 s) seed)) (T + 1) := by
   simp only [Inv, hst] at hs
   obtain ⟨hv, hp, hc, hk⟩ := hs
   have hR := hp.R_pos
@@ -46,7 +46,7 @@ lemma inv_check (c : Ctx E) {O : Oracle (Query E) (Reply E)} (hO : Valid c O)
   have hgap : 0 < gap s := lt_trans c.ε_pos hk.gap_gt
   have hy := hk.feasible.primal_mem
   have hq : query c.R c.x0 s = .inl s.inner.primal := by simp [query, hst]
-  rw [hq, hO.first k seed _ hy]
+  rw [hq, hO.first history seed _ hy]
   have hu : update c.R c.ε c.x0 s (.inl (c.f s.inner.primal, c.grad s.inner.primal)) =
       checkUpdate c.R c.ε c.x0 s (c.f s.inner.primal) := by simp [update, hst]
   rw [hu]
