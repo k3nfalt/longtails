@@ -40,6 +40,7 @@ You may install reasonable Python libraries, system packages, and Lean libraries
 
 Deliver only:
 - The chosen setup as a Lean specification under `LongTails/Setups`, including when it is an established setup from the literature. If an exactly equivalent specification already exists in the repository, reuse it explicitly rather than adding a duplicate; otherwise, adding the setup is mandatory.
+  Keep each setup's definitions, assumptions, and `spec` in exactly one Lean file; do not split a setup across multiple files. Reuse existing shared definitions by importing them, and put supporting proofs in `LongTails/Proofs`.
 - Algorithm definitions.
 - Complete supporting Lean proofs and lemmas for the new result, following the existing proof-module layout.
 - Exactly one NEW main proved convergence or oracle-complexity theorem under `LongTails/Theorems`, connected to the chosen setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
