@@ -254,21 +254,18 @@ lemma calls_eq_sampleOffset (cfg : Config) :
 lemma execute_batchState (cfg : Config) (g : E → Ω → E) (x0 : E)
     (O : Oracle E E) (seed : RepresentativeSeed cfg)
     (ξ : (k : ℕ) → O.Seed k) (ζ : ℕ → Ω)
-    (hanswer : ∀ k x, O.answer k (0, x) (ξ k) = g x (ζ (k / 2))) :
+    (hanswer : ∀ k x, O.answer k (0, x) (ξ k.length) = g x (ζ (k.length / 2))) :
     execute O (multiscaleRepresentatives cfg x0) (fun _ => cfg.calls) seed ξ =
       representativeOutput (batchState cfg g x0 seed ζ cfg.tasks.length) := by
-  erw [execute_indexed]
-  have hstep : (fun sc : RepresentativeState cfg E × ℕ =>
-      (representativeUpdate cfg sc.1
-        (O.answer sc.2 (0, representativeQuery cfg sc.1) (ξ sc.2)), sc.2 + 1)) =
-      indexedStep cfg g ζ := by
-    funext sc
-    simp only [indexedStep, hanswer]
-  change representativeOutput ((fun sc : RepresentativeState cfg E × ℕ =>
-      (representativeUpdate cfg sc.1
-        (O.answer sc.2 (0, representativeQuery cfg sc.1) (ξ sc.2)), sc.2 + 1))^[cfg.calls]
-      ((multiscaleRepresentatives cfg x0).initial seed, 0)).1 = _
-  rw [hstep, calls_eq_sampleOffset, indexedStep_batchState cfg g x0 seed ζ _ le_rfl]
+  have hans : ∀ history query, O.answer history query (ξ history.length) =
+      g query.2 (ζ (history.length / 2)) := by
+    intro history query
+    have hi : query.1 = 0 := Subsingleton.elim _ _
+    simpa only [← hi] using hanswer history query.2
+  erw [execute_indexed_of_answer O _ _ _ ξ (fun k query => g query.2 (ζ (k / 2))) hans]
+  change representativeOutput ((indexedStep cfg g ζ)^[cfg.calls]
+    ((multiscaleRepresentatives cfg x0).initial seed, 0)).1 = _
+  rw [calls_eq_sampleOffset, indexedStep_batchState cfg g x0 seed ζ _ le_rfl]
 
 lemma indexedStep_frozen (cfg : Config) (g : E → Ω → E) (ζ : ℕ → Ω)
     (s : RepresentativeState cfg E) (hs : cfg.tasks.length ≤ s.taskIndex) (c n : ℕ) :
@@ -283,22 +280,19 @@ lemma indexedStep_frozen (cfg : Config) (g : E → Ω → E) (ζ : ℕ → Ω)
 lemma execute_batchState_of_le (cfg : Config) (g : E → Ω → E) (x0 : E)
     (O : Oracle E E) (seed : RepresentativeSeed cfg)
     (ξ : (k : ℕ) → O.Seed k) (ζ : ℕ → Ω)
-    (hanswer : ∀ k x, O.answer k (0, x) (ξ k) = g x (ζ (k / 2)))
+    (hanswer : ∀ k x, O.answer k (0, x) (ξ k.length) = g x (ζ (k.length / 2)))
     (K : ℕ) (hK : cfg.calls ≤ K) :
     execute O (multiscaleRepresentatives cfg x0) (fun _ => K) seed ξ =
       representativeOutput (batchState cfg g x0 seed ζ cfg.tasks.length) := by
-  erw [execute_indexed]
-  have hstep : (fun sc : RepresentativeState cfg E × ℕ =>
-      (representativeUpdate cfg sc.1
-        (O.answer sc.2 (0, representativeQuery cfg sc.1) (ξ sc.2)), sc.2 + 1)) =
-      indexedStep cfg g ζ := by
-    funext sc
-    simp only [indexedStep, hanswer]
-  change representativeOutput ((fun sc : RepresentativeState cfg E × ℕ =>
-      (representativeUpdate cfg sc.1
-        (O.answer sc.2 (0, representativeQuery cfg sc.1) (ξ sc.2)), sc.2 + 1))^[K]
-      ((multiscaleRepresentatives cfg x0).initial seed, 0)).1 = _
-  rw [hstep, show K = (K - cfg.calls) + cfg.calls by omega,
+  have hans : ∀ history query, O.answer history query (ξ history.length) =
+      g query.2 (ζ (history.length / 2)) := by
+    intro history query
+    have hi : query.1 = 0 := Subsingleton.elim _ _
+    simpa only [← hi] using hanswer history query.2
+  erw [execute_indexed_of_answer O _ _ _ ξ (fun k query => g query.2 (ζ (k / 2))) hans]
+  change representativeOutput ((indexedStep cfg g ζ)^[K]
+    ((multiscaleRepresentatives cfg x0).initial seed, 0)).1 = _
+  rw [show K = (K - cfg.calls) + cfg.calls by omega,
     Function.iterate_add_apply, calls_eq_sampleOffset,
     indexedStep_batchState cfg g x0 seed ζ _ le_rfl,
     indexedStep_frozen cfg g ζ _ (by simp [batchState_index])]

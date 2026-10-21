@@ -1,3 +1,4 @@
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Setups.UncalibratedSharp
 import LongTails.Algorithms.RobustPolyak
 import LongTails.Proofs.AcceleratedMarkovExecution
@@ -153,7 +154,7 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
   let κ := 4 * (p.μ - p.ρ) ^ 2 * p.α * p.β / ((p.G + p.ρ) ^ 2 * (p.α + p.β) ^ 2)
   let c := 2 * (1 - p.ρ / p.μ) / (p.α + p.β)
   let A := robustPolyak c p.x0
-  let step : ℕ → p.E → p.E := fun k x => A.update x (O.answer k (A.query x) (ξ k))
+  let step : ℕ → p.E → p.E := fun k x => A.update x (executeAnswerAt O A () ξ k (A.query x))
   let x : ℕ → p.E := fun k => advance step k 0 p.x0
   have hx (k : ℕ) : x (k + 1) = step k (x k) := by
     dsimp [x]
@@ -165,11 +166,11 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
     induction k with
     | zero => simpa [x, advance] using pow_le_pow_left₀ (norm_nonneg _) hdist 2
     | succ k ih =>
-      obtain ⟨γ, r, g, e, hγ, hg, he, hsub, hra, hrb, ha⟩ := hans k (x k) (ξ k)
+      obtain ⟨γ, r, g, e, hγ, hg, he, hsub, hra, hrb, ha⟩ := hans (executeIndexedState O A () ξ k).2 (x k) (ξ _)
       have hs := oracle_step p hvalid f (x k) u hmin (hsharp _) γ r g e hγ hg he hsub hra hrb
       rw [hx]
-      dsimp only [step, A, robustPolyak]
-      rw [ha]
+      dsimp only [step, executeAnswerAt, A, robustPolyak]
+      erw [ha]
       have hi := mul_le_mul_of_nonneg_left ih hq
       rw [pow_succ]
       change ‖x k - (c * (γ * r) / ‖γ • (g + e)‖ ^ 2) • (γ • (g + e)) - u‖ ^ 2 ≤ _
@@ -188,7 +189,7 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
   rw [div_one] at hb
   have hacc : f (x K) - f u ≤ p.ε := by nlinarith only [hsq, hnorm, hb, hgap0, hε]
   dsimp only
-  erw [execute_advance]
+  erw [execute_advance_history]
   exact ⟨u, hmin, hacc⟩
 
 end OracleTemplate.UncalibratedSharp

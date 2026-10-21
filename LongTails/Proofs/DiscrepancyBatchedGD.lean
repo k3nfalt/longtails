@@ -105,15 +105,16 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E p.E)
   rcases ho with ⟨hg, hlip, ⟨g, hanswer, herr⟩, xstar, hmin, hgap, hpl⟩
   let B := batchSize p.D
   dsimp only
+  change ∃ xstar, IsMinOn f Set.univ xstar ∧
+    f (execute O (batchedGD p.toPublic) (fun _ => K * batchSize p.D) () ξ) - f xstar ≤ p.ε
+  rw [execute_advance_of_answer O (batchedGD p.toPublic) (K * batchSize p.D) () ξ
+    (fun k query => g k query.2) (by
+      intro history query
+      rcases query with ⟨i, x⟩
+      have hi : i = 0 := Subsingleton.elim _ _
+      subst i
+      exact hanswer history x (ξ history.length))]
   unfold batchedGD
-  erw [execute_advance]
-  have hanswer' (k : ℕ) (query : Fin 1 × p.E) (seed : O.Seed k) :
-      O.answer k query seed = g k query.2 := by
-    rcases query with ⟨i, x⟩
-    have hi : i = 0 := Subsingleton.elim _ _
-    subst i
-    exact hanswer k x seed
-  simp only [hanswer']
   have he := advance_batched (batchSize_pos p.D) (Gradient.gd (p.L, p.x0))
     (fun x _ => x) (fun _ replies => (batchSize p.D : ℝ)⁻¹ • ∑ i, replies i) 0
     (fun x k => g k x) (fun k => k) K 0 p.x0

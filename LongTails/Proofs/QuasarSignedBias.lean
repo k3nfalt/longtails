@@ -51,7 +51,9 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
   have hC : 0 < C := by dsimp [C]; positivity
   have hη : 0 < η := by dsimp [η]; positivity
   let A := bestValueDescent η p.x0
-  let step := fun k s => A.update s (O.answer k (A.query s) (ξ k))
+  let response := fun k (query : Fin 1 × p.E) =>
+    (f query.2, gradient f query.2 + b (k + 1) - b k)
+  let step := fun k s => A.update s (response k (A.query s))
   let s := fun k => advance step k 0 (A.initial ())
   let x := fun k => (s k).2.1
   have hs (k : ℕ) : s (k + 1) = step k (s k) := by
@@ -64,7 +66,7 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
     | zero => rfl
     | succ k ih => rw [hs]; exact congrArg (· + 1) ih
   have hx (k : ℕ) : x (k + 1) = x k - η • (gradient f (x k) + b (k + 1) - b k) := by
-    simp only [x, hs, step, A, bestValueDescent, hans]
+    simp only [x, hs, step, A, bestValueDescent, response]
   have hbest : ∀ k, 0 < k →
       f (s k).2.2.1 = (s k).2.2.2 ∧ ∀ j < k, f (s k).2.2.1 ≤ f (x j) := by
     intro k
@@ -75,14 +77,14 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
       by_cases hk0 : k = 0
       · subst k
         constructor
-        · simp [hs, step, A, bestValueDescent, hans, hindex]
+        · simp [hs, step, A, bestValueDescent, response, hindex]
         · intro j hj
           have : j = 0 := by omega
           subst j
-          simp [hs, step, A, bestValueDescent, hans, hindex, x]
+          simp [hs, step, A, bestValueDescent, response, hindex, x]
       · have hi := ih (Nat.pos_of_ne_zero hk0)
         rw [hs]
-        simp only [step, A, bestValueDescent, hans, hindex, hk0, false_or]
+        simp only [step, A, bestValueDescent, response, hindex, hk0, false_or]
         change f (if f (x k) ≤ (s k).2.2.2 then (x k, f (x k)) else (s k).2.2).1 =
           (if f (x k) ≤ (s k).2.2.2 then (x k, f (x k)) else (s k).2.2).2 ∧
           ∀ j < k + 1, f (if f (x k) ≤ (s k).2.2.2 then (x k, f (x k)) else (s k).2.2).1 ≤ f (x j)
@@ -139,7 +141,12 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle p.E (ℝ × p.
         2 * η * p.τ * (K : ℝ) * p.ε := by nlinarith only [hen, hsum', hR2, hinit, hn]
     exact (mul_le_mul_iff_right₀ (show 0 < 2 * η * p.τ * (K : ℝ) by positivity)).mp hrate
   dsimp only
-  erw [execute_advance]
+  rw [execute_advance_of_answer O A K () ξ response (by
+    intro history query
+    rcases query with ⟨i, x⟩
+    have hi : i = 0 := Subsingleton.elim _ _
+    subst i
+    exact hans history x (ξ history.length))]
   exact ⟨u, hmin, hacc⟩
 
 end OracleTemplate.QuasarSignedBias

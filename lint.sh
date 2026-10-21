@@ -2,6 +2,11 @@
 set -eu
 cd "$(dirname "$0")"
 
+if grep -REn --include='*.lean' '^[[:space:]]*(public[[:space:]]+)?import[[:space:]]+LongTails\.(Algorithms|Proofs)(\.|[[:space:]]|$)' LongTails/Setups; then
+  echo "Setups must not import LongTails.Algorithms or LongTails.Proofs." >&2
+  exit 1
+fi
+
 ruff check .
 ruff format --check .
 

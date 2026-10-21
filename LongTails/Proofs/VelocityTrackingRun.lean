@@ -354,9 +354,11 @@ lemma execute_vt (Q : ProbabilityMeasure Ω) (g : ℕ → E → Ω → E) (γ β
     (ξ : ℕ → Ω) :
     execute { Seed := fun _ => Ω
               law := ⟨Measure.infinitePi (fun _ : ℕ => (Q : Measure Ω)), inferInstance⟩
-              answer := fun k (_, x) seed => g k x seed } (velocityTrackingSgd γ β x0)
+              answer := fun history (_, x) seed => g history.length x seed } (velocityTrackingSgd γ β x0)
       (fun _ => N) () ξ = ((run g γ β 0 N (x0, 0) (fun i => ξ i)).1, N) := by
-  erw [StochasticGradient.execute_advance]
+  erw [StochasticGradient.execute_advance_indexed
+    (law := ⟨Measure.infinitePi (fun _ : ℕ => (Q : Measure Ω)), inferInstance⟩)
+    (answer := fun k query seed => g k query.2 seed)]
   change (velocityTrackingSgd γ β x0).output (StochasticGradient.advance _ N 0 (0, (x0, 0).1,
     (x0, 0).2)) = _
   erw [advance_vt g γ β x0 ξ N 0 0 (x0, 0)]

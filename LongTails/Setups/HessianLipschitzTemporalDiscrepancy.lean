@@ -33,7 +33,7 @@ abbrev spec : Setup where
     (∀ x y, ‖gradient f x - gradient f y‖ ≤ p.L * ‖x - y‖) ∧
     (∀ x y, ‖fderiv ℝ (gradient f) x - fderiv ℝ (gradient f) y‖ ≤ p.M * ‖x - y‖) ∧
     (∃ e : ℕ → p.E,
-      (∀ k x seed, O.answer k (0, x) seed = gradient f x + e k) ∧
+      (∀ k x seed, O.answer k (0, x) seed = gradient f x + e k.length) ∧
       ∀ n, ‖∑ k ∈ Finset.range n, e k‖ ≤ p.D) ∧
     (∃ xstar, IsMinOn f Set.univ xstar ∧ f p.x0 - f xstar ≤ p.Δ)
   successful p f output P :=

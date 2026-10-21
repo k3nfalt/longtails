@@ -1,3 +1,4 @@
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Proofs.NearZeroSumCalculus
 import LongTails.Proofs.SgdExecution
 import Mathlib.Algebra.Order.BigOperators.Ring.Finset
@@ -145,13 +146,25 @@ lemma execute_prefix_congr {Query Reply Output : Type*}
     (h : ∀ k, k < N → ξ k = ζ k) :
     OracleTemplate.execute O A (fun _ => N) seed ξ =
       OracleTemplate.execute O A (fun _ => N) seed ζ := by
-  rw [OracleTemplate.StochasticGradient.execute_advance,
-    OracleTemplate.StochasticGradient.execute_advance]
-  congr 1
-  apply advance_prefix_congr
-  intro k _ hk
-  funext state
-  rw [h k (by simpa using hk)]
+  have hist : ∀ k, k ≤ N →
+      OracleTemplate.executeIndexedState O A seed ξ k =
+        OracleTemplate.executeIndexedState O A seed ζ k := by
+    intro k
+    induction k with
+    | zero => intro _; rfl
+    | succ k ih =>
+      intro hk
+      have hprev := ih (by omega)
+      simp only [OracleTemplate.executeIndexedState]
+      rw [congrArg Prod.fst hprev, congrArg Prod.snd hprev]
+      have hlen := OracleTemplate.executeIndexedState_length O A seed ζ k
+      have hseed : ξ (OracleTemplate.executeIndexedState O A seed ζ k).2.length =
+          ζ (OracleTemplate.executeIndexedState O A seed ζ k).2.length :=
+        h _ (by rw [hlen]; omega)
+      rw [hseed]
+  unfold OracleTemplate.execute
+  rw [OracleTemplate.executeWithTrace_eq_executeIndexedState,
+    OracleTemplate.executeWithTrace_eq_executeIndexedState, hist N le_rfl]
 
 section Quadratic
 

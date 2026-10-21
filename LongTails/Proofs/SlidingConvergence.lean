@@ -1,5 +1,6 @@
 import LongTails.Proofs.SlidingRun
 import LongTails.Proofs.SlidingExecution
+import LongTails.Proofs.ExecutionHistory
 
 open Set
 open scoped RealInnerProductSpace
@@ -293,14 +294,14 @@ lemma convergence_main :
         execute oracle (sliding q) (fun i => if i = 0 then 2 * outerCap q else N) () ξ ∈ I.Q ∧
           objective I (execute oracle (sliding q) (fun i => if i = 0 then 2 * outerCap q else N) () ξ) - objective I xs ≤ q.ε := by
       intro ξ
-      set r : ℕ → Query q → q.E := fun k qq => oracle.answer k qq (ξ k) with hrdef
+      set r : ℕ → Query q → q.E := executeAnswerAt oracle (sliding q) () ξ with hrdef
       have hsub0 : SubgradientOracle I.h (subAt q r 0 0) I.Q q.M := fun u hu =>
         hsubA _ (ξ _) u hu
       have hy : Hyp I.f I.h I.grad I.Q q.L0 q.L1 :=
         ⟨hL0, hL1, hc, hgrad, hcont, hsmooth, hQ, convexOn_of_subgradient hQ hsub0⟩
       have hI : Inst q r I.f I.h I.grad I.Q xs :=
         { hyp := hy, hM := hM, hR := hR, hΔ := hΔ, hε := hε, hG := hG
-          grad := fun k x => hgradA k (ξ k) x
+          grad := fun k x => hgradA _ (ξ _) x
           sub := fun k t u hu => hsubA _ (ξ _) u hu
           proj := fun k t w => hprojA _ (ξ _) w
           x0 := hx0, memxs := hxs, min := hmin, dist := hdist, gap := hgap, gs := hGx }
@@ -331,6 +332,8 @@ lemma convergence_main :
       have hidle : Idle q (bnd q r K).1 := Or.inl hbig
       let B : Fin 3 → ℕ := fun i => if i = 0 then 2 * outerCap q else N
       let state : ℕ → (sliding q).State := fun n => ((trans q r)^[n] ((sliding q).initial (), 0)).1
+      have hstate (n : ℕ) : (executeIndexedState oracle (sliding q) () ξ n).1 = state n := by
+        exact executeIndexedState_eq_executeAnswerAt oracle (sliding q) () ξ n
       have houtput (n : ℕ) (hn : (bnd q r K).2 ≤ n) : (sliding q).output (state n) = (bnd q r K).1.x := by
         have hti := trans_idle (r := r) hstage hidle (bnd q r K).2 (n - (bnd q r K).2)
         dsimp only [state]
@@ -338,17 +341,12 @@ lemma convergence_main :
           Function.iterate_add_apply, bnd_trans, hti]
         rfl
       have hexec : execute oracle (sliding q) B () ξ = (bnd q r K).1.x := by
-        apply execute_eq_of_safe_prefix oracle (sliding q) B () ξ state
-          (fun n i => B i - calls q r n i) (bnd q r K).2 _ rfl
-        · intro n
-          dsimp only [state]
-          rw [Function.iterate_succ_apply']
-          change (sliding q).update _ (r (((trans q r)^[n] ((sliding q).initial (), 0)).2) _) = _
-          rw [trans_snd]
-          simp only [Nat.zero_add, hrdef]
+        apply execute_eq_of_history_safe_prefix oracle (sliding q) B () ξ
+          (fun n i => B i - calls q r n i) (bnd q r K).2 _
         · funext i; simp [calls]
-        · exact remaining_succ B
+        · simpa only [hstate] using remaining_succ (p := q) (r := r) B
         · intro n hn
+          rw [hstate]
           let i := ((sliding q).query (state n)).1
           have hcount : calls q r (n + 1) i ≤ B i := by
             by_cases hi : i = 0
@@ -360,7 +358,7 @@ lemma convergence_main :
             exact congrArg (fun j => calls q r n i + j) (ite_eq_left rfl)
           change 0 < B i - calls q r n i
           omega
-        · exact houtput
+        · simpa only [hstate] using houtput
         · have hsum : N ≤ ∑ i, B i := by
             have h := Finset.single_le_sum (fun i (_ : i ∈ Finset.univ) => Nat.zero_le (B i))
               (Finset.mem_univ (1 : Fin 3))

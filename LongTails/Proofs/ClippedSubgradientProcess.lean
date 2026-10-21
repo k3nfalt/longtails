@@ -89,7 +89,7 @@ lemma advance_run (q : Params) (g : q.E → q.Ω → q.E) (projection : q.E → 
     (P : ProbabilityMeasure (ℕ → q.Ω)) (ξ : ℕ → q.Ω) (n call t idx : ℕ) (x out : q.E) :
     StochasticGradient.advance
       (fun k state => (algorithm q).update state
-        ((sampleOracle q g projection P).answer k ((algorithm q).query state) (ξ k)))
+        ((sampleOracle q g projection P).answer [] ((algorithm q).query state) (ξ k)))
       (2 * n) call ⟨t, x, false, x, idx, out⟩ =
       run q g projection n t x idx out (fun k => ξ (call + k)) := by
   dsimp only [algorithm, ClippedSubgradient.method, sampleOracle]
@@ -149,7 +149,8 @@ lemma execute_algorithm (q : Params) (g : q.E → q.Ω → q.E) (projection : q.
     (P : ProbabilityMeasure (ℕ → q.Ω)) (j : Fin (steps q + 1)) (ξ : ℕ → q.Ω) :
     execute (sampleOracle q g projection P) (algorithm q) (fun _ => (2 * steps q)) j ξ =
       trajectory q g projection (fun k => ξ (2 * k)) j.val := by
-  erw [StochasticGradient.execute_advance]
+  erw [StochasticGradient.execute_advance_of_answer _ _ _ _ _
+    (fun k query => (sampleOracle q g projection P).answer [] query (ξ k)) (fun _ _ => rfl)]
   have h := advance_run q g projection P ξ (steps q) 0 0 j.val q.x0 q.x0
   simp only [Nat.zero_add] at h
   have hinit : (algorithm q).initial j = ⟨0, q.x0, false, q.x0, j.val, q.x0⟩ := rfl

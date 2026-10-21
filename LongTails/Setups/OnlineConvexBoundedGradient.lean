@@ -32,8 +32,8 @@ abbrev spec : OnlineSetup where
     (∀ t, ConvexOn ℝ p.K (losses t) ∧
       ∀ x ∈ p.K, HasGradientAt (losses t) (gradient (losses t) x) x ∧
         ‖gradient (losses t) x‖ ≤ p.G) ∧
-    ∀ t query seed,
-      oracle.answer t query seed = gradient (losses t) query.2
+    ∀ history query seed,
+      oracle.answer history query seed = gradient (losses history.length) query.2
   successful p T losses result _ bound :=
     ∀ ω, let trace := (result ω).2
       ∀ u : p.K,

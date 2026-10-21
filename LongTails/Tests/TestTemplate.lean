@@ -66,7 +66,7 @@ theorem adaptive_false_replies : execute { answer := fun _ (_, _) _ => false } a
 theorem one_query_solves : Convergence spec (fun _ _ => 1) := by
   refine ⟨fun _ => readOracle, ?_, fun _ _ => trivial⟩
   intro p hp hidden oracle h
-  exact Filter.Eventually.of_forall (fun seed => h 0 (seed.2 0))
+  exact Filter.Eventually.of_forall (fun seed => h [] (seed.2 0))
 
 theorem restriction_applies_to_successful_algorithm :
     ¬ Convergence { spec with allowedAlgorithm := fun _ A => A = constant 0 } (fun _ _ => 1) := by
@@ -249,7 +249,7 @@ def alternatingCoin : Oracle Unit Bool where
   law := ⟨(1 / 2 : ENNReal) • Measure.dirac (fun _ => false) +
     (1 / 2 : ENNReal) • Measure.dirac (fun _ => true),
     ⟨by simp [ENNReal.inv_two_add_inv_two]⟩⟩
-  answer := fun k (_, _) seed => if k % 2 = 0 then seed else !seed
+  answer := fun k (_, _) seed => if k.length % 2 = 0 then seed else !seed
 
 def readCoin : Algorithm Unit Bool Bool where
   State := Bool

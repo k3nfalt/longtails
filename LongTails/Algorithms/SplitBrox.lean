@@ -1,3 +1,4 @@
+import LongTails.Setups.KnownValueSmoothConvexLocalLinear
 import LongTails.Template
 import Mathlib.Analysis.InnerProductSpace.Basic
 
@@ -8,10 +9,6 @@ open scoped RealInnerProductSpace
 namespace OracleTemplate.SplitBrox
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-
-abbrev Query (E : Type*) := E ⊕ (E × ℝ × E)
-
-abbrev Reply (E : Type*) := (ℝ × E) ⊕ E
 
 inductive Phase (E : Type*) where
   | first

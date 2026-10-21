@@ -32,7 +32,8 @@ lemma execute_paired {d : ℕ} {U Ω : Type} [MeasurableSpace Ω]
     (0, 0) P (fun z ω => (g z.1 ω, g z.2 ω)) ξ B τ
   rw [Nat.mul_comm 3 B]
   refine h.trans ?_
-  erw [StochasticGradient.execute_advance]
+  erw [StochasticGradient.execute_advance Q
+    (fun z ω => (oracle g z.1 ω, oracle g z.2 ω)) A B τ (fun k i => ξ (k * 3 + i.val))]
   rfl
 
 lemma tuning {L Λ σ Δ ε : ℝ} (hL : 0 < L) (hΛ : 0 ≤ Λ) (hσ : 0 ≤ σ)

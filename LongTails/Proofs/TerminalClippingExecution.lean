@@ -36,7 +36,7 @@ lemma advance_run {Ω : Type} [MeasurableSpace Ω] (q : Public)
     (x p proposal : Vector q.d) :
     (algorithm q).output (StochasticGradient.advance
       (fun k state => (algorithm q).update state
-        ((sampleOracle q g projection P).answer k ((algorithm q).query state) (ξ k)))
+        ((sampleOracle q g projection P).answer [] ((algorithm q).query state) (ξ k)))
       (2 * n) call ⟨t, x, p, false, proposal⟩) =
       run q g projection n t x p (fun k => ξ (call + k)) := by
   induction n generalizing call t x p proposal with
@@ -58,7 +58,8 @@ lemma execute_terminal {Ω : Type} [MeasurableSpace Ω] (q : Public)
     (P : ProbabilityMeasure (ℕ → Ω)) (ξ : ℕ → Ω) :
     execute (sampleOracle q g projection P) (algorithm q) (fun _ => (2 * q.T)) () ξ =
       terminal q g projection ξ := by
-  rw [StochasticGradient.execute_advance]
+  erw [StochasticGradient.execute_advance_of_answer _ _ _ _ _
+    (fun k query => (sampleOracle q g projection P).answer [] query (ξ k)) (fun _ _ => rfl)]
   have h := advance_run q g projection P ξ q.T 0 0 q.x0 0 q.x0
   simpa only [algorithm, terminal, Nat.zero_add] using
     h

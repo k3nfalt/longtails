@@ -163,7 +163,8 @@ lemma igt_execute (cfg : IgtConfig) (x0 : E) (y0 : F) (ox : E × F → Ω → E)
     execute ({ Seed := fun _ => Ω, law := P, answer := fun _ (_, z) ω => (ox z ω, oy z ω) } : Oracle (E × F) (E × F))
       (igtSgda cfg x0 y0) (fun _ => (off cfg + cfg.T)) (show (igtSgda cfg x0 y0).Seed from τ) ξ =
       outRec cfg x0 y0 ox oy ξ τ.val cfg.T := by
-  rw [StochasticGradient.execute_advance]
+  erw [StochasticGradient.execute_advance P (fun z ω => (ox z ω, oy z ω))
+    (igtSgda cfg x0 y0) (off cfg + cfg.T) (show (igtSgda cfg x0 y0).Seed from τ) ξ]
   have h := st_main cfg x0 y0 ox oy ξ τ.val hNB cfg.T le_rfl
   simp only [st] at h
   simp only [igtSgda]

@@ -212,8 +212,8 @@ lemma execute_oriented_proximalFoam {p : Public} (B P : Space p → Space p)
   apply execute_safe_plan _ _ _ _ _ _ (Sum.elim B P) (feasibleQuery (domain p)) oracle () ω
   · intro k q hq
     cases q with
-    | inl u => exact hf k (ω k) u hq
-    | inr u => exact hp k (ω k) u
+    | inl u => exact hf k (ω k.length) u hq
+    | inr u => exact hp k (ω k.length) u
   · exact safe_oriented_plan B P hP cfg β N u0 hu0 swap
   · exact hK
 

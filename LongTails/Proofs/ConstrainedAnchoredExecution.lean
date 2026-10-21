@@ -31,15 +31,15 @@ lemma execute_det {Q Rp O : Type*} {n : ℕ} (oracle : Oracle Q Rp n) (A : Algor
   unfold execute executeWithTrace
   rw [counts_sum]
   generalize A.initial seed = state
-  generalize (0 : ℕ) = call
-  induction K generalizing state call with
+  generalize ([] : List ((Fin n × Q) × Rp)) = history
+  induction K generalizing state history with
   | zero => rfl
   | succ K ih =>
       have hc : counts A ans (K + 1) state (A.query state).1 =
           counts A ans K (A.update state (ans (A.query state))) (A.query state).1 + 1 := by
         simp [counts]
       change (if counts A ans (K + 1) state (A.query state).1 = 0 then
-        (A.output state, []) else _).1 = _
+        (A.output state, history) else _).1 = _
       rw [hc]
       simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, ite_false]
       rw [h]

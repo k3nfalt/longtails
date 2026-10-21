@@ -33,7 +33,7 @@ noncomputable def sampleOracle (p : ProbabilityMeasure Ξ) (G : Ξ → E → E) 
 lemma execute_linearDecaySgd (p : ProbabilityMeasure Ξ) (G : Ξ → E → E) (η : ℝ) (T : ℕ) (x0 : E)
     (K : ℕ) (ξ : ℕ → Ξ) :
     execute (sampleOracle p G) (linearDecaySgd η T x0) (fun _ => K) () ξ = path G η T x0 ξ K := by
-  refine (StochasticGradient.execute_advance (sampleOracle p G) (linearDecaySgd η T x0) K () ξ).trans ?_
+  refine (StochasticGradient.execute_advance (sampleOracle p G).law (fun x ω => G ω x) (linearDecaySgd η T x0) K () ξ).trans ?_
   have h := advance_linearDecaySgd G η T x0 ξ K 0
   rw [Nat.zero_add] at h
   change (linearDecaySgd η T x0).output (StochasticGradient.advance (fun k state =>

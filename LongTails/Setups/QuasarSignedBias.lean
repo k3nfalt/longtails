@@ -33,7 +33,7 @@ abbrev spec : Setup where
     (∀ x, HasGradientAt f (gradient f x) x) ∧
     (∀ x, ‖gradient f x‖ ≤ p.M) ∧
     (∃ b : ℕ → p.E, b 0 = 0 ∧ (∀ k, ‖b k‖ ≤ p.B) ∧
-      ∀ k x seed, O.answer k (0, x) seed = (f x, gradient f x + b (k + 1) - b k)) ∧
+      ∀ k x seed, O.answer k (0, x) seed = (f x, gradient f x + b (k.length + 1) - b k.length)) ∧
     (∃ xstar, IsMinOn f Set.univ xstar ∧ ‖p.x0 - xstar‖ ≤ p.R ∧
       ∀ x, p.τ * (f x - f xstar) ≤ ⟪gradient f x, x - xstar⟫)
   successful p f output P :=

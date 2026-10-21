@@ -9,12 +9,14 @@ def advance {State : Type*} (step : ℕ → State → State) : ℕ → ℕ → S
   | 0, _, state => state
   | K + 1, call, state => advance step K (call + 1) (step call state)
 
-lemma execute_advance {Query Reply Output : Type*} (O : Oracle Query Reply)
-    (A : Algorithm Query Reply Output) (K : ℕ) (seed : A.Seed) (ξ : (k : ℕ) → O.Seed k) :
+lemma execute_advance_of_answer {Query Reply Output : Type*} (O : Oracle Query Reply)
+    (A : Algorithm Query Reply Output) (K : ℕ) (seed : A.Seed) (ξ : (k : ℕ) → O.Seed k)
+    (response : ℕ → (Fin 1 × Query) → Reply)
+    (h : ∀ history query, O.answer history query (ξ history.length) = response history.length query) :
     execute O A (fun _ => K) seed ξ =
-      A.output (advance (fun k state => A.update state (O.answer k (A.query state) (ξ k)))
+      A.output (advance (fun k state => A.update state (response k (A.query state)))
         K 0 (A.initial seed)) := by
-  rw [execute_indexed]
+  rw [execute_indexed_of_answer O A K seed ξ response h]
   congr 1
   generalize A.initial seed = state
   generalize (0 : ℕ) = call
@@ -23,6 +25,34 @@ lemma execute_advance {Query Reply Output : Type*} (O : Oracle Query Reply)
   | succ K ih =>
       rw [Function.iterate_succ_apply]
       exact ih _ _
+
+lemma execute_advance_indexed {Query Reply Output : Type*}
+    {Seed : ℕ → Type} [∀ k, MeasurableSpace (Seed k)]
+    (law : MeasureTheory.ProbabilityMeasure ((k : ℕ) → Seed k))
+    (answer : (k : ℕ) → (Fin 1 × Query) → Seed k → Reply)
+    (A : Algorithm Query Reply Output) (K : ℕ) (seed : A.Seed) (ξ : (k : ℕ) → Seed k) :
+    execute { Seed := Seed, law := law, answer := fun history query seed => answer history.length query seed }
+      A (fun _ => K) seed ξ =
+      A.output (advance (fun k state => A.update state (answer k (A.query state) (ξ k)))
+        K 0 (A.initial seed)) := by
+  rw [execute_indexed_of_answer _ _ _ _ _ (fun k query => answer k query (ξ k)) (fun _ _ => rfl)]
+  congr 1
+  generalize A.initial seed = state
+  generalize (0 : ℕ) = call
+  induction K generalizing state call with
+  | zero => rfl
+  | succ K ih =>
+      rw [Function.iterate_succ_apply]
+      exact ih _ _
+
+lemma execute_advance {Query Reply Output : Type*} {Ω : Type} [MeasurableSpace Ω]
+    (law : MeasureTheory.ProbabilityMeasure (ℕ → Ω)) (g : Query → Ω → Reply)
+    (A : Algorithm Query Reply Output) (K : ℕ) (seed : A.Seed) (ξ : ℕ → Ω) :
+    execute { Seed := fun _ => Ω, law := law, answer := fun _ (_, x) seed => g x seed }
+      A (fun _ => K) seed ξ =
+      A.output (advance (fun k state => A.update state (g (A.query state).2 (ξ k)))
+        K 0 (A.initial seed)) :=
+  execute_advance_indexed law (fun _ query seed => g query.2 seed) A K seed ξ
 
 variable {E : Type*} {Ω : Type} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 

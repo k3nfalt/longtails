@@ -1,5 +1,4 @@
 import LongTails.Setups.StochasticGeneralizedSmoothAndConvex
-import LongTails.Algorithms.Clipping
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 open MeasureTheory
@@ -8,6 +7,9 @@ open scoped RealInnerProductSpace
 namespace LongTails.Setups.TerminalClippingConvex
 
 open OracleTemplate
+
+noncomputable def clipReply {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (B : ℝ) (v : E) : E := if ‖v‖ ≤ B then v else (B / ‖v‖) • v
 
 abbrev Vector (d : ℕ) := EuclideanSpace ℝ (Fin d)
 
@@ -54,7 +56,7 @@ abbrev spec : Setup where
         | .subgradient x =>
           x = A.output s ∧ ∀ g,
             A.output (A.update s g) = x ∧
-            A.query (A.update s g) = (0, .projection (x - η s • clip (C s) g))
+            A.query (A.update s g) = (0, .projection (x - η s • clipReply (C s) g))
         | .projection _ => ∀ x,
             A.output (A.update s x) = x ∧
             A.query (A.update s x) = (0, .subgradient x)

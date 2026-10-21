@@ -30,8 +30,8 @@ abbrev spec : Setup where
     (∀ x y, ‖gradient f x - gradient f y‖ ≤ p.L * ‖x - y‖) ∧
     (∀ k x seed, O.answer k (0, (Sum.inl x)) seed = gradient f x) ∧
     (∃ δ : ℕ → ℝ, (∀ k, 0 ≤ δ k) ∧ (∀ n, ∑ k ∈ Finset.range n, δ k ≤ p.Γ) ∧
-      ∀ k v seed, O.answer (2 * k + 1) (0, (Sum.inr v)) seed ∈ p.C ∧
-        ∀ u ∈ p.C, ⟪v, O.answer (2 * k + 1) (0, (Sum.inr v)) seed⟫ ≤ ⟪v, u⟫ + δ k) ∧
+      ∀ history, history.length % 2 = 1 → ∀ v seed, O.answer history (0, (Sum.inr v)) seed ∈ p.C ∧
+        ∀ u ∈ p.C, ⟪v, O.answer history (0, (Sum.inr v)) seed⟫ ≤ ⟪v, u⟫ + δ (history.length / 2)) ∧
     (∃ xstar ∈ p.C, IsMinOn f p.C xstar ∧
       ∀ x ∈ p.C, p.τ * (f x - f xstar) ≤ ⟪gradient f x, x - xstar⟫)
   successful p f output P :=

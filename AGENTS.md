@@ -12,6 +12,8 @@ project preferences; newer explicit user requests take precedence.
   `LongTails/Proofs/`. Do not create separate method folders with different casing.
 - Reuse shared assumptions in `LongTails/Setups/` and existing lemmas instead of
   duplicating them.
+- Setups must not import `LongTails.Algorithms` or `LongTails.Proofs`. Put method
+  definitions required by a setup's algorithm restrictions in that setup.
 - Match each setup namespace to its module path, for example
   `LongTails.Setups.GeneralizedSmoothAndConvex`. Public convergence statements
   must name that setup's `spec` explicitly and import its module directly.

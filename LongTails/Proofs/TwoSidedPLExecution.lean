@@ -31,7 +31,7 @@ noncomputable def agdaOracle (Gx : E × F → Ω → E) (Gy : E × F → Ω → 
 lemma advance_agda (Gx : E × F → Ω → E) (Gy : E × F → Ω → F) (p : ProbabilityMeasure Ω)
     (L μy τ : ℝ) (n : ℕ) (x0 : E) (y0 : F) (j : Fin (n + 1)) (ξ : ℕ → Ω) :
     ∀ t, advance (fun k s => (stochasticSmoothedAgda (2 * L) τ (τ / 32) (τ * μy / 6144) n x0 y0).update s
-        ((agdaOracle Gx Gy p).answer k
+        ((agdaOracle Gx Gy p).answer []
           ((stochasticSmoothedAgda (2 * L) τ (τ / 32) (τ * μy / 6144) n x0 y0).query s) (ξ k)))
         (2 * t) 0 ((stochasticSmoothedAgda (2 * L) τ (τ / 32) (τ * μy / 6144) n x0 y0).initial j) =
       (j, 2 * t, (path Gx Gy L μy τ x0 y0 ξ t).1, (path Gx Gy L μy τ x0 y0 ξ t).2.1,
@@ -76,7 +76,8 @@ lemma execute_agda (Gx : E × F → Ω → E) (Gy : E × F → Ω → F) (p : Pr
     execute (agdaOracle Gx Gy p) (stochasticSmoothedAgda (2 * L) τ (τ / 32) (τ * μy / 6144) n x0 y0)
         (fun _ => (2 * (2 * n + 1))) j ξ =
       ((path Gx Gy L μy τ x0 y0 ξ (n + j)).1, (path Gx Gy L μy τ x0 y0 ξ (n + j)).2.1) := by
-  erw [execute_advance]
+  erw [execute_advance_of_answer _ _ _ _ _
+    (fun k query => (agdaOracle Gx Gy p).answer [] query (ξ k)) (fun _ _ => rfl)]
   have h := advance_agda Gx Gy p L μy τ n x0 y0 j ξ (2 * n + 1)
   have hj : n + (j : ℕ) ≤ 2 * n + 1 := by have := j.isLt; omega
   simp only [hj, ite_true] at h

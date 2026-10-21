@@ -104,27 +104,16 @@ theorem missing_success (budget : Unit → Fin 2 → ℕ) : ¬ Convergence missi
   rintro ⟨_, hCorrect, _⟩
   exact hCorrect () True.intro () oracle rfl
 
-abbrev traceSpec : Setup :=
-  { missingSuccessSpec with
-    successfulWithTrace := fun _ _ result _ =>
-      ∀ ω, result ω = (15, [((0, 7), 14), ((1, 14), 15)]) }
+def historyOracle : Oracle ℕ ℕ 2 where
+  answer history query _ := query.2 + (history.map fun entry => entry.2).sum
 
-theorem trace_success : Convergence traceSpec (fun _ => ![1, 1]) := by
-  refine ⟨fun _ => algorithm, ?_, fun _ _ => rfl⟩
-  intro p _ I O hO
-  change O = oracle at hO
-  subst O
-  change ∀ seed : Unit × (ℕ → Unit),
-    executeWithTrace oracle algorithm ![1, 1] seed.1 seed.2 =
-      (15, [((0, 7), 14), ((1, 14), 15)])
-  intro seed
-  have hseed : seed = ((), fun _ => ()) := Subsingleton.elim _ _
-  rw [hseed]
-  exact ordered_trace
+theorem history_dependent_trace :
+    executeWithTrace historyOracle algorithm ![1, 2] () (fun _ => ()) =
+      (35, [((0, 7), 7), ((1, 7), 14), ((1, 14), 35)]) := by decide
 
 #print axioms separate_budgets
 #print axioms insufficient_budget
 #print axioms missing_success
-#print axioms trace_success
+#print axioms history_dependent_trace
 
 end OracleTemplate.MultiOracleTests

@@ -124,7 +124,7 @@ lemma tuned_success (q : Params) (hq : spec.valid q) (N : ℕ)
   have hexec : (fun seed : A.Seed × ((k : ℕ) → q.Ω) =>
       execute { Seed := fun _ => q.Ω
                 law := ⟨Measure.infinitePi (fun _ : ℕ => (P : Measure q.Ω)), inferInstance⟩
-                answer := fun k (_, x) seed => g k x seed } A (fun _ => K + 1) seed.1 seed.2) =
+                answer := fun history (_, x) seed => g history.length x seed } A (fun _ => K + 1) seed.1 seed.2) =
       fun seed => (output seed.2, K + 1) := by
     funext ⟨⟨⟩, ξ⟩
     exact execute_vt P g γ _ q.x0 (K + 1) ξ

@@ -1,4 +1,5 @@
 import LongTails.Algorithms.OnlineGradientDescent
+import LongTails.Proofs.Execution
 import LongTails.Proofs.FrankWolfeDescent
 import LongTails.Proofs.TerminalClippingEnergy
 
@@ -86,64 +87,35 @@ lemma regret_bound (p : Public) (hp : spec.valid p.toParams p.T)
   have hn := sq_nonneg ‖(trajectory p losses (steps p)).val - u.val‖
   nlinarith
 
-lemma trace_indexed {Query Reply Output : Type*} (oracle : Oracle Query Reply)
-    (A : Algorithm Query Reply Output) (K : ℕ) (seed : A.Seed)
-    (ξ : (k : ℕ) → oracle.Seed k) :
-    (executeWithTrace oracle A (fun _ => K) seed ξ).2 =
-      (List.range K).map (fun k =>
-        let sc := ((fun sc : A.State × ℕ =>
-          (A.update sc.1 (oracle.answer sc.2 (A.query sc.1) (ξ sc.2)), sc.2 + 1))^[k]
-          (A.initial seed, 0))
-        (A.query sc.1, oracle.answer sc.2 (A.query sc.1) (ξ sc.2))) := by
-  unfold executeWithTrace
-  simp only [Fin.sum_univ_one]
-  generalize A.initial seed = state
-  generalize (0 : ℕ) = call
-  induction K generalizing state call with
-  | zero => rfl
-  | succ k ih =>
-    change (if k + 1 = 0 then (A.output state, []) else _).2 = _
-    simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, ite_false]
-    have hr : Function.update (fun _ : Fin 1 => k + 1) (A.query state).1 k = fun _ => k := by
-      funext i
-      have hi : i = (A.query state).1 := Subsingleton.elim _ _
-      subst i
-      simp
-    simp only [Nat.add_sub_cancel]
-    rw [hr]
-    rw [List.range_succ_eq_map, List.map_cons]
-    simp only [Function.iterate_zero, id_eq, List.map_map, Function.comp_def,
-      Function.iterate_succ_apply]
-    congr 1
-    exact ih _ _
-
 lemma execution_trace (p : Public) (losses : ℕ → EuclideanSpace ℝ (Fin p.d) → ℝ)
     (O : Oracle p.K (EuclideanSpace ℝ (Fin p.d)))
-    (ho : ∀ t < (steps p), ∀ query seed, O.answer t query seed = gradient (losses t) query.2)
+    (ho : ∀ history, history.length < steps p → ∀ query seed,
+      O.answer history query seed = gradient (losses history.length) query.2)
     (seed : (algorithm p).Seed) (ξ : (k : ℕ) → O.Seed k) :
-    (executeWithTrace O (algorithm p) (fun _ => (steps p)) seed ξ).2 =
+    (executeWithTrace O (algorithm p) (fun _ => steps p) seed ξ).2 =
       (List.range (steps p)).map (fun t =>
         ((0, trajectory p losses t), gradient (losses t) (trajectory p losses t))) := by
-  let advance := fun sc : (algorithm p).State × ℕ =>
-    ((algorithm p).update sc.1 (O.answer sc.2 ((algorithm p).query sc.1) (ξ sc.2)), sc.2 + 1)
-  have hi : ∀ t ≤ (steps p), advance^[t] ((algorithm p).initial seed, 0) = (trajectory p losses t, t) := by
+  let entry := fun t =>
+    (((0 : Fin 1), trajectory p losses t), gradient (losses t) (trajectory p losses t))
+  let advance := fun sc : (algorithm p).State × List ((Fin 1 × p.K) × EuclideanSpace ℝ (Fin p.d)) =>
+    let query := (algorithm p).query sc.1
+    let reply := O.answer sc.2 query (ξ sc.2.length)
+    ((algorithm p).update sc.1 reply, sc.2 ++ [(query, reply)])
+  have hi : ∀ t ≤ steps p, advance^[t] ((algorithm p).initial seed, []) =
+      (trajectory p losses t, (List.range t).map entry) := by
     intro t
     induction t with
     | zero => intro _; rfl
     | succ t ih =>
       intro ht
       rw [Function.iterate_succ_apply', ih (by omega)]
-      dsimp [advance, algorithm]
-      rw [ho t (by omega)]
-      rfl
-  rw [trace_indexed]
-  apply List.map_congr_left
-  intro t ht
-  have h := hi t (Nat.le_of_lt (List.mem_range.mp ht))
-  change (let sc := advance^[t] ((algorithm p).initial seed, 0); _) = _
-  rw [h]
-  dsimp [algorithm]
-  rw [ho t (List.mem_range.mp ht)]
+      dsimp only [advance]
+      rw [ho _ (by simpa using (show t < steps p by omega))]
+      simp only [List.length_map, List.length_range]
+      simp [algorithm, trajectory, List.range_succ, List.map_append, entry]
+  rw [executeWithTrace_indexed]
+  change (advance^[steps p] ((algorithm p).initial seed, [])).2 = _
+  rw [hi _ le_rfl]
 
 lemma execution_success (p : Public) (hp : spec.valid p.toParams p.T)
     (losses : ℕ → EuclideanSpace ℝ (Fin p.d) → ℝ)

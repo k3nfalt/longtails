@@ -8,11 +8,11 @@ lemma execution_log_energy (p : Public) (I : Instance p) (O : Oracle p.E p.E)
     (hv : spec.valid p) (h : spec.admissible p I O) (ξ : (k : ℕ) → O.Seed k)
     {z : p.E} (hz : z ∈ I.C) (hR : ‖p.x0 - z‖ ≤ p.R)
     (hΔ : I.f p.x0 - I.f z ≤ p.Δ) {N : ℕ}
-    (hg : 0 < I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) N) - I.f z) :
+    (hg : 0 < I.f (oracleIterate p.x0 O ξ N) - I.f z) :
     2 * ((N : ℝ) * p.t) ^ 2 ≤
       (Real.log p.Δ - Real.log
-        (I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) N) - I.f z)) * p.R ^ 2 := by
-  let x := iterate p.x0 (fun k x => O.answer k (0, x) (ξ k))
+        (I.f (oracleIterate p.x0 O ξ N) - I.f z)) * p.R ^ 2 := by
+  let x := oracleIterate p.x0 O ξ
   let g := I.f (x N) - I.f z
   obtain ⟨c, hc⟩ := iterate_radial_certificates p I O hv h ξ hz (by linarith)
   have hx : ∀ i ≤ N, x i ∈ I.C := fun i _ => iterate_feasible p I O h ξ i
@@ -56,9 +56,9 @@ lemma execution_gaussian (p : Public) (I : Instance p) (O : Oracle p.E p.E)
     (hv : spec.valid p) (h : spec.admissible p I O) (ξ : (k : ℕ) → O.Seed k)
     {z : p.E} (hz : z ∈ I.C) (hR : ‖p.x0 - z‖ ≤ p.R)
     (hΔ : I.f p.x0 - I.f z ≤ p.Δ) (hRp : 0 < p.R) (K : ℕ) :
-    I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) K) - I.f z ≤
+    I.f (oracleIterate p.x0 O ξ K) - I.f z ≤
       p.Δ * Real.exp (-2 * (K : ℝ) ^ 2 * p.t ^ 2 / p.R ^ 2) := by
-  let g := I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) K) - I.f z
+  let g := I.f (oracleIterate p.x0 O ξ K) - I.f z
   by_cases hg : 0 < g
   · have he := execution_log_energy p I O hv h ξ hz hR hΔ hg
     have hlog : Real.log g ≤ Real.log p.Δ + (-2 * (K : ℝ) ^ 2 * p.t ^ 2 / p.R ^ 2) := by
@@ -85,8 +85,8 @@ lemma execute_gaussian (p : Public) (I : Instance p) (O : Oracle p.E p.E)
 lemma iterate_optimal_persists (p : Public) (I : Instance p) (O : Oracle p.E p.E)
     (hv : spec.valid p) (h : spec.admissible p I O) (ξ : (k : ℕ) → O.Seed k)
     {z : p.E} (hmin : IsMinOn I.f I.C z) {j K : ℕ} (hj : j ≤ K)
-    (hopt : I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) j) = I.f z) :
-    I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) K) = I.f z := by
+    (hopt : I.f (oracleIterate p.x0 O ξ j) = I.f z) :
+    I.f (oracleIterate p.x0 O ξ K) = I.f z := by
   apply le_antisymm
   · simpa [hopt] using iterate_objective_antitone p I O hv h ξ hj
   · exact hmin (iterate_feasible p I O h ξ K)
@@ -97,13 +97,13 @@ lemma gaussian_budget_accuracy (p : Public) (I : Instance p) (O : Oracle p.E p.E
     (hΔ : I.f p.x0 - I.f z ≤ p.Δ) {K : ℕ}
     (hK : ⌈min ((p.R / p.t) ^ 2)
       ((p.R / p.t) * Real.sqrt (max 0 (Real.log (p.Δ / p.ε)) / 2))⌉₊ ≤ K) :
-    I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) K) - I.f z ≤ p.ε := by
+    I.f (oracleIterate p.x0 O ξ K) - I.f z ≤ p.ε := by
   by_contra hbad
   have hg := lt_of_not_ge hbad
-  let g := I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) K) - I.f z
+  let g := I.f (oracleIterate p.x0 O ξ K) - I.f z
   have hm := iterate_objective_antitone p I O hv h ξ (Nat.zero_le K)
   have hinit : p.ε < I.f p.x0 - I.f z := by
-    change I.f (iterate p.x0 (fun k x => O.answer k (0, x) (ξ k)) K) ≤ I.f p.x0 at hm
+    change I.f (oracleIterate p.x0 O ξ K) ≤ I.f p.x0 at hm
     linarith
   have heΔ : p.ε < p.Δ := lt_of_lt_of_le hinit hΔ
   have hxz : p.x0 ≠ z := by

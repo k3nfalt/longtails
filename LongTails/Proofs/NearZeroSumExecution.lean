@@ -1,6 +1,8 @@
 import LongTails.Proofs.QueryPlan
 import LongTails.Algorithms.NearZeroSumFoam
 
+open private _run from LongTails.Template
+
 set_option backward.isDefEq.respectTransparency false
 set_option backward.defeqAttrib.useBackward true
 
@@ -55,16 +57,64 @@ lemma execute_safe_plan {S : Type} [MeasurableSpace S]
     (law : MeasureTheory.ProbabilityMeasure S) (q0 : Q) (u0 : U)
     (k K : ℕ) (plan : S → QueryPlan Q R U k) (g : Q → R) (valid : Q → Prop)
     (oracle : Oracle Q R) (seed : S) (ω : (i : ℕ) → oracle.Seed i)
-    (ha : ∀ i q, valid q → oracle.answer i (0, q) (ω i) = g q)
+    (ha : ∀ history q, valid q → oracle.answer history (0, q) (ω history.length) = g q)
     (hp : safeQueries valid g (plan seed)) (hK : k ≤ K) :
     execute oracle (QueryPlan.algorithm law q0 u0 k plan) (fun _ => K) seed ω =
       QueryPlan.eval g (plan seed) := by
-  erw [StochasticGradient.execute_advance]
-  change QueryPlan.output u0 (StochasticGradient.advance
-    (fun i s => QueryPlan.update s (oracle.answer i (0, QueryPlan.query q0 s) (ω i)))
-      K 0 ⟨k, plan seed⟩) = _
-  rw [advance_safe_plan q0 (fun i q => oracle.answer i (0, q) (ω i)) ha _ hp hK]
-  rfl
+  let answer : List ((Fin 1 × Q) × R) → (Fin 1 × Q) → R := fun history query =>
+    oracle.answer history query (ω history.length)
+  let A := QueryPlan.algorithm law q0 u0 k plan
+  have hrun : ∀ (fuel : ℕ) (history : List ((Fin 1 × Q) × R))
+      (remaining : Fin 1 → ℕ) (j : ℕ) (p : QueryPlan Q R U j),
+      safeQueries valid g p → j ≤ fuel → j ≤ remaining 0 →
+      (_run answer A fuel history remaining ⟨j, p⟩).1 = QueryPlan.eval g p := by
+    intro fuel
+    induction fuel with
+    | zero =>
+        intro history remaining j p hp hf hr
+        have hj : j = 0 := by omega
+        subst j
+        cases p with
+        | done value => rfl
+    | succ fuel ih =>
+        intro history remaining j p hp hf hr
+        cases p with
+        | done value =>
+            let st : A.State := ⟨0, .done value⟩
+            have hquery : A.query st = (0, q0) := rfl
+            have hupdate : A.update st (answer history (0, q0)) = st := rfl
+            have houtput : A.output st = value := rfl
+            by_cases hz : remaining 0 = 0
+            · simp only [_run, st, hquery, hz, ite_true, houtput, QueryPlan.eval]
+            · have hnextRemaining : 0 ≤ (Function.update remaining 0 (remaining 0 - 1)) 0 := by
+                simp only [Function.update_self]
+                omega
+              let r := answer history (0, q0)
+              have hnext := ih (history ++ [((0, q0), r)])
+                (Function.update remaining 0 (remaining 0 - 1)) 0
+                (.done value) trivial (by omega) hnextRemaining
+              simpa only [_run, st, hquery, hz, ite_false, hupdate, r, QueryPlan.eval] using hnext
+        | @ask j q next =>
+            have hpositive : 0 < remaining 0 := by omega
+            have hnextFuel : j ≤ fuel := by omega
+            have hnextRemaining : j ≤ (Function.update remaining 0 (remaining 0 - 1)) 0 := by
+              simp only [Function.update_self]
+              omega
+            have hanswer := ha history q hp.1
+            let st : A.State := ⟨j + 1, .ask q next⟩
+            have hquery : A.query st = (0, q) := rfl
+            have hupdate : A.update st (g q) = ⟨j, next (g q)⟩ := rfl
+            have hanswer' : answer history (0, q) = g q := by
+              simpa [answer] using hanswer
+            have hnext := ih (history ++ [((0, q), g q)])
+              (Function.update remaining 0 (remaining 0 - 1)) j (next (g q)) hp.2
+              hnextFuel hnextRemaining
+            have hnotzero : remaining 0 ≠ 0 := by omega
+            simp only [_run, st, hquery, hnotzero, ite_false, hanswer', hupdate, QueryPlan.eval]
+            exact hnext
+  unfold execute executeWithTrace
+  change (_run answer A K [] (fun _ => K) (A.initial seed)).1 = _
+  exact hrun K [] (fun _ => K) k (plan seed) hp hK hK
 
 lemma eval_repeatQueries {S : Type*} {c : ℕ} (g : Q → R)
     (step : S → QueryPlan Q R S c) (n : ℕ) (s : S) :
@@ -191,16 +241,18 @@ lemma safe_proximalFoamPlan {C : Set (Joint E F)} (B P : Joint E F → Joint E F
 lemma execute_proximalFoam {C : Set (Joint E F)} (B P : Joint E F → Joint E F)
     (hP : ∀ u, P u ∈ C) (cfg : FoamConfig) (β : ℝ) (N K : ℕ) (u0 : Joint E F) (hu0 : u0 ∈ C)
     (oracle : Oracle (Joint E F ⊕ Joint E F) (Joint E F))
-    (hf : ∀ k seed u, u ∈ C → oracle.answer k (0, Sum.inl u) seed = B u)
-    (hp : ∀ k seed u, oracle.answer k (0, Sum.inr u) seed = P u)
+    (hf : ∀ history seed u, u ∈ C →
+      oracle.answer history (0, Sum.inl u) seed = B u)
+    (hp : ∀ history seed u,
+      oracle.answer history (0, Sum.inr u) seed = P u)
     (ω : (i : ℕ) → oracle.Seed i) (hK : foamCalls cfg * N ≤ K) :
     execute oracle (proximalFoam cfg β N u0) (fun _ => K) () ω =
       QueryPlan.eval (Sum.elim B P) (proximalFoamPlan cfg β N u0) := by
   apply execute_safe_plan _ _ _ _ _ _ (Sum.elim B P) (feasibleQuery C) oracle () ω
-  · intro k q hq
+  · intro history q hq
     cases q with
-    | inl u => exact hf k (ω k) u hq
-    | inr u => exact hp k (ω k) u
+    | inl u => exact hf history (ω history.length) u hq
+    | inr u => exact hp history (ω history.length) u
   · exact (safe_proximalFoamPlan B P hP cfg β N u0 hu0).1
   · exact hK
 

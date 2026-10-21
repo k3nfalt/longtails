@@ -21,7 +21,7 @@ theorem result :
   rcases hp with ⟨hL, hD, hε, hx, hy, hxc, hyc, hxv, hyv, hdiam⟩
   rcases h with ⟨hc, ha, hg, hlip⟩
   let seed0 := (Classical.choice O.law.nonempty) 0
-  let g := fun z => O.answer 0 (0, z) seed0
+  let g := fun z => O.answer [] (0, z) seed0
   let N := max 1 ⌈2 * q.L * q.D ^ 2 / q.ε⌉₊
   let w := extraPredict q.X q.Y (1 / (2 * q.L)) g
   let output := (N : ℝ)⁻¹ • ∑ k ∈ Finset.range N, w k
@@ -29,8 +29,8 @@ theorem result :
   have hanswer : ∀ k z seed, O.answer k (0, z) seed = g z := by
     intro k z seed
     apply Prod.ext
-    · exact (hg k seed z).1.unique (hg 0 seed0 z).1
-    · exact neg_injective ((hg k seed z).2.unique (hg 0 seed0 z).2)
+    · exact (hg k seed z).1.unique (hg [] seed0 z).1
+    · exact neg_injective ((hg k seed z).2.unique (hg [] seed0 z).2)
   have hw : ∀ k, w k ∈ q.X ×ˢ q.Y :=
     extraPredict_mem hx hy hxc hyc hxv hyv _ g
   have hout : output ∈ q.X ×ˢ q.Y := by
@@ -41,7 +41,7 @@ theorem result :
       (∑ k ∈ Finset.range N, (⟪(g (w k)).1, (w k).1 - u.1⟫ +
         ⟪(g (w k)).2, (w k).2 - u.2⟫)) ≤ 2 * q.L * q.D ^ 2 := by
     intro u hu
-    have hr := extragradient_regret hx hy hxc hyc hxv hyv g hL (hlip 0 seed0) u hu N
+    have hr := extragradient_regret hx hy hxc hyc hxv hyv g hL (hlip [] seed0) u hu N
     have hd := hdiam (start q.X, start q.Y) ⟨start_mem hx, start_mem hy⟩ u hu
     have hf := (norm_fst_le ((start q.X, start q.Y) - u)).trans hd
     have hs := (norm_snd_le ((start q.X, start q.Y) - u)).trans hd
@@ -51,7 +51,7 @@ theorem result :
     apply hr.trans
     dsimp [energy] at *
     nlinarith
-  have hgap := average_gap_le_of_regret hx hy hc ha g (hg 0 seed0) w hN
+  have hgap := average_gap_le_of_regret hx hy hc ha g (hg [] seed0) w hN
     (fun k _ => hw k) (2 * q.L * q.D ^ 2) hregret
   have hround : 2 * q.L * q.D ^ 2 / q.ε ≤ (N : ℝ) :=
     (Nat.le_ceil _).trans (Nat.cast_le.mpr (le_max_right _ _))

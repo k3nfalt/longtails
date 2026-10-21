@@ -23,7 +23,7 @@ omit [InnerProductSpace ℝ E] in
 lemma advance_two (M : Model E Ξ) (η : ℝ) (T : ℕ) (x0 : E) (ξ : ℕ → Ξ) (j : ℕ) :
     StochasticGradient.advance
       (fun k state => (proximalLinearDecaySgd η T x0).update state
-        ((compositeOracle M).answer k ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
+        (oracleAnswer M ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
       2 (2 * j) (j, false, path M.grad M.prox η T x0 ξ j, gprev M η T x0 ξ j) =
       (j + 1, false, path M.grad M.prox η T x0 ξ (j + 1), gprev M η T x0 ξ (j + 1)) := by
   rfl
@@ -32,7 +32,7 @@ omit [InnerProductSpace ℝ E] in
 lemma advance_iter (M : Model E Ξ) (η : ℝ) (T : ℕ) (x0 : E) (ξ : ℕ → Ξ) :
     ∀ K j, StochasticGradient.advance
       (fun k state => (proximalLinearDecaySgd η T x0).update state
-        ((compositeOracle M).answer k ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
+        (oracleAnswer M ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
       (2 * K) (2 * j) (j, false, path M.grad M.prox η T x0 ξ j, gprev M η T x0 ξ j) =
       (j + K, false, path M.grad M.prox η T x0 ξ (j + K), gprev M η T x0 ξ (j + K)) := by
   intro K
@@ -43,14 +43,14 @@ lemma advance_iter (M : Model E Ξ) (η : ℝ) (T : ℕ) (x0 : E) (ξ : ℕ → 
     have h2 : 2 * (K + 1) = 2 * K + 2 := by ring
     have hsplit : ∀ (c : ℕ) (st : ℕ × Bool × E × E), StochasticGradient.advance
         (fun k state => (proximalLinearDecaySgd η T x0).update state
-          ((compositeOracle M).answer k ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
+          (oracleAnswer M ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
         (2 * K + 2) c st =
         StochasticGradient.advance
           (fun k state => (proximalLinearDecaySgd η T x0).update state
-            ((compositeOracle M).answer k ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
+            (oracleAnswer M ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
           (2 * K) (c + 2) (StochasticGradient.advance
             (fun k state => (proximalLinearDecaySgd η T x0).update state
-              ((compositeOracle M).answer k ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
+              (oracleAnswer M ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
             2 c st) := by
       intro c st
       rfl
@@ -64,13 +64,14 @@ omit [InnerProductSpace ℝ E] in
 lemma execute_proximalLinearDecaySgd (M : Model E Ξ) (η : ℝ) (T : ℕ) (x0 : E) (K : ℕ) (ξ : ℕ → Ξ) :
     execute (compositeOracle M) (proximalLinearDecaySgd η T x0) (fun _ => 2 * K) () ξ =
       path M.grad M.prox η T x0 ξ K := by
-  refine (StochasticGradient.execute_advance (compositeOracle M) (proximalLinearDecaySgd η T x0)
+  refine (StochasticGradient.execute_advance_indexed (compositeOracle M).law (fun _ => oracleAnswer M)
+    (proximalLinearDecaySgd η T x0)
     (2 * K) () ξ).trans ?_
   have h := advance_iter M η T x0 ξ K 0
   rw [Nat.zero_add, Nat.mul_zero] at h
   change (proximalLinearDecaySgd η T x0).output (StochasticGradient.advance (fun k state =>
     (proximalLinearDecaySgd η T x0).update state
-      ((compositeOracle M).answer k ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
+      (oracleAnswer M ((proximalLinearDecaySgd η T x0).query state) (ξ k)))
       (2 * K) 0 (0, false, path M.grad M.prox η T x0 ξ 0, gprev M η T x0 ξ 0)) = _
   rw [h]
   rfl

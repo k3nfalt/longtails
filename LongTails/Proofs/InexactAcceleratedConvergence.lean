@@ -1,3 +1,4 @@
+import LongTails.Proofs.ExecutionHistory
 import LongTails.Setups.InexactGradientStronglyConvex
 import LongTails.Proofs.InexactAcceleratedStep
 import LongTails.Proofs.SgdExecution
@@ -159,9 +160,9 @@ lemma execute_accuracy [CompleteSpace E] {f : E → ℝ} {L μ α δ R ε : ℝ}
     have hn : 0 ≤ ‖x0 - xstar‖ ^ 2 := sq_nonneg _
     show f x0 - f xstar + μ / 4 * ‖x0 - xstar‖ ^ 2 ≤ L * R ^ 2
     nlinarith
-  rw [StochasticGradient.execute_advance]
+  rw [execute_advance_history]
   have hadv := advance_potential hL hμ hα0 hα1 hθ0 hθ1 hθL hθα hup hsc hminx
-    (fun k x => O.answer k (0, x) (ξ k)) (fun k x => herr k x (ξ k)) K 0 (x0, x0)
+    (fun k x => executeAnswerAt O (inexactAccelerated L μ α x0) seed ξ k (0, x)) (fun k x => herr _ x (ξ _)) K 0 (x0, x0)
   have hfloor := floor_le hL hμ hα0 hα1 hθ0 hθlow hδ
   have hfloor0 : 0 ≤ 2 / θ * (2 / (1 - α) * (3 / (4 * L) + 2 * θ / μ) * δ ^ 2) := by
     have : 0 < 1 - α := by linarith
@@ -176,17 +177,17 @@ lemma execute_accuracy [CompleteSpace E] {f : E → ℝ} {L μ α δ R ε : ℝ}
   have h1 := mul_le_mul_of_nonneg_left hstart hq
   have h2 := mul_nonneg hq hfloor0
   have hpot : f (StochasticGradient.advance
-      (fun k s => step L μ θ s (O.answer k (0, (query θ s)) (ξ k))) K 0 (x0, x0)).1 - f xstar ≤
+      (fun k s => step L μ θ s (executeAnswerAt O (inexactAccelerated L μ α x0) seed ξ k (0, query θ s))) K 0 (x0, x0)).1 - f xstar ≤
       potential f μ xstar (StochasticGradient.advance
-        (fun k s => step L μ θ s (O.answer k (0, (query θ s)) (ξ k))) K 0 (x0, x0)) := by
+        (fun k s => step L μ θ s (executeAnswerAt O (inexactAccelerated L μ α x0) seed ξ k (0, query θ s))) K 0 (x0, x0)) := by
     have : 0 ≤ μ / 4 * ‖(StochasticGradient.advance
-        (fun k s => step L μ θ s (O.answer k (0, (query θ s)) (ξ k))) K 0 (x0, x0)).2 - xstar‖ ^ 2 := by
+        (fun k s => step L μ θ s (executeAnswerAt O (inexactAccelerated L μ α x0) seed ξ k (0, query θ s))) K 0 (x0, x0)).2 - xstar‖ ^ 2 := by
       positivity
     unfold potential
     linarith
   rw [hθ] at hpot hadv
   show f (StochasticGradient.advance
-      (fun k s => step L μ (momentum L μ α) s (O.answer k (0, (query (momentum L μ α) s)) (ξ k)))
+      (fun k s => step L μ (momentum L μ α) s (executeAnswerAt O (inexactAccelerated L μ α x0) seed ξ k (0, query (momentum L μ α) s)))
       K 0 (x0, x0)).1 - f xstar ≤ ε
   rw [hθ] at h1 h2 hfloor hgeo
   nlinarith

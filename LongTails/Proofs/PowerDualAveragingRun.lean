@@ -1,9 +1,11 @@
 import LongTails.Proofs.PowerMirrorGeometry
 import LongTails.Proofs.PowerMirrorTuning
 import LongTails.Proofs.Execution
+import LongTails.Proofs.ExecutionHistory
 
 namespace LongTails.Proofs.PowerDualAveragingRun
 
+open OracleTemplate
 open LongTails.Setups.PowerGeometryRelativeErrorConvex
 open LongTails.Algorithms.PowerDualAveraging
 open PowerMirrorGeometry PowerMirrorTuning
@@ -147,20 +149,25 @@ lemma trajectory_valid (d : Public) (hd : d.Valid)
 lemma execute_eq (d : Public) (O : OracleTemplate.Oracle d.E (d.E →L[ℝ] ℝ))
     (T : ℕ) (seed : (algorithm d).Seed) (ξ : (k : ℕ) → O.Seed k) :
     OracleTemplate.execute O (algorithm d) (fun _ => T) seed ξ =
-      (trajectory d (fun k x => O.answer k (0, x) (ξ k)) T).x := by
-  rw [OracleTemplate.execute_indexed]
+      (trajectory d (fun k x => executeAnswerAt O (algorithm d) seed ξ k (0, x)) T).x := by
+  change (executeWithTrace O (algorithm d) (fun _ => T)
+    (by simpa [algorithm] using seed) ξ).1 = _
+  rw [executeWithTrace_eq_executeIndexedState]
+  rw [executeIndexedState_eq_executeAnswerAt]
   have hi (n : ℕ) :
       ((fun sc : State d × ℕ =>
-        (step d sc.1 (O.answer sc.2 (0, queryPoint d sc.1) (ξ sc.2)), sc.2 + 1))^[n]
+        (step d sc.1 (executeAnswerAt O (algorithm d) seed ξ sc.2
+          (0, queryPoint d sc.1)), sc.2 + 1))^[n]
         (⟨0, d.x0, d.x0, 0⟩, 0)) =
-      (trajectory d (fun k x => O.answer k (0, x) (ξ k)) n, n) := by
+      (trajectory d (fun k x => executeAnswerAt O (algorithm d) seed ξ k (0, x)) n, n) := by
     induction n with
     | zero => rfl
     | succ n ih =>
         rw [Function.iterate_succ_apply', ih]
         rfl
   change output d (((fun sc : State d × ℕ =>
-    (step d sc.1 (O.answer sc.2 (0, queryPoint d sc.1) (ξ sc.2)), sc.2 + 1))^[T]
+    (step d sc.1 (executeAnswerAt O (algorithm d) seed ξ sc.2
+      (0, queryPoint d sc.1)), sc.2 + 1))^[T]
     (⟨0, d.x0, d.x0, 0⟩, 0)).1) = _
   rw [hi]
   rfl
@@ -209,8 +216,10 @@ lemma execute_accuracy (d : Public) (hd : d.Valid) {f : d.E → ℝ}
     (seed : (algorithm d).Seed) (ξ : (k : ℕ) → O.Seed k) :
     f (OracleTemplate.execute O (algorithm d) (fun _ => T) seed ξ) - f u ≤ ε := by
   rw [execute_eq]
-  let oracle := fun k x => O.answer k (0, x) (ξ k)
-  have he := trajectory_energy d hd hf hc hlip oracle (fun k x => herr k (ξ k) x) hdist T le_rfl
+  let oracle := fun k x => executeAnswerAt O (algorithm d) seed ξ k (0, x)
+  have he := trajectory_energy d hd hf hc hlip oracle (fun k x =>
+    herr (executeIndexedState O (algorithm d) seed ξ k).2
+      (ξ (executeIndexedState O (algorithm d) seed ξ k).2.length) x) hdist T le_rfl
   have hv := potential_nonneg d (trajectory_valid d hd oracle T) u
   have hreg := regularization_upper (R := R) d hd hT
   have hR : 0 ≤ R := (norm_nonneg _).trans hdist

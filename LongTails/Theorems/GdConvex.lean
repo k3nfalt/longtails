@@ -14,11 +14,11 @@ theorem result :
   rcases hp with ⟨hL, hR, hε⟩
   rcases h with ⟨hc, hg, hlip, xstar, hmin, hdist⟩
   let seed0 := (Classical.choice oracle.law.nonempty) 0
-  let g := fun x => oracle.answer 0 (0, x) seed0
+  let g := fun x => oracle.answer [] (0, x) seed0
   have hanswer : ∀ k x seed, oracle.answer k (0, x) seed = g x :=
-    fun k x seed => (hg k seed x).unique (hg 0 seed0 x)
+    fun k x seed => (hg k seed x).unique (hg [] seed0 x)
   have haccuracy := gd_accuracy f g q.L q.R q.ε q.x0 xstar
-    hL hR hε hc (hg 0 seed0) (hlip 0 seed0) hdist (budget q 0) le_rfl
+    hL hR hε hc (hg [] seed0) (hlip [] seed0) hdist (budget q 0) le_rfl
   refine ⟨xstar, hmin, Filter.Eventually.of_forall ?_⟩
   rintro ⟨⟨⟩, seed⟩
   change f (execute oracle (gd (q.L, q.x0)) (fun _ => budget q 0) () seed) - f xstar ≤ q.ε
