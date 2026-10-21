@@ -46,11 +46,17 @@ def inspect(files, env):
 open Lean Elab Command in
 run_cmd do
   let entries ← liftTermElabM ConvergenceMetadata.inspect
-  let rows := entries.map fun entry => Json.mkObj [
-    ("module", toJson entry.moduleName.toString),
-    ("theorem", toJson entry.theoremName.toString),
-    ("setup", toJson entry.setupName.toString),
-    ("budget", toJson entry.budgetName.toString)]
+  let rows ← entries.mapM fun entry => do
+    let info ← Lean.getConstInfo entry.budgetName
+    let boundType ← liftTermElabM <| withOptions
+      (fun options => options.setBool `pp.fullNames true) (Lean.Meta.ppExpr info.type)
+    pure <| Json.mkObj [
+      ("module", toJson entry.moduleName.toString),
+      ("theorem", toJson entry.theoremName.toString),
+      ("setup", toJson entry.setupName.toString),
+      ("budget", toJson entry.budgetName.toString),
+      ("online", toJson entry.online),
+      ("bound_type", toJson boundType.pretty)]
   (← IO.getStdout).putStrLn (Json.arr rows).compress
 """
     result = subprocess.run(
@@ -76,9 +82,15 @@ def generate(rows, work):
         source = work / Path(*name.split(".")).with_suffix(".lean")
         source.parent.mkdir(parents=True, exist_ok=True)
         setup_module = row["setup"].removesuffix(".spec")
+        if row["online"]:
+            convergence = "OnlineConvergence"
+            bound_type = row["bound_type"]
+        else:
+            convergence = "Convergence"
+            bound_type = f"(let S := {row['setup']}; S.Params → Fin S.numOracles → ℕ)"
         source.write_text(f"""import {setup_module}
-noncomputable def {row["budget"]} : (let S := {row["setup"]}; S.Params → Fin S.numOracles → ℕ) := by sorry
-theorem {row["theorem"]} : OracleTemplate.Convergence {row["setup"]} {row["budget"]} := by sorry
+noncomputable def {row["budget"]} : {bound_type} := by sorry
+theorem {row["theorem"]} : OracleTemplate.{convergence} {row["setup"]} {row["budget"]} := by sorry
 """)
         config = source.with_suffix(".json")
         config.write_text(
