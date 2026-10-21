@@ -24,26 +24,26 @@ structure Oracle (Query : Type uQ) (Reply : Type uR) (numOracles : ℕ := 1) whe
   [seedSpace : ∀ k, MeasurableSpace (Seed k)]
   law : ProbabilityMeasure ((k : ℕ) → Seed k) := by
     exact ⟨MeasureTheory.Measure.dirac (fun _ => ()), inferInstance⟩
-  answer : (k : ℕ) → (Fin numOracles × Query) → Seed k → Reply
+  answer : (history : List ((Fin numOracles × Query) × Reply)) →
+    (Fin numOracles × Query) → Seed history.length → Reply
 
 attribute [instance] Oracle.seedSpace
 
 private def _run
     {Query : Type uQ} {Reply : Type uR} {Output : Type uO}
     {numOracles : ℕ}
-    (oracle : ℕ → (Fin numOracles × Query) → Reply)
+    (oracle : List ((Fin numOracles × Query) × Reply) → (Fin numOracles × Query) → Reply)
     (A : Algorithm Query Reply Output numOracles) :
-    Nat → Nat → (Fin numOracles → ℕ) → A.State →
+    Nat → List ((Fin numOracles × Query) × Reply) → (Fin numOracles → ℕ) → A.State →
       Output × List ((Fin numOracles × Query) × Reply)
-  | 0, _, _, state => (A.output state, [])
-  | k + 1, call, remaining, state =>
+  | 0, history, _, state => (A.output state, history)
+  | k + 1, history, remaining, state =>
       let query := A.query state
-      if remaining query.1 = 0 then (A.output state, [])
+      if remaining query.1 = 0 then (A.output state, history)
       else
-        let reply := oracle call query
+        let reply := oracle history query
         let remaining := Function.update remaining query.1 (remaining query.1 - 1)
-        let result := _run oracle A k (call + 1) remaining (A.update state reply)
-        (result.1, (query, reply) :: result.2)
+        _run oracle A k (history ++ [(query, reply)]) remaining (A.update state reply)
 
 def executeWithTrace
     {Query : Type uQ} {Reply : Type uR} {Output : Type uO}
@@ -52,8 +52,8 @@ def executeWithTrace
     (budget : Fin numOracles → ℕ) (seed : A.Seed := by exact ())
     (oracleSeed : (k : ℕ) → oracle.Seed k := by exact fun _ => ()) :
     Output × List ((Fin numOracles × Query) × Reply) :=
-  _run (fun k query => oracle.answer k query (oracleSeed k))
-    A (∑ i, budget i) 0 budget (A.initial seed)
+  _run (fun history query => oracle.answer history query (oracleSeed history.length))
+    A (∑ i, budget i) [] budget (A.initial seed)
 
 def execute
     {Query : Type uQ} {Reply : Type uR} {Output : Type uO}
