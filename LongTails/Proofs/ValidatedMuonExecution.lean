@@ -27,7 +27,7 @@ lemma execute_validatedMuon {Ω : Type} [MeasurableSpace Ω] {m n : ℕ}
   erw [MuonSimulation.execute_validatedMuon_resume]
   rw [hbudget]
   rw [MuonSimulation.sampledEval_training_resume α η ρ x0 g ξ seed extra 0]
-  exact MuonValidationSimulation.sampledEval_resumeMuonPlan_validation
+  simpa only [Nat.zero_add] using MuonValidationSimulation.sampledEval_resumeMuonPlan_validation (T := T)
     α η ρ b k q extra x0 g ξ (fun i =>
       (QueryPlan.sampledEval g ξ (trainingPlan α η (T + 1) x0 0) 0) (seed i)) (T + 1)
 

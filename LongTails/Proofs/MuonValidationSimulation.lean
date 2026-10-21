@@ -8,7 +8,6 @@ open OracleTemplate
 open LongTails.Algorithms.MatrixPolar LongTails.Algorithms.ValidatedMuon
 open LongTails.Proofs.MuonSimulation LongTails.Proofs.MuonBatchSimulation
 open LongTails.Proofs.ValidatedMuonExecution
-open LongTails.Setups.FiniteVarianceSpectralSmooth (ValidatedMuonState validatedMuonDirect)
 
 lemma sampledEval_resumeMuonPlan_validation {Ω : Type*} {m n T : ℕ}
     (α η ρ : ℝ) (b k q extra : ℕ) (x0 : Space m n)

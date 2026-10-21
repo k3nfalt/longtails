@@ -38,7 +38,6 @@ namespace LongTails.Proofs.MuonSimulation
 
 open OracleTemplate
 open LongTails.Algorithms.MatrixPolar LongTails.Algorithms.ValidatedMuon
-open LongTails.Setups.FiniteVarianceSpectralSmooth (ValidatedMuonState validatedMuonDirect)
 
 lemma sampledEval_training_resume {m n T b k q : ℕ} {Ω : Type*}
     (α η ρ : ℝ) (x0 : Space m n) (g : Space m n → Ω → Space m n)
