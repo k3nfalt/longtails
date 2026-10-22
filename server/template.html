@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>__PROJECT_NAME__</title>
   <link rel="icon" type="image/png" href="data:image/png;base64,__ICON_DATA__">
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   <style>
     __FONT_FACES__
     :root{color-scheme:light;--paper:#eeeeee;--ink:#111111;--muted:#637083;--line:#e3e7ed;--accent:#3157a3;--serif:"TeX Gyre Termes",serif;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
@@ -36,7 +35,7 @@
     .card-top h1,.card-top h2{flex:1;min-width:0}
     #setups article{margin-bottom:20px}#setups .card-body{padding:24px 32px}#setups .card-top{margin-bottom:16px;padding-bottom:10px}
     #setups .description-title{justify-content:flex-start;margin-bottom:12px}#setups .description-title>h2{text-align:left;font-size:22px}
-    #setups .description{font-size:17px}#setups .description p{text-align:left;hyphens:none}
+    #setups .description{font-size:16px}#setups .description p{text-align:left;hyphens:none}
     #setups .budgets{margin-top:16px;padding-top:16px}#setups .budgets h3{margin-bottom:10px}#setups .entry-link{margin-top:12px}
     .setup-anchor{display:inline-flex;align-items:center;justify-content:center;align-self:center;width:24px;height:24px;flex-shrink:0;color:var(--muted);border-radius:4px}.setup-anchor:hover{color:var(--accent)}
     .number{flex-shrink:0;font:12px/1.5 var(--mono);font-variant-numeric:tabular-nums;color:#666}
@@ -50,7 +49,7 @@
     .description-toggle>summary{cursor:pointer;font-size:14px;color:var(--muted);width:fit-content;padding:6px 0}
     .description-toggle>summary:hover{color:var(--accent)}
     .description-toggle[open]>summary{margin-bottom:20px}
-    .description{min-width:0;font:17px/1.6 Georgia,serif;color:var(--ink);overflow-wrap:break-word}
+    .description{min-width:0;font:18px/1.4 var(--serif);color:var(--ink);overflow-wrap:break-word}
     .description p{margin:0 0 .75em;text-align:justify;hyphens:auto}.description p:last-child{margin-bottom:0}
     .description h2,.description h3{font-family:var(--serif);font-weight:700;letter-spacing:0;margin:1.3em 0 .65em;font-size:21px}
     .description h2:first-child{margin:0 0 1em;text-align:center;font-size:24px}
@@ -58,7 +57,6 @@
     .description strong{font-weight:700;color:#171717}
     math{font-family:"Latin Modern Math",math;font-size:1em;font-weight:400}
     .description math[display="block"]{display:block;max-width:100%;overflow-x:auto;margin:.7em 0;padding:5px 0;text-align:center;scrollbar-width:thin}
-    mjx-container[display="true"]{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:5px 0;scrollbar-width:thin}
     .description a{color:var(--accent);text-underline-offset:3px}
     .entry-link{justify-self:start;align-self:end;display:inline-flex;align-items:center;margin-top:24px;text-decoration:none;font-size:13px;font-weight:600;color:var(--accent);padding:7px 0;border-bottom:1px solid #cdd8eb}
     .entry-link:hover{border-color:var(--accent)}
@@ -187,19 +185,10 @@
     }
     renderHistory();
     window.addEventListener('resize', renderHistory);
-    function typesetMath(element) {
-      if (!window.MathJax?.typesetPromise) return;
-      MathJax.startup.promise = MathJax.startup.promise
-        .then(() => MathJax.typesetPromise([element]))
-        .catch(error => console.error('Math rendering failed:', error));
-    }
-    document.addEventListener('toggle', event => {
-      if (event.target.open) typesetMath(event.target);
-    }, true);
     function descriptionView(html, compact = false) {
       const container = make('div', undefined, 'description');
       container.innerHTML = html;
-      for (const equation of container.querySelectorAll('.math.display')) {
+      for (const equation of container.querySelectorAll('math[display="block"]')) {
         equation.tabIndex = 0;
         equation.setAttribute('aria-label', 'Display equation');
       }
@@ -256,7 +245,7 @@
         if (theorem.reviewPath) title.append(' ', sourceLink(theorem.reviewPath, '(review)'));
         entry.append(title);
         if (theorem.formulaHtml) {
-          const formula = make('div', undefined, 'budget-formula tex2jax_ignore');
+          const formula = make('div', undefined, 'budget-formula');
           formula.innerHTML = theorem.formulaHtml;
           formula.tabIndex = 0;formula.setAttribute('aria-label', 'Proved budget formula');
           entry.append(formula);
@@ -286,10 +275,7 @@
         content.tabIndex = 0;content.setAttribute('role', 'region');
         content.setAttribute('aria-label', 'Comparison table and references');
         comparison.addEventListener('toggle', () => {
-          if (comparison.open && !content.hasChildNodes()) {
-            content.innerHTML = setup.comparisonHtml || '';
-            typesetMath(content);
-          }
+          if (comparison.open && !content.hasChildNodes()) content.innerHTML = setup.comparisonHtml || '';
         });
         content.addEventListener('click', event => {
           const link = event.target.closest('a[href^="#"]');
@@ -388,10 +374,7 @@
     function highlightMatches(card, setup, query) {
       if (!highlightIndexes.has(card)) {
         const table = card.querySelector('.comparison-scroll');
-        if (table && !table.hasChildNodes()) {
-          table.innerHTML = setup.comparisonHtml || '';
-          typesetMath(table);
-        }
+        if (table && !table.hasChildNodes()) table.innerHTML = setup.comparisonHtml || '';
         const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
         const texts = [];
         while (walker.nextNode()) {

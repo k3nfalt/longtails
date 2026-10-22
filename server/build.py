@@ -55,7 +55,7 @@ def font_css():
     return "\n".join(faces)
 
 
-def description_html(text, format, bibliography=None, *, mathjax=True):
+def description_html(text, format, bibliography=None):
     command = ["pandoc", "--from=" + format, "--to=json"]
     if bibliography is not None:
         command += ["--citeproc", "--bibliography=" + str(bibliography)]
@@ -99,7 +99,7 @@ def description_html(text, format, bibliography=None, *, mathjax=True):
             "pandoc",
             "--from=json",
             "--to=html5",
-            "--mathjax" if mathjax else "--mathml",
+            "--mathml",
             "--shift-heading-level-by=1",
         ],
         input=json.dumps(clean(document)),
@@ -373,9 +373,7 @@ def render(
         )
         formula = ROOT / "Theorems/Descriptions" / (relative + ".tex")
         theorem["formulaHtml"] = (
-            description_html(
-                formula.read_text(encoding="utf-8"), "latex", mathjax=False
-            )
+            description_html(formula.read_text(encoding="utf-8"), "latex")
             if formula.exists()
             else None
         )
