@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Convex Proximal Minimization}
+We consider minimizing $f+g$ over a convex set $C$ in a real Hilbert space $E$, where $f,g:E\to\mathbb{R}$. The function $f$ is differentiable, convex, and smooth with a hidden constant $L>0$, while $g$ is convex on $C$. For a given proximal parameter $\gamma>0$, the oracle returns exact proximal minimizers of $f$ over $E$ and of $g$ over $C$. A given point $w^1\in E$ satisfies $\|w^1-(x^\star+\gamma\nabla f(x^\star))\|\leq R$ for some minimizer $x^\star\in C$ and radius $R>0$. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $(f+g)(\bar{x})-(f+g)(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+Write $F(x)=f(x)+g(x)$. The optimization problem is
+\[
+\min_{x\in C} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The parameters satisfy
+\[
+L>0,\qquad \gamma>0,\qquad 0<\lambda\leq 1,
+\qquad 4\gamma L\leq\lambda,\qquad R>0,\qquad \varepsilon>0.
+\]
+The algorithm receives only $E$, $\gamma$, $\lambda$, and $w^1$; the remaining parameters $L$, $R$, and $\varepsilon$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For all $x,y\in E$,
+\[
+\begin{aligned}
+f(x)+\langle\nabla f(x),y-x\rangle
+&\leq f(y),\\
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
++\frac{L}{2}\|y-x\|^2.
+\end{aligned}
+\]
+The set $C$ is convex, and $g$ is convex on $C$: for all $x,y\in C$ and $t\in[0,1]$,
+\[
+g((1-t)x+ty)\leq (1-t)g(x)+t g(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Exact proximal access]
+For every $w,v\in E$, the oracle returns the respective minimizers
+\[
+\begin{aligned}
+p_f(w)&\in\operatorname*{arg\,min}_{x\in E}
+\left\{f(x)+\frac{\|x-w\|^2}{2\gamma}\right\},\\
+p_g(v)&\in\operatorname*{arg\,min}_{y\in C}
+\left\{g(y)+\frac{\|y-v\|^2}{2\gamma}\right\}.
+\end{aligned}
+\]
+Both minimizers exist for every query point. Either type of query may be made anywhere in $E$, and both types count toward a single total oracle-call budget.
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial distance]
+There exists $x^\star\in C$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in C,\\
+\|w^1-(x^\star+\gamma\nabla f(x^\star))\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy
+\[
+\bar{x}\in C,\qquad F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

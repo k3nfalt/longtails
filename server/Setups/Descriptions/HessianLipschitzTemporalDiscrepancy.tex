@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Minimization with Bounded Temporal Discrepancy}
+We consider minimizing a twice continuously differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. The function is $\mu$-strongly convex with $L$-Lipschitz gradient and $M$-Lipschitz Hessian, where $0<\mu\leq L$ and $M\geq0$. A given starting point $x^0\in E$ has objective gap at most $\Delta\geq0$ above a global minimizer $x^\star$. The oracle returns the gradient plus a fixed deterministic error sequence whose partial sums have norm at most $D\geq0$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $x^0$, $\mu$, $L$, $M$, $D$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Strong convexity and smoothness]
+The function $f$ is twice continuously Fr\'echet differentiable. For every $x,y\in E$,
+\[
+\begin{aligned}
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|^2,\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Lipschitz Hessian]
+The Hessian $\nabla^2 f(x):E\to E$ satisfies
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
+\leq M\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Bounded temporal discrepancy]
+There is a fixed deterministic sequence $(e_k)_{k\geq0}$ in $E$. At the $k$th call, indexed from zero, a query $x\in E$ returns
+\[
+g_k(x)=\nabla f(x)+e_k.
+\]
+The cumulative errors satisfy
+\[
+\left\|\sum_{k=0}^{n-1}e_k\right\|\leq D,
+\qquad n=0,1,2,\ldots.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

@@ -1,0 +1,80 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Composite Generalized Smooth Minimization}
+We consider minimizing $F=f+\psi$ over a convex set $Q$ in a real Hilbert space $E$, where $f,\psi:E\to\mathbb{R}$. The function $f$ is convex and continuously differentiable, $\psi$ is convex on $Q$, and $f$ is $(L_0,L_1)$-smooth with $L_0>0$ and $L_1\geq0$. A given point $x^0\in Q$ has bounded distance and objective gap to a minimizer $x^\star$, whose gradient norm is bounded. The oracle returns $\nabla f(x)$ at $x$ and exact constrained proximal minimizers. For $\varepsilon>0$, the goal is $\bar{x}\in Q$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in Q} F(x),
+\qquad F(x):=f(x)+\psi(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$. The parameters satisfy
+\[
+L_0>0,\qquad L_1\geq0,\qquad R>0,\qquad
+\Delta>0,\qquad G\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives only $E,L_0,L_1,R,\Delta$, and $x^0$; $G$ and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Convexity]
+The set $Q\subseteq E$ is convex. For every $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y)
+&&\text{for }x,y\in E,\\
+\psi((1-t)x+ty)&\leq(1-t)\psi(x)+t\psi(y)
+&&\text{for }x,y\in Q.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and $\nabla f:E\to E$ is continuous. For every $x,y\in E$ and $M\in\mathbb{R}$, the implication
+\[
+\begin{aligned}
+&\|\nabla f(x+\theta(y-x))\|\leq M
+\quad\text{for every }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
+\|\nabla f(x)-\nabla f(y)\|
+\leq(L_0+L_1M)\|x-y\|
+\end{aligned}
+\]
+holds.
+\end{assumption}
+
+\begin{assumption}[Exact proximal access]
+There is a map $T:\mathbb{R}\times E\times E\to E$ such that, for every $a>0$ and $z,v\in E$,
+\[
+T(a,z,v)\in\operatorname*{arg\,min}_{u\in Q}
+\left\{
+\frac{\|u-z\|^2}{2a}+\langle v,u-z\rangle+\psi(u)
+\right\}.
+\]
+\end{assumption}
+
+\begin{assumption}[Initialization and minimizer bounds]
+The given starting point satisfies $x^0\in Q$. There exists $x^\star\in Q$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta,\\
+\|\nabla f(x^\star)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle returns $\nabla f(x)$ at $x$. It also accepts a proximal query $(a,z,v)\in\mathbb{R}\times E\times E$ and returns $T(a,z,v)$; the minimization property is required for $a>0$. Gradient queries may be made at any $x\in E$. Gradient and proximal queries each count as one call toward a shared oracle-call budget.
+
+After the allotted calls, the output must satisfy
+\[
+\bar{x}\in Q,
+\qquad F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

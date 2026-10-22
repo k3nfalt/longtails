@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Symmetric Noise}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d$ is a nonnegative integer. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in\mathbb{R}^d$ satisfies $f(x^0)-\inf_x f(x)\leq\Delta$, with $\Delta\geq0$. Each oracle call returns unbiased stochastic gradients at two queried points using one shared sample, independently across calls. The noise has symmetric coordinate marginals, a bounded first moment, and Lipschitz dependence on the query in mean norm. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ with $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, averaging over sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+where $\|\cdot\|$ denotes the Euclidean norm. Let $\Omega$ be a measurable sample space, and let $\Lambda,\sigma\geq0$ denote the noise regularity and first-moment bounds, respectively. The algorithm receives $d$, $\Omega$ with its measurable structure, $L$, $\Lambda$, $\sigma$, $\Delta$, $\varepsilon$, and $x^0$; the objective is accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, and
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,
+&&x,y\in\mathbb{R}^d,\\
+f(x^0)-f(x)&\leq\Delta,
+&&x\in\mathbb{R}^d.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Symmetric first-moment noise]
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$. For every $x\in\mathbb{R}^d$, the map $g(x,\cdot)$ is Bochner integrable under $p$. Define the noise by
+\[
+e(x,\omega)=g(x,\omega)-\nabla f(x).
+\]
+For all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\|e(x,\xi)\|&\leq\sigma,\\
+\mathbb{E}_{\xi\sim p}\|e(x,\xi)-e(y,\xi)\|
+&\leq\Lambda\|x-y\|.
+\end{aligned}
+\]
+Each coordinate marginal of the noise is symmetric about zero: for every $x\in\mathbb{R}^d$ and $i\in\{1,\ldots,d\}$,
+\[
+e_i(x,\xi)\overset{\mathrm{law}}{=}-e_i(x,\xi),
+\qquad \xi\sim p.
+\]
+\end{assumption}
+
+At call $k\geq0$, the algorithm may query any pair $(x_k,y_k)\in\mathbb{R}^d\times\mathbb{R}^d$, and the oracle returns
+\[
+\bigl(g(x_k,\xi_k),\,g(y_k,\xi_k)\bigr).
+\]
+The sample variables $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $p$. They are independent of the algorithm's randomness. Both replies in a pair use the same sample, and one such paired query counts as one oracle call.
+
+After the allotted calls, the output $\bar{x}$ must be measurable and $\|\nabla f(\bar{x})\|$ must be integrable, with
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the samples and the independent algorithm randomness.
+\end{document}

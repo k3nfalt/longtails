@@ -1,0 +1,92 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Nonconvex Strongly Concave Minimax}
+We consider a possibly nonconvex minimax objective $f:E\times F\to\mathbb{R}$ on finite-dimensional real inner product spaces $E$ and $F$. The function is strongly concave in its second argument, with a Lipschitz gradient and Lipschitz Hessian. Given points $x^0\in E$ and $y^0\in F$ satisfy bounds on the initial value gap and dual gradient. Each oracle call returns unbiased estimates of both partial gradients using one shared sample, independently across calls, with bounded joint variance. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}[\|\nabla\Phi(\bar{x})\|]\leq\varepsilon$, where $\Phi(x)=\max_{y\in F}f(x,y)$ and expectation includes sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in E}\max_{y\in F} f(x,y).
+\]
+We equip $E\times F$ with the product inner product and norm
+\[
+\|(u,v)\|^2=\|u\|^2+\|v\|^2.
+\]
+All operator norms below are induced by these norms. The parameters satisfy
+\[
+0<\mu\leq L,\qquad \rho>0,\qquad \sigma>0,\qquad
+\Delta\geq0,\qquad G\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives $E$, $F$, the measurable sample space $\Omega$, all seven scalar parameters, and the given points $x^0,y^0$.
+
+Our assumptions:
+\begin{assumption}[Gradient and Hessian regularity]
+Both partial gradients of $f$ exist everywhere and are Fr\'echet differentiable as functions on $E\times F$. Writing $z=(x,y)$ and $\nabla f(z)=(\nabla_x f(x,y),\nabla_y f(x,y))$, we require, for every $z,z'\in E\times F$,
+\[
+\begin{aligned}
+\|\nabla f(z)-\nabla f(z')\|&\leq L\|z-z'\|,\\
+\|\nabla^2 f(z)-\nabla^2 f(z')\|_{\mathrm{op}}
+&\leq \rho\|z-z'\|.
+\end{aligned}
+\]
+Here $\nabla^2 f(z)$ is the linear operator from $E\times F$ to $E\times F$ obtained by differentiating the two partial gradients.
+\end{assumption}
+
+\begin{assumption}[Strong concavity]
+For every $x\in E$ and $y,y'\in F$,
+\[
+f(x,y')\leq f(x,y)+\langle\nabla_y f(x,y),y'-y\rangle
+-\frac{\mu}{2}\|y'-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+The given points satisfy
+\[
+\begin{aligned}
+&\forall x\in E\ \forall y\in F\ \exists y'\in F:
+&&f(x^0,y)-f(x,y')\leq\Delta,\\
+&&&\|\nabla_y f(x^0,y^0)\|\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic partial gradients]
+There is a probability measure $\nu$ on $\Omega$ and jointly measurable maps
+\[
+o_x:(E\times F)\times\Omega\to E,
+\qquad
+o_y:(E\times F)\times\Omega\to F.
+\]
+For each fixed $z=(x,y)$, both replies are Bochner integrable under $\nu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[o_x(z,\xi)]&=\nabla_x f(x,y),\\
+\mathbb{E}_{\xi\sim\nu}[o_y(z,\xi)]&=\nabla_y f(x,y).
+\end{aligned}
+\]
+The sum of squared errors is integrable and satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}\!\left[
+\|o_x(z,\xi)-\nabla_x f(x,y)\|^2
++\|o_y(z,\xi)-\nabla_y f(x,y)\|^2
+\right]\leq\sigma^2.
+\]
+The samples $(\xi_k)_{k\geq0}$ are measurable, independent, and identically distributed with law $\nu$, and are independent of algorithm randomness. At query $z_k\in E\times F$, call $k$ returns the pair $(o_x(z_k,\xi_k),o_y(z_k,\xi_k))$ using the same sample for both components.
+\end{assumption}
+
+Queries may be made anywhere in $E\times F$. The output requirement includes the existence of a maximizing selection $y^\star:E\to F$ satisfying
+\[
+f(x,y)\leq f(x,y^\star(x))
+\qquad\text{for every }x\in E,\ y\in F.
+\]
+For every such selection, the value function is $\Phi(x)=f(x,y^\star(x))$. The output $\bar{x}$ must be measurable, its gradient norm $\|\nabla\Phi(\bar{x})\|$ must be integrable, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla\Phi(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the oracle samples and the independent algorithm randomness.
+\end{document}

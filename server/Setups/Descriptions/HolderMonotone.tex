@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Zeros of H\"older Monotone Operators}
+We seek a zero of a monotone operator $F:E\to E$ on a finite-dimensional real inner product space $E$. The operator satisfies a mixed Lipschitz--H\"older bound with constants $L,H\geq 0$ and exponent $\alpha\in(0,1]$. A given point $x^0\in E$ lies within distance $R>0$ of a zero $x^\star$ of $F$. These regularity parameters and $R$ are hidden from the algorithm. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The problem is to find
+\[
+x^\star\in E\quad\text{such that}\quad F(x^\star)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $x^0$, a radius parameter $r_0$, and $\varepsilon$, where $0<r_0\leq R$; the parameters $L,H,\alpha,R$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Monotonicity]
+For every $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle\geq 0.
+\]
+\end{assumption}
+
+\begin{assumption}[Mixed Lipschitz--H\"older continuity]
+For every $x,y\in E$,
+\[
+\|F(x)-F(y)\|
+\leq L\|x-y\|+H\|x-y\|^{\alpha}.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance to a zero]
+There exists a zero $x^\star$ of $F$ satisfying
+\[
+\|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

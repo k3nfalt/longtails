@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Convex--Concave Saddle Problems}
+We consider a convex--concave function $\varphi:E\times F\to\mathbb{R}$ on real Hilbert spaces $E,F$, with nonempty compact convex feasible sets $X\subseteq E$ and $Y\subseteq F$. Their product has diameter at most $D\geq0$ in the maximum product norm. The oracle returns $G(x,y)=(\nabla_x\varphi(x,y),-\nabla_y\varphi(x,y))$, which exists everywhere and is globally $L$-Lipschitz for $L>0$. For $\varepsilon>0$, the goal is a measurable output $(\bar{x},\bar{y})\in X\times Y$ almost surely with integrable primal--dual gap and $\mathbb{E}_{P}[\sup_{y\in Y}\varphi(\bar{x},y)-\inf_{x\in X}\varphi(x,\bar{y})]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The saddle-point problem is
+\[
+\min_{x\in X}\max_{y\in Y}\varphi(x,y).
+\]
+We equip the product space with the norm
+\[
+\|(x,y)\|=\max\{\|x\|_E,\|y\|_F\},
+\]
+where the component norms are induced by the Hilbert inner products. The algorithm receives $E,F,X,Y,L,D$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Feasible geometry]
+The sets $X$ and $Y$ are nonempty, compact, and convex, and
+\[
+\|z-w\|\leq D,
+\qquad z,w\in X\times Y.
+\]
+\end{assumption}
+
+\begin{assumption}[Convexity and concavity]
+For every $x,x'\in X$, $y,y'\in Y$, and $t\in[0,1]$,
+\[
+\begin{aligned}
+\varphi((1-t)x+tx',y)
+&\leq (1-t)\varphi(x,y)+t\varphi(x',y),\\
+\varphi(x,(1-t)y+ty')
+&\geq (1-t)\varphi(x,y)+t\varphi(x,y').
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Global smoothness]
+For every $(x,y)\in E\times F$, the functions $\varphi(\cdot,y)$ and $\varphi(x,\cdot)$ are Fr\'echet differentiable at $x$ and $y$, respectively. Their signed gradient map satisfies
+\[
+\|G(z)-G(w)\|\leq L\|z-w\|,
+\qquad z,w\in E\times F.
+\]
+\end{assumption}
+
+Queries may be made at any point of $E\times F$, and each oracle reply is the exact signed gradient $G(x,y)$. Define the primal--dual gap by
+\[
+\operatorname{Gap}(x,y)
+=\sup_{v\in Y}\varphi(x,v)
+-\inf_{u\in X}\varphi(u,y).
+\]
+After the allotted oracle calls, the output $(\bar{x},\bar{y})$ must be measurable with respect to the given measurable structures on $E$ and $F$, and must satisfy
+\[
+\begin{aligned}
+(\bar{x},\bar{y})&\in X\times Y
+&&P\text{-a.s.},\\
+\mathbb{E}_{P}\bigl[|\operatorname{Gap}(\bar{x},\bar{y})|\bigr]&<\infty,\\
+\mathbb{E}_{P}\bigl[\operatorname{Gap}(\bar{x},\bar{y})\bigr]&\leq\varepsilon.
+\end{aligned}
+\]
+\end{document}

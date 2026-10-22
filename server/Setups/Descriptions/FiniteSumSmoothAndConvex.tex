@@ -1,0 +1,47 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Convex Finite-Sum Minimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^{n}f_i(x)$ on a real Hilbert space $E$, where $n\geq1$ is an integer and each $f_i:E\to\mathbb{R}$ is differentiable and convex with an $L$-Lipschitz gradient, for $L>0$. A given starting point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$ of $F$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is equipped with a measurable structure. The algorithm receives $E$, $n$, $L$, $R$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Component convexity]
+For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq (1-t)f_i(x)+t f_i(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Component smoothness]
+Each $f_i$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|\leq L\|x-y\|,
+\qquad x,y\in E,\quad i\in\{1,\ldots,n\}.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may select any component $i\in\{1,\ldots,n\}$ and any point $x\in E$, and each call returns its exact component gradient. After the allotted oracle calls, the output $\bar{x}$ must be measurable with respect to the given measurable structure on $E$, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,46 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Diagonal Smooth Strongly Convex Minimization}
+We consider minimizing a differentiable function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq 1$. For hidden weights $w_i>0$, define $\|v\|_w^2=\sum_{i=1}^d w_i v_i^2$. In this norm, $f$ is $1$-smooth and $\mu$-strongly convex, with hidden $\mu\in(0,1]$. Its known minimum value $f^\star=f(x^\star)$ is attained at a global minimizer $x^\star$. A given starting point $x^0$ satisfies $f(x^0)-f^\star\leq\Delta$, where $\Delta\geq0$. The oracle returns $(f(x),\nabla f(x))$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+The inner product $\langle\cdot,\cdot\rangle$ and gradient are Euclidean; the weighted norm specifies the quadratic bounds below. The algorithm receives only $d$, $x^0$, and $f^\star$; the weights $w=(w_i)_{i=1}^d$, strong convexity parameter $\mu$, initial gap bound $\Delta$, and tolerance $\varepsilon$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Diagonal smoothness and strong convexity]
+The function $f$ is differentiable everywhere on $\mathbb{R}^d$. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{1}{2}\|y-x\|_w^2,\\
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|_w^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Attained minimum and initial gap]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&=f^\star\leq f(x)
+&&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-f^\star&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$, with each query returning both the exact function value and the exact gradient. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

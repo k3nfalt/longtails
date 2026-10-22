@@ -1,0 +1,68 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Mixed Relative Noise}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, where $L>0$, and a given point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$ for $\Delta\geq0$. The oracle returns unbiased stochastic gradients, with second moments controlled by gradient magnitudes and noise increments controlled jointly by gradient magnitudes and query distance. Consecutive pairs of calls share a sample; samples across pairs are independent. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, averaging over sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. Let $\Omega$ be a measurable sample space, and let $M,r,\sigma\geq0$. The algorithm receives $E$, $\Omega$, $L$, $M$, $r$, $\sigma$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given point $x^0$ satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Mixed relative noise]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. Define the centered error by
+\[
+e(x,\omega)=g(x,\omega)-\nabla f(x).
+\]
+For every $x\in E$, the random variable $\|e(x,\xi)\|^2$ is integrable for $\xi\sim\nu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\|e(x,\xi)\|^2
+&\leq r\|\nabla f(x)\|^2+\sigma^2.
+\end{aligned}
+\]
+Moreover, for every $x,y\in E$, the same sample is used in the noise-increment bound
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\|e(x,\xi)-e(y,\xi)\|^2
+&\leq r\bigl(\|\nabla f(x)\|^2+\|\nabla f(y)\|^2\bigr)\\
+&\quad+M^2\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. Let $(\xi_j)_{j\geq0}$ be measurable, independent random variables with common law $\nu$, independent of the algorithm's randomness. At call $k\geq0$, a query $x_k\in E$ receives
+\[
+g\bigl(x_k,\xi_{\lfloor k/2\rfloor}\bigr).
+\]
+Thus calls $2j$ and $2j+1$ use the same sample $\xi_j$, including when the second query depends on the first reply. Each evaluation counts as one oracle call.
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable, and
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the sample sequence and the independent algorithm randomness.
+\end{document}

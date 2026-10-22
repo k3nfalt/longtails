@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Constant-Step Random Reshuffling}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n\geq1$ and the functions $f_i:E\to\mathbb{R}$ are differentiable and convex with Lipschitz gradients. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for a minimizer $x^\star$ of $F$, with $n^{-1}\sum_{i=1}^n\|\nabla f_i(x^\star)\|^2\leq\sigma^2$, where $R,\sigma\geq0$. The oracle returns $\nabla f_i(x)$ at $(i,x)$. We analyze constant-step random reshuffling and require its last iterate $\bar{x}$ to satisfy $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $\varepsilon>0$ and the expectation is over the random permutations.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. Fix smoothness bounds $0<L_{\mathrm{avg}}\leq L_{\max}$. The algorithm receives $E$, $n$, $L_{\mathrm{avg}}$, $L_{\max}$, $R$, $\sigma$, $\varepsilon$, and $x^0$; the component functions are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+Each $f_i$ is Fr\'echet differentiable on $E$ and satisfies
+\[
+f_i((1-t)x+ty)\leq(1-t)f_i(x)+t f_i(y),
+\qquad x,y\in E,\quad t\in[0,1].
+\]
+There exist constants $\ell_1,\ldots,\ell_n$ such that
+\[
+\begin{aligned}
+0\leq\ell_i&\leq L_{\max},
+&\frac1n\sum_{i=1}^n\ell_i&\leq L_{\mathrm{avg}},\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq\ell_i\|x-y\|,
+&&x,y\in E.
+\end{aligned}
+\]
+These conditions hold for every $i\in\{1,\ldots,n\}$.
+\end{assumption}
+
+\begin{assumption}[Initial distance and component gradients]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+\frac1n\sum_{i=1}^n\|\nabla f_i(x^\star)\|^2&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze constant-step random reshuffling. The algorithm chooses an integer $K\geq0$ and a constant step size $\eta>0$ from the available inputs. It draws $K$ independent, uniformly distributed permutations $\pi_0,\ldots,\pi_{K-1}$ of $\{1,\ldots,n\}$. For every epoch $k\geq K$, set $\pi_k$ to the identity permutation. Starting from the given $x^0$, the updates are
+\[
+\begin{aligned}
+x^{t+1}&=x^t-\eta\nabla f_{\pi_k(j+1)}(x^t),\\
+k&=\lfloor t/n\rfloor,\qquad j=t-nk,
+\qquad t=0,1,\ldots.
+\end{aligned}
+\]
+Thus each of the first $K$ epochs visits every component once in a fresh random order, and subsequent epochs use the fixed order $1,\ldots,n$. The same step size is used throughout. Each update makes one component-gradient query, which may be evaluated at any point of $E$.
+
+For an allotted number $N\geq0$ of oracle calls, the output is the last iterate $\bar{x}=x^N$, including when the calls end partway through an epoch. Let $P$ be the law of the sampled permutations. The output must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

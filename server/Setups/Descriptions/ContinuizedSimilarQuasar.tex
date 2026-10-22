@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Similar Finite-Sum Quasar Minimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n\geq1$ and the functions $f_i:E\to\mathbb{R}$ are differentiable. The possibly nonconvex objective $F$ has an $L$-Lipschitz gradient and is strongly quasar-convex with parameters $0<\mu\leq L$ and $0<\gamma\leq1$ relative to a global minimizer $x^\star$. Component-gradient deviations from $\nabla F$ satisfy a mean-square Lipschitz bound with constant $\delta\geq0$. A given point $x^0\in E$ satisfies $F(x^0)-F(x^\star)\leq\Delta$, where $\Delta\geq0$. At $(i,x)$, the oracle returns $\nabla f_i(x)$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, $n$, $L$, $\mu$, $\gamma$, $\delta$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Differentiability and smoothness]
+Each $f_i$ is Fr\'echet differentiable everywhere on $E$. The average gradient satisfies
+\[
+\|\nabla F(x)-\nabla F(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Mean-square gradient similarity]
+Define $d_i(x)=\nabla f_i(x)-\nabla F(x)$. For every $x,y\in E$,
+\[
+\frac{1}{n}\sum_{i=1}^n\|d_i(x)-d_i(y)\|^2
+\leq\delta^2\|x-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Strong quasar-convexity and initial gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+F(x^0)-F(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+For this same minimizer and every $x\in E$,
+\[
+\gamma F(x)+\langle\nabla F(x),x^\star-x\rangle
++\frac{\gamma\mu}{2}\|x^\star-x\|^2
+\leq\gamma F(x^\star).
+\]
+\end{assumption}
+
+Queries may use any component $i\in\{1,\ldots,n\}$ and any point $x\in E$. After the allotted component-gradient calls, the output must have an integrable objective gap and satisfy
+\[
+\mathbb{E}_{P}\!\left[\left|F(\bar{x})-F(x^\star)\right|\right]<\infty,
+\qquad
+\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,60 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Quadratic Finite-Sum Minimization}
+We consider minimizing $f=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space $E$, where $n\geq1$ and each $f_i:E\to\mathbb{R}$ is quadratic. Component Hessians have operator norm at most $L>0$, and their average is bounded below by $\mu I$, where $0<\mu\leq L$ and $I$ is the identity on $E$. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for the minimizer $x^\star$, with $R\geq0$ and $\|\nabla f_i(x^\star)\|\leq G$ for $G\geq0$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+Write the component objectives and their average as
+\[
+\begin{aligned}
+f_i(x)&=\frac12\langle x,A_i x\rangle+\langle b_i,x\rangle,\qquad i=1,\ldots,n,\\
+f(x)&=\frac1n\sum_{i=1}^n f_i(x),
+\end{aligned}
+\]
+where each $A_i:E\to E$ is a bounded linear operator and $b_i\in E$. The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $n$, $L$, $\mu$, $R$, $G$, $\varepsilon$, and $x^0$; the operators $A_i$ and vectors $b_i$ are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Component curvature and strong convexity]
+For every $i\in\{1,\ldots,n\}$, the operator $A_i$ is symmetric and bounded by $L$:
+\[
+\begin{aligned}
+\langle A_i x,y\rangle&=\langle x,A_i y\rangle,\qquad x,y\in E,\\
+\|A_i\|_{\mathrm{op}}&\leq L.
+\end{aligned}
+\]
+The average curvature satisfies
+\[
+\frac1n\sum_{i=1}^n\langle x,A_i x\rangle\geq\mu\|x\|^2,
+\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and component gradients]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+\sum_{i=1}^n(A_i x^\star+b_i)&=0,\\
+\|x^0-x^\star\|&\leq R,\\
+\|A_i x^\star+b_i\|&\leq G,\qquad i=1,\ldots,n.
+\end{aligned}
+\]
+The curvature condition makes $x^\star$ the unique global minimizer of $f$.
+\end{assumption}
+
+At any selected index $i\in\{1,\ldots,n\}$ and point $x\in E$, the oracle returns the exact component gradient
+\[
+\nabla f_i(x)=A_i x+b_i.
+\]
+After the allotted component-gradient calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

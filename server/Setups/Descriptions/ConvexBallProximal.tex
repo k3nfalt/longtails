@@ -1,0 +1,68 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Ball Proximal Minimization}
+We minimize a convex function $f:E\to\mathbb{R}$ over a convex set $C$ in a finite-dimensional real inner-product space $E$, with closed constrained epigraph. A given $x^0\in C$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for a minimizer $x^\star\in C$, where $R\geq0$ and $\Delta>0$. At $x\in C$, the oracle returns an exact minimizer over $\{z\in C:\|z-x\|\leq t\}$, where $t>0$. Ball proximal iteration must return $\bar{x}\in C$ with $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of oracle randomness, for $\varepsilon>0$.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $t$, $R$, $\Delta$, $\varepsilon$, and $x^0$; the set $C$ and function $f$ are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Convexity and closed epigraph]
+The set $C\subseteq E$ is convex, and for all $x,y\in C$ and $\lambda\in[0,1]$,
+\[
+f((1-\lambda)x+\lambda y)
+\leq (1-\lambda)f(x)+\lambda f(y).
+\]
+The constrained epigraph
+\[
+\{(x,a)\in E\times\mathbb{R}:x\in C,\ f(x)\leq a\}
+\]
+is closed in $E\times\mathbb{R}$.
+\end{assumption}
+
+\begin{assumption}[Initialization and minimizer]
+The given starting point satisfies $x^0\in C$. There exists $x^\star\in C$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in C,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact ball proximal oracle]
+For every query $x\in C$, every oracle reply $y$ satisfies
+\[
+\begin{aligned}
+y&\in C, & \|y-x\|&\leq t,\\
+f(y)&\leq f(z)
+&&\text{for all }z\in C\text{ with }\|z-x\|\leq t.
+\end{aligned}
+\]
+These conditions hold for every query history and every realization of the oracle randomness. The oracle may select among multiple minimizers using that history and randomness.
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze ball proximal iteration with fixed radius $t$. Starting at the given $x^0$, each step queries the oracle at the current iterate and replaces it by the returned point:
+\[
+x^{k+1}\in\operatorname*{arg\,min}_{\substack{z\in C\\\|z-x^k\|\leq t}} f(z),
+\qquad k=0,\ldots,K-1.
+\]
+Here $K\geq0$ is the integer oracle-call budget, each step uses one call, and the output is the last iterate $\bar{x}=x^K$. All queries therefore lie in $C$.
+
+The required accuracy is
+\[
+\bar{x}\in C,
+\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The minimizer $x^\star$ is fixed independently of the oracle randomness.
+\end{document}

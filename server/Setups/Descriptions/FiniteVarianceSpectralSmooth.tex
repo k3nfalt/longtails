@@ -1,0 +1,110 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Muon with Finite-Variance Matrix Gradients}
+We consider a differentiable, possibly nonconvex objective $f:E\to\mathbb{R}$ on $E=\mathbb{R}^{m\times n}$ with the Frobenius inner product, where $m,n$ are nonnegative integers. Its gradient is $L$-Lipschitz from the spectral norm to the nuclear norm, with $L\geq0$, and a given $x^0\in E$ has gap at most $\Delta\geq0$ above a global lower bound. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with row standard deviations summing to at most $s\geq0$ in a fixed orthonormal basis. The specified Muon variant must return a measurable $\bar{x}$ satisfying $\|\nabla f(\bar{x})\|_*\leq\varepsilon$ with probability at least $1-\delta$, where $\|\cdot\|_*$ is the nuclear norm, $\varepsilon>0$, and $\delta\in(0,1)$.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+Write $\langle X,Y\rangle_F=\operatorname{tr}(X^\top Y)$ and $\|X\|_F$ for the Frobenius inner product and norm. The spectral norm $\|X\|_{\mathrm{op}}$ is the induced operator norm of $X:\mathbb{R}^n\to\mathbb{R}^m$ with Euclidean norms, and $\|X\|_*$ is its dual norm under this inner product. Gradients are taken with respect to the Frobenius inner product. The algorithm receives $m,n,L,\Delta,s,\varepsilon,\delta$, and $x^0$; the noise law and the basis and row bounds described below are not inputs.
+
+Our assumptions:
+\begin{assumption}[Spectral-to-nuclear smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_*
+\leq L\|x-y\|_{\mathrm{op}},
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_{\mathrm{low}}&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased gradients with a row variance profile]
+There is a probability law $\nu$ on a measurable sample space $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, $g(x,\cdot)$ is Bochner integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+There exist an orthonormal basis $(v_i)_{i=1}^m$ of $\mathbb{R}^m$ and nonnegative numbers $(\sigma_i)_{i=1}^m$ such that
+\[
+\begin{aligned}
+\sum_{i=1}^m\sigma_i&\leq s,\\
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|(g(x,\xi)-\nabla f(x))^\top v_i\|_2^2\bigr]
+&\leq\sigma_i^2,
+\qquad x\in E,\quad 1\leq i\leq m.
+\end{aligned}
+\]
+Each row-error map in this display belongs to $L^2(\nu;\mathbb{R}^n)$. At successive calls, the oracle uses measurable, mutually independent samples $\xi_0,\xi_1,\ldots$, each with law $\nu$, and returns $g(x,\xi_\ell)$ at the queried point $x$. Algorithm randomness is independent of this sample sequence.
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze Muon with momentum, polar updates, and a sampled-candidate selection rule. Define the polar map by the minimum-Frobenius-norm maximizer
+\[
+\operatorname{polar}(M)
+=\\operatorname*{arg\,min}_{U\in\mathcal{S}(M)}\|U\|_F,
+\qquad
+\mathcal{S}(M)
+=\operatorname*{arg\,max}_{\|V\|_{\mathrm{op}}\leq1}
+\langle M,V\rangle_F.
+\]
+The algorithm chooses parameters
+\[
+0<\alpha\leq1,\qquad \eta>0,\qquad \rho>0,
+\qquad T,k,q\in\mathbb{Z}_{\geq0},\qquad b\in\mathbb{Z}_{\geq1}.
+\]
+Starting from the given $x^0$ and $M^0=0$, it queries the training points $x^t$ for $t=0,\ldots,T$, with replies $G_t=g(x^t,\xi_t)$. The candidate trajectory is defined by
+\[
+\begin{aligned}
+M^{t+1}&=(1-\alpha)M^t+\alpha G_t,\\
+x^{t+1}&=x^t-\eta\operatorname{polar}(M^{t+1}),
+\qquad 0\leq t<T.
+\end{aligned}
+\]
+Thus there are $T+1$ training queries, including the query at $x^T$.
+
+Using its own randomness, the algorithm draws $q+1$ independent indices $I_0,\ldots,I_q$, uniformly distributed on $\{0,\ldots,T\}$, and sets $y_i=x^{I_i}$. At each $y_i$, it collects $k+1$ batches of $b$ further oracle replies. With zero-based indices, these batch means are
+\[
+\begin{aligned}
+a_{ij}&=T+1+b(k+1)i+bj,\\
+B_{ij}&=\frac{1}{b}\sum_{u=0}^{b-1}
+ g(y_i,\xi_{a_{ij}+u}),
+\qquad 0\leq i\leq q,\quad 0\leq j\leq k.
+\end{aligned}
+\]
+For each candidate, define
+\[
+\mathcal{J}_i
+=\left\{j\in\{0,\ldots,k\}:
+2\left|\left\{\ell\in\{0,\ldots,k\}:
+\|B_{ij}-B_{i\ell}\|_*\leq\rho
+\right\}\right|>k+1\right\}.
+\]
+Let $j_i$ be the smallest element of $\mathcal{J}_i$ when it is nonempty, and let $j_i=0$ otherwise. Set $\widehat G_i=B_{i j_i}$. The output rule is
+\[
+i_* = \min\operatorname*{arg\,min}_{0\leq i\leq q}
+\|\widehat G_i\|_*,
+\qquad \bar{x}=y_{i_*}.
+\]
+This procedure uses $T+1+b(k+1)(q+1)$ oracle calls. Its output remains the same after any additional calls. The family also includes a constant-output alternative: when $2L\Delta\leq\varepsilon^2$, the algorithm may return $x^0$ at every stage.
+
+Queries may be made at any point of $E$. The required output is measurable and satisfies
+\[
+\mathbb{P}_{P}\!\left(\|\nabla f(\bar{x})\|_*>\varepsilon\right)
+\leq\delta,
+\]
+where $P$ is the joint law of the algorithm randomness and the independent oracle sample sequence.
+\end{document}

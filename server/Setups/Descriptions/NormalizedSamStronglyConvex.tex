@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Normalized SAM for Strongly Convex Minimization}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a real Hilbert space $E$ using normalized sharpness-aware minimization (SAM). The function is $\mu$-strongly convex with $L$-Lipschitz gradient, where $0<\mu\leq L$. A given starting point $x^0\in E$ satisfies $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$ and $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. With perturbation radius $\rho>0$ and tolerance $\varepsilon>0$, the goal is a last iterate $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$. The algorithm receives $E$, $L$, $\mu$, $\rho$, $x^0$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Strong convexity]
+For every $x,y\in E$,
+\[
+f(y)\geq f(x)+\langle\nabla f(x),y-x\rangle
++\frac{\mu}{2}\|y-x\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze normalized SAM with a fixed step size $\eta>0$, chosen from the available inputs, and the prescribed radius $\rho$. Starting from the given $x^0$, the method uses two successive gradient queries per iteration:
+\[
+\begin{aligned}
+g^t&=\nabla f(x^t),\\
+u^t&=\begin{cases}
+g^t/\|g^t\|, & g^t\neq0,\\
+0, & g^t=0,
+\end{cases}\\
+y^t&=x^t+\rho u^t,\\
+x^{t+1}&=x^t-\eta\nabla f(y^t),
+\qquad t=0,1,2,\ldots.
+\end{aligned}
+\]
+Queries may be made at any point of $E$. The step size remains constant throughout the run. For an oracle-call budget $N\in\{0,1,2,\ldots\}$, the output is
+\[
+\bar{x}=x^{\lfloor N/2\rfloor}.
+\]
+If $N$ is odd, the final call evaluates the gradient at the current iterate without completing another update. The required accuracy is
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

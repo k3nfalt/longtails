@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Batched SGD for Convex Quadratics}
+We consider minimizing a differentiable convex quadratic $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and the given starting point $x^0\in E$ is within distance $R\geq0$ of a global minimizer $x^\star$. Each oracle call returns an independent-sample, unbiased stochastic gradient with variance at most $\sigma^2$, where $\sigma\geq0$. We analyze batched stochastic gradient descent (SGD). For $\varepsilon>0$, its last completed iterate $\bar{x}$ must satisfy $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, with expectation over the oracle samples.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, the measurable sample space $\Omega$, $L$, $R$, $\sigma$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Quadratic objective and smoothness]
+There exist a linear operator $A:E\to E$, a point $u\in E$, and a constant $c\in\mathbb{R}$ such that
+\[
+f(x)=c+\frac{1}{2}\|A(x-u)\|^2,
+\qquad x\in E.
+\]
+The function $f$ is convex and Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+Let $p$ be a probability measure on $\Omega$. The oracle is a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable, the map $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+Queries may be made at any point of $E$. Successive calls use independent samples $\xi_1,\xi_2,\ldots$ with common law $p$, and a call at $x$ using $\xi_j$ returns $g(x,\xi_j)$.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze batched SGD with deterministic step sizes $\eta_i\geq0$ and positive integer batch sizes $b_i$, chosen from the algorithm inputs. Starting from the given $x^0$, define $s_0=0$ and, for $i\geq1$,
+\[
+\begin{aligned}
+s_i&=\sum_{r=1}^{i}b_r,\\
+x^i&=x^{i-1}-\frac{\eta_i}{b_i}
+\sum_{j=1}^{b_i}g(x^{i-1},\xi_{s_{i-1}+j}).
+\end{aligned}
+\]
+All queries in batch $i$ are made at $x^{i-1}$, and the point is updated only after all $b_i$ replies have been collected. For an oracle-call budget $N\in\mathbb{N}_0$, let
+\[
+T=\max\{i\in\mathbb{N}_0:s_i\leq N\}.
+\]
+The output is $\bar{x}=x^T$. If $s_T<N$, the remaining $N-s_T$ calls belong to an unfinished batch and do not change the output; these calls still count toward the budget.
+
+Let $P$ be the joint law of the independent oracle samples. The output must be measurable, its objective gap must be integrable under $P$, and the required accuracy is
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

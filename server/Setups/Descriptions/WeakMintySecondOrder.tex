@@ -1,0 +1,50 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Second-Order Weak Minty Root Finding}
+We seek a zero of a differentiable map $F:E\to E$ on a finite-dimensional real inner product space $E$. The map and its derivative are Lipschitz. A root $x^\star$ satisfies the weak Minty inequality $\langle F(x),x-x^\star\rangle\geq-(\rho/2)\|F(x)\|^2$ for every $x\in E$, where $\rho\geq0$, and a given starting point $x^0$ lies within distance $R\geq0$ of this root. The oracle returns either $F(x)$ or its derivative at the queried point $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The root-finding problem is to find $x\in E$ such that
+\[
+F(x)=0.
+\]
+Write $J(x):E\to E$ for the Fr\'echet derivative of $F$ at $x$. The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The parameters satisfy
+\[
+L_1>0,\qquad L_2>0,\qquad \rho L_1<2.
+\]
+The algorithm receives $E$, $L_1$, $L_2$, $\rho$, $\varepsilon$, and $x^0$; the radius $R$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Lipschitz map and derivative]
+The map $F$ is Fr\'echet differentiable everywhere on $E$, and, for all $x,y\in E$,
+\[
+\begin{aligned}
+\|F(x)-F(y)\|&\leq L_1\|x-y\|,\\
+\|J(x)-J(y)\|_{\mathrm{op}}&\leq L_2\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty root and initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq R,\\
+\langle F(x),x-x^\star\rangle
+&\geq-\frac{\rho}{2}\|F(x)\|^2
+\qquad\text{for every }x\in E.
+\end{aligned}
+\]
+\end{assumption}
+
+At any point $x\in E$, the algorithm may request either the exact value $F(x)$ or the exact linear operator $J(x)$. Each request counts as one call toward a shared oracle-call budget; obtaining both at a point requires two calls. After the allotted calls, the output must satisfy
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

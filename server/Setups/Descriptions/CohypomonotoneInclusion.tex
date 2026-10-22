@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Cohypomonotone Operator Inclusions}
+We seek a zero of $F+A$ on a real inner product space $E$, where $F:E\to E$ is $L$-Lipschitz and $A:E\rightrightarrows E$ is monotone. The sum is $\rho$-cohypomonotone, with $L>0$, $\rho\geq0$, and $\rho L<1$. A given point $x^0\in E$ is within distance $R\geq0$ of a zero. The oracle returns exact values of $F$ and resolvent evaluations of $A$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ admitting $\xi\in A(\bar{x})$ with $\|F(\bar{x})+\xi\|\leq\varepsilon$, almost surely under the law of the algorithm's randomness.
+
+The inclusion problem is to find $x\in E$ such that
+\[
+0\in F(x)+A(x),
+\]
+where $F(x)+A(x)=\{F(x)+a:a\in A(x)\}$. Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $L$, $\rho$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Lipschitz continuity and monotonicity]
+For every $x,y\in E$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+For every $x,y\in E$, $a\in A(x)$, and $b\in A(y)$,
+\[
+\langle a-b,x-y\rangle\geq0.
+\]
+\end{assumption}
+
+\begin{assumption}[Cohypomonotonicity]
+For every $x,y\in E$, $a\in A(x)$, and $b\in A(y)$, setting $u=F(x)+a$ and $v=F(y)+b$, we have
+\[
+\langle u-v,x-y\rangle\geq-\rho\|u-v\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Resolvent access]
+There is a map $J:\mathbb{R}\times E\to E$, written $J_\gamma(z)$, such that, for every $\gamma>0$ and $z\in E$,
+\[
+\frac{z-J_\gamma(z)}{\gamma}\in A(J_\gamma(z)).
+\]
+The oracle returns $F(x)$ for a query $x\in E$, or $J_\gamma(z)$ for a query $(\gamma,z)\in\mathbb{R}\times E$. These replies are exact. For $\gamma\leq0$, the map $J_\gamma$ is unrestricted. Both query types count toward the same oracle-call budget.
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ satisfying
+\[
+\begin{aligned}
+-F(x^\star)&\in A(x^\star),\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy
+\[
+\exists\,\xi\in A(\bar{x})\quad
+\|F(\bar{x})+\xi\|\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the law of the algorithm's randomness. The required output is $\bar{x}$; the residual witness $\xi$ need not be returned.
+\end{document}

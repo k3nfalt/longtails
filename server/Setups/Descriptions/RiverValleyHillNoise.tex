@@ -1,0 +1,130 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Step-Decay SGD in River Valleys}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The objective combines a smooth function along a subspace with a positive quadratic penalty around a curved valley. Derivative bounds, curvature separation conditions, and a bound on the initial objective gap control this geometry. The oracle returns unbiased stochastic gradients with independent, identically distributed samples and separately bounded noise variances along and across the valley. Starting from a given $x^0\in E$, step-decay SGD must return $\bar{x}\in E$ with $\mathbb{E}_{P}\|\nabla f(\bar{x})\|\leq\varepsilon$, where $\varepsilon>0$ and $P$ is the joint law of sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm on $E$ is induced by its inner product. All operator and multilinear norms below are induced operator norms. The algorithm receives $E$, the measurable sample space $\Omega$, the starting point $x^0$, and the parameters
+\[
+\begin{gathered}
+0<\mu\leq L_v,\qquad \varepsilon>0,\\
+L_h,\rho_h,G,\Gamma,L_J,\rho_J,\sigma_u,\sigma_v,\Delta\geq0.
+\end{gathered}
+\]
+The objective, its geometric decomposition, and the sampling distribution are accessed only through the oracle.
+
+Our assumptions:
+\begin{assumption}[Valley geometry and regularity]
+There exist a linear subspace $S\subseteq E$, twice Fr\'echet differentiable maps $h:E\to\mathbb{R}$ and $\phi:E\to E$, and a self-adjoint linear operator $A:E\to E$. Write $\Pi_u$ and $\Pi_v$ for the orthogonal projections onto $S^\perp$ and $S$, respectively. Then
+\[
+\begin{aligned}
+r(x)&=\Pi_v x-\phi(\Pi_u x),\\
+f(x)&=h(\Pi_u x)+\frac12\langle A r(x),r(x)\rangle,
+\qquad x\in E.
+\end{aligned}
+\]
+For every $y,z\in E$, the hill component satisfies
+\[
+\begin{aligned}
+\|\nabla h(y)\|&\leq G,\\
+\|\nabla h(y)-\nabla h(z)\|&\leq L_h\|y-z\|,\\
+\|\nabla^2h(y)-\nabla^2h(z)\|_{\mathrm{op}}
+&\leq\rho_h\|y-z\|.
+\end{aligned}
+\]
+Let $J(y)=D\phi(y):E\to E$, with derivative $DJ(y)$ viewed as a bilinear operator on $E\times E$. For every $y,z\in E$,
+\[
+\begin{aligned}
+\phi(y)&\in S,\\
+\|J(y)-J(z)\|_{\mathrm{op}}&\leq L_J\|y-z\|,\\
+\|DJ(y)-DJ(z)\|_{\mathrm{op}}&\leq\rho_J\|y-z\|,\\
+\|A J(y)\Pi_u z\|&\leq\Gamma\mu\|\Pi_u z\|.
+\end{aligned}
+\]
+The quadratic operator preserves $S$ and satisfies, for every $v\in S$,
+\[
+A v\in S,\qquad
+\mu\|v\|^2\leq\langle A v,v\rangle,\qquad
+\|A v\|\leq L_v\|v\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta,\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. At its $k$th query $x$, the oracle returns $g(x,\xi_k)$, where the measurable random variables $(\xi_k)_{k\geq0}$ are independent with common law $\nu$. Their joint law is independent of the algorithm's randomness. Queries may be made anywhere in $E$.
+
+For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+Writing $e(x,\xi)=g(x,\xi)-\nabla f(x)$, both projected squared norms below are integrable and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\|\Pi_u e(x,\xi)\|^2&\leq\sigma_u^2,\\
+\mathbb{E}_{\xi\sim\nu}\|\Pi_v e(x,\xi)\|^2&\leq\sigma_v^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Parameter separation]
+Define the following combinations of the given parameters:
+\[
+\begin{aligned}
+a&=\Gamma L_h+2L_JG,\\
+b&=2G\rho_J+2L_JL_h+\Gamma\rho_h+GL_J^2,\\
+c&=\frac{256a^2}{\mu}+32\Gamma a
+   +\frac{2b\sigma_u}{L_v},\\
+d&=2L_h\sigma_u^2+7c(\sigma_v^2+\sigma_u^2)
+   +a\sigma_u\sigma_v\\
+ &\quad+\frac{b\sigma_u^3}{\mu}
+   +\frac{b\Gamma G\sigma_u^2}{L_v}
+   +\frac{2L_J^2\sigma_u^4}{L_v},\\
+q&=(2G\rho_h+L_h^2)\sigma_u^2+4L_v^2\sigma_v^2
+   +20\Gamma^2\mu^2\sigma_u^2\\
+ &\quad+\frac{8L_vL_J^2\sigma_u^4}{\mu}
+   +\frac{\Gamma\mu GL_J\sigma_u^2}{4}.
+\end{aligned}
+\]
+They obey
+\[
+\begin{gathered}
+16\Gamma\leq1,\qquad 64a\leq\mu,\qquad
+64b\sigma_u\leq\mu L_v,\\
+32L_h\log\left(
+3+\frac{L_v^2}{\mu^2}
++\frac{4L_v^2q}{\mu^3(L_v\varepsilon^2+8d)}
+\right)\leq\mu.
+\end{gathered}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze step-decay SGD with a uniformly randomized switching time. The algorithm chooses two step sizes $\eta_s,\eta_c>0$ and integers $T,K\geq0$ from its inputs. It draws $\tau$ uniformly from $\{0,\ldots,T\}$, independently of the oracle samples, and starts at the given $x^0$. At call $k\geq0$, it queries $x^k$ and uses the recurrence
+\[
+x^{k+1}=\begin{cases}
+x^k-\eta_s g(x^k,\xi_k),&k<\tau,\\
+x^k-\eta_c g(x^k,\xi_k),&\tau\leq k<\tau+K,\\
+x^k,&k\geq\tau+K.
+\end{cases}
+\]
+After a budget of $N\geq0$ oracle calls, the output is $\bar{x}=x^N$. Calls after $\tau+K$ still count toward $N$, although they leave the iterate unchanged.
+
+The output must be measurable, its gradient norm must be integrable under $P$, and the required stationarity criterion is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]
+\leq\varepsilon.
+\]
+\end{document}

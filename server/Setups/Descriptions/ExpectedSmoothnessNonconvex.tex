@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Expected Smoothness}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is Lipschitz, and a given starting point has bounded objective gap above a global lower bound. The oracle returns two unbiased stochastic gradients evaluated at queried points using a shared sample, with independent samples across calls. Their mean-square difference is bounded by squared query distance, and their variance grows at most linearly with the objective gap. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}_{P}[\|\nabla f(\bar{x})\|]\leq\varepsilon$, where $P$ is the joint law of sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which carries its Borel sigma-algebra. Fix a measurable sample space $\Omega$, a starting point $x^0\in E$, and parameters
+\[
+L>0,\qquad A\geq0,\qquad C\geq0,\qquad
+\Delta\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives $E$, $\Omega$, $L$, $A$, $C$, $\Delta$, $\varepsilon$, and $x^0$; the objective, sampling distribution, and lower bound are accessible only through the stated oracle information.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Lower bound and initial gap]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_{\mathrm{low}}&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiasedness and expected smoothness]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+For every $x,y\in E$, both $\|g(x,\xi)-\nabla f(x)\|^2$ and $\|g(x,\xi)-g(y,\xi)\|^2$ are integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-g(y,\xi)\|^2\bigr]
+&\leq L^2\|x-y\|^2,\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
+&\leq 2A\bigl(f(x)-f_{\mathrm{low}}\bigr)+C.
+\end{aligned}
+\]
+\end{assumption}
+
+At call $k$, a query $(x,y)\in E\times E$ returns
+\[
+\bigl(g(x,\xi_k),g(y,\xi_k)\bigr).
+\]
+The measurable random variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and are independent of the algorithm's randomness. Both replies within a call use the same sample. Each such paired query counts as one oracle call.
+
+After the allotted calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

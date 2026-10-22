@@ -1,0 +1,60 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Zeroth-Order Matrix-Smooth Convex Minimization}
+We consider minimizing a twice differentiable convex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$. The function $f$ is matrix $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$, relative to an unknown positive definite matrix $H$ bounded above by the identity and satisfying $\operatorname{tr}(H)\leq r$, where $r>0$. A given point $x^0$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$, with $R,\Delta>0$. The oracle returns the scalar $f(x)$ at $x$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$ over the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean inner product $\langle\cdot,\cdot\rangle$ and its induced norm $\|\cdot\|$. The algorithm receives $d,L_0,L_1,r,R,\Delta,\varepsilon,\delta$, and $x^0$; the matrix $H$ and the minimizer are not supplied.
+
+Our assumptions:
+\begin{assumption}[Convexity and differentiability]
+The function $f$ is differentiable everywhere, its gradient is differentiable everywhere, and
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y),
+\qquad x,y\in\mathbb{R}^d,\quad t\in[0,1].
+\]
+\end{assumption}
+
+\begin{assumption}[Matrix generalized smoothness]
+There exists a symmetric matrix $H\in\mathbb{R}^{d\times d}$ and a constant $\mu>0$ such that
+\[
+\begin{aligned}
+\mu\|v\|^2&\leq\langle Hv,v\rangle\leq\|v\|^2
+&&\text{for every }v\in\mathbb{R}^d,\\
+\operatorname{tr}(H)&\leq r.
+\end{aligned}
+\]
+Write $\|v\|_H=\sqrt{\langle Hv,v\rangle}$ and $\|g\|_{H^{-1}}=\sqrt{\langle H^{-1}g,g\rangle}$. The Hessian, viewed as a linear operator on $\mathbb{R}^d$, satisfies
+\[
+\langle\nabla^2 f(x)v,w\rangle
+\leq\bigl(L_0+L_1\|\nabla f(x)\|_{H^{-1}}\bigr)
+\|v\|_H\|w\|_H,
+\qquad x,v,w\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and objective gap]
+There exists a global minimizer $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Function-value queries may be made at any point of $\mathbb{R}^d$. After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable and satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

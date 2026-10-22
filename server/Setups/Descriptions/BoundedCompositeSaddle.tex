@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Arrow--Hurwicz for Bounded Composite Saddles}
+We consider the saddle objective $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$ on convex sets $X\subset E$ and $Y\subset F$, where $E,F$ are real inner product spaces. Both sets lie in balls of radius $R>0$ about zero; $g:E\to\mathbb{R}$ and $h:F\to\mathbb{R}$ are convex and $M$-Lipschitz on their respective sets, with $M\geq0$, and $K:E\to F$ is bounded linear with operator norm at most $L>0$. The oracle returns exact linear-map, adjoint, and constrained proximal evaluations. From given feasible points, Arrow--Hurwicz must return a feasible pair $(\bar{x},\bar{y})$ satisfying $\Phi(\bar{x},y)-\Phi(x,\bar{y})\leq\varepsilon$ for every $(x,y)\in X\times Y$, almost surely, where $\varepsilon>0$ is the tolerance.
+
+The optimization problem is
+\[
+\inf_{x\in X}\sup_{y\in Y}\Phi(x,y).
+\]
+The norms on $E$ and $F$ are induced by their inner products, and we use the product norm $\|(x,y)\|=\max\{\|x\|,\|y\|\}$. Operator norms are the induced operator norms. The algorithm receives $E,F,X,Y,R,L,M,\varepsilon$ and the starting points $x^0,y^0$; access to $K,g,h$ is through the oracle.
+
+Our assumptions:
+\begin{assumption}[Bounded feasible sets]
+The sets $X$ and $Y$ are convex, $x^0\in X$, $y^0\in Y$, and
+\[
+\begin{aligned}
+\|x\|&\leq R &&\text{for every }x\in X,\\
+\|y\|&\leq R &&\text{for every }y\in Y.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Convex composite objective]
+The functions $g$ and $h$ are convex on $X$ and $Y$, respectively, and satisfy
+\[
+\begin{aligned}
+|g(a)-g(b)|&\leq M\|a-b\| &&(a,b\in X),\\
+|h(a)-h(b)|&\leq M\|a-b\| &&(a,b\in Y).
+\end{aligned}
+\]
+The map $K:E\to F$ is bounded linear with $\|K\|_{\mathrm{op}}\leq L$. There exists a map $K^*:F\to E$ satisfying
+\[
+\langle K^*y,z\rangle=\langle y,Kz\rangle,
+\qquad y\in F,\ z\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact proximal access]
+For every $u\in E$, $v\in F$, and $t>0$, the oracle provides points
+\[
+\begin{aligned}
+p_X(u,t)&\in\operatorname*{arg\,min}_{x\in X}
+\left\{t g(x)+\tfrac12\|x-u\|^2\right\},\\
+p_Y(v,t)&\in\operatorname*{arg\,min}_{y\in Y}
+\left\{t h(y)+\tfrac12\|y-v\|^2\right\}.
+\end{aligned}
+\]
+The oracle also returns $Kx$ for any $x\in E$ and $K^*y$ for any $y\in F$. Each linear-map, adjoint, or proximal evaluation counts as one call to the same oracle. Proximal queries accept arbitrary real $t$, with the stated minimization requirement applying when $t>0$.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze Arrow--Hurwicz with a constant step size $\eta>0$ chosen from the available inputs. Starting from the given pair $(x^0,y^0)$, the updates are
+\[
+\begin{aligned}
+x^{k+1}&=p_X\bigl(x^k-\eta K^*y^k,\eta\bigr),\\
+y^{k+1}&=p_Y\bigl(y^k+\eta Kx^{k+1},\eta\bigr),
+\qquad k\geq0.
+\end{aligned}
+\]
+Each iteration makes four calls, in the order $K^*y^k$, the primal proximal evaluation, $Kx^{k+1}$, and the dual proximal evaluation. After $N\geq1$ complete iterations, the output is
+\[
+\bar{x}=\frac1N\sum_{k=1}^{N}x^k,
+\qquad
+\bar{y}=\frac1N\sum_{k=1}^{N}y^k.
+\]
+If the call budget ends during a subsequent iteration, that incomplete iteration is excluded from the averages. If no iteration has been completed, the output is the current pair: $(x^0,y^0)$ after zero or one call, and $(x^1,y^0)$ after two or three calls.
+
+The required accuracy is feasibility together with a uniform primal--dual gap bound:
+\[
+\begin{gathered}
+(\bar{x},\bar{y})\in X\times Y,\\
+\Phi(\bar{x},y)-\Phi(x,\bar{y})\leq\varepsilon
+\quad\text{for every }x\in X,\ y\in Y,
+\qquad P\text{-a.s.},
+\end{gathered}
+\]
+where $P$ is the law of the algorithm's randomness; the specified Arrow--Hurwicz method and its oracle replies are deterministic.
+\end{document}

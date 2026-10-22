@@ -1,0 +1,96 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Clipped Subgradients with Heavy-Tailed Noise}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ over a closed convex set $D$ in a finite-dimensional real inner product space $E$. The function is $\rho$-weakly convex, with $\rho>0$, and admits bounded subgradients and a lower bound with controlled gap at a given starting point. The oracle returns unbiased stochastic subgradients with a bounded centered moment of order $\alpha\in(1,2]$, or exact projections onto $D$. Projected clipped subgradient updates must produce a measurable feasible output $\bar{x}$ satisfying $\mathbb{E}[4\rho^2\|\bar{x}-p(\bar{x})\|^2]\leq\varepsilon^2$, where $\varepsilon>0$, $p(x)$ minimizes $f(y)+\rho\|y-x\|^2$ over $y\in D$, and expectation averages sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in D} f(x).
+\]
+The norm is induced by the inner product on $E$. Fix parameters
+\[
+\rho>0,\qquad G>0,\qquad \sigma\geq0,\qquad
+1<\alpha\leq2,\qquad \Delta\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives $E$, the measurable sample space $\Omega$, these parameters, and the starting point $x^0$; the objective, feasible set, and sampling distribution are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Weak convexity and initial gap]
+The set $D\subseteq E$ is closed and convex, and $x^0\in D$. There is a map $v:E\to E$ such that, for every $x,y\in D$,
+\[
+\begin{aligned}
+f(y)&\geq f(x)+\langle v(x),y-x\rangle
+       -\frac{\rho}{2}\|y-x\|^2,\\
+\|v(x)\|&\leq G.
+\end{aligned}
+\]
+There is a lower bound $\ell\in\mathbb{R}$ satisfying
+\[
+f(x)\geq\ell\quad(x\in D),\qquad f(x^0)-\ell\leq\Delta.
+\]
+\end{assumption}
+
+\begin{assumption}[Heavy-tailed stochastic subgradients]
+There are a probability distribution $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in D$, the random vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-v(x)\|^\alpha$ is integrable under $\xi\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=v(x),\\
+\mathbb{E}_{\xi\sim\nu}[\|g(x,\xi)-v(x)\|^\alpha]
+&\leq\sigma^\alpha.
+\end{aligned}
+\]
+Oracle samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. Their joint law is independent of the algorithm's randomness. At call $k$, a subgradient query at $x$ returns $g(x,\xi_k)$.
+\end{assumption}
+
+\begin{assumption}[Exact projection]
+Projection queries at any $z\in E$ return $\Pi_D(z)$, where $\Pi_D:E\to E$ is measurable and satisfies
+\[
+\begin{aligned}
+\Pi_D(z)&\in D,\\
+\langle z-\Pi_D(z),u-\Pi_D(z)\rangle&\leq0
+\qquad(u\in D).
+\end{aligned}
+\]
+\end{assumption}
+
+The task is algorithm-specific: we analyze projected clipped subgradient descent with a constant step size and clipping threshold. The algorithm chooses $K\in\{0,1,2,\ldots\}$, $\eta>0$, and $\tau>0$ from its inputs. Starting from the given $x^0$, it alternates a stochastic subgradient query and a projection query:
+\[
+\begin{aligned}
+h^t&=g(x^t,\xi_{2t}),\\
+z^t&=x^t-\eta\operatorname{clip}_{\tau}(h^t),\\
+x^{t+1}&=\Pi_D(z^t),
+\end{aligned}
+\qquad
+\operatorname{clip}_{\tau}(h)=
+\begin{cases}
+h,&\|h\|\leq\tau,\\
+\dfrac{\tau}{\|h\|}h,&\|h\|>\tau.
+\end{cases}
+\]
+Each completed update uses two oracle calls, one of each kind, counted together. For a total budget $N\in\{0,1,2,\ldots\}$, let $m=\lfloor N/2\rfloor$ be the number of completed updates. Independently of the samples, draw $J$ uniformly from $\{0,\ldots,K\}$. The output rule is
+\[
+\bar{x}=
+\begin{cases}
+x^J,&J\leq m,\\
+x^0,&J>m.
+\end{cases}
+\]
+Thus a budget of $2K$ calls produces a uniformly selected iterate from $x^0,\ldots,x^K$. An unpaired final subgradient query does not change the output.
+
+Accuracy is measured by a proximal residual. Success requires the existence of a map $p:E\to E$ satisfying, for every $x\in E$,
+\[
+p(x)\in\operatorname*{arg\,min}_{y\in D}
+\bigl\{f(y)+\rho\|y-x\|^2\bigr\}.
+\]
+The output must be measurable and belong to $D$ for every realization. For every such proximal map $p$, the squared residual must be integrable and satisfy
+\[
+\mathbb{E}_{P}\!\left[4\rho^2\|\bar{x}-p(\bar{x})\|^2\right]
+\leq\varepsilon^2,
+\]
+where $P$ is the joint law of the independent index $J$ and oracle samples.
+\end{document}

@@ -1,0 +1,72 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Quasar Minimization with Amortized LMO}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ over a bounded convex set $C$ in a real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L\geq0$, and $f$ is $\tau$-quasar-convex relative to a minimizer $x^\star\in C$, with $0<\tau\leq1$. A starting point $x^0\in C$ is given. The oracle returns $\nabla f(x)$ at $x$. It also supplies approximate linear minimizers on calls with an odd number of preceding calls, with summable errors. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $L$, $x^0$, and $\tau$; the set $C$, its diameter bound $D\geq0$, the error budget $\Gamma\geq0$, and the tolerance $\varepsilon>0$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Feasible set]
+The set $C\subseteq E$ is convex, contains $x^0$, and satisfies
+\[
+\|x-y\|\leq D,
+\qquad x,y\in C.
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Quasar convexity]
+There exists $x^\star\in C$ such that, for every $x\in C$,
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x),\\
+\tau\bigl(f(x)-f(x^\star)\bigr)
+&\leq\langle\nabla f(x),x-x^\star\rangle.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Amortized linear minimization]
+There is a fixed sequence $(\delta_k)_{k\geq0}$ satisfying
+\[
+\delta_k\geq0\quad(k\geq0),
+\qquad
+\sum_{k=0}^{n-1}\delta_k\leq\Gamma\quad(n\geq0).
+\]
+For any query history containing $2k+1$ preceding calls and any direction $v\in E$, a linear minimization query returns a vector $s\in E$ satisfying
+\[
+\begin{aligned}
+s&\in C,\\
+\langle v,s\rangle&\leq\langle v,u\rangle+\delta_k,
+\qquad u\in C.
+\end{aligned}
+\]
+These conditions hold for every such history and every realization of the oracle randomness. The linear minimization guarantee applies only at these history lengths.
+\end{assumption}
+
+Gradient queries may be made at any point of $E$, and linear minimization queries may use any direction in $E$. Both query types count toward a single total oracle-call budget; the history length counts both types. Oracle replies to linear minimization queries may depend on the preceding history. Algorithm randomness is independent of oracle randomness.
+
+After the allotted calls, the output must satisfy
+\[
+\bar{x}\in C,
+\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The minimizer $x^\star$ is fixed independently of the randomness.
+\end{document}

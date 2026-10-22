@@ -1,0 +1,110 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Near-Zero-Sum Games}
+We study a two-player game on nonempty compact convex sets $X\subset E$ and $Y\subset F$, where $E,F$ are finite-dimensional real inner product spaces. The players minimize $h+g$ and $g-h$, respectively, where $h,g:E\times F\to\mathbb{R}$. The function $h$ is strongly convex in the first variable and strongly concave in the second; $g$ is jointly convex. Their within-domain gradients satisfy Lipschitz bounds, and an equilibrium exists. The oracle returns the players' own-variable gradients or a Euclidean projection. For $\varepsilon>0$, the goal is a feasible output $\bar z$ with $\|\bar z-z^\star\|^2\leq\varepsilon$ almost surely for one fixed equilibrium $z^\star$, using the product Euclidean norm.
+
+Write $Z=X\times Y$ and equip $E\times F$ with the inner product and norm
+\[
+\begin{aligned}
+\langle (x,y),(u,v)\rangle
+&=\langle x,u\rangle_E+\langle y,v\rangle_F,\\
+\|(x,y)\|^2&=\|x\|_E^2+\|y\|_F^2.
+\end{aligned}
+\]
+Define the players' costs by $c_1=h+g$ and $c_2=g-h$. Their respective problems, with the other player's action fixed, are
+\[
+\min_{x\in X} c_1(x,y),
+\qquad
+\min_{y\in Y} c_2(x,y).
+\]
+The algorithm receives $E,F,X,Y$, a feasible starting point $z^0=(x^0,y^0)$, and the parameters $L,\mu,\nu,\delta,D,\varepsilon$, whose ranges are
+\[
+0<\mu\leq L,\qquad 0<\nu\leq L,\qquad
+0\leq\delta\leq L,\qquad D>0,\qquad\varepsilon>0.
+\]
+The functions $h$ and $g$ are accessed through the oracle described below.
+
+Our assumptions:
+\begin{assumption}[Feasible geometry]
+The sets $X$ and $Y$ are compact and convex, $x^0\in X$, $y^0\in Y$, and
+\[
+\|z-w\|\leq D,\qquad z,w\in Z.
+\]
+\end{assumption}
+
+\begin{assumption}[Game structure]
+For every $t\in[0,1]$, $x,x'\in X$, and $y,y'\in Y$,
+\[
+\begin{aligned}
+h((1-t)x+tx',y)
+&\leq (1-t)h(x,y)+t h(x',y)\\
+&\phantom{\leq{}}-\frac{\mu}{2}t(1-t)\|x-x'\|_E^2,\\
+h(x,(1-t)y+ty')
+&\geq (1-t)h(x,y)+t h(x,y')\\
+&\phantom{\geq{}}+\frac{\nu}{2}t(1-t)\|y-y'\|_F^2.
+\end{aligned}
+\]
+Moreover, $g$ is jointly convex on $Z$: for $z,w\in Z$ and $t\in[0,1]$,
+\[
+g((1-t)z+tw)\leq (1-t)g(z)+t g(w).
+\]
+\end{assumption}
+
+\begin{assumption}[Within-domain smoothness]
+There exist gradient selections $H,G:Z\to E\times F$ such that, for every $z\in Z$, as $w\to z$ within $Z$,
+\[
+\begin{aligned}
+h(w)-h(z)-\langle H(z),w-z\rangle
+&=o(\|w-z\|),\\
+g(w)-g(z)-\langle G(z),w-z\rangle
+&=o(\|w-z\|).
+\end{aligned}
+\]
+These selections satisfy, for all $z,w\in Z$,
+\[
+\begin{aligned}
+\|(H+G)(z)-(H+G)(w)\|&\leq L\|z-w\|,\\
+\|(H-G)(z)-(H-G)(w)\|&\leq L\|z-w\|,\\
+\|G(z)-G(w)\|&\leq\delta\|z-w\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Equilibrium existence]
+There exists $z^\star=(x^\star,y^\star)\in Z$ such that
+\[
+\begin{aligned}
+c_1(x^\star,y^\star)&\leq c_1(x,y^\star)
+&&\text{for every }x\in X,\\
+c_2(x^\star,y^\star)&\leq c_2(x^\star,y)
+&&\text{for every }y\in Y.
+\end{aligned}
+\]
+Such a point is a Nash equilibrium.
+\end{assumption}
+
+Write $H=(H_x,H_y)$ and $G=(G_x,G_y)$. At a feasible query $z\in Z$, the exact game-gradient oracle returns
+\[
+V(z)=\bigl(H_x(z)+G_x(z),\,-H_y(z)+G_y(z)\bigr).
+\]
+A projection query may instead be made at any $u\in E\times F$ and returns $\Pi_Z(u)$, characterized by
+\[
+\Pi_Z(u)\in Z,\qquad
+\langle u-\Pi_Z(u),w-\Pi_Z(u)\rangle\leq 0
+\quad\text{for every }w\in Z.
+\]
+Both types of query count toward the same total oracle-call budget.
+
+After the allotted calls, the output must satisfy, for some fixed Nash equilibrium $z^\star$,
+\[
+\bar z\in Z,\qquad
+\|\bar z-z^\star\|^2\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the law of the algorithm's randomness and $z^\star$ is independent of its realization.
+\end{document}

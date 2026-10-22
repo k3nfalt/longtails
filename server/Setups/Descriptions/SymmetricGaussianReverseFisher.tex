@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gradient Descent for Reverse Fisher Estimation}
+We consider estimating a hidden vector $\mu\in\mathbb{R}^d$, where $d\geq1$, from exact gradients of the reverse Fisher objective $F_\mu$: the mean squared difference between candidate and target mixture scores, averaged under the candidate symmetric Gaussian mixture with identity covariance. The signal satisfies $a\leq\|\mu\|\leq b$, where $0\leq a\leq b$. The oracle returns $\nabla F_\mu(\theta)$ at $\theta$. We analyze gradient descent with positive steps and algorithm-chosen initialization. For $\varepsilon,\delta\in(0,1]$, the goal is a measurable output $\bar{\theta}$ satisfying $\min\{\|\bar{\theta}-\mu\|^2,\|\bar{\theta}+\mu\|^2\}\leq\varepsilon$ with probability at least $1-\delta$ over the algorithm's randomness.
+
+Equip $\mathbb{R}^d$ with its Euclidean inner product and norm. For a candidate parameter $\theta\in\mathbb{R}^d$, define the symmetric mixture and its score by
+\[
+\begin{aligned}
+q_\theta&=\tfrac12\mathcal{N}(\theta,I_d)
+          +\tfrac12\mathcal{N}(-\theta,I_d),\\
+s_\theta(x)&=\tanh(\langle\theta,x\rangle)\theta-x,
+\qquad x\in\mathbb{R}^d,
+\end{aligned}
+\]
+where $I_d$ is the identity matrix. The objective is
+\[
+\begin{aligned}
+F_\mu(\theta)
+&=\mathbb{E}_{X\sim q_\theta}
+  \bigl[\|s_\theta(X)-s_\mu(X)\|^2\bigr]\\
+&=\tfrac12\mathbb{E}_{Z\sim\mathcal{N}(0,I_d)}
+  \bigl[\|s_\theta(\theta+Z)-s_\mu(\theta+Z)\|^2\bigr]\\
+&\quad+\tfrac12\mathbb{E}_{Z\sim\mathcal{N}(0,I_d)}
+  \bigl[\|s_\theta(-\theta+Z)-s_\mu(-\theta+Z)\|^2\bigr].
+\end{aligned}
+\]
+The associated optimization problem is
+\[
+\min_{\theta\in\mathbb{R}^d} F_\mu(\theta).
+\]
+The algorithm receives $d,a,b,\varepsilon,\delta$; the target $\mu$ is hidden.
+
+Our assumptions:
+\begin{assumption}[Signal bounds]
+The fixed target belongs to the prescribed Euclidean annulus:
+\[
+a\leq\|\mu\|\leq b.
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze gradient descent. The algorithm chooses its initialization $\theta^0\in\mathbb{R}^d$, possibly at random. At each iteration it queries its current point and updates according to
+\[
+\begin{aligned}
+g^k&=\nabla F_\mu(\theta^k),\\
+\theta^{k+1}&=\theta^k-\eta_k g^k,
+\qquad \eta_k>0.
+\end{aligned}
+\]
+The step $\eta_k$ may depend on the algorithm's randomness and information available before the current oracle reply. Queries may be made anywhere in $\mathbb{R}^d$. After $K\geq0$ oracle calls, the output is the current iterate $\bar{\theta}=\theta^K$.
+
+The required accuracy concerns recovery up to sign. The output must be measurable and satisfy
+\[
+P\!\left(
+\min\{\|\bar{\theta}-\mu\|^2,\|\bar{\theta}+\mu\|^2\}
+\leq\varepsilon
+\right)\geq1-\delta,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

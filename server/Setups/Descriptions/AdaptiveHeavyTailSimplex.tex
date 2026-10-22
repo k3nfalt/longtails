@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Heavy-Tailed Convex Simplex Optimization}
+We consider minimizing $f:\mathbb{R}^d\to\mathbb{R}$ over the probability simplex $\Delta_d=\{x\in\mathbb{R}^d:x_i\geq0,\ \sum_{i=1}^d x_i=1\}$, where $d\geq2$. On this simplex, $f$ is convex and differentiable, attains its minimum at $x^\star$, and has an $L$-Lipschitz gradient from the $\ell_1$ norm to the $\ell_\infty$ norm, with $L>0$. The oracle returns unbiased gradient estimates using independent, identically distributed samples, with centered $p$th moments in $\ell_\infty$ bounded by $\sigma^p$, where $1<p\leq2$ and $\sigma\geq0$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in\Delta_d$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\min_{x\in\Delta_d} f(x).
+\]
+We use the Euclidean inner product to define gradients, and write
+\[
+\|v\|_1=\sum_{i=1}^d |v_i|,
+\qquad
+\|v\|_\infty=\max_{1\leq i\leq d}|v_i|.
+\]
+The algorithm receives only $d$, $L$, and $\delta$; the moment exponent $p$, noise bound $\sigma$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Convexity and attainment]
+For all $x,y\in\Delta_d$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+t f(y).
+\]
+There exists $x^\star\in\Delta_d$ such that
+\[
+f(x^\star)\leq f(x),\qquad x\in\Delta_d.
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness in simplex geometry]
+The function $f$ is Fr\'echet differentiable as a function on $\mathbb{R}^d$ at every point of $\Delta_d$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_\infty
+\leq L\|x-y\|_1,
+\qquad x,y\in\Delta_d.
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased heavy-tailed oracle]
+Let $\Omega$ be a measurable space with probability measure $\nu$. The oracle is specified by a jointly measurable map $g:\Delta_d\times\Omega\to\mathbb{R}^d$. For each $x\in\Delta_d$, the map $g(x,\cdot)$ is Bochner integrable, the random variable $\|g(x,\xi)-\nabla f(x)\|_\infty^p$ is integrable for $\xi\sim\nu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|_\infty^p\bigr]
+&\leq\sigma^p.
+\end{aligned}
+\]
+At call $k$, a query $x_k\in\Delta_d$ receives $g(x_k,\xi_k)$, where $(\xi_k)_{k\geq0}$ are measurable, mutually independent samples with common law $\nu$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries are restricted to $\Delta_d$. After the allotted oracle calls, the algorithm must return a measurable $\Delta_d$-valued output $\bar{x}$ satisfying
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the oracle samples and the algorithm's randomness.
+\end{document}

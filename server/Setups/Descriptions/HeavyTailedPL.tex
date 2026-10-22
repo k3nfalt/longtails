@@ -1,0 +1,57 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Heavy-Tailed SGD under the PL Condition}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, and it satisfies the Polyak--\L{}ojasiewicz condition with constant $\mu$, where $0<\mu\leq L$. Write $f_\star=\inf_{x\in E}f(x)>-\infty$. A given starting point $x^0\in E$ satisfies $f(x^0)-f_\star\leq\Delta$, where $\Delta\geq0$. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with uniformly bounded second and $q$th noise moments for $q>2$, allowing heavy tails. For $\varepsilon>0$ and $\delta\in(0,1)$, scheduled SGD must return a measurable last iterate $\bar{x}$ satisfying $P(f(\bar{x})-f_\star>\varepsilon)\leq\delta$, where $P$ is the sample law.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $L$, $\mu$, and $x^0$; the noise parameters $\sigma,\nu>0$, moment order $q$, initial gap bound $\Delta$, tolerance $\varepsilon$, and failure probability $\delta$ may enter the oracle-call budget but not the step-size schedule.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, with
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Polyak--\L{}ojasiewicz condition and initialization]
+The function $f$ is bounded below, and
+\[
+\begin{aligned}
+2\mu\bigl(f(x)-f_\star\bigr)&\leq\|\nabla f(x)\|^2,
+&&x\in E,\\
+f(x^0)-f_\star&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent sampling and noise moments]
+Let $\Omega$ be a measurable space and $P_0$ a probability measure on $\Omega$. The measurable sample variables $(\xi_t)_{t\geq0}$ are mutually independent under $P$, each with distribution $P_0$. The oracle is a jointly measurable map $g:E\times\Omega\to E$ and returns $g(x,\xi_t)$ at the $t$th query $x\in E$. For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable, and the scalar maps $\|g(x,\cdot)-\nabla f(x)\|^2$ and $\|g(x,\cdot)-\nabla f(x)\|^q$ are integrable under $P_0$. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim P_0}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim P_0}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2,\\
+\mathbb{E}_{\xi\sim P_0}\bigl[\|g(x,\xi)-\nabla f(x)\|^q\bigr]&\leq\nu^q.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze scheduled stochastic gradient descent (SGD). Starting from the given $x^0$, the method uses a deterministic schedule $(\eta_t)_{t\geq0}$ with $\eta_t>0$ and performs
+\[
+x^{t+1}=x^t-\eta_t g(x^t,\xi_t),
+\qquad t=0,1,2,\ldots.
+\]
+The schedule depends only on the algorithm inputs specified above. After $K\in\{0,1,2,\ldots\}$ oracle calls, the output is the last iterate $\bar{x}=x^K$. It must be measurable and satisfy
+\[
+P\bigl(f(\bar{x})-f_\star>\varepsilon\bigr)\leq\delta.
+\]
+\end{document}

@@ -1,0 +1,116 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Paired Zeroth-Order Convex Minimization}
+We consider minimizing $f:\mathbb{R}^d\to\mathbb{R}$ over a nonempty compact convex set $Q$, where $d\geq1$. On a neighborhood of $Q$, the objective is convex and Lipschitz, with an optional Lipschitz-gradient assumption hidden from the algorithm. The oracle returns a stochastic scalar function value plus bounded deterministic error; consecutive pairs of calls share a sample, and different pairs use independent samples. Sample functions have weak gradients with bounded second moments. For $\varepsilon>0$ and $\ell\geq\log 8$, the goal is a measurable feasible output $\bar{x}$ satisfying $P(f(\bar{x})-f(x^\star)>\varepsilon)\leq8e^{-\ell}$, where $x^\star$ minimizes $f$ on $Q$ and $P$ is the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in Q} f(x).
+\]
+We use the Euclidean norm and inner product on $\mathbb{R}^d$. Let $D,\gamma_{\max}>0$, let $N,T$ be positive integers, and define the enlarged domain
+\[
+U=Q+\{u\in\mathbb{R}^d:\|u\|\leq\gamma_{\max}\}.
+\]
+The algorithm receives $d,Q,x^0,\Pi_Q,D,\gamma_{\max},\varepsilon,\ell,N,T$; the constants $M,M_2,L,\Delta\geq0$ and the smoothness flag $s\in\{0,1\}$ are hidden and may enter the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Feasible geometry]
+The set $Q$ is compact and convex, the given point $x^0$ belongs to $Q$, and
+\[
+\|x-y\|\leq D,\qquad x,y\in Q.
+\]
+The supplied projection $\Pi_Q:\mathbb{R}^d\to\mathbb{R}^d$ satisfies, for every $x\in\mathbb{R}^d$,
+\[
+\Pi_Q(x)\in Q,
+\qquad
+\|x-\Pi_Q(x)\|=\inf_{y\in Q}\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Objective regularity]
+There is a point $x^\star\in Q$ such that $f(x^\star)\leq f(x)$ for every $x\in Q$. For $x,y\in U$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+|f(x)-f(y)|&\leq M\|x-y\|.
+\end{aligned}
+\]
+If $s=1$, the function $f$ is differentiable on $\operatorname{int}U$ and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\operatorname{int}U.
+\]
+\end{assumption}
+
+\begin{assumption}[Paired stochastic values and weak gradients]
+Let $\Omega$ and $\Xi$ be measurable spaces with probability measures $\nu$ and $\rho$, respectively. Let $\xi_k:\Xi\to\Omega$, $k\geq0$, be measurable, mutually independent under $\rho$, and each have distribution $\nu$. There are jointly measurable maps
+\[
+F:\mathbb{R}^d\times\Omega\to\mathbb{R},
+\qquad
+G:\mathbb{R}^d\times\Omega\to\mathbb{R}^d,
+\]
+and a measurable deterministic function $\delta:\mathbb{R}^d\to\mathbb{R}$. With calls indexed from zero, the reply to a query $x$ on call $n$ is
+\[
+F(x,\xi_{\lfloor n/2\rfloor})+\delta(x).
+\]
+Thus calls $2k$ and $2k+1$ use the same sample. Queries may be made anywhere in $\mathbb{R}^d$; the regularity and moment conditions below apply on $U$. Algorithm randomness is independent of the sample sequence. Each scalar reply counts as one oracle call.
+
+For every $x\in U$, the random variable $F(x,\cdot)$ is $\nu$-integrable and
+\[
+\mathbb{E}_{w\sim\nu}[F(x,w)]=f(x),
+\qquad |\delta(x)|\leq\Delta.
+\]
+For $\nu$-almost every $w$, the function $F(\cdot,w)$ is continuous on $U$, and $G(\cdot,w)$ is locally Bochner integrable on $\operatorname{int}U$ with respect to Lebesgue measure. For the same samples, every smooth compactly supported function $\psi:\mathbb{R}^d\to\mathbb{R}$ with $\operatorname{supp}\psi\subset\operatorname{int}U$ and every $v\in\mathbb{R}^d$ satisfy
+\[
+\begin{aligned}
+&\int_{\mathbb{R}^d}F(x,w)\langle\nabla\psi(x),v\rangle\,dx\\
+&\qquad=-\int_{\mathbb{R}^d}\langle G(x,w),v\rangle\psi(x)\,dx.
+\end{aligned}
+\]
+For every $x\in\operatorname{int}U$, the random variable $\|G(x,\cdot)\|^2$ is $\nu$-integrable and
+\[
+\mathbb{E}_{w\sim\nu}[\|G(x,w)\|^2]\leq M_2^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Parameter compatibility]
+Define the radii
+\[
+\begin{aligned}
+r_1&=\min\{\gamma_{\max},D/N\},\\
+r_0&=\min\{\gamma_{\max},d^{1/4}D/N\}.
+\end{aligned}
+\]
+The supplied integers satisfy
+\[
+T\geq 2^{48}(d+\ell)
+\left(1+\frac{M_2^2D^2}{\varepsilon^2}\right)+N.
+\]
+Their remaining requirements depend on the hidden flag:
+\[
+\begin{aligned}
+s=1:\quad
+N&\geq32\left(1+\sqrt{\frac{LD^2}{\varepsilon}}\right),\\
+s=0:\quad
+N&\geq1024\left(1+\frac{d^{1/4}MD}{\varepsilon}
++d^{1/4}D\sqrt{\frac{M}{\gamma_{\max}\varepsilon}}\right).
+\end{aligned}
+\]
+In either case, the deterministic error satisfies
+\[
+\frac{\sqrt d\,\Delta}{r_s}
+\leq\frac{\varepsilon}{16384D}.
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable and belong to $Q$ for every realization. Its objective gap must also be measurable, and the required accuracy is
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)
+\leq8e^{-\ell}.
+\]
+\end{document}

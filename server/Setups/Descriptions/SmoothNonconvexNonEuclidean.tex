@@ -1,0 +1,42 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Nonconvex Banach-Space Optimization}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ on a real Banach space $E$. Its Fr\'echet derivative $f'(x)\in E^*$, where $E^*$ is the continuous dual of $E$, is $L$-Lipschitz in the induced operator norm $\|\cdot\|_{\mathrm{op}}$, with $L>0$. A given point $x^0\in E$ has objective gap at most $\Delta\geq0$ above a global lower bound. The oracle returns $f'(x)$ at $x$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}_{P}[\|f'(\bar{x})\|_{\mathrm{op}}^2]\leq\varepsilon^2$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The space $E$ is equipped with a specified measurable structure. We write $\|\cdot\|$ for its norm and use the induced operator norm on $E^*$. The algorithm receives $E$, $L$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|f'(x)-f'(y)\|_{\mathrm{op}}
+\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $\ell\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+\ell&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-\ell&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$, with exact derivative replies in $E^*$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its squared derivative norm must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|f'(\bar{x})\|_{\mathrm{op}}^2\bigr]
+\leq\varepsilon^2.
+\]
+\end{document}

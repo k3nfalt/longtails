@@ -1,0 +1,88 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Alex-GDA for Block-Smooth Saddle Problems}
+We consider $\min_{x\in E}\max_{y\in F} f(x,y)$ on real Hilbert spaces $E$ and $F$, where $f:E\times F\to\mathbb{R}$ is convex in $x$, concave in $y$, and has globally Lipschitz partial gradients in each variable. A given starting pair $(x^0,y^0)$ lies within distance $R\geq0$ of a saddle point in the Hilbert product norm. Each oracle query returns either $\nabla_x f(x,y)$ or $\nabla_y f(x,y)$. For $\varepsilon>0$, Alex-GDA must return $(\bar{x},\bar{y})$ satisfying $\|\nabla_x f(\bar{x},\bar{y})\|^2+\|\nabla_y f(\bar{x},\bar{y})\|^2\leq\varepsilon^2$ almost surely.
+
+The saddle-point problem is
+\[
+\min_{x\in E}\max_{y\in F} f(x,y).
+\]
+Norms on $E$ and $F$ are induced by their inner products, and we use the product norm $\|(x,y)\|=(\|x\|^2+\|y\|^2)^{1/2}$. The block constants satisfy
+\[
+L_x,L_y,L_{xy}\geq0,
+\qquad L_x+L_{xy}>0,
+\qquad L_y+L_{xy}>0.
+\]
+The algorithm receives $E,F,L_x,L_y,L_{xy}$, the starting pair $(x^0,y^0)$, and parameters $\gamma,\delta$ satisfying $1<\gamma\leq2$ and $\delta\geq1$; the radius $R$ and tolerance $\varepsilon$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Convexity and concavity]
+For every $y\in F$, the function $f(\cdot,y)$ is convex on $E$. For every $x\in E$, the function $f(x,\cdot)$ is concave on $F$.
+\end{assumption}
+
+\begin{assumption}[Block smoothness]
+Both partial functions are Fr\'echet differentiable everywhere. For all $x,x'\in E$ and $y,y'\in F$, their gradients satisfy
+\[
+\begin{aligned}
+\|\nabla_x f(x,y)-\nabla_x f(x',y)\|
+&\leq L_x\|x-x'\|,\\
+\|\nabla_x f(x,y)-\nabla_x f(x,y')\|
+&\leq L_{xy}\|y-y'\|,\\
+\|\nabla_y f(x,y)-\nabla_y f(x,y')\|
+&\leq L_y\|y-y'\|,\\
+\|\nabla_y f(x,y)-\nabla_y f(x',y)\|
+&\leq L_{xy}\|x-x'\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Saddle point and initial distance]
+There exists $(x^\star,y^\star)\in E\times F$ such that, for every $x\in E$ and $y\in F$,
+\[
+f(x^\star,y)\leq f(x^\star,y^\star)\leq f(x,y^\star),
+\]
+and
+\[
+\|x^0-x^\star\|^2+\|y^0-y^\star\|^2\leq R^2.
+\]
+\end{assumption}
+
+Queries may be made at any pair in $E\times F$. The oracle returns the requested exact partial gradient, with each partial-gradient evaluation counted as one call.
+
+Our result is algorithm-specific: we analyze Alex-GDA. The method chooses fixed step sizes $\alpha,\beta>0$ from its available inputs and initializes $v^0=0$. Starting from the given pair, each iteration $k\geq0$ makes two successive oracle calls and updates according to
+\[
+\begin{aligned}
+g^k&=\nabla_x f\bigl(x^k,y^k+(\delta-1)\beta v^k\bigr),\\
+h^k&=\nabla_y f\bigl(x^k-\gamma\alpha g^k,y^k\bigr),\\
+x^{k+1}&=x^k-\alpha g^k,\\
+y^{k+1}&=y^k+\beta h^k,\\
+v^{k+1}&=h^k.
+\end{aligned}
+\]
+For each completed iteration, define
+\[
+s_k=\|g^k\|^2+\|h^k\|^2+\|v^k\|^2.
+\]
+Given a total budget of $B\geq0$ oracle calls, let $N=\lfloor B/2\rfloor$. If $N\geq1$, the output is the pre-update pair with the smallest score, with ties resolved by the earliest index:
+\[
+\begin{aligned}
+k_\star&=\min\mathop{\mathrm{arg\,min}}_{0\leq k<N}s_k,\\
+(\bar{x},\bar{y})&=(x^{k_\star},y^{k_\star}).
+\end{aligned}
+\]
+If $N=0$, the output is $(x^0,y^0)$. An unpaired final partial-gradient call does not change the output.
+
+The required accuracy is the squared gradient-residual bound
+\[
+\|\nabla_x f(\bar{x},\bar{y})\|^2
++\|\nabla_y f(\bar{x},\bar{y})\|^2
+\leq\varepsilon^2
+\quad P\text{-a.s.},
+\]
+where $P$ is the law of the algorithm's randomness; the specified method and exact replies are deterministic.
+\end{document}

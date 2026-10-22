@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Cyclic Gradient Under Interpolation}
+We consider minimizing $F(x)=m^{-1}\sum_{i=0}^{m-1}f_i(x)$ on a real Hilbert space $E$, where $m\geq1$ is an integer. Each component $f_i:E\to\mathbb{R}$ is convex and differentiable with an $L$-Lipschitz gradient, where $L>0$. The components share a global minimizer $x^\star$, and the given starting point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for $R\geq0$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. Cyclic gradient descent with step size $1/L$ must return its last iterate $\bar{x}$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under the output law $P$, for $\varepsilon>0$.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $m$, $L$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Component convexity and smoothness]
+Each $f_i$ is Fr\'echet differentiable everywhere on $E$. For every $i\in\{0,\ldots,m-1\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+\begin{aligned}
+f_i((1-t)x+ty)&\leq(1-t)f_i(x)+t f_i(y),\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Interpolation and initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f_i(x^\star)&\leq f_i(x)
+&&\text{for every }i\in\{0,\ldots,m-1\},\ x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle accepts any component index and any point in $E$ and returns the exact component gradient. Our formulation is algorithm-specific: we analyze cyclic gradient descent, initialized at the given point $x^0$. Its updates are
+\[
+\begin{aligned}
+i_k&=k\bmod m,\\
+x^{k+1}&=x^k-\frac{1}{L}\nabla f_{i_k}(x^k),
+\qquad k=0,1,\ldots.
+\end{aligned}
+\]
+Each update uses one component-gradient call. After an allotted budget of $K\geq0$ calls, with $K$ an integer, the output is the last iterate $\bar{x}=x^K$. The required accuracy is
+\[
+F(\bar{x})-F(x^\star)
+=\frac{1}{m}\sum_{i=0}^{m-1}\bigl(f_i(\bar{x})-f_i(x^\star)\bigr)
+\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The common minimizer in this requirement is fixed independently of the output; all common minimizers have the same component objective values.
+\end{document}

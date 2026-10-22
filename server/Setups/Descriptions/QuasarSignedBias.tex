@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Quasar-Convex Minimization with Signed Bias}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is bounded by $M>0$, and it is $\tau$-quasar-convex about a global minimizer $x^\star$, where $\tau\in(0,1]$. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$, where $R\geq0$. The oracle returns the exact function value and a gradient perturbed by successive differences of a fixed vector sequence bounded by $B\geq0$ and starting at zero. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, $M$, $B$, $R$, $\tau$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Bounded gradient]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, with
+\[
+\|\nabla f(x)\|\leq M,
+\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Quasar-convexity and initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,
+\end{aligned}
+\]
+and $f$ is $\tau$-quasar-convex about this minimizer:
+\[
+\tau\bigl(f(x)-f(x^\star)\bigr)
+\leq \langle\nabla f(x),x-x^\star\rangle,
+\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Signed-bias oracle]
+There is a fixed deterministic sequence $(b_k)_{k\geq0}$ in $E$ satisfying
+\[
+b_0=0,\qquad \|b_k\|\leq B\quad\text{for every }k\geq0.
+\]
+On call $k+1$, for $k\geq0$, a query at any $x\in E$ returns
+\[
+\bigl(f(x),\,\nabla f(x)+b_{k+1}-b_k\bigr).
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

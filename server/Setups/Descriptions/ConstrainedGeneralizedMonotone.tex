@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Constrained Generalized Monotone Inequalities}
+We consider a variational inequality for a continuous monotone operator $F:E\to E$ on a convex set $X$ in a real inner product space $E$. The operator satisfies a segmentwise generalized Lipschitz condition with constants $L_0>0$ and $L_1\geq0$. A given point $x^0\in X$ has bounded distance to a solution, with operator norms bounded at both points. Two exact oracles return $F(x)$ and the projection of $x$ onto $X$. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ admitting $\xi\in E$ with $\langle\xi,w-\bar{x}\rangle\leq0$ for every $w\in X$ and $\|F(\bar{x})+\xi\|\leq\varepsilon$, almost surely under $P$, the law of the algorithm's randomness.
+
+The variational inequality asks for $x^\star\in X$ such that
+\[
+\langle F(x^\star),w-x^\star\rangle\geq0
+\qquad\text{for every }w\in X.
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The parameters satisfy
+\[
+L_0>0,\qquad L_1\geq0,\qquad R>0,\qquad
+G\geq0,\qquad G_0\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives only $E$, $L_0$, $L_1$, and $x^0$; the parameters $R$, $G$, $G_0$, and $\varepsilon$ may enter the oracle-call budgets but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Convex constraints and projection]
+The set $X\subseteq E$ is convex. There exists a map $\Pi_X:E\to E$ satisfying, for every $z\in E$,
+\[
+\begin{aligned}
+\Pi_X(z)&\in X,\\
+\langle z-\Pi_X(z),w-\Pi_X(z)\rangle&\leq0
+&&\text{for every }w\in X.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Monotonicity and generalized Lipschitz continuity]
+The operator $F$ is continuous on $E$ and satisfies
+\[
+\langle F(x)-F(y),x-y\rangle\geq0
+\qquad\text{for all }x,y\in E.
+\]
+For every $x,y\in E$ and $M\in\mathbb{R}$, the segment bound
+\[
+\|F(x+\theta(y-x))\|\leq M
+\qquad\text{for all }\theta\in[0,1]
+\]
+implies
+\[
+\|F(x)-F(y)\|\leq(L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial point and solution bounds]
+The given starting point satisfies $x^0\in X$ and $\|F(x^0)\|\leq G_0$. There exists a solution $x^\star$ of the variational inequality such that
+\[
+\|x^0-x^\star\|\leq R,
+\qquad
+\|F(x^\star)\|\leq G.
+\]
+\end{assumption}
+
+Queries to either oracle may be made at any point of $E$. The operator oracle returns $F(x)$ at $x$, and the projection oracle returns $\Pi_X(z)$ at $z$. Calls to these two oracles are counted separately.
+
+For a feasible point $x$, define its normal cone by
+\[
+N_X(x)=\{\xi\in E:\langle\xi,w-x\rangle\leq0
+\text{ for every }w\in X\}.
+\]
+After the allotted oracle calls, the output must satisfy the normal-cone residual criterion
+\[
+\bar{x}\in X,
+\qquad
+\exists\,\xi\in N_X(\bar{x}):
+\|F(\bar{x})+\xi\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

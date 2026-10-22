@@ -1,0 +1,104 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Adam with Heterogeneous Symmetric Noise}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on the Euclidean space $E=\mathbb{R}^b\times\mathbb{R}^h$, where $b,h\geq0$ are integers with $b+h>0$. Its gradient is $L$-Lipschitz, with $L>0$, and the given starting point $x^0$ has objective gap at most $\Delta>0$ above the infimum. The oracle returns unbiased stochastic gradients from independent, identically distributed samples. Body-coordinate noise is symmetric with bounded first moment and integrably Lipschitz sample paths; head-coordinate noise has bounded second moment. We analyze heterogeneous Adam, seeking a measurable output $\bar{x}$ satisfying $\mathbb{E}_{P}\|\nabla f(\bar{x})\|\leq\varepsilon$ for $\varepsilon>0$, where $P$ is the joint law of sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+Write $x=(x_B,x_H)$ for the body and head blocks, with coordinate sets $B=\{1,\ldots,b\}$ and $H=\{1,\ldots,h\}$. Throughout, $\|\cdot\|$ denotes the Euclidean norm. The parameters satisfy
+\[
+L,\Delta,\varepsilon,\delta>0,
+\qquad M,\sigma_B,\sigma_H\geq0.
+\]
+The algorithm receives $b,h$, the measurable sample space $\Omega$, $L,M,\sigma_B,\sigma_H,\Delta,\varepsilon,\delta$, and $x^0\in E$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, and for all $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f(x)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased heterogeneous noise]
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, $g(x,\cdot)$ is Bochner integrable under $p$, and
+\[
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]=\nabla f(x).
+\]
+Define the noise $e(x,\xi)=g(x,\xi)-\nabla f(x)$. For every $x\in E$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}\left[\sum_{i\in B}|e_{B,i}(x,\xi)|\right]&\leq\sigma_B,\\
+\mathbb{E}_{\xi\sim p}\left[\sum_{j\in H}e_{H,j}(x,\xi)^2\right]&\leq\sigma_H^2.
+\end{aligned}
+\]
+The head squared-noise sum is integrable under $p$. Each body coordinate has a symmetric noise distribution:
+\[
+e_{B,i}(x,\xi)\overset{\mathrm{d}}{=}-e_{B,i}(x,\xi),
+\qquad \xi\sim p,\quad x\in E,\quad i\in B.
+\]
+\end{assumption}
+
+\begin{assumption}[Samplewise body-noise regularity]
+There exists a measurable, integrable function $K:\Omega\to\mathbb{R}$ with $\mathbb{E}_{\xi\sim p}[K(\xi)]\leq M$. For $p$-almost every $\xi$, $K(\xi)\geq0$ and, simultaneously for all $x,y\in E$ and $i\in B$,
+\[
+|e_{B,i}(x,\xi)-e_{B,i}(y,\xi)|
+\leq K(\xi)\|x-y\|.
+\]
+\end{assumption}
+
+At call $t$, a query $x\in E$ returns $g(x,\xi_t)$. The sample variables $(\xi_t)_{t\geq0}$ are measurable, mutually independent, and each has law $p$; they are independent of the algorithm's randomness.
+
+Our result is algorithm-specific: we analyze heterogeneous Adam, using bias-corrected Adam updates on the body and cumulative squared-gradient normalization on the head. The algorithm chooses a nonnegative integer $T$, a scalar $r_0>0$, and deterministic positive step sequences $(\eta^B_t)_{t\geq0}$ and $(\eta^H_t)_{t\geq0}$ from the available inputs. The momentum coefficients and denominator offset are fixed as
+\[
+\alpha=\frac{9}{10},\qquad
+\beta=\frac{999}{1000},\qquad
+\delta>0.
+\]
+Initialize the iterates at the given $x^0$, with
+\[
+m^0=0,\qquad v^0_{B,i}=0,\qquad v^0_{H,j}=r_0^2.
+\]
+For $g^t=g(x^t,\xi_t)$, the body coordinates obey, for $i\in B$,
+\[
+\begin{aligned}
+m^{t+1}_{B,i}&=\alpha m^t_{B,i}+(1-\alpha)g^t_{B,i},\\
+v^{t+1}_{B,i}&=\beta v^t_{B,i}+(1-\beta)(g^t_{B,i})^2,\\
+\widehat m^{t+1}_{B,i}&=\frac{m^{t+1}_{B,i}}{1-\alpha^{t+1}},\\
+\widehat v^{t+1}_{B,i}&=\frac{v^{t+1}_{B,i}}{1-\beta^{t+1}},\\
+x^{t+1}_{B,i}&=x^t_{B,i}
+-\eta^B_t\frac{\widehat m^{t+1}_{B,i}}
+{\delta+\sqrt{\widehat v^{t+1}_{B,i}}}.
+\end{aligned}
+\]
+The head coordinates obey, for $j\in H$,
+\[
+\begin{aligned}
+m^{t+1}_{H,j}&=g^t_{H,j},\\
+v^{t+1}_{H,j}&=v^t_{H,j}+(g^t_{H,j})^2,\\
+x^{t+1}_{H,j}&=x^t_{H,j}
+-\eta^H_t\frac{g^t_{H,j}}{\sqrt{v^{t+1}_{H,j}}}.
+\end{aligned}
+\]
+Independently of the samples, draw $J$ uniformly from $\{0,\ldots,T\}$. After $N\geq0$ oracle calls, the output rule is
+\[
+\bar{x}=\begin{cases}
+x^J,&J\leq N,\\
+x^0,&J>N.
+\end{cases}
+\]
+Thus, when $N\geq T$, the output is uniformly selected from $x^0,\ldots,x^T$. The required output is measurable, its gradient norm is integrable under $P$, and the accuracy criterion is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

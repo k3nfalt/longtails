@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Scalar H\"older Stochastic Stationarity}
+We consider a differentiable, possibly nonconvex function $f:\mathbb{R}\to\mathbb{R}$ with a globally H\"older continuous derivative. A given point $x^0\in\mathbb{R}$ has objective gap at most $\Delta>0$ above a global lower bound. At $x$, the oracle returns an unbiased scalar estimate of $f'(x)$ using a fresh independent sample; its error has uniformly bounded $p$th absolute moment for $1<p\leq2$, allowing heavy-tailed noise. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}$ satisfying $P(|f'(\bar{x})|>\varepsilon)\leq1/3$, where $P$ is the joint law of the samples and the algorithm's independent randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}} f(x),
+\]
+with accuracy measured by stationarity. Fix a measurable sample space $\Omega$ and parameters
+\[
+H>0,\qquad 0<\nu\leq1,\qquad \Delta>0,\qquad
+\sigma\geq0,\qquad 1<p\leq2,\qquad \varepsilon>0.
+\]
+The algorithm receives $\Omega$, $H$, $\nu$, $\Delta$, $\sigma$, $p$, $\varepsilon$, and $x^0$; the objective and sampling distribution are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[H\"older continuity]
+The function $f$ is differentiable everywhere, and
+\[
+|f'(x)-f'(y)|\leq H|x-y|^{\nu},
+\qquad x,y\in\mathbb{R}.
+\]
+\end{assumption}
+
+\begin{assumption}[Lower bound and initial gap]
+There exists $\ell\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+\ell&\leq f(x) &&\text{for every }x\in\mathbb{R},\\
+f(x^0)-\ell&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent stochastic derivative oracle]
+There exist a probability measure $\mu$ on $\Omega$ and a jointly measurable function $g:\mathbb{R}\times\Omega\to\mathbb{R}$. For each $x\in\mathbb{R}$, both $g(x,\cdot)$ and $|g(x,\cdot)-f'(x)|^p$ are integrable under $\mu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)]&=f'(x),\\
+\mathbb{E}_{\xi\sim\mu}[|g(x,\xi)-f'(x)|^p]&\leq\sigma^p.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in\mathbb{R}$ receives the scalar reply $g(x,\xi_k)$. The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\mu$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+P\bigl(|f'(\bar{x})|>\varepsilon\bigr)\leq\frac{1}{3}.
+\]
+\end{document}

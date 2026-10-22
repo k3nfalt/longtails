@@ -1,0 +1,77 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Composite Generalized Smooth Minimization}
+We minimize $F=f+h$ over a convex set $Q$ in a real Hilbert space $E$, where $f,h:E\to\mathbb{R}$. The function $f$ is convex and $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$; $h$ admits bounded supporting subgradients on $Q$. A given point $x^0\in Q$ has bounded distance and objective gap to a minimizer $x^\star$, where the gradient of $f$ is bounded. Oracles return exact gradients of $f$, bounded subgradients of $h$, and exact projections onto $Q$. For $\varepsilon>0$, the goal is $\bar{x}\in Q$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
+
+More precisely, define $F(x)=f(x)+h(x)$ and consider
+\[
+\min_{x\in Q} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $x^0$, and all parameters $L_0,L_1,M,R,\Delta,G,\varepsilon$, whose ranges are
+\[
+L_0,R,\Delta,\varepsilon>0,
+\qquad L_1,M,G\geq0.
+\]
+The functions and feasible set are accessed through the three oracles described below.
+
+Our assumptions:
+\begin{assumption}[Convexity and feasibility]
+The set $Q\subseteq E$ is convex and $x^0\in Q$. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+t f(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, with continuous gradient. Its $(L_0,L_1)$-smoothness means that, for every $x,y\in E$ and $B\in\mathbb{R}$,
+\[
+\begin{aligned}
+&\|\nabla f(x+\theta(y-x))\|\leq B
+\quad\text{for all }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
+\|\nabla f(x)-\nabla f(y)\|
+\leq (L_0+L_1B)\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Solution and initial bounds]
+There exists $x^\star\in Q$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta,\\
+\|\nabla f(x^\star)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Oracle access]
+The gradient oracle returns $\nabla f(x)$ at $x\in E$. At each $u\in Q$, every reply $s\in E$ of the subgradient oracle satisfies
+\[
+\begin{aligned}
+\|s\|&\leq M,\\
+h(u)+\langle s,v-u\rangle&\leq h(v)
+&&\text{for every }v\in Q.
+\end{aligned}
+\]
+These conditions hold for every query history and every realization of oracle randomness. Subgradient queries outside $Q$ carry no guarantee. At any $w\in E$, the projection oracle returns a point $p\in Q$ satisfying
+\[
+\|w-p\|\leq\|w-u\|
+\qquad\text{for every }u\in Q.
+\]
+\end{assumption}
+
+Gradient, subgradient, and projection calls are counted separately. Oracle randomness may be dependent across calls, and subgradient replies may depend on the query history; the algorithm's randomness is independent of the oracle's randomness. After the allotted calls, the output must satisfy
+\[
+\bar{x}\in Q,
+\qquad F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

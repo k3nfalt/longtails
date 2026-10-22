@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Known-Value Convex Local Linear Optimization}
+We consider minimizing $f:E\to\mathbb{R}$ over a closed convex set $C$ in a real Hilbert space $E$. On $C$, the function is differentiable and convex with a quadratic upper model of curvature $L>0$. A given $x^0\in C$ is within distance $R\geq0$ of a minimizer with known value $f^\star\in\mathbb{R}$. The oracle returns either a function value and gradient or a local linear minimizer over a queried ball intersected with $C$. For $\varepsilon>0$, the goal is $\bar{x}\in C$ with $f(\bar{x})-f^\star\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$. The algorithm receives $E$, $L$, $R$, $\varepsilon$, $f^\star$, and $x^0$; the objective and feasible set are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Feasible set]
+The set $C\subseteq E$ is closed and convex, and $x^0\in C$.
+\end{assumption}
+
+\begin{assumption}[Convexity and quadratic upper model]
+The function $f$ is Fr\'echet differentiable at every point of $C$. For every $x,y\in C$,
+\[
+\begin{aligned}
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle,\\
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+             +\frac{L}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Known minimum and initial distance]
+There exists $x^\star\in C$ such that
+\[
+\begin{aligned}
+f(x^\star)&=f^\star,\\
+f(x^\star)&\leq f(x) &&\text{for every }x\in C,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle supports two types of queries. At $x\in C$, a value--gradient query returns $(f(x),\nabla f(x))$. A local linear query specifies $x\in C$, a radius $r\geq0$, and a direction $g\in E$, and returns a point
+\[
+v\in\mathop{\mathrm{arg\,min}}_{z\in C,\ \|z-x\|\leq r}
+\langle g,z\rangle.
+\]
+Such a point must exist for every valid local linear query. The oracle may choose among these minimizers using the query history and its randomness, but every reply must satisfy the stated requirement. Both query types count toward a single total oracle-call budget.
+
+After the allotted calls, the output must satisfy
+\[
+\bar{x}\in C,
+\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The algorithm's randomness is independent of the oracle's randomness in the joint law $P$.
+\end{document}

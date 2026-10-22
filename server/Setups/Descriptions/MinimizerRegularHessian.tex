@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Minimization with Minimizer-Anchored Hessian Regularity}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a nonzero finite-dimensional real Hilbert space $E$. The function is $\mu$-strongly convex with an $L$-Lipschitz, differentiable gradient, where $0<\mu\leq L$. A given point $x^0\in E$ lies within distance $R>0$ of a global minimizer $x^\star$, and the Hessian satisfies $\|\nabla^2 f(x)-\nabla^2 f(x^\star)\|_{\mathrm{op}}\leq M\|x-x^\star\|$ for every $x\in E$, where $M\geq0$ and the norms are induced by the inner product. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The algorithm receives $E$, $L$, $\mu$, $M$, $x^0$, $R$, and $\varepsilon$. We write $\|\cdot\|_{\mathrm{op}}$ for the induced operator norm; each Hessian $\nabla^2 f(x)$ is a linear operator from $E$ to $E$.
+
+Our assumptions:
+\begin{assumption}[Strong convexity]
+For every $x,y\in E$,
+\[
+f(y)\geq f(x)+\langle\nabla f(x),y-x\rangle
++\frac{\mu}{2}\|y-x\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Differentiability and smoothness]
+Both $f$ and $\nabla f$ are Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and Hessian regularity]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,
+\end{aligned}
+\]
+and the Hessian obeys the minimizer-anchored bound
+\[
+\|\nabla^2 f(x)-\nabla^2 f(x^\star)\|_{\mathrm{op}}
+\leq M\|x-x^\star\|,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

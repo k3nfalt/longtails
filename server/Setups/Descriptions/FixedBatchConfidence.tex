@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Confidence Guarantees for Quadratic Minimization}
+We consider minimizing $f(x)=\tfrac12\mathbb{E}_{a\sim\nu}[\langle a,x-x^\star\rangle^2]$ over $x\in\mathbb{R}^2$, where $\nu$ is a probability distribution and $x^\star\in\mathbb{R}^2$ is an unknown minimizer. In the Euclidean norm, $\|a\|^2\leq L$ holds $\nu$-almost surely for $L>0$, and a given point $x^0$ satisfies $\|x^0-x^\star\|\leq R$ for $R>0$. Each oracle call at $x$ returns $\langle a,x-x^\star\rangle a$ using a fresh independent sample from $\nu$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^2} f(x).
+\]
+We use the standard Euclidean inner product and its induced norm. The algorithm receives only $L$ and $x^0$; the parameters $R$, $\varepsilon$, and $\delta$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Population quadratic and initial distance]
+There exist a Borel probability distribution $\nu$ on $\mathbb{R}^2$ and a point $x^\star\in\mathbb{R}^2$ such that
+\[
+\begin{aligned}
+f(x)&=\frac12\mathbb{E}_{a\sim\nu}
+    [\langle a,x-x^\star\rangle^2],
+    &&x\in\mathbb{R}^2,\\
+\|a\|^2&\leq L,
+    &&\nu\text{-almost surely},\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+In particular, $f$ is a convex quadratic and $f(x^\star)=0$ is its global minimum.
+\end{assumption}
+
+\begin{assumption}[Independent stochastic gradient samples]
+The sample sequence $(a_k)_{k\geq0}$ consists of measurable, mutually independent random vectors with common distribution $\nu$. It is independent of the algorithm's randomness. At call $k$, a query $x\in\mathbb{R}^2$ receives
+\[
+g(x,a_k)=\langle a_k,x-x^\star\rangle a_k.
+\]
+\end{assumption}
+
+Queries may be made anywhere in $\mathbb{R}^2$. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^2$ must be measurable and satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the sample sequence and the algorithm's independent randomness.
+\end{document}

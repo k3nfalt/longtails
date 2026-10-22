@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Local Hidden Convex Stochastic Minimization}
+We minimize a differentiable, possibly nonconvex function $F:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in E$ is within distance $R>0$ of a global minimizer $x^\star$. Locally, $F$ is a convex function composed with a differentiable change of coordinates whose derivative is uniformly nonsingular and varies slowly. The oracle returns unbiased stochastic gradients with variance at most $\sigma^2$, where $\sigma\geq0$, using independent samples. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable gap and $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, averaging over oracle and independent algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. Write $B(x,r)$ and $\overline B(x,r)$ for the open and closed balls. The algorithm receives only $E$, the measurable sample space $\Omega$, $L$, $R$, $\sigma$, and $x^0$; the parameters $\mu>0$, $L_J\geq0$, and $\varepsilon>0$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Local hidden convexity]
+There exist functions $H:E\to\mathbb{R}$ and $c:E\to E$, an open convex set $U\subseteq E$, and a map $J$ assigning a linear operator $J(x):E\to E$ to each $x\in E$, such that
+\[
+F(x)=H(c(x)),\qquad x\in B(x^0,3R).
+\]
+The function $H$ is differentiable on $U$ and satisfies
+\[
+H((1-t)u+tv)\leq(1-t)H(u)+tH(v),
+\qquad u,v\in U,\quad t\in[0,1].
+\]
+For every $x\in\overline B(x^0,2R)$, we have $c(x)\in U$, the map $c$ is Fr\'echet differentiable at $x$ with derivative $J(x)$, and
+\[
+\mu\|v\|\leq\|J(x)v\|,\qquad v\in E.
+\]
+The derivative satisfies
+\[
+\begin{aligned}
+\|J(x)-J(y)\|_{\mathrm{op}}&\leq L_J\|x-y\|,
+&&x,y\in\overline B(x^0,2R),\\
+32L_JR&\leq\mu.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Global smoothness]
+The function $F$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla F(x)-\nabla F(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+Let $\nu$ be a probability measure on $\Omega$. The oracle is a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the random vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla F(x)\|^2$ is integrable for $\xi\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla F(x),\\
+\mathbb{E}_{\xi\sim\nu}[\|g(x,\xi)-\nabla F(x)\|^2]&\leq\sigma^2.
+\end{aligned}
+\]
+At the $k$th query $x$, the oracle returns $g(x,\xi_k)$, where $(\xi_k)_{k\geq0}$ are independent with common law $\nu$ and are independent of the algorithm's randomness.
+\end{assumption}
+
+Queries may be made at any point of $E$. Let $P$ be the joint law of the oracle samples and the algorithm's randomness. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon.
+\]
+\end{document}

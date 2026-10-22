@@ -1,0 +1,72 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nesterov under Local Strong Aiming}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$ using Nesterov's method. Around its nonempty minimizer set, $f$ has an $L$-Lipschitz gradient, a quadratic lower model, and a strong aiming condition toward nearest minimizers, with $0<\mu\leq L$. These conditions hold within distance $r>0$ of that set; the given starting point $x^0$ lies there with objective gap at most $\mu r^2/256$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is a last iterate $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of algorithm randomness, where $x^\star$ is a global minimizer.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. For the minimizer set $M$, define
+\[
+d(x,M):=\inf_{z\in M}\|x-z\|,
+\qquad U_r:=\{x\in E:d(x,M)<r\}.
+\]
+The algorithm receives only $E$, $L$, $\mu$, and $x^0$; the radius $r$, initial gap bound $\Delta$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Minimizers and initialization]
+There exists a global minimizer $x^\star\in E$. With $M:=\{x\in E:f(x)=f(x^\star)\}$, the parameters and starting point satisfy
+\[
+\begin{aligned}
+&0<\mu\leq L,\qquad r>0,\qquad \Delta\geq0,\qquad \varepsilon>0,\\
+&256\Delta\leq\mu r^2,\\
+&f(x^0)-f(x^\star)\leq\Delta,\qquad d(x^0,M)<r.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Local regularity]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in U_r$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+-\sqrt{\mu L}\,\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Local strong aiming]
+For every $x\in U_r$ and every nearest minimizer $z\in M$, meaning $\|x-z\|=d(x,M)$,
+\[
+f(x)-f(x^\star)+\frac{\mu}{2}\|x-z\|^2
+\leq\langle\nabla f(x),x-z\rangle.
+\]
+\end{assumption}
+
+The formulation is algorithm-specific: we analyze Nesterov's method with position $x^k$ and velocity $v^k$. Set
+\[
+s:=\frac{1}{2\sqrt{L}},\qquad q:=\sqrt{\mu}\,s,
+\qquad v^0:=0,
+\]
+with position initialized at the given $x^0$. At each iteration $k\geq0$, the method queries $y^k$ and updates according to
+\[
+\begin{aligned}
+y^k&=x^k+s v^k,\\
+g^k&=\nabla f(y^k),\\
+x^{k+1}&=x^k+s v^k-s^2g^k,\\
+v^{k+1}&=\frac{1-q}{1+q}(v^k-sg^k).
+\end{aligned}
+\]
+Queries may be made at any point of $E$. After $K\geq0$ oracle calls, the output is the last position $\bar{x}=x^K$. The required accuracy is
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

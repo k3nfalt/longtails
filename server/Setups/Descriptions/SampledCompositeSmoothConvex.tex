@@ -1,0 +1,90 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Proximal Linear-Decay SGD}
+We consider minimizing $F(x)=\mathbb{E}_{\xi\sim\nu}[\ell(\xi,x)]+\psi(x)$ over a closed convex set $Q$ in a separable real Hilbert space $E$, where $\nu$ is a probability law on a measurable sample space $\Xi$. Each sample loss $\ell(\xi,\cdot)$ is convex with an $L$-Lipschitz gradient, $L>0$, and $\psi:E\to\mathbb{R}$ is lower semicontinuous and convex on $Q$. A given starting point has bounded distance and objective gap to a minimizer $x^\star$, where gradient variance is bounded. The oracle returns independent sampled gradients or exact proximal minimizers. Proximal SGD with linearly decaying steps must return a measurable output $\bar{x}$ with integrable gap satisfying $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $\varepsilon>0$ and expectation is over the samples.
+
+Write
+\[
+f(x)=\mathbb{E}_{\xi\sim\nu}[\ell(\xi,x)],
+\qquad F(x)=f(x)+\psi(x).
+\]
+The optimization problem is
+\[
+\min_{x\in Q} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $\Xi$, the starting point $x^0$, and the parameters
+\[
+L>0,\qquad R>0,\qquad \Delta\geq0,
+\qquad \sigma\geq0,\qquad \varepsilon>0.
+\]
+The model consists of $\nu$, $\ell$, its sample gradient $g:\Xi\times E\to E$, $\psi$, $Q$, and a proximal map $\mathcal{P}:\mathbb{R}\times E\times E\to E$; access to it is through the oracle below.
+
+Our assumptions:
+\begin{assumption}[Sample losses]
+The map $(\xi,x)\mapsto g(\xi,x)$ is jointly measurable. For every $\xi\in\Xi$, the function $\ell(\xi,\cdot)$ is convex and Fr\'echet differentiable on $E$, with
+\[
+\begin{aligned}
+g(\xi,x)&=\nabla_x\ell(\xi,x),\\
+\|g(\xi,x)-g(\xi,y)\|&\leq L\|x-y\|,
+\qquad x,y\in E.
+\end{aligned}
+\]
+For every $x\in E$, the function $\xi\mapsto\ell(\xi,x)$ is integrable under $\nu$.
+\end{assumption}
+
+\begin{assumption}[Composite structure and proximal access]
+The set $Q\subseteq E$ is closed and convex, and $x^0\in Q$. The function $\psi:E\to\mathbb{R}$ is lower semicontinuous on $E$ and convex on $Q$. For every $a>0$ and $z,h\in E$, the oracle's proximal map satisfies
+\[
+\mathcal{P}(a,z,h)\in
+\operatorname*{arg\,min}_{u\in Q}
+\left\{\frac{\|u-z\|^2}{2a}
++\langle h,u-z\rangle+\psi(u)\right\}.
+\]
+The map is defined for all real $a$, but this minimization property is required only for $a>0$.
+\end{assumption}
+
+\begin{assumption}[Initialization and variance at a minimizer]
+There exists $x^\star\in Q$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+The random vector $g(\xi,x^\star)$ is Bochner integrable under $\nu$. Define its mean by $m^\star=\mathbb{E}_{\xi\sim\nu}[g(\xi,x^\star)]$. The squared centered norm is integrable and satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|g(\xi,x^\star)-m^\star\|^2\bigr]
+\leq\sigma^2.
+\]
+\end{assumption}
+
+Let $(\xi_j)_{j\geq0}$ be measurable, mutually independent samples, each with law $\nu$, and let $P$ denote their joint law. At call $j$, a gradient query $x\in E$ returns $g(\xi_j,x)$, while a proximal query $(a,z,h)\in\mathbb{R}\times E\times E$ returns $\mathcal{P}(a,z,h)$. Both query types count toward one shared oracle-call budget; proximal replies do not depend on the sample at that call.
+
+Our formulation is algorithm-specific: we analyze proximal SGD with linear step-size decay. The algorithm chooses $\eta\geq0$ and an integer $T\geq0$ from its inputs and starts at the given $x^0$. It alternates a gradient query and a proximal query according to
+\[
+\begin{aligned}
+a_k&=\eta\frac{T-k}{T},\\
+h^k&=g(\xi_{2k},x^k),\\
+x^{k+1}&=\mathcal{P}(a_k,x^k,h^k),
+\qquad k=0,1,\ldots.
+\end{aligned}
+\]
+When $T=0$, the step-size formula is interpreted as $a_k=0$. The parameter $T$ specifies the decay schedule; termination is determined by the allotted number of calls. For a budget of $N\geq0$ calls, the output is the last completed proximal iterate,
+\[
+\bar{x}=x^{\lfloor N/2\rfloor}.
+\]
+Thus each completed update uses two calls, and an additional gradient call does not change the output.
+
+The output must be measurable under $P$, and its objective gap must be integrable and satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]
+\leq\varepsilon.
+\]
+\end{document}

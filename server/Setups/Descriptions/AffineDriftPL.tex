@@ -1,0 +1,60 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{PL Minimization with Affine Drift}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$. Its gradient is $L$-Lipschitz, and it satisfies the Polyak--\L{}ojasiewicz inequality with constant $0<\mu\leq L$. A given point $x^0$ has objective gap at most $\Delta\geq0$ from a global minimizer $x^\star$. The oracle returns function values corrupted by arbitrary affine drift within blocks of $d+2$ calls and deterministic errors bounded by $\nu\geq0$. For $\varepsilon>0$ with $4dL\nu\leq\mu\varepsilon$, the goal is an output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x),
+\]
+where $d$ is an integer and $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives only $d,L,\mu,\varepsilon$, and $x^0$; the parameters $\Delta$ and $\nu$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Polyak--\L{}ojasiewicz inequality and initial gap]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x), &&x\in\mathbb{R}^d,\\
+f(x^0)-f(x^\star)&\leq\Delta,\\
+2\mu\bigl(f(x)-f(x^\star)\bigr)&\leq\|\nabla f(x)\|^2,
+&&x\in\mathbb{R}^d.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Blockwise affine oracle drift]
+There are fixed real sequences $(a_j)_{j\geq0}$ and $(b_j)_{j\geq0}$ and fixed functions $e_k:\mathbb{R}^d\to\mathbb{R}$ satisfying
+\[
+|e_k(x)|\leq\nu,
+\qquad k\geq0,\quad x\in\mathbb{R}^d.
+\]
+Index oracle calls from zero. On call $k$, a query at any $x\in\mathbb{R}^d$ returns the scalar
+\[
+\begin{aligned}
+y_k(x)&=f(x)+a_j+b_j r+e_k(x),\\
+j&=\left\lfloor\frac{k}{d+2}\right\rfloor,
+\qquad r=k-j(d+2)\in\{0,\ldots,d+1\}.
+\end{aligned}
+\]
+The intercepts $a_j$ and slopes $b_j$ are arbitrary and may differ between blocks.
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

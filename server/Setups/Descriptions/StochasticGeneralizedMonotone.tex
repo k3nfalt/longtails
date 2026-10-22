@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Generalized Monotone Equations}
+We seek a zero of a continuous monotone operator $F:E\to E$ on a finite-dimensional real Hilbert space $E$. For $L_0,L_1\geq0$, its Lipschitz constant along each segment is bounded by $L_0+L_1M$ whenever $M$ bounds the operator norm values on that segment. A given point $x^0\in E$ lies within distance $R\geq0$ of a zero. The oracle returns unbiased estimates of $F(x)$ with variance at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. Given $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ with probability at least $1-\delta$ over oracle and independent algorithm randomness.
+
+The operator equation is
+\[
+F(x)=0,\qquad x\in E.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $L_0$, $L_1$, $x^0$, $R$, $\sigma$, $\varepsilon$, and $\delta$; it accesses $F$ through the oracle.
+
+Our assumptions:
+\begin{assumption}[Continuity and monotonicity]
+The operator $F$ is continuous, and for every $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle\geq0.
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized Lipschitz condition]
+For every $x,y\in E$ and $M\in\mathbb{R}$, the following implication holds:
+\[
+\begin{aligned}
+&\|F(x+\theta(y-x))\|\leq M
+&&\text{for all }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
+\|F(x)-F(y)\|\leq(L_0+L_1M)\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nearby zero]
+There exists $x^\star\in E$ such that
+\[
+F(x^\star)=0,
+\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic operator oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-F(x)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ receives $g(x,\xi_k)$. The sample variables $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\mathbb{P}_{P}\bigl(\|F(\bar{x})\|>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle sample sequence.
+\end{document}

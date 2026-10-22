@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Adam with Heavy-Tailed Gradients}
+We consider stationarity for a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer. Its gradient is $L$-Lipschitz, with $L>0$, and a given starting point $x^0$ satisfies $f(x^0)-\inf_x f(x)\leq\Delta$, with $\Delta\geq0$. The oracle returns unbiased stochastic gradients with independent, identically distributed samples and coordinatewise noise moments of order $\alpha\in(1,2]$ whose sum is bounded by $\sigma^\alpha$, where $\sigma\geq0$. We analyze Adam with a randomly selected iterate $\bar{x}$; the goal is $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where $\varepsilon>0$ and expectation includes sampling and iterate selection.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+and $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives $d$, the measurable sample space $\Omega$, $L$, $\sigma$, $\alpha$, $\Delta$, $\varepsilon$, and $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, and for every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f(x)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Heavy-tailed stochastic gradients]
+Let $p$ be a probability measure on $\Omega$. The oracle is a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$. For each $x\in\mathbb{R}^d$, the map $g(x,\cdot)$ is Bochner integrable, and the scalar random variable $\sum_{i=1}^d |g_i(x,\xi)-\nabla_i f(x)|^\alpha$ is integrable for $\xi\sim p$. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\left[
+\sum_{i=1}^d |g_i(x,\xi)-\nabla_i f(x)|^\alpha
+\right]&\leq\sigma^\alpha.
+\end{aligned}
+\]
+At call $k$, a query $x\in\mathbb{R}^d$ receives $g(x,\xi_k)$. The measurable sample variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $p$ under their joint law $Q$, and are independent of the algorithm's randomness.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze Adam with constant parameters and without bias correction. The algorithm chooses
+\[
+0\leq\beta<1,\qquad 0<\rho\leq1,\qquad
+\eta>0,\qquad\tau>0,\qquad n\in\mathbb{Z}_{\geq0},
+\]
+using the available inputs. Starting from the given $x^0$ and $m^0=v^0=0$, it queries at $x^k$ and performs the coordinatewise updates
+\[
+\begin{aligned}
+g^k&=g(x^k,\xi_k),\\
+m^{k+1}&=\beta m^k+(1-\beta)g^k,\\
+v_i^{k+1}&=(1-\rho)v_i^k+\rho(g_i^k)^2,\\
+x_i^{k+1}&=x_i^k-\eta\frac{m_i^{k+1}}{\sqrt{v_i^{k+1}}+\tau},
+\qquad i=1,\ldots,d.
+\end{aligned}
+\]
+Independently of the samples, it draws $J$ uniformly from $\{0,\ldots,n\}$. Its saved output is initialized to $x^0$ and replaced by the pre-update iterate $x^J$ when call $J$ is made. Thus, after $B\geq0$ oracle calls, its output is
+\[
+\bar{x}=
+\begin{cases}
+x^J,&J<B,\\
+x^0,&J\geq B.
+\end{cases}
+\]
+In particular, with $B=n+1$ calls the output is the uniformly selected iterate $x^J$ from $x^0,\ldots,x^n$; the final call and update are included in this budget.
+
+Let $P$ be the joint law of the samples and the independent index $J$. The required output $\bar{x}$ is measurable, $\|\nabla f(\bar{x})\|$ is integrable under $P$, and the accuracy requirement is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

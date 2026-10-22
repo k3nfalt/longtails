@@ -1,0 +1,44 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Polyak--\L{}ojasiewicz Minimization}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is $L$-Lipschitz, and $f$ satisfies the Polyak--\L{}ojasiewicz inequality with parameter $0<\mu\leq L$. A global minimizer $x^\star\in E$ exists, and a given starting point $x^0\in E$ satisfies $f(x^0)-f(x^\star)\leq\Delta$, where $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $L$, and $x^0$; the parameters $\mu$, $\Delta$, and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Polyak--\L{}ojasiewicz inequality and initial gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f(x^\star)&\leq\Delta,\\
+2\mu\bigl(f(x)-f(x^\star)\bigr)&\leq\|\nabla f(x)\|^2
+&&\text{for every }x\in E.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The minimizer is fixed independently of the algorithm's randomness; any global minimizer gives the same objective value.
+\end{document}

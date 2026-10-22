@@ -1,0 +1,108 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Smoothed AGDA under Two-Sided PL}
+We consider $\inf_{x\in E}\sup_{y\in F}f(x,y)$ for $f:E\times F\to\mathbb{R}$, where $E$ is a finite-dimensional real inner-product space and $F$ is a separable real Hilbert space. The partial gradients are jointly Lipschitz and satisfy two-sided Polyak--\L{}ojasiewicz inequalities; each inner maximum is attained, and the given initial pair satisfies a bounded potential condition. Each oracle call returns an unbiased, bounded-variance estimate of one partial gradient using a fresh independent sample. Stochastic smoothed alternating gradient descent--ascent (AGDA) must return $(\bar{x},\bar{y})$ with $\mathbb{E}[2\Phi(\bar{x})-\Phi_* -f(\bar{x},\bar{y})]\leq\varepsilon$, where $\Phi(x)=\sup_{y\in F}f(x,y)$, $\Phi_*=\inf_{x\in E}\Phi(x)$, $\varepsilon>0$, and the expectation includes sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E}\sup_{y\in F} f(x,y).
+\]
+Use the inner-product norms on $E$ and $F$, and the product norm $\|(x,y)\|_1=\|x\|+\|y\|$. Fix a starting pair $(x^0,y^0)\in E\times F$ and parameters
+\[
+0<\mu_x\leq L,\qquad 0<\mu_y\leq L,\qquad
+\sigma\geq0,\qquad \Delta\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives $E$, $F$, the measurable sample space $\Omega$, all six scalar parameters, and $(x^0,y^0)$; the objective and the sampling distribution are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Partial-gradient smoothness]
+Each partial function is Fr\'echet differentiable everywhere. For all $x,x'\in E$ and $y,y'\in F$,
+\[
+\begin{aligned}
+\|\nabla_x f(x,y)-\nabla_x f(x',y')\|
+&\leq L\bigl(\|x-x'\|+\|y-y'\|\bigr),\\
+\|\nabla_y f(x,y)-\nabla_y f(x',y')\|
+&\leq L\bigl(\|x-x'\|+\|y-y'\|\bigr).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Two-sided Polyak--\L{}ojasiewicz inequalities]
+For every $x,x'\in E$ and $y,y'\in F$,
+\[
+\begin{aligned}
+2\mu_x\bigl(f(x,y)-f(x',y)\bigr)
+&\leq \|\nabla_x f(x,y)\|^2,\\
+2\mu_y\bigl(f(x,y')-f(x,y)\bigr)
+&\leq \|\nabla_y f(x,y)\|^2.
+\end{aligned}
+\]
+For every $x\in E$, there exists $y_x\in F$ such that
+\[
+f(x,y')\leq f(x,y_x)\qquad\text{for every }y'\in F.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial potential]
+The given starting pair satisfies
+\[
+2\Phi(x^0)-\Phi_*-f(x^0,y^0)
++\frac{\|\nabla_x f(x^0,y^0)\|^2}{L}
+\leq\Delta.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic partial-gradient oracle]
+There is a probability distribution $\nu$ on $\Omega$ and jointly measurable maps
+\[
+G_x:(E\times F)\times\Omega\to E,
+\qquad
+G_y:(E\times F)\times\Omega\to F.
+\]
+For each fixed $w=(x,y)$ and $a\in\{x,y\}$, the random vector $G_a(w,\xi)$ is Bochner integrable and its squared error is integrable under $\xi\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[G_a(w,\xi)]&=\nabla_a f(w),\\
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|G_a(w,\xi)-\nabla_a f(w)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+A query at any $w\in E\times F$ selects either partial gradient and returns the corresponding estimate. Calls use independent samples with common distribution $\nu$, independent of the algorithm's randomness.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze stochastic smoothed AGDA. Its tuning parameters are $r,\tau_x,\tau_y,\beta\in\mathbb{R}$ and $n\in\mathbb{N}_0$. Initialize the auxiliary point by $z^0=x^0$. With independent samples $\xi_0,\xi_1,\ldots\sim\nu$, each complete iteration consists of
+\[
+\begin{aligned}
+g_x^t&=G_x((x^t,y^t),\xi_{2t}),\\
+x^{t+1}&=x^t-\tau_x\bigl(g_x^t+r(x^t-z^t)\bigr),\\
+g_y^t&=G_y((x^{t+1},y^t),\xi_{2t+1}),\\
+y^{t+1}&=y^t+\tau_y g_y^t,\\
+z^{t+1}&=z^t+\beta(x^{t+1}-z^t).
+\end{aligned}
+\]
+Thus one complete iteration uses two oracle calls, with the ascent query made after the descent update. The parameters and $n$ are chosen from the available inputs.
+
+For the output rule, draw $J$ uniformly from $\{0,\ldots,n\}$, independently of the samples. Given a total call budget $B\in\mathbb{N}_0$, let $T=\lfloor B/2\rfloor$ be the number of complete iterations. The returned pair is
+\[
+(\bar{x},\bar{y})=
+\begin{cases}
+(x^{n+J},y^{n+J}),&1\leq n+J\leq T,\\
+(x^0,y^0),&\text{otherwise}.
+\end{cases}
+\]
+An unmatched final descent call does not change the returned pair.
+
+The output must be measurable, its combined primal suboptimality and inner-maximization error must be integrable, and it must satisfy
+\[
+\mathbb{E}_{P}\!\left[
+\bigl(\Phi(\bar{x})-\Phi_*\bigr)
++\bigl(\Phi(\bar{x})-f(\bar{x},\bar{y})\bigr)
+\right]\leq\varepsilon,
+\]
+where $P$ is the joint law of $J$ and the independent oracle samples.
+\end{document}

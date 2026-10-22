@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stationarity with Affine Gradient Variance}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is Lipschitz, and its objective gap from a given point is bounded. Stochastic gradients are unbiased, have variance bounded by an affine function of the squared gradient norm, and satisfy mean-squared Lipschitz continuity. At queried points $x,y\in E$, the oracle returns $(g(x,\xi),g(y,\xi))$, where $g$ is the stochastic gradient map and $\xi$ is a fresh sample shared within the pair. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with $\mathbb{E}_{P}\|\nabla f(\bar{x})\|\leq\varepsilon$, where $P$ is the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which carries its Borel sigma-algebra. Let $\Omega$ be a measurable sample space. The algorithm receives $E$, $\Omega$, the given point $x^0\in E$, and the parameters
+\[
+L>0,\qquad \overline{L},\Gamma,\Lambda,\Delta\geq 0,
+\qquad \varepsilon>0.
+\]
+It accesses the objective through the oracle described below.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f(x)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiasedness and affine variance]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For each $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, and $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable under $\nu$. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
+&\leq\Gamma^2\|\nabla f(x)\|^2+\Lambda^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Mean-squared smoothness]
+For every $x,y\in E$, the function $\|g(x,\cdot)-g(y,\cdot)\|^2$ is integrable under $\nu$, and
+\[
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-g(y,\xi)\|^2\bigr]
+\leq \overline{L}^{\,2}\|x-y\|^2.
+\]
+\end{assumption}
+
+The oracle uses a sequence $(\xi_k)_{k\geq0}$ of measurable, independent samples, each with law $\nu$, independent of the algorithm's randomness. On call $k$, a query $(x,y)\in E\times E$ receives
+\[
+\bigl(g(x,\xi_k),g(y,\xi_k)\bigr).
+\]
+Each such paired reply counts as one oracle call; both evaluations use the same sample. Queries may be chosen adaptively anywhere in $E\times E$.
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Markov Quadratic Interpolation}
+We consider minimizing a convex quadratic $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. It is the stationary average of quadratic losses sharing a minimizer $x^\star$, with positive semidefinite Hessians bounded by $L>0$. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$, where $R\geq0$. At query $x$, the oracle returns $H_Z(x-x^\star)$, where $H_Z$ is the Hessian indexed by a finite-state Markov chain $Z$. The chain starts arbitrarily and its transition law dominates $\alpha$ times its invariant law, with $0<\alpha\leq1$. For $\varepsilon>0$, the goal is $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, averaging over the chain and independent algorithm randomness for the output $\bar{x}\in E$.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $L$, $x^0$, and $\alpha$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Interpolating quadratic model]
+There exist a finite index set $\mathcal{I}=\{1,\ldots,m\}$ with $m\geq1$, a probability distribution $\pi$ on $\mathcal{I}$, bounded linear operators $H_i:E\to E$, and a point $x^\star\in E$ such that
+\[
+\begin{aligned}
+H_i^*&=H_i && (i\in\mathcal{I}),\\
+0\leq\langle v,H_i v\rangle&\leq L\|v\|^2
+&& (i\in\mathcal{I},\ v\in E),\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+Here $H_i^*$ denotes the Hilbert space adjoint. The population objective satisfies
+\[
+f(x)-f(x^\star)
+=\frac{1}{2}\mathbb{E}_{I\sim\pi}
+\bigl[\langle x-x^\star,H_I(x-x^\star)\rangle\bigr],
+\qquad x\in E.
+\]
+In particular, $x^\star$ is a global minimizer and every component gradient vanishes there.
+\end{assumption}
+
+\begin{assumption}[Markov sampling and refresh]
+Let $\kappa$ be a Markov transition kernel on $\mathcal{I}$, and write $\pi_j=\pi(\{j\})$. Its invariant distribution and refresh condition satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{I\sim\pi}[\kappa(I,\{j\})]&=\pi_j
+&& (j\in\mathcal{I}),\\
+\kappa(i,\{j\})&\geq\alpha\pi_j
+&& (i,j\in\mathcal{I}).
+\end{aligned}
+\]
+The samples $(Z_k)_{k\geq0}$ form a time-homogeneous Markov chain with transition kernel $\kappa$ and arbitrary initial distribution $\mu$ on $\mathcal{I}$. Algorithm randomness is independent of this chain.
+\end{assumption}
+
+Queries may be made at any point of $E$. At the $k$th call, starting with $k=0$, a query $x$ receives the vector
+\[
+g(x,Z_k)=H_{Z_k}(x-x^\star).
+\]
+Thus successive calls use successive states of the same chain. The distributions $\pi$ and $\mu$, the kernel $\kappa$, the operators $H_i$, and the minimizer $x^\star$ are not supplied to the algorithm.
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable, and it must satisfy
+\[
+\mathbb{E}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Cohypomonotone Inclusions}
+We consider solving $0\in F(x)+A(x)$ in a finite-dimensional real inner product space $E$, where $F:E\to E$ is $L$-Lipschitz and $A:E\rightrightarrows E$ is monotone. The sum $F+A$ is $\rho$-cohypomonotone, with $L>0$, $\rho\geq0$, and $2\rho L<1$. A given point $x^0\in E$ lies within distance $R\geq0$ of a solution. The oracle returns unbiased estimates of $F$ with independent sampling and variance at most $\sigma^2$, where $\sigma\geq0$, or exact resolvent evaluations of $A$. For $\varepsilon>0$, the goal is a measurable pair $(\bar{x},\bar{a})$ with $\bar{a}\in A(\bar{x})$ for every realization and $\mathbb{E}\|F(\bar{x})+\bar{a}\|\leq\varepsilon$, averaging over sampling and algorithm randomness.
+
+The inclusion problem is to find $x\in E$ such that
+\[
+0\in F(x)+A(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, the measurable sample space $\Omega$, $L$, $\rho$, $R$, $\sigma$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Lipschitz continuity and cohypomonotonicity]
+For every $x,y\in E$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+For every $a\in A(x)$ and $b\in A(y)$, monotonicity of $A$ and cohypomonotonicity of $F+A$ mean
+\[
+\begin{aligned}
+\langle a-b,x-y\rangle&\geq0,\\
+\langle F(x)+a-F(y)-b,x-y\rangle
+&\geq-\rho\|F(x)+a-F(y)-b\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ satisfying
+\[
+-F(x^\star)\in A(x^\star),
+\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic operator access]
+There is a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For each $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-F(x)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. They are independent of the algorithm's randomness. A stochastic query at $x\in E$ on call $k$ returns $g(x,\xi_k)$.
+\end{assumption}
+
+\begin{assumption}[Exact resolvent access]
+There is a map $J:\mathbb{R}\times E\to E$ such that, for every $\gamma>0$ and $z\in E$,
+\[
+\frac{z-J(\gamma,z)}{\gamma}\in A\bigl(J(\gamma,z)\bigr).
+\]
+A resolvent query $(\gamma,z)\in\mathbb{R}\times E$ returns $J(\gamma,z)$ exactly. The stated resolvent condition applies to positive $\gamma$.
+\end{assumption}
+
+Each call chooses either a stochastic query or a resolvent query; both count toward the same total oracle-call budget. The index $k$ counts calls of either kind.
+
+The output $(\bar{x},\bar{a})\in E\times E$ must be measurable and satisfy $\bar{a}\in A(\bar{x})$ for every realization. Its residual norm must be integrable and obey
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})+\bar{a}\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the oracle samples and the independent algorithm randomness.
+\end{document}

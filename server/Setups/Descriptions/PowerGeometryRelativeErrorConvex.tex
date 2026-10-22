@@ -1,0 +1,67 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Power Geometry with Relative Errors}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a finite-dimensional real normed space $E$. Its derivative $Df$ is $L$-Lipschitz, with $L>0$. At a given point $x^0\in E$, the squared norm is differentiable and satisfies a power-type curvature bound with exponent $p>2$ and constant $c>0$. A global minimizer $x^\star$ satisfies $\|x^0-x^\star\|\leq R$, where $R\geq0$. The oracle returns a dual vector $g$ with $\|g-Df(x)\|_{\mathrm{op}}\leq\alpha\|Df(x)\|_{\mathrm{op}}$ at $x$, where $0\leq\alpha\leq1/4$. For $\varepsilon>0$, the goal is $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely for an output $\bar{x}\in E$ under the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $E^*$ for the continuous dual of $E$ and $\|\cdot\|_{\mathrm{op}}$ for its induced operator norm. Define
+\[
+\psi(x)=\frac{1}{2}\|x-x^0\|^2.
+\]
+The algorithm receives $E$, $L$, $\alpha$, $p$, $c$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Power geometry]
+The function $\psi$ is Fr\'echet differentiable everywhere, and for every $x,y\in E$,
+\[
+\frac{c\|y-x\|^p}
+{(\|y-x^0\|+\|x-x^0\|)^{p-2}}
+\leq \psi(y)-\psi(x)-D\psi(x)[y-x].
+\]
+The fraction is defined to be zero when $x=y=x^0$.
+\end{assumption}
+
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is Fr\'echet differentiable everywhere. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+\|Df(x)-Df(y)\|_{\mathrm{op}}&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^\star-x^0\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Relative-error oracle]
+Queries may be made at any point $x\in E$. Every oracle reply $g\in E^*$ satisfies
+\[
+\|g-Df(x)\|_{\mathrm{op}}
+\leq\alpha\|Df(x)\|_{\mathrm{op}}.
+\]
+This bound holds for every query history and every realization of the oracle randomness. Replies may depend on the history, and oracle randomness across calls may be dependent. The algorithm's randomness is independent of the oracle randomness.
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}\in E$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the joint law of the algorithm and oracle randomness, and $x^\star$ is a fixed global minimizer.
+\end{document}

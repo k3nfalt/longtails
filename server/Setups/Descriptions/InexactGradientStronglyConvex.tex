@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Inexact Gradient Strongly Convex Minimization}
+We consider minimizing a differentiable, $\mu$-strongly convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with quadratic upper curvature bound $L\geq\mu>0$. A given point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$. At $x\in E$, the oracle returns a vector $g\in E$ with relative gradient error controlled by $\alpha\in[0,1)$ and additive error controlled by $\delta\geq0$. For a tolerance $\varepsilon>0$ compatible with this error, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of the algorithm's and oracle's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $L$, $x^0$, $\mu$, and $\alpha$; the parameters $\delta$, $R$, and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs. In addition to the ranges above, the parameters satisfy
+\[
+136\delta^2\leq\mu(1-\alpha)^2\varepsilon.
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and strong convexity]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{L}{2}\|y-x\|^2,\\
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Inexact gradient oracle]
+Queries may be made at any point $x\in E$. Every oracle reply $g\in E$ satisfies
+\[
+\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|+\delta.
+\]
+This bound holds for every query history and every realization of the oracle randomness. Replies may depend on the history, and the oracle randomness may be dependent across calls. The algorithm's randomness is independent of the oracle randomness.
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

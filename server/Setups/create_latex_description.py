@@ -201,6 +201,14 @@ def parse_document(response):
         and latex.endswith(r"\end{document}")
     ):
         raise ValueError("Codex did not return a standalone LaTeX document")
+    parsed = subprocess.run(
+        ["pandoc", "--from=latex", "--to=json"],
+        input=latex,
+        text=True,
+        capture_output=True,
+    )
+    if parsed.returncode:
+        raise ValueError(f"Invalid LaTeX: {parsed.stderr.strip()}")
     return latex
 
 
@@ -295,6 +303,7 @@ def generate_setup(
                 if attempt == 0:
                     print(f"Retrying {setup.name}: {error}", flush=True)
                     prompt += (
+                        f"\nValidation error: {error}\n"
                         "\nThe previous response had an invalid document format. Return only "
                         'JSON with a "latex" string containing the complete document: '
                         r"\documentclass, the preamble, \begin{document}, the full body, "

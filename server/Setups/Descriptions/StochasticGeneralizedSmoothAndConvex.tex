@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Generalized Smooth Convex Minimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$. A given point $x^0\in E$ has distance at most $R>0$ and objective gap at most $\Delta>0$ from a global minimizer $x^\star$. The oracle returns unbiased stochastic gradients with variance at most $\sigma^2$ and an exponential squared-error bound, where $\sigma\geq0$, using independent identically distributed samples. Given $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$ over oracle and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $x^0$, $L_0$, $L_1$, $R$, $\Delta$, $\sigma$, $\varepsilon$, and $\delta$; the objective and sampling distribution are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, its gradient is Fr\'echet differentiable, and for every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq (1-t)f(x)+t f(y),\\
+\|\nabla^2 f(x)\|_{\mathrm{op}}&\leq L_0+L_1\|\nabla f(x)\|.
+\end{aligned}
+\]
+Here $\nabla^2 f(x):E\to E$ is the derivative of the gradient.
+\end{assumption}
+
+\begin{assumption}[Initial distance and objective gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Light-tailed stochastic gradients]
+There are a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable, its squared error is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+When $\sigma>0$, the exponential below is integrable and satisfies, for every $x\in E$,
+\[
+\mathbb{E}_{\xi\sim\nu}\left[
+\exp\left(\frac{\|g(x,\xi)-\nabla f(x)\|^2}{\sigma^2}\right)
+\right]\leq e.
+\]
+When $\sigma=0$, the variance condition gives $g(x,\xi)=\nabla f(x)$ for $\nu$-almost every $\xi$, for each fixed $x$.
+
+The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent random variables with common law $\nu$ under a joint probability law $Q$. At call $k$, a query $x\in E$ receives $g(x,\xi_k)$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}\in E$ must be measurable and satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples with law $Q$.
+\end{document}

@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stationarity with Gradient-Dependent Third Derivatives}
+We consider a possibly nonconvex objective $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The function is three times continuously differentiable, with its third derivative bounded by $L_0+L_1\|\nabla f(x)\|$ at each $x\in E$, where $L_0>0$ and $L_1\geq0$. A given starting point $x^0\in E$ has objective gap at most $\Delta>0$ above the infimum and gradient norm at most $G_0\geq0$. Two exact oracles return the gradient and Hessian. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and derivative norms $\|\cdot\|_{\mathrm{op}}$ are the induced operator norms. The algorithm receives $E$, $x^0$, $L_0$, $L_1$, $\Delta$, $G_0$, $\varepsilon$, and an integer $m\geq1$.
+
+Our assumptions:
+\begin{assumption}[Third-derivative bound]
+The function $f$ belongs to $C^3(E;\mathbb{R})$ and satisfies
+\[
+\|\nabla^3 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in E.
+\]
+Here $\nabla^3 f(x)$ denotes the trilinear third derivative of $f$, equivalently the second derivative of its gradient under the inner product identification.
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+The given point $x^0$ satisfies
+\[
+\begin{aligned}
+f(x^0)-f(x)&\leq\Delta &&\text{for every }x\in E,\\
+\|\nabla f(x^0)\|&\leq G_0.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries to either oracle may be made at any point of $E$. The gradient oracle returns $\nabla f(x)$ at $x$. The Hessian oracle returns $\nabla^2 f(x)$ at $x$, as a linear operator from $E$ to $E$. Gradient and Hessian calls are counted separately.
+
+After the allotted calls to each oracle, the output must satisfy
+\[
+\|\nabla f(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

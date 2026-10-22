@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Lipschitz Monotone Root Finding}
+We seek a zero of a continuous monotone operator $F:E\to E$ on a real inner product space $E$ with induced norm $\|\cdot\|$. For constants $L_0>0$ and $L_1\geq0$, the Lipschitz bound along each segment is $L_0+L_1M$ whenever $M$ bounds the norm of $F$ on that segment. A given point $x^0\in E$ satisfies $\|F(x^0)\|\leq G$ and lies within distance $R$ of a zero, where $G,R\geq0$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The root-finding problem is to find $x\in E$ such that
+\[
+F(x)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$. The algorithm receives only $E$, $L_0$, $L_1$, and $x^0$; the residual bound $G$, radius $R$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Continuity and monotonicity]
+The operator $F$ is continuous, and for every $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle\geq0.
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized Lipschitz condition]
+For every $x,y\in E$ and $M\in\mathbb{R}$ satisfying
+\[
+\|F(x+\theta(y-x))\|\leq M
+\qquad\text{for every }\theta\in[0,1],
+\]
+the operator satisfies
+\[
+\|F(x)-F(y)\|\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial residual and distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq R,\\
+\|F(x^0)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

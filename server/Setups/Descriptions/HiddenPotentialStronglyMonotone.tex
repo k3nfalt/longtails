@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strongly Monotone Hidden-Potential Root Finding}
+We seek a zero of a map $F:E\to E$ on a real Hilbert space $E$. The map is $\mu$-strongly monotone, where $\mu>0$, and admits a hidden differentiable potential $\varphi:E\to\mathbb{R}$ whose gradient is $L$-Lipschitz, with $L\geq0$, while $F-\nabla\varphi$ is $s$-Lipschitz, with $s\geq0$. A given point $x^0\in E$ lies within distance $R\geq0$ of a zero $x^\star$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|\bar{x}-x^\star\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The root-finding problem is
+\[
+\text{find }x^\star\in E\text{ such that }F(x^\star)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, $x^0$, $\mu$, $L$, $s$, $R$, and $\varepsilon$; the potential $\varphi$ is not supplied.
+
+Our assumptions:
+\begin{assumption}[Strong monotonicity]
+For every $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle
+\geq \mu\|x-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Hidden potential]
+There exists an everywhere Fr\'echet differentiable function $\varphi:E\to\mathbb{R}$ such that, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla\varphi(x)-\nabla\varphi(y)\|
+&\leq L\|x-y\|,\\
+\|(F-\nabla\varphi)(x)-(F-\nabla\varphi)(y)\|
+&\leq s\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ satisfying
+\[
+F(x^\star)=0,
+\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. Strong monotonicity makes the zero $x^\star$ unique. After the allotted oracle calls, the output must satisfy
+\[
+\|\bar{x}-x^\star\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

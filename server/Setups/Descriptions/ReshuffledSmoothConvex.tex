@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Random Reshuffling for Convex Minimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n\geq1$ and the functions $f_i:E\to\mathbb{R}$ are differentiable and convex. Their gradient Lipschitz constants have prescribed average and maximum bounds. A global minimizer $x^\star$ satisfies prescribed bounds on its distance from the given starting point $x^0\in E$ and on the mean squared component-gradient norm there. The oracle returns $\nabla f_i(x)$ at $(i,x)$. Random reshuffling uses independent uniform permutations for a chosen number of epochs, then the identity order. For $\varepsilon>0$, its final iterate $\bar{x}$ must satisfy $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of these permutations.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The parameters satisfy
+\[
+0<L_{\mathrm{avg}}\leq L_{\max},\qquad
+R\geq0,\qquad \sigma\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives $E$, $n$, $L_{\mathrm{avg}}$, $L_{\max}$, $R$, $\sigma$, $\varepsilon$, and $x^0$; the component functions are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Component convexity and smoothness]
+Each $f_i$ is Fr\'echet differentiable on $E$, and for every $x,y\in E$ and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq(1-t)f_i(x)+t f_i(y).
+\]
+There exist constants $\ell_1,\ldots,\ell_n$ such that
+\[
+\begin{aligned}
+0\leq\ell_i&\leq L_{\max}, &&i=1,\ldots,n,\\
+\frac1n\sum_{i=1}^n\ell_i&\leq L_{\mathrm{avg}},\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq\ell_i\|x-y\|,
+&&x,y\in E.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and gradients at a minimizer]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+\frac1n\sum_{i=1}^n\|\nabla f_i(x^\star)\|^2&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze random reshuffling with a constant step size within each epoch. The algorithm chooses an integer $K\geq0$ and a deterministic sequence $(\eta_k)_{k\geq0}$ of real step sizes from its inputs. The setup imposes no sign or magnitude restriction on $\eta_k$. For $k=0,\ldots,K-1$, let $\pi_k$ be independent uniform permutations of $\{1,\ldots,n\}$; for $k\geq K$, set $\pi_k$ to the identity. Starting from the given $x^0$, the iterates satisfy
+\[
+x^{kn+j+1}
+=x^{kn+j}-\eta_k\nabla f_{\pi_k(j+1)}(x^{kn+j}),
+\qquad k\geq0,\quad 0\leq j<n.
+\]
+Queries may use any component index and any point in $E$. Each update uses one component-gradient query. After an allotted number $T\geq0$ of queries, the output is the last iterate $\bar{x}=x^T$, including when $T$ ends within an epoch.
+
+The output must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

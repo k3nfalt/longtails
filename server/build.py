@@ -61,7 +61,7 @@ def description_html(text, format, bibliography=None):
         command += ["--citeproc", "--bibliography=" + str(bibliography)]
     document = json.loads(
         subprocess.run(
-            command, input=text, text=True, capture_output=True, check=True
+            command, input=text, text=True, stdout=subprocess.PIPE, check=True
         ).stdout
     )
 
@@ -99,7 +99,7 @@ def description_html(text, format, bibliography=None):
             "pandoc",
             "--from=json",
             "--to=html5",
-            "--mathml",
+            "--mathjax",
             "--shift-heading-level-by=1",
         ],
         input=json.dumps(clean(document)),

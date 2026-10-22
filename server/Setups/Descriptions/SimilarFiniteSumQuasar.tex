@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Similar Finite-Sum Quasar Minimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n\geq 1$ and the functions $f_i:E\to\mathbb{R}$ are differentiable. The potentially nonconvex objective has a Lipschitz gradient, satisfies a quadratic lower model, and obeys strong quasar-convexity and quadratic growth relative to a global minimizer $x^\star$. Component-gradient deviations from the mean are Lipschitz with a restricted similarity constant. A given point $x^0\in E$ has bounded objective gap. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$. The parameters satisfy
+\[
+\begin{aligned}
+&0<\mu\leq L, \qquad 0<\gamma\leq 1,\\
+&\delta\geq 0, \qquad 384\delta^2\leq\gamma^3\mu^2,\\
+&\Delta\geq 0, \qquad \varepsilon>0.
+\end{aligned}
+\]
+The algorithm receives $E$, $n$, $L$, $\mu$, $\gamma$, $\delta$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and component similarity]
+Each $f_i$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$ and $i\in\{1,\ldots,n\}$,
+\[
+\begin{aligned}
+\|\nabla F(x)-\nabla F(y)\|&\leq L\|x-y\|,\\
+\| (\nabla f_i(x)-\nabla F(x))
+-(\nabla f_i(y)-\nabla F(y))\|
+&\leq\delta\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Quadratic lower model]
+For every $x,y\in E$,
+\[
+F(x)+\langle\nabla F(x),y-x\rangle
+-\frac{\gamma\mu}{2\sqrt{\mu/L}}\|y-x\|^2
+\leq F(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Strong quasar-convexity and quadratic growth]
+There exists a global minimizer $x^\star\in E$ such that
+\[
+F(x^0)-F(x^\star)\leq\Delta,
+\]
+and, for every $x\in E$,
+\[
+\begin{aligned}
+\gamma F(x)+\langle\nabla F(x),x^\star-x\rangle
++\frac{\gamma\mu}{2}\|x-x^\star\|^2
+&\leq\gamma F(x^\star),\\
+\frac{\gamma\mu}{2(2-\gamma)}\|x-x^\star\|^2
+&\leq F(x)-F(x^\star).
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may use any component index $i\in\{1,\ldots,n\}$ and any point $x\in E$. After the allotted component-gradient calls, the output must satisfy
+\[
+F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

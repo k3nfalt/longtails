@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Non-Euclidean Weak Minty Problems}
+We seek a zero of an operator $F:E\to E^*$ on a finite-dimensional real normed space $E$, where $E^*$ is its continuous dual with induced operator norm $\|\cdot\|_{\mathrm{op}}$. The operator is $L$-Lipschitz, with $L>0$, and satisfies a weak Minty condition with parameter $0\leq\rho\leq 1/(20L)$ at a zero $x^\star$. A differentiable, $\mu$-strongly convex function $h:E\to\mathbb{R}$, with $\mu>0$, bounds the Bregman distance from a given $x^0\in E$ to $x^\star$ by $D\geq0$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|F(\bar{x})\|_{\mathrm{op}}\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The problem is to find $x\in E$ such that
+\[
+F(x)=0.
+\]
+Write $\langle v,u\rangle=v(u)$ for $v\in E^*$ and $u\in E$. The norm on $E$ is denoted by $\|\cdot\|$, and define the Bregman divergence by
+\[
+B_h(u,x)=h(u)-h(x)-\langle h'(x),u-x\rangle,
+\]
+where $h'(x)\in E^*$ is the Fr\'echet derivative. The algorithm receives $E$, $L$, $\rho$, $\mu$, $h$, and $x^0$; the bound $D$ and tolerance $\varepsilon$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Bregman geometry]
+The function $h$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+B_h(u,x)\geq\frac{\mu}{2}\|u-x\|^2,
+\qquad x,u\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Lipschitz continuity]
+The operator satisfies
+\[
+\|F(x)-F(y)\|_{\mathrm{op}}\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty condition and initial bound]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+B_h(x^\star,x^0)&\leq D,\\
+\langle F(x),x-x^\star\rangle
+&\geq-\rho\|F(x)\|_{\mathrm{op}}^2,
+\qquad x\in E.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|_{\mathrm{op}}\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

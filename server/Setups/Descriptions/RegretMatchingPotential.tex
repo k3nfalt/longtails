@@ -1,0 +1,87 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Regret Matching+ in Potential Games}
+We consider a two-player game with payoff matrices $A,C\in\mathbb{R}^{m\times n}$, where $m,n\geq 1$ are the players' numbers of actions. Mixed strategies are probability vectors in $\mathbb{R}^m$ and $\mathbb{R}^n$. Unilateral payoff differences agree with those of an exact potential taking values in $[0,B]$, where $B>0$. The oracle returns $Ay$ and $C^\top x$ at a strategy pair $(x,y)$. For $\varepsilon>0$, Regret Matching+ must return probability vectors $(\bar{x},\bar{y})$ for which neither player can increase its expected payoff by more than $\varepsilon$ through any unilateral pure-action deviation.
+
+Write
+\[
+\Delta_d=\left\{z\in\mathbb{R}^d:z_i\geq 0\text{ for all }i,\ \sum_{i=1}^d z_i=1\right\}.
+\]
+The players maximize the respective payoffs $x^\top Ay$ and $x^\top Cy$ over $x\in\Delta_m$ and $y\in\Delta_n$. The algorithm receives only $m$, $n$, and $\varepsilon$; the bound $B$ may enter the oracle-call budget but is not an algorithm input.
+
+Our assumptions:
+\begin{assumption}[Bounded exact potential]
+There exists a matrix $H\in\mathbb{R}^{m\times n}$ such that, for all $i,i'\in\{1,\ldots,m\}$ and $j,j'\in\{1,\ldots,n\}$,
+\[
+\begin{aligned}
+0\leq H_{ij}&\leq B,\\
+A_{ij}-A_{i'j}&=H_{ij}-H_{i'j},\\
+C_{ij}-C_{ij'}&=H_{ij}-H_{ij'}.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any $(x,y)\in\mathbb{R}^m\times\mathbb{R}^n$. One oracle call returns both exact payoff vectors
+\[
+\begin{aligned}
+u_i&=\sum_{j=1}^n A_{ij}y_j, &&i=1,\ldots,m,\\
+v_j&=\sum_{i=1}^m C_{ij}x_i, &&j=1,\ldots,n.
+\end{aligned}
+\]
+
+The setup is algorithm-specific: we analyze Regret Matching+ with simultaneous updates and retention of the most recent pair passing the deviation test. For $d\geq 1$ and $q\in\mathbb{R}^d$, define
+\[
+S_d(q)_i=
+\begin{cases}
+q_i\big/\sum_{\ell=1}^d q_\ell,&\displaystyle\sum_{\ell=1}^d q_\ell>0,\\
+1/d,&\displaystyle\sum_{\ell=1}^d q_\ell\leq 0.
+\end{cases}
+\]
+Initialize the two regret vectors as $q^0=0\in\mathbb{R}^m$ and $r^0=0\in\mathbb{R}^n$, and initialize the retained pair as
+\[
+z^0=(S_m(0),S_n(0)).
+\]
+At iteration $t\geq 0$, query
+\[
+\begin{aligned}
+x^t&=S_m(q^t), & y^t&=S_n(r^t),\\
+u^t&=Ay^t, & v^t&=C^\top x^t.
+\end{aligned}
+\]
+Define the instantaneous deviation gains and update the regret vectors by
+\[
+\begin{aligned}
+a_i^t&=u_i^t-(x^t)^\top u^t,
+& q_i^{t+1}&=\max\{q_i^t+a_i^t,0\},\\
+b_j^t&=v_j^t-(y^t)^\top v^t,
+& r_j^{t+1}&=\max\{r_j^t+b_j^t,0\}.
+\end{aligned}
+\]
+The retained pair is updated using the strategies queried at that iteration:
+\[
+z^{t+1}=
+\begin{cases}
+(x^t,y^t),& a_i^t\leq\varepsilon\text{ for every }i
+\text{ and }b_j^t\leq\varepsilon\text{ for every }j,\\
+z^t,&\text{otherwise}.
+\end{cases}
+\]
+After the allotted $T$ oracle calls, the output is $(\bar{x},\bar{y})=z^T$. Thus, if no queried pair passes the test, the output remains the initial uniform pair.
+
+The required accuracy is an $\varepsilon$-Nash equilibrium:
+\[
+\begin{aligned}
+\bar{x}&\in\Delta_m,\qquad \bar{y}\in\Delta_n,\\
+(A\bar{y})_i&\leq\bar{x}^\top A\bar{y}+\varepsilon,
+&&i=1,\ldots,m,\\
+(C^\top\bar{x})_j&\leq\bar{x}^\top C\bar{y}+\varepsilon,
+&&j=1,\ldots,n.
+\end{aligned}
+\]
+These requirements hold for every realization, rather than only in expectation or almost surely.
+\end{document}
