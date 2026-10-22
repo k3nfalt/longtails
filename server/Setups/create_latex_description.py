@@ -275,9 +275,18 @@ def generate_setup(
         print(f"Generating {setup.name} -> {output}", flush=True)
         for attempt in range(2):
             draft.unlink(missing_ok=True)
-            subprocess.run(
-                command + ["-"], input=prompt, text=True, encoding="utf-8", check=True
-            )
+            try:
+                subprocess.run(
+                    command + ["-"],
+                    input=prompt,
+                    text=True,
+                    encoding="utf-8",
+                    capture_output=True,
+                    check=True,
+                )
+            except subprocess.CalledProcessError as error:
+                print(error.stderr or error.stdout or str(error), flush=True)
+                raise
             response = draft.read_text(encoding="utf-8") if draft.exists() else ""
             try:
                 latex = parse_document(response)
