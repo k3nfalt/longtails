@@ -69,7 +69,7 @@ Create a separate Git worktree and unique working branch for each agent. Use uni
 
 All research edits and reviewer validation must happen in these worktrees. Never modify or push the `main` branch.
 
-Reuse existing Lean build artifacts when initializing each worktree to avoid rebuilding unchanged dependencies and modules. Run the required verification on the final integrated result.
+Reuse existing Lean build artifacts when initializing each worktree to avoid rebuilding unchanged dependencies and modules. Use ordinary copies or copy-on-write reflinks (on Linux, `cp -a --reflink=auto`), never hard links (`cp -al`) or symlinks to another checkout's caches. Keep all writable build artifacts, including dependency caches, independent between worktrees and the main checkout. Run the required verification on the final integrated result.
 
 Transfer proposed changes between worktrees using patches or explicit file copies that include new files. Record the base revision and identify the exact candidate contents being reviewed. Keep the recorded starting base throughout the task.
 
