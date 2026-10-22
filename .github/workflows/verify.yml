@@ -2,6 +2,10 @@ name: Verify Lean and scripts
 
 on:
   workflow_call:
+    inputs:
+      upload-build:
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -68,6 +72,22 @@ jobs:
               python3 -u run_comparator.py -j 2
             fi
           } 2>&1 | tee comparator.log
+
+      - name: Archive verified Lean build
+        if: inputs.upload-build
+        run: |
+          tar -czf "$RUNNER_TEMP/lean-build.tar.gz" \
+            .lake/build lean-toolchain lake-manifest.json lakefile.toml
+
+      - name: Upload verified Lean build
+        if: inputs.upload-build
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
+          path: ${{ runner.temp }}/lean-build.tar.gz
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
 
       - name: Upload verification logs
         if: always()
