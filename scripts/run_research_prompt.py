@@ -15,6 +15,11 @@ def main(argv=None):
     )
     parser.add_argument("--agent", choices=("codex", "omp", "claude"), default="codex")
     parser.add_argument(
+        "--pull",
+        action="store_true",
+        help="Pull the main checkout with --ff-only before the automatic build.",
+    )
+    parser.add_argument(
         "--delivery",
         choices=("local", "pr"),
         default="local",
@@ -162,6 +167,20 @@ def main(argv=None):
                 "Preserve the worktrees, report the approved deliverables' location and "
                 "verification evidence, and stop without committing, pushing, or opening a PR."
             )
+    worktrees = subprocess.check_output(
+        ["git", "worktree", "list", "--porcelain", "-z"],
+        cwd=scripts.parent,
+    )
+    main_root = Path(
+        os.fsdecode(worktrees.split(b"\0", 1)[0]).removeprefix("worktree ")
+    )
+    prepared = subprocess.run(
+        ["./build.sh", *(["--pull"] if args.pull else [])],
+        cwd=main_root,
+        check=False,
+    )
+    if prepared.returncode:
+        return prepared.returncode
     environment = os.environ.copy()
     environment["LONGTAILS_STARTUP"] = json.dumps(
         {
@@ -195,7 +214,7 @@ def main(argv=None):
     try:
         return subprocess.run(
             [*command, *agent_args, prompt],
-            cwd=scripts.parent,
+            cwd=main_root,
             env=environment,
             check=False,
         ).returncode
