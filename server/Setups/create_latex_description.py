@@ -100,6 +100,9 @@ explanation of P. Do not add closing sentences listing unrestricted choices or
 repeating the guarantee's scope. Write optimization displays as min/max/inf/sup
 of an expression; define named objectives separately, not as an equality inside
 the optimized expression.
+Avoid "execution law", "degenerate law", and explanations about point masses.
+For P-a.s. statements, identify P simply as the law of the relevant randomness;
+do not add probability-space machinery just because the method is deterministic.
 
 Translate every nontrivial allowedAlgorithm restriction into mathematics,
 including its recurrence, tuning restrictions, initialization and output rule.
@@ -152,6 +155,10 @@ and their distributions, or the joint law underlying the expectation, once.
 Use conditional expectations only when the source asserts conditional statements;
 do not replace stationary expectations by conditional expectations. Retain integral
 notation when the measure is not a probability measure or an integral is clearer.
+This preference applies to probability averages throughout the formulation, not
+only to the output guarantee: for example, express invariance of a Markov law as
+\mathbb{E}_{Z\sim\pi}[\kappa(Z,A)]=\pi(A). Keep spatial integrals, such as
+weak-derivative identities against Lebesgue measure, as integrals.
 Retain joint measurability, Bochner integrability, moment integrability, and output
 measurability/integrability exactly where required. Distinguish independent samples
 from Markov dependence. For Markov noise retain stationarity, invariance, the
