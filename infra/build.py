@@ -7,9 +7,6 @@ from pathlib import Path
 def main():
     root = Path(__file__).resolve().parents[1]
     args = sys.argv[1:]
-    pull = args[:1] == ["--pull"]
-    if pull:
-        args = args[1:]
     lock_path = subprocess.check_output(
         ["git", "rev-parse", "--git-path", "longtails-build.lock"],
         cwd=root,
@@ -25,8 +22,6 @@ def main():
                 command, cwd=root, check=check, pass_fds=(lock.fileno(),)
             )
 
-        if pull:
-            run(["git", "pull", "--ff-only"])
         run(["lake", "exe", "cache", "get"])
         if run(["lake", "exe", "mk_all", "--lib", "LongTails"], check=False).returncode:
             run(["lake", "exe", "mk_all", "--lib", "LongTails", "--check"])

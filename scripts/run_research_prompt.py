@@ -15,11 +15,6 @@ def main(argv=None):
     )
     parser.add_argument("--agent", choices=("codex", "omp", "claude"), default="codex")
     parser.add_argument(
-        "--pull",
-        action="store_true",
-        help="Pull the main checkout with --ff-only before the automatic build.",
-    )
-    parser.add_argument(
         "--delivery",
         choices=("local", "pr"),
         default="local",
@@ -175,7 +170,7 @@ def main(argv=None):
         os.fsdecode(worktrees.split(b"\nHEAD ", 1)[0]).removeprefix("worktree ")
     )
     prepared = subprocess.run(
-        ["./build.sh", *(["--pull"] if args.pull else [])],
+        ["./build.sh"],
         cwd=main_root,
         check=False,
     )
