@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import ast
 import json
 import os
 import subprocess
@@ -169,11 +168,12 @@ def main(argv=None):
                 "verification evidence, and stop without committing, pushing, or opening a PR."
             )
     worktrees = subprocess.check_output(
-        ["git", "-c", "core.quotePath=false", "worktree", "list", "--porcelain"],
+        ["git", "worktree", "list", "--porcelain"],
         cwd=scripts.parent,
     )
-    main_path = os.fsdecode(worktrees.split(b"\n", 1)[0]).removeprefix("worktree ")
-    main_root = Path(ast.literal_eval(main_path) if main_path.startswith('"') else main_path)
+    main_root = Path(
+        os.fsdecode(worktrees.split(b"\nHEAD ", 1)[0]).removeprefix("worktree ")
+    )
     prepared = subprocess.run(
         ["./build.sh", *(["--pull"] if args.pull else [])],
         cwd=main_root,
