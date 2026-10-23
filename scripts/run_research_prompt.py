@@ -168,11 +168,11 @@ def main(argv=None):
                 "verification evidence, and stop without committing, pushing, or opening a PR."
             )
     worktrees = subprocess.check_output(
-        ["git", "worktree", "list", "--porcelain", "-z"],
+        ["git", "worktree", "list", "--porcelain"],
         cwd=scripts.parent,
     )
     main_root = Path(
-        os.fsdecode(worktrees.split(b"\0", 1)[0]).removeprefix("worktree ")
+        os.fsdecode(worktrees.split(b"\nHEAD ", 1)[0]).removeprefix("worktree ")
     )
     prepared = subprocess.run(
         ["./build.sh", *(["--pull"] if args.pull else [])],
