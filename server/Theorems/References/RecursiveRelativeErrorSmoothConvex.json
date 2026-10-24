@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
+  "searched_at": "2026-10-24T06:17:28.246609+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 4 \\cdot \\sqrt{2 + \\frac{L \\cdot R^{2}}{\\varepsilon}} \\cdot \\exp\\left(32 \\cdot \\left(1 + \\sqrt{\\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)}\\right) \\cdot \\log\\left(32 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈4 * √(2 + p.L * p.R ^ 2 / p.ε) *\n      Real.exp (32 * (1 + √(Real.log (2 + p.L * p.R ^ 2 / p.ε))) * Real.log (32 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 4 \\cdot \\sqrt{2 + \\frac{L \\cdot R^{2}}{\\varepsilon}} \\cdot \\exp\\left(32 \\cdot \\left(1 + \\sqrt{\\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)}\\right) \\cdot \\log\\left(32 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈4 * √(2 + p.L * p.R ^ 2 / p.ε) *\n      Real.exp (32 * (1 + √(Real.log (2 + p.L * p.R ^ 2 / p.ε))) * Real.log (32 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RecursiveRelativeErrorConvex",
+      "namespace": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
+      "setup": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RecursiveRelativeErrorSmoothConvex.spec\n  LongTails.Theorems.RecursiveRelativeErrorConvex.budget",
+      "theorem": "LongTails.Theorems.RecursiveRelativeErrorConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RecursiveRelativeErrorConvex",
+      "theorem": "LongTails.Theorems.RecursiveRelativeErrorConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on a real Hilbert space E. For every x,y, f(x)+⟨∇f(x),y−x⟩ ≤ f(y) ≤ f(x)+⟨∇f(x),y−x⟩+(L/2)‖y−x‖². A global minimizer x⋆ exists with ‖x₀−x⋆‖≤R; strong convexity is not required.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Public."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "One oracle accepts x∈E and returns g∈E satisfying ‖g−∇f(x)‖≤α‖∇f(x)‖ for every history, query, and seed. Function values are not supplied. Answers may depend on the full history, and oracle seeds may be dependent.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: Oracle."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "No unbiasedness or mean-zero condition is imposed; arbitrary bias is permitted within the pointwise relative-error bound.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.admissible."
+      },
+      {
+        "label": "relative_error",
+        "details": "The error bound is pointwise relative to the true gradient norm. With Q=2+LR²/ε, validity requires 0≤α<1 and α≤exp(−8(1+√log Q))/100.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.valid and spec.admissible; LongTails/Setups/RecursiveRelativeErrorSmoothConvex.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary complete real inner-product space, with no finite-dimensional restriction. E, L, x₀, α, R, and ε are public; L>0, R≥0, and ε>0. The objective and its minimizer are hidden.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Public; LongTails/Setups/RelativeErrorSmoothConvex.lean: Public, spec.Params, spec.publicInput, spec.Instance, and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x∈E satisfying f(x)−f(x⋆)≤ε for a global minimizer x⋆. There is no requirement that the output be a queried point.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the product of the algorithm-seed law and oracle-seed law, after execution with the supplied fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines smooth convex Hilbert-space optimization with arbitrary pointwise relative gradient errors and an accuracy-dependent exponential restriction on their magnitude. Repository implementations and proofs were not inspected; no qualifying reference is a search outcome, not a novelty claim."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.RecursiveRelativeErrorConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RecursiveRelativeErrorConvex",
+          "theorem": "LongTails.Theorems.RecursiveRelativeErrorConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

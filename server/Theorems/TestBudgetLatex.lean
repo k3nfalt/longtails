@@ -5,6 +5,7 @@ open Lean Elab Command Term
 namespace BudgetLatexTests
 structure Public where
   L : ℝ
+  start : ℝ
 structure Params where
   data : Public
   dimension : ℕ+
@@ -23,6 +24,13 @@ run_cmd liftTermElabM do
   unless result == "dimension" do
     throwError "Unexpected positive natural parameter: {result}"
 end BudgetLatexTests
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (p : BudgetLatexTests.Params) => ‖p.data.start‖ ^ 2)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\left\\lVert start \\right\\rVert^{2}" do
+    throwError "Unexpected squared norm budget: {result}"
 
 set_option hygiene false in
 run_cmd liftTermElabM do

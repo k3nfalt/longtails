@@ -85,6 +85,27 @@
   },
   {
     "budget": {
+      "latex": "\\left(\\left\\lceil \\frac{64 \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+      "oracle": 0,
+      "type": "LongTails.Setups.BatchedSpectralSmooth.spec.Params → ℕ",
+      "value": "fun p => (⌈64 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+    },
+    "budgets": [
+      {
+        "latex": "\\left(\\left\\lceil \\frac{64 \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.BatchedSpectralSmooth.spec.Params → ℕ",
+        "value": "fun p => (⌈64 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+      }
+    ],
+    "module": "LongTails.Theorems.MuonNoiseSeparation",
+    "namespace": "LongTails.Setups.BatchedSpectralSmooth",
+    "setup": "LongTails.Setups.BatchedSpectralSmooth",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.BatchedSpectralSmooth.spec LongTails.Theorems.MuonNoiseSeparation.budget",
+    "theorem": "LongTails.Theorems.MuonNoiseSeparation.result"
+  },
+  {
+    "budget": {
       "latex": "2 \\cdot \\left\\lceil \\frac{180 \\cdot \\gamma^{4} \\cdot \\delta^{4} \\cdot \\left(\\max\\left\\{ Lx, Ly \\right\\} + Lxy\\right)^{2} \\cdot R^{2}}{\\left(\\gamma - 1\\right)^{3} \\cdot \\varepsilon^{2}} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.BlockSmoothConvexConcave.spec.Params → ℕ",
@@ -320,6 +341,27 @@
     "setup": "LongTails.Setups.CompositeLipschitzHessian",
     "statement": "OracleTemplate.Convergence LongTails.Setups.CompositeLipschitzHessian.spec\n  LongTails.Theorems.CompositeLazyCubicAcceleration.budget",
     "theorem": "LongTails.Theorems.CompositeLazyCubicAcceleration.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left(B + 1\\right) \\cdot \\left\\lceil \\frac{64 \\cdot \\kappa \\cdot G^{2} \\cdot R^{2} \\cdot \\left(1 + \\exp\\left(c1 - c0\\right) \\cdot \\varepsilon\\right) + \\frac{32 \\cdot \\min\\left\\{ 2 \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\sigma^{2}, \\exp\\left(2 \\cdot \\left(c1 - c0\\right)\\right) \\cdot G^{2} \\right\\} \\cdot R^{2} \\cdot \\left(1 + \\varepsilon\\right)}{B} + \\frac{8 \\cdot n \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\left(1 + 64 \\cdot \\left(1 + \\left(c1 - c0\\right)\\right) \\cdot \\left(\\kappa - 1\\right)\\right) \\cdot \\left(1 + \\varepsilon\\right)}{B}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.CompositionalEntropicRisk.spec.Params → ℕ",
+      "value": "fun q =>\n  (q.B + 1) *\n    ⌈(64 * q.κ * q.G ^ 2 * q.R ^ 2 * (1 + Real.exp (q.c1 - q.c0) * q.ε) +\n            32 * min (2 * Real.exp (q.c1 - q.c0) * q.σ ^ 2) (Real.exp (2 * (q.c1 - q.c0)) * q.G ^ 2) * q.R ^ 2 *\n                (1 + q.ε) /\n              ↑q.B +\n          8 * ↑q.n * Real.exp (q.c1 - q.c0) * (1 + 64 * (1 + (q.c1 - q.c0)) * (q.κ - 1)) * (1 + q.ε) / ↑q.B) /\n        q.ε ^ 2⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left(B + 1\\right) \\cdot \\left\\lceil \\frac{64 \\cdot \\kappa \\cdot G^{2} \\cdot R^{2} \\cdot \\left(1 + \\exp\\left(c1 - c0\\right) \\cdot \\varepsilon\\right) + \\frac{32 \\cdot \\min\\left\\{ 2 \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\sigma^{2}, \\exp\\left(2 \\cdot \\left(c1 - c0\\right)\\right) \\cdot G^{2} \\right\\} \\cdot R^{2} \\cdot \\left(1 + \\varepsilon\\right)}{B} + \\frac{8 \\cdot n \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\left(1 + 64 \\cdot \\left(1 + \\left(c1 - c0\\right)\\right) \\cdot \\left(\\kappa - 1\\right)\\right) \\cdot \\left(1 + \\varepsilon\\right)}{B}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CompositionalEntropicRisk.spec.Params → ℕ",
+        "value": "fun q =>\n  (q.B + 1) *\n    ⌈(64 * q.κ * q.G ^ 2 * q.R ^ 2 * (1 + Real.exp (q.c1 - q.c0) * q.ε) +\n            32 * min (2 * Real.exp (q.c1 - q.c0) * q.σ ^ 2) (Real.exp (2 * (q.c1 - q.c0)) * q.G ^ 2) * q.R ^ 2 *\n                (1 + q.ε) /\n              ↑q.B +\n          8 * ↑q.n * Real.exp (q.c1 - q.c0) * (1 + 64 * (1 + (q.c1 - q.c0)) * (q.κ - 1)) * (1 + q.ε) / ↑q.B) /\n        q.ε ^ 2⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.ScentCompositionalEntropicRisk",
+    "namespace": "LongTails.Setups.CompositionalEntropicRisk",
+    "setup": "LongTails.Setups.CompositionalEntropicRisk",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.CompositionalEntropicRisk.spec\n  OracleTemplate.Scent.ScentCompositionalEntropicRisk.budget",
+    "theorem": "OracleTemplate.Scent.ScentCompositionalEntropicRisk.result"
   },
   {
     "budget": {
@@ -618,6 +660,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{4398046511104 \\cdot \\log\\left(\\frac{2}{1 - \\rho \\cdot L}\\right)}{1 - \\rho \\cdot L} \\cdot \\min\\left\\{ n \\cdot \\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}\\right), \\frac{n + \\frac{\\Lambda^{2}}{L^{2}} + \\frac{\\left(\\sqrt{n} \\cdot \\Lambda \\cdot L + \\Lambda^{2}\\right) \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}}{\\left(1 - \\rho \\cdot L\\right)^{3}} \\right\\} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.FiniteSumWeakMintyInclusion.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈4398046511104 * Real.log (2 / (1 - p.ρ * p.L)) / (1 - p.ρ * p.L) *\n      min (↑p.n * (1 + p.L ^ 2 * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)))\n        ((↑p.n + p.Λ ^ 2 / p.L ^ 2 + (√↑p.n * p.Λ * p.L + p.Λ ^ 2) * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)) /\n          (1 - p.ρ * p.L) ^ 3)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{4398046511104 \\cdot \\log\\left(\\frac{2}{1 - \\rho \\cdot L}\\right)}{1 - \\rho \\cdot L} \\cdot \\min\\left\\{ n \\cdot \\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}\\right), \\frac{n + \\frac{\\Lambda^{2}}{L^{2}} + \\frac{\\left(\\sqrt{n} \\cdot \\Lambda \\cdot L + \\Lambda^{2}\\right) \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}}{\\left(1 - \\rho \\cdot L\\right)^{3}} \\right\\} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteSumWeakMintyInclusion.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈4398046511104 * Real.log (2 / (1 - p.ρ * p.L)) / (1 - p.ρ * p.L) *\n      min (↑p.n * (1 + p.L ^ 2 * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)))\n        ((↑p.n + p.Λ ^ 2 / p.L ^ 2 + (√↑p.n * p.Λ * p.L + p.Λ ^ 2) * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)) /\n          (1 - p.ρ * p.L) ^ 3)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.VarianceReducedWeakMintyInclusion",
+    "namespace": "LongTails.Setups.FiniteSumWeakMintyInclusion",
+    "setup": "LongTails.Setups.FiniteSumWeakMintyInclusion",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumWeakMintyInclusion.spec\n  OracleTemplate.VarianceReducedWeakMintyInclusion.budget",
+    "theorem": "OracleTemplate.VarianceReducedWeakMintyInclusion.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil 2^{21} \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) + 2^{40} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right) + \\frac{2^{48} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2}}{\\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)}} + \\frac{2^{21} \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right) \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right)}{\\log\\left(\\exp\\left(1\\right) + \\frac{\\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) \\cdot \\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)}}{2^{26} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\cdot \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} + \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}} + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right) + \\left(L1 \\cdot R \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}\\right) \\cdot \\sqrt{1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right)} \\cdot \\exp\\left(-\\left(28 \\cdot \\log\\left(\\frac{\\exp\\left(1\\right) \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(\\log\\left(\\frac{\\exp\\left(1\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) + L1 \\cdot R + \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right)}{\\delta}\\right)\\right)\\right)}\\right)} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex.spec.Params → ℕ",
@@ -741,6 +804,27 @@
     "setup": "LongTails.Setups.GeneralizedLipschitzMonotone",
     "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedLipschitzMonotone.spec OracleTemplate.GeneralizedMonotone.budget",
     "theorem": "OracleTemplate.GeneralizedMonotone.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\frac{2^{100} \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(1 + L0 + L1\\right)^{10} \\cdot \\left(1 + \\sigma^{2}\\right) \\cdot \\left(1 + \\Delta\\right)^{12}}{\\left(1 - \\beta\\right)^{4} \\cdot \\varepsilon^{4}} + \\frac{2}{1 - \\beta} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.GeneralizedSmoothAdam.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈2 ^ 100 * (↑q.d + 1) ^ 2 * (1 + q.L0 + q.L1) ^ 10 * (1 + q.σ ^ 2) * (1 + q.Δ) ^ 12 / ((1 - q.β) ^ 4 * q.ε ^ 4) +\n      2 / (1 - q.β)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{2^{100} \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(1 + L0 + L1\\right)^{10} \\cdot \\left(1 + \\sigma^{2}\\right) \\cdot \\left(1 + \\Delta\\right)^{12}}{\\left(1 - \\beta\\right)^{4} \\cdot \\varepsilon^{4}} + \\frac{2}{1 - \\beta} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothAdam.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 100 * (↑q.d + 1) ^ 2 * (1 + q.L0 + q.L1) ^ 10 * (1 + q.σ ^ 2) * (1 + q.Δ) ^ 12 / ((1 - q.β) ^ 4 * q.ε ^ 4) +\n      2 / (1 - q.β)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.ExpectedGeneralizedSmoothAdam",
+    "namespace": "LongTails.Setups.GeneralizedSmoothAdam",
+    "setup": "LongTails.Setups.GeneralizedSmoothAdam",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothAdam.spec\n  OracleTemplate.ExpectedGeneralizedSmoothAdam.budget",
+    "theorem": "OracleTemplate.ExpectedGeneralizedSmoothAdam.result"
   },
   {
     "budget": {
@@ -1102,6 +1186,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{34359738368 \\cdot \\left(\\frac{upper}{lower}\\right)^{4} \\cdot \\left(\\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)^{2} \\cdot \\left(samples + 1 + \\frac{upper}{lower} \\cdot \\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)}{derivativeMargin^{2}} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.ManySampleConvolutionalPerceptron.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈34359738368 * (p.upper / p.lower) ^ 4 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2) ^ 2 *\n        (↑p.samples + 1 + p.upper / p.lower * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)) /\n      p.derivativeMargin ^ 2⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{34359738368 \\cdot \\left(\\frac{upper}{lower}\\right)^{4} \\cdot \\left(\\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)^{2} \\cdot \\left(samples + 1 + \\frac{upper}{lower} \\cdot \\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)}{derivativeMargin^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ManySampleConvolutionalPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈34359738368 * (p.upper / p.lower) ^ 4 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2) ^ 2 *\n        (↑p.samples + 1 + p.upper / p.lower * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)) /\n      p.derivativeMargin ^ 2⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.ManySampleConvolutionalPerceptronAcceleration",
+    "namespace": "LongTails.Setups.ManySampleConvolutionalPerceptron",
+    "setup": "LongTails.Setups.ManySampleConvolutionalPerceptron",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.ManySampleConvolutionalPerceptron.spec\n  OracleTemplate.ManySampleConvolutionalPerceptron.budget",
+    "theorem": "OracleTemplate.ManySampleConvolutionalPerceptron.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil \\frac{10000000000000000 \\cdot L \\cdot R^{2}}{\\alpha \\cdot \\varepsilon} \\right\\rceil_{+} + 1",
       "oracle": 0,
       "type": "LongTails.Setups.MarkovQuadraticInterpolation.spec.Params → ℕ",
@@ -1225,6 +1330,27 @@
     "setup": "LongTails.Setups.NearZeroSumGames",
     "statement": "OracleTemplate.Convergence LongTails.Setups.NearZeroSumGames.spec OracleTemplate.NearZeroSum.OwnGradients.budget",
     "theorem": "OracleTemplate.NearZeroSum.OwnGradients.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil \\frac{100000 \\cdot count \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2} + \\frac{\\left\\lVert start \\right\\rVert^{2}}{noiseScale^{2} \\cdot \\left(dimension + 1\\right)}\\right) \\cdot \\left(\\frac{2}{failure}\\right)^{5 \\cdot \\exp\\left(25000 \\cdot \\left(dimension + 1\\right)^{2} \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2}\\right)^{2}\\right)}}{failure} \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.NoisyBatchQuadraticPerceptron.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈100000 * ↑↑p.input.count *\n          ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2 +\n            ‖p.input.start‖ ^ 2 / (p.input.noiseScale ^ 2 * (↑p.input.dimension + 1))) *\n        (2 / p.failure) ^\n          (5 *\n            Real.exp\n              (25000 * (↑p.input.dimension + 1) ^ 2 *\n                ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2) ^ 2)) /\n      p.failure⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{100000 \\cdot count \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2} + \\frac{\\left\\lVert start \\right\\rVert^{2}}{noiseScale^{2} \\cdot \\left(dimension + 1\\right)}\\right) \\cdot \\left(\\frac{2}{failure}\\right)^{5 \\cdot \\exp\\left(25000 \\cdot \\left(dimension + 1\\right)^{2} \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2}\\right)^{2}\\right)}}{failure} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NoisyBatchQuadraticPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈100000 * ↑↑p.input.count *\n          ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2 +\n            ‖p.input.start‖ ^ 2 / (p.input.noiseScale ^ 2 * (↑p.input.dimension + 1))) *\n        (2 / p.failure) ^\n          (5 *\n            Real.exp\n              (25000 * (↑p.input.dimension + 1) ^ 2 *\n                ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2) ^ 2)) /\n      p.failure⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.NoisyBatchQuadraticPerceptronGlobal",
+    "namespace": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
+    "setup": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.NoisyBatchQuadraticPerceptron.spec\n  OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.budget",
+    "theorem": "OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.result"
   },
   {
     "budget": {
@@ -1433,6 +1559,27 @@
     "setup": "LongTails.Setups.QuasarSignedBias",
     "statement": "OracleTemplate.Convergence LongTails.Setups.QuasarSignedBias.spec OracleTemplate.QuasarSignedBias.budget",
     "theorem": "OracleTemplate.QuasarSignedBias.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 4 \\cdot \\sqrt{2 + \\frac{L \\cdot R^{2}}{\\varepsilon}} \\cdot \\exp\\left(32 \\cdot \\left(1 + \\sqrt{\\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)}\\right) \\cdot \\log\\left(32 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈4 * √(2 + p.L * p.R ^ 2 / p.ε) *\n      Real.exp (32 * (1 + √(Real.log (2 + p.L * p.R ^ 2 / p.ε))) * Real.log (32 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 4 \\cdot \\sqrt{2 + \\frac{L \\cdot R^{2}}{\\varepsilon}} \\cdot \\exp\\left(32 \\cdot \\left(1 + \\sqrt{\\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)}\\right) \\cdot \\log\\left(32 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈4 * √(2 + p.L * p.R ^ 2 / p.ε) *\n      Real.exp (32 * (1 + √(Real.log (2 + p.L * p.R ^ 2 / p.ε))) * Real.log (32 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.RecursiveRelativeErrorConvex",
+    "namespace": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
+    "setup": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.RecursiveRelativeErrorSmoothConvex.spec\n  LongTails.Theorems.RecursiveRelativeErrorConvex.budget",
+    "theorem": "LongTails.Theorems.RecursiveRelativeErrorConvex.result"
   },
   {
     "budget": {
@@ -1737,6 +1884,27 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil 2 \\cdot \\left(1 + \\frac{2 \\cdot L}{\\mu}\\right)^{\\frac{\\log\\left(2\\right)}{\\log\\left(1 + \\sqrt{2}\\right)}} \\cdot \\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) \\cdot \\left(\\log_{2}\\left(1 + \\frac{2 \\cdot L}{\\mu}\\right) + \\log_{2}\\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) + 3\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.SmoothConvexQuadraticGrowth.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈2 * (1 + 2 * p.L / p.μ) ^ (Real.log 2 / Real.log (1 + √2)) * (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) *\n      (Real.logb 2 (1 + 2 * p.L / p.μ) + Real.logb 2 (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) + 3)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 2 \\cdot \\left(1 + \\frac{2 \\cdot L}{\\mu}\\right)^{\\frac{\\log\\left(2\\right)}{\\log\\left(1 + \\sqrt{2}\\right)}} \\cdot \\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) \\cdot \\left(\\log_{2}\\left(1 + \\frac{2 \\cdot L}{\\mu}\\right) + \\log_{2}\\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) + 3\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothConvexQuadraticGrowth.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 * (1 + 2 * p.L / p.μ) ^ (Real.log 2 / Real.log (1 + √2)) * (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) *\n      (Real.logb 2 (1 + 2 * p.L / p.μ) + Real.logb 2 (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) + 3)⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.UniversalSilverQuadraticGrowth",
+    "namespace": "LongTails.Setups.SmoothConvexQuadraticGrowth",
+    "setup": "LongTails.Setups.SmoothConvexQuadraticGrowth",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothConvexQuadraticGrowth.spec\n  LongTails.Theorems.UniversalSilverQuadraticGrowth.budget",
+    "theorem": "LongTails.Theorems.UniversalSilverQuadraticGrowth.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil 16 \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right) \\cdot \\log\\left(1 + \\frac{15 \\cdot R^{2} + 45 \\cdot V^{2} \\cdot \\left(\\frac{2 \\cdot L}{\\mu} + \\frac{99 \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\varepsilon}\\right)^{2}}{\\varepsilon}\\right) \\right\\rceil_{+} + H + 1",
       "oracle": 0,
       "type": "LongTails.Setups.SmoothDriftStronglyConvex.spec.Params → ℕ",
@@ -1818,6 +1986,28 @@
     "setup": "LongTails.Setups.StochasticCohypomonotoneInclusion",
     "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticCohypomonotoneInclusion.spec\n  OracleTemplate.StochasticCohypomonotone.budget",
     "theorem": "OracleTemplate.StochasticCohypomonotone.result"
+  },
+  {
+    "budget": null,
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 2^{128} \\cdot \\left(\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot \\left(1 + L1 \\cdot R\\right)^{2} \\cdot R}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}\\right)\\right)^{3} \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}}{\\delta}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 128 * ((q.L0 + q.L1 * q.G) * (1 + q.L1 * q.R) ^ 2 * q.R / q.ε + (1 + q.L1 * q.R) ^ 4 + q.σ ^ 2 / q.ε ^ 2) *\n        (1 + Real.log (2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε)) ^ 3 *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε) / q.δ))⌉₊"
+      },
+      {
+        "latex": "\\left\\lceil 2^{128} \\cdot \\left(\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot \\left(1 + L1 \\cdot R\\right)^{2} \\cdot R}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}\\right)\\right)^{3} \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}}{\\delta}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 1,
+        "type": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 128 * ((q.L0 + q.L1 * q.G) * (1 + q.L1 * q.R) ^ 2 * q.R / q.ε + (1 + q.L1 * q.R) ^ 4 + q.σ ^ 2 / q.ε ^ 2) *\n        (1 + Real.log (2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε)) ^ 3 *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε) / q.δ))⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.StochasticConstrainedGeneralizedMonotone",
+    "namespace": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
+    "setup": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticConstrainedGeneralizedMonotone.spec\n  OracleTemplate.StochasticConstrainedGeneralizedMonotone.budget",
+    "theorem": "OracleTemplate.StochasticConstrainedGeneralizedMonotone.result"
   },
   {
     "budget": {
@@ -2071,6 +2261,27 @@
     "setup": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.ThirdDerivativeSmoothNonconvex.spec\n  LongTails.Theorems.LazyQuarticHessianTradeoff.budget",
     "theorem": "LongTails.Theorems.LazyQuarticHessianTradeoff.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 24 \\cdot \\left(\\frac{radius \\cdot \\log\\left(ratio\\right)}{slowLower} + 1\\right) \\cdot \\left(\\frac{radius}{gain} + 1\\right)^{2} \\cdot \\left(3 + \\frac{2 \\cdot couplingUpper \\cdot \\log\\left(ratio\\right)}{slowLower} + \\log\\left(size \\cdot \\left(\\frac{1}{wedgeLower} + \\frac{8 \\cdot radius^{3}}{couplingLower^{3} \\cdot depthLower}\\right)\\right)\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.TwoSampleQuadraticPerceptron.spec.Params → ℕ",
+      "value": "fun p =>\n  ⌈24 * (p.radius * Real.log p.ratio / p.slowLower + 1) * (p.radius / p.gain + 1) ^ 2 *\n      (3 + 2 * p.couplingUpper * Real.log p.ratio / p.slowLower +\n        Real.log (p.size * (p.wedgeLower⁻¹ + 8 * p.radius ^ 3 / (p.couplingLower ^ 3 * p.depthLower))))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 24 \\cdot \\left(\\frac{radius \\cdot \\log\\left(ratio\\right)}{slowLower} + 1\\right) \\cdot \\left(\\frac{radius}{gain} + 1\\right)^{2} \\cdot \\left(3 + \\frac{2 \\cdot couplingUpper \\cdot \\log\\left(ratio\\right)}{slowLower} + \\log\\left(size \\cdot \\left(\\frac{1}{wedgeLower} + \\frac{8 \\cdot radius^{3}}{couplingLower^{3} \\cdot depthLower}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.TwoSampleQuadraticPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈24 * (p.radius * Real.log p.ratio / p.slowLower + 1) * (p.radius / p.gain + 1) ^ 2 *\n      (3 + 2 * p.couplingUpper * Real.log p.ratio / p.slowLower +\n        Real.log (p.size * (p.wedgeLower⁻¹ + 8 * p.radius ^ 3 / (p.couplingLower ^ 3 * p.depthLower))))⌉₊"
+      }
+    ],
+    "module": "LongTails.Theorems.TwoSampleQuadraticPerceptronAcceleration",
+    "namespace": "LongTails.Setups.TwoSampleQuadraticPerceptron",
+    "setup": "LongTails.Setups.TwoSampleQuadraticPerceptron",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.TwoSampleQuadraticPerceptron.spec\n  OracleTemplate.TwoSampleQuadraticPerceptron.budget",
+    "theorem": "OracleTemplate.TwoSampleQuadraticPerceptron.result"
   },
   {
     "budget": {

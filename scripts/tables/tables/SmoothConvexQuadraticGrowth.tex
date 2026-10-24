@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth convex optimization with quadratic growth: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothConvexQuadraticGrowth.lean}{SmoothConvexQuadraticGrowth}.}\label{tab:SmoothConvexQuadraticGrowth}
+\parbox{\linewidth}{\footnotesize Convex $f$ on a real Hilbert space has an exact $L$-Lipschitz gradient, $L,\mu,\varepsilon>0$, and a minimizer $x_\star$ with $\|x_0-x_\star\|\le R$, $R\ge0$. For every $x$, some minimizer $z$ satisfies $f(x)-f(z)\ge\frac{\mu}{2}\|x-z\|^2$. The setup restricts algorithms to GD with predetermined positive stepsizes and current-iterate output. Target: $f(x_K)-f(x_\star)\le\varepsilon$ almost surely. In \textbf{(1)}, updates use only $L$; $\mu,R,\varepsilon$ enter the stopping budget.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/UniversalSilverQuadraticGrowth.lean}{Universal\allowbreak Silver\allowbreak Quadratic\allowbreak Growth} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/UniversalSilverQuadraticGrowth.md}{(review)}
+& $\mathcal{O}\!\left((1+\kappa)^p\ell\right.$\newline $\left.{}\cdot[1+\log(1+\kappa)+\log\ell]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Restarted AGD \citep[Thm.~2, Sec.~3.4]{scqgFercoqQu2017}
+& $\mathcal{O}\!\left(\sqrt{1+\kappa}\,[\ell+\log(1+\kappa)]\right)$\newline Includes restart tests; smooth unconstrained specialization in $\mathbb R^d$.
+& \textbf{(1)}: Predetermined GD with anytime last-iterate accuracy; \textbf{(2)} adaptively restarts AGD and returns a stopped output. No complexity improvement; updates already need no $\mu$.
+& \textbf{(1)}: Exponent $p$ instead of $1/2$, with extra logarithms; requires global QG instead of initial-sublevel QG. \\
+\midrule
+\textbf{(3)} Anytime GD \citep[Thm.~11, arXiv v2]{scqgZhang2025}
+& $\mathcal{O}(\kappa^q\ell)$\newline Special case: $\mu$-strong convexity in $\mathbb R^d$.
+& \textbf{(1)}: Scope: QG instead of strong convexity. Adaptivity: no $\mu$. Rate on overlap: $p\approx0.786$ instead of $q\approx0.893$; total gain when $\kappa^{q-p}\gg1+\log\kappa+\log\ell$.
+& \textbf{(1)}: Extra $1+\log\kappa+\log\ell$ factor. Crossover depends on unspecified constants; the unit-constant illustration exceeds $\kappa\approx10^{15}$. \\
+\midrule
+\textbf{(4)} Silver GD \citep[Thm.~1.1]{scqgAltschulerParrilo2023}
+& $\mathcal{O}(\kappa^p\ell)$\newline Special case: $\mu$-strong convexity; prescribed horizons. Distance contraction converted to objective gap.
+& \textbf{(1)}: Scope: QG instead of strong convexity. Adaptivity: neither $\kappa$ nor horizon needed; anytime last-iterate accuracy instead of prescribed-horizon accuracy.
+& \textbf{(1)}: Extra $1+\log\kappa+\log\ell$ factor on the strongly convex overlap. \\
+\midrule
+\textbf{(5)} Restarted long-step GD \citep[Remark~3]{scqgGrimmer2024}
+& $\mathcal{O}((1+\kappa)^p\ell)$\newline Derived bound: convex PL restart in $\mathbb R^d$; QG implies PL up to universal factors. Block-end objective accuracy.
+& \textbf{(1)}: No $\mu$ needed to choose block lengths; anytime last-iterate accuracy instead of block-end accuracy. Matches the condition-number exponent; no QG scope gain.
+& \textbf{(1)}: Extra $1+\log(1+\kappa)+\log\ell$ factor. \\
+\midrule
+\textbf{(6)} Constant-step GD, $1/L$ \citep[Sec.~2.1]{scqgFercoqQu2017}
+& $\mathcal{O}((1+\kappa)\ell)$\newline QG/PL specialization of the classical proximal-gradient bound.
+& \textbf{(1)}: Rate: $\kappa^{0.786}$ instead of $\kappa$, up to logarithms; total gain when $\kappa^{1-p}\gg1+\log\kappa+\log\ell$. No adaptivity gain: \textbf{(6)} is already anytime and $\mu$-free.
+& \textbf{(1)}: Larger leading constants and logarithmic overhead; savings require sufficiently large $\kappa$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count exact gradient calls. $\kappa=L/\mu$, $\ell=1+\log(1+LR^2/\varepsilon)$, $p=\log 2/\log(1+\sqrt2)$, $q=(1+p)/2$. GD: gradient descent; AGD: accelerated gradient descent; QG: quadratic growth; PL: Polyak--\L{}ojasiewicz inequality. Anytime: accuracy at every sufficiently large iteration; \textbf{(1)} exports the stated stopping budget.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

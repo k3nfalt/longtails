@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Batched Muon under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BatchedSpectralSmooth.lean}{BatchedSpectralSmooth}.}\label{tab:BatchedSpectralSmooth}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^{m\times n}\to\mathbb{R}$ satisfies $\|\nabla f(X)-\nabla f(Y)\|_*\le L\|X-Y\|_{\mathrm{op}}$, $f\ge f_{\min}$ and $f(X_0)-f_{\min}\le\Delta$, with $L,\varepsilon>0$ and $\Delta,s\ge0$. The jointly measurable, integrable oracle $G(X,\xi)$ uses IID samples and satisfies $\mathbb{E}G(X,\xi)=\nabla f(X)$. For a fixed orthonormal basis $(b_i)_{i=1}^m$ and $\sigma_i\ge0$, $\mathbb{E}\|[G(X,\xi)-\nabla f(X)]^\top b_i\|_2^2\le\sigma_i^2$ and $\sum_i\sigma_i\le s$. The setup requires constant-step, momentum-free batched polar updates and a uniformly selected iterate $\widehat X$; the target is $\mathbb{E}\|\nabla f(\widehat X)\|_*\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MuonNoiseSeparation.lean}{Muon\allowbreak Noise\allowbreak Separation} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MuonNoiseSeparation.md}{(review)}
+& $\mathcal{O}\!\left((1+s^2/\varepsilon^2)(1+L\Delta/\varepsilon^2)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Muon \citep[Theorem 4, v1]{bssTaoYuZhang2026v1}
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta\|\Sigma\|_*^2}{\varepsilon^4}\right)$.
+Restricted to $\mathbb{E}[NN^\top\mid\mathcal F]\preceq\Sigma^2$.
+& \textbf{(1)}: Row-profile extension. For varying-sign rank-one noise, $s=r=m\le n$, $\|\Sigma\|_*\ge\sqrt r\,s$: if $r\ge\varepsilon$, $L\Delta\ge\varepsilon^2$, costs are $\mathcal{O}(L\Delta r^2/\varepsilon^4)$ versus $\mathcal{O}(L\Delta r^3/\varepsilon^4)$. This improves the statement's certification, not the method; see \textbf{(3)}.
+& \textbf{(1)}: At $s=\|\Sigma\|_*$, extra $s^2/\varepsilon^2$ cost when $s>\varepsilon$, $2L\Delta\le\varepsilon^2$. Requires IID samples and gradient-Lipschitz smoothness; \textbf{(2)} allows conditional sampling and a quadratic remainder bound. \\
+\midrule
+\textbf{(3)} Derived bound \citep[Appendix D.1]{bssTaoYuZhang2026v1}
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta s^2}{\varepsilon^4}\right)$.
+Same row-profile model; substitute $\mathbb{E}\|\overline N_B\|_*\le s/\sqrt B$.
+& \textbf{(1)}: Matches known rate for $L\Delta\ge\varepsilon^2$; formal verification with explicit constants. Row-profile substitution leaves the descent argument unchanged.
+& \textbf{(1)}: Extra $s^2/\varepsilon^2$ cost when $s>\varepsilon$, $2L\Delta\le\varepsilon^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls, including every batch sample. $\|\cdot\|_*$: nuclear norm; $\|\cdot\|_{\mathrm{op}}$: spectral norm; $N=G-\nabla f$: noise; $\overline N_B$: mean of $B$ noise samples; $\Sigma$: fixed positive semidefinite covariance envelope; $\mathcal F$: sampling history; $r$: number of rows in the varying-sign example.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

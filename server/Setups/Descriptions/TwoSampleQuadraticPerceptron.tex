@@ -1,0 +1,129 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Two-Sample Quadratic Perceptron}
+We study strict separation of two labeled vectors $b_+,b_-\in\mathbb{R}^d$ by a quadratic perceptron with score $F(b;\theta)$. The parameter $\theta$ belongs to $\mathbb{R}^d\times\mathbb{R}$ for the two-layer model or $\mathbb{R}^2\times\mathbb{R}^d$ for the convolutional model. The data have norms at most $R>0$ and satisfy model-specific geometric and spectral bounds; a given initialization $\theta^0$ satisfies signed wedge, depth, and size conditions. The oracle returns both signed scores and their parameter-gradient directions exactly. A fixed positive-step perceptron updates the first misclassified sample, prioritizing $b_+$. The goal is an output $\bar{\theta}$ with $F(b_+;\bar{\theta})>0$ and $F(b_-;\bar{\theta})<0$ for every realization.
+
+Let $d\in\mathbb{N}_0$, with Euclidean inner product and norm on the feature space $\mathbb{R}^d$. Write $\mathbf{1}\in\mathbb{R}^d$ for the all-ones vector and $S$ for the cyclic shift, so that $(Sb)_i=b_{i-1\bmod d}$ when $d>0$; in dimension zero, $S$ is the unique map. The two scores are
+\[
+\begin{aligned}
+F(b;(w,a))&=a\langle w,b\rangle
+&&\text{(two-layer)},\\
+F(b;((u,v),w))&=u\langle b,w\rangle+v\langle Sb,w\rangle
+&&\text{(convolutional)}.
+\end{aligned}
+\]
+Their parameter-gradient directions, in the same coordinate order, are
+\[
+\begin{aligned}
+G(b;(w,a))&=(ab,\langle w,b\rangle),\\
+G(b;((u,v),w))&=((\langle b,w\rangle,\langle Sb,w\rangle),ub+vSb).
+\end{aligned}
+\]
+The algorithm receives only the model, $d$, $R$, and $\theta^0$. The remaining parameters introduced below may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Data geometry]
+Both samples satisfy $\|b_+\|\leq R$ and $\|b_-\|\leq R$.
+For the two-layer model, define
+\[
+\begin{aligned}
+e_A&=\frac{b_+}{\|b_+\|},&
+n&=b_--\langle b_-,e_A\rangle e_A,&
+e_B&=\frac{n}{\|n\|}.
+\end{aligned}
+\]
+We require $\langle b_+,b_-\rangle>0$ and $n\neq0$.
+For the convolutional model, define the mean level and the centered directions by
+\[
+\begin{aligned}
+\ell(b)&=\frac{\langle b,\mathbf{1}\rangle}{d},&
+\widetilde b_-&=b_--\ell(b_-)\mathbf{1},\\
+h_+&=\widetilde b_-+S\widetilde b_-,&
+h_-&=\widetilde b_--S\widetilde b_-.
+\end{aligned}
+\]
+We require
+\[
+b_+=\ell(b_+)\mathbf{1},\qquad
+\ell(b_+)>0,\qquad \ell(b_-)>0,\qquad h_+\neq0.
+\]
+The admissible data necessarily have $d>0$; all mean levels above are taken in this case.
+\end{assumption}
+
+\begin{assumption}[Spectral bounds]
+Let $g>0$, $0<c_-\leq c_+$, and $s_->0$. Define the model-dependent quantities
+\[
+(\lambda_1,\lambda_2,c,s)=
+\begin{cases}
+(\|b_+\|,\langle b_-,e_A\rangle,\|n\|,0),
+&\text{two-layer},\\
+(\ell(b_+)\sqrt{2d},\ell(b_-)\sqrt{2d},
+\|h_+\|/\sqrt{2},\|h_-\|/\sqrt{2}),
+&\text{convolutional}.
+\end{cases}
+\]
+They satisfy
+\[
+\lambda_1\geq g,\qquad \lambda_2\geq g,\qquad
+c_-\leq c\leq c_+.
+\]
+For the convolutional model, additionally $s\geq s_-$.
+\end{assumption}
+
+\begin{assumption}[Initialization geometry]
+Let $\rho\geq1$ and $\omega,\delta,M>0$.
+For the given starting point, define coordinates $(p,q,z,r,y)$ as follows. In the two-layer model, with $\theta^0=(w^0,a^0)$, set
+\[
+p=a^0,\qquad q=\langle w^0,e_A\rangle,\qquad
+z=\langle w^0,e_B\rangle,\qquad r=y=0.
+\]
+In the convolutional model, with $\theta^0=((u^0,v^0),w^0)$, set
+\[
+\begin{aligned}
+p&=\frac{u^0+v^0}{\sqrt{2}},&
+q&=\frac{\langle w^0,\mathbf{1}\rangle}{\sqrt d},&
+z&=\frac{\langle w^0,h_+\rangle}{\|h_+\|},\\
+r&=\frac{u^0-v^0}{\sqrt{2}},&
+y&=\frac{\langle w^0,h_-\rangle}{\|h_-\|}.
+\end{aligned}
+\]
+Writing $\sigma=-\operatorname{sgn}(z)$, we require
+\[
+\begin{aligned}
+|r+y|&\leq\rho|r-y|,& |z|&\geq\delta,\\
+\sigma(p+q)&\geq\omega,& \sigma(p-q)&\geq0,\\
+2\sigma p+2|z|&\leq M.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze the two-sample quadratic perceptron with a constant step size $\gamma>0$. At any query point $\theta$, one oracle call returns the tuple
+\[
+\bigl(F(b_+;\theta),\ G(b_+;\theta),\
+-F(b_-;\theta),\ -G(b_-;\theta)\bigr).
+\]
+Starting at the supplied $\theta^0$, the method follows
+\[
+\theta^{k+1}=
+\begin{cases}
+\theta^k+\gamma G(b_+;\theta^k),
+& F(b_+;\theta^k)\leq0,\\
+\theta^k-\gamma G(b_-;\theta^k),
+& F(b_+;\theta^k)>0,\ F(b_-;\theta^k)\geq0,\\
+\theta^k,
+& F(b_+;\theta^k)>0,\ F(b_-;\theta^k)<0.
+\end{cases}
+\]
+The step size is fixed throughout the run and may depend only on the available inputs. After $K\in\mathbb{N}_0$ oracle calls, the output is the current iterate $\bar{\theta}=\theta^K$. The required accuracy is strict separation,
+\[
+F(b_+;\bar{\theta})>0,
+\qquad
+F(b_-;\bar{\theta})<0,
+\]
+for every realization of any algorithm or oracle randomness.
+\end{document}

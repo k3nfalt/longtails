@@ -62,6 +62,8 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
   | ``HMul.hMul => binary args " \\cdot " 70 .left
   | ``HDiv.hDiv => return .frac (← latexPP args[args.size - 2]!) (← latexPP args.back!)
   | ``HPow.hPow => return (sized (← latexPP args[args.size - 2]!)).sup (← latexPP args.back!)
+  | ``Norm.norm => return .atomString ("\\left\\lVert " ++
+      (← latexPP args.back!).latex.1 ++ " \\right\\rVert")
   | ``Real.sqrt => return .ofString ("\\sqrt{" ++ (← latexPP args.back!).latex.1 ++ "}")
   | ``Real.log => return .ofString ("\\log\\left(" ++
       (← latexPP args.back!).latex.1 ++ "\\right)")

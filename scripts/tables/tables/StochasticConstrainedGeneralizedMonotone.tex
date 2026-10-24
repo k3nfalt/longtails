@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic constrained generalized-monotone variational inequalities: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean}{StochasticConstrainedGeneralizedMonotone}.}\label{tab:StochasticConstrainedGeneralizedMonotone}
+\parbox{\linewidth}{\footnotesize A finite-dimensional real inner-product space; convex $X$ with exact projection and $x_0\in X$; continuous, globally monotone $F$ satisfying $\|F(x)-F(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|F(z)\|)\|x-y\|$. A VI solution $x^\star\in X$ satisfies $\|x_0-x^\star\|\le R$ and $\|F(x^\star)\|\le G$. Jointly measurable, integrable stochastic evaluations satisfy $\int g(x,\omega)\,dp=F(x)$ and $\int\|g(x,\omega)-F(x)\|^2\,dp\le\sigma^2$, with IID samples of law $p$ under $P$. Public parameters satisfy $L_0,R,\varepsilon>0$, $L_1,G,\sigma\ge0$, $0<\delta<1$. Target: a measurable output $Y$ with $P\{Y\in X,\ \exists v\in N_X(Y):\|F(Y)+v\|\le\varepsilon\}\ge1-\delta$. Costs count all operator samples plus projections.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticConstrainedGeneralizedMonotone.lean}{Stochastic\allowbreak Constrained\allowbreak Generalized\allowbreak Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticConstrainedGeneralizedMonotone.md}{(review)}
+& $\mathcal{O}\!\left(\left[\frac{(L_0+L_1G)(1+L_1R)^2R}{\varepsilon}\right.\right.$\newline
+$\left.\left.{}+(1+L_1R)^4+\frac{\sigma^2}{\varepsilon^2}\right]\ell^3(\ell+\log(1/\delta))\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} AR+SOE \citep[Thm.~2.2]{sciJiLanZhu2026v2}
+& $\mathcal{O}\!\left(\frac{L_0R}{\varepsilon}h(\varepsilon)+\frac{\sigma^2}{\varepsilon^2}j(\varepsilon)^3h(\varepsilon)^2\right)$\newline
+$\sqrt{\mathbb{E}[r(Y)^2]}\le\varepsilon$; $L_1=0$, $\varepsilon\le L_0R$.
+& \textbf{(1)}: Scope extends to $L_1>0$ with polynomial $L_1R$ dependence. Matches polynomial accuracy dependence at $L_1=0$, up to logarithms.
+& \textbf{(1)}: Extra logarithmic overhead; high-probability accuracy does not supply \textbf{(2)}'s mean-square residual guarantee. \\
+\midrule
+\textbf{(3)} Derived bound: \citep[Thm.~2.2]{sciJiLanZhu2026v2}, Markov conversion
+& $\mathcal{O}\!\left(\frac{L_0R}{\varepsilon\sqrt\delta}h(\varepsilon\sqrt\delta)\right.$\newline
+$\left.{}+\frac{\sigma^2}{\varepsilon^2\delta}j(\varepsilon\sqrt\delta)^3h(\varepsilon\sqrt\delta)^2\right)$\newline
+$P\{r(Y)\le\varepsilon\}\ge1-\delta$; $L_1=0$, $\varepsilon\sqrt\delta\le L_0R$.
+& \textbf{(1)}: At $L_1=0$, logarithmic confidence dependence replaces $\delta^{-1/2}$ and $\delta^{-1}$ factors in \textbf{(3)} only; no accuracy-exponent gain.
+& \textbf{(1)}: At fixed confidence, larger accuracy-logarithm powers: noise term $\log^4$ versus $\log^3$, apart from iterated logarithms. \\
+\midrule
+\textbf{(4)} Clipped Korpelevich \citep[Thm.~4.4]{sgmVankov2025v2}
+& Expected squared distance to the solution set; $p$-quasi-sharpness with $\mu>0$, $p\ge2$, and $0<\alpha\le\tfrac12$. No comparable residual cost.
+& \textbf{(1)}: Scope covers monotone operators without quasi-sharpness at $\alpha=1$; high-probability residual replaces expected distance. Rates are not comparable.
+& \textbf{(1)}: Requires global monotonicity; \textbf{(4)} also covers nonmonotone quasi-sharp operators. \\
+\midrule
+\textbf{(5)} EG \citep[Thm.~3.1]{scgmGreenbergLoizou2026v1}
+& $\mathcal{O}\!\left(1+\frac{(L_0+L_1G)(1+L_1R e^{L_1R})R^2}{\varepsilon}\right)$\newline
+Exact $F$ ($\sigma=0$); averaged restricted gap $\le\varepsilon$.
+& \textbf{(1)}: Scope allows finite-variance noise; polynomial rather than exponential $L_1R$ dependence, for a returned-point residual rather than averaged gap. Rates are not comparable.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N_X(y)=\{v:\langle v,w-y\rangle\le0\ \forall w\in X\}$; $r(y)=\inf_{v\in N_X(y)}\|F(y)+v\|$. $\ell=1+\log(1+(L_0+L_1G+L_1\varepsilon)(1+L_1R)R/\varepsilon)$; $j(t)=1+\log(L_0R/t)$ and $h(t)=1+\log j(t)$ for $0<t\le L_0R$. $\alpha$ is the exponent of $\|F\|$ in generalized Lipschitz continuity; $p$-quasi-sharpness means $\langle F(x),x-z\rangle\ge\mu\,\mathrm{dist}(x,X^\star)^p$ for all solutions $z$. Restricted gap: $\sup_{z\in B}\langle F(z),y-z\rangle$, where $B=X\cap\{z:\|z-x^\star\|\le cR\}$ for the fixed universal radius factor in \textbf{(5)}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

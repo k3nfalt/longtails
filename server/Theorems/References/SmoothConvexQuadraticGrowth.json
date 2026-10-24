@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.SmoothConvexQuadraticGrowth",
+  "searched_at": "2026-10-24T06:18:16.614628+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2 \\cdot \\left(1 + \\frac{2 \\cdot L}{\\mu}\\right)^{\\frac{\\log\\left(2\\right)}{\\log\\left(1 + \\sqrt{2}\\right)}} \\cdot \\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) \\cdot \\left(\\log_{2}\\left(1 + \\frac{2 \\cdot L}{\\mu}\\right) + \\log_{2}\\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) + 3\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothConvexQuadraticGrowth.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 * (1 + 2 * p.L / p.μ) ^ (Real.log 2 / Real.log (1 + √2)) * (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) *\n      (Real.logb 2 (1 + 2 * p.L / p.μ) + Real.logb 2 (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) + 3)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2 \\cdot \\left(1 + \\frac{2 \\cdot L}{\\mu}\\right)^{\\frac{\\log\\left(2\\right)}{\\log\\left(1 + \\sqrt{2}\\right)}} \\cdot \\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) \\cdot \\left(\\log_{2}\\left(1 + \\frac{2 \\cdot L}{\\mu}\\right) + \\log_{2}\\left(\\log_{2}\\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right) + 1\\right) + 3\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothConvexQuadraticGrowth.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 * (1 + 2 * p.L / p.μ) ^ (Real.log 2 / Real.log (1 + √2)) * (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) *\n      (Real.logb 2 (1 + 2 * p.L / p.μ) + Real.logb 2 (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) + 3)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.UniversalSilverQuadraticGrowth",
+      "namespace": "LongTails.Setups.SmoothConvexQuadraticGrowth",
+      "setup": "LongTails.Setups.SmoothConvexQuadraticGrowth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothConvexQuadraticGrowth.spec\n  LongTails.Theorems.UniversalSilverQuadraticGrowth.budget",
+      "theorem": "LongTails.Theorems.UniversalSilverQuadraticGrowth.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.UniversalSilverQuadraticGrowth",
+      "theorem": "LongTails.Theorems.UniversalSilverQuadraticGrowth.result",
+      "references": "- Mingrui Liu and Tianbao Yang. [Adaptive Accelerated Gradient Converging Methods under Hölderian Error Bound Condition](https://arxiv.org/pdf/1611.07609v2). 2017 (NIPS publication; preprint first posted 2016, version used: May 2017). Complexity: $O(1+\\sqrt{\\kappa}\\log^2(2\\kappa)\\log(2\\kappa LR^2/\\varepsilon))$ exact-gradient calls for adaAGC to obtain $f(x)-f_*\\le\\varepsilon$, including initialization and gradient tests; $\\kappa=L/\\mu\\ge1$, $0<\\varepsilon\\le LR^2$, initial error-bound estimate $c_0=L^{-1/2}$ and doubling factor $2$.\n- Olivier Fercoq and Zheng Qu. [Adaptive restart of accelerated gradient methods under local quadratic growth condition](https://arxiv.org/pdf/1709.02300v1). 2019 (IMA Journal of Numerical Analysis; version used: September 2017 preprint). Complexity: $O(1+\\sqrt{\\kappa}\\log(2\\kappa^2 LR^2/\\varepsilon))$ exact-gradient calls for AdaRES to obtain $f(x)-f_*\\le\\varepsilon$, including initialization and restart tests; $\\kappa=L/\\mu\\ge1$, $0<\\varepsilon\\le LR^2$, initial normalized growth estimate $1$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a globally convex, differentiable function f:E→ℝ with L-Lipschitz gradient, L>0. A minimizer exists within distance R≥0 of x0. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/SmoothConvexQuadraticGrowth.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns ∇f(x) exactly, for every history and oracle seed. No function values are supplied. Each gradient query counts as one oracle call.",
+        "evidence": "LongTails/Setups/SmoothConvexQuadraticGrowth.lean: spec.Query, spec.Reply and spec.admissible; LongTails/Template.lean: Oracle.answer and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "quadratic_growth",
+        "details": "Global quadratic growth with μ>0: for every x there exists a minimizer z such that (μ/2)‖x−z‖²≤f(x)−f(z). The minimizer may depend on x.",
+        "evidence": "LongTails/Setups/SmoothConvexQuadraticGrowth.lean: spec.valid and final conjunct of spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary real Hilbert space, without a finite-dimensional restriction. Only E, L and x0 are public; μ, R and ε are hidden. Allowed algorithms use one predetermined sequence ηt>0 in xt+1=xt−ηt∇f(xt), independent of the hidden parameters, and output the current iterate.",
+        "evidence": "LongTails/Setups/SmoothConvexQuadraticGrowth.lean: Public, Params, spec.publicInput, gradientMethod and spec.allowedAlgorithm; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "For ε>0, the final iterate after the supplied fixed gradient-call budget must satisfy f(output)−f(xstar)≤ε for a global minimizer xstar.",
+        "evidence": "LongTails/Setups/SmoothConvexQuadraticGrowth.lean: spec.successful and gradientMethod.output; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap inequality holds almost surely under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/SmoothConvexQuadraticGrowth.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The objective and quadratic-growth condition are classical. The additional requirement of a predetermined positive-step gradient sequence, independent of μ, R and ε, with final-iterate accuracy at an externally specified fixed budget makes this formulation a meaningful restricted variant."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.UniversalSilverQuadraticGrowth.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.UniversalSilverQuadraticGrowth",
+          "theorem": "LongTails.Theorems.UniversalSilverQuadraticGrowth.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

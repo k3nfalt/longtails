@@ -1,0 +1,86 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Many-Sample Convolutional Separation}
+We consider strict separation of one positive reference vector and $n\geq1$ negative sample vectors in $\mathbb{R}^d$, where $d\geq1$, using parameters $\theta=((a,b),w)\in\mathbb{R}^2\times\mathbb{R}^d$. The score is $h_\theta(x)=a\langle x,w\rangle+b\langle Sx,w\rangle$, where $S$ is the cyclic coordinate shift and $\langle\cdot,\cdot\rangle$ is the Euclidean inner product. The reference is constant across coordinates; samples have bounded positive constant backgrounds and small centered defects whose cyclic differences share a separating direction. The oracle returns a selected example's signed score and parameter direction. The goal is an output with strictly positive reference score and strictly negative scores on all samples, for every realization of algorithm randomness.
+
+Write the data as a reference $x_0\in\mathbb{R}^d$ and samples $x_1,\ldots,x_n\in\mathbb{R}^d$. Coordinates are indexed by $j=0,\ldots,d-1$, with
+\[
+(Sx)_j=x_{j-1\bmod d},
+\qquad
+u=\frac{1}{\sqrt d}(1,\ldots,1).
+\]
+All inner products and norms on $\mathbb{R}^d$ are Euclidean. The algorithm receives $d,n,g,R,\mu,\kappa$, where $g,R$ bound the background amplitudes, $\mu$ scales the defects, and $\kappa$ is a directional margin. The data and their geometric witnesses are accessed only through the oracle.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The dimensions satisfy $d,n\in\mathbb{N}_{\geq1}$, and
+\[
+0<g\leq R,\qquad \mu>0,\qquad 0<\kappa\leq1.
+\]
+Define
+\[
+\rho=\frac{g}{4R},\qquad
+\delta=\left(\frac{\mu}{4R}\right)^2,\qquad
+B=\left\lceil\frac{8}{\rho^2}\log\frac{1}{\delta}\right\rceil_++2,
+\]
+where $\lceil t\rceil_+$ is the smallest nonnegative integer at least $t$. These quantities satisfy
+\[
+\begin{aligned}
+\delta&\leq e^{-1},\\
+\delta(B+1)^3&\leq\frac{\kappa^3}{16777216},\\
+\delta(B+1)^2&\leq\frac{\kappa^2\rho^4}{16777216}.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Background and defect geometry]
+There exist amplitudes $c_0,c_1,\ldots,c_n\in\mathbb{R}$, defects $z_1,\ldots,z_n\in\mathbb{R}^d$, and a vector $v\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+x_0&=\frac{c_0}{\sqrt2}\,u,
+&g\leq c_0&\leq R,\\
+x_i&=\frac{c_i}{\sqrt2}\,u+\mu z_i,
+&g\leq c_i&\leq R
+\qquad (1\leq i\leq n).
+\end{aligned}
+\]
+The defects and common direction satisfy
+\[
+\begin{aligned}
+\langle u,z_i\rangle&=0,
+&\|z_i\|&\leq\frac{1}{\sqrt2}
+&& (1\leq i\leq n),\\
+\|v\|&=1,\\
+-\left\langle\frac{z_i-Sz_i}{\sqrt2},v\right\rangle
+&\geq\kappa
+&&&& (1\leq i\leq n).
+\end{aligned}
+\]
+\end{assumption}
+
+For oracle access, define signed examples $q_0=x_0$ and $q_i=-x_i$ for $1\leq i\leq n$. A query consists of any index $i\in\{0,\ldots,n\}$ and any parameter $\theta=((a,b),w)\in\mathbb{R}^2\times\mathbb{R}^d$. The oracle returns the exact pair
+\[
+\bigl(m_i(\theta),G_i(\theta)\bigr),
+\]
+where
+\[
+\begin{aligned}
+m_i(\theta)&=a\langle q_i,w\rangle+b\langle Sq_i,w\rangle,\\
+G_i(\theta)&=\bigl((\langle q_i,w\rangle,\langle Sq_i,w\rangle),
+                    a q_i+b Sq_i\bigr).
+\end{aligned}
+\]
+Initialization is chosen by the algorithm. After the allotted oracle calls, its output $\bar\theta\in\mathbb{R}^2\times\mathbb{R}^d$ must satisfy
+\[
+\begin{aligned}
+h_{\bar\theta}(x_0)&>0,\\
+h_{\bar\theta}(x_i)&<0\qquad (1\leq i\leq n),
+\end{aligned}
+\]
+for every realization of the algorithm's randomness.
+\end{document}

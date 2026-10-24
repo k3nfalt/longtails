@@ -1,0 +1,123 @@
+{
+  "setup": "LongTails.Setups.CompositionalEntropicRisk",
+  "searched_at": "2026-10-24T06:17:46.228697+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(B + 1\\right) \\cdot \\left\\lceil \\frac{64 \\cdot \\kappa \\cdot G^{2} \\cdot R^{2} \\cdot \\left(1 + \\exp\\left(c1 - c0\\right) \\cdot \\varepsilon\\right) + \\frac{32 \\cdot \\min\\left\\{ 2 \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\sigma^{2}, \\exp\\left(2 \\cdot \\left(c1 - c0\\right)\\right) \\cdot G^{2} \\right\\} \\cdot R^{2} \\cdot \\left(1 + \\varepsilon\\right)}{B} + \\frac{8 \\cdot n \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\left(1 + 64 \\cdot \\left(1 + \\left(c1 - c0\\right)\\right) \\cdot \\left(\\kappa - 1\\right)\\right) \\cdot \\left(1 + \\varepsilon\\right)}{B}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CompositionalEntropicRisk.spec.Params → ℕ",
+        "value": "fun q =>\n  (q.B + 1) *\n    ⌈(64 * q.κ * q.G ^ 2 * q.R ^ 2 * (1 + Real.exp (q.c1 - q.c0) * q.ε) +\n            32 * min (2 * Real.exp (q.c1 - q.c0) * q.σ ^ 2) (Real.exp (2 * (q.c1 - q.c0)) * q.G ^ 2) * q.R ^ 2 *\n                (1 + q.ε) /\n              ↑q.B +\n          8 * ↑q.n * Real.exp (q.c1 - q.c0) * (1 + 64 * (1 + (q.c1 - q.c0)) * (q.κ - 1)) * (1 + q.ε) / ↑q.B) /\n        q.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(B + 1\\right) \\cdot \\left\\lceil \\frac{64 \\cdot \\kappa \\cdot G^{2} \\cdot R^{2} \\cdot \\left(1 + \\exp\\left(c1 - c0\\right) \\cdot \\varepsilon\\right) + \\frac{32 \\cdot \\min\\left\\{ 2 \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\sigma^{2}, \\exp\\left(2 \\cdot \\left(c1 - c0\\right)\\right) \\cdot G^{2} \\right\\} \\cdot R^{2} \\cdot \\left(1 + \\varepsilon\\right)}{B} + \\frac{8 \\cdot n \\cdot \\exp\\left(c1 - c0\\right) \\cdot \\left(1 + 64 \\cdot \\left(1 + \\left(c1 - c0\\right)\\right) \\cdot \\left(\\kappa - 1\\right)\\right) \\cdot \\left(1 + \\varepsilon\\right)}{B}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CompositionalEntropicRisk.spec.Params → ℕ",
+          "value": "fun q =>\n  (q.B + 1) *\n    ⌈(64 * q.κ * q.G ^ 2 * q.R ^ 2 * (1 + Real.exp (q.c1 - q.c0) * q.ε) +\n            32 * min (2 * Real.exp (q.c1 - q.c0) * q.σ ^ 2) (Real.exp (2 * (q.c1 - q.c0)) * q.G ^ 2) * q.R ^ 2 *\n                (1 + q.ε) /\n              ↑q.B +\n          8 * ↑q.n * Real.exp (q.c1 - q.c0) * (1 + 64 * (1 + (q.c1 - q.c0)) * (q.κ - 1)) * (1 + q.ε) / ↑q.B) /\n        q.ε ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ScentCompositionalEntropicRisk",
+      "namespace": "LongTails.Setups.CompositionalEntropicRisk",
+      "setup": "LongTails.Setups.CompositionalEntropicRisk",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CompositionalEntropicRisk.spec\n  OracleTemplate.Scent.ScentCompositionalEntropicRisk.budget",
+      "theorem": "OracleTemplate.Scent.ScentCompositionalEntropicRisk.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ScentCompositionalEntropicRisk",
+      "theorem": "OracleTemplate.Scent.ScentCompositionalEntropicRisk.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(w)=n⁻¹∑ᵢ log Eξ∼lawᵢ[exp(scoreᵢ(w,ξ))] over a nonempty closed convex domain. Each sampled score satisfies a supporting-subgradient inequality, implying convexity of the scores and F. Differentiability and smoothness are not required.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: objective; spec.admissible, domain conditions and score supporting inequality."
+      },
+      {
+        "label": "composite",
+        "details": "Nested nonlinear composition log E exp(score), rather than an additive smooth-plus-proximable decomposition.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: normalizer and objective."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective averages n≥1 entropic-risk terms, each containing an expectation under its own hidden probability law.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: Params.n and nonzero; Instance.law; normalizer; objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A sample query at w returns a uniform random index i and two conditionally independent sampled score/subgradient pairs for that same i. These are subgradients of sampled scores, not an unbiased gradient oracle for F. The caller cannot select i or reuse the hidden sample at another point.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: Query.sample; Reply.sample; Seed; sampleLaw; sampleOracle; spec.admissible supporting inequality."
+      },
+      {
+        "label": "function_value",
+        "details": "Each sampling reply includes two sampled score values; neither the normalizer nor the objective value is returned.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: Reply.sample and sampleOracle."
+      },
+      {
+        "label": "proximal",
+        "details": "Exact metric projection onto the hidden domain is available as a separate query. Sampling and projection queries consume the same oracle budget; one sampling query returns both pairs.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: Query.projection; sampleOracle; spec.admissible projection inequalities. LongTails/Template.lean: Algorithm.query; executeWithTrace; _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniformly over i and feasible w, writing Zᵢ(w)=E exp(scoreᵢ(w,ξ)), the assumptions are E‖gradᵢ(w,ξ)‖²≤G², E exp(2 scoreᵢ(w,ξ))≤κ Zᵢ(w)², and E[exp(2 scoreᵢ(w,ξ))‖gradᵢ(w,ξ)‖²]≤σ² Zᵢ(w)². These are second-moment bounds, not a centered variance bound for an unbiased objective-gradient oracle; σ=0 is permitted.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: normalizer; spec.valid; spec.admissible, three moment inequalities."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is a second-countable real Hilbert space with its Borel measurable structure, without a finite-dimensional restriction. Scores lie pointwise in [c0,c1]. Oracle seeds are IID across calls, and the two samples are independent conditional on their shared index. A minimizer exists within distance R of feasible w0; no domain-diameter bound is assumed. All Params are public, including n, B≥1, c0≤c1, G>0, κ≥1, σ≥0, R≥0 and ε>0; scores, subgradients, laws and domain are hidden.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: Params; Instance; sampleLaw; spec.publicInput, valid and admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID.measurable, independent and marginal."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The measurable output ŵ must have an integrable objective gap satisfying E[F(ŵ)−F(w*)]≤ε for a domain minimizer w*.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output belongs to the domain for every outcome, not merely almost surely.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: spec.successful, ∀ ω, output ω ∈ I.domain."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over the joint algorithm and oracle randomness under a fixed oracle-call budget; no high-probability objective-gap guarantee is required.",
+        "evidence": "LongTails/Setups/CompositionalEntropicRisk.lean: spec.successful. LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "An established entropic-risk formulation with a specialized paired-sampling oracle, normalized exponential moment bounds, general Hilbert-space geometry, and a shared sampling/projection budget. This classification does not assert novelty. Repository proofs and implementations were not inspected; no qualifying reference verified here is not evidence that none exists."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.Scent.ScentCompositionalEntropicRisk.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ScentCompositionalEntropicRisk",
+          "theorem": "OracleTemplate.Scent.ScentCompositionalEntropicRisk.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

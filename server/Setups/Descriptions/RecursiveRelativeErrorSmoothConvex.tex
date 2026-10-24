@@ -1,0 +1,49 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Small Relative Error Convex Minimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. The function is $L$-smooth, with $L>0$, and a given point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$. At $x$, the oracle returns a vector $g$ satisfying $\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|$, where $0\leq\alpha<1$ and $\alpha\leq\exp(-8(1+\sqrt{\log(2+LR^2/\varepsilon)}))/100$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $L$, $x^0$, $\alpha$, $R$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle,\\
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{L}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Uniform relative oracle error]
+Queries may be made at any point of $E$. The relative error bound stated above holds for every query, every finite query--reply history, and every realization of the oracle randomness. The reply may depend on that history, and oracle randomness may be dependent across calls. Algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The minimizer $x^\star$ is fixed independently of the randomness.
+\end{document}

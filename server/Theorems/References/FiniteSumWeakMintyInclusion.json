@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.FiniteSumWeakMintyInclusion",
+  "searched_at": "2026-10-24T06:18:18.647079+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{4398046511104 \\cdot \\log\\left(\\frac{2}{1 - \\rho \\cdot L}\\right)}{1 - \\rho \\cdot L} \\cdot \\min\\left\\{ n \\cdot \\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}\\right), \\frac{n + \\frac{\\Lambda^{2}}{L^{2}} + \\frac{\\left(\\sqrt{n} \\cdot \\Lambda \\cdot L + \\Lambda^{2}\\right) \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}}{\\left(1 - \\rho \\cdot L\\right)^{3}} \\right\\} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteSumWeakMintyInclusion.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈4398046511104 * Real.log (2 / (1 - p.ρ * p.L)) / (1 - p.ρ * p.L) *\n      min (↑p.n * (1 + p.L ^ 2 * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)))\n        ((↑p.n + p.Λ ^ 2 / p.L ^ 2 + (√↑p.n * p.Λ * p.L + p.Λ ^ 2) * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)) /\n          (1 - p.ρ * p.L) ^ 3)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{4398046511104 \\cdot \\log\\left(\\frac{2}{1 - \\rho \\cdot L}\\right)}{1 - \\rho \\cdot L} \\cdot \\min\\left\\{ n \\cdot \\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}\\right), \\frac{n + \\frac{\\Lambda^{2}}{L^{2}} + \\frac{\\left(\\sqrt{n} \\cdot \\Lambda \\cdot L + \\Lambda^{2}\\right) \\cdot R^{2}}{\\left(1 - \\rho \\cdot L\\right)^{2} \\cdot \\varepsilon^{2}}}{\\left(1 - \\rho \\cdot L\\right)^{3}} \\right\\} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteSumWeakMintyInclusion.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈4398046511104 * Real.log (2 / (1 - p.ρ * p.L)) / (1 - p.ρ * p.L) *\n      min (↑p.n * (1 + p.L ^ 2 * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)))\n        ((↑p.n + p.Λ ^ 2 / p.L ^ 2 + (√↑p.n * p.Λ * p.L + p.Λ ^ 2) * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)) /\n          (1 - p.ρ * p.L) ^ 3)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.VarianceReducedWeakMintyInclusion",
+      "namespace": "LongTails.Setups.FiniteSumWeakMintyInclusion",
+      "setup": "LongTails.Setups.FiniteSumWeakMintyInclusion",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumWeakMintyInclusion.spec\n  OracleTemplate.VarianceReducedWeakMintyInclusion.budget",
+      "theorem": "OracleTemplate.VarianceReducedWeakMintyInclusion.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.VarianceReducedWeakMintyInclusion",
+      "theorem": "OracleTemplate.VarianceReducedWeakMintyInclusion.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "composite",
+        "details": "The inclusion combines the Lipschitz operator F with a set-valued monotone operator A accessible through its resolvent.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: spec.Instance and spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x)=n⁻¹∑ᵢFᵢ(x), with n>0; the component operators need not be gradients.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: operator, spec.Instance, and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Find a zero of F+A, where F is single-valued and A is monotone. A solution x⋆ satisfies ⟨F(y)+v,y−x⋆⟩≥−ρ‖F(y)+v‖² for every v∈A(y), with 0≤ρL<1. Monotonicity of F is not required.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Exact resolvent evaluations Jη(z) satisfying (z−Jη(z))/η∈A(Jη(z)) for every η>0. Component and resolvent queries each consume one call from the same fixed budget.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: spec.Query and spec.admissible; LongTails/Template.lean: Algorithm.query and executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "Exact indexed component evaluations Fᵢ(x), independent of history and oracle seed. No gradient structure or stochastic oracle error is assumed.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: spec.Query and first oracle equality in spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Real Hilbert space, potentially infinite-dimensional. The average operator is L-Lipschitz and n⁻¹∑ᵢ‖Fᵢ(x)−Fᵢ(y)‖²≤Λ²‖x−y‖², with 0<L≤Λ. A weak-Minty solution lies within distance R of x0. All parameters, including n,L,Λ,ρ,R,ε,x0 and the ambient space, are public; the component operators, A, and solution are hidden. No bounded component variance or bounded domain is assumed.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The squared-residual guarantee is in expectation under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The returned certificate satisfies v∈A(x) almost surely; residual accuracy itself is only required in expectation.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: almost-everywhere clause of spec.successful."
+      },
+      {
+        "label": "other",
+        "details": "Return a measurable pair (x,v) whose squared inclusion residual is integrable and satisfies E‖F(x)+v‖²≤ε². This is an inclusion residual, not necessarily a gradient norm.",
+        "evidence": "LongTails/Setups/FiniteSumWeakMintyInclusion.lean: spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A structured nonmonotone inclusion with a weak-Minty solution, separate average and mean-square component Lipschitz constants, and an explicit residual certificate in a general Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.VarianceReducedWeakMintyInclusion.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.VarianceReducedWeakMintyInclusion",
+          "theorem": "OracleTemplate.VarianceReducedWeakMintyInclusion.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

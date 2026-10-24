@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Compositional entropic risk under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositionalEntropicRisk.lean}{CompositionalEntropicRisk setup}.}\label{tab:CompositionalEntropicRisk}
+\parbox{\linewidth}{\footnotesize Minimize $F(w)=n^{-1}\sum_{i=1}^n\log m_i(w)$ over a nonempty closed convex set $W$ in a separable real Hilbert space, where $m_i(w)=\int e^{s_i(w;\xi)}\,dp_i(\xi)$. Jointly measurable scores and subgradients satisfy $s_i(w;\xi)\in[c_0,c_1]$, $s_i(y;\xi)\ge s_i(w;\xi)+\langle g_i(w;\xi),y-w\rangle$, and, uniformly on $W$, $\int\|g_i\|^2dp_i\le G^2$, $\int e^{2s_i}dp_i\le\kappa m_i^2$, $\int e^{2s_i}\|g_i\|^2dp_i\le\sigma^2m_i^2$. Here $n,B\ge1$, $G>0$, $\kappa\ge1$, $\sigma,R\ge0$, $\varepsilon>0$, and $w_0,w_\star\in W$, with $w_\star$ minimizing $F$ and $\|w_0-w_\star\|\le R$. The oracle provides exact projection and IID uniform-anchor draws, each with two conditionally independent score--subgradient samples from $p_i$. Target: $\int[F(\bar w(\omega))-F(w_\star)]\,dP(\omega)\le\varepsilon$ under the IID execution law $P$; \textbf{(1)} constructs the SCENT average.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ScentCompositionalEntropicRisk.lean}{Scent\allowbreak Compositional\allowbreak Entropic\allowbreak Risk} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ScentCompositionalEntropicRisk.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\begin{gathered}
+ B+\frac{(B+1)\kappa G^2R^2(1+e^\Delta\varepsilon)}{\varepsilon^2}\\
+ {}+\frac{1+\varepsilon}{\varepsilon^2}\Bigl(e^\Delta\min\{\sigma^2,e^\Delta G^2\}R^2\\
+ {}+ne^\Delta[1+(1+\Delta)(\kappa-1)]\Bigr)
+\end{gathered}\right)$.
+Sequential sampling with replacement; total calls minimized at $B=1$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} SCENT \citep{cermWei2026v2}, Thm.~3.6 and Assumption~4.1. Derived bound, $B=1$; finite-dimensional, differentiable-score specialization.
+& $\mathcal{O}\!\left(1+\begin{aligned}&\frac{e^{2\Delta}\min\{\sigma^2,G^2\}R^2}{\varepsilon^2}\\&+\frac{n(1+\Delta)e^{2\Delta}\min\{\kappa-1,1\}}{\varepsilon^2}\\&+\frac{ne^\Delta}{\varepsilon}\end{aligned}\right)$.
+& \textbf{(1)}: Method-specific rate gain for joint optimization, including $n\ge2$. For $B=1$, $\varepsilon\le e^{-\Delta}$, primal savings up to $e^\Delta$ when $\kappa G^2\lesssim e^\Delta\sigma^2\le e^{2\Delta}G^2$; anchor savings factor $\frac{e^\Delta(1+\Delta)\min\{\kappa-1,1\}}{1+(1+\Delta)(\kappa-1)}$ when $>1$.
+\par Rademacher linear-score example: $\Delta=4r\ge1$, $\kappa=G^2=2$, $\sigma^2=4$, $\varepsilon\le e^{-\Delta}$: $\mathcal{O}(e^\Delta[R^2+n(1+\Delta)]/\varepsilon^2)$ instead of $\mathcal{O}(e^{2\Delta}[R^2+n(1+\Delta)]/\varepsilon^2)$.
+& \textbf{(1)}: At $\kappa=1$, anchor cost $ne^\Delta/\varepsilon^2$ instead of $ne^\Delta/\varepsilon$; worse when $n\gg e^\Delta G^2R^2$. Extra primal term $e^\Delta\kappa G^2R^2/\varepsilon$. \\
+\midrule
+\textbf{(3)} Joint projected SGD \citep{cermNemirovski2009}, \S2.2, (2.15). Derived bound on $W\times[c_0,c_1]^n$; finite-dimensional specialization.
+& $\mathcal{O}\!\left(1+\frac{e^{2\Delta}(GR+\sqrt n\,\Delta)^2}{\varepsilon^2}\right)$.
+& \textbf{(1)}: In the Rademacher regime stated for \textbf{(2)}, total cost $\mathcal{O}(e^\Delta[R^2+n(1+\Delta)]/\varepsilon^2)$ instead of $\mathcal{O}(e^{2\Delta}[R+\sqrt n\,\Delta]^2/\varepsilon^2)$.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\Delta=c_1-c_0$; $n$ is the number of anchors; $B$ is the number of sample calls per SCENT iteration. Costs count all sample and projection calls: an iteration in \textbf{(1)} uses $B$ paired-sample calls and one projection, equivalently $2B$ primitive score--subgradient evaluations and one projection up to universal factors. $P$ is the probability law of the execution, and $\bar w$ its averaged output. In the example, $s_i(w;\xi)=\langle a_i,w\rangle+u(\xi)\langle b_i,w\rangle$, $u=\pm1$ equiprobably, $\|a_i\|,\|b_i\|\le1$, and $W$ is a radius-$r$ ball; the displayed moment constants are valid upper bounds.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

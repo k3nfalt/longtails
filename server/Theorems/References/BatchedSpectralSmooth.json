@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.BatchedSpectralSmooth",
+  "searched_at": "2026-10-24T06:19:15.166592+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\frac{64 \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.BatchedSpectralSmooth.spec.Params → ℕ",
+        "value": "fun p => (⌈64 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{64 \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.BatchedSpectralSmooth.spec.Params → ℕ",
+          "value": "fun p => (⌈64 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.MuonNoiseSeparation",
+      "namespace": "LongTails.Setups.BatchedSpectralSmooth",
+      "setup": "LongTails.Setups.BatchedSpectralSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BatchedSpectralSmooth.spec LongTails.Theorems.MuonNoiseSeparation.budget",
+      "theorem": "LongTails.Theorems.MuonNoiseSeparation.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MuonNoiseSeparation",
+      "theorem": "LongTails.Theorems.MuonNoiseSeparation.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on real m×n matrices, permitting nonconvexity, with a global lower bound fmin and f(x0)−fmin≤Δ.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Jointly measurable, integrable, unbiased matrix-valued gradient samples g(x,ξ), with fresh IID seeds across individual oracle calls. Each sample counts as one call, including all samples within batches.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "There exists one fixed orthonormal row basis (b_i) and nonnegative σ_i with Σ_i σ_i≤s such that, uniformly in X, E‖(g(X,ξ)−∇f(X))ᵀb_i‖₂²≤σ_i². Neither independence between rows nor exponential tails is required.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel.row_profile, used by LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Spectral/nuclear dual geometry: ‖∇f(X)−∇f(Y)‖nuc≤L‖X−Y‖op. Allowed algorithms take constant-step polar directions of batch means.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible, spec.allowedAlgorithm and batchedIterate; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: spectralNorm, nuclearNorm and polar."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace ℝ (Fin m × Fin n), identified with real m×n matrices; m,n are natural numbers.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: MatrixPolar.Space and matrixEquiv; LongTails/Setups/BatchedSpectralSmooth.lean: Public."
+      },
+      {
+        "label": "other",
+        "details": "Public information consists of m,n,L,Δ,s,ε,x0, with L>0, Δ≥0, s≥0 and ε>0. The objective, sampling law, row basis and individual σ_i are hidden. Oracle seeds are IID and independent of the algorithm seed.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: Public, spec.publicInput, spec.valid and spec.admissible; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The measurable output must have integrable nuclear gradient norm and satisfy E‖∇f(output)‖nuc≤ε; the norm is not squared.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm and oracle randomness. The output is a uniformly selected iterate among x0,…,xT from the prescribed batched polar trajectory, after B(T+1) individual sample calls.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: FollowsBatched and spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines spectral-to-nuclear smoothness, a hidden fixed-basis row-variance profile, nuclear-norm expected stationarity and a prescribed batched polar algorithm family. Repository proofs and implementations were not inspected; the absence of a qualifying reference does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MuonNoiseSeparation.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MuonNoiseSeparation",
+          "theorem": "LongTails.Theorems.MuonNoiseSeparation.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

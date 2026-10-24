@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothAdam",
+  "searched_at": "2026-10-24T06:19:35.992156+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{2^{100} \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(1 + L0 + L1\\right)^{10} \\cdot \\left(1 + \\sigma^{2}\\right) \\cdot \\left(1 + \\Delta\\right)^{12}}{\\left(1 - \\beta\\right)^{4} \\cdot \\varepsilon^{4}} + \\frac{2}{1 - \\beta} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothAdam.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 100 * (↑q.d + 1) ^ 2 * (1 + q.L0 + q.L1) ^ 10 * (1 + q.σ ^ 2) * (1 + q.Δ) ^ 12 / ((1 - q.β) ^ 4 * q.ε ^ 4) +\n      2 / (1 - q.β)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{2^{100} \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(1 + L0 + L1\\right)^{10} \\cdot \\left(1 + \\sigma^{2}\\right) \\cdot \\left(1 + \\Delta\\right)^{12}}{\\left(1 - \\beta\\right)^{4} \\cdot \\varepsilon^{4}} + \\frac{2}{1 - \\beta} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedSmoothAdam.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 100 * (↑q.d + 1) ^ 2 * (1 + q.L0 + q.L1) ^ 10 * (1 + q.σ ^ 2) * (1 + q.Δ) ^ 12 / ((1 - q.β) ^ 4 * q.ε ^ 4) +\n      2 / (1 - q.β)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ExpectedGeneralizedSmoothAdam",
+      "namespace": "LongTails.Setups.GeneralizedSmoothAdam",
+      "setup": "LongTails.Setups.GeneralizedSmoothAdam",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothAdam.spec\n  OracleTemplate.ExpectedGeneralizedSmoothAdam.budget",
+      "theorem": "OracleTemplate.ExpectedGeneralizedSmoothAdam.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ExpectedGeneralizedSmoothAdam",
+      "theorem": "OracleTemplate.ExpectedGeneralizedSmoothAdam.result",
+      "references": "- Shen-Yi Zhao, Yin-Peng Xie, Wu-Jun Li. [On the convergence and improvement of stochastic normalized gradient descent](https://cs.nju.edu.cn/lwj/paper/SciChina21_SNGD.pdf). 2021. Complexity: $O((1+L_0\\Delta/\\varepsilon^2)(1+\\sigma^2/\\varepsilon^2))$ stochastic-gradient oracle calls, including minibatches, for SNGD to achieve $\\mathbb E\\|\\nabla f(X)\\|\\le\\varepsilon$; $L_0,L_1,\\sigma>0$ and $\\varepsilon\\le cL_0/L_1$, with universal $c>0$.\n- Amirhossein Reisizadeh, Haochuan Li, Subhro Das, Ali Jadbabaie. [Variance-reduced Clipping for Non-convex Optimization](https://arxiv.org/pdf/2303.00883v2). 2023 preprint, v2; published ICASSP 2025. Complexity: $O((1+L_0\\Delta/\\varepsilon^2)(1+\\sigma^2/\\varepsilon^2))$ stochastic-gradient oracle calls, including minibatches, for ClippedSGD to achieve $\\mathbb E\\|\\nabla f(X)\\|\\le\\varepsilon$; $L_0>0$ and $\\varepsilon\\le cL_0/L_1$, with universal $c>0$ and no such restriction when $L_1=0$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f: ℝ^d → ℝ, permitting nonconvexity, with f(x0) − inf_x f(x) ≤ Δ. No minimizer attainment is required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x, ξ) using a fresh IID sample, with E[g(x, ξ)] = ∇f(x). The oracle supplies neither function values nor exact gradients. The jointly measurable oracle map and sampling distributions are hidden.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For all x,y satisfying L1‖y−x‖ ≤ 1, ‖∇f(y)−∇f(x)‖ ≤ (L0+L1‖∇f(x)‖)‖y−x‖. L0,L1 ≥ 0; twice differentiability and samplewise smoothness are not required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every x, E‖g(x,ξ)−∇f(x)‖² ≤ σ², with σ ≥ 0. Only second-moment control is imposed; bounded or sub-Gaussian noise is not assumed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: spec.admissible, variance integrability and variance bound."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝ^d with its ℓ2 norm, for d ∈ ℕ.",
+        "evidence": "LongTails/Setups/HeavyTailedAdam.lean: OracleTemplate.Adam.Point; LongTails/Setups/GeneralizedSmoothAdam.lean: Params.d."
+      },
+      {
+        "label": "other",
+        "details": "All Params are public, including L0,L1,σ,Δ,ε,x0 and β ∈ [0,1). Allowed algorithms belong to the supplied method family with this fixed β; ρ ∈ (0,1], η,τ,vinit > 0 and n ∈ ℕ may be chosen.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: Params, spec.Public, spec.publicInput, spec.valid and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The measurable output X must have integrable squared Euclidean gradient norm and satisfy E‖∇f(X)‖² ≤ ε², where ε > 0. The permitted method returns a saved iterate selected through its uniform random index.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: spec.successful and method; LongTails/Setups/HeavyTailedAdam.lean: OracleTemplate.Adam.update."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the independent algorithm seed and IID oracle stream. Oracle cost is a deterministic cap counting every gradient reply, not an expected stopping-time budget.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAdam.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Gradient-dependent local smoothness extends the classical globally Lipschitz-gradient benchmark, while retaining IID unbiased bounded-variance gradients and expected squared-gradient accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ExpectedGeneralizedSmoothAdam.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ExpectedGeneralizedSmoothAdam",
+          "theorem": "OracleTemplate.ExpectedGeneralizedSmoothAdam.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
+  "searched_at": "2026-10-24T06:17:27.562315+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{100000 \\cdot count \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2} + \\frac{\\left\\lVert start \\right\\rVert^{2}}{noiseScale^{2} \\cdot \\left(dimension + 1\\right)}\\right) \\cdot \\left(\\frac{2}{failure}\\right)^{5 \\cdot \\exp\\left(25000 \\cdot \\left(dimension + 1\\right)^{2} \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2}\\right)^{2}\\right)}}{failure} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NoisyBatchQuadraticPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈100000 * ↑↑p.input.count *\n          ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2 +\n            ‖p.input.start‖ ^ 2 / (p.input.noiseScale ^ 2 * (↑p.input.dimension + 1))) *\n        (2 / p.failure) ^\n          (5 *\n            Real.exp\n              (25000 * (↑p.input.dimension + 1) ^ 2 *\n                ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2) ^ 2)) /\n      p.failure⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{100000 \\cdot count \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2} + \\frac{\\left\\lVert start \\right\\rVert^{2}}{noiseScale^{2} \\cdot \\left(dimension + 1\\right)}\\right) \\cdot \\left(\\frac{2}{failure}\\right)^{5 \\cdot \\exp\\left(25000 \\cdot \\left(dimension + 1\\right)^{2} \\cdot \\left(\\left(count + 1\\right)^{2} \\cdot \\left(\\frac{radius}{margin}\\right)^{2}\\right)^{2}\\right)}}{failure} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NoisyBatchQuadraticPerceptron.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈100000 * ↑↑p.input.count *\n          ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2 +\n            ‖p.input.start‖ ^ 2 / (p.input.noiseScale ^ 2 * (↑p.input.dimension + 1))) *\n        (2 / p.failure) ^\n          (5 *\n            Real.exp\n              (25000 * (↑p.input.dimension + 1) ^ 2 *\n                ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2) ^ 2)) /\n      p.failure⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.NoisyBatchQuadraticPerceptronGlobal",
+      "namespace": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
+      "setup": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NoisyBatchQuadraticPerceptron.spec\n  OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.budget",
+      "theorem": "OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NoisyBatchQuadraticPerceptronGlobal",
+      "theorem": "OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict feasibility in bilinear parameters w=(v,s): find s⟨a_i,v⟩>0 for every i. The feasible set in (v,s) is generally nonconvex; no optimization objective is explicitly specified.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: answer, Separates, spec.successful."
+      },
+      {
+        "label": "other",
+        "details": "Finite-data homogeneous separation: n=count≥1 hidden vectors satisfy ‖a_i‖≤R and ⟨u,a_i⟩≥γ for some hidden unit vector u, with 0<γ≤R.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: Data, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "Query (i,(v,s)) returns the exact gradient (s a_i,⟨a_i,v⟩) of the component margin s⟨a_i,v⟩. Replies have no oracle error or history dependence. Each complete scan costs n oracle calls.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: Query, answer, spec.admissible, family; LongTails/Template.lean: executeWithTrace."
+      },
+      {
+        "label": "function_value",
+        "details": "Each component query also returns its exact scalar margin s⟨a_i,v⟩.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: Reply.margin, answer.margin."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in ℝ^d and weights in ℝ^d×ℝ with the Euclidean product norm.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features; LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: Weights."
+      },
+      {
+        "label": "other",
+        "details": "The prescribed family scans all components at one fixed point, then updates w←w+(η/n)Σ_{i:s⟨a_i,v⟩≤0}(s a_i,⟨a_i,v⟩)+σξ_k whenever a violation exists. Here η>0 is fixed, σ>0, and ξ_k are independent standard Gaussian vectors in ℝ^{d+1}. A violation-free scan freezes the point. Noise is algorithmic, not oracle error. Public inputs are d,n,R,γ,σ,start and the noise source; the data and separating witness are hidden. Failure probability δ is not supplied to the algorithm constructor.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: Public, Params, scanUpdate, family, spec.valid, spec.publicInput; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The output must strictly separate every datum: s⟨a_i,v⟩>0 for all i. There is no positive output-margin threshold or approximate objective criterion. Output is the current point after the fixed oracle budget.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: Separates, family, spec.successful; LongTails/Template.lean: execute, Convergence."
+      },
+      {
+        "label": "high_probability",
+        "details": "For every admissible dataset, the probability that any output margin is nonpositive is at most δ=failure, where 0<δ<1.",
+        "evidence": "LongTails/Setups/NoisyBatchQuadraticPerceptron.lean: spec.valid, spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines bilinear strict separation with a prescribed full-scan update, persistent isotropic Gaussian weight perturbations, and freezing upon verified separation. Repository proofs and implementations were not inspected; the literature search does not certify novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NoisyBatchQuadraticPerceptronGlobal",
+          "theorem": "OracleTemplate.NoisyBatchQuadraticPerceptronGlobal.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

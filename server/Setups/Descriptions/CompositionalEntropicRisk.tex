@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Compositional Entropic Risk Minimization}
+We minimize $F(x)=n^{-1}\sum_{i=1}^n\log\mathbb{E}_{\xi\sim\nu_i}[e^{s_i(x,\xi)}]$ over a nonempty closed convex set $C$ in a separable real Hilbert space $E$, where $n\geq1$, $\nu_i$ are probability laws, and $s_i$ are bounded convex sample scores. Measurable score subgradients satisfy second-moment and exponentially weighted moment bounds, and a given starting point lies near a minimizer $x^\star\in C$. The oracle returns two independent score--subgradient pairs for one uniformly sampled component, or an exact projection onto $C$. For $\varepsilon>0$, the goal is a measurable, everywhere feasible output $\bar{x}$ with integrable gap and $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, averaging over independent algorithm and oracle randomness.
+
+Let $\Xi$ be a measurable sample space, and write
+\[
+\begin{aligned}
+s_i &: E\times\Xi\to\mathbb{R}, &
+g_i &: E\times\Xi\to E,\\
+Z_i(x)&=\mathbb{E}_{\xi\sim\nu_i}[e^{s_i(x,\xi)}], &
+F(x)&=\frac{1}{n}\sum_{i=1}^n\log Z_i(x).
+\end{aligned}
+\]
+The optimization problem is
+\[
+\min_{x\in C} F(x).
+\]
+The norm is induced by the inner product on $E$. The parameters satisfy
+\[
+\begin{gathered}
+n,B\in\mathbb{N},\qquad n\geq1,\quad B\geq1,\qquad
+c_0,c_1\in\mathbb{R},\quad c_0\leq c_1,\\
+G>0,\qquad \kappa\geq1,\qquad \sigma\geq0,\qquad
+R\geq0,\qquad \varepsilon>0.
+\end{gathered}
+\]
+The algorithm receives $E$, $\Xi$, $n$, $B$, $c_0$, $c_1$, $G$, $\kappa$, $\sigma$, $R$, $\varepsilon$, and the starting point $x^0$; the scores, subgradients, laws, and feasible set are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Feasible set and initial distance]
+The set $C\subseteq E$ is closed and convex, and $x^0\in C$. There exists $x^\star\in C$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in C,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Bounded scores and subgradients]
+For each $i\in\{1,\ldots,n\}$, the maps $s_i$ and $g_i$ are jointly measurable. For every $\xi\in\Xi$ and $x,y\in C$,
+\[
+\begin{aligned}
+s_i(x,\xi)+\langle g_i(x,\xi),y-x\rangle
+&\leq s_i(y,\xi),\\
+c_0\leq s_i(x,\xi)&\leq c_1.
+\end{aligned}
+\]
+Thus $g_i(x,\xi)$ is a subgradient of the sample score on $C$.
+\end{assumption}
+
+\begin{assumption}[Moment bounds]
+For each $i\in\{1,\ldots,n\}$ and $x\in C$, the function $\xi\mapsto\|g_i(x,\xi)\|^2$ is integrable under $\nu_i$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu_i}\bigl[\|g_i(x,\xi)\|^2\bigr]
+&\leq G^2,\\
+\mathbb{E}_{\xi\sim\nu_i}\bigl[e^{2s_i(x,\xi)}\bigr]
+&\leq \kappa Z_i(x)^2,\\
+\mathbb{E}_{\xi\sim\nu_i}\bigl[e^{2s_i(x,\xi)}\|g_i(x,\xi)\|^2\bigr]
+&\leq \sigma^2 Z_i(x)^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. At a sampling query $x$, a component $I$ is drawn uniformly from $\{1,\ldots,n\}$. Conditional on $I=i$, two samples $\xi$ and $\xi'$ are drawn independently from $\nu_i$. The reply is
+\[
+\left(I,\ (s_I(x,\xi),g_I(x,\xi)),\
+(s_I(x,\xi'),g_I(x,\xi'))\right).
+\]
+Each score and its subgradient use the same sample, and the two pairs share the component index. The draws used at successive calls are independent and identically distributed, and independent of the algorithm's randomness.
+
+At a projection query $x$, the oracle returns $\Pi_C(x)$. The map $\Pi_C:E\to E$ is measurable and satisfies
+\[
+\begin{aligned}
+\Pi_C(x)&\in C &&\text{for every }x\in E,\\
+\langle x-\Pi_C(x),u-\Pi_C(x)\rangle&\leq0
+&&\text{for every }x\in E,\ u\in C.
+\end{aligned}
+\]
+Sampling and projection queries share one total call budget; a sampling call returns both pairs above.
+
+After the allotted calls, the output $\bar{x}$ must be measurable and belong to $C$ for every realization. Its objective gap must be integrable and satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the independent algorithm and oracle randomness, and $x^\star$ is a fixed minimizer on $C$.
+\end{document}

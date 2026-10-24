@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Many-sample convolutional separation under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ManySampleConvolutionalPerceptron.lean}{ManySampleConvolutionalPerceptron setup}.}\label{tab:ManySampleConvolutionalPerceptron}
+\parbox{\linewidth}{\footnotesize In $\mathbb R^d$, $d,n\ge1$, the positive reference is $b_0=\alpha_0 e/\sqrt2$ and the $n$ negative samples are $b_i=\alpha_i e/\sqrt2+\mu u_i$, with $0<g\le\alpha_i\le R$, $\mu>0$, $u_i\perp e$, and $\|u_i\|\le1/\sqrt2$. There exists $\|w\|=1$ with $-\langle(u_i-Pu_i)/\sqrt2,w\rangle\ge\kappa$, $0<\kappa\le1$. Validity requires $\delta\le e^{-1}$, $\delta(B+1)^3\le\kappa^3/2^{24}$, and $\delta(B+1)^2\le\kappa^2\rho^4/2^{24}$. Each call returns one sample's exact signed margin and gradient. The target is deterministic strict separation: $m(b_0;\theta)>0$ and $m(b_i;\theta)<0$ for all $i\ge1$. The setup imposes no algorithm-family restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ManySampleConvolutionalPerceptronAcceleration.lean}{Many\allowbreak Sample\allowbreak Convolutional\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ManySampleConvolutionalPerceptronAcceleration.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{(R/g)^4\ell^2}{\kappa^2}\left[n+(R/g)\ell\right]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: reconstruction + LP; convolutional model \citep[Sec.~2]{mscpTyurin2026v2}
+& $\mathcal{O}(n+1)$ calls; offline linear separation after recovering each signed sample at $\theta=((1,0),0)$.
+& \textbf{(1)}: $\mathcal{O}(d)$ state instead of $\mathcal{O}(nd)$ cached data. No established oracle-complexity improvement; the setup imposes no memory constraint.
+& \textbf{(1)}: cost larger by $(R/g)^4\ell^2[1+(R/g)\ell/n]/\kappa^2$; $\ell^2$ when $R/g,\kappa$ are constant and $n\gtrsim\ell$. Needs small contrast, $R,\mu$ for updates, $g,\kappa$ for stopping; \textbf{(2)} needs none. \\
+\midrule
+\textbf{(3)} Noisy quadratic perceptron \citep[Thm.~5.1, v2]{mscpTyurin2026v2}
+& $\mathcal{O}\!\left(\dfrac{\sqrt d}{\nu}H\left[1+\log\!\left(\dfrac{\sqrt d H}{\nu}\right)\right]\right)$.
+Special case: $n=1$, $b_0=\mathbf1$, $b_1=\mathbf1+\nu E_0$, $0<\nu\le1/10$; success probability $\ge1-\beta$, nonzero initial alignment, tuned Gaussian perturbations.
+& \textbf{(1)}: Method-specific $\mathcal{O}(\log^3(d/\nu))$ versus \textbf{(3)} when $\nu\lesssim2^{-22}\sqrt d/\log^{3/2}(d/\nu)$ and setup validity holds. Scope: many derivative-separable defects. Deterministic guarantee. No problem-class speedup over \textbf{(2)}.
+& \textbf{(1)} requires small contrast and one fixed initialization; changes the method to a directed deterministic kick and restarting scan. Its analysis does not establish GD equivalence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $e=\mathbf1/\sqrt d$; $P$ is the cyclic shift; $E_0$ is a coordinate unit vector; $\theta=((a_1,a_2),v)$; $m(b;\theta)=a_1\langle b,v\rangle+a_2\langle Pb,v\rangle$; $\rho=g/(4R)$, $\delta=\mu^2/(16R^2)$, $B=\lceil8\rho^{-2}\log(1/\delta)\rceil+2$; $\ell=1+\max\{0,\log(R/\mu)\}$. In \textbf{(3)}, $\nu$ is the coordinate defect, $0<\beta<1$ is the failure probability, $Q=\|\theta_0\|^2/|\langle\theta_0,v_{\nu,+}\rangle|^2$, and $H=[1+\log(Q/\beta^3)][1+\log(\sqrt d Q/\nu)]$; $v_{\nu,+}$ is the unit eigenvector of the negative signed-margin Hessian with eigenvalue $\nu$. Oracle costs count individual sample queries; offline arithmetic is excluded.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
