@@ -7,26 +7,30 @@
 \newcommand{\E}{\mathbb E}
 \newcommand{\Prb}{\mathbb P}
 \newcommand{\A}{\mathcal A}
-\title{Stationary parallel task allocation: a quota-bucket candidate}
+\title{Stationary parallel task allocation: a quota-bucket algorithm}
 \author{}
-\date{20 October 2026}
+\date{21 October 2026}
 \begin{document}
 \maketitle
 \noindent\textbf{Verification status.}
-This is a mathematical derivation under review, not a completed Lean or Comparator
-certificate. The setup, a causal measurable policy, its execution through the online
-protocol, prefix statistics, uniform confidence, and confidence validity along the
-actual trajectory are formalized separately. A proved reduction turns a
-deterministic regret bound on the confidence event into an expected-regret bound
-with an additive cost at most one. The schedule cost and the sum of phase costs
-still require Lean proofs before the final theorem can be exported and audited
-by Comparator. The Python implementation is a numerical research prototype.
-Its tests do not certify the stochastic regret theorem below.
+The Lean development includes the setup, causal measurable policy, execution
+through the online protocol, prefix statistics, uniform confidence, valid
+confidence intervals along the actual trajectory, quota scheduling, phase
+completion, phase costs, and a potential argument for the full regret.
+The exported result is in
+\texttt{LongTailsOnline/Theorems/ParallelTaskAllocation.lean}.
+The full build, lint, and Comparator audit have passed. Comparator checked
+the exported theorem, algorithm, and explicit bound against the unchanged
+setup, and the Lean default kernel accepted the solution. The permitted
+foundational axioms were \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}.
+The Python implementation remains a numerical research prototype; its tests
+are separate from the stochastic theorem.
 
 The Lean policy uses clipped intervals alone and updates them at phase boundaries,
 after completing the planned quotas. The Python prototype additionally intersects
-raw sub-Gaussian intervals and permits early phase completion. The argument below
-applies to both variants; execution equivalence between the two implementations
+raw sub-Gaussian intervals and permits early phase completion. The theorem below
+concerns the Lean policy; execution equivalence between the two implementations
 has not been claimed.
 
 \paragraph{Model and criterion.}
@@ -47,8 +51,9 @@ $L(v)=\min_{a\in\A}\ell_v(a)$, $L^*=L(\mu)$, and
 \]
 The target is $\E R_K/K$, the expected average proxy regret, not realized makespan regret.
 Every oracle below solves its finite integer minimization exactly. The heap
-implementation selects the $B$ smallest slots $jv_i$, including a capacity
-restriction when specified. Zero weights are permitted, and ties use worker index.
+prototype selects the $B$ smallest slots $jv_i$, including a capacity restriction
+when specified. The Lean oracle minimizes over a fixed finite enumeration of
+allocations, with ties resolved by the first minimizing index. Zero weights are permitted.
 
 \paragraph{Explicit parameters.}
 Put
@@ -59,26 +64,26 @@ Put
 \]
 \[
  \beta=(1+\bar\sigma)e^{-t},\quad \varepsilon=\sqrt{d/K},\quad
- J_*=2+\left\lceil\log_2(162\chi B^2K)\right\rceil,\quad
- P_*=1+\left\lceil\log_2(1+B\sqrt K)\right\rceil.
+ Q_* = \left\lceil256\chi B^2K^2+32\chi BK\right\rceil+1,\quad
+ J_*=1+\lfloor\log_2 Q_*\rfloor,\quad
+ P_*=1+\lfloor\log_2(BK)\rfloor.
 \]
 In particular, $t>1$, $\chi\ge1$, and $\beta\le\varepsilon/(16B)$.
 
 \paragraph{Confidence intervals.}
-Maintain nested intervals $[s_i,u_i]$, initially $[0,1]$. Store both the raw
-observations and $Z_{i,j}=\min(X_{i,j},H)$. For $N_i>0$ and a previously valid
-upper endpoint $v_i$, intersect the old interval and $[0,1]$ with the intervals
-centered at the raw and clipped empirical means and having radii
+Maintain nested intervals $[s_i,u_i]$, initially $[0,1]$. Store counts and sums of
+$Z_{i,j}=\min(X_{i,j},H)$. For $N_i>0$ and a previously valid upper endpoint
+$v_i$, intersect the old interval and $[0,1]$ with the interval centered at the
+clipped empirical mean and having radius
 \[
- r_i^{\rm raw}=\sigma\sqrt{2t/N_i},\qquad
  r_i^{\rm clip}=2\sqrt{v_i\chi/N_i}+2\chi/N_i+\beta.
 \]
 No update is made when $N_i=0$. Inside a phase, $v_i$ is frozen at that phase's
-initial upper endpoint. Empty intersections trigger a feasible balanced fallback
+initial upper endpoint. Empty intersections trigger a feasible concentrated fallback
 for all remaining rounds. This also specifies the policy outside the confidence event.
 
 \begin{lemma}[Uniform validity]
-With probability at least $1-4nBK e^{-t}$, every interval update through round
+With probability at least $1-2nBK e^{-t}$, every interval update through round
 $K$ contains its corresponding mean.
 \end{lemma}
 \begin{proof}
@@ -110,23 +115,22 @@ $(X-H)_+\le e^{\lambda(X-H)}/\lambda$. Since $\mu\le1$,
       e^{-\lambda(H-\mu)+\sigma^2\lambda^2/2}
  \le\frac{\bar\sigma}{\sqrt{2t}}e^{-t}\le\beta.
 \]
-Thus $\nu\le\mu\le v_i$ implies the clipped radius stated above. The raw
-sub-Gaussian bound has failure probability $2e^{-t}$ for each prefix as well.
-Take a union over workers, both interval constructions, and all prefix lengths
+Thus $\nu\le\mu\le v_i$ implies the clipped radius stated above.
+Take a union over workers and all prefix lengths
 $1\le N\le BK$. On this single event, induction justifies every adaptive
 choice of the previously valid $v_i$, without conditioning on adaptive counts.
 \end{proof}
 
 \paragraph{Policy.}
-Set $\theta=B$. At a phase boundary compute the upper oracle value $V=L(u)$ on
-the currently active set. Permanently remove each worker with $s_i>V$, using
-strict inequality, and recompute the oracle values. Set
+Set $\theta=B$. At a phase boundary compute the upper oracle value $V=L(u)$
+over all workers. Define
 \[
  C_i=\begin{cases}\min\{B,\lfloor V/s_i\rfloor\},&s_i>0,\\B,&s_i=0,\end{cases}
  \qquad D_i=C_i(u_i-s_i)
 \]
-on the active set, and $C_i=D_i=0$ elsewhere. If every $D_i\le\theta/2$, halve
-$\theta$ and repeat this check. Once $\theta\le\varepsilon$ or $V\le\varepsilon$,
+for every worker. A worker with $s_i>V$ has $C_i=0$ and receives no further
+tasks. Stationarity and nested intervals justify this permanent implicit elimination.
+Once $\theta\le\varepsilon$ or $V\le\varepsilon$,
 use the upper oracle for all remaining rounds. Otherwise start a phase and freeze
 $u,s,V,C,\theta$ for its allocation schedule. Give each active worker the quota
 \[
@@ -139,11 +143,12 @@ splitting the group into chunks of at most $\lfloor B/b\rfloor$ workers.
 Process groups in increasing $j$, and chunks in worker order. This specifies
 an exploration vector $e$ satisfying $e_i\le C_i$ and $\sum_i e_i\le B$ each round.
 
-For every such vector, choose the upper-oracle residual allocation with capacities
-$C_i-e_i$ and residual batch size $B-\sum_i e_i$. Play exploration plus residual.
-Update intervals after receiving the entire batch, using the phase's frozen $u$
-in its clipped radius. A phase may finish early when the updated geometry satisfies
-$\max_i D_i\le\theta/2$. Only then halve $\theta$ and start the next phase.
+For every such vector, let $b=\operatorname{RAS}(u,B)$. Choose a feasible action
+$a$ satisfying $e_i\le a_i\le C_i$ and $a_i-e_i\le b_i$, using the fixed choice
+in the Lean definition. The residual-feasibility lemma below guarantees existence.
+Complete the frozen quota schedule, and then update intervals using the phase's
+frozen $u$ in the clipped radius. Check $\max_i D_i\le\theta/2$; only then halve
+$\theta$ and start the next phase.
 At an exhausted horizon, record a pending phase as unfinished. Exhausting a quota
 schedule without reaching its target triggers fallback, never a forced transition.
 There is no positive-lower-bound warm-up in this variant.
@@ -200,11 +205,12 @@ Finally $\max_i(e_i+r_i)\mu_i\le\max_i e_i u_i+\max_i r_i u_i$.
 
 \begin{lemma}[Quota-bucket scheduling]
 For positive quotas and capacities let
-$Q=\max_i q_i u_i$, $A=\max_i q_i/C_i$, and let $J$ be the number of nonempty
-dyadic groups. The complete exploration schedule satisfies
+$Q=\max_i q_i u_i$, $A=\max_i q_i/C_i$, and
+$J=1+\max_i\lfloor\log_2 q_i\rfloor$, with zero quotas ignored.
+The complete exploration schedule satisfies
 \[
- N_{\rm round}\le4\sum_iq_i/B+2J(A+1),\qquad
- \sum_{\rm rounds}\max_i e_i u_i\le4Q(J+n/B).
+ N_{\rm round}\le J\bigl(4\sum_iq_i/B+2A+2\bigr),\qquad
+ \sum_{\rm rounds}\max_i e_i u_i\le4QJ(1+n/B).
 \]
 It collects between $q_i$ and $2q_i$ observations of each worker.
 \end{lemma}
@@ -215,18 +221,18 @@ at most $2q/\min_iC_i+2+2q/\lfloor B/m\rfloor
 \le2A+2+4mq/B$. Total exploration load is at most
 $(2q+b)Q/q\le4Q$.
 If $m>B$, $b=1$ and the group needs $2q\lceil m/B\rceil\le4mq/B$ rounds, with
-total exploration load at most $4Qm/B$. Sum over the groups and use
-$mq\le\sum_{i\text{ in group}}q_i$.
+total exploration load at most $4Qm/B$. Bound each group's sum of quotas by
+the global sum, and $m$ by $n$, and sum over at most $J$ groups.
 \end{proof}
 
 \begin{lemma}[Completion and phase costs]
 Every phase starts with $\max_iD_i\le\theta$. If its complete quota schedule fits
 within the horizon, the confidence event implies completion at its target.
-With $G=\lceil B/n\rceil$, its regret, including any incomplete prefix, is at most
+With $G=B/n+1$, its regret, including any incomplete prefix, is at most
 \[
  \begin{cases}
- 20000\chi Jd,&\theta\ge V,\\
- 21792\chi Jd/\theta+12J\theta,&\theta<V.
+ 25000\chi Jd,&\theta\ge V,\\
+ 22000\chi Jd/\theta+24Jd,&\theta<V.
  \end{cases}
 \]
 \end{lemma}
@@ -252,46 +258,55 @@ Since $C_i u_i\le V+\theta$, the quotas imply
 \]
 The last inequality uses the harmonic oracle lemma. By the two regret bounds,
 the phase costs at most both $2\theta N_{\rm round}$ and
-$4Q_0(J+n/B)+(V-L^*)N_{\rm round}$, where $V-L^*\le\min(V,\theta)$.
+$4Q_0J(1+n/B)+(V-L^*)N_{\rm round}$, where $V-L^*\le\min(V,\theta)$.
 
-For $\theta\ge V$, $Q_0\le1090\chi$ and $A_0\le544\chi/\theta+2$.
-Substitution in the latter bound gives at most
-$9808\chi J(1+n/B)+6JG\le20000\chi Jd$.
-For $\theta<V$, $Q_0\le1090\chi V^2/\theta^2$ and
-$A_0\le544\chi V/\theta^2+2$.
-Substitution in the former bound gives at most
-$10896\chi JV(1+n/B)/\theta+12J\theta$.
-Use $V(1+n/B)\le(B/n+1)(1+n/B)=d+2\le2d$.
+For $\theta\ge V$, $Q_0\le1100\chi$ and $A_0\le550\chi/\theta+2$.
+Substitution gives at most
+$J(8800\chi(1+n/B)+1100\chi+6G)\le25000\chi Jd$.
+For $\theta<V$, $Q_0\le1100\chi V^2/\theta^2$ and
+$A_0\le550\chi V/\theta^2+2$.
+Substitution gives at most
+$11000\chi JV(1+n/B)/\theta+12JG$.
+Use $V(1+n/B)\le(B/n+1)(1+n/B)=d+2\le2d$ and $G\le2d$.
 
 All bounds also hold for an unfinished phase: its frozen schedule extends
 deterministically to a complete schedule, every summand of both bounding costs
 is nonnegative, and no confidence assertion after the experimental horizon is used.
 \end{proof}
 
-\begin{theorem}[Candidate upper bound]
+\begin{theorem}[Expected average proxy regret]
 The policy described above satisfies
 \[
  \frac{\E R_K}{K}\le
- \min\left\{B,\frac{100000\chi J_*(P_*+1)(d+\sqrt{dK})+1}{K}\right\}.
+ \frac{100000\chi J_*P_*d(1+1/\varepsilon)+K\varepsilon+1}{K}.
 \]
 \end{theorem}
 \begin{proof}
-Any started phase has $\theta>\varepsilon$. Its quotas are bounded by
-$256\chi B^2/\varepsilon^2+32\chi B/\varepsilon+2
-\le162\chi B^2K$, so $J\le J_*$. There are at most $P_*$ started phases.
-The geometric precisions give $\sum_{\rm fine}1/\theta\le2/\varepsilon$.
-Every fine precision is below $V\le G$, so $\sum_{\rm fine}\theta\le2G$.
-Thus the exploration regret on the good event is at most
+Any started phase has $\theta>\varepsilon\ge1/K$, $C_i\le B$, and $u_i\le1$.
+Thus $q_i\le Q_*$ and $J\le J_*$. Its index satisfies $2^h<BK$, so
+$h<P_*$. The phase bounds above are each at most
 \[
- 20000\chi J_*P_*d+43584\chi J_*d/\varepsilon+24J_*G.
+ F=100000\chi J_*d(1+1/\varepsilon).
 \]
-The final exploitation regret is at most $K\varepsilon$: stopping on precision
-uses the interval lemma, and stopping on $V$ uses $\ell_\mu(\operatorname{RAS}(u))\le V$.
-This also covers a run which starts directly in exploitation.
-Use $G\le3d/2$, $d/\varepsilon=K\varepsilon=\sqrt{dK}$, and $\chi,J_*\ge1$.
+For a frozen phase, charge an exploration row $e$ by
+$\max_i e_i u_i+V-L^*$ when $V\le\theta$, and by $2\theta$ otherwise.
+Each charge is nonnegative and dominates that round's true proxy regret.
+The cost of the complete plan is at most $F$.
+
+In phase $h$, let the potential equal the cost of the remaining rows plus
+$F(P_*-h-1)$. It is nonnegative. Completing a phase removes its remaining
+cost, and installing the next phase adds at most $F$, offset by decreasing
+the future-phase count. Starting directly in exploitation sets the potential
+to zero. Its initial value is at most $FP_*$. Every exploration round pays
+its regret by the potential decrease. An exploitation round has regret at
+most $\varepsilon$: stopping on precision uses the interval lemma, while
+stopping on $V$ uses $\ell_\mu(\operatorname{RAS}(u))\le V$.
+Telescoping gives $R_K\le FP_*+K\varepsilon$ on the confidence event,
+including runs ending within a phase. No confidence assertion beyond $K$ is used.
+
 On the complement event, every feasible action still has regret between zero
 and $B$, so its contribution to expectation is at most
-$BK\cdot4nBK e^{-t}\le1$. Integrability follows from $0\le R_K\le BK$.
+$BK\cdot2nBK e^{-t}\le1$. Integrability follows from $0\le R_K\le BK$.
 \end{proof}
 
 \paragraph{Lower-bound comparison and limits.}
@@ -301,11 +316,14 @@ gives $\Omega(\sqrt{nK/B})$ for $B<n$ and $\Omega(\sqrt{BK/n})$ for $B\ge n$.
 Its positive observations are bounded by one, so they are a subclass of the
 present model for a fixed suitable sub-Gaussian parameter. Since
 $d$ is within a factor two of $\max\{B/n,n/B\}$, the candidate bound matches
-these powers of $n,B,K$ up to logarithmic factors for fixed $\sigma>0$.
+these powers of $n,B,K$ up to logarithmic factors for fixed $\sigma>0$:
+$d/K\le2$ in the stated horizon regime, and the upper bound is
+$\widetilde O(\sqrt{d/K})$.
 For smaller fixed positive $\sigma$, scale the bounded hard instances;
 the constant in the lower bound changes. This comparison does not establish
 optimal dependence on $\sigma$, a bound without logarithms, or a nonstationary result.
 In the degenerate case $n=1$, regret is exactly zero.
-The full stochastic theorem and its execution connection still require Lean
-formalization and Comparator verification.
+The public Lean theorem states the explicit expectation bound above for
+\texttt{OnlineTemplate.execute}, rather than assuming a confidence event or
+a deterministic regret bound in the setup.
 \end{document}
