@@ -1,6 +1,6 @@
 # Fixed-memory Adam with affine heavy-tailed noise
 
-[The Lean theorem](FixedMemoryAdamAffineHeavyTails.lean) proves an expected ordinary-stationarity guarantee for canonical coordinatewise Adam with arithmetic minibatches, bias correction, zero initial moments, and fixed memories `(0.9, 0.999)`. The [specification](../Setups/AffineHeavyTailedAdam.lean) and [algorithm and output](../Algorithms/BatchedAdam.lean) make the oracle, update family, returned iterate, and oracle cost explicit.
+[The Lean theorem](FixedMemoryAdamAffineHeavyTails.lean) proves an expected ordinary-stationarity guarantee for canonical coordinatewise Adam with arithmetic minibatches, bias correction, zero initial moments, and fixed memories `(0.9, 0.999)`. The [specification](../Setups/AffineHeavyTailedAdam.lean) and [algorithm and output](../Algorithms/AffineHeavyTailedAdam.lean) make the oracle, update family, returned iterate, and oracle cost explicit.
 
 ## Problem and guarantee
 

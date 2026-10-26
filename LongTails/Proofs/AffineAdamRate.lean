@@ -6,7 +6,7 @@ open MeasureTheory
 
 namespace LongTails.Proofs.AffineAdamRate
 
-open OracleTemplate LongTails.Setups.AffineHeavyTailedAdam LongTails.Algorithms.BatchedAdam
+open OracleTemplate LongTails.Setups.AffineHeavyTailedAdam LongTails.Algorithms.AffineHeavyTailedAdam
 open AffineAdamProbability AffineAdamParameters AffineAdamGeometry BatchedAdamExecution
 
 lemma block_gradient_sum (q : Params) (hq : spec.valid q)

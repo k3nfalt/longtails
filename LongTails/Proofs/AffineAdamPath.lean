@@ -6,7 +6,7 @@ open scoped RealInnerProductSpace
 namespace LongTails.Proofs.AffineAdamPath
 
 open OracleTemplate LongTails.Setups.AffineHeavyTailedAdam
-open LongTails.Algorithms.BatchedAdam AffineAdamTrajectory AffineAdamGeometry
+open LongTails.Algorithms.AffineHeavyTailedAdam AffineAdamTrajectory AffineAdamGeometry
 
 variable {d : ℕ} (cfg : Config) (hb1 : cfg.β₁ = 9 / 10) (hb2 : cfg.β₂ = 999 / 1000)
     (hη : 0 ≤ cfg.η) (hδ : 0 < cfg.δ) (x0 : Point d) (k : ℕ) (z : ℕ → Point d)

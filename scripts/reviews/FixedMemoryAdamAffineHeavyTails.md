@@ -1,6 +1,6 @@
 # Novelty assessment: FixedMemoryAdamAffineHeavyTails
 
-The [theorem](../../LongTails/Theorems/FixedMemoryAdamAffineHeavyTails.lean) concerns bias-corrected coordinatewise Adam with `β₁ = 0.9`, `β₂ = 0.999`, damping `δ = ε/(8(d+1))` outside the square root, step `η = ε/(2²⁹(L₀+L₁ε))`, and arithmetic minibatches of size `B` ([algorithm](../../LongTails/Algorithms/BatchedAdam.lean)). It runs `T` updates, returns a uniformly random pre-update iterate `x_I`, and proves `E‖∇f(x_I)‖₁ ≤ ε`. The [setup](../../LongTails/Setups/AffineHeavyTailedAdam.lean) assumes the following:
+The [theorem](../../LongTails/Theorems/FixedMemoryAdamAffineHeavyTails.lean) concerns bias-corrected coordinatewise Adam with `β₁ = 0.9`, `β₂ = 0.999`, damping `δ = ε/(8(d+1))` outside the square root, step `η = ε/(2²⁹(L₀+L₁ε))`, and arithmetic minibatches of size `B` ([algorithm](../../LongTails/Algorithms/AffineHeavyTailedAdam.lean)). It runs `T` updates, returns a uniformly random pre-update iterate `x_I`, and proves `E‖∇f(x_I)‖₁ ≤ ε`. The [setup](../../LongTails/Setups/AffineHeavyTailedAdam.lean) assumes the following:
 
 - `f` is differentiable on `ℝᵈ` with `f(x₀) − f(x) ≤ Δ` for all `x`.
 - Anchored local `(ℓ∞→ℓ₁)` generalized smoothness: `‖∇f(y)−∇f(x)‖₁ ≤ (L₀+L₁‖∇f(x)‖₁)‖y−x‖_∞` whenever `L₁‖y−x‖_∞ ≤ 1`.

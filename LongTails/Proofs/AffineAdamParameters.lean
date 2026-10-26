@@ -1,9 +1,9 @@
-import LongTails.Algorithms.BatchedAdam
+import LongTails.Algorithms.AffineHeavyTailedAdam
 import Mathlib.Tactic
 
 namespace LongTails.Proofs.AffineAdamParameters
 
-open LongTails.Setups.AffineHeavyTailedAdam LongTails.Algorithms.BatchedAdam
+open LongTails.Setups.AffineHeavyTailedAdam LongTails.Algorithms.AffineHeavyTailedAdam
 
 lemma scale_pos (q : Params) (hq : spec.valid q) : 0 < q.L0 + q.L1 * q.ε := by
   rcases hq with ⟨h0, h1, hL, _, _, _, _, _, he⟩

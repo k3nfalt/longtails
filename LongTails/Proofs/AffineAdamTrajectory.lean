@@ -1,11 +1,11 @@
-import LongTails.Algorithms.BatchedAdam
+import LongTails.Algorithms.AffineHeavyTailedAdam
 import LongTails.Proofs.AffineAdamDescent
 import LongTails.Proofs.AffineAdamBiasCorrection
 
 namespace LongTails.Proofs.AffineAdamTrajectory
 
 open OracleTemplate LongTails.Setups.AffineHeavyTailedAdam
-open LongTails.Algorithms.BatchedAdam AdaptiveHistoryAlgebra
+open LongTails.Algorithms.AffineHeavyTailedAdam AdaptiveHistoryAlgebra
 
 lemma trajectory_time {d : ℕ} (cfg : Config) (x0 : Point d) (k : ℕ)
     (z : ℕ → Point d) (t : ℕ) : (trajectory cfg x0 k z t).time = t := by

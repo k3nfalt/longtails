@@ -8,7 +8,7 @@ open MeasureTheory
 namespace LongTails.Proofs.AffineAdamProbability
 
 open OracleTemplate LongTails.Setups.AffineHeavyTailedAdam
-open LongTails.Algorithms.BatchedAdam BatchedAdamExecution AffineAdamGeometry
+open LongTails.Algorithms.AffineHeavyTailedAdam BatchedAdamExecution AffineAdamGeometry
 
 lemma measurable_batchReply {d : ℕ} {Ω : Type} [MeasurableSpace Ω]
     (cfg : Config) {g : Point d → Ω → Point d} (hg : Measurable (Function.uncurry g)) :

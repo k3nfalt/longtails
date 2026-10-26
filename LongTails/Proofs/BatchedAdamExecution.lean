@@ -1,10 +1,10 @@
-import LongTails.Algorithms.BatchedAdam
+import LongTails.Algorithms.AffineHeavyTailedAdam
 import LongTails.Proofs.AcceleratedMarkovExecution
 
 namespace LongTails.Proofs.BatchedAdamExecution
 
 open OracleTemplate LongTails.Setups.AffineHeavyTailedAdam
-open LongTails.Algorithms.BatchedAdam StochasticGradient HeavyTailedMarkovGradient
+open LongTails.Algorithms.AffineHeavyTailedAdam StochasticGradient HeavyTailedMarkovGradient
 
 lemma advance_prefix {d : ℕ} {Ω : Type} (cfg : Config)
     (g : Point d → Ω → Point d) (ξ : ℕ → Ω) (s : Adam.State d)

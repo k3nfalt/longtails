@@ -1,12 +1,12 @@
 import LongTails.Setups.AffineHeavyTailedAdam
-import LongTails.Algorithms.BatchedAdam
+import LongTails.Algorithms.AffineHeavyTailedAdam
 import LongTails.Proofs.AffineAdamRate
 
 open MeasureTheory OracleTemplate
 
 namespace LongTails.Theorems.FixedMemoryAdamAffineHeavyTails
 
-open LongTails.Setups.AffineHeavyTailedAdam LongTails.Algorithms.BatchedAdam
+open LongTails.Setups.AffineHeavyTailedAdam LongTails.Algorithms.AffineHeavyTailedAdam
 
 noncomputable def budget : (let S := spec; S.Params → Fin S.numOracles → ℕ) := fun q _ => (1 + ⌈(131072 * (q.σ1 + (∑ i, q.σ0 i) / q.ε)) ^ (q.p / (q.p - 1))⌉₊) * (1 + ⌈4294967296 * q.Δ * (q.L0 + q.L1 * q.ε) / q.ε ^ 2⌉₊)
 
