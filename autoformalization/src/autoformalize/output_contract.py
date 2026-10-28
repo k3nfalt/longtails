@@ -4,8 +4,145 @@ These checks establish coverage and ownership, not semantic equivalence. The
 independent reviewer must substantiate every classification and correspondence.
 """
 
+import re
+
 from .common import fields, require, text
 from .layout import in_category
+from .public_design import validate_design
+
+
+def lean_tokens(code):
+    """Erase nested comments/strings before syntax lints; preserve line boundaries."""
+    out, i, depth, string = [], 0, 0, False
+    while i < len(code):
+        pair = code[i : i + 2]
+        if depth:
+            if pair == "/-":
+                depth += 1
+                i += 2
+                continue
+            if pair == "-/":
+                depth -= 1
+                i += 2
+                continue
+            out.append("\n" if code[i] == "\n" else " ")
+            i += 1
+            continue
+        if string:
+            if code[i] == "\\":
+                out.append("  ")
+                i += 2
+                continue
+            if code[i] == '"':
+                string = False
+            out.append("\n" if code[i] == "\n" else " ")
+            i += 1
+            continue
+        if pair == "/-":
+            depth = 1
+            out.append(" ")
+            i += 2
+            continue
+        if pair == "--":
+            end = code.find("\n", i)
+            i = len(code) if end < 0 else end
+            continue
+        if code[i] == '"':
+            string = True
+            out.append(" ")
+            i += 1
+            continue
+        out.append(code[i])
+        i += 1
+    require(not depth and not string, "Unterminated Lean comment/string")
+    return "".join(out)
+
+
+def budget_lambda(code):
+    clean = lean_tokens(code)
+    matches = re.findall(
+        r"(?m)^(?:noncomputable\s+)?def budget\s*:[^\n]*?:=\s*(fun\b[^\n]+)$", clean
+    )
+    require(len(matches) == 1, "Budget must be one explicit single-line lambda")
+    return matches[0].strip()
+
+
+def lint_budget_expression(expression, component=None, parameters=None):
+    """Reject count-only shapes; names never determine a parameter's meaning.
+
+    This is a narrow structural check, not proof of honest source classification.
+    """
+    clean = lean_tokens(expression).strip()
+    body = clean.split("=>", 1)[-1].strip()
+    binder = re.match(r"^fun\s+([^\W\d]\w*)\b", clean, re.UNICODE)
+    parameter = binder.group(1) if binder else "p"
+    projection = r"\b" + re.escape(parameter) + r"\s*\.\s*([^\W\d]\w*)"
+    # Remove only elementary decorative zero terms. This is deliberately not a
+    # symbolic algebra engine; other disguises remain mandatory review failures.
+    atom = r"\b" + re.escape(parameter) + r"\s*\.\s*[^\W\d]\w*"
+    body = re.sub(r"\b0\s*\*\s*" + atom, "0", body, flags=re.UNICODE)
+    body = re.sub(atom + r"\s*\*\s*0\b", "0", body, flags=re.UNICODE)
+    refs = set(re.findall(projection, body, re.UNICODE))
+    # Remove projections and multiplication/parentheses. This also catches renamed counts.
+    rest = re.sub(projection, "", body, flags=re.UNICODE)
+    bare = bool(refs) and not re.sub(r"[\s()*↑]", "", rest)
+    allowed_exact = (
+        component
+        and parameters
+        and component.get("accuracy_independent_reason", "").strip()
+        and all(parameters.get(n) == "problem_data" for n in refs)
+    )
+    if parameters is not None and refs:
+        require(
+            bool(refs & {n for n, role in parameters.items() if role == "accuracy"})
+            or allowed_exact,
+            "Nonconstant budget needs an effective accuracy dependency or a justified exact problem-size cost",
+        )
+    require(
+        not bare or allowed_exact,
+        "Bare parameter projection/product is not a derived complexity budget",
+    )
+    arithmetic = re.sub(
+        r"\b(?:Nat|Int|Real)\.(?:ceil|floor|cast|ofNat|toNat)\b", "", rest
+    )
+    arithmetic = re.sub(r"[\d\s()+*/^.,↑⌈⌉⌊⌋₊−-]", "", arithmetic)
+    accurate = parameters is not None and any(
+        parameters.get(n) == "accuracy" for n in refs
+    )
+    require(
+        not (len(refs) == 1 and not arithmetic) or accurate or allowed_exact,
+        "Single-field count arithmetic is not a derived accuracy budget; scaling, offsets and rounding do not supply a rate",
+    )
+    require(
+        not re.fullmatch(r"[\w.']+\s+" + re.escape(parameter), body.strip("() ")),
+        "Opaque budget helper: expand the sufficient-count formula",
+    )
+
+
+def lint_public_budget(code, export=None):
+    expression = budget_lambda(code)
+    if export is None:
+        lint_budget_expression(expression)
+        return
+    d = export["design"]
+    b = d["budget"]
+
+    def normalize(x):
+        return re.sub(r"\s+", "", lean_tokens(x))
+
+    require(
+        normalize(expression) == normalize(b["expression"]),
+        "Actual budget lambda differs from the reviewed design",
+    )
+    roles = {p["field"]: p["role"] for p in d["parameters"]}
+    if b["num_oracles"] == 1:
+        lint_budget_expression(expression, b["components"][0], roles)
+    else:
+        lint_budget_expression(expression)
+    for c in b["components"]:
+        lint_budget_expression(c["expression"], c, roles)
+    return {"status": "passed", "expression": expression}
+
 
 CLASSES = (
     "convergence_result",
@@ -213,6 +350,10 @@ def output_checks(plan, unit=None):
             prefix + e["node"]
             for prefix in (
                 "output:public_result:",
+                "output:parameter_roles:",
+                "output:accuracy_contract:",
+                "output:explicit_budget:",
+                "output:source_adaptation:",
                 "cost:headline_units:",
                 "cost:execution_budget:",
                 "cost:correspondence:",
@@ -268,7 +409,11 @@ def declaration_contract(units, graph, inventory):
 
 def validate_output(plan, graph, reachable):
     contract = plan["output_contract"]
-    fields(contract, ["public_results", "setups", "counts"])
+    fields(contract, ["schema_version", "public_results", "setups", "counts"])
+    require(
+        type(contract["schema_version"]) is int and contract["schema_version"] == 3,
+        "Public output contract requires schema_version 3; older runs use their preserved controller",
+    )
     require(
         isinstance(contract["public_results"], list)
         and isinstance(contract["setups"], list),
@@ -292,7 +437,19 @@ def validate_output(plan, graph, reachable):
         )
 
     for e in contract["public_results"]:
-        fields(e, ["node", "unit", "result", "setup_unit", "spec", "budget", "cost"])
+        fields(
+            e,
+            [
+                "node",
+                "unit",
+                "result",
+                "setup_unit",
+                "spec",
+                "budget",
+                "cost",
+                "design",
+            ],
+        )
         require(
             e["node"] in graph["inventory"]["convergence_results"]
             and e["node"] not in exports,
@@ -369,6 +526,12 @@ def validate_output(plan, graph, reachable):
                 relation["proofs"],
                 "Cost conversion needs a planned correspondence theorem",
             )
+        validate_design(e, units, reachable, graph)
+        lint_public_budget(
+            "noncomputable def budget : Params → Fin 1 → ℕ := "
+            + e["design"]["budget"]["expression"],
+            e,
+        )
         exports[e["node"]] = e
         public_units.add(e["unit"])
         result_names.add(e["result"])
@@ -519,6 +682,17 @@ def catalog_contract(plan, catalog, inventory, unit_ids=None):
                 e[key] in observed and observed[e[key]]["module"] == expected_module,
                 "Compiler declaration ownership differs from the output contract",
             )
+        design = e.get("design")
+        if design is not None:
+            require(
+                len(row["budgets"]) == design["budget"]["num_oracles"],
+                "Compiled oracle count differs from the public design",
+            )
+            roles = {p["field"]: p["role"] for p in design["parameters"]}
+            for actual, component in zip(
+                row["budgets"], design["budget"]["components"]
+            ):
+                lint_budget_expression(actual["value"], component, roles)
         proof_names = list(e["cost"]["relationship"]["proofs"])
         for s in plan["output_contract"]["setups"]:
             for c in s["compatibility"]:

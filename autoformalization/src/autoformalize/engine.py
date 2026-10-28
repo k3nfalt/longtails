@@ -27,6 +27,7 @@ from .contracts import (
     validate_plan,
     validate_review,
 )
+from .interface_contract import validate_template_contract
 from .layout import in_category
 from .lean import (
     Compiler,
@@ -45,11 +46,34 @@ from .output_contract import (
     catalog_contract,
     declaration_contract,
     graph_checks,
+    lint_public_budget,
     output_checks,
     review_clauses,
 )
 from .project import MANIFEST, compact_manifest, materialize, sync_index
+from .public_design import observed_design
+from .review_evidence import (
+    attach_interface_evidence,
+    bounded_packet,
+    compact_candidate,
+    required_interface_citations,
+)
 from .source import acquisition, load_package, spans
+
+STATEMENT_GATE_ORDER = [
+    "source_style",
+    "budget_syntax",
+    "elaboration",
+    "declaration_lint",
+    "inventory_audit",
+    "frozen_signatures",
+    "graph_and_plan",
+    "declaration_contract",
+    "catalog_rendering",
+    "catalog_contract",
+    "comparator_topology",
+    "public_design",
+]
 
 
 def workflow_root():
@@ -64,6 +88,7 @@ def policy_documents():
         "AGENTS.md",
         "WORKFLOW.md",
         "PROTOCOL.md",
+        "OUTPUT_CONTRACT.md",
         "FORMALIZER.md",
         "REVIEWER.md",
     ):
@@ -212,6 +237,25 @@ class Run:
     @contextmanager
     def transaction(self):
         """Recover source and checkpoint together after failure or process interruption."""
+        journal_path = self.root / "transaction.json"
+        if getattr(self, "_transaction_active", False):
+            require(
+                not self._transaction_failed,
+                "An inner operation aborted this transaction",
+            )
+            try:
+                yield
+            except BaseException:
+                self._transaction_failed = True
+                # Roll back immediately even if a caller catches the inner exception.
+                if journal_path.exists():
+                    self.recover()
+                raise
+            return
+        require(
+            not journal_path.exists(),
+            "Interrupted edit found; recover before starting another transaction",
+        )
         before = copy.deepcopy(self.state)
         files = {}
         for u in self.units():
@@ -222,14 +266,41 @@ class Run:
                     if path.exists()
                     else None
                 )
-        write_json(self.root / "transaction.json", {"state": before, "files": files})
+        index = self.compiler.project / "outputs.lean"
+        files["outputs.lean"] = (
+            base64.b64encode(index.read_bytes()).decode("ascii")
+            if index.exists()
+            else None
+        )
+        state_path = self.root / "state.json"
+        raw_state = state_path.read_bytes() if state_path.exists() else None
+        journal = {
+            "state": before,
+            "files": files,
+            "state_file": base64.b64encode(raw_state).decode("ascii")
+            if raw_state is not None and read_json(state_path) == before
+            else None,
+        }
+        require(
+            len(canonical(journal).encode("utf-8")) + 1 <= 64_000_000,
+            "Rollback journal exceeds 64 MB; narrow the run before editing any files",
+        )
+        write_json(journal_path, journal, compact=True)
+        self._transaction_active, self._transaction_failed = True, False
         try:
             yield
+            require(
+                not self._transaction_failed,
+                "An inner operation aborted this transaction",
+            )
         except BaseException:
-            self.recover()
+            if journal_path.exists():
+                self.recover()
             raise
         else:
-            (self.root / "transaction.json").unlink()
+            journal_path.unlink()
+        finally:
+            self._transaction_active = False
 
     def recover(self):
         path = self.root / "transaction.json"
@@ -242,6 +313,7 @@ class Run:
             if state["plan"]
             else set()
         )
+        allowed.add("outputs.lean")
         require(
             journal["files"].keys() <= allowed,
             "Recovery journal contains an unowned path",
@@ -264,9 +336,20 @@ class Run:
                         "Cannot recover a changed dependency",
                     )
                     p.unlink()
-        self.compiler.sync_index()
+        # Legacy journals did not snapshot the aggregate; new journals restore bytes.
+        if "outputs.lean" not in journal["files"]:
+            self.compiler.sync_index()
         self.state = state
-        write_json(self.root / "state.json", self.state)
+        if journal.get("state_file") is not None:
+            (self.root / "state.json").write_bytes(
+                base64.b64decode(journal["state_file"], validate=True)
+            )
+            require(
+                read_json(self.root / "state.json") == self.state,
+                "Restored state bytes disagree with recovery checkpoint",
+            )
+        else:
+            write_json(self.root / "state.json", self.state)
         path.unlink()
 
     @classmethod
@@ -434,6 +517,9 @@ class Run:
 
     def packet(self, kind, candidate, clauses, *, extra_checks=()):
         evidence = self.get(self.state["evidence"])
+        if kind in {"statement_review", "composition_review"}:
+            candidate = attach_interface_evidence(self, candidate)
+        candidate = compact_candidate(self, candidate)
         # Expression trees remain complete evidence, cited at their subtree roots.
         candidate_ids = evidence_pointers(candidate)
         packet = {
@@ -449,11 +535,12 @@ class Run:
             "plan": self.state["plan"],
             "reviewer": self.state["reviewer"],
             "policy_version": self.state["controller"],
+            "required_candidate_evidence": required_interface_citations(candidate),
         }
         packet["repository_commit"] = self.state["repository_commit"]
         packet["repository_basis"] = digest(self.state["base_files"])
         packet["basis"] = digest(packet)
-        return packet
+        return bounded_packet(packet)
 
     def queue(self, packet, owner):
         require(
@@ -513,6 +600,12 @@ class Run:
         self.save("plan_submitted", {"layers": order})
 
     def submit_statement(self, submission):
+        # The method owns its rollback boundary, including all late packet/save errors.
+        # CLI/drive may already hold a transaction; nested transactions share one journal.
+        with self.transaction():
+            return self._submit_statement(submission)
+
+    def _submit_statement(self, submission):
         fields(submission, ["unit", "code", "holes", "providers"])
         require(self.state["phase"] == "statements", "Not in statement mode")
         uid = submission["unit"]
@@ -549,11 +642,35 @@ class Run:
             path.write_text(submission["code"], encoding="utf-8", newline="\n")
         added = {}
         try:
+            # Reject presentation defects before elaboration and semantic review.
+            self.compiler.source_style()
+            export = next(
+                (
+                    e
+                    for e in self.get(self.state["plan"])["output_contract"][
+                        "public_results"
+                    ]
+                    if e["unit"] == uid
+                ),
+                None,
+            )
+            if export:
+                lint_public_budget(path.read_text(encoding="utf-8"), export)
             added = materialize(self.compiler.project, [unit["file"]])
             self.state["base_files"].update(added)
-            topology = self.compiler.topology(self.get(self.state["plan"]))
             self.compiler.build(targets=[module_name(unit["file"])])
+            self.compiler.declaration_lint()
             observed = self.compiler.inspect([unit], submission["providers"])
+            export = next(
+                (
+                    e
+                    for e in self.get(self.state["plan"])["output_contract"][
+                        "public_results"
+                    ]
+                    if e["unit"] == uid
+                ),
+                None,
+            )
             if unit["mode"] == "new":
                 owned = [
                     d
@@ -563,9 +680,9 @@ class Run:
                 check_holes(
                     submission["code"], submission["holes"], owned, unit["declarations"]
                 )
-                public_layout(unit, submission["code"], observed)
+                public_layout(unit, submission["code"], observed, export)
             elif in_category(unit["file"], "Theorems"):
-                public_layout(unit, path.read_text(encoding="utf-8"), observed)
+                public_layout(unit, path.read_text(encoding="utf-8"), observed, export)
             audit(
                 observed,
                 self.all_holes() + submission["holes"],
@@ -576,6 +693,7 @@ class Run:
             output = catalog_contract(
                 self.get(self.state["plan"]), catalog, observed, [uid]
             )
+            topology = self.compiler.topology(self.get(self.state["plan"]))
         except Exception:
             for relative, expected in added.items():
                 dependency = scoped(self.compiler.project, relative)
@@ -601,6 +719,12 @@ class Run:
             "catalog": catalog,
             "output_contract_check": output,
             "comparator_topology": topology,
+            "statement_checks": {
+                "source_style": "passed",
+                "declaration_lint": "passed",
+                "catalog_rendering": catalog["status"],
+                "order": "format_and_structure_before_semantic_review",
+            },
             "source_code": submission["code"],
             "graph": self.get(self.state["graph"]),
             "plan": self.get(self.state["plan"]),
@@ -641,6 +765,7 @@ class Run:
             self.state["units"][key]["accepted"] = False
             self.state["units"][key]["review"] = None
         self.state["composition"] = self.state["freeze"] = self.state["final"] = None
+        self.state.pop("statement_validation", None)
         self.state["pending"] = None
         self.state.pop("repair_request", None)
         return sorted(affected)
@@ -692,12 +817,26 @@ class Run:
         return {"accepted": accepted, "scores": scores, "phase": self.state["phase"]}
 
     def compose(self):
+        with self.transaction():
+            return self._compose()
+
+    def _compose(self):
         require(
             self.state["phase"] == "statements"
             and self.accepted() == {u["id"] for u in self.units()},
             "All required statements must pass before composition",
         )
+        self.compiler.source_style()
+        plan = self.get(self.state["plan"])
+        for entry in plan["output_contract"]["public_results"]:
+            lint_public_budget(
+                scoped(
+                    self.compiler.project, self.unit(entry["unit"])["file"]
+                ).read_text(encoding="utf-8"),
+                entry,
+            )
         self.compiler.build()
+        self.compiler.declaration_lint()
         inventory = self.inventory()
         audit(inventory, self.all_holes())
         # A dependency change cannot keep a cached unit acceptance alive.
@@ -711,9 +850,25 @@ class Run:
         graph = self.get(self.state["graph"])
         validate_plan(plan, graph)
         declaration_contract(self.units(), graph, inventory)
-        topology = self.compiler.topology(plan)
         catalog = self.compiler.catalog(self.units())
         output = catalog_contract(plan, catalog, inventory)
+        topology = self.compiler.topology(plan)
+        self.check_public_designs(plan, inventory)
+        validation = self.put(
+            {
+                "status": "passed",
+                "stage": "statements",
+                "controller": self.state["controller"],
+                "graph": self.state["graph"],
+                "plan": self.state["plan"],
+                "files": repository_files(self.compiler.project),
+                "environment": self.state["environment"],
+                "checks": STATEMENT_GATE_ORDER,
+                "catalog": catalog,
+                "output_contract_check": output,
+                "comparator_topology": topology,
+            }
+        )
         packet = self.packet(
             "composition_review",
             {
@@ -724,6 +879,12 @@ class Run:
                 "catalog": catalog,
                 "output_contract_check": output,
                 "comparator_topology": topology,
+                "statement_validation": validation,
+                "statement_checks": {
+                    "status": "passed",
+                    "checks": STATEMENT_GATE_ORDER,
+                    "receipt_path": str(self.root / "objects" / (validation + ".json")),
+                },
             },
             clauses,
             extra_checks=["obligation:" + o["id"] for o in plan["deferred_obligations"]]
@@ -732,6 +893,7 @@ class Run:
             + ["node:" + n["id"] for n in graph["nodes"]],
         )
         self.state["composed_inventory"] = self.put(inventory)
+        self.state["statement_validation"] = validation
         self.queue(packet, "composition")
         self.save("composition_submitted")
 
@@ -740,6 +902,7 @@ class Run:
             self.state["phase"] == "ready_to_freeze" and self.state["composition"],
             "Composition must pass before freeze",
         )
+        self.checked_statement_validation()
         inventory = self.inventory()
         require(
             frozen_signature(inventory)
@@ -754,12 +917,17 @@ class Run:
             "plan": self.state["plan"],
             "composition": self.state["composition"],
             "units": self.state["units"],
+            "statement_validation": self.state["statement_validation"],
         }
         self.state["freeze"] = self.put(frozen)
         self.state["phase"] = "proofs"
         self.save("frozen")
 
     def prove(self, name, proof):
+        with self.transaction():
+            return self._prove(name, proof)
+
+    def _prove(self, name, proof):
         require(self.state["phase"] == "proofs", "Freeze statements before proving")
         text(proof, "proof body")
         require(
@@ -789,7 +957,9 @@ class Run:
             newline="\n",
         )
         try:
+            self.compiler.source_style()
             self.compiler.build()
+            self.compiler.declaration_lint()
             inventory = self.inventory()
             check_proof_signature(
                 self.get(self.state["freeze"])["signature"], inventory, self.all_holes()
@@ -808,6 +978,10 @@ class Run:
         self.save("proof_checked", name)
 
     def reopen(self, uid, reason):
+        with self.transaction():
+            return self._reopen(uid, reason)
+
+    def _reopen(self, uid, reason):
         text(reason, "reason for reopening statements")
         require(self.state["plan"], "No statement plan to reopen")
         self.unit(uid)
@@ -821,9 +995,14 @@ class Run:
                     self.get(row["candidate"])["code"], encoding="utf-8", newline="\n"
                 )
         self.state["phase"] = "statements"
+        self.compiler.sync_index()
         self.save("statements_reopened", {"affected": affected, "reason": reason})
 
     def restart_graph(self, reason):
+        with self.transaction():
+            return self._restart_graph(reason)
+
+    def _restart_graph(self, reason):
         text(reason, "reason for graph revision")
         for u in self.units():
             if u["mode"] == "new" and self.state["units"][u["id"]]["candidate"]:
@@ -841,7 +1020,43 @@ class Run:
             final=None,
         )
         self.state.pop("repair_request", None)
+        self.state.pop("statement_validation", None)
+        self.compiler.sync_index()
         self.save("graph_reopened", reason)
+
+    def checked_statement_validation(self, frozen=None):
+        """Require pre-proof checks on the exact reviewed statement sources."""
+        key = (frozen or self.state).get("statement_validation")
+        require(key, "Statement validation must pass before freeze/proof completion")
+        record = self.get(key)
+        expected_files = (
+            frozen["files"] if frozen else repository_files(self.compiler.project)
+        )
+        require(
+            record["status"] == "passed" and record["stage"] == "statements",
+            "Missing successful statement-stage validation",
+        )
+        require(
+            record.get("checks") == STATEMENT_GATE_ORDER,
+            "Incomplete or out-of-order statement validation",
+        )
+        for name in ("controller", "graph", "plan", "environment"):
+            require(
+                record[name] == self.state[name], "Stale statement validation: " + name
+            )
+        require(
+            record["files"] == expected_files,
+            "Statement sources changed after validation",
+        )
+        # The independent composition verdict must cover this exact gate receipt.
+        review = self.get(self.state["composition"])
+        packet = self.get(self.state["last_review"]["packet"])
+        require(
+            packet["basis"] == review["basis"]
+            and packet["candidate"]["statement_validation"] == key,
+            "Composition review does not cover statement validation",
+        )
+        return record
 
     def finish(self):
         require(
@@ -871,6 +1086,7 @@ class Run:
                     == expected,
                     "Edits occurred outside registered proof bodies",
                 )
+        validation = self.checked_statement_validation(frozen)
         public_paths = [
             u["file"] for u in self.units() if in_category(u["file"], "Theorems")
         ]
@@ -878,13 +1094,10 @@ class Run:
         inventory = self.inventory()
         check_proof_signature(frozen["signature"], inventory, self.all_holes())
         audit(inventory, final=True)
-        catalog = self.compiler.catalog(self.units())
+        catalog = validation["catalog"]
         graph, plan = self.get(self.state["graph"]), self.get(self.state["plan"])
-        validate_graph(graph, self.get(self.state["evidence"]))
-        validate_plan(plan, graph)
-        declaration_contract(self.units(), graph, inventory)
-        output = catalog_contract(plan, catalog, inventory)
-        topology = self.compiler.topology(plan)
+        output = validation["output_contract_check"]
+        topology = validation["comparator_topology"]
         require(
             self.compiler.environment() == self.state["environment"],
             "Final environment differs from the freeze",
@@ -899,6 +1112,7 @@ class Run:
             "source_inventory": graph["inventory"],
             "output_contract": plan["output_contract"],
             "comparator_topology": topology,
+            "statement_validation": frozen["statement_validation"],
             "environment": self.state["environment"],
             "files": {p: files[p] for p in sorted(allowed)},
             "repository_commit": self.state["repository_commit"],
@@ -926,14 +1140,28 @@ class Run:
         write_json(destination / "verification.json", result)
         return result
 
+    def check_public_designs(self, plan, inventory):
+        units = {u["id"]: u for u in plan["units"]}
+        for e in plan["output_contract"]["public_results"]:
+            observed_design(e, inventory)
+            lint_public_budget(
+                scoped(self.compiler.project, units[e["unit"]]["file"]).read_text(
+                    encoding="utf-8"
+                ),
+                e,
+            )
+
     def next(self):
+        return bounded_packet(self._next())
+
+    def _next(self):
         s = self.state
         common = {
             "phase": s["phase"],
             "target": s["target"],
             "run": str(self.root),
             "last_review": s.get("last_review"),
-            "instructions": "Read AGENTS.md, WORKFLOW.md and your role prompt. Never invent tool observations.",
+            "instructions": "Apply the complete supplied workflow policy, including OUTPUT_CONTRACT.md and your role prompt. Do not infer output requirements from external repository guidance or examples. Never invent tool observations.",
         }
         common["project"] = str(self.compiler.project)
         common["paths"] = {
@@ -975,6 +1203,10 @@ class Run:
                 "server/Theorems/BudgetLatex.lean",
             )
         }
+        validate_template_contract(
+            policy_documents()["OUTPUT_CONTRACT.md"].read_text(encoding="utf-8"),
+            common["repository_interfaces"]["LongTails/Template.lean"],
+        )
         common["repository_commit"] = s["repository_commit"]
         common["repository_instructions"] = (
             self.compiler.project / "AGENTS.md"
@@ -983,7 +1215,14 @@ class Run:
         common["policy"] = {
             name: path.read_text(encoding="utf-8")
             for name, path in policy_documents().items()
-            if name in {"AGENTS.md", "WORKFLOW.md", "PROTOCOL.md", role_prompt}
+            if name
+            in {
+                "AGENTS.md",
+                "WORKFLOW.md",
+                "PROTOCOL.md",
+                "OUTPUT_CONTRACT.md",
+                role_prompt,
+            }
         }
         common["source"] = self.get(s["source"])
         common["source_ids"] = self.get(s["evidence"])

@@ -1,8 +1,10 @@
 # Autoformalization for auto-math
 
 These are the task-specific instructions for formalizing existing mathematics in
-auto-math. Read this file and WORKFLOW.md before a run. Read the target repository's
-AGENTS.md as well. The user's latest instructions take precedence. This workflow
+auto-math. Apply this file, WORKFLOW.md, PROTOCOL.md, OUTPUT_CONTRACT.md and the
+role prompt supplied in each packet. These workflow policies state all output
+requirements explicitly; do not infer them from the target repository's AGENTS.md,
+README, tutorial or example modules. The user's latest instructions take precedence. This workflow
 does not invoke auto-math's novelty-seeking research prompt.
 
 ## Repository context
@@ -15,8 +17,10 @@ checkout. Each run works in a compact project at <run>/project.
 In task packets, paths.project identifies that checkout and paths.workflow
 identifies these instructions. Generated outputs/, copied LongTails/ dependencies, server/ and build
 paths resolve under paths.project. The packet supplies absolute resource paths,
-repository instructions and the actual template/renderer source. Read them before
-planning. Submit candidates through the controller.
+run-local instructions, the complete workflow policy and actual template/renderer
+source. Apply these supplied contents before planning. Submit candidates through
+the controller. The original repository AGENTS.md hash is provenance, not an
+additional source of unstated mathematical or output requirements.
 
 Generated modules use outputs.*; copied dependencies retain LongTails.*.
 The controller copies only the selected transitive dependency closure and builds
@@ -100,8 +104,10 @@ convergence result, and counts typed assumption clauses and parameter objects.
 These latter counts are scoped occurrences, not claims about the number of
 distinct mathematical concepts. Review repeated identities and substitutions.
 Keep numerical definitions separate from propositions about their values.
-Prop-valued assumption/success definitions are permitted; defining a predicate
-or bound does not prove a claimed property or cost relation.
+Reusable Prop-valued assumption predicates are permitted. In public successful
+fields, write the accuracy inequality inline; do not hide it in a setup-local
+success/Guarantee helper. Ordinary mathematical predicates may accompany that
+visible criterion. Defining a predicate or bound proves no property or cost relation.
 
 Every convergence result in the required closure needs exactly one public module,
 including results used only as dependencies and reused results. The plan records
@@ -123,7 +129,7 @@ lake-manifest.json. Do not copy old compiled artifacts from another Lean version
 Preserve existing repository declarations. No generic Formalized namespace, flat
 assumptions.lean/algorithms.lean output, or alternative public theorem API.
 
-Follow actual module conventions: imports, namespace, abbrev spec : Setup, one
+Follow the explicit OUTPUT_CONTRACT.md templates: imports, namespace, abbrev spec : Setup, one
 explicit single-line public budget definition, and theorem result : Convergence
 outputs.Setups.<Module>.spec budget. Put supporting results in Proofs, even if their informal labels say
 'theorem'. Group related lemmas; do not create one file per local fact. Distinct
@@ -131,8 +137,9 @@ public cases use separate appropriately named modules. Validate namespace/name
 compatibility with Comparator and catalog extraction. Each public module has
 exactly one main theorem; supporting theorems belong in Proofs.
 
-The template is a mathematical contract, not just a folder convention. Inspect
-LongTails/Template.lean and a relevant existing module before planning any output:
+The template is a mathematical contract, not just a folder convention. Its entire
+source and the construction rules are supplied in OUTPUT_CONTRACT.md and
+repository_interfaces; no external example is needed to determine requirements:
 
 - Algorithms use OracleTemplate.Algorithm, including the seed/law, state,
   initialization, query, update and output needed by the source method. Queries
@@ -163,11 +170,12 @@ LongTails/Template.lean and a relevant existing module before planning any outpu
   model in Proofs. Never replace these interfaces with look-alike definitions.
 
 Select the namespace, imported proof modules and explicit budget from the reviewed
-source contract. Inspect relevant existing modules for syntax and style without
-adopting their mathematical assumptions, algorithm variants or rate formulas.
+source contract and explicit workflow templates. Inspect library declarations
+only for justified reuse; do not infer syntax/style requirements or import their
+mathematical assumptions, algorithm variants or rate formulas as defaults.
 
 The controller checks the resolved Convergence/spec/budget identities and their
-module ownership. Before public statement review and again before completion,
+module ownership. Before public statement review and at composition,
 it runs the pinned repository's theorem extractor and BudgetLatex renderer.
 Each public module must yield exactly its planned result, matching setup and
 setup namespace, and every oracle budget component with nonempty type, value and
@@ -177,8 +185,8 @@ The complete catalog must also have exactly the public results in the graph/plan
 inventory, with the reviewed setup association; no missing, duplicate or extra
 module may be hidden by checking modules individually. Composition review
 includes the aggregate catalog and explicit output counts before freezing.
-The statement review packet includes this catalog evidence; final verification
-retains it with the extractor/renderer source hashes. Missing tools, extraction
+The statement review packet includes this catalog evidence; the pre-freeze
+validation receipt binds it to reviewed sources. Final verification retains it with the extractor/renderer source hashes. Missing tools, extraction
 failures, ambiguous discovery and unsupported notation block acceptance/export.
 
 BudgetLatex is a display renderer, not a proof or semantic validator. Repair an
@@ -189,17 +197,49 @@ repairs require reopening the affected statement closure. Compatibility checking
 does not write server/theorems.json or server/Theorems/Descriptions; publishing
 those website artifacts is a separate operation.
 
-Reconcile outdated paths or method-specific research defaults in repository
-instructions with the active oracle layout and the supplied source contract.
-These task instructions explicitly select the active layout. Preserve applicable
-mathematical correctness, reuse, naming, cost and verification requirements.
-Preserve the source algorithm variant even where older research defaults differ.
+This workflow explicitly selects the layout and mathematical requirements above
+and in OUTPUT_CONTRACT.md. Research defaults in external repository instructions
+are not part of this workflow. Preserve the supplied source's method and cases;
+do not substitute novelty search or a different algorithm variant.
 
 Do not add explanatory Lean comments/docstrings unless requested. Keep source
 correspondence, reviews and unresolved issues in run artifacts outside the Lean
 deliverables. No Git commit or push is implied by formalization.
 
 ## Statement stage and semantic gate
+
+The statement gate order is mandatory, not a list of optional end-of-run checks:
+
+1. Write the candidate inside the controller transaction and regenerate the
+   outputs import index. Run native text/style lint and source budget-syntax lint.
+   A formatting failure stops here, before candidate elaboration or semantic review.
+2. Materialize pinned dependencies, elaborate the candidate and run the native
+   declaration lint (excluding only the repository's docBlame check). Registered
+   `by sorry` theorem slots are expected at this stage; they are not proof evidence.
+3. Check proof-hole registration, declaration ownership/layout, allowed axioms,
+   compiled interfaces and structured parameter/tuning/output designs. For public
+   units, run the actual theorem extractor, budget renderer, catalog bijection and
+   Comparator discovery/topology checks before issuing a semantic review packet.
+4. Obtain independent semantic statement review. A failed earlier mechanical gate
+   must never create a pending reviewer packet or an accepted candidate.
+5. On the assembled statements, repeat the aggregate checks and record an immutable
+   statement-validation receipt with source hashes, environment, graph, plan and
+   controller identity. Composition review must cover that exact receipt.
+6. Freeze only after the receipt and composition approval match the current sources.
+   Then fill registered proof bodies. Check newly inserted proof text/style and
+   declaration lint immediately; proof-format repairs stay inside the proof slot.
+7. Final verification checks frozen-source preservation, strict compilation, full
+   proof Comparator checks and transitive axiom freedom. Native lint repeats only
+   as a regression check on proof changes. Catalog, budget-rendering, topology and
+   statement-design evidence is carried forward from the verified pre-freeze
+   receipt after source and signature preservation checks; it is not first computed
+   after proving. No statement-only gate may be deferred to completion.
+
+Text/style lint needs source files; declaration lint and metadata extraction need
+elaboration; semantic review needs all of that evidence; proof checks need filled
+proofs. Assign every new gate by these dependencies, not by when it was requested.
+Graph and plan reviews precede Lean generation and remain separate from semantic
+review of the written statements.
 
 Formalize dependencies before consumers. Required theorem/lemma statements start
 with registered proof holes ending `:= by sorry`. Concrete definition and algorithm
@@ -230,7 +270,8 @@ cannot express the target faithfully, investigate and report that incompatibilit
 
 ## Freeze and proof stage
 
-After all required statements and composition pass, freeze the graph revision,
+After every statement-format/structure gate and semantic composition review pass,
+require the immutable validation receipt for the current exact sources, then freeze the graph revision,
 declaration types, concrete definitions, algorithms, setup/success predicates,
 budgets, instances, imports and dependency/toolchain versions. Register each
 editable proof body by declaration identity and source location.
@@ -264,8 +305,9 @@ Classical.choice and Quot.sound.
 Compile the changed output module and its transitive imports after Lean changes.
 The controller generates outputs.lean from outputs/ only; final checks build outputs.
 Never clone, copy or build the whole LongTails library for a run.
-Use python3 run_comparator.py <theorem-file> for final public results, the native
-Lean lint checks, and separately audit supporting declarations. Do not
+Run native style and declaration lint before statement review and immediately
+after proof edits. Use python3 run_comparator.py <theorem-file> for final proved
+public results, repeat lint as a proof-change regression, and audit supporting declarations. Do not
 claim proof verification from a zero compiler exit code with sorry warnings.
 
 ## Progress and honesty

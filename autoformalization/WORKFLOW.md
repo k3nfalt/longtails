@@ -12,10 +12,14 @@ auto-math/autoformalization; initialization uses the containing repository unles
 --repo selects another checkout. The controller creates a compact <run>/project
 and supplies its absolute resource paths in each task packet. Repository-relative
 Generated outputs/, copied LongTails/ dependencies and server/ paths refer to paths.project. The packet also includes the
-actual template and renderer source in repository_interfaces.
+actual template and renderer source in repository_interfaces and the complete
+OUTPUT_CONTRACT.md in policy. The contract includes the exact imported Lean API,
+construction templates and all output requirements; no external examples or
+repository-root instructions are required to determine them.
 
-Inspect the actual repository revision, worktree state, AGENTS.md, Template.lean,
-toolchain, manifest, representative relevant modules and verification scripts.
+Inspect the actual repository revision, worktree state, supplied workflow policy
+and interface source, toolchain, manifest and verification scripts. Consult
+library modules for reuse only, not for unstated output/style requirements.
 Do not reset or overwrite other work. Use the compact run project when editing; retrieve library sources read-only from paths.repository.
 Record the baseline and run identity. Do not run research_prompt.md.
 
@@ -129,6 +133,19 @@ Use auto-math's exact existing interfaces and routing. Specify Public versus
 Params information; valid/admissible/successful/allowedAlgorithm; query/reply/output;
 state, initialization, update and output; explicit public budget and result.
 
+Use the Lean templates and field rules in the supplied OUTPUT_CONTRACT.md. Record
+each parameter's mathematical role and public/hidden status, explicit tuning
+dependencies, the visible accuracy criterion, actual output selection, inline
+budget components and the derivation from the source rate. Put these designs in
+the existing unit detail/adaptation/deferred-obligation fields. A free sufficient
+horizon is not an explicit complexity formula; an unmet tuning/work implication
+is not a substitute for output accuracy. Keep the exact source statement in
+reviewed supporting lemmas and prove the adaptation. Resolve genuine source/API
+incompatibilities before plan acceptance without silently changing the source.
+The four output:parameter_roles, output:accuracy_contract, output:explicit_budget
+and output:source_adaptation checks are mandatory for every public node at plan,
+public statement and composition review.
+
 Check that the source method is actually pinned, rather than approving any
 existential algorithm. Record the correspondence between source iterations and
 primitive queries, batching, selected/averaged/last output, probability laws,
@@ -167,6 +184,39 @@ Formalize dependencies before consumers. Implement complete definitions and
 algorithms; write each required theorem/lemma statement with a registered
 `:= by sorry` body. Do not use placeholders in computational definitions.
 
+The statement gate order is mandatory, not a list of optional end-of-run checks:
+
+1. Write the candidate inside the controller transaction and regenerate the
+   outputs import index. Run native text/style lint and source budget-syntax lint.
+   A formatting failure stops here, before candidate elaboration or semantic review.
+2. Materialize pinned dependencies, elaborate the candidate and run the native
+   declaration lint (excluding only the repository's docBlame check). Registered
+   `by sorry` theorem slots are expected at this stage; they are not proof evidence.
+3. Check proof-hole registration, declaration ownership/layout, allowed axioms,
+   compiled interfaces and structured parameter/tuning/output designs. For public
+   units, run the actual theorem extractor, budget renderer, catalog bijection and
+   Comparator discovery/topology checks before issuing a semantic review packet.
+4. Obtain independent semantic statement review. A failed earlier mechanical gate
+   must never create a pending reviewer packet or an accepted candidate.
+5. On the assembled statements, repeat the aggregate checks and record an immutable
+   statement-validation receipt with source hashes, environment, graph, plan and
+   controller identity. Composition review must cover that exact receipt.
+6. Freeze only after the receipt and composition approval match the current sources.
+   Then fill registered proof bodies. Check newly inserted proof text/style and
+   declaration lint immediately; proof-format repairs stay inside the proof slot.
+7. Final verification checks frozen-source preservation, strict compilation, full
+   proof Comparator checks and transitive axiom freedom. Native lint repeats only
+   as a regression check on proof changes. Catalog, budget-rendering, topology and
+   statement-design evidence is carried forward from the verified pre-freeze
+   receipt after source and signature preservation checks; it is not first computed
+   after proving. No statement-only gate may be deferred to completion.
+
+Text/style lint needs source files; declaration lint and metadata extraction need
+elaboration; semantic review needs all of that evidence; proof checks need filled
+proofs. Assign every new gate by these dependencies, not by when it was requested.
+Graph and plan reviews precede Lean generation and remain separate from semantic
+review of the written statements.
+
 Compile under auto-math's pinned environment and inspect the elaborated
 declarations independently of the Formalizer's proposed mappings. Inventory
 types/binders/instances, assumptions, conclusions, operation applications,
@@ -196,7 +246,9 @@ plumbing constant.
 
 ## 7. Review composition and freeze
 
-Rebuild the assembled modules. Inspect actual final types and dependencies.
+Run aggregate style, elaboration, declaration lint, catalog/rendering, interface
+and topology checks before composition review. Bind the results in the immutable
+statement-validation receipt. Inspect actual final types and dependencies.
 Discharge every deferred obligation; reconcile source cases and theorem-group
 relationships. All supporting statements and the main result must be accepted.
 Recompute the complete catalog and match it bijectively to the reviewed public
@@ -239,17 +291,14 @@ Audit all delivered declarations, including auxiliary results, for transitive
 axioms. Only propext, Classical.choice and Quot.sound are permitted. Verify no
 unfinished bodies or custom axioms remain.
 
-Enforce the exact output contract in AGENTS.md: UpperCamelCase paths, the
-original template interfaces and namespace/spec/budget/result conventions.
-Run the pinned repository's actual theorem extractor and BudgetLatex renderer
-for every public module, including reused public results. Require exactly the
-planned result, matching setup/namespace and one successfully rendered budget.
-This check also runs before public statement review, so unsupported notation is
-repaired before freeze. A failed final check prevents completion and export.
-Save catalog rows and extractor/renderer hashes in final verification; do not
-omit the source inventory, public-result mapping and validated counts from the
-completion artifact. Final checks repeat the aggregate bijection and confirm
-that all cost/setup correspondence witnesses are actual theorem declarations.
+Require the exact statement-validation receipt accepted at composition and
+bound into the freeze. Verify source preservation outside registered proof slots
+and frozen declaration signatures before carrying its catalog rows, renderer hashes,
+interface/topology evidence and validated counts into final verification. The
+statement-only checks already passed in steps 6 and 7. Full proof Comparator,
+strict warning-free build and transitive axiom audit run here because they require
+completed proofs. Native lint is a proof-change regression, not a first statement
+format check. A failed final check prevents completion and export.
 Do not
 generate or publish website metadata as part of compatibility checking.
 Keep existing core files unchanged. Report
@@ -271,6 +320,15 @@ Bind caches to actual source/target, dependency, candidate, policy and environme
 identities. Resume the failed stage of a valid checkpoint; do not replay known
 failed drafts or rerun unrelated accepted units. A changed node invalidates its
 affected descendants, not the entire unrelated project.
+
+Develop controller changes in one isolated candidate from an exact live baseline.
+Use one writer per file; coordinate ownership before any delegated edits. Test the
+earliest failure boundary of every gate and the order of downstream actions.
+Before deployment, hold the workflow upgrade lock and existing run locks, compare
+all live workflow hashes against the baseline, and abort on concurrent edits.
+Preserve the old controller, accepted run/state/source artifacts and exports; apply
+only reviewed changed files atomically with rollback on validation failure. Never
+reset unrelated work or migrate accepted runs by editing their state hashes.
 
 Runs are bound to the exact controller and policy hashes. Preserve the complete
 old workflow directory before upgrading contracts if old runs must remain

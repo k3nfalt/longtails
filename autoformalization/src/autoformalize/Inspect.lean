@@ -63,6 +63,8 @@ def afRecord (name : Name) (trees : Bool) : CommandElabM Json := do
     ("axioms", toJson ((axioms.qsort (fun a b => a.toString < b.toString)).map Name.toString)),
     ("range", ranges.map (afRangeJson ·.range) |>.getD Json.null),
     ("selection", ranges.map (afRangeJson ·.selectionRange) |>.getD Json.null)]
+  if (getStructureInfo? env name).isSome then
+    fields := fields ++ [("structure_fields", toJson ((getStructureFieldsFlattened env name false).map Name.toString))]
   if trees then
     fields := fields ++ [("type_tree", afExprTree ci.type), ("value_tree", value.map afExprTree |>.getD Json.null)]
   return Json.mkObj fields

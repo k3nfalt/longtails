@@ -1,17 +1,34 @@
-# Agent protocol, version 2
+# Agent protocol, version 3
 
 Every response is one UTF-8 JSON object. Unknown fields, duplicate keys and
 nonfinite numbers are rejected. Use LF for Lean source. Run artifacts live outside
 the delivered oracle files. Read `next` after each transition; do not infer success
 from an adapter exit code or from a Lean build containing sorry warnings.
 
-This version adds exhaustive classification and output inventories. Runs retain
+Statement submission is atomic at the Run.submit_statement API boundary, not
+only at the CLI/drive boundary. The rollback journal is written before any
+invalidation, descendant deletion or candidate write. It covers all managed
+new-unit files, outputs.lean and the prior state. Compiler, design/evidence,
+packet-size and state-save failures restore these together; newly copied pinned
+dependencies are removed. Successful submission saves the new file set and state.
+Nested transactions share a single journal. An inner failure restores immediately
+and aborts the outer transaction even if the inner exception was caught. An
+existing interrupted journal cannot be overwritten: use `recover --run <run>`
+before retrying. Process interruptions leave the journal for recovery. If recovery
+itself fails (for example unavailable storage), retain the journal and report the
+error; never continue a run whose recovery has not completed. Oversize rollback
+journals are rejected before modifying project files. Immutable unreferenced
+evidence objects may remain after rollback; they confer no acceptance or state.
+
+This version requires structured public-interface designs and bounded, referenced
+review evidence, in addition to classification/output inventories. Runs retain
 the state-envelope version but are bound to the complete controller/policy hash.
 Use the preserved old workflow to load or export an older run; do not migrate
 accepted artifacts by adding fields or reuse old approvals for the new schema.
 
 This JSON protocol carries agent responses; delivered Lean files must separately
-obey the mandatory output contract in AGENTS.md. Public result candidates retain
+obey the explicit Lean templates and field rules in OUTPUT_CONTRACT.md, supplied
+in full in every task packet. Public result candidates retain
 the original Setup/Algorithm/Convergence interfaces and must be discoverable by
 the repository's catalog extractor with a BudgetLatex-renderable budget.
 
@@ -21,6 +38,10 @@ Repository-relative paths in this protocol resolve under `paths.project`.
 `repository_interfaces` supplies the actual template and renderer text from that
 checkout. Agent adapters may have a different working directory; use these paths
 and submit code through the controller rather than editing repositories directly.
+The complete workflow policy is in `policy`, including OUTPUT_CONTRACT.md and the
+current role prompt. Do not consult repository-root AGENTS.md or examples to
+infer requirements. The controller checks the embedded Template.lean reference
+against the run's actual imported template; mismatch blocks packet generation.
 
 ## Graph
 
@@ -129,9 +150,35 @@ investigation evidence in the run while working toward resolution.
                  "probability": "Laws and probability meaning", "source_correspondence": "Contract and necessary transport results"},
   "deferred_obligations": [{"id": "transport", "owner": "support", "requirement": "Exact obligation and how the reviewed statement discharges it"}],
   "output_contract": {
+    "schema_version": 3,
     "public_results": [{
       "node": "T1", "unit": "public", "result": "OracleTemplate.Example.result",
       "setup_unit": "setup", "spec": "outputs.Setups.Example.spec", "budget": "OracleTemplate.Example.budget",
+      "design": {
+        "params": "outputs.Setups.Example.Params",
+        "parameters": [
+          {"field": "L", "role": "problem_data", "public": true, "justification": "Supplied smoothness upper bound"},
+          {"field": "Δ", "role": "problem_data", "public": true, "justification": "Supplied initial gap upper bound"},
+          {"field": "ε", "role": "accuracy", "public": true, "justification": "Requested accuracy"}
+        ],
+        "tuning": [{"name": "K", "declaration": "outputs.Algorithms.Example.horizon",
+                    "expression": "⌈4 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1", "uses": ["L", "Δ", "ε"],
+                    "proofs": ["OracleTemplate.Example.tuningLegal"]}],
+        "output": {"kind": "random", "algorithm": "outputs.Algorithms.Example.tuned",
+                   "selector": "outputs.Algorithms.Example.output", "probability_mode": "expectation",
+                   "criterion": "(∫ ω, ‖gradient f (output ω)‖ ^ 2 ∂(P : Measure _)) ≤ p.ε ^ 2",
+                   "proofs": ["OracleTemplate.Example.accuracy"]},
+        "budget": {"expression": "fun p _ => ⌈4 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1", "num_oracles": 1,
+                   "components": [{"oracle": 0, "expression": "⌈4 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1",
+                                   "uses": ["L", "Δ", "ε"], "accuracy_independent_reason": "",
+                                   "proofs": ["OracleTemplate.Example.costCorrespondence"]}],
+                   "boundary_cases": [{"case": "Δ = 0 and natural ceiling rounding",
+                                       "reason": "The chosen horizon remains positive and sufficient",
+                                       "proofs": ["OracleTemplate.Example.tuningLegal"]}]},
+        "adaptation": {"kind": "derived", "source_nodes": ["T1"],
+                       "reason": "Specialize the source rate at the derived horizon and transport to the random output",
+                       "proofs": ["OracleTemplate.Example.accuracy"], "approval": null}
+      },
       "cost": {
         "headline": {"expression": "Source headline bound", "unit": "source_cost_unit", "domain": "Source mathematical domain"},
         "execution": {"expression": "Complete indexed template execution bound", "unit": "template_oracle_calls", "domain": "Fin spec.numOracles → Nat"},
@@ -147,11 +194,87 @@ investigation evidence in the run while working toward resolution.
 ```
 
 This plan fragment omits other required units/declarations for readability.
+The numerical design is only a schema example for a compatible source bound,
+not a rate to import into other theorems. Every named definition and proof must
+be added to its actual owning unit's declarations; the omitted setup, algorithm
+and proof units must be present in a submitted plan.
 Every node and clause
 must have exactly one owner. A unit may group several related nodes into one
 cohesive module. Internal declaration order belongs in `detail.construction`.
 Cross-unit graph prerequisites must be reflected in `depends_on`. A global plan
 is independently reviewed before any statement generation.
+
+The version-3 design object has exactly the keys shown above. `params` names a
+planned concrete structure in Setups. The actual spec must directly use that
+structure for Params; do not name an unrelated look-alike structure to satisfy
+the ledger check. `parameters` enumerates every actual Lean
+field, including inherited fields (excluding generated parent subobject fields).
+Allowed roles are problem_data, accuracy, known_input, analysis_bound and
+family_setting. `public` is Boolean; analysis_bound fields must be false. Every
+field has a nonempty justification, and at least one field has role accuracy.
+Derived tuning and free execution-count roles are forbidden; put their formulas
+in `tuning`, not Params. A source-prescribed family setting requires justification.
+
+Every tuning entry has exactly name, declaration, expression, uses and proofs.
+Names are unique; declaration belongs to Algorithms. Expressions use `p.field`
+to refer to original Params. `uses` lists exactly these referenced fields, all
+marked public. Expand dependency formulas here rather than hiding them in helpers.
+The implemented Public input may have different field names; its mapping from
+these known parameters must be checked by the reviewer. An empty tuning list is
+permitted only when the method genuinely has no tuning, explained in construction.
+
+Output kind is last, best, random, average or certificate. Both algorithm and
+selector name actual Algorithms definitions (the same declaration may serve both
+if its output field directly defines selection). Probability mode is expectation,
+deterministic, almost_sure or high_probability. criterion is a nonempty, inline
+Lean formula. Include regularity/feasibility conjuncts required by the source.
+
+Budget expression is the complete single-line `fun p ... => ...` lambda used in
+Lean. num_oracles is a positive integer; components cover IDs 0 through n-1 in
+order exactly once. Each component has exactly oracle, expression, uses,
+accuracy_independent_reason and proofs. The latter reason can be empty only when
+uses includes an accuracy field. Constant or dimension-only costs need an explicit
+reason why they do not depend on accuracy. The mechanical budget lint described
+in OUTPUT_CONTRACT.md also runs on the plan, actual source and extracted catalog.
+boundary_cases is nonempty; each record has case, reason and proofs. Cover all
+rounding, positivity and zero-bound cases relevant to the formulas, or explicitly
+explain the source-domain exclusion with its proof.
+
+Adaptation kind is equivalent, derived or approved_departure. source_nodes is a
+nonempty list of actual graph nodes containing the public result's source node.
+reason explains the precise correspondence. approval is null for equivalent or
+derived; approved_departure requires the exact user-approval evidence as text.
+The reviewer must independently verify that approval; text alone grants none.
+
+All proofs lists above are nonempty, contain distinct planned declarations from
+Proofs, and belong to the public result's prerequisite closure. Statement review
+checks that they elaborate as theorems; their admitted bodies remain obligations,
+not evidence of truth. Final compilation/axiom audits require their proofs.
+All definition references must be planned prerequisite declarations of the stated
+module role. Omitting this design or replacing it with generic free text fails
+schema validation. Structural validation does not decide the truth of formulas,
+whether a role label is honest, or whether a proof proves the intended claim:
+the four mandatory semantic checks still cover these points.
+
+Statement/composition packets include interface_evidence for public results:
+source snapshots for all transitive unit prerequisites, required declaration
+names and the structured design. Inventories contain names rather than repeated
+ASTs; declaration_evidence maps those names to immutable full compiler-record
+references and bounded previews. Read a reference's absolute JSON path and check
+its hash before using it; SHA-256 is over canonical JSON with sorted keys,
+compact separators, ensure_ascii=false, UTF-8 and no newline. Source-file hashes
+are over original bytes. Each large record is kept outside the packet; no record
+is discarded. Missing relevant external library evidence requires inspection or
+an unresolved verdict. Actual code, not the proposed design alone, justifies match.
+
+The packet's required_candidate_evidence map lists the result-specific pointer
+each of the four output match verdicts must cite (that pointer or a descendant).
+Cite the supporting source snapshots and compiler records too in the comparison.
+The controller validates the required pointer, not whether the reviewer read it.
+Both the review packet and the full `next` response, including policies, are
+checked below 64,000,000 UTF-8 bytes in pretty-printed JSON. Overflow blocks;
+never omit evidence to get below the limit. Earlier accepted runs keep their old
+schema, code and approvals and must be opened using their preserved controller.
 
 `node_declarations` covers exactly the owned node IDs, each mapped to a nonempty
 list from the unit's declarations. Actual compiler module ownership is checked.
@@ -180,7 +303,7 @@ Justification and independent review must establish that no hypotheses, domains
 or parameter dependencies are strengthened or dropped. A setup exports
 outputs.Setups.<Module>.spec. Compatible public results may share that setup.
 Discovery uses the pinned run_comparator.py and tools/ConvergenceMetadata.lean
-before statement review and at composition/completion. It checks compiled
+before statement review and at composition, before freezing. It checks compiled
 result/spec/budget identities and generated challenge configurations for planned
 public files. Before those files exist, compiled planned setups are checked for
 their module-qualified spec. Counts report actual planned units.
@@ -205,7 +328,7 @@ does not establish a cost bound on execution. All witness proofs must pass the
 ordinary frozen proof and final axiom checks.
 
 The controller verifies the public-result/module/setup counts and the complete
-catalog bijection at composition and completion. Per-public-unit checks run
+catalog bijection at composition; completion verifies preservation of that checked basis. Per-public-unit checks run
 before its statement review. Missing/extra/duplicate results and incorrect setup
 associations block progress. Final verification includes both structured
 inventories and observed counts; extraction does not publish website metadata.
@@ -218,6 +341,19 @@ belong in Proofs; public convergence results belong in Theorems. Distinct public
 cases use distinct modules. Declaration names use explicit qualified ASCII Lean
 identifiers (subscript digits are allowed); source mathematical names may be
 Unicode. Rename an unsupported exported identifier in a new module if needed.
+
+For each public result, include the explicit parameter-role ledger, allowed
+tuning inputs, exact Lean setup/output/accuracy/budget designs and source-to-public
+derivation in the existing `detail.construction`, `detail.edge_cases`, `adaptation`
+and `deferred_obligations` fields, as specified by OUTPUT_CONTRACT.md. No new JSON
+keys are introduced. Four additional mandatory checks are generated per public
+source node at plan, public statement and composition review:
+`output:parameter_roles:<node>`, `output:accuracy_contract:<node>`,
+`output:explicit_budget:<node>`, and `output:source_adaptation:<node>`.
+Each must carry concrete source/candidate evidence and a comparison; omission or
+`not_applicable` is rejected, and mismatch/unresolved prevents acceptance. These
+are independent semantic review requirements, not claims of automatic semantic
+verification. Required source cases and the public-result bijection remain intact.
 
 ## Statement candidate
 
@@ -236,6 +372,39 @@ For `reuse`, send `code: ""`, `holes: []`. `providers` requests additional exact
 qualified declarations reachable through the module imports, including deeper
 definitions needed for semantic interpretation. Add needed imports before freeze.
 
+The statement gate order is mandatory, not a list of optional end-of-run checks:
+
+1. Write the candidate inside the controller transaction and regenerate the
+   outputs import index. Run native text/style lint and source budget-syntax lint.
+   A formatting failure stops here, before candidate elaboration or semantic review.
+2. Materialize pinned dependencies, elaborate the candidate and run the native
+   declaration lint (excluding only the repository's docBlame check). Registered
+   `by sorry` theorem slots are expected at this stage; they are not proof evidence.
+3. Check proof-hole registration, declaration ownership/layout, allowed axioms,
+   compiled interfaces and structured parameter/tuning/output designs. For public
+   units, run the actual theorem extractor, budget renderer, catalog bijection and
+   Comparator discovery/topology checks before issuing a semantic review packet.
+4. Obtain independent semantic statement review. A failed earlier mechanical gate
+   must never create a pending reviewer packet or an accepted candidate.
+5. On the assembled statements, repeat the aggregate checks and record an immutable
+   statement-validation receipt with source hashes, environment, graph, plan and
+   controller identity. Composition review must cover that exact receipt.
+6. Freeze only after the receipt and composition approval match the current sources.
+   Then fill registered proof bodies. Check newly inserted proof text/style and
+   declaration lint immediately; proof-format repairs stay inside the proof slot.
+7. Final verification checks frozen-source preservation, strict compilation, full
+   proof Comparator checks and transitive axiom freedom. Native lint repeats only
+   as a regression check on proof changes. Catalog, budget-rendering, topology and
+   statement-design evidence is carried forward from the verified pre-freeze
+   receipt after source and signature preservation checks; it is not first computed
+   after proving. No statement-only gate may be deferred to completion.
+
+Text/style lint needs source files; declaration lint and metadata extraction need
+elaboration; semantic review needs all of that evidence; proof checks need filled
+proofs. Assign every new gate by these dependencies, not by when it was requested.
+Graph and plan reviews precede Lean generation and remain separate from semantic
+review of the written statements.
+
 Compilation and compiler-owned inventories precede review. The inventory includes
 all declarations owned by new modules, full expression structure, raw types and
 definition bodies, direct providers, and a list of deeper dependencies not yet
@@ -248,7 +417,10 @@ rendered budget and extractor/renderer source hashes. Extraction must pass befor
 the review packet is issued. Inspect the rendered formula's correspondence to the
 reviewed budget; renderer success alone says nothing about source faithfulness.
 The mandatory `catalog:<unit>` check must pass and cannot be marked not applicable.
-Final verification repeats extraction and retains `catalog` in verification.json.
+Composition repeats aggregate extraction before review. Freeze requires the exact
+`statement_validation` receipt covered by composition approval. Final verification
+checks proof-only source preservation and frozen signatures, then carries this
+receipt's `catalog` into verification.json without rerunning statement-only extraction.
 
 ## Bidirectional review
 
@@ -285,7 +457,8 @@ records remain immutable; an identical rejected basis cannot be resubmitted.
 {"declaration": "OracleTemplate.Example.bound", "proof": "by\n  trivial"}
 ```
 
-After all statements and composition are accepted, `freeze` captures source,
+After all statement gates and composition are accepted, `freeze` verifies the
+source-bound validation receipt and captures source,
 types, definitions, environment and registered proof slots. Each replacement
 must parse as one `by` term. Complete prerequisites first. Local `have`/`let`
 steps are allowed; new source theorems must return through the graph/statement
@@ -295,7 +468,11 @@ When `next` requests `repair`, return `{"unit": "support", "reason": "..."}`
 to reopen that closure, or `{"reason": "..."}` for a revised graph. The same
 operations are available via `reopen`. An interface change in a prerequisite
 removes stale descendant modules from the active checkout while retaining their
-artifacts for repair. Unrelated accepted work survives.
+artifacts for repair. Regenerate outputs.lean before saving the reopened state.
+Reopen, graph restart, statement submission, composition and proof insertion each
+own a rollback transaction even when called directly. A failed check or state save
+restores source files, descendants, generated index and checkpoint together.
+Unrelated accepted work survives.
 
 ## PDF acquisition
 

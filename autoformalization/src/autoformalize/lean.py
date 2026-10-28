@@ -156,21 +156,32 @@ class Compiler:
         if final:
             sync_index(self.project, check=True)
             self.run(["lake", "--wfail", "build", "outputs", "BudgetLatex"])
-            source = adapt_style_linter(
-                (
-                    self.project / ".lake/packages/mathlib/scripts/lint-style.lean"
-                ).read_text(encoding="utf-8")
-            )
-            native = self.project / ".lake/style-check/RunOutputStyle.lean"
-            native.parent.mkdir(parents=True, exist_ok=True)
-            native.write_text(source, encoding="utf-8", newline="\n")
-            self.run(["lake", "exe", "runOutputStyle"])
-            self.run(["lake", "exe", "runLinterNoDocString"])
+            # Proofs can introduce style/linter defects too. Statement checks have
+            # already passed before review; these are proof-stage regressions.
+            self.source_style()
+            self.declaration_lint()
             if public_paths is None:
                 self.run([sys.executable, "run_comparator.py"])
             else:
                 for path in sorted(set(public_paths)):
                     self.run([sys.executable, "run_comparator.py", path])
+
+    def source_style(self):
+        """Native text lint before candidate elaboration or semantic review."""
+        self.sync_index()
+        source = adapt_style_linter(
+            (self.project / ".lake/packages/mathlib/scripts/lint-style.lean").read_text(
+                encoding="utf-8"
+            )
+        )
+        native = self.project / ".lake/style-check/RunOutputStyle.lean"
+        native.parent.mkdir(parents=True, exist_ok=True)
+        native.write_text(source, encoding="utf-8", newline="\n")
+        self.run(["lake", "exe", "runOutputStyle"])
+
+    def declaration_lint(self):
+        """Native elaborated declaration lint, also valid with registered holes."""
+        self.run(["lake", "exe", "runLinterNoDocString"])
 
     def probe(self, modules, tail):
         require(
@@ -592,9 +603,12 @@ def render_proofs(original, holes, proofs):
     return code
 
 
-def public_layout(unit, code, inventory):
+def public_layout(unit, code, inventory, export=None):
     if not in_category(unit["file"], "Theorems"):
         return
+    from .output_contract import lint_public_budget
+
+    lint_public_budget(code, export)
     require(
         len(
             re.findall(

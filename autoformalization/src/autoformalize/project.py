@@ -151,9 +151,9 @@ def initialize_compact(repository, destination, cache=None):
         + " and "
         + str(policy / "WORKFLOW.md")
         + ".\n"
-        "Repository mathematical/style guidance: "
-        + str(repository / "AGENTS.md")
-        + ".\n"
+        "Explicit Lean output contract: " + str(policy / "OUTPUT_CONTRACT.md") + ".\n"
+        "All output and style requirements are in the supplied workflow policies.\n"
+        "Do not infer additional requirements from repository-root AGENTS.md or examples.\n"
         "Generate only outputs/{Algorithms,Setups,Proofs,Theorems} modules (outputs.*).\n"
         "LongTails/ contains only pinned dependencies; it is read-only. No library alias.\n"
         "Build explicit output modules or outputs, never the whole LongTails library.\n"

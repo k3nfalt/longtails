@@ -13,8 +13,11 @@ used only as dependencies. Raw analytic proofs may remain grouped in Proofs.
 
 ```text
 source + target → dependency graph → graph review → formalization global and local plans
-  → statements → bidirectional semantic review → composition review
-  → freeze → proofs → build + Comparator + axiom audit + catalog check → export
+  → statements → text/style + budget lint → elaboration + declaration lint
+  → interface + catalog/rendering + topology checks → semantic statement review
+  → aggregate statement checks + composition review → verified receipt → freeze
+  → proof filling + immediate proof lint → preservation + strict build + proof Comparator
+  → axiom audit + verified receipt reuse → export
 ```
 
 The workflow not only guarantees the semantically faithful versions of the given theorems,

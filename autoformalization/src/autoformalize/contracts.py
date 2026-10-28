@@ -484,6 +484,15 @@ def validate_review(review, packet, reviewer):
                 check["source"] and check["candidate"],
                 "Semantic comparison needs both evidence directions",
             )
+        required_pointer = packet.get("required_candidate_evidence", {}).get(key)
+        if required_pointer and check["verdict"] == "match":
+            require(
+                any(
+                    p == required_pointer or p.startswith(required_pointer + "/")
+                    for p in check["candidate"]
+                ),
+                "Public-interface match must cite its result-specific implementation evidence",
+            )
         accepted &= check["verdict"] in {"match", "not_applicable"}
     require(
         isinstance(review["blockers"], list) and isinstance(review["notes"], list),
