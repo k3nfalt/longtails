@@ -1,0 +1,72 @@
+name = "LongTails"
+version = "0.1.0"
+defaultTargets = ["outputs"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "7a751b750301cb7ae12b59be70b5fb38b0e2d39a"
+
+
+[[lean_lib]]
+name = "LongTails"
+globs = ["LongTails.*"]
+
+[[lean_exe]]
+name = "runLinterNoDocString"
+root = "RunLinterNoDocString"
+srcDir = "tools"
+needs = ["outputs"]
+supportInterpreter = true
+
+[[require]]
+name = "LeanTeX"
+git = "https://github.com/kmill/LeanTeX"
+rev = "d66db4582b6cb4d9fa0b6309168103a248a5fd46"
+
+[[require]]
+name = "proofwidgets"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/ProofWidgets4"
+rev = "4c70ac059693669e5756e32a7a94b57ee1e99dc5"
+
+[[require]]
+name = "batteries"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/batteries"
+rev = "167242e0621ba382fd6f7b2a7e932ce0811f9ab1"
+
+[[lean_lib]]
+name = "BudgetLatex"
+srcDir = "server/Theorems"
+roots = ["BudgetLatex"]
+
+[[lean_lib]]
+name = "ComparatorChallenge"
+srcDir = ".lake/comparator-check"
+globs = ["ComparatorChallenge.*"]
+
+[[require]]
+name = "Comparator"
+scope = "leanprover"
+git = "https://github.com/leanprover/comparator"
+rev = "32bd61da1d68fbaa310234964e9b820b03a0f82f"
+
+
+[[require]]
+name = "lean4export"
+scope = "leanprover"
+git = "https://github.com/leanprover/lean4export"
+rev = "6cea97789dc088ea47fcea15692db85685aedac5"
+
+[[lean_lib]]
+name = "outputs"
+roots = ["outputs"]
+
+[[lean_exe]]
+name = "runOutputStyle"
+root = "RunOutputStyle"
+srcDir = ".lake/style-check"
+supportInterpreter = true
+weakLinkArgs = ["-lLake"]

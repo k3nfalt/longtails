@@ -264,7 +264,7 @@ theorem mix_smul (q : Public) (c : ℝ) (u : Stacked q.n q.dim) : mix q (c • u
   ext i : 1
   simp [mix, Finset.smul_sum, smul_comm c]
 
-theorem penaltyHessian_inner (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penaltyHessian_inner (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (x v : Stacked p.n p.dim) :
     ⟪penaltyHessian p.toPublic f x v, v⟫ =
       ∑ i, ⟪fderiv ℝ (gradient (f i)) (x i) (v i), v i⟫ + 1 / p.lam * ⟪v, v - mix p.toPublic v⟫ := by
@@ -273,7 +273,7 @@ theorem penaltyHessian_inner (p : Params) (f : Fin p.n → EuclideanSpace ℝ (F
   simp only [penaltyHessian, PiLp.sub_apply]
   rw [inner_add_right, inner_smul_right, real_inner_comm (v i)]
 
-theorem penaltyHessian_bounds (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penaltyHessian_bounds (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hA1 : Assumption1 p.toPublic p.m p.M f)
     (x v : Stacked p.n p.dim) :
     p.m * ‖v‖ ^ 2 ≤ ⟪penaltyHessian p.toPublic f x v, v⟫ ∧
@@ -294,7 +294,7 @@ theorem penaltyHessian_bounds (p : Params) (f : Fin p.n → EuclideanSpace ℝ (
       unfold a; field_simp
     linarith
 
-theorem penaltyGradient_inner (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penaltyGradient_inner (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (x d : Stacked p.n p.dim) :
     ⟪penaltyGradient p.toPublic f x, d⟫ =
       ∑ i, ⟪gradient (f i) (x i), d i⟫ + 1 / p.lam * ⟪x - mix p.toPublic x, d⟫ := by
@@ -303,7 +303,7 @@ theorem penaltyGradient_inner (p : Params) (f : Fin p.n → EuclideanSpace ℝ (
   simp only [penaltyGradient, PiLp.sub_apply]
   rw [inner_add_left, inner_smul_left, RCLike.conj_to_real]
 
-theorem penalty_decomp (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penalty_decomp (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (x y : Stacked p.n p.dim) :
     penalty p.toPublic f y - penalty p.toPublic f x - ⟪penaltyGradient p.toPublic f x, y - x⟫ =
       ∑ i, (f i (y i) - f i (x i) - ⟪gradient (f i) (x i), y i - x i⟫) +
@@ -328,7 +328,7 @@ theorem penalty_decomp (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.d
   field_simp
   ring
 
-theorem penalty_quadratic_bounds (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penalty_quadratic_bounds (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hA1 : Assumption1 p.toPublic p.m p.M f)
     (x y : Stacked p.n p.dim) :
     penalty p.toPublic f x + ⟪penaltyGradient p.toPublic f x, y - x⟫ + p.m / 2 * ‖y - x‖ ^ 2 ≤
@@ -365,7 +365,7 @@ theorem sum_norm_cube_le {n dim : ℕ} (d : Stacked n dim) : ∑ i, ‖d i‖ ^ 
         rw [pow_succ']; exact mul_le_mul_of_nonneg_right (hle i) (sq_nonneg _)
     _ = ‖d‖ ^ 3 := by rw [← Finset.mul_sum, ← PiLp.norm_sq_eq_of_L2]; ring
 
-theorem penalty_cubic_bound (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penalty_cubic_bound (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hA1 : Assumption1 p.toPublic p.m p.M f)
     (hA2 : Assumption2 p.toPublic p.L f) (hL : 0 ≤ p.L) (x y : Stacked p.n p.dim) :
     penalty p.toPublic f y ≤ penalty p.toPublic f x + ⟪penaltyGradient p.toPublic f x, y - x⟫ +
@@ -384,7 +384,7 @@ theorem penalty_cubic_bound (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fi
       1 / 2 * (1 / p.lam * (inner ℝ (y - x) ((y - x) - mix p.toPublic (y - x)))) := by ring
   linarith
 
-theorem penalty_continuous (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penalty_continuous (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hA1 : Assumption1 p.toPublic p.m p.M f) : Continuous (penalty p.toPublic f) := by
   have hmix : Continuous (mix p.toPublic) := by
     unfold mix
@@ -401,7 +401,7 @@ theorem penalty_continuous (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin
     exact ((hA1 i).1.continuous).comp ((continuous_apply i).comp (PiLp.continuous_ofLp 2 (fun _ : Fin p.n => EuclideanSpace ℝ (Fin p.dim))))
   · exact continuous_const.mul (continuous_id.inner (continuous_id.sub hmix))
 
-theorem penalty_exists_minimizer (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penalty_exists_minimizer (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hm : 0 < p.m)
     (hA1 : Assumption1 p.toPublic p.m p.M f) :
     ∃ xstar, IsMinOn (penalty p.toPublic f) Set.univ xstar := by
@@ -440,7 +440,7 @@ theorem hessian_symm {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E
     exact InnerProductSpace.toDual_symm_apply
   rw [key, real_inner_comm, key, hsym u v]
 
-theorem penaltyHessian_symm (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penaltyHessian_symm (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hA1 : Assumption1 p.toPublic p.m p.M f) (x u v : Stacked p.n p.dim) :
     ⟪penaltyHessian p.toPublic f x u, v⟫ = ⟪u, penaltyHessian p.toPublic f x v⟫ := by
   rw [PiLp.inner_apply, PiLp.inner_apply]

@@ -2,6 +2,8 @@ import LongTails.Proofs.MuonExecution
 import LongTails.Setups.MuonThirdOrder
 import Mathlib.Analysis.Calculus.MeanValue
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
+import LongTails.Proofs.MuonMatrix
+import LongTails.Proofs.Execution
 
 open MeasureTheory
 open scoped RealInnerProductSpace
@@ -157,7 +159,7 @@ namespace OracleTemplate.MuonThirdOrder
 
 open Muon LongTails.Setups.MuonThirdOrder
 
-theorem guarantee (p : Params) (hp : spec.valid p) (f : Mat p.m p.n → ℝ)
+theorem guarantee (p : Constants) (hp : Valid p) (f : Mat p.m p.n → ℝ)
     (hf : ThirdDerivativeBounded p.s f) (hb : BddBelow (Set.range f)) :
     Guarantee p f (fun j : Fin (p.T + 1) => SimplifiedMuon.trajectory (publicInput p) (gradient f) j) := by
   obtain ⟨hm, hn, hs, hη, hT⟩ := hp
@@ -247,5 +249,234 @@ theorem guarantee (p : Params) (hp : spec.valid p) (f : Mat p.m p.n → ℝ)
     refine ⟨havgε, ?_⟩
     exact exists_le_of_average_le p.T hT (fun t => nuclearNorm (gradient f (W t.castSucc))) ε
       (hA.trans_le havgε)
+
+end OracleTemplate.MuonThirdOrder
+
+namespace OracleTemplate.MuonBest
+
+open OracleTemplate OracleTemplate.Muon
+
+open OracleTemplate.MuonBest
+
+theorem execute_best (p : OracleTemplate.MuonBest.Public)
+    (G : Mat p.m p.n → Mat p.m p.n) (O : Oracle (Mat p.m p.n) (Mat p.m p.n))
+    (hO : ∀ k W seed, O.answer k (0, W) seed = G W)
+    (K : ℕ) (seed : (algorithm p).Seed) (tape : (k : ℕ) → O.Seed k) :
+    execute O (algorithm p) (fun _ => K) seed tape = (stateAt p G K).best := by
+  rw [execute_eq_of_answer_eq O G hO (algorithm p) K seed tape, execute_iterate]
+  rfl
+
+theorem best_gradient (p : OracleTemplate.MuonBest.Public)
+    (G : Mat p.m p.n → Mat p.m p.n) (K : ℕ) (hK : 1 ≤ K) :
+    (stateAt p G K).point = OracleTemplate.SimplifiedMuon.trajectory (sourceInput p) G K ∧
+    nuclearNorm (G (stateAt p G K).best) ≤ (1 / (K : ℝ)) *
+      ∑ j : Fin K, nuclearNorm (G (OracleTemplate.SimplifiedMuon.trajectory (sourceInput p) G j.val)) := by
+  classical
+  let X : ℕ → Mat p.m p.n := OracleTemplate.SimplifiedMuon.trajectory (sourceInput p) G
+  have hstep (k : ℕ) : OracleTemplate.MuonBest.stateAt p G (k + 1) =
+      OracleTemplate.MuonBest.step p (OracleTemplate.MuonBest.stateAt p G k) (G (OracleTemplate.MuonBest.stateAt p G k).point) := by
+    simp only [OracleTemplate.MuonBest.stateAt, Function.iterate_succ_apply']
+  have hpoint (st : OracleTemplate.MuonBest.State p) :
+      (OracleTemplate.MuonBest.step p st (G st.point)).point = st.point - stepSize p • orthogonalize (G st.point) := by
+    dsimp only [OracleTemplate.MuonBest.step]
+    split <;> rfl
+  have hX (k : ℕ) : X (k + 1) = X k - stepSize p • orthogonalize (G (X k)) := by
+    exact Function.iterate_succ_apply' _ _ _
+  have hpnt : ∀ k, (OracleTemplate.MuonBest.stateAt p G k).point = X k := by
+    intro k
+    induction k with
+    | zero => rfl
+    | succ k ih => rw [hstep, hpoint, ih, hX]
+  have hbest : ∀ k,
+      (OracleTemplate.MuonBest.stateAt p G (k + 1)).seen = true ∧
+      (OracleTemplate.MuonBest.stateAt p G (k + 1)).score = nuclearNorm (G (OracleTemplate.MuonBest.stateAt p G (k + 1)).best) ∧
+      (∃ j ≤ k, (OracleTemplate.MuonBest.stateAt p G (k + 1)).best = X j) ∧
+      ∀ j ≤ k, (OracleTemplate.MuonBest.stateAt p G (k + 1)).score ≤ nuclearNorm (G (X j)) := by
+    intro k
+    induction k with
+    | zero =>
+      simp [OracleTemplate.MuonBest.stateAt, initial, OracleTemplate.MuonBest.step, X, OracleTemplate.SimplifiedMuon.trajectory, sourceInput]
+    | succ k ih =>
+      obtain ⟨hseen, hscore, hmem, hmin⟩ := ih
+      by_cases hc : nuclearNorm (G (OracleTemplate.MuonBest.stateAt p G (k + 1)).point) ≤ (OracleTemplate.MuonBest.stateAt p G (k + 1)).score
+      · rw [hstep (k + 1)]
+        simp only [OracleTemplate.MuonBest.step, hseen, Bool.true_eq_false, false_or, hc, ite_true]
+        refine ⟨True.intro, True.intro, ⟨k + 1, le_rfl, hpnt (k + 1)⟩, ?_⟩
+        intro j hj
+        by_cases hjlast : j = k + 1
+        · subst j
+          rw [hpnt]
+        · exact hc.trans (hmin j (by omega))
+      · rw [hstep (k + 1)]
+        simp only [OracleTemplate.MuonBest.step, hseen, Bool.true_eq_false, false_or, hc, ite_false]
+        refine ⟨True.intro, hscore, ?_, ?_⟩
+        · obtain ⟨j, hj, heq⟩ := hmem
+          exact ⟨j, hj.trans (Nat.le_succ k), heq⟩
+        · intro j hj
+          by_cases hjlast : j = k + 1
+          · subst j
+            rw [← hpnt (k + 1)]
+            exact (lt_of_not_ge hc).le
+          · exact hmin j (by omega)
+  have hlast := hbest (K - 1)
+  rw [Nat.sub_add_cancel hK] at hlast
+  obtain ⟨_, hscore, _, hmin⟩ := hlast
+  have hsum : (K : ℝ) * nuclearNorm (G (OracleTemplate.MuonBest.stateAt p G K).best) ≤
+      ∑ j : Fin K, nuclearNorm (G (X j.val)) := by
+    calc
+      _ = ∑ _j : Fin K, nuclearNorm (G (OracleTemplate.MuonBest.stateAt p G K).best) := by simp
+      _ ≤ _ := Finset.sum_le_sum fun j _ => by
+        rw [← hscore]
+        exact hmin j.val (by have := j.isLt; omega)
+  have hKpos : (0 : ℝ) < K := by exact_mod_cast (show 0 < K by omega)
+  refine ⟨hpnt K, ?_⟩
+  change nuclearNorm (G (OracleTemplate.MuonBest.stateAt p G K).best) ≤ (1 / (K : ℝ)) * ∑ j : Fin K, nuclearNorm (G (X j.val))
+  rw [one_div_mul_eq_div]
+  exact (le_div_iff₀ hKpos).mpr (by simpa only [mul_comm] using hsum)
+
+end OracleTemplate.MuonBest
+
+namespace OracleTemplate.MuonThirdOrder
+
+open OracleTemplate OracleTemplate.Muon
+
+theorem tuning_bounds (p : LongTails.Setups.MuonThirdOrder.Params)
+    (hp : LongTails.Setups.MuonThirdOrder.spec.valid p) :
+    0 < OracleTemplate.MuonBest.stepSize p.toPublic ∧
+    1 ≤ OracleTemplate.MuonBest.horizon p.toPublic ∧
+    8 * p.J * p.Δ / p.ε ^ 2 ≤ (OracleTemplate.MuonBest.horizon p.toPublic : ℝ) ∧
+    2 * p.s * (((min p.m p.n : ℕ) : ℝ) * Real.sqrt ((min p.m p.n : ℕ) : ℝ)) * p.Δ /
+      (3 * p.J * p.ε) ≤ (OracleTemplate.MuonBest.horizon p.toPublic : ℝ) := by
+  obtain ⟨_, _, hs, hJ, hΔ, hε⟩ := hp
+  let r : ℝ := (min p.m p.n : ℕ)
+  let a := 8 * p.J * p.Δ / p.ε ^ 2
+  let b := 2 * p.s * (r * Real.sqrt r) * p.Δ / (3 * p.J * p.ε)
+  have ha : 0 ≤ a := by dsimp only [a]; positivity
+  have hb : 0 ≤ b := by dsimp only [b, r]; positivity
+  have hK : 1 ≤ OracleTemplate.MuonBest.horizon p.toPublic := by
+    unfold OracleTemplate.MuonBest.horizon
+    omega
+  have hKpos : (0 : ℝ) < OracleTemplate.MuonBest.horizon p.toPublic := by
+    exact_mod_cast (show 0 < OracleTemplate.MuonBest.horizon p.toPublic from hK)
+  have hab : a + b ≤ (OracleTemplate.MuonBest.horizon p.toPublic : ℝ) := by
+    calc
+      _ ≤ (⌈a + b⌉₊ : ℝ) := Nat.le_ceil _
+      _ ≤ _ := by
+        change (⌈a + b⌉₊ : ℝ) ≤ ((⌈a + b⌉₊ + 1 : ℕ) : ℝ)
+        simp only [Nat.cast_add, Nat.cast_one]
+        linarith
+  refine ⟨?_, hK, (le_add_of_nonneg_right hb).trans hab, (le_add_of_nonneg_left ha).trans hab⟩
+  exact Real.sqrt_pos.mpr (div_pos (by positivity) (mul_pos hJ hKpos))
+
+theorem scalar_accuracy (r s J Δ K ε η : ℝ) (hr : 0 ≤ r) (hs : 0 ≤ s) (hJ : 0 < J)
+    (hΔ : 0 < Δ) (hK : 0 < K) (hε : 0 < ε) (hη : η = Real.sqrt (2 * Δ / (J * K)))
+    (hK₁ : 8 * J * Δ / ε ^ 2 ≤ K) (hK₂ : 2 * s * (r * Real.sqrt r) * Δ / (3 * J * ε) ≤ K) :
+    Δ / (K * η) + η * J / 2 + s * η ^ 2 * (r * Real.sqrt r) / 6 ≤ ε := by
+  have hηpos : 0 < η := by rw [hη]; positivity
+  have hη2 : η ^ 2 = 2 * Δ / (J * K) := by
+    rw [hη, Real.sq_sqrt (by positivity)]
+  have hk : η * J / 2 = Δ / (K * η) := by
+    rw [eq_div_iff (by positivity)]
+    have heq : η * J / 2 * (K * η) = η ^ 2 * J * K / 2 := by ring
+    rw [heq, hη2]
+    field_simp
+  have hηJ : η * J = Real.sqrt (2 * J * Δ / K) := by
+    rw [eq_comm, Real.sqrt_eq_iff_mul_self_eq (by positivity) (by positivity)]
+    have heq : η * J * (η * J) = η ^ 2 * J ^ 2 := by ring
+    rw [heq, hη2]
+    field_simp
+  let R := s * (r * Real.sqrt r) * Δ / (3 * J)
+  have hR : 0 ≤ R := by dsimp only [R]; positivity
+  have hlast : s * η ^ 2 * (r * Real.sqrt r) / 6 = R / K := by
+    rw [hη2]
+    dsimp only [R]
+    field_simp
+    ring
+  have hq1 : Real.sqrt (2 * J * Δ / K) ≤ ε / 2 := by
+    rw [Real.sqrt_le_left (by positivity), div_le_iff₀ hK]
+    rw [div_le_iff₀ (by positivity)] at hK₁
+    nlinarith
+  have hb : 2 * R / ε ≤ K := by
+    convert hK₂ using 1
+    dsimp only [R]
+    ring
+  have hq2 : R / K ≤ ε / 2 := by
+    by_cases hzero : R = 0
+    · rw [hzero, zero_div]
+      positivity
+    · have hRpos : 0 < R := lt_of_le_of_ne hR (Ne.symm hzero)
+      have hd : 0 < 2 * R / ε := by positivity
+      calc
+        _ ≤ R / (2 * R / ε) := div_le_div_of_nonneg_left hR hd hb
+        _ = ε / 2 := by field_simp [ne_of_gt hRpos, ne_of_gt hε]
+  calc
+    _ = Real.sqrt (2 * J * Δ / K) + R / K := by rw [← hk, hlast, ← hηJ]; ring
+    _ ≤ ε := by linarith
+
+theorem iterations_accuracy (p : LongTails.Setups.MuonThirdOrder.Params)
+    (hp : LongTails.Setups.MuonThirdOrder.spec.valid p) (f : Mat p.m p.n → ℝ)
+    (hf : LongTails.Setups.MuonThirdOrder.ThirdDerivativeBounded p.s f)
+    (hb : BddBelow (Set.range f)) (hΔ : f p.W0 - ⨅ W, f W ≤ p.Δ)
+    (hJ : ∀ W, LongTails.Setups.MuonThirdOrder.hessianQuadratic f W ≤ p.J) :
+    let q := OracleTemplate.MuonBest.sourceInput p.toPublic
+    (1 / (q.T : ℝ)) * ∑ j : Fin q.T,
+      nuclearNorm (gradient f (OracleTemplate.SimplifiedMuon.trajectory q (gradient f) j.val)) ≤ p.ε := by
+  let K := OracleTemplate.MuonBest.horizon p.toPublic
+  let η := OracleTemplate.MuonBest.stepSize p.toPublic
+  let r : ℝ := (min p.m p.n : ℕ)
+  let X : ℕ → Mat p.m p.n :=
+    OracleTemplate.SimplifiedMuon.trajectory (OracleTemplate.MuonBest.sourceInput p.toPublic) (gradient f)
+  obtain ⟨hη, hK, hK₁, hK₂⟩ := tuning_bounds p hp
+  have hKpos : (0 : ℝ) < K := by exact_mod_cast (show 0 < K from hK)
+  let q : LongTails.Setups.MuonThirdOrder.Constants :=
+    ⟨p.m, p.n, p.s, η, K, p.W0⟩
+  have hq : LongTails.Setups.MuonThirdOrder.Valid q :=
+    ⟨hp.1, hp.2.1, hp.2.2.1, hη, hK⟩
+  have hmain := (guarantee q hq f hf hb).1
+  change (1 / (K : ℝ)) * ∑ j : Fin K, nuclearNorm (gradient f (X j.val)) ≤
+    (f (X 0) - f (X K)) / ((K : ℝ) * η) +
+    η * ((1 / (K : ℝ)) * ∑ j : Fin K, LongTails.Setups.MuonThirdOrder.hessianQuadratic f (X j.val)) / 2 +
+    p.s * η ^ 2 * (r * Real.sqrt r) / 6 at hmain
+  have hgap : f (X 0) - f (X K) ≤ p.Δ := by
+    have hlow := ciInf_le hb (X K)
+    change f p.W0 - f (X K) ≤ p.Δ
+    linarith
+  have hcurv : (1 / (K : ℝ)) *
+      ∑ j : Fin K, LongTails.Setups.MuonThirdOrder.hessianQuadratic f (X j.val) ≤ p.J := by
+    calc
+      _ ≤ (1 / (K : ℝ)) * ∑ _j : Fin K, p.J :=
+        mul_le_mul_of_nonneg_left (Finset.sum_le_sum (fun j _ => hJ (X j.val))) (by positivity)
+      _ = p.J := by
+        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+        field_simp
+  have hgapdiv := div_le_div_of_nonneg_right hgap (mul_nonneg hKpos.le hη.le)
+  have hcurvdiv := div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hcurv hη.le)
+    (show (0 : ℝ) ≤ 2 by norm_num)
+  have hbound : (1 / (K : ℝ)) * ∑ j : Fin K, nuclearNorm (gradient f (X j.val)) ≤
+      p.Δ / ((K : ℝ) * η) + η * p.J / 2 + p.s * η ^ 2 * (r * Real.sqrt r) / 6 := by
+    linarith
+  exact hbound.trans (scalar_accuracy r p.s p.J p.Δ (K : ℝ) p.ε η (by positivity)
+    hp.2.2.1 hp.2.2.2.1 hp.2.2.2.2.1 hKpos hp.2.2.2.2.2 rfl hK₁ hK₂)
+
+theorem execution_accuracy (p : LongTails.Setups.MuonThirdOrder.Params)
+    (hp : LongTails.Setups.MuonThirdOrder.spec.valid p) (f : Mat p.m p.n → ℝ)
+    (O : Oracle (Mat p.m p.n) (Mat p.m p.n))
+    (hO : LongTails.Setups.MuonThirdOrder.spec.admissible p f O) :
+    let A := OracleTemplate.MuonBest.algorithm p.toPublic
+    LongTails.Setups.MuonThirdOrder.spec.successful p f
+      (fun seed : A.Seed × ((k : ℕ) → O.Seed k) =>
+        execute O A (fun _ => ⌈8 * p.J * p.Δ / p.ε ^ 2 + 2 * p.s * (((min p.m p.n : ℕ) : ℝ) * Real.sqrt ((min p.m p.n : ℕ) : ℝ)) * p.Δ / (3 * p.J * p.ε)⌉₊ + 1) seed.1 seed.2)
+      ⟨(A.law : Measure _).prod (O.law : Measure _), inferInstance⟩ := by
+  obtain ⟨hf, hb, hΔ, hJ, hO⟩ := hO
+  have hK := (tuning_bounds p hp).2.1
+  have hbest := OracleTemplate.MuonBest.best_gradient p.toPublic (gradient f)
+    (OracleTemplate.MuonBest.horizon p.toPublic) hK
+  have havg := iterations_accuracy p hp f hf hb hΔ hJ
+  dsimp only
+  intro seed
+  change nuclearNorm (gradient f (execute O (OracleTemplate.MuonBest.algorithm p.toPublic)
+    (fun _ => OracleTemplate.MuonBest.horizon p.toPublic) seed.1 seed.2)) ≤ p.ε
+  rw [OracleTemplate.MuonBest.execute_best p.toPublic (gradient f) O hO]
+  exact hbest.2.trans havg
 
 end OracleTemplate.MuonThirdOrder

@@ -69,7 +69,7 @@ theorem pow_inner_nonneg (T : V →ₗ[ℝ] V) (hsym : ∀ u v, ⟪T u, v⟫ = �
 
 end Operator
 
-theorem penaltyHessian_add (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penaltyHessian_add (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (x u v : Stacked p.n p.dim) :
     penaltyHessian p.toPublic f x (u + v) =
       penaltyHessian p.toPublic f x u + penaltyHessian p.toPublic f x v := by
@@ -77,20 +77,20 @@ theorem penaltyHessian_add (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin
   simp only [penaltyHessian, mix_add, PiLp.add_apply, map_add]
   module
 
-theorem penaltyHessian_smul (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem penaltyHessian_smul (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (x : Stacked p.n p.dim) (c : ℝ) (u : Stacked p.n p.dim) :
     penaltyHessian p.toPublic f x (c • u) = c • penaltyHessian p.toPublic f x u := by
   ext i : 1
   simp only [penaltyHessian, mix_smul, PiLp.smul_apply, map_smul, smul_add, ← smul_sub]
   rw [smul_comm c (1 / p.lam)]
 
-theorem localBase_eq (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem localBase_eq (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (x : Stacked p.n p.dim) :
     localBase p.toPublic x (localOracle p.toPublic f x) = p.η • penaltyGradient p.toPublic f x := by
   ext i : 1
   rfl
 
-theorem innerStep_eq (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem innerStep_eq (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (x g : Stacked p.n p.dim) :
     innerStep p.toPublic x (localOracle p.toPublic f x) g =
       p.η • penaltyGradient p.toPublic f x + (g - p.η • penaltyHessian p.toPublic f x g) := by
@@ -105,7 +105,7 @@ theorem innerStep_eq (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim
   rw [this]
   module
 
-theorem a_ge_m (p : Params) (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hmM : p.m ≤ p.M) :
+theorem a_ge_m (p : Constants) (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hmM : p.m ≤ p.M) :
     p.m ≤ a p := by
   have h0 : wmin p.toPublic ≤ 1 := by
     have hi := wmin_le p.toPublic ⟨0, hnet.1⟩
@@ -118,7 +118,7 @@ theorem a_ge_m (p : Params) (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hmM 
     apply div_nonneg _ hlam.le; linarith
   linarith
 
-theorem direction_bounds (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem direction_bounds (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hη : 0 < p.η) (hK : 1 ≤ p.K)
     (hm : 0 < p.m) (hmM : p.m ≤ p.M) (hA1 : Assumption1 p.toPublic p.m p.M f)
     (hηa : p.η < 1 / a p) (x : Stacked p.n p.dim) :
@@ -182,7 +182,7 @@ theorem direction_bounds (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p
           Finset.sum_le_sum fun l _ => pow_norm_le A hAsym hApos hAle l G
       _ = p.K * ‖G‖ := by rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
 
-theorem gradient_gap_bounds (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem gradient_gap_bounds (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hm : 0 < p.m) (hmM : p.m ≤ p.M)
     (hA1 : Assumption1 p.toPublic p.m p.M f) (xstar : Stacked p.n p.dim)
     (hmin : IsMinOn (penalty p.toPublic f) Set.univ xstar) (x : Stacked p.n p.dim) :
@@ -267,7 +267,7 @@ theorem lemma5_scalar (m aa η K L Δ s g c q : ℝ) (hm : 0 < m) (hma : m ≤ a
       _ ≤ aa ^ 3 / m ^ 3 * (c0 * Y) := mul_le_mul_of_nonneg_right hratio h2
   linarith
 
-theorem lemma5 (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem lemma5 (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hη : 0 < p.η) (hK : 1 ≤ p.K)
     (hm : 0 < p.m) (hmM : p.m ≤ p.M) (hL : 0 ≤ p.L)
     (hA1 : Assumption1 p.toPublic p.m p.M f) (hA2 : Assumption2 p.toPublic p.L f)
@@ -305,7 +305,7 @@ theorem lemma5 (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → 
   rw [hnext]
   linarith
 
-theorem rate_bounds (p : Params) (hη : 0 < p.η) (hK : 1 ≤ p.K) (hm : 0 < p.m) (hma : p.m ≤ a p)
+theorem rate_bounds (p : Constants) (hη : 0 < p.η) (hK : 1 ≤ p.K) (hm : 0 < p.m) (hma : p.m ≤ a p)
     (hL : 0 ≤ p.L) (Δ : ℝ) (hΔ : 0 ≤ Δ) (hT : StepSizeTheorem2 p Δ) :
     0 < rate p Δ ∧ rate p Δ < 1 := by
   obtain ⟨hη1, hη2⟩ := hT
@@ -356,7 +356,7 @@ theorem rate_bounds (p : Params) (hη : 0 < p.η) (hK : 1 ≤ p.K) (hm : 0 < p.m
   unfold rate
   constructor <;> linarith
 
-theorem theorem2 (p : Params) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+theorem theorem2 (p : Constants) (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
     (hnet : Network p.toPublic) (hlam : 0 < p.lam) (hη : 0 < p.η) (hK : 1 ≤ p.K)
     (hm : 0 < p.m) (hmM : p.m ≤ p.M) (hL : 0 ≤ p.L)
     (hA1 : Assumption1 p.toPublic p.m p.M f) (hA2 : Assumption2 p.toPublic p.L f)
@@ -436,3 +436,219 @@ theorem execute_dobocK (q : Public) (f : Fin q.n → EuclideanSpace ℝ (Fin q.d
       exact (ih _ _).trans (Function.iterate_succ_apply _ k state).symm
 
 end OracleTemplate.DobocK
+
+namespace OracleTemplate.DobocKTuning
+
+open OracleTemplate OracleTemplate.DobocK LongTails.Setups.DobocK
+
+theorem curvature_bounds (p : LongTails.Setups.DobocK.Params)
+    (hp : LongTails.Setups.DobocK.spec.valid p) :
+    0 < p.m ∧ p.m ≤ a (constants p.toPublic) ∧
+      a (constants p.toPublic) ≤ curvatureBound p.toPublic := by
+  rcases hp with ⟨hnet, hlam, hK, hm, hmM, hL, hΔ, hε⟩
+  refine ⟨hm, a_ge_m (constants p.toPublic) hnet hlam hmM, ?_⟩
+  let : Nonempty (Fin (sourceInput p.toPublic).n) := ⟨⟨0, hnet.1⟩⟩
+  have hw : 0 ≤ wmin (sourceInput p.toPublic) :=
+    le_ciInf (fun i => hnet.2.2.1 i i)
+  change p.M + 2 * (1 - wmin (sourceInput p.toPublic)) / p.lam ≤ p.M + 2 / p.lam
+  apply add_le_add_right
+  apply (div_le_div_iff_of_pos_right hlam).mpr
+  linarith
+
+theorem scalar_tuning (m a A k L Δ d C : ℝ)
+    (hm : 0 < m) (hma : m ≤ a) (haA : a ≤ A) (hk : 1 ≤ k)
+    (hL : 0 ≤ L) (hΔ : 0 ≤ Δ) (hd : 0 ≤ d) (hdΔ : d ≤ Δ)
+    (hC : C = 1 + A + A ^ 2 * k ^ 2 / m +
+      Real.sqrt (A ^ 4 * (2 * A) ^ (3 / 2 : ℝ) * k ^ 3 * L *
+        Real.sqrt Δ / (6 * m ^ 5))) :
+    let η := 1 / (2 * C)
+    0 < η ∧ 0 < m ^ 2 / (2 * A * C) ∧
+      (η < 1 ∧ η < 1 / a ∧ η < 2 * m / (a ^ 2 * k ^ 2)) ∧
+      (η < m / (a ^ 2 * k ^ 2) ∧
+        η ^ 2 * (a ^ 4 * (2 * a) ^ (3 / 2 : ℝ) * k ^ 3 * L *
+          d ^ (1 / 2 : ℝ)) < 6 * m ^ 5) ∧
+      m ^ 2 / (2 * A * C) ≤
+        (2 * m ^ 2 * η - m * a ^ 2 * η ^ 2 * k ^ 2) / a -
+          a ^ 3 * (2 * a) ^ (3 / 2 : ℝ) * η ^ 3 * k ^ 3 * L /
+            (6 * m ^ 3) * d ^ (1 / 2 : ℝ) := by
+  dsimp only
+  have ha : 0 < a := lt_of_lt_of_le hm hma
+  have hA : 0 < A := lt_of_lt_of_le ha haA
+  have hk0 : 0 < k := lt_of_lt_of_le zero_lt_one hk
+  let B := A ^ 4 * (2 * A) ^ (3 / 2 : ℝ) * k ^ 3 * L * Real.sqrt Δ / (6 * m ^ 5)
+  have hB : 0 ≤ B := by dsimp [B]; positivity
+  have hq : 0 ≤ A ^ 2 * k ^ 2 / m := by positivity
+  have hs : 0 ≤ Real.sqrt B := Real.sqrt_nonneg B
+  have hC' : C = 1 + A + A ^ 2 * k ^ 2 / m + Real.sqrt B := hC
+  have h1C : 1 ≤ C := by linarith
+  have hAC : A ≤ C := by linarith
+  have hqC : A ^ 2 * k ^ 2 / m ≤ C := by linarith
+  have hsC : Real.sqrt B ≤ C := by linarith
+  have hCpos : 0 < C := lt_of_lt_of_le zero_lt_one h1C
+  let η := 1 / (2 * C)
+  have hη : 0 < η := by dsimp [η]; positivity
+  have hηC : η * C = 1 / 2 := by dsimp [η]; field_simp
+  have hηhalf : η ≤ 1 / 2 := by
+    calc η = η * 1 := by ring
+         _ ≤ η * C := mul_le_mul_of_nonneg_left h1C hη.le
+         _ = 1 / 2 := hηC
+  have hηa : η * a ≤ 1 / 2 := by
+    calc η * a ≤ η * C := mul_le_mul_of_nonneg_left (haA.trans hAC) hη.le
+         _ = 1 / 2 := hηC
+  have hqa : a ^ 2 * k ^ 2 / m ≤ C := by
+    calc a ^ 2 * k ^ 2 / m ≤ A ^ 2 * k ^ 2 / m := by gcongr
+         _ ≤ C := hqC
+  let u := η * (a ^ 2 * k ^ 2 / m)
+  have hu : u ≤ 1 / 2 := by
+    calc u ≤ η * C := mul_le_mul_of_nonneg_left hqa hη.le
+         _ = 1 / 2 := hηC
+  have hηak : η * (a ^ 2 * k ^ 2) ≤ (1 / 2) * m := by
+    apply (div_le_iff₀ hm).mp
+    simpa only [u, mul_div_assoc] using hu
+  have hdenak : 0 < a ^ 2 * k ^ 2 := by positivity
+  have hstep : η < m / (a ^ 2 * k ^ 2) :=
+    (lt_div_iff₀ hdenak).mpr (by linarith)
+  let b := a ^ 4 * (2 * a) ^ (3 / 2 : ℝ) * k ^ 3 * L * d ^ (1 / 2 : ℝ)
+  have hroot : Real.sqrt d ≤ Real.sqrt Δ := by
+    apply (sq_le_sq₀ (Real.sqrt_nonneg d) (Real.sqrt_nonneg Δ)).mp
+    simpa only [Real.sq_sqrt hd, Real.sq_sqrt hΔ] using hdΔ
+  have hbB : b / (6 * m ^ 5) ≤ B := by
+    dsimp [b, B]
+    rw [← Real.sqrt_eq_rpow]
+    apply (div_le_div_iff_of_pos_right (by positivity : 0 < 6 * m ^ 5)).mpr
+    exact mul_le_mul (by gcongr) hroot (Real.sqrt_nonneg d) (by positivity)
+  have hBC : B ≤ C ^ 2 := by
+    calc B = (Real.sqrt B) ^ 2 := (Real.sq_sqrt hB).symm
+         _ ≤ C ^ 2 := pow_le_pow_left₀ hs hsC 2
+  have hden : 0 < 6 * m ^ 5 := by positivity
+  have hb : b ≤ 6 * m ^ 5 * C ^ 2 := by
+    have hh := (div_le_iff₀ hden).mp (hbB.trans hBC)
+    nlinarith only [hh]
+  have hηb : η ^ 2 * b ≤ (6 * m ^ 5) / 4 := by
+    calc η ^ 2 * b ≤ η ^ 2 * (6 * m ^ 5 * C ^ 2) :=
+           mul_le_mul_of_nonneg_left hb (sq_nonneg η)
+         _ = (6 * m ^ 5) * (η * C) ^ 2 := by ring
+         _ = (6 * m ^ 5) / 4 := by rw [hηC]; ring
+  let v := η ^ 2 * b / (6 * m ^ 5)
+  have hv : v ≤ 1 / 4 := by
+    apply (div_le_iff₀ hden).mpr
+    linarith only [hηb]
+  have hfactor : 1 ≤ 2 - u - v := by linarith
+  have hmain : 0 ≤ m ^ 2 * η / a := by positivity
+  have hrate :
+      (2 * m ^ 2 * η - m * a ^ 2 * η ^ 2 * k ^ 2) / a -
+        a ^ 3 * (2 * a) ^ (3 / 2 : ℝ) * η ^ 3 * k ^ 3 * L /
+          (6 * m ^ 3) * d ^ (1 / 2 : ℝ) =
+      (m ^ 2 * η / a) * (2 - u - v) := by
+    dsimp only [u, v, b]
+    field_simp
+  refine ⟨hη, by positivity, ⟨by linarith, ?_, ?_⟩, ⟨hstep, ?_⟩, ?_⟩
+  · exact (lt_div_iff₀ ha).mpr (by linarith)
+  · exact (lt_div_iff₀ hdenak).mpr (by linarith)
+  · change η ^ 2 * b < 6 * m ^ 5
+    linarith only [hηb, hden]
+  · rw [hrate]
+    calc m ^ 2 / (2 * A * C) = m ^ 2 * η / A := by dsimp [η]; field_simp
+         _ ≤ m ^ 2 * η / a := by gcongr
+         _ = (m ^ 2 * η / a) * 1 := by ring
+         _ ≤ (m ^ 2 * η / a) * (2 - u - v) := mul_le_mul_of_nonneg_left hfactor hmain
+
+theorem tuning_bounds (p : LongTails.Setups.DobocK.Params)
+    (hp : LongTails.Setups.DobocK.spec.valid p) :
+    0 < stepSize p.toPublic ∧ 0 < contraction p.toPublic ∧
+      StepSizeLemma5 (constants p.toPublic) ∧
+      ∀ d : ℝ, 0 ≤ d → d ≤ p.Δ →
+        StepSizeTheorem2 (constants p.toPublic) d ∧
+          contraction p.toPublic ≤ rate (constants p.toPublic) d := by
+  rcases curvature_bounds p hp with ⟨hm, hma, haA⟩
+  rcases hp with ⟨hnet, hlam, hK, _, hmM, hL, hΔ, hε⟩
+  have hk : (1 : ℝ) ≤ (p.K : ℝ) := by exact_mod_cast hK
+  have ht (d : ℝ) (hd : 0 ≤ d) (hdΔ : d ≤ p.Δ) :=
+    scalar_tuning p.m (a (constants p.toPublic)) (curvatureBound p.toPublic)
+      (p.K : ℝ) p.L p.Δ d (tuningScale p.toPublic) hm hma haA hk hL hΔ hd hdΔ rfl
+  have h0 := ht 0 le_rfl hΔ
+  refine ⟨h0.1, h0.2.1, h0.2.2.1, ?_⟩
+  intro d hd hdΔ
+  exact (ht d hd hdΔ).2.2.2
+
+theorem geometric_accuracy (ρ r d Δ ε : ℝ)
+    (hρ : 0 < ρ) (hρr : ρ ≤ r) (hr : r < 1)
+    (hd : 0 ≤ d) (hdΔ : d ≤ Δ) (hε : 0 < ε) :
+    (1 - r) ^ ⌈1 / ρ * Real.log (max 1 (Δ / ε))⌉₊ * d ≤ ε := by
+  by_cases hΔε : Δ ≤ ε
+  · have hmax : max 1 (Δ / ε) = 1 := max_eq_left ((div_le_one hε).mpr hΔε)
+    simpa [hmax] using hdΔ.trans hΔε
+  have hεΔ : ε < Δ := lt_of_not_ge hΔε
+  have hΔ : 0 < Δ := hε.trans hεΔ
+  have hratio : 0 < Δ / ε := div_pos hΔ hε
+  have hmax : max 1 (Δ / ε) = Δ / ε := max_eq_right ((one_le_div hε).mpr hεΔ.le)
+  rw [hmax]
+  let K : ℕ := ⌈1 / ρ * Real.log (Δ / ε)⌉₊
+  have hceil : Real.log (Δ / ε) ≤ (K : ℝ) * ρ := by
+    apply (div_le_iff₀ hρ).mp
+    simpa only [K, div_eq_mul_inv, mul_comm, mul_one, one_mul] using
+      (Nat.le_ceil (1 / ρ * Real.log (Δ / ε)))
+  have hbase : 1 - r ≤ Real.exp (-ρ) := by
+    have hh := Real.add_one_le_exp (-ρ)
+    linarith
+  have hpow : (1 - r) ^ K ≤ Real.exp (-ρ) ^ K :=
+    pow_le_pow_left₀ (by linarith) hbase K
+  calc (1 - r) ^ K * d ≤ Real.exp (-ρ) ^ K * Δ :=
+         mul_le_mul hpow hdΔ hd (by positivity)
+       _ = Real.exp ((K : ℝ) * (-ρ)) * Δ := by rw [Real.exp_nat_mul]
+       _ ≤ Real.exp (-Real.log (Δ / ε)) * Δ := by
+         apply mul_le_mul_of_nonneg_right _ hΔ.le
+         apply Real.exp_le_exp.mpr
+         linarith only [hceil]
+       _ = ε := by rw [Real.exp_neg, Real.exp_log hratio]; field_simp
+
+theorem iterations_accuracy (p : LongTails.Setups.DobocK.Params)
+    (hp : LongTails.Setups.DobocK.spec.valid p)
+    (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+    (hA1 : Assumption1 (sourceInput p.toPublic) p.m p.M f)
+    (hA2 : Assumption2 (sourceInput p.toPublic) p.L f)
+    (hmin : IsMinOn (penalty (sourceInput p.toPublic) f) Set.univ p.xstar)
+    (hgap : penalty (sourceInput p.toPublic) f p.x0 -
+      penalty (sourceInput p.toPublic) f p.xstar ≤ p.Δ) :
+    penalty (sourceInput p.toPublic) f
+      (iterate (sourceInput p.toPublic) f (horizon p.toPublic)) -
+      penalty (sourceInput p.toPublic) f p.xstar ≤ p.ε := by
+  have ht := tuning_bounds p hp
+  rcases hp with ⟨hnet, hlam, hK, hm, hmM, hL, hΔ, hε⟩
+  have hd : 0 ≤ penalty (sourceInput p.toPublic) f p.x0 -
+      penalty (sourceInput p.toPublic) f p.xstar := sub_nonneg.mpr (hmin (Set.mem_univ p.x0))
+  have htd := ht.2.2.2 _ hd hgap
+  have hr := theorem2 (constants p.toPublic) f hnet hlam ht.1 hK hm hmM hL
+    hA1 hA2 ht.2.2.1 p.xstar hmin htd.1
+  have hg := geometric_accuracy (contraction p.toPublic)
+    (rate (constants p.toPublic) (penalty (sourceInput p.toPublic) f p.x0 -
+      penalty (sourceInput p.toPublic) f p.xstar)) _ p.Δ p.ε ht.2.1 htd.2 hr.2.1 hd hgap hε
+  have hh : (⌈1 / contraction p.toPublic * Real.log (max 1 (p.Δ / p.ε))⌉₊ : ℕ) =
+      horizon p.toPublic := by
+    change ⌈1 / (p.m ^ 2 / (2 * curvatureBound p.toPublic * tuningScale p.toPublic)) *
+      Real.log (max 1 (p.Δ / p.ε))⌉₊ =
+      ⌈2 * curvatureBound p.toPublic * tuningScale p.toPublic / p.m ^ 2 *
+        Real.log (max 1 (p.Δ / p.ε))⌉₊
+    rw [one_div_div]
+  rw [hh] at hg
+  exact (hr.2.2 (horizon p.toPublic)).trans hg
+
+theorem execution_accuracy (p : LongTails.Setups.DobocK.Params)
+    (hp : LongTails.Setups.DobocK.spec.valid p)
+    (f : Fin p.n → EuclideanSpace ℝ (Fin p.dim) → ℝ)
+    (O : Oracle (Stacked p.n p.dim) (LocalReply p.n p.dim) 1)
+    (hadm : LongTails.Setups.DobocK.spec.admissible p f O)
+    (seed : (algorithm p.toPublic).Seed) (ξ : (j : ℕ) → O.Seed j) :
+    penalty (sourceInput p.toPublic) f
+      (execute O (algorithm p.toPublic) (fun _ => horizon p.toPublic) seed ξ) -
+      penalty (sourceInput p.toPublic) f p.xstar ≤ p.ε := by
+  rcases hadm with ⟨hA1, hA2, hmin, hgap, hO⟩
+  change penalty (sourceInput p.toPublic) f
+    (execute O (dobocK (sourceInput p.toPublic)) (fun _ => horizon p.toPublic) seed ξ) -
+      penalty (sourceInput p.toPublic) f p.xstar ≤ p.ε
+  have he := execute_dobocK (sourceInput p.toPublic) f O hO (horizon p.toPublic) seed ξ
+  exact (congrArg (fun x => penalty (sourceInput p.toPublic) f x -
+    penalty (sourceInput p.toPublic) f p.xstar) he).trans_le
+      (iterations_accuracy p hp f hA1 hA2 hmin hgap)
+
+end OracleTemplate.DobocKTuning

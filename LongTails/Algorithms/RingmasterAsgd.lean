@@ -105,4 +105,26 @@ noncomputable def completionEvent {n : ℕ} (V : Fin n → ℝ → ℝ) (_ : ℕ
     Option (Fin n × ℝ) :=
   RennalaUniform.earliest (fun i => RennalaUniform.completion (V i) (starts i)) (List.finRange n)
 
+noncomputable def stepSize (L σ ε : ℝ) (R : ℕ) : ℝ :=
+  if σ = 0 then 1 / (2 * R * L) else min (1 / (2 * R * L)) (ε / (4 * L * σ ^ 2))
+
+noncomputable def iterationHorizon (L σ ε Δ : ℝ) (R : ℕ) : ℕ :=
+  ⌈8 * R * L * Δ / ε + 16 * σ ^ 2 * L * Δ / ε ^ 2⌉₊
+
+noncomputable def threshold (σ ε : ℝ) : ℕ := max 1 ⌈σ ^ 2 / ε⌉₊
+
+noncomputable def timeBlocks (L ε Δ : ℝ) : ℕ := ⌈48 * L * Δ / ε⌉₊
+
+noncomputable def timeHorizon (L σ ε Δ : ℝ) : ℕ := threshold σ ε * timeBlocks L ε Δ
+
+noncomputable def ringmasterPoint (p : Public) : Algorithm (Query p) (Reply p) (Point p.d) where
+  Seed := (ringmaster p).Seed
+  seedSpace := (ringmaster p).seedSpace
+  law := (ringmaster p).law
+  State := (ringmaster p).State
+  initial := (ringmaster p).initial
+  query := (ringmaster p).query
+  update := (ringmaster p).update
+  output s := s.selected
+
 end OracleTemplate.RingmasterAsgd

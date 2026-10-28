@@ -9,7 +9,7 @@ namespace LongTails.Setups.DobocK
 
 open OracleTemplate OracleTemplate.DobocK
 
-structure Params extends OracleTemplate.DobocK.Public where
+structure Constants extends OracleTemplate.DobocK.Public where
   m : ℝ
   M : ℝ
   L : ℝ
@@ -38,7 +38,7 @@ noncomputable def penaltyHessian (q : OracleTemplate.DobocK.Public)
 
 noncomputable def wmin (q : OracleTemplate.DobocK.Public) : ℝ := ⨅ i, q.W i i
 
-noncomputable def a (p : Params) : ℝ := p.M + 2 * (1 - wmin p.toPublic) / p.lam
+noncomputable def a (p : Constants) : ℝ := p.M + 2 * (1 - wmin p.toPublic) / p.lam
 
 def Assumption1 (q : OracleTemplate.DobocK.Public) (m M : ℝ)
     (f : Fin q.n → EuclideanSpace ℝ (Fin q.dim) → ℝ) : Prop :=
@@ -50,41 +50,51 @@ def Assumption2 (q : OracleTemplate.DobocK.Public) (L : ℝ)
     (f : Fin q.n → EuclideanSpace ℝ (Fin q.dim) → ℝ) : Prop :=
   ∀ i x y, ‖fderiv ℝ (gradient (f i)) x - fderiv ℝ (gradient (f i)) y‖ ≤ L * ‖x - y‖
 
-def StepSizeLemma5 (p : Params) : Prop :=
+def StepSizeLemma5 (p : Constants) : Prop :=
   p.η < 1 ∧ p.η < 1 / a p ∧ p.η < 2 * p.m / (a p ^ 2 * (p.K : ℝ) ^ 2)
 
-def StepSizeTheorem2 (p : Params) (Δ : ℝ) : Prop :=
+def StepSizeTheorem2 (p : Constants) (Δ : ℝ) : Prop :=
   p.η < p.m / (a p ^ 2 * (p.K : ℝ) ^ 2) ∧
     p.η ^ 2 * (a p ^ 4 * (2 * a p) ^ (3 / 2 : ℝ) * (p.K : ℝ) ^ 3 * p.L * Δ ^ (1 / 2 : ℝ)) < 6 * p.m ^ 5
 
-noncomputable def rate (p : Params) (Δ : ℝ) : ℝ :=
+noncomputable def rate (p : Constants) (Δ : ℝ) : ℝ :=
   (2 * p.m ^ 2 * p.η - p.m * a p ^ 2 * p.η ^ 2 * (p.K : ℝ) ^ 2) / a p -
     a p ^ 3 * (2 * a p) ^ (3 / 2 : ℝ) * p.η ^ 3 * (p.K : ℝ) ^ 3 * p.L / (6 * p.m ^ 3) * Δ ^ (1 / 2 : ℝ)
 
-abbrev spec : Setup where
+noncomputable def constants (p : OracleTemplate.DobocKTuning.Public) : Constants where
+  toPublic := OracleTemplate.DobocKTuning.sourceInput p
+  m := p.m
+  M := p.M
+  L := p.L
+  k := 0
+
+open OracleTemplate.DobocKTuning
+
+structure Params extends OracleTemplate.DobocKTuning.Public where
+  xstar : Stacked n dim
+
+noncomputable abbrev spec : Setup where
   Params := Params
-  Public := OracleTemplate.DobocK.Public
+  Public := OracleTemplate.DobocKTuning.Public
   Instance q := Fin q.n → EuclideanSpace ℝ (Fin q.dim) → ℝ
   Query q := Stacked q.n q.dim
   Reply q := LocalReply q.n q.dim
   Output q := Stacked q.n q.dim
   publicInput := Params.toPublic
-  valid p := Network p.toPublic ∧ 0 < p.lam ∧ 0 < p.η ∧ 1 ≤ p.K ∧ 0 < p.m ∧ p.m ≤ p.M ∧
-    0 ≤ p.L ∧ StepSizeLemma5 p
+  valid p :=
+    Network (sourceInput p.toPublic) ∧ 0 < p.lam ∧ 1 ≤ p.K ∧ 0 < p.m ∧ p.m ≤ p.M ∧
+      0 ≤ p.L ∧ 0 ≤ p.Δ ∧ 0 < p.ε
   admissible p f O :=
-    Assumption1 p.toPublic p.m p.M f ∧ Assumption2 p.toPublic p.L f ∧
-    (∀ k x seed, O.answer k (0, x) seed = localOracle p.toPublic f x) ∧
-    ∀ xstar, IsMinOn (penalty p.toPublic f) Set.univ xstar →
-      StepSizeTheorem2 p (penalty p.toPublic f p.x0 - penalty p.toPublic f xstar)
-  successful p f output P :=
-    ∃ xstar, IsMinOn (penalty p.toPublic f) Set.univ xstar ∧
-      0 < rate p (penalty p.toPublic f p.x0 - penalty p.toPublic f xstar) ∧
-      rate p (penalty p.toPublic f p.x0 - penalty p.toPublic f xstar) < 1 ∧
-      ∀ᵐ ω ∂(P : MeasureTheory.Measure _),
-        penalty p.toPublic f (output ω) - penalty p.toPublic f xstar ≤
-          (1 - rate p (penalty p.toPublic f p.x0 - penalty p.toPublic f xstar)) ^ p.k *
-            (penalty p.toPublic f p.x0 - penalty p.toPublic f xstar)
-  allowedAlgorithm q A := A = dobocK q
+    Assumption1 (sourceInput p.toPublic) p.m p.M f ∧
+      Assumption2 (sourceInput p.toPublic) p.L f ∧
+      IsMinOn (penalty (sourceInput p.toPublic) f) Set.univ p.xstar ∧
+      penalty (sourceInput p.toPublic) f p.x0 -
+        penalty (sourceInput p.toPublic) f p.xstar ≤ p.Δ ∧
+      ∀ k x seed, O.answer k (0, x) seed = localOracle (sourceInput p.toPublic) f x
+  successful p f output _ :=
+    ∀ ω, penalty (sourceInput p.toPublic) f (output ω) -
+      penalty (sourceInput p.toPublic) f p.xstar ≤ p.ε
+  allowedAlgorithm q A := A = algorithm q
 
 attribute [local simp] penaltyGradient penaltyHessian
 

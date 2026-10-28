@@ -1,4 +1,4 @@
-import LongTails.Setups.RingmasterIterations
+import LongTails.Algorithms.RingmasterAsgd
 import LongTails.Proofs.RennalaStochastic
 import LongTails.Proofs.AdaptiveIID
 import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
@@ -862,7 +862,7 @@ theorem iteration_accuracy (f : Point d → ℝ) (g : Point d → Ω → Point d
     (ha : ∀ k, a k ≤ k) (hR : ∀ k, k < a k + R)
     (hK : 8 * R * L * (f x0 - lower) / eps + 16 * sigma ^ 2 * L * (f x0 - lower) / eps ^ 2 ≤ K) :
     1 / ((K : ℝ) + 1) * ∑ k ∈ Finset.range (K + 1),
-        (∫ ω, ‖gradient f (delayedIterate g (LongTails.Setups.RingmasterIterations.stepSize L sigma eps R) a x0 (fun i => ξ i ω) k)‖ ^ 2
+        (∫ ω, ‖gradient f (delayedIterate g (stepSize L sigma eps R) a x0 (fun i => ξ i ω) k)‖ ^ 2
           ∂(P : Measure Ξ)) ≤ eps := by
   have hR1 : 1 ≤ R := by
     have := hR 0
@@ -871,8 +871,8 @@ theorem iteration_accuracy (f : Point d → ℝ) (g : Point d → Ω → Point d
   have hRr : (0 : ℝ) < R := by exact_mod_cast hR1
   set Δ := f x0 - lower with hΔ
   have hΔ0 : 0 ≤ Δ := by linarith [hlower x0]
-  set gamma := LongTails.Setups.RingmasterIterations.stepSize L sigma eps R with hgdef
-  have hsd : LongTails.Setups.RingmasterIterations.stepSize L sigma eps R = if sigma = 0 then 1 / (2 * R * L)
+  set gamma := stepSize L sigma eps R with hgdef
+  have hsd : stepSize L sigma eps R = if sigma = 0 then 1 / (2 * R * L)
       else min (1 / (2 * R * L)) (eps / (4 * L * sigma ^ 2)) := rfl
   have hA : 0 < 1 / (2 * R * L) := by positivity
   have hgpos : 0 < gamma := by

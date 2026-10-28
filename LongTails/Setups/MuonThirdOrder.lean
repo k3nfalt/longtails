@@ -7,7 +7,7 @@ namespace LongTails.Setups.MuonThirdOrder
 
 open OracleTemplate OracleTemplate.Muon
 
-structure Params where
+structure Constants where
   m : ℕ
   n : ℕ
   s : ℝ
@@ -15,7 +15,7 @@ structure Params where
   T : ℕ
   W0 : Mat m n
 
-def publicInput (p : Params) : SimplifiedMuon.Public := ⟨p.m, p.n, p.η, p.T, p.W0⟩
+def publicInput (p : Constants) : SimplifiedMuon.Public := ⟨p.m, p.n, p.η, p.T, p.W0⟩
 
 def ThirdDerivativeBounded {m n : ℕ} (s : ℝ) (f : Mat m n → ℝ) : Prop :=
   Differentiable ℝ f ∧ Differentiable ℝ (fderiv ℝ f) ∧ Differentiable ℝ (iteratedFDeriv ℝ 2 f) ∧
@@ -24,7 +24,7 @@ def ThirdDerivativeBounded {m n : ℕ} (s : ℝ) (f : Mat m n → ℝ) : Prop :=
 noncomputable def hessianQuadratic {m n : ℕ} (f : Mat m n → ℝ) (W : Mat m n) : ℝ :=
   iteratedFDeriv ℝ 2 f W ![orthogonalize (gradient f W), orthogonalize (gradient f W)]
 
-def Guarantee (p : Params) (f : Mat p.m p.n → ℝ) (W : Fin (p.T + 1) → Mat p.m p.n) : Prop :=
+def Guarantee (p : Constants) (f : Mat p.m p.n → ℝ) (W : Fin (p.T + 1) → Mat p.m p.n) : Prop :=
   let r : ℝ := (min p.m p.n : ℕ)
   let T : ℝ := p.T
   let Δ : ℝ := f p.W0 - ⨅ W, f W
@@ -37,20 +37,27 @@ def Guarantee (p : Params) (f : Mat p.m p.n → ℝ) (W : Fin (p.T + 1) → Mat 
     ∀ ε > 0, 8 * J * Δ / ε ^ 2 ≤ T → 2 * p.s * (r * Real.sqrt r) * Δ / (3 * J * ε) ≤ T →
       avg ≤ ε ∧ ∃ t : Fin p.T, NuclearStationary f (W t.castSucc) ε)
 
+def Valid (p : Constants) : Prop :=
+  0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.s ∧ 0 < p.η ∧ 1 ≤ p.T
+
+structure Params extends OracleTemplate.MuonBest.Public
+
 noncomputable abbrev spec : Setup where
   Params := Params
-  Public := SimplifiedMuon.Public
+  Public := OracleTemplate.MuonBest.Public
   Instance p := Mat p.m p.n → ℝ
   Query p := Mat p.m p.n
   Reply p := Mat p.m p.n
-  Output p := Fin (p.T + 1) → Mat p.m p.n
-  publicInput := publicInput
-  valid p := 0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.s ∧ 0 < p.η ∧ 1 ≤ p.T
+  Output p := Mat p.m p.n
+  publicInput := Params.toPublic
+  valid p := 0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.s ∧ 0 < p.J ∧ 0 < p.Δ ∧ 0 < p.ε
   admissible p f O :=
-    ThirdDerivativeBounded p.s f ∧ BddBelow (Set.range f) ∧
-      ∀ k W seed, O.answer k (0, W) seed = gradient f W
-  successful p f W _ := ∀ ω, Guarantee p f (W ω)
-  allowedAlgorithm q A := A = SimplifiedMuon.simplifiedMuon q
+    LongTails.Setups.MuonThirdOrder.ThirdDerivativeBounded p.s f ∧ BddBelow (Set.range f) ∧
+    f p.W0 - ⨅ W, f W ≤ p.Δ ∧
+    (∀ W, LongTails.Setups.MuonThirdOrder.hessianQuadratic f W ≤ p.J) ∧
+    ∀ k W seed, O.answer k (0, W) seed = gradient f W
+  successful p f output _ := ∀ ω, nuclearNorm (gradient f (output ω)) ≤ p.ε
+  allowedAlgorithm p A := A = OracleTemplate.MuonBest.algorithm p
 
 attribute [local simp] publicInput ThirdDerivativeBounded hessianQuadratic Guarantee
 

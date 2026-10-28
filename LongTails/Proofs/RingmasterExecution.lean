@@ -1,6 +1,8 @@
 import LongTails.Proofs.RingmasterStochastic
+import LongTails.Setups.RingmasterIterations
 import LongTails.Setups.RingmasterUniversalTime
 import LongTails.Proofs.MaleniaUniformTiming
+import LongTails.Proofs.RennalaConvergence
 
 open MeasureTheory
 
@@ -450,5 +452,230 @@ theorem roundTime_mono {n : ℕ} (V : Fin n → ℝ → ℝ)
   · show _ ≤ (if ∃ t, 0 ≤ t ∧ (S : ℝ) ≤ ∑ i, ((⌊V i t - V i s'⌋ : ℤ) : ℝ) then _ else ⊤)
     rw [ite_eq_right h']
     exact le_top
+
+theorem stepSize_pos (L σ ε : ℝ) (R : ℕ) (hL : 0 < L) (hσ : 0 ≤ σ)
+    (hε : 0 < ε) (hR : 1 ≤ R) : 0 < stepSize L σ ε R := by
+  have hR' : 0 < (R : ℝ) := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hR)
+  unfold OracleTemplate.RingmasterAsgd.stepSize
+  split_ifs with hz
+  · positivity
+  · have hσpos : 0 < σ := lt_of_le_of_ne hσ (Ne.symm hz)
+    exact lt_min (by positivity) (by positivity)
+
+theorem iteration_horizon_sufficient (p : LongTails.Setups.RingmasterIterations.Params) :
+    8 * p.R * p.L * p.Δ / p.ε + 16 * p.σ ^ 2 * p.L * p.Δ / p.ε ^ 2 ≤
+      (iterationHorizon p.L p.σ p.ε p.Δ p.R : ℝ) := by
+  exact Nat.le_ceil _
+
+theorem time_horizon_sufficient (p : LongTails.Setups.RingmasterUniversalTime.Params)
+    (hL : 0 < p.L) (hε : 0 < p.ε) (hΔ : 0 ≤ p.Δ) :
+    8 * threshold p.σ p.ε * p.L * p.Δ / p.ε + 16 * p.σ ^ 2 * p.L * p.Δ / p.ε ^ 2 ≤
+      (timeHorizon p.L p.σ p.ε p.Δ : ℝ) := by
+  let R := threshold p.σ p.ε
+  let K := timeBlocks p.L p.ε p.Δ
+  have hR1 : 1 ≤ R := le_max_left _ _
+  have hRs : p.σ ^ 2 / p.ε ≤ (R : ℝ) := by
+    have h1 := Nat.le_ceil (p.σ ^ 2 / p.ε)
+    have h2 : (⌈p.σ ^ 2 / p.ε⌉₊ : ℝ) ≤ (R : ℝ) := by exact_mod_cast le_max_right _ _
+    linarith
+  have hK : 48 * p.L * p.Δ / p.ε ≤ (K : ℝ) := Nat.le_ceil _
+  have hRr : (1 : ℝ) ≤ R := by exact_mod_cast hR1
+  have hLD : 0 ≤ p.L * p.Δ / p.ε := by positivity
+  have e1 : 8 * (R : ℝ) * p.L * p.Δ / p.ε = 8 * R * (p.L * p.Δ / p.ε) := by ring
+  have e2 : 16 * p.σ ^ 2 * p.L * p.Δ / p.ε ^ 2 =
+      16 * (p.σ ^ 2 / p.ε) * (p.L * p.Δ / p.ε) := by field_simp
+  have e3 : 48 * p.L * p.Δ / p.ε = 48 * (p.L * p.Δ / p.ε) := by ring
+  change 8 * (R : ℝ) * p.L * p.Δ / p.ε +
+    16 * p.σ ^ 2 * p.L * p.Δ / p.ε ^ 2 ≤ ((R * K : ℕ) : ℝ)
+  push_cast
+  rw [e1, e2]
+  rw [e3] at hK
+  nlinarith [mul_le_mul_of_nonneg_right hRs hLD,
+    mul_le_mul_of_nonneg_left hK (by positivity : (0 : ℝ) ≤ R)]
+
+theorem arrival_accuracy (p : LongTails.Setups.RingmasterIterations.Params) (K : ℕ)
+    (hp : LongTails.Setups.RingmasterIterations.spec.valid p)
+    (hK : 8 * p.R * p.L * p.Δ / p.ε + 16 * p.σ ^ 2 * p.L * p.Δ / p.ε ^ 2 ≤ (K : ℝ))
+    (I : Instance p.d) (O : Oracle (Query (LongTails.Setups.RingmasterIterations.publicInput p))
+      (Reply (LongTails.Setups.RingmasterIterations.publicInput p)))
+    (hO : LongTails.Setups.RingmasterIterations.spec.admissible p I O) :
+    let q := { LongTails.Setups.RingmasterIterations.publicInput p with K := K }
+    LongTails.Setups.RingmasterIterations.spec.successful p I
+      (fun z : (ringmasterPoint q).Seed × ((k : ℕ) → O.Seed k) =>
+        execute O (ringmasterPoint q) (fun _ => K) z.1 z.2)
+      ⟨((ringmasterPoint q).law : Measure _).prod (O.law : Measure _), inferInstance⟩ := by
+  classical
+  obtain ⟨hg, hlip, hlower, hgap, Ω, m, μ, P, g, arrive, hiid, ho, rfl⟩ := hO
+  let := m
+  have hlower' (x : Point p.d) : I.f p.x0 - p.Δ ≤ I.f x := by
+    linarith [hlower x]
+  have hgap' : I.f p.x0 - (I.f p.x0 - p.Δ) = p.Δ := by ring
+  obtain ⟨hL, hsig, heps, hΔ0, hR1⟩ := hp
+  let q := { LongTails.Setups.RingmasterIterations.publicInput p with K := K }
+  let event : ℕ → (Fin q.n → ℝ) → Option (Fin q.n × ℝ) := fun k _ => some (arrive k, 0)
+  let ans : ℕ → Query q → Ω → Reply q := fun k qq b =>
+    Option.elim qq none (fun r => some (arrive k, 0, g (r.1 (arrive k)) b))
+  have hev : ∀ k < q.K, event k (timing q.R event k).starts ≠ none := fun k _ => Option.some_ne_none _
+  let a : ℕ → ℕ := fun k => if k < q.K then delays q.R event k else k
+  have hab := delays_bound q.R hR1 event q.K hev
+  have hexe (j : Fin (q.K + 1)) (ω : ℕ → Ω) :
+      execute (arrivalOracle q arrive P g) (ringmasterPoint q) (fun _ => K) j ω =
+        delayedIterate g q.gamma a q.x0 ω j.val := by
+    have hadv := advance_ringmaster q hR1 g event ans (fun _ _ _ _ => rfl) hev j ω q.K le_rfl
+    erw [StochasticGradient.execute_advance]
+    change ((ringmaster q).output (StochasticGradient.advance (fun c s => (ringmaster q).update s
+      (ans c ((ringmaster q).query s).2 (ω c))) q.K 0 ((ringmaster q).initial j))).1 = _
+    rw [hadv]
+    exact ite_eq_left (show j.val ≤ q.K by omega)
+  let x : Fin (q.K + 1) → (ℕ → Ω) → Point p.d := fun j ω => delayedIterate g q.gamma a q.x0 ω j.val
+  have hm (j : Fin (q.K + 1)) : Measurable (x j) :=
+    (iterate_moments I.f g μ P (fun k ω => ω k) p.L p.σ q.gamma q.x0 a hL hg
+      hlip ho hiid (fun k => (hab k).1) j.val).1
+  have hi (j : Fin (q.K + 1)) : Integrable (fun ω => ‖gradient I.f (x j ω)‖ ^ 2) (P : Measure _) :=
+    (iterate_moments I.f g μ P (fun k ω => ω k) p.L p.σ q.gamma q.x0 a hL hg
+      hlip ho hiid (fun k => (hab k).1) j.val).2.2.1
+  have hacc := iteration_accuracy I.f g μ P (fun k ω => ω k) p.L p.σ p.ε (I.f p.x0 - p.Δ) p.x0 a p.R K
+    hL hsig heps hg hlip hlower' ho hiid (fun k => (hab k).1) (fun k => (hab k).2)
+    (by rw [hgap']; exact hK)
+  have ha : (1 / ((q.K + 1 : ℕ) : ℝ)) * ∑ j : Fin (q.K + 1),
+      (∫ ω, ‖gradient I.f (x j ω)‖ ^ 2 ∂(P : Measure _)) ≤ p.ε := by
+    have hs := Fin.sum_univ_eq_sum_range (fun k => ∫ ω, ‖gradient I.f (delayedIterate g q.gamma a q.x0 ω k)‖ ^ 2
+      ∂(P : Measure (ℕ → Ω))) (q.K + 1)
+    show (1 / ((q.K + 1 : ℕ) : ℝ)) * ∑ j : Fin (q.K + 1), (fun k => ∫ ω, ‖gradient I.f
+      (delayedIterate g q.gamma a q.x0 ω k)‖ ^ 2 ∂(P : Measure (ℕ → Ω))) (j : ℕ) ≤ p.ε
+    rw [hs]
+    push_cast
+    exact hacc
+  have hu := uniform_prefix_accuracy P I.f q.K x p.ε hm hi ha
+  have hfun : (fun z : Fin (q.K + 1) × (ℕ → Ω) =>
+      execute (arrivalOracle q arrive P g) (ringmasterPoint q) (fun _ => K) z.1 z.2) =
+      fun z => x z.1 z.2 := by
+    funext z
+    exact hexe z.1 z.2
+  change LongTails.Setups.RingmasterIterations.spec.successful p I
+    (fun z : Fin (q.K + 1) × (ℕ → Ω) => execute (arrivalOracle q arrive P g) (ringmasterPoint q) (fun _ => K) z.1 z.2)
+    ⟨((PMF.uniformOfFintype (Fin (q.K + 1))).toMeasure).prod (P : Measure (ℕ → Ω)), inferInstance⟩
+  rw [hfun]
+  exact ⟨hu.1, hu.2.1, hu.2.2.2⟩
+
+theorem iterations_success (p : LongTails.Setups.RingmasterIterations.Params)
+    (hp : LongTails.Setups.RingmasterIterations.spec.valid p)
+    (I : Instance p.d) (O : Oracle (Query (LongTails.Setups.RingmasterIterations.publicInput p))
+      (Reply (LongTails.Setups.RingmasterIterations.publicInput p)))
+    (hO : LongTails.Setups.RingmasterIterations.spec.admissible p I O) :
+    let q := LongTails.Setups.RingmasterIterations.publicInput p
+    LongTails.Setups.RingmasterIterations.spec.successful p I
+      (fun z : (ringmasterPoint q).Seed × ((k : ℕ) → O.Seed k) =>
+        execute O (ringmasterPoint q) (fun _ => iterationHorizon p.L p.σ p.ε p.Δ p.R) z.1 z.2)
+      ⟨((ringmasterPoint q).law : Measure _).prod (O.law : Measure _), inferInstance⟩ := by
+  exact arrival_accuracy p (iterationHorizon p.L p.σ p.ε p.Δ p.R) hp
+    (iteration_horizon_sufficient p) I O hO
+
+theorem universal_accuracy (p : LongTails.Setups.RingmasterUniversalTime.Params)
+    (hp : 0 < p.L ∧ 0 ≤ p.σ ∧ 0 < p.ε ∧ 0 ≤ p.Δ ∧
+      ∀ i, RennalaUniform.PowerAssumption (p.power i))
+    (I : Instance p.d) (O : Oracle (Query (LongTails.Setups.RingmasterUniversalTime.publicInput p))
+      (Reply (LongTails.Setups.RingmasterUniversalTime.publicInput p)))
+    (hO : LongTails.Setups.RingmasterUniversalTime.spec.admissible p I O) :
+    RennalaUniform.deadline (fun i t => RennalaUniform.work (p.power i) t / 4)
+      (max 1 ⌈p.σ ^ 2 / p.ε⌉₊) ⌈48 * p.L * p.Δ / p.ε⌉₊ < ⊤ →
+    let q := LongTails.Setups.RingmasterUniversalTime.publicInput p
+    LongTails.Setups.RingmasterUniversalTime.spec.successful p I
+      (fun z : (ringmaster q).Seed × ((k : ℕ) → O.Seed k) =>
+        execute O (ringmaster q) (fun _ => timeHorizon p.L p.σ p.ε p.Δ) z.1 z.2)
+      ⟨((ringmaster q).law : Measure _).prod (O.law : Measure _), inferInstance⟩ := by
+  classical
+  intro hfin
+  obtain ⟨hg, hlip, hlower, hgap, Ω, m, μ, P, g, hiid, ho, rfl⟩ := hO
+  let := m
+  have hlower' (x : Point p.d) : I.f p.x0 - p.Δ ≤ I.f x := by
+    linarith [hlower x]
+  have hgap' : I.f p.x0 - (I.f p.x0 - p.Δ) = p.Δ := by ring
+  obtain ⟨hL, hsig, heps, hΔ0, hpow⟩ := hp
+  let q := LongTails.Setups.RingmasterUniversalTime.publicInput p
+  let R := threshold p.σ p.ε
+  let K := ⌈48 * p.L * p.Δ / p.ε⌉₊
+  have hR1 : 1 ≤ R := le_max_left _ _
+  let V : Fin p.n → ℝ → ℝ := fun i => RennalaUniform.work (p.power i)
+  have hV : ∀ i, ContinuousOn (V i) (Set.Ici 0) ∧ MonotoneOn (V i) (Set.Ici 0) := fun i =>
+    RennalaUniform.work_properties (p.power i) (hpow i)
+  let event : ℕ → (Fin q.n → ℝ) → Option (Fin q.n × ℝ) := completionEvent V
+  let ans : ℕ → Query q → Ω → Reply q := fun _ qq b => eventAnswer q V g qq b
+  change LongTails.Setups.RingmasterUniversalTime.spec.successful p I
+    (fun z : Fin (q.K + 1) × (ℕ → Ω) =>
+      execute (eventOracle q V P g) (ringmaster q) (fun _ => timeHorizon p.L p.σ p.ε p.Δ) z.1 z.2)
+    ⟨((PMF.uniformOfFintype (Fin (q.K + 1))).toMeasure).prod (P : Measure (ℕ → Ω)), inferInstance⟩
+  obtain ⟨hev0, hclk⟩ := deadline_updates R hR1 V hV K hfin
+  have hKq : q.K = K * R := Nat.mul_comm _ _
+  have hev : ∀ k < q.K, event k (timing q.R event k).starts ≠ none := fun k hk =>
+    hev0 k (by rw [← hKq]; exact hk)
+  let a : ℕ → ℕ := fun k => if k < q.K then delays q.R event k else k
+  have hab := delays_bound q.R hR1 event q.K hev
+  have hexe (j : Fin (q.K + 1)) (ω : ℕ → Ω) :
+      execute (eventOracle q V P g) (ringmaster q) (fun _ => timeHorizon p.L p.σ p.ε p.Δ) j ω =
+        (delayedIterate g q.gamma a q.x0 ω j.val, (timing q.R event q.K).clock) := by
+    have hadv := advance_ringmaster q hR1 g event ans (fun _ _ _ _ => rfl) hev j ω q.K le_rfl
+    erw [StochasticGradient.execute_advance]
+    change (ringmaster q).output (StochasticGradient.advance (fun c s => (ringmaster q).update s
+      (ans c ((ringmaster q).query s).2 (ω c))) q.K 0 ((ringmaster q).initial j)) = _
+    rw [hadv]
+    exact Prod.ext (ite_eq_left (show j.val ≤ q.K by omega)) rfl
+  let x : Fin (q.K + 1) → (ℕ → Ω) → Point p.d := fun j ω => delayedIterate g q.gamma a q.x0 ω j.val
+  have hm (j : Fin (q.K + 1)) : Measurable (x j) :=
+    (iterate_moments I.f g μ P (fun k ω => ω k) p.L p.σ q.gamma q.x0 a hL hg
+      hlip ho hiid (fun k => (hab k).1) j.val).1
+  have hi (j : Fin (q.K + 1)) : Integrable (fun ω => ‖gradient I.f (x j ω)‖ ^ 2) (P : Measure _) :=
+    (iterate_moments I.f g μ P (fun k ω => ω k) p.L p.σ q.gamma q.x0 a hL hg
+      hlip ho hiid (fun k => (hab k).1) j.val).2.2.1
+  have hK : 8 * R * p.L * (I.f p.x0 - (I.f p.x0 - p.Δ)) / p.ε +
+      16 * p.σ ^ 2 * p.L * (I.f p.x0 - (I.f p.x0 - p.Δ)) / p.ε ^ 2 ≤ (q.K : ℝ) := by
+    rw [hgap']
+    exact time_horizon_sufficient p hL heps hΔ0
+  have hacc := iteration_accuracy I.f g μ P (fun k ω => ω k) p.L p.σ p.ε (I.f p.x0 - p.Δ) p.x0 a R q.K
+    hL hsig heps hg hlip hlower' ho hiid (fun k => (hab k).1) (fun k => (hab k).2) hK
+  have ha : (1 / ((q.K + 1 : ℕ) : ℝ)) * ∑ j : Fin (q.K + 1),
+      (∫ ω, ‖gradient I.f (x j ω)‖ ^ 2 ∂(P : Measure _)) ≤ p.ε := by
+    have hs := Fin.sum_univ_eq_sum_range (fun k => ∫ ω, ‖gradient I.f (delayedIterate g q.gamma a q.x0 ω k)‖ ^ 2
+      ∂(P : Measure (ℕ → Ω))) (q.K + 1)
+    show (1 / ((q.K + 1 : ℕ) : ℝ)) * ∑ j : Fin (q.K + 1), (fun k => ∫ ω, ‖gradient I.f
+      (delayedIterate g q.gamma a q.x0 ω k)‖ ^ 2 ∂(P : Measure (ℕ → Ω))) (j : ℕ) ≤ p.ε
+    rw [hs]
+    push_cast
+    exact hacc
+  have hu := uniform_prefix_accuracy P I.f q.K x p.ε hm hi ha
+  have hfun : (fun z : Fin (q.K + 1) × (ℕ → Ω) =>
+      execute (eventOracle q V P g) (ringmaster q) (fun _ => timeHorizon p.L p.σ p.ε p.Δ) z.1 z.2) =
+      fun z => (x z.1 z.2, (timing q.R event q.K).clock) := by
+    funext z
+    exact hexe z.1 z.2
+  rw [hfun]
+  have hclk' : ENNReal.ofReal (timing q.R event q.K).clock ≤ RennalaUniform.deadline
+      (fun i t => RennalaUniform.work (p.power i) t / 4) (threshold p.σ p.ε)
+        ⌈48 * p.L * p.Δ / p.ε⌉₊ := by
+    have e : (timing q.R event q.K).clock = (timing R (completionEvent V) (K * R)).clock :=
+      congrArg (fun k => (timing R (completionEvent V) k).clock) hKq
+    rw [e]
+    exact hclk
+  exact ⟨hu.1.prodMk measurable_const, hu.2.1, hu.2.2.2, Filter.Eventually.of_forall (fun _ => hclk')⟩
+
+theorem universal_success (p : LongTails.Setups.RingmasterUniversalTime.Params)
+    (hp : LongTails.Setups.RingmasterUniversalTime.spec.valid p)
+    (I : Instance p.d) (O : Oracle (Query (LongTails.Setups.RingmasterUniversalTime.publicInput p))
+      (Reply (LongTails.Setups.RingmasterUniversalTime.publicInput p)))
+    (hO : LongTails.Setups.RingmasterUniversalTime.spec.admissible p I O) :
+    let q := LongTails.Setups.RingmasterUniversalTime.publicInput p
+    LongTails.Setups.RingmasterUniversalTime.spec.successful p I
+      (fun z : (ringmaster q).Seed × ((k : ℕ) → O.Seed k) =>
+        execute O (ringmaster q) (fun _ => timeHorizon p.L p.σ p.ε p.Δ) z.1 z.2)
+      ⟨((ringmaster q).law : Measure _).prod (O.law : Measure _), inferInstance⟩ := by
+  exact universal_accuracy p hp.1 I O hO hp.2
+
+theorem finite_domain_iff (p : LongTails.Setups.RingmasterUniversalTime.Params) (Q : Prop) :
+    (LongTails.Setups.RingmasterUniversalTime.spec.valid p → Q) ↔
+      ((0 < p.L ∧ 0 ≤ p.σ ∧ 0 < p.ε ∧ 0 ≤ p.Δ ∧
+      ∀ i, RennalaUniform.PowerAssumption (p.power i)) →
+        RennalaUniform.deadline (fun i t => RennalaUniform.work (p.power i) t / 4)
+      (max 1 ⌈p.σ ^ 2 / p.ε⌉₊) ⌈48 * p.L * p.Δ / p.ε⌉₊ < ⊤ → Q) := by
+  exact and_imp
 
 end OracleTemplate.RingmasterAsgd

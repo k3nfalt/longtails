@@ -5,6 +5,7 @@ import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Calculus.Gradient.Basic
+import Mathlib.Probability.Distributions.Uniform
 
 open MeasureTheory
 
@@ -94,3 +95,54 @@ attribute [local simp] NuclearStationary toMatrix ofMatrix gramEigenvalues right
   spectralNorm orthogonalize step muon sampleOracle batchGradient iterationStep trajectory
 
 end OracleTemplate.Muon
+
+namespace OracleTemplate.MuonTuning
+
+open OracleTemplate OracleTemplate.Muon
+
+structure Public where
+  m : ℕ
+  n : ℕ
+  L : ℝ
+  σ : ℝ
+  Δ : ℝ
+  ε : ℝ
+  W0 : Mat m n
+
+noncomputable def threshold (p : Public) (C : ℝ) : ℝ :=
+  let r : ℝ := (min p.m p.n : ℕ)
+  18 ^ 4 * r * C * p.Δ * p.σ ^ 2 / p.ε ^ 4 + 18 ^ 2 * C * p.Δ / p.ε ^ 2 +
+    18 ^ 2 * r ^ 2 * p.σ ^ 4 / (C * p.Δ * p.ε ^ 2)
+
+noncomputable def horizon (p : Public) (C : ℝ) : ℕ := ⌈threshold p C⌉₊ + 1
+
+noncomputable def momentum (p : Public) (C : ℝ) : ℝ :=
+  1 - (if p.σ = 0 then 1 else
+    min (Real.sqrt (C * p.Δ) / (p.σ * Real.sqrt (((min p.m p.n : ℕ) : ℝ) * horizon p C))) 1)
+
+noncomputable def stepSize (p : Public) (C : ℝ) : ℝ :=
+  Real.sqrt ((1 - momentum p C) * p.Δ / ((horizon p C : ℝ) * C))
+
+noncomputable def sourceInput (p : Public) (C : ℝ) : OracleTemplate.Muon.Public :=
+  ⟨p.m, p.n, stepSize p C, momentum p C, 1, horizon p C, p.W0⟩
+
+noncomputable def randomMuon (q : OracleTemplate.Muon.Public) (N : ℕ) :
+    Algorithm (Mat q.m q.n) (Mat q.m q.n) (Mat q.m q.n) where
+  Seed := Fin (N + 1)
+  law := ⟨(PMF.uniformOfFintype (Fin (N + 1))).toMeasure, inferInstance⟩
+  State := OracleTemplate.Muon.State q × Fin (N + 1)
+  initial j := ((muon q).initial (), j)
+  query st := (muon q).query st.1
+  update st G := ((muon q).update st.1 G, st.2)
+  output st := st.1.iterates st.2.val
+
+noncomputable def frobenius (p : Public) : Algorithm (Mat p.m p.n) (Mat p.m p.n) (Mat p.m p.n) :=
+  randomMuon (sourceInput p (((min p.m p.n : ℕ) : ℝ) * p.L))
+    ⌈threshold p (((min p.m p.n : ℕ) : ℝ) * p.L)⌉₊
+
+noncomputable def spectral (p : Public) : Algorithm (Mat p.m p.n) (Mat p.m p.n) (Mat p.m p.n) :=
+  randomMuon (sourceInput p p.L) ⌈threshold p p.L⌉₊
+
+attribute [local simp] threshold horizon momentum stepSize sourceInput randomMuon frobenius spectral
+
+end OracleTemplate.MuonTuning

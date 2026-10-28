@@ -9,7 +9,7 @@ namespace LongTails.Setups.MuonFrobenius
 
 open OracleTemplate OracleTemplate.Muon
 
-structure Params where
+structure Constants where
   m : ℕ
   n : ℕ
   L : ℝ
@@ -20,7 +20,7 @@ structure Params where
   T : ℕ
   W0 : Mat m n
 
-def publicInput (p : Params) : Muon.Public := ⟨p.m, p.n, p.η, p.β, p.B, p.T, p.W0⟩
+def publicInput (p : Constants) : Muon.Public := ⟨p.m, p.n, p.η, p.β, p.B, p.T, p.W0⟩
 
 def FrobeniusSmooth {m n : ℕ} (L : ℝ) (f : Mat m n → ℝ) : Prop :=
   (∀ W, HasGradientAt f (gradient f W) W) ∧ ∀ W W', ‖gradient f W - gradient f W'‖ ≤ L * ‖W - W'‖
@@ -34,11 +34,11 @@ def StochasticOracleModel {m n : ℕ} (f : Mat m n → ℝ) (σ : ℝ) (O : Orac
       LongTails.Setups.StochasticSmoothAndConvex.IsStochasticGradient (Mat m n) Ω (μ : Measure Ω) f g σ ∧
       O = sampleOracle P g
 
-noncomputable def averageNuclear (p : Params) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
+noncomputable def averageNuclear (p : Constants) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
     (W : Ω → Fin (p.T + 1) → Mat p.m p.n) (P : Measure Ω) : ℝ :=
   (1 / (p.T : ℝ)) * ∑ t : Fin p.T, ∫ ω, nuclearNorm (gradient f (W ω t.castSucc)) ∂P
 
-def Guarantee (p : Params) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
+def Guarantee (p : Constants) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
     (W : Ω → Fin (p.T + 1) → Mat p.m p.n) (P : Measure Ω) : Prop :=
   let r : ℝ := (min p.m p.n : ℕ)
   let T : ℝ := p.T
@@ -59,19 +59,30 @@ def Guarantee (p : Params) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpac
         18 ^ 2 * r * p.σ ^ 4 / (p.L * Δ * ε ^ 2) ≤ T →
       avg ≤ ε ∧ ∃ t : Fin p.T, ∫ ω, nuclearNorm (gradient f (W ω t.castSucc)) ∂P ≤ ε)
 
+def Valid (p : Constants) : Prop :=
+  0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.L ∧ 0 ≤ p.σ ∧ 0 < p.η ∧ 0 ≤ p.β ∧ p.β < 1 ∧
+    1 ≤ p.B ∧ 1 ≤ p.T
+
+structure Params extends OracleTemplate.MuonTuning.Public
+
 noncomputable abbrev spec : Setup where
   Params := Params
-  Public := Muon.Public
+  Public := OracleTemplate.MuonTuning.Public
   Instance p := Mat p.m p.n → ℝ
   Query p := Mat p.m p.n
   Reply p := Mat p.m p.n
-  Output p := Fin (p.T + 1) → Mat p.m p.n
-  publicInput := publicInput
-  valid p := 0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.L ∧ 0 ≤ p.σ ∧ 0 < p.η ∧ 0 ≤ p.β ∧ p.β < 1 ∧
-    1 ≤ p.B ∧ 1 ≤ p.T
-  admissible p f O := FrobeniusSmooth p.L f ∧ BddBelow (Set.range f) ∧ StochasticOracleModel f p.σ O
-  successful p f W P := Guarantee p f W (P : Measure _)
-  allowedAlgorithm q A := A = muon q
+  Output p := Mat p.m p.n
+  publicInput := Params.toPublic
+  valid p := 0 < p.m ∧ 0 < p.n ∧ 0 < p.L ∧ 0 ≤ p.σ ∧ 0 < p.Δ ∧ 0 < p.ε
+  admissible p f O :=
+    LongTails.Setups.MuonFrobenius.FrobeniusSmooth p.L f ∧ BddBelow (Set.range f) ∧
+    f p.W0 - ⨅ W, f W ≤ p.Δ ∧
+    LongTails.Setups.MuonFrobenius.StochasticOracleModel f p.σ O
+  successful p f output P :=
+    Measurable output ∧
+    Integrable (fun ω => nuclearNorm (gradient f (output ω))) (P : Measure _) ∧
+    (∫ ω, nuclearNorm (gradient f (output ω)) ∂(P : Measure _)) ≤ p.ε
+  allowedAlgorithm p A := A = OracleTemplate.MuonTuning.frobenius p
 
 attribute [local simp] publicInput FrobeniusSmooth StochasticOracleModel averageNuclear Guarantee
 

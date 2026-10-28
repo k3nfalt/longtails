@@ -8,7 +8,7 @@ namespace LongTails.Setups.MuonSpectral
 
 open OracleTemplate OracleTemplate.Muon
 
-structure Params where
+structure Constants where
   m : ℕ
   n : ℕ
   Ls : ℝ
@@ -19,17 +19,17 @@ structure Params where
   T : ℕ
   W0 : Mat m n
 
-def publicInput (p : Params) : Muon.Public := ⟨p.m, p.n, p.η, p.β, p.B, p.T, p.W0⟩
+def publicInput (p : Constants) : Muon.Public := ⟨p.m, p.n, p.η, p.β, p.B, p.T, p.W0⟩
 
 def SpectralSmooth {m n : ℕ} (Ls : ℝ) (f : Mat m n → ℝ) : Prop :=
   (∀ W, HasGradientAt f (gradient f W) W) ∧
     ∀ W W', nuclearNorm (gradient f W - gradient f W') ≤ Ls * spectralNorm (W - W')
 
-noncomputable def averageNuclear (p : Params) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
+noncomputable def averageNuclear (p : Constants) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
     (W : Ω → Fin (p.T + 1) → Mat p.m p.n) (P : Measure Ω) : ℝ :=
   (1 / (p.T : ℝ)) * ∑ t : Fin p.T, ∫ ω, nuclearNorm (gradient f (W ω t.castSucc)) ∂P
 
-def Guarantee (p : Params) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
+def Guarantee (p : Constants) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpace Ω]
     (W : Ω → Fin (p.T + 1) → Mat p.m p.n) (P : Measure Ω) : Prop :=
   let r : ℝ := (min p.m p.n : ℕ)
   let T : ℝ := p.T
@@ -50,20 +50,30 @@ def Guarantee (p : Params) (f : Mat p.m p.n → ℝ) {Ω : Type} [MeasurableSpac
         18 ^ 2 * r ^ 2 * p.σ ^ 4 / (p.Ls * Δ * ε ^ 2) ≤ T →
       avg ≤ ε ∧ ∃ t : Fin p.T, ∫ ω, nuclearNorm (gradient f (W ω t.castSucc)) ∂P ≤ ε)
 
+def Valid (p : Constants) : Prop :=
+  0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.Ls ∧ 0 ≤ p.σ ∧ 0 < p.η ∧ 0 ≤ p.β ∧ p.β < 1 ∧
+    1 ≤ p.B ∧ 1 ≤ p.T
+
+structure Params extends OracleTemplate.MuonTuning.Public
+
 noncomputable abbrev spec : Setup where
   Params := Params
-  Public := Muon.Public
+  Public := OracleTemplate.MuonTuning.Public
   Instance p := Mat p.m p.n → ℝ
   Query p := Mat p.m p.n
   Reply p := Mat p.m p.n
-  Output p := Fin (p.T + 1) → Mat p.m p.n
-  publicInput := publicInput
-  valid p := 0 < p.m ∧ 0 < p.n ∧ 0 ≤ p.Ls ∧ 0 ≤ p.σ ∧ 0 < p.η ∧ 0 ≤ p.β ∧ p.β < 1 ∧
-    1 ≤ p.B ∧ 1 ≤ p.T
-  admissible p f O := SpectralSmooth p.Ls f ∧ BddBelow (Set.range f) ∧
+  Output p := Mat p.m p.n
+  publicInput := Params.toPublic
+  valid p := 0 < p.m ∧ 0 < p.n ∧ 0 < p.L ∧ 0 ≤ p.σ ∧ 0 < p.Δ ∧ 0 < p.ε
+  admissible p f O :=
+    LongTails.Setups.MuonSpectral.SpectralSmooth p.L f ∧ BddBelow (Set.range f) ∧
+    f p.W0 - ⨅ W, f W ≤ p.Δ ∧
     LongTails.Setups.MuonFrobenius.StochasticOracleModel f p.σ O
-  successful p f W P := Guarantee p f W (P : Measure _)
-  allowedAlgorithm q A := A = muon q
+  successful p f output P :=
+    Measurable output ∧
+    Integrable (fun ω => nuclearNorm (gradient f (output ω))) (P : Measure _) ∧
+    (∫ ω, nuclearNorm (gradient f (output ω)) ∂(P : Measure _)) ≤ p.ε
+  allowedAlgorithm p A := A = OracleTemplate.MuonTuning.spectral p
 
 attribute [local simp] publicInput SpectralSmooth averageNuclear Guarantee
 

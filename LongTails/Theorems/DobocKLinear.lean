@@ -3,22 +3,17 @@ import LongTails.Proofs.DobocKConvergence
 
 namespace OracleTemplate.DobocKLinear
 
-open LongTails.Setups.DobocK OracleTemplate.DobocK
+open OracleTemplate
 
-def budget : (let S := spec; S.Params → Fin S.numOracles → ℕ) := fun p _ => p.k
+noncomputable def budget : (let S := LongTails.Setups.DobocK.spec; S.Params → Fin S.numOracles → ℕ) := fun p _ => ⌈2 * (p.M + 2 / p.lam) * (1 + (p.M + 2 / p.lam) + (p.M + 2 / p.lam) ^ 2 * (p.K : ℝ) ^ 2 / p.m + Real.sqrt ((p.M + 2 / p.lam) ^ 4 * (2 * (p.M + 2 / p.lam)) ^ (3 / 2 : ℝ) * (p.K : ℝ) ^ 3 * p.L * Real.sqrt p.Δ / (6 * p.m ^ 5))) / p.m ^ 2 * Real.log (max 1 (p.Δ / p.ε))⌉₊
 
 theorem result : Convergence LongTails.Setups.DobocK.spec budget := by
-  refine ⟨fun q => dobocK q, ?_, fun _ _ => rfl⟩
-  rintro p ⟨hnet, hlam, hη, hK, hm, hmM, hL, hstep⟩ f O ⟨hA1, hA2, hO, hT⟩
-  obtain ⟨xstar, hmin⟩ := penalty_exists_minimizer p f hnet hlam hm hA1
-  obtain ⟨h0, h1, hrate⟩ :=
-    theorem2 p f hnet hlam hη hK hm hmM hL hA1 hA2 hstep xstar hmin (hT xstar hmin)
-  refine ⟨xstar, hmin, h0, h1, Filter.Eventually.of_forall ?_⟩
-  rintro ⟨seed, ξ⟩
-  have hexec := execute_dobocK p.toPublic f O hO p.k seed ξ
-  change penalty p.toPublic f (execute O (dobocK p.toPublic) (fun _ => p.k) seed ξ) -
-    penalty p.toPublic f xstar ≤ _
-  rw [hexec]
-  exact hrate p.k
+  refine ⟨OracleTemplate.DobocKTuning.algorithm, ?_, ?_⟩
+  · intro p hp f O hadm
+    dsimp only
+    intro ω
+    exact OracleTemplate.DobocKTuning.execution_accuracy p hp f O hadm ω.1 ω.2
+  · intro p hp
+    rfl
 
 end OracleTemplate.DobocKLinear
