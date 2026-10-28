@@ -1,0 +1,27 @@
+\begin{table}[tp]
+\centering
+\caption{Clustered convolutional separation: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ClusteredConvolutionalPerceptron.lean}{ClusteredConvolutionalPerceptron}.}\label{tab:ClusteredConvolutionalPerceptron}
+\parbox{\linewidth}{\footnotesize Signed examples $D_i\in\mathbb R^d$, $d>0$, satisfy $D_i=(\alpha_i/\sqrt2)e+\mu u_i$, $0<g\le |\alpha_i|\le R$, $\langle e,u_i\rangle=0$, $\|u_i-u_\star\|\le\kappa/64$, $\|u_\star\|\le1/2$, and $\|(u_\star-Pu_\star)/\sqrt2\|\ge2\kappa$, with $0<\kappa\le1/4$ and $0<\mu\le\kappa g^4/(4096R^3)$. An exact query returns one example's margin and its parameter gradient. The target is a deterministic strict separator: $w_1\langle D_i,v\rangle+w_2\langle PD_i,v\rangle>0$ for every $i$. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ClusteredConvolutionalPerceptronAcceleration.lean}{Clustered\allowbreak Convolutional\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ClusteredConvolutionalPerceptronAcceleration.md}{(review)} & $\mathcal O\!\left(N(R/g)^2\log(R/\mu)\right)$ exact margin-and-gradient calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} One-query projection, derived bound \citep{ccpOracleSource} & $\mathcal O(1)$: query $((1,0),0)$ on $D_0$; return $((1,0),D_0-\langle D_0,e\rangle e)$. Applies to the same cluster geometry without the small-contrast restriction. & \textbf{(1)}: No established improvement. & \textbf{(1)}: larger budget than one call; needs $g,R,\mu,\kappa$ and the small-contrast restriction. \\
+\midrule
+\textbf{(3)} Reference-sample construction \citep{ccpReferenceSource} & $\mathcal O\!\left(\frac{(R/g)^4\ell^2}{\kappa^2}\left[N+(R/g)\ell\right]\right)$. Pure reference and derivative-separable defects, under its small-contrast hypotheses. No common instance class; rates not comparable. & \textbf{(1)}: method-specific analysis removes the reference and directed kick; handles clustered residuals through unmodified cyclic updates. & \textbf{(1)}: adds a cluster cap; the data classes are not nested. \\
+\midrule
+\textbf{(4)} Two-sample quadratic perceptron \citep{tqpTyurin2026v2}, Section~5 & Not applicable: dataset~(5) contains a pure-background example, excluded by the cluster cap. Rates are not comparable. & \textbf{(1)}: method-specific scope extends to $N$ interacting clustered residuals; deterministic, noiseless analysis from one fixed start. & \textbf{(1)}: a $\kappa$-dependent start and small contrast; \textbf{(4)} covers almost every start with random perturbations. \\
+\midrule
+\textbf{(5)} Raw or frozen-filter linear perceptron \citep{ccpLowerSource} & $\Omega(1/\mu)$ calls on an explicit growing-rank clustered family (method lower bound). & \textbf{(1)}: $\mathcal O(N\log(1/\mu))$ for fixed $R,g,\kappa$ contrasts with inverse-contrast linear-perceptron lower bounds; a method-specific comparison, retaining $N$. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N=\texttt{samples}+1$; $d=\texttt{dimension}$; $g=\texttt{lower}$; $R=\texttt{upper}$; $\mu=\texttt{contrast}$; $\kappa=\texttt{derivativeMargin}$; $e=d^{-1/2}(1,\ldots,1)$; $P$ is the cyclic coordinate shift; $u_\star$ is the unknown cluster center. $\ell=\log(R/\mu)$; $\log$ is natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

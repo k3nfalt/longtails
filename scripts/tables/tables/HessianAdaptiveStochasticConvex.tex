@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic convex optimization with adaptive Hessian-noise tuning: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianAdaptiveStochasticConvex.lean}{HessianAdaptiveStochasticConvex}.}\label{tab:HessianAdaptiveStochasticConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:\mathbb{R}^d\to\mathbb{R}$ has differentiable gradient and $\rho$-Lipschitz Hessian on a compact convex body $C$ of diameter at most $D$; $x_0,x^\star\in C$, $x^\star\in\arg\min_C f$, $D,\rho,\varepsilon>0$. Jointly measurable oracles use IID samples of law $\mu$ under $P$, with $\int g(x,\omega)\,d\mu=\nabla f(x)$, $\int\|g(x,\omega)-\nabla f(x)\|^2\,d\mu\le\sigma_g^2$, and $\int\|H(x,\omega)-\nabla^2 f(x)\|_{\mathrm{op}}^2\,d\mu\le\sigma_h^2$ on $C$. Hessian samples are symmetric PSD pointwise and may be biased; the stated moments are integrable. Target: measurable feasible output $w$ with integrable gap and $\int[f(w)-f(x^\star)]\,dP\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HessianAdaptiveCubic.lean}{Hessian\allowbreak Adaptive\allowbreak Cubic} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HessianAdaptiveCubic.md}{(review)}
+& $\mathcal{O}\!\left(Q[1+\log((1+\sigma_h/(\rho D))Q)]^2\right)$ gradient and Hessian calls in total; two gradients and one Hessian per round.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{hascAgafonov2026Stochastic}, Thm.~5.1, Alg.~2 ($M=\rho$)
+& $\mathcal{O}\!\left(1+\frac{\sigma_g^2D^2}{\varepsilon^2}+\sqrt{\frac{\sigma_hD^2}{\varepsilon}}+\left(\frac{\rho D^3}{\varepsilon}\right)^{2/7}\right)$ total gradient and Hessian calls; same three calls per round.
+& \textbf{(1)}: Updates need no $\sigma_h$; stopping budget still does. Matches polynomial orders, with squared-logarithmic overhead.
+& \textbf{(1)}: Extra logarithm squared and larger leading constant; independent gradient/Hessian samples instead of allowing shared samples. \\
+\midrule
+\textbf{(3)} Extra-Newton \citep{hascExtraNewton2022}, Thm.~3.2 ($\gamma=D$); unbiased-Hessian subclass
+& $\mathcal{O}\!\left(\begin{aligned}1+\frac{\sigma_g^2D^2}{\varepsilon^2}&+\left(\frac{\sigma_hD^2}{\varepsilon}\right)^{2/3}\\[-2pt]&+\left(\frac{\rho D^3+\sqrt{\beta_0}D}{\varepsilon}\right)^{1/3}\end{aligned}\right)$ total gradient and Hessian calls.
+& \textbf{(1)}: On the unbiased PSD overlap, Hessian term $(\sigma_hD^2/\varepsilon)^{1/2}$ instead of $(\sigma_hD^2/\varepsilon)^{2/3}$; curvature $(\rho D^3/\varepsilon)^{2/7}$ instead of $(\rho D^3/\varepsilon)^{1/3}$, up to log squared. Gains matter when these dominate gradient noise, allowing for logarithms. Scope: biased PSD Hessians.
+& \textbf{(1)}: Needs $\rho,\sigma_g$ in updates; requires PSD samples. \textbf{(3)} needs neither noise levels nor $\rho$. \\
+\midrule
+\textbf{(4)} \citep{hascAgafonov2026Inexact}, Thm.~4.1 and App.~F.4; unconstrained, exact-gradient special case
+& $\mathcal{O}\!\left(\begin{aligned}1&+\log_+\frac{\max\{\eta_0,\bar\tau_0\}}{\rho R+\delta}+\log_+\frac{\bar\tau_0}{\eta_0}\\[-2pt]&+\left(\frac{\rho R^3}{\varepsilon}\right)^{2/7}+\sqrt{\frac{\delta R^2}{\varepsilon}}\end{aligned}\right)$ total calls, including gradient trials. Global $\rho$-Lipschitz Hessian; uniform error $\|H-\nabla^2f\|_{\mathrm{op}}\le\delta$.
+& \textbf{(1)}: Supports constraints, stochastic gradients and RMS Hessian error. Full classes are incomparable; no established rate improvement.
+& \textbf{(1)}: Requires known $\rho,\sigma_g$ and bounded $C$. \textbf{(4)} already adapts to $\rho,\delta$ and additionally covers generalized Hessian smoothness. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\sigma_g,\sigma_h\ge0$: gradient and Hessian RMS errors; PSD: positive semidefinite. $Q=1+\sigma_g^2D^2/\varepsilon^2+(\sigma_hD^2/\varepsilon)^{1/2}+(\rho D^3/\varepsilon)^{2/7}$. One call returns one gradient or one Hessian. $\beta_0>0$: Extra-Newton scale initialization. $R=\|x_0-x^\star\|$ (at most $D$ on the overlap); $\delta$: uniform Hessian error; $\eta_0>0$: initial regularization; $\bar\tau_0=\max\{4\delta,2\sqrt{\rho\|\nabla f(x_0)\|}\}$; $\log_+ t=\max\{0,\log t\}$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

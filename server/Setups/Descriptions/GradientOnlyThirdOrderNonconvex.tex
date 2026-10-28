@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gradient-Only Third-Order Nonconvex Optimization}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The function is three times continuously differentiable, with $L_1$-Lipschitz gradient and $L_3$-Lipschitz third derivative in the induced operator norm, where $L_1,L_3>0$. A given point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$, where $\Delta>0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm, including for multilinear forms. In particular, $\nabla^3 f(x)$ is a trilinear form on $E$. The algorithm receives $E$, $x^0$, $L_1$, $L_3$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ belongs to $C^3(E;\mathbb{R})$, and its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L_1\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Third-derivative regularity]
+The third derivative satisfies
+\[
+\|\nabla^3 f(x)-\nabla^3 f(y)\|_{\mathrm{op}}
+\leq L_3\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted gradient calls, the output must satisfy the first-order stationarity criterion
+\[
+\|\nabla f(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

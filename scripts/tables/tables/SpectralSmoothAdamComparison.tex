@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SpectralSmoothAdamComparison.lean}{SpectralSmoothAdamComparison}.}\label{tab:SpectralSmoothAdamComparison}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb R^{r\times r}\to\mathbb R$, $r\ge4$, $L,\varepsilon>0$, $L\Delta\ge128\varepsilon^2$; $f\ge f_{\min}$ and $f(X_0)-f_{\min}\le\Delta$; $\|\nabla f(X)-\nabla f(Y)\|_*\le L\|X-Y\|_{\rm op}$. IID samples of a jointly measurable, integrable oracle $G$ satisfy $\int G(X,\omega)\,dp(\omega)=\nabla f(X)$ and, for a fixed orthonormal basis $(b_i)$, $\int\|(G(X,\omega)-\nabla f(X))^\top b_i\|_2^2\,dp(\omega)\le\sigma_i^2$, with $\sigma_i\ge0$ and $\sum_i\sigma_i\le\varepsilon$. The setup requires constant-step batched exact-polar Muon with a uniform-iterate output $\widehat X$; the target is $\int\|\nabla f(\widehat X)\|_*\,d\mathbb P\le\varepsilon$, where $\mathbb P$ combines IID oracle samples and independent output randomization. Success also includes worst-case Adam and SGD lower bounds.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MuonAdamSgdSeparation.lean}{Muon\allowbreak Adam\allowbreak Sgd\allowbreak Separation} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MuonAdamSgdSeparation.md}{(review)}
+& Muon: $\mathcal O(L\Delta/\varepsilon^2)$ calls.\par Adam: $\Omega(\min\{\sqrt r,(rL\Delta/\varepsilon^2)^{1/3}\})$.\par SGD: $\Omega(rL\Delta/\varepsilon^2)$.\par Lower bounds: every constant tuning and batch size; uniform-iterate output. Adam is bias-corrected, $\eta>0$, $\tau\ge0$, $0\le\beta_1,\beta_2<1$, $\beta_1^2\le\beta_2$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Muon \citep{bssTaoYuZhang2026v1}, Thm.~4
+& $\mathcal O(1+L\Delta/\varepsilon^2+L\Delta s^2/\varepsilon^4)$.\par One-sided covariance: $\mathbb E[ZZ^\top\mid\mathcal F]\preceq\Sigma^2$, $s=\|\Sigma\|_*$. At $s=\varepsilon$: $\mathcal O(L\Delta/\varepsilon^2)$.
+& \textbf{(1)}: Adds an Adam lower bound. Matches known Muon rate at $s=\varepsilon$; row-profile relaxation already appears in \textbf{(3)}.
+& \textbf{(1)} fixes $s=\varepsilon$, square matrices, $r\ge4$, $L\Delta\ge128\varepsilon^2$; requires IID samples and gradient-Lipschitz smoothness. \\
+\midrule
+\textbf{(3)} Repository Muon guarantee and SGD lower bound \citep{ssacMuonRepository,ssacSgdRepository}
+& Muon: $\mathcal O((1+s^2/\varepsilon^2)(1+L\Delta/\varepsilon^2))$.\par At $s=\varepsilon$, square matrices and $L\Delta\ge128\varepsilon^2$: Muon $\mathcal O(L\Delta/\varepsilon^2)$; SGD $\Omega(rL\Delta/\varepsilon^2)$.
+& \textbf{(1)}: Adds the full two-moment Adam lower bound; reuses the Muon guarantee and SGD separation on the common setup.
+& \textbf{(1)} specializes the Muon guarantee to square matrices, $r\ge4$, $s=\varepsilon$, $L\Delta\ge128\varepsilon^2$. \\
+\midrule
+\textbf{(4)} One-step SignGD comparison \citep{ssacWang2025v2}, Thm.~5.3
+& One-step learning-imbalance result, not a stationarity complexity bound. Restricted to $\beta_1=\beta_2=0$, zero initialization, orthonormal embeddings and two imbalanced class groups in an associative-memory model; rates not comparable.
+& \textbf{(1)}: Multistep, batch-uniform Adam lower bound yields asymptotic separation when $r/Q^2\to\infty$: Muon $\mathcal O(Q)$ versus Adam $\Omega(\min\{\sqrt r,(rQ)^{1/3}\})$. Explicit constants require $r\gtrsim9.5\cdot10^{15}$ at $Q=128$.
+& \\
+\midrule
+\textbf{(5)} Adam nonconvergence \citep{ssacReddi2018}, Thm.~3
+& Nonconvergence on a one-dimensional constrained stochastic convex instance, $\beta_1<\sqrt{\beta_2}$, steps $\alpha/\sqrt t$; no nuclear-stationarity complexity bound. Rates not comparable.
+& \textbf{(1)}: Quantitative finite-budget lower bound for constant-parameter Adam on unconstrained matrix problems, uniform over batches and damping. Method-specific separation; no improved problem-class upper bound.
+& \textbf{(1)} does not cover decreasing steps; its Adam bound is limited to uniform-iterate output, excluding last or averaged outputs and AdamW. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $Q=L\Delta/\varepsilon^2$; $s$ is the noise scale (equal to $\varepsilon$ in \textbf{(1)}); $Z=G-\nabla f$; $\mathcal F$ is the sampling history; $\Sigma\succeq0$ is a fixed covariance envelope. $\|\cdot\|_*$ and $\|\cdot\|_{\rm op}$ are nuclear and spectral norms. Costs count individual gradient samples, including all batches; $N=B(T+1)$ in \textbf{(1)}. $\eta$ is the step size, $\beta_1,\beta_2$ are Adam moment parameters, and $\tau$ is denominator damping.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

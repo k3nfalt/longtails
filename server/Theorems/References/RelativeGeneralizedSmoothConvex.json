@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.RelativeGeneralizedSmoothConvex",
+  "searched_at": "2026-10-28T12:13:22.384859+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{60} \\cdot \\left(\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\alpha^{2} \\cdot \\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R + \\frac{\\Delta}{L0 \\cdot R^{2}}\\right)\\right) + \\alpha^{2} \\cdot \\left(L1 \\cdot R\\right)^{2} \\cdot \\left(1 + \\log\\left(2 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R + \\frac{\\Delta}{L0 \\cdot R^{2}}\\right)\\right)^{2}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RelativeGeneralizedSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 60 *\n      (√(p.L0 * p.R ^ 2 / p.ε) + p.α ^ 2 * (p.L0 * p.R ^ 2 / p.ε) +\n          (1 + p.L1 * p.R) * (1 + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.Δ / (p.L0 * p.R ^ 2))) +\n        p.α ^ 2 * (p.L1 * p.R) ^ 2 *\n          (1 + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.Δ / (p.L0 * p.R ^ 2))) ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{60} \\cdot \\left(\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\alpha^{2} \\cdot \\frac{L0 \\cdot R^{2}}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R + \\frac{\\Delta}{L0 \\cdot R^{2}}\\right)\\right) + \\alpha^{2} \\cdot \\left(L1 \\cdot R\\right)^{2} \\cdot \\left(1 + \\log\\left(2 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R + \\frac{\\Delta}{L0 \\cdot R^{2}}\\right)\\right)^{2}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RelativeGeneralizedSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 60 *\n      (√(p.L0 * p.R ^ 2 / p.ε) + p.α ^ 2 * (p.L0 * p.R ^ 2 / p.ε) +\n          (1 + p.L1 * p.R) * (1 + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.Δ / (p.L0 * p.R ^ 2))) +\n        p.α ^ 2 * (p.L1 * p.R) ^ 2 *\n          (1 + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.Δ / (p.L0 * p.R ^ 2))) ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration",
+      "namespace": "LongTails.Setups.RelativeGeneralizedSmoothConvex",
+      "setup": "LongTails.Setups.RelativeGeneralizedSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RelativeGeneralizedSmoothConvex.spec\n  LongTails.Theorems.RelativeErrorGeneralizedAcceleration.budget",
+      "theorem": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration",
+      "theorem": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f on a real Hilbert space. A minimizer x⋆ exists with ‖x0−x⋆‖≤R and f(x0)−f(x⋆)≤Δ. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: spec.admissible; LongTails/Setups/GeneralizedSmoothAndConvex.lean: Public."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "A query x returns g satisfying ‖g−∇f(x)‖≤α‖∇f(x)‖ for every history and seed. Replies may be biased and history-dependent; neither independence nor unbiasedness is required. No function values are supplied.",
+        "evidence": "LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: Oracle.answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is continuous. Whenever ‖∇f(x+θ(y−x))‖≤M for every θ∈[0,1], one has ‖∇f(x)−∇f(y)‖≤(L0+L1M)‖x−y‖. Public parameters satisfy L0>0 and L1≥0; no second differentiability is assumed.",
+        "evidence": "LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: spec.admissible, spec.valid, Public."
+      },
+      {
+        "label": "relative_error",
+        "details": "The public error tolerance satisfies 0≤α≤1/100. The relative gradient-error bound holds pointwise for every query, history, and seed, including adversarially dependent errors.",
+        "evidence": "LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: Public, spec.valid, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary complete real inner-product space, without a finite-dimensional restriction. E, x0, L0, L1, R, Δ, α, and ε are public, with R, Δ, ε>0; f and its gradient are hidden instance data.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: Public; LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: Public, Instance, spec.publicInput, spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x with f(x)−f(x⋆)≤ε for a global minimizer x⋆, within the supplied fixed budget of inexact-gradient oracle calls.",
+        "evidence": "LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace; supplied extracted result budget."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The output objective-gap guarantee holds almost surely under the joint law of algorithm and oracle seeds.",
+        "evidence": "LongTails/Setups/RelativeGeneralizedSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines gradient-dependent generalized smoothness with uniformly bounded, potentially adversarial relative gradient error in an arbitrary Hilbert space, and requires almost-sure objective accuracy within a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.RelativeErrorGeneralizedAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration",
+          "theorem": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Heavy-Tailed Strong-Growth Convex Minimization}
+We minimize a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$. At $x$, the oracle returns an unbiased stochastic gradient $g(x,\xi)$ using independent samples $\xi$ from a probability measure $\mu$ on a measurable space $\Omega$. Its noise has $p$th moment at most $\rho\|\nabla f(x)\|^p$, where $1<p\leq2$ and $\rho\geq0$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, averaging over sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is equipped with its Borel sigma-algebra. The algorithm receives $E$, $\Omega$, $L$, $R$, $\rho$, $p$, $\varepsilon$, and $x^0$; access to $f$ is through the stochastic gradient oracle.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+t f(y),\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Relative moment and independent sampling]
+The map $g:E\times\Omega\to E$ is jointly measurable. For each $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\mu$, and $\|g(x,\cdot)-\nabla f(x)\|^p$ is integrable under $\mu$. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\mu}\bigl[\|g(x,\xi)-\nabla f(x)\|^p\bigr]
+&\leq\rho\|\nabla f(x)\|^p.
+\end{aligned}
+\]
+The oracle uses a sequence $(\xi_k)_{k\geq0}$ of measurable, mutually independent random variables, each with distribution $\mu$. At call $k$, a query $x\in E$ receives $g(x,\xi_k)$. The algorithm's randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. Let $P$ denote the joint law of the sample sequence and the algorithm's randomness. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gap $f(\bar{x})-f(x^\star)$ must be integrable under $P$, and
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

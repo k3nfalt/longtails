@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Relative Errors}
+We consider minimizing a continuously differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$. A given point $x^0\in E$ has distance at most $R>0$ and objective gap at most $\Delta>0$ from a global minimizer $x^\star$. At $x$, the oracle returns $g\in E$ with $\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|$, where $0\leq\alpha\leq1/100$; replies may depend on the query history. For $\varepsilon>0$, the goal is $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $L_0$, $L_1$, $R$, $\Delta$, $x^0$, $\alpha$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Convexity and differentiability]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, its gradient $\nabla f:E\to E$ is continuous, and
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+t f(y),
+\qquad x,y\in E,\quad t\in[0,1].
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+For every $x,y\in E$ and $M\in\mathbb{R}$ satisfying
+\[
+\|\nabla f(x+\theta(y-x))\|\leq M
+\qquad\text{for all }\theta\in[0,1],
+\]
+we have
+\[
+\|\nabla f(x)-\nabla f(y)\|
+\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and objective gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Relative oracle error]
+Queries may be made at any $x\in E$. For every finite query--reply history $h$ and every realization $z$ of the oracle randomness used for the reply, the returned vector $g(h,x,z)\in E$ satisfies
+\[
+\|g(h,x,z)-\nabla f(x)\|
+\leq\alpha\|\nabla f(x)\|.
+\]
+The oracle randomness may be dependent across calls and is independent of the algorithm's randomness.
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}\in E$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+Here $x^\star$ is a fixed global minimizer, independent of the randomness defining $P$.
+\end{document}

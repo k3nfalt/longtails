@@ -1,0 +1,57 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Banach Fixed Points}
+We consider finding a fixed point of a nonexpansive map $T:E\to E$ on a finite-dimensional real Banach space $E$ with a smooth squared norm controlled by $C\geq1$. A given point $x^0\in E$ is within distance $R\geq0$ of a fixed point. At $x\in E$, the oracle returns an unbiased estimate of $T(x)$ using a fresh independent sample, with expected squared error at most $\sigma^2$, where $\sigma\geq0$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with $\mathbb{E}_{P}\|T(\bar{x})-\bar{x}\|^2\leq\varepsilon^2$, where $P$ is the joint law of sampling and independent algorithm randomness.
+
+The fixed-point problem is to find $x\in E$ such that
+\[
+T(x)=x.
+\]
+Write $\|\cdot\|$ for the norm on $E$ and $E^*$ for its continuous real dual. Operator norms are the induced operator norms. The algorithm receives $E$, the measurable sample space $\Omega$, $x^0$, $C$, $R$, $\sigma$, and $\varepsilon$; it accesses $T$ through the stochastic oracle.
+
+Our assumptions:
+\begin{assumption}[Smooth squared norm]
+There exists a continuous map $J:E\to E^*$ such that, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|J(x)\|_{\mathrm{op}}&\leq\|x\|,\\
+\|x+y\|^2&\leq\|x\|^2+2J(x)[y]+C\|y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nonexpansiveness and initial distance]
+The map $T$ satisfies
+\[
+\|T(x)-T(y)\|\leq\|x-y\|,
+\qquad x,y\in E.
+\]
+There exists $x^\star\in E$ such that
+\[
+T(x^\star)=x^\star,
+\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, the squared error $\|g(x,\cdot)-T(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=T(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-T(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ receives the reply $g(x,\xi_k)$. The measurable random variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and the entire sample sequence is independent of the algorithm's randomness.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its squared fixed-point residual must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|T(\bar{x})-\bar{x}\|^2\bigr]
+\leq\varepsilon^2.
+\]
+\end{document}

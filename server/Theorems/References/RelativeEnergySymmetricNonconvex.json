@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.RelativeEnergySymmetricNonconvex",
+  "searched_at": "2026-10-28T12:13:12.555607+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{66} \\cdot \\left(1 + \\log\\left(\\frac{\\left(r + \\varepsilon\\right)^{2} + L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right) \\cdot \\left(\\frac{\\left(r + \\varepsilon\\right)^{2} + L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\min\\left\\{ \\kappa \\cdot \\varepsilon, L \\right\\} \\cdot \\left(r + \\varepsilon\\right)^{2} \\cdot \\Delta}{\\varepsilon^{4}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RelativeEnergySymmetricNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 66 * (1 + Real.log (((q.r + q.ε) ^ 2 + q.L * q.Δ) / q.ε ^ 2)) *\n      (((q.r + q.ε) ^ 2 + q.L * q.Δ) / q.ε ^ 2 + min (q.κ * q.ε) q.L * (q.r + q.ε) ^ 2 * q.Δ / q.ε ^ 4)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{66} \\cdot \\left(1 + \\log\\left(\\frac{\\left(r + \\varepsilon\\right)^{2} + L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right) \\cdot \\left(\\frac{\\left(r + \\varepsilon\\right)^{2} + L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\min\\left\\{ \\kappa \\cdot \\varepsilon, L \\right\\} \\cdot \\left(r + \\varepsilon\\right)^{2} \\cdot \\Delta}{\\varepsilon^{4}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RelativeEnergySymmetricNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 66 * (1 + Real.log (((q.r + q.ε) ^ 2 + q.L * q.Δ) / q.ε ^ 2)) *\n      (((q.r + q.ε) ^ 2 + q.L * q.Δ) / q.ε ^ 2 + min (q.κ * q.ε) q.L * (q.r + q.ε) ^ 2 * q.Δ / q.ε ^ 4)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FairRelativeEnergyNonconvex",
+      "namespace": "LongTails.Setups.RelativeEnergySymmetricNonconvex",
+      "setup": "LongTails.Setups.RelativeEnergySymmetricNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RelativeEnergySymmetricNonconvex.spec\n  LongTails.Theorems.FairRelativeEnergyNonconvex.budget",
+      "theorem": "LongTails.Theorems.FairRelativeEnergyNonconvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FairRelativeEnergyNonconvex",
+      "theorem": "LongTails.Theorems.FairRelativeEnergyNonconvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable f on a second-countable real Hilbert space E; ∇f is globally L-Lipschitz and f(x0)−f(x)≤Δ for every x. Convexity and attainment of the infimum are not required. L>0 and Δ≥0.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: Params; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns g(x,ω). Calls 2j and 2j+1 share the same hidden sample ωj; samples across pairs are IID. Only oracle replies are exposed, with each evaluation counted separately. Neither integrability nor unbiasedness of g is assumed. All Params, including L, κ, r, Δ, ε and x0, are public; f, g and the sampling laws are hidden.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: spec.Public, spec.publicInput, spec.admissible and oracle law P.map (fun ξ k => ξ (k / 2)); LongTails/Template.lean: Algorithm, Oracle, executeWithTrace, Convergence; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "For every x,y, E[(‖e(x,ω)−e(y,ω)‖/(r+‖e(x,ω)‖+‖e(y,ω)‖))²]≤κ²‖x−y‖², where κ≥0 and both errors use the same sample. This controls normalized error increments, not unnormalized mean-square gradient differences or pointwise relative gradient error.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: final integral inequality in spec.admissible."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Writing e(x,ω)=g(x,ω)−∇f(x), the law of e(x,ω) equals that of −e(x,ω), and Pr(‖e(x,ω)‖>r)≤1/64 uniformly in x, with r≥0. No finite noise moment or density is required.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: spec.valid; symmetry and tail-probability clauses of spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space may be infinite-dimensional: E is a complete real inner-product space with its Borel measurable structure and second-countable topology. Oracle dependence consists of prescribed consecutive sample pairs, independent across pairs.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: Params typeclass fields and spec.admissible oracle law; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable E-valued output X with integrable ‖∇f(X)‖ and E‖∇f(X)‖≤ε, ε>0. The criterion uses the first power of the norm and applies to the returned point.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the joint algorithm and oracle randomness. The extracted result supplies a fixed oracle-call cap, rather than an expected stopping cost.",
+        "evidence": "LongTails/Setups/RelativeEnergySymmetricNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace; supplied result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The standard smooth nonconvex objective is combined with moment-free symmetric noise, a quantile bound, normalized mean-square error increments, and prescribed paired sample reuse. These are unusual oracle assumptions."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FairRelativeEnergyNonconvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FairRelativeEnergyNonconvex",
+          "theorem": "LongTails.Theorems.FairRelativeEnergyNonconvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

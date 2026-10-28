@@ -85,6 +85,7 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       return .ofString ("\\left(\\sum_{" ++ symbol index.toString ++ "=0}^{" ++
         bound.latex.1 ++ "-1} " ++ (← latexPP body).latex.1 ++ "\\right)")
   | ``Nat.ceil => return .ofString ("\\left\\lceil " ++ (← latexPP args.back!).latex.1 ++ " \\right\\rceil_{+}")
+  | ``Nat.floor => return .ofString ("\\left\\lfloor " ++ (← latexPP args.back!).latex.1 ++ " \\right\\rfloor_{+}")
   | ``Nat.clog =>
     return .ofString ("\\operatorname{clog}_{" ++ (← latexPP args[0]!).latex.1 ++
       "}\\left(" ++ (← latexPP args[1]!).latex.1 ++ "\\right)")

@@ -1,0 +1,124 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Spectral-Smooth Muon and Adam Comparison}
+We consider nonconvex minimization of a differentiable function $f:\mathbb{R}^{r\times r}\to\mathbb{R}$, where $r\geq4$, with the Frobenius inner product. The gradient is $L$-Lipschitz from the spectral norm to the nuclear norm, where $L>0$, and a given point $x^0$ has gap at most $\Delta\geq0$ above a global lower bound. For $\varepsilon>0$ with $128\varepsilon^2\leq L\Delta$, the oracle returns unbiased stochastic gradients from independent, identically distributed samples, with rowwise standard deviations summing to at most $\varepsilon$ in a fixed orthonormal basis. The task requires batched, momentum-free Muon to return $\bar{x}$ with $\mathbb{E}\|\nabla f(\bar{x})\|_*\leq\varepsilon$, where $\|\cdot\|_*$ is the nuclear norm and expectation includes sampling and algorithm randomness, together with worst-case call constraints for Adam and stochastic gradient descent.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^{r\times r}} f(x).
+\]
+Write $E=\mathbb{R}^{r\times r}$, with inner product $\langle x,y\rangle=\operatorname{tr}(x^\top y)$ and Frobenius norm $\|\cdot\|_{\mathrm F}$. The spectral norm $\|\cdot\|_{\mathrm{op}}$ is the induced operator norm on maps from $\mathbb{R}^r$ to $\mathbb{R}^r$, and $\|\cdot\|_*$ is its dual under this inner product. Gradients are taken with respect to the Frobenius inner product. The algorithm receives $r,L,\Delta,\varepsilon$, and $x^0$; the oracle model and its rowwise noise profile are not inputs.
+
+Our assumptions:
+\begin{assumption}[Spectral smoothness]
+The function $f:E\to\mathbb{R}$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_*
+\leq L\|x-y\|_{\mathrm{op}},
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial gap]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_{\mathrm{low}}&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients and rowwise moments]
+There are a measurable sample space $\Omega$, a probability measure $\nu$ on $\Omega$, and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the random matrix $g(x,\xi)$ is Bochner integrable for $\xi\sim\nu$, and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+There exist a fixed orthonormal basis $(b_i)_{i=1}^r$ of $\mathbb{R}^r$ and numbers $\sigma_i\geq0$ such that
+\[
+\sum_{i=1}^r\sigma_i\leq\varepsilon.
+\]
+For every $x\in E$ and $i\in\{1,\ldots,r\}$, the vector $(g(x,\xi)-\nabla f(x))^\top b_i$ belongs to $L^2(\nu;\mathbb{R}^r)$ and satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|(g(x,\xi)-\nabla f(x))^\top b_i\|_2^2\bigr]
+\leq\sigma_i^2.
+\]
+At call $k\geq0$, a query $x\in E$ receives $g(x,\xi_k)$. The measurable sample variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and the algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze batched Muon without momentum. Define the polar direction by
+\[
+\operatorname{polar}(G)
+=
+\underset{U\in\mathcal{S}(G)}{\operatorname{argmin}}
+\|U\|_{\mathrm F},
+\qquad
+\mathcal{S}(G)
+=
+\underset{\|V\|_{\mathrm{op}}\leq1}{\operatorname{argmax}}
+\langle G,V\rangle.
+\]
+Thus the minimum-Frobenius-norm maximizer specifies the direction also when $G$ is singular. The method chooses a constant step size $\eta>0$, a batch size $B\in\mathbb{N}$ with $B\geq1$, and a horizon $T\in\mathbb{N}_0$ from its inputs. Starting at the given $x^0$, it uses
+\[
+\begin{aligned}
+G_t&=\frac1B\sum_{j=0}^{B-1}g(x^t,\xi_{Bt+j}),\\
+x^{t+1}&=x^t-\eta\operatorname{polar}(G_t),
+\qquad 0\leq t\leq T.
+\end{aligned}
+\]
+Each of the $B$ queries in batch $t$ is made at $x^t$. A measurable index $J$, drawn using the algorithm's randomness, is uniform on $\{0,\ldots,T\}$, and the output is $\bar{x}=x^J$. The prescribed run uses $N=B(T+1)$ oracle calls, including the batch at $x^T$. After these calls, the output remains $x^J$ even if further replies are supplied. These query and output rules hold for every realization of the algorithm's randomness and every possible reply sequence.
+
+Let $P$ denote the joint law of the algorithm's randomness and the independent oracle sample sequence. The output must be measurable, $\|\nabla f(\bar{x})\|_*$ must be integrable under $P$, and the required accuracy is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|_*\bigr]
+\leq\varepsilon.
+\]
+
+The task additionally requires two worst-case comparison statements at the same fixed inputs. The competing methods use the same batching, starting point, uniform output rule, and requirement that the output remain unchanged after $N=B(T+1)$ calls. Their recurrences and query rules likewise apply to every possible reply sequence.
+
+For Adam, consider every constant tuning satisfying
+\[
+\begin{aligned}
+&\eta>0,\qquad 0\leq\beta_1<1,\qquad 0\leq\beta_2<1,\\
+&\beta_1^2\leq\beta_2,\qquad \tau\geq0,
+\end{aligned}
+\]
+and every $B\geq1$ and $T\geq0$. With $G_t$ the batch average at its own iterate $x^t$, the analyzed bias-corrected variant initializes $m_0=v_0=0$ and uses
+\[
+\begin{aligned}
+m_{t+1}&=\beta_1m_t+(1-\beta_1)G_t,\\
+v_{t+1}&=\beta_2v_t+(1-\beta_2)G_t^{\odot2},\\
+\widehat m_{t+1}&=\frac{m_{t+1}}{1-\beta_1^{t+1}},\qquad
+\widehat v_{t+1}=\frac{v_{t+1}}{1-\beta_2^{t+1}},\\
+x^{t+1}&=x^t-\eta
+\frac{\widehat m_{t+1}}{\sqrt{\widehat v_{t+1}}+\tau},
+\qquad 0\leq t\leq T.
+\end{aligned}
+\]
+Squares, square roots, and the final quotient are entrywise, and $\tau$ is added to every denominator entry. Division by zero is defined to return zero, so the rule includes $\tau=0$.
+
+For every such tuning, batch size, horizon, and algorithm following these Adam rules, there must exist an objective and oracle satisfying the assumptions above for which measurable, integrable output meeting the stated accuracy criterion after $N$ calls implies
+\[
+r-1\leq64N^2
+\qquad\text{or}\qquad
+(r-1)L\Delta\leq4096\varepsilon^2N^3.
+\]
+The objective and oracle may depend on the competing algorithm and its tuning.
+
+For batched stochastic gradient descent, consider every constant $\eta>0$, every $B\geq1$ and $T\geq0$, and every algorithm following
+\[
+x^{t+1}=x^t-\eta G_t,
+\qquad 0\leq t\leq T,
+\]
+with the same uniform output rule. For each such algorithm there must exist an objective and oracle satisfying the assumptions above for which measurable, integrable output meeting the stated accuracy criterion after $N$ calls implies
+\[
+(r-1)L\Delta\leq1728\varepsilon^2N.
+\]
+These two comparison requirements are part of the task, in addition to the expected stationarity requirement for the Muon output.
+\end{document}

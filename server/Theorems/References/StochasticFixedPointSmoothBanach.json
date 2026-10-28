@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.StochasticFixedPointSmoothBanach",
+  "searched_at": "2026-10-28T12:15:22.770477+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(\\log_{2}\\left(1 + \\frac{D}{\\varepsilon}\\right) + 4\\right) \\cdot \\left(16 + \\frac{20 \\cdot D}{\\varepsilon} + \\frac{2048 \\cdot K \\cdot \\sigma^{2} \\cdot \\left(\\log_{2}\\left(1 + \\frac{D}{\\varepsilon}\\right) + 4\\right)^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticFixedPointSmoothBanach.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(Real.logb 2 (1 + q.D / q.ε) + 4) *\n      (16 + 20 * q.D / q.ε + 2048 * q.K * q.σ ^ 2 * (Real.logb 2 (1 + q.D / q.ε) + 4) ^ 2 / q.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(\\log_{2}\\left(1 + \\frac{D}{\\varepsilon}\\right) + 4\\right) \\cdot \\left(16 + \\frac{20 \\cdot D}{\\varepsilon} + \\frac{2048 \\cdot K \\cdot \\sigma^{2} \\cdot \\left(\\log_{2}\\left(1 + \\frac{D}{\\varepsilon}\\right) + 4\\right)^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticFixedPointSmoothBanach.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈(Real.logb 2 (1 + q.D / q.ε) + 4) *\n      (16 + 20 * q.D / q.ε + 2048 * q.K * q.σ ^ 2 * (Real.logb 2 (1 + q.D / q.ε) + 4) ^ 2 / q.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RecursiveAnchorKmSmoothBanach",
+      "namespace": "LongTails.Setups.StochasticFixedPointSmoothBanach",
+      "setup": "LongTails.Setups.StochasticFixedPointSmoothBanach",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticFixedPointSmoothBanach.spec\n  OracleTemplate.RecursiveAnchorKm.budget",
+      "theorem": "OracleTemplate.RecursiveAnchorKm.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RecursiveAnchorKmSmoothBanach",
+      "theorem": "OracleTemplate.RecursiveAnchorKm.result",
+      "references": "- Lesi Chen and Luo Luo. [Near-Optimal Algorithms for Making the Gradient Small in Stochastic Minimax Optimization](https://jmlr.org/papers/volume25/22-1126/22-1126.pdf). 2024 (preprint 2022; published version used). Complexity: $O((1+D/\\varepsilon)(1+\\log\\ell)+\\sigma^2\\ell^3/\\varepsilon^2)$ stochastic operator calls using RAIN for $\\mathbb E\\|x-Tx\\|\\le\\varepsilon$ in Euclidean space, with $F=I-T$ and $\\ell=1+\\log(1+D/\\varepsilon)$; fixed total cost including initialization.\n- Yekini Shehu. [Adaptivity, Anchoring, and the Exact Oracle Complexity of Stochastic Fixed-Point Iterations](https://arxiv.org/html/2610.00295v1). 2026 (preprint v1). Complexity: $O((1+D/\\varepsilon)(1+\\log\\ell)+\\sigma^2\\ell^3/\\varepsilon^2)$ stochastic map calls using the RAIN reduction in Hilbert space for $\\mathbb E\\|x-Tx\\|\\le\\varepsilon$, where $\\ell=1+\\log(1+D/\\varepsilon)$; fixed total cost including initialization.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Approximate fixed-point computation for a globally nonexpansive map T:E→E. A fixed point x* exists with ‖x0−x*‖≤D. No objective function or saddle function is specified.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: Model.map and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Single-point stochastic map evaluation sample(ξ,x), with fresh IID seeds, E[sample(ξ,x)]=T(x), and E‖sample(ξ,x)−T(x)‖²≤σ². Each returned sample counts as one oracle call; shared-seed evaluations at multiple points are not provided.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: spec.admissible oracle construction; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The unbiased oracle has a uniform second central moment bound σ² in the same norm used for nonexpansiveness and residual accuracy. Samples are jointly measurable and Bochner integrable; no tail or samplewise Lipschitz condition is imposed.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: spec.admissible."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "E is a second-countable real Banach space with its Borel measurable structure. There exists j:E→E* satisfying ‖x+y‖²≤‖x‖²+2j(x)(y)+K‖y‖² for every x,y. Finite dimension and an inner product are not required.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: Params, TwoUniformlySmooth, and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "K≥0, D>0, σ≥0, ε>0 and x0 are public. The map, sampling distribution, sampling function, fixed point and smoothness witness j are hidden. D bounds initial distance to one fixed point, without requiring a bounded domain.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: Params, Model, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm randomness and the IID oracle stream, under a fixed deterministic total oracle budget.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      },
+      {
+        "label": "other",
+        "details": "Return an E-valued measurable output X with integrable fixed-point residual ‖X−T(X)‖ and E‖X−T(X)‖≤ε. The criterion uses the first power of the norm; no particular iterate is prescribed.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established stochastic nonexpansive fixed-point formulation with unbiased bounded-variance evaluations and expected residual accuracy, posed in two-uniformly smooth Banach geometry."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RecursiveAnchorKm.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RecursiveAnchorKmSmoothBanach",
+          "theorem": "OracleTemplate.RecursiveAnchorKm.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

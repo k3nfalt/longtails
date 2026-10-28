@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedTwoPointZerothOrder",
+  "searched_at": "2026-10-28T12:12:10.627366+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{2^{20} \\cdot 132^{\\frac{p}{p - 1}} \\cdot L \\cdot d \\cdot \\Delta}{\\varepsilon^{2}} \\cdot \\left(1 + \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}}\\right) \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedTwoPointZerothOrder.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 20 * 132 ^ (q.p / (q.p - 1)) * q.L * ↑q.d * q.Δ / q.ε ^ 2 * (1 + (q.σ / q.ε) ^ (q.p / (q.p - 1)))⌉₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{2^{20} \\cdot 132^{\\frac{p}{p - 1}} \\cdot L \\cdot d \\cdot \\Delta}{\\varepsilon^{2}} \\cdot \\left(1 + \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}}\\right) \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedTwoPointZerothOrder.spec.Params → ℕ",
+          "value": "fun q => ⌈2 ^ 20 * 132 ^ (q.p / (q.p - 1)) * q.L * ↑q.d * q.Δ / q.ε ^ 2 * (1 + (q.σ / q.ε) ^ (q.p / (q.p - 1)))⌉₊ + 1"
+        }
+      ],
+      "module": "LongTails.Theorems.ClippedSpsaHeavyTailed",
+      "namespace": "LongTails.Setups.HeavyTailedTwoPointZerothOrder",
+      "setup": "LongTails.Setups.HeavyTailedTwoPointZerothOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedTwoPointZerothOrder.spec\n  OracleTemplate.ClippedSpsaHeavyTailed.budget",
+      "theorem": "OracleTemplate.ClippedSpsaHeavyTailed.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ClippedSpsaHeavyTailed",
+      "theorem": "OracleTemplate.ClippedSpsaHeavyTailed.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable optimization on R^d, permitting nonconvex objectives. There is a global lower bound ℓ with f(x0)−ℓ≤Δ; no minimizer attainment or convexity is required.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: Point; spec.Instance; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "Each oracle call returns (F(x,ω),F(y,ω)) using the same fresh sample ω for both queried points. Samples are IID across calls. Sample gradients G are unobserved. No moment bound or unbiasedness assumption is imposed on function values themselves. One budget unit counts a pair of evaluations.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: spec.Query, spec.Reply, spec.admissible oracle answer; LongTails/Template.lean: OracleTemplate._run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every x, E[G(x,ω)]=∇f(x) and E‖G(x,ω)−∇f(x)‖₂^p≤σ^p, with 1<p≤2 and σ≥0. For p<2, finite variance is not required.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: spec.valid; spec.admissible gradient integrability, unbiasedness, and centered moment clauses."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is R^d with its Euclidean inner product and norm, for a positive integer d.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: Point; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Every sample function is differentiable with gradient G and uniformly L-smooth: ‖G(x,ω)−G(y,ω)‖₂≤L‖x−y‖₂ for all ω,x,y, with L>0. Samples are IID. All parameters d, Ω, L, Δ, σ, p, ε and x0 are public; f, F, G and the sampling laws are hidden. Δ≥0 and ε>0.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: Params; spec.Public, spec.publicInput, spec.valid, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point X∈R^d with integrable gradient norm and E‖∇f(X)‖₂≤ε. The criterion uses the norm, not its square; no particular iterate selection is prescribed.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: spec.Output; spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The expectation includes algorithm randomness and the IID oracle sequence. Oracle expenditure is bounded by the supplied fixed budget, rather than only in expectation.",
+        "evidence": "LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace, _run."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established stochastic zeroth-order formulation: smooth nonconvex optimization with shared-sample two-point evaluations, bounded heavy-tailed gradient moments, and expected first-order stationarity."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ClippedSpsaHeavyTailed.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ClippedSpsaHeavyTailed",
+          "theorem": "OracleTemplate.ClippedSpsaHeavyTailed.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

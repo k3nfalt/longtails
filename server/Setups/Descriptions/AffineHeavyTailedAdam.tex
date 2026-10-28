@@ -1,0 +1,83 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Adam with Affine Heavy-Tailed Noise}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer. The function $f$ is $(L_0,L_1)$-smooth in the $\ell_\infty$-to-$\ell_1$ sense, with $L_0,L_1\geq0$ and $L_0+L_1>0$. A given starting point $x^0$ satisfies $f(x^0)-\inf_x f(x)\leq\Delta$, where $\Delta\geq0$. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with coordinatewise noise moments of order $p\in(1,2]$ bounded affinely in the corresponding gradient magnitudes to power $p$. We analyze minibatch Adam with bias correction. For $\varepsilon>0$, its output $\bar{x}$ must satisfy $\mathbb{E}\|\nabla f(\bar{x})\|_1\leq\varepsilon$, where expectation includes sampling and algorithm randomness and $\|z\|_1=\sum_{i=1}^d|z_i|$.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The ambient space has its Euclidean inner product, which defines $\nabla f$. Write $\|z\|_\infty=\max_{1\leq i\leq d}|z_i|$, with both norms equal to zero when $d=0$. Let $\Omega$ be a measurable sample space, and let $\sigma_0=(\sigma_{0,i})_{i=1}^d$ and $\sigma_1$ be nonnegative noise parameters. The algorithm receives $d$, $\Omega$, $L_0$, $L_1$, $\sigma_0$, $\sigma_1$, $p$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere. For all $x,y\in\mathbb{R}^d$ satisfying $L_1\|y-x\|_\infty\leq1$,
+\[
+\|\nabla f(y)-\nabla f(x)\|_1
+\leq \bigl(L_0+L_1\|\nabla f(x)\|_1\bigr)\|y-x\|_\infty.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta
+\qquad\text{for every }x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Affine heavy-tailed oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$. For every $x$, the map $g(x,\cdot)$ is Bochner integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+For every $x$ and coordinate $i$, the random variable $|g_i(x,\xi)-\nabla_i f(x)|^p$ is integrable and satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}
+ \bigl[|g_i(x,\xi)-\nabla_i f(x)|^p\bigr]
+\leq \sigma_{0,i}^p+\sigma_1^p|\nabla_i f(x)|^p.
+\]
+At call $k\geq0$, a query $x\in\mathbb{R}^d$ receives $g(x,\xi_k)$. Under their joint law $Q$, the measurable samples $(\xi_k)_{k\geq0}$ are mutually independent and each has distribution $\nu$. Algorithm randomness is independent of this sample sequence.
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze minibatch Adam with bias correction and a constant step size. Its tuning parameters satisfy
+\[
+\begin{aligned}
+&0\leq\beta_1<1,\qquad 0\leq\beta_2<1,\qquad \eta>0,\qquad\delta>0,\\
+&B\in\{1,2,\ldots\},\qquad n\in\{0,1,\ldots\}.
+\end{aligned}
+\]
+These parameters may depend on the supplied inputs. Initialize the moments at $m^0=v^0=0$ and the iterate at the given $x^0$. At iteration $t\geq0$, take $B$ consecutive oracle samples at $x^t$ and form
+\[
+h^t=\frac{1}{B}\sum_{b=0}^{B-1}g(x^t,\xi_{tB+b}).
+\]
+For each coordinate $i$, the update is
+\[
+\begin{aligned}
+m^{t+1}&=\beta_1m^t+(1-\beta_1)h^t,\\
+v_i^{t+1}&=\beta_2v_i^t+(1-\beta_2)(h_i^t)^2,\\
+\widehat m^{t+1}&=\frac{m^{t+1}}{1-\beta_1^{t+1}},\qquad
+\widehat v^{t+1}=\frac{v^{t+1}}{1-\beta_2^{t+1}},\\
+x_i^{t+1}&=x_i^t-\eta\frac{\widehat m_i^{t+1}}
+ {\sqrt{\widehat v_i^{t+1}}+\delta}.
+\end{aligned}
+\]
+Each completed iteration uses $B$ oracle calls. For an allotted budget $N\in\{0,1,\ldots\}$, let $T=\lfloor N/B\rfloor$ be the number of completed iterations. Any remaining calls are made at $x^T$ and do not produce another update.
+
+Independently of the samples, draw $J$ uniformly from $\{0,\ldots,n\}$. The output rule saves the selected iterate immediately before its update; explicitly,
+\[
+\bar{x}=\begin{cases}
+x^J,&J<T,\\
+x^0,&J\geq T.
+\end{cases}
+\]
+In particular, when $N\geq B(n+1)$, this is a uniform selection from $x^0,\ldots,x^n$. Let $P$ be the joint law of $J$ and the oracle samples. The output must be measurable, $\|\nabla f(\bar{x})\|_1$ must be integrable under $P$, and the required accuracy is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|_1\bigr]\leq\varepsilon.
+\]
+\end{document}

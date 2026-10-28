@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothFiniteSum",
+  "searched_at": "2026-10-28T12:10:54.755618+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 16777216 \\cdot \\left(n \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\left(\\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right)^{2} + \\sqrt{\\frac{n \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} \\cdot \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothFiniteSum.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈16777216 *\n      (↑p.n * (1 + p.L1 * p.R) * Real.log (2 + p.Δ / p.ε) ^ 2 +\n        √(↑p.n * (p.L0 + p.L1 * p.G) * p.R ^ 2 / p.ε) * Real.log (2 + p.Δ / p.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 16777216 \\cdot \\left(n \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\left(\\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right)^{2} + \\sqrt{\\frac{n \\cdot \\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} \\cdot \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedSmoothFiniteSum.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈16777216 *\n      (↑p.n * (1 + p.L1 * p.R) * Real.log (2 + p.Δ / p.ε) ^ 2 +\n        √(↑p.n * (p.L0 + p.L1 * p.G) * p.R ^ 2 / p.ε) * Real.log (2 + p.Δ / p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.LocalFiniteSumAcceleration",
+      "namespace": "LongTails.Setups.GeneralizedSmoothFiniteSum",
+      "setup": "LongTails.Setups.GeneralizedSmoothFiniteSum",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothFiniteSum.spec\n  OracleTemplate.GeneralizedFiniteSum.LocalFiniteSumAcceleration.budget",
+      "theorem": "OracleTemplate.GeneralizedFiniteSum.LocalFiniteSumAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LocalFiniteSumAcceleration",
+      "theorem": "OracleTemplate.GeneralizedFiniteSum.LocalFiniteSumAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of F(x), with every component f_i convex and continuously differentiable; strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x) = (1/n) Σ_i f_i(x), with n ≥ 1.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: Params.nonzero and spec.Instance; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i,x) returns the exact component gradient ∇f_i(x). The index and point are selectable; replies have no oracle error, regardless of history or seed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: spec.Query, spec.Reply, and spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same oracle call also returns the exact component value f_i(x).",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: spec.Reply and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For each component, whenever ‖∇f_i(x+θ(y−x))‖ ≤ M for all θ∈[0,1], one has ‖∇f_i(x)−∇f_i(y)‖ ≤ (L0+L1 M)‖x−y‖. Here L0>0 and L1≥0; no global Lipschitz gradient bound is required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space with a measurable-space structure. A minimizer x* satisfies ‖x0−x*‖≤R, F(x0)−F(x*)≤Δ, and (1/n)Σ_i ‖∇f_i(x*)‖≤G. This bounds average component gradient norms, not their squares, and permits nonzero component gradients at x*. All parameters, including n,L0,L1,G,R,Δ,ε,x0, are public; component functions and the minimizer are hidden. R,Δ,ε>0 and G≥0.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output X with integrable objective gap and E[F(X)−F(x*)]≤ε for a global minimizer x*.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is in expectation over algorithm and oracle seeds. Execution uses a fixed upper budget of component value-and-gradient calls, rather than an expected stopping cost.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothFiniteSum.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace; supplied result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The finite-sum convex formulation uses componentwise gradient-dependent smoothness and an average component-gradient norm bound at a minimizer, rather than standard global smoothness or a common-minimizer assumption."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GeneralizedFiniteSum.LocalFiniteSumAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LocalFiniteSumAcceleration",
+          "theorem": "OracleTemplate.GeneralizedFiniteSum.LocalFiniteSumAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

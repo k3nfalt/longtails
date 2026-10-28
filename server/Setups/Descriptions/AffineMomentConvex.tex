@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Affine Moments}
+We minimize a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in E$ lies within distance $R>0$ of a minimizer $x^\star$. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with error $\alpha$-moment bounded by $\sigma_0^\alpha+\sigma^\alpha\|\nabla f(x)\|^\alpha$ at $x$, where $1<\alpha\leq2$ and $\sigma_0,\sigma\geq0$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ satisfying $P\{f(\bar{x})-f(x^\star)>\varepsilon\}\leq\delta$, where $P$ is the joint law of sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is equipped with its Borel sigma-algebra. Let $\Omega$ be a measurable sample space. The algorithm receives $E$, $\Omega$, $L$, $R$, $\sigma$, $\sigma_0$, $\alpha$, $\varepsilon$, $\delta$, and $x^0$; the objective is accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq (1-t)f(x)+t f(y),\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Sampling and affine moment bound]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. At the $k$th query $x\in E$, the oracle returns $g(x,\xi_k)$, where the measurable random variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and are independent of the algorithm's randomness. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-\nabla f(x)\|^\alpha$ is integrable with respect to $\nu$. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^\alpha\bigr]
+&\leq \sigma_0^\alpha+\sigma^\alpha\|\nabla f(x)\|^\alpha.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy the high-probability objective-gap requirement
+\[
+P\bigl\{f(\bar{x})-f(x^\star)>\varepsilon\bigr\}\leq\delta.
+\]
+\end{document}

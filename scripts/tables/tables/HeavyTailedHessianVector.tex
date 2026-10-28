@@ -1,0 +1,47 @@
+\begin{table}[tp]
+\centering
+\caption{Heavy-tailed second-order stationarity under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedHessianVector.lean}{HeavyTailedHessianVector setup}.}\label{tab:HeavyTailedHessianVector}
+\parbox{\linewidth}{\footnotesize $f:\mathbb R^d\to\mathbb R$, $d\geq1$, has an $L$-Lipschitz gradient and a $\rho$-Lipschitz Hessian, with $f(x_0)-m\leq\Delta$ for a global lower bound $m$. Here $L,\rho,\varepsilon>0$, $\Delta,\sigma_g,\sigma_h\geq0$, and $1<p\leq2$. Jointly measurable, unbiased gradient and linear Hessian-vector estimators use fresh IID samples and satisfy $\mathbb E\|g(x)-\nabla f(x)\|^p\leq\sigma_g^p$ and $\mathbb E\|(H(x)-\nabla^2f(x))v\|^p\leq\sigma_h^p\|v\|^p$ for every $x,v$. The target is $\Pr\{\|\nabla f(\widehat x)\|\leq\varepsilon,\ \nabla^2f(\widehat x)\succeq-\sqrt{\rho\varepsilon}I\}\geq2/3$, over the IID oracle samples and algorithm randomness. Each gradient or Hessian-vector query counts as one call.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DirectionalHeavyTailedSecondOrder.lean}{Directional\allowbreak Heavy\allowbreak Tailed\allowbreak Second\allowbreak Order} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DirectionalHeavyTailedSecondOrder.md}{(review)}
+& $\mathcal O\!\left(2^{64r^2}\begin{aligned}[t]
+&\Bigl[(1+\sigma_g/\varepsilon)^r\\
+&+(1+\Delta M/\varepsilon^2)\bigl\{1\\
+&\quad +(1+\sigma_g/\varepsilon)^{r-1}a+a^r\\
+&\quad +\ell\ell_d M/\gamma\\
+&\quad +\ell\ell_d^r(\sigma_h/\gamma)^r\\
+&\quad +\ell^2[1+(\sigma_h/\gamma)^r]\bigr\}\Bigr]
+\end{aligned}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[arXiv v1, Theorem 4]{hthvArjevani2020v1}; bounded-noise special case
+& $\mathcal O\!\left(\begin{aligned}[t]
+&\frac{\Delta\sigma_g\bar\sigma_h}{\varepsilon^3}+\frac{\Delta L}{\varepsilon^2}\\
+&+\frac{\Delta(\bar\sigma_h+L)^2}{\sqrt\rho\,\varepsilon^{5/2}}\left[1+\log\frac{dL}{\gamma}\right]^2
+\end{aligned}\right)$\par
+$p=2$, $\|H-\nabla^2f\|_{\rm op}\leq\bar\sigma_h$ a.s.; $\varepsilon\leq\min\{\sigma_g,\sqrt{\Delta L}\}$, $\gamma\leq\min\{\bar\sigma_h,L\}$. SOSP probability $\geq5/8$.
+& \textbf{(1)}: Scope extends to infinite variance ($p<2$); at $p=2$, directional variance replaces almost-sure operator-norm boundedness. Dimension dependence remains polylogarithmic.
+& \textbf{(1)}: At $p=2$, $\sigma_h=\bar\sigma_h>0$, the $\varepsilon^{-3}$ coefficient worsens by order $1+L\sigma_h/(\rho\sigma_g)$, up to logarithms; extra logarithmic factors and a $2^{256}$ prefactor. \\
+\midrule
+\textbf{(3)} \citep[Theorem 2]{hthvSadiev2025v1}; first-order target
+& $\mathcal O\!\left(\begin{aligned}[t]
+&1+\frac{\Delta(L+\sigma_h)}{\varepsilon^2}\\
+&\quad\cdot[1+(\sigma_g/\varepsilon)^{r-1}]\\
+&+(\sigma_g/\varepsilon)^r
+\end{aligned}\right)$\par
+$T^{-1}\sum_{t<T}\mathbb E\|\nabla f(x_t)\|\leq\varepsilon$; operator-norm $p$-moment bound $\mathbb E\|H-\nabla^2f\|_{\rm op}^p\leq\sigma_h^p$.
+& \textbf{(1)}: Adds second-order stationarity with constant probability at the same polynomial $\varepsilon^{-(r+1)}$ dependence for fixed positive remaining parameters, up to logarithms. Directional moments replace operator-norm moments.
+& \textbf{(1)}: Needs a $\rho$-Lipschitz Hessian; adds curvature costs and dimension logarithms, with the large $2^{64r^2}$ prefactor. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} HVP: Hessian-vector product; SOSP: second-order stationary point. $r=p/(p-1)$, $\gamma=\sqrt{\rho\varepsilon}$, $M=L+\sqrt{\rho\varepsilon}$, $a=\sigma_h/(L+\sqrt{\rho\varepsilon})+\rho\varepsilon/(L+\sqrt{\rho\varepsilon})^2$, $\ell=\log(2+(L+\sqrt{\rho\varepsilon})^2/(\rho\varepsilon))$, $\ell_d=\log(2+d)$. $\bar\sigma_h$ bounds Hessian noise almost surely in operator norm; $T$ is the iteration count.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

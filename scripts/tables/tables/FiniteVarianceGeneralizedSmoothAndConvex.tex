@@ -38,6 +38,41 @@
 &+\log_+\tfrac{\Delta}{L_0R^2}\Bigr)\end{aligned}$
 & \textbf{(2)}: at $T=1$, $\Delta=4\varepsilon$, $\delta=1/2$, $q\to\infty$, $\mathcal{O}(q^{2/3}\log q)$ versus $\mathcal{O}(q)$. \textbf{(1)}, \textbf{(2)} extend to finite-variance stochastic gradients.
 & \textbf{(2)} pays $\log(e(1+T+q+\lambda)/\delta)$ on $\sqrt T$ when it dominates, even with exact gradients. \\
+\midrule
+\textbf{(6)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteVarianceGeneralizedRadiusAcceleratedConvex.lean}{Finite\allowbreak Variance\allowbreak Generalized\allowbreak Radius\allowbreak Accelerated\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteVarianceGeneralizedRadiusAcceleratedConvex.md}{(review)}
+& $\mathcal{O}\!\left((1+q+\sqrt T+v^2)H^3\right)$,
+\par $H=\log\!\dfrac{e(2+T+q+v)}{\delta}$.
+& & \\
+\midrule[1.2pt]
+\textbf{(7)} Clip-SSTM \citep{fvRadiusElKadi2026v2}, Thm.~2, Remark~1; derived bound on $\mathbb R^d$, $L_1>0$, $\alpha=2$, supplied gap.
+& $\begin{aligned}[t]\mathcal{O}\Bigl(\bigl(& (1+q)[D+\log((1+q)H_D)]\\
+&+\sqrt T+v^2\bigr)H_D\Bigr),\end{aligned}$
+\par $D=\log(2+\Delta/(L_0R^2))$,
+$H_D=\log\!\dfrac{e(2+T+q+v+D)}{\delta}$.
+& \textbf{(6)}: curvature $qD\to q$ up to logs; gain when large $D$ dominates logarithmic overhead and unchanged terms. Updates and budget need no $\Delta$.
+& \textbf{(6)}: extra logarithmic overhead and larger leading constant; covers only $\alpha=2$, whereas \textbf{(7)} allows $1<\alpha<2$. \\
+\midrule
+\textbf{(8)} Clip-SSTM \citep{fvRadiusElKadi2026v2}, Thm.~2, Remark~2; derived radius-only bound on $\mathbb R^d$, $L_1>0$, $\alpha=2$.
+& $\begin{aligned}[t]\mathcal{O}\Bigl(\bigl(& (1+q)[q+\log((1+q)H)]\\
+&+\sqrt T+v^2\bigr)H\Bigr).
+\end{aligned}$
+& \textbf{(6)}: curvature $q^2\to q$ up to logs. For $T=v=1$, $\delta=1/2$, $q\to\infty$: $\mathcal{O}(q\log^3q)$ versus $\mathcal{O}(q^2\log q)$. No total gain implied when unchanged terms dominate.
+& \textbf{(6)}: extra logarithmic overhead and larger leading constant; excludes the $\alpha<2$ noise allowed by \textbf{(8)}. \\
+\midrule
+\textbf{(9)} Earlier repository bound \citep{fvRadiusEarlierRepository}; comparison with \textbf{(2)} on the identical setup.
+& $\mathcal{O}\!\left((W+v^2\ell^2)\log\frac{e(1+T+q+\lambda)}{\delta}\right)$
+& \textbf{(6)}: no $\Delta$ needed. For $\lambda\asymp q\to\infty$, $T=v=1$, $\delta=1/2$, admissible cosh instances give $\mathcal{O}(q\log^3q)$ versus $\mathcal{O}(q^{4/3}\log q)$.
+& \textbf{(6)}: worse for small known gaps; e.g. fixed $\lambda,T,v,\delta$ gives $\mathcal{O}(q\log^3q)$ versus $\mathcal{O}(q^{2/3}\log q)$. Extra optimization/noise logarithms and larger leading constant. \\
+\midrule
+\textbf{(10)} Clipped SGD \citep{sgacGaash2025v2}, Thm.~1; derived bound on $\mathbb R^d$, sub-Gaussian noise: $\mathbb E\exp(\|g-\nabla f\|^2/\sigma^2)\le e$.
+& $\mathcal{O}\!\left((1+T+q^2)H+v^2H^3\right)$ stochastic-gradient calls, including double sampling.
+& \textbf{(6)}: $T\to\sqrt T$ and $q^2\to q$ up to logs on the sub-Gaussian overlap; extends to finite variance. Unchanged noise can mask a total gain.
+& \textbf{(6)}: extra logarithmic factors on optimization terms. \\
+\midrule
+\textbf{(11)} \citep{fvRadiusRudomanov2026v1}, Thm.~3.7; special case $\sigma=0$, $L_1>0$, $\mathbb R^d$.
+& $\mathcal{O}\!\left(\sqrt T+(1+q)\log(2+q)\right)$ exact-gradient calls, including line-search queries.
+& \textbf{(6)}: extends the radius-only guarantee to finite-variance stochastic gradients; retains linear curvature dependence up to logarithms.
+& \textbf{(6)}: at $\sigma=0$, pays $H^3$ on $\sqrt T$ and $(1+q)$, versus no logarithm and $\log(2+q)$, respectively. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

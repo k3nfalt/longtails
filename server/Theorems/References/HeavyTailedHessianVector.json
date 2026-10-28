@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedHessianVector",
+  "searched_at": "2026-10-28T12:09:32.149254+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{64 \\cdot \\left(\\frac{p}{p - 1}\\right)^{2}} \\cdot \\left(\\left(1 + \\frac{\\sigma g}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + \\left(1 + \\frac{\\Delta \\cdot \\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\left(1 + \\frac{\\sigma g}{\\varepsilon}\\right)^{\\frac{1}{p - 1}} \\cdot \\left(\\frac{\\sigma h}{L + \\sqrt{\\rho \\cdot \\varepsilon}} + \\frac{\\rho \\cdot \\varepsilon}{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}\\right) + \\left(\\frac{\\sigma h}{L + \\sqrt{\\rho \\cdot \\varepsilon}} + \\frac{\\rho \\cdot \\varepsilon}{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}\\right)^{\\frac{p}{p - 1}} + \\log\\left(2 + \\frac{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}{\\rho \\cdot \\varepsilon}\\right) \\cdot \\log\\left(2 + d\\right) \\cdot \\frac{L + \\sqrt{\\rho \\cdot \\varepsilon}}{\\sqrt{\\rho \\cdot \\varepsilon}} + \\log\\left(2 + \\frac{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}{\\rho \\cdot \\varepsilon}\\right) \\cdot \\left(\\log\\left(2 + d\\right)\\right)^{\\frac{p}{p - 1}} \\cdot \\left(\\frac{\\sigma h}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)^{\\frac{p}{p - 1}} + \\left(\\log\\left(2 + \\frac{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}{\\rho \\cdot \\varepsilon}\\right)\\right)^{2} \\cdot \\left(1 + \\left(\\frac{\\sigma h}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)^{\\frac{p}{p - 1}}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedHessianVector.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ (64 * (p.p / (p.p - 1)) ^ 2) *\n      ((1 + p.σg / p.ε) ^ (p.p / (p.p - 1)) +\n        (1 + p.Δ * (p.L + √(p.ρ * p.ε)) / p.ε ^ 2) *\n          (1 + (1 + p.σg / p.ε) ^ (p.p - 1)⁻¹ * (p.σh / (p.L + √(p.ρ * p.ε)) + p.ρ * p.ε / (p.L + √(p.ρ * p.ε)) ^ 2) +\n                  (p.σh / (p.L + √(p.ρ * p.ε)) + p.ρ * p.ε / (p.L + √(p.ρ * p.ε)) ^ 2) ^ (p.p / (p.p - 1)) +\n                Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) * Real.log (2 + ↑p.d) *\n                  ((p.L + √(p.ρ * p.ε)) / √(p.ρ * p.ε)) +\n              Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) * Real.log (2 + ↑p.d) ^ (p.p / (p.p - 1)) *\n                (p.σh / √(p.ρ * p.ε)) ^ (p.p / (p.p - 1)) +\n            Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) ^ 2 *\n              (1 + (p.σh / √(p.ρ * p.ε)) ^ (p.p / (p.p - 1)))))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{64 \\cdot \\left(\\frac{p}{p - 1}\\right)^{2}} \\cdot \\left(\\left(1 + \\frac{\\sigma g}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + \\left(1 + \\frac{\\Delta \\cdot \\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\left(1 + \\frac{\\sigma g}{\\varepsilon}\\right)^{\\frac{1}{p - 1}} \\cdot \\left(\\frac{\\sigma h}{L + \\sqrt{\\rho \\cdot \\varepsilon}} + \\frac{\\rho \\cdot \\varepsilon}{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}\\right) + \\left(\\frac{\\sigma h}{L + \\sqrt{\\rho \\cdot \\varepsilon}} + \\frac{\\rho \\cdot \\varepsilon}{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}\\right)^{\\frac{p}{p - 1}} + \\log\\left(2 + \\frac{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}{\\rho \\cdot \\varepsilon}\\right) \\cdot \\log\\left(2 + d\\right) \\cdot \\frac{L + \\sqrt{\\rho \\cdot \\varepsilon}}{\\sqrt{\\rho \\cdot \\varepsilon}} + \\log\\left(2 + \\frac{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}{\\rho \\cdot \\varepsilon}\\right) \\cdot \\left(\\log\\left(2 + d\\right)\\right)^{\\frac{p}{p - 1}} \\cdot \\left(\\frac{\\sigma h}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)^{\\frac{p}{p - 1}} + \\left(\\log\\left(2 + \\frac{\\left(L + \\sqrt{\\rho \\cdot \\varepsilon}\\right)^{2}}{\\rho \\cdot \\varepsilon}\\right)\\right)^{2} \\cdot \\left(1 + \\left(\\frac{\\sigma h}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)^{\\frac{p}{p - 1}}\\right)\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedHessianVector.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ (64 * (p.p / (p.p - 1)) ^ 2) *\n      ((1 + p.σg / p.ε) ^ (p.p / (p.p - 1)) +\n        (1 + p.Δ * (p.L + √(p.ρ * p.ε)) / p.ε ^ 2) *\n          (1 + (1 + p.σg / p.ε) ^ (p.p - 1)⁻¹ * (p.σh / (p.L + √(p.ρ * p.ε)) + p.ρ * p.ε / (p.L + √(p.ρ * p.ε)) ^ 2) +\n                  (p.σh / (p.L + √(p.ρ * p.ε)) + p.ρ * p.ε / (p.L + √(p.ρ * p.ε)) ^ 2) ^ (p.p / (p.p - 1)) +\n                Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) * Real.log (2 + ↑p.d) *\n                  ((p.L + √(p.ρ * p.ε)) / √(p.ρ * p.ε)) +\n              Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) * Real.log (2 + ↑p.d) ^ (p.p / (p.p - 1)) *\n                (p.σh / √(p.ρ * p.ε)) ^ (p.p / (p.p - 1)) +\n            Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) ^ 2 *\n              (1 + (p.σh / √(p.ρ * p.ε)) ^ (p.p / (p.p - 1)))))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.DirectionalHeavyTailedSecondOrder",
+      "namespace": "LongTails.Setups.HeavyTailedHessianVector",
+      "setup": "LongTails.Setups.HeavyTailedHessianVector",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedHessianVector.spec\n  OracleTemplate.DirectionalHeavyTailedSecondOrder.budget",
+      "theorem": "OracleTemplate.DirectionalHeavyTailedSecondOrder.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DirectionalHeavyTailedSecondOrder",
+      "theorem": "OracleTemplate.DirectionalHeavyTailedSecondOrder.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization on R^d, permitting nonconvex objectives. The gradient is L-Lipschitz, the Hessian is ρ-Lipschitz in operator norm, and a global lower bound m satisfies f(x0)−m≤Δ.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: spec.admissible, Space"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query (x, none) returns an unbiased stochastic gradient g(x,ξ), with a fresh independent sample. No function values or sample reuse are supplied.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: spec.Query and spec.admissible oracle answer and gradient unbiasedness; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      },
+      {
+        "label": "other",
+        "details": "A query (x, some v) returns an unbiased stochastic Hessian-vector product H(x,ξ)v. Each gradient or Hessian-vector response counts as one call against the same fixed budget. Full Hessian access is not supplied.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: spec.Query and spec.admissible; LongTails/Template.lean: executeWithTrace and Convergence"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For public p∈(1,2], E‖g(x,ξ)−∇f(x)‖^p≤σg^p and E‖(H(x,ξ)−∇²f(x))v‖^p≤σh^p‖v‖^p for every x,v. The Hessian noise bound is directional, not an operator-norm moment bound. Variances may be infinite when p<2. Sample matrices need not be symmetric or derivatives of a common random loss.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: spec.valid and spec.admissible moment bounds and declaration of H"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space R^d with positive finite dimension d and its Euclidean norm.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: Params.d, Space and spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "Oracle seeds are IID across calls. All parameters are public: d, Ω, L, ρ, σg, σh, p, Δ, ε and x0; L,ρ,ε>0 and σg,σh,Δ≥0. The objective, estimators and sampling law are hidden.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: Params, spec.Public, spec.publicInput, spec.valid and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned point x must satisfy ‖∇f(x)‖≤ε.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: secondOrderAccurate"
+      },
+      {
+        "label": "high_probability",
+        "details": "The output is measurable and satisfies both stationarity conditions jointly with probability at least 2/3 over algorithm and oracle randomness, within a fixed oracle budget.",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace"
+      },
+      {
+        "label": "other",
+        "details": "At the same returned point, ⟨v,∇²f(x)v⟩≥−√(ρε)‖v‖² for every v, equivalently λmin(∇²f(x))≥−√(ρε).",
+        "evidence": "LongTails/Setups/HeavyTailedHessianVector.lean: secondOrderAccurate"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The second-order stationarity target is standard, but the oracle permits infinite-variance noise with only directional p-moment control of Hessian-vector errors, without sample symmetry, common-loss structure or sample reuse."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.DirectionalHeavyTailedSecondOrder.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DirectionalHeavyTailedSecondOrder",
+          "theorem": "OracleTemplate.DirectionalHeavyTailedSecondOrder.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

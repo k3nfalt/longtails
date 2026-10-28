@@ -1,0 +1,59 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedAffineHessianVector.lean}{GeneralizedAffineHessianVector}.}\label{tab:GeneralizedAffineHessianVector}
+\parbox{\linewidth}{\footnotesize On Euclidean $\mathbb{R}^d$, $f$ has a continuously differentiable gradient, $f\ge m$, $f(x_0)-m\le\Delta$, and $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$. Jointly measurable, integrable, unbiased gradient and Hessian-vector estimators $g(x,\xi),h(x,v,\xi)$ use IID samples of law $P_0$, with joint sample law $P$. For every $x,v$, their integrable central moments satisfy $\mathbb{E}_{P_0}\|g-\nabla f(x)\|^p\le\sigma_g^p+\alpha_g^p\|\nabla f(x)\|^p$ and $\mathbb{E}_{P_0}\|h-\nabla^2 f(x)v\|^q\le(\sigma_h^q+\alpha_h^q\|\nabla f(x)\|^q)\|v\|^q$, where $1<p,q\le2$. All scale parameters and $\Delta$ are nonnegative; $\varepsilon>0$. Target: a measurable returned point $X$ with $\int\|\nabla f(X)\|\,dP\le\varepsilon$. Costs count every gradient or HVP reply, including initialization, batches, guards and validation.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GuardedAffineHessianTransport.lean}{Guarded\allowbreak Affine\allowbreak Hessian\allowbreak Transport} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GuardedAffineHessianTransport.md}{(review)}
+& $\begin{aligned}[t]
+\mathcal{O}\!\Bigl(C_p\ell^{b+1}\bigl[&(1+S/\varepsilon)^b\\
++{}&\left(\frac{\Delta H}{\varepsilon^2}+\frac{\Delta}{\varepsilon R}\right)\\
+&\cdot(1+S/\varepsilon)^{b/q}\\
+&\cdot(1+\alpha_g+\sigma_g/R)^b\bigr]\Bigr)
+\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} RanSOM-E \citep{gahChaytiFakhouri2026v3}, Theorem B.24, Remark B.26
+& As $\varepsilon\downarrow0$, fixed remaining parameters, $\sigma_g,\Delta>0$, $L_1+\alpha_h>0$:
+$\mathcal{O}(\varepsilon^{-(b+1)})$ for $q>p$;
+$\mathcal{O}(\varepsilon^{-(2+b/q)})$ for $q\le p$.
+Accuracy exponents only; batch and initialization costs included.
+& \textbf{(1)}: for $q>p$, exponent $\max\{b,2+b/q\}$ replaces $b+1$, up to logs. At $p=3/2,q=2$: $\mathcal{O}(\varepsilon^{-7/2}\ell^4)$ versus $\mathcal{O}(\varepsilon^{-4})$. For $q\le p$, matches exponent. Improvement over a proved bound, not a lower bound.
+& \textbf{(1)} adds logarithmic overhead and a large $p$-dependent prefactor; Euclidean scope versus general norms. \\
+\midrule
+\textbf{(3)} RanSOM-E \citep{gahChaytiFakhouri2026v3}, Remark B.26, $\sigma_g=0$
+& Derived bound, including batches:
+$\begin{aligned}[t]
+\mathcal{O}\!\Bigl((1+\alpha_g)^b\bigl[1
+&+\tfrac{\Delta(L_0+\sigma_h)}{\varepsilon^2}\\
+&+\tfrac{\Delta(L_1+\alpha_h)}{\varepsilon}\bigr]\Bigr).
+\end{aligned}$
+& \textbf{(1)}: No established improvement in this regime.
+& \textbf{(1)}: when $\alpha_g>0$, retains $(1+\alpha_gR/\varepsilon)^{b/q}$ and logarithmic overhead; worse accuracy dependence for fixed positive parameters. \\
+\midrule
+\textbf{(4)} RanSOM \citep{gahChaytiFakhouri2026v3}, Corollary 4.8 / B.27
+& Special case $L_1=\alpha_g=\alpha_h=0$:
+$\begin{aligned}[t]
+\mathcal{O}\!\Bigl(1+&(\sigma_g/\varepsilon)^b\\
++{}&\tfrac{\Delta(L_0+\sigma_h)}{\varepsilon^2}\\
+&\cdot[1+(\sigma_g/\varepsilon)^{b/q}]\Bigr).
+\end{aligned}$
+& \textbf{(1)}: Scope extends to generalized curvature and affine noise through guarded localization in expectation. Matches the accuracy exponent on the common setup.
+& \textbf{(1)}: extra $\ell^{b+1}(1+\sigma_g/R)^b$ overhead on the common setup, and a large $p$-dependent prefactor. \\
+\midrule
+\textbf{(5)} NSGD-Hess \citep{mshFradin2026v2}, Theorem 5.1
+& Special case $L_1=\alpha_g=\alpha_h=0$, additionally $L_2$-Lipschitz Hessian and operator-norm Hessian moments. For fixed positive parameters as $\varepsilon\downarrow0$:
+$\mathcal{O}(\varepsilon^{-\max\{b,2+b/q\}})$.
+& \textbf{(1)}: removes Lipschitz-Hessian regularity, weakens operator-norm moments to directional HVP moments, and permits generalized curvature and affine noise. Matches the leading accuracy exponent on the overlap.
+& \textbf{(1)}: extra logarithms and $(1+\sigma_g/R)^b$ factors in shared stochastic terms. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} HVP: Hessian-vector product; norms are Euclidean or their induced operator norms. $b=p/(p-1)$, $R=\sqrt{L_0\Delta}+L_1\Delta+\varepsilon$, $S=\sigma_g+\alpha_gR$, $H=L_0+\sigma_h+(L_1+\alpha_h)R$, $C_p=2^{100b}(1+b)$, and $\ell=1+\log(2+R/\varepsilon+\Delta H/\varepsilon^2+\Delta/(\varepsilon R)+S/\varepsilon)$. $L_2$ denotes the Hessian Lipschitz constant. Asymptotic accuracy bounds hold with all other parameters fixed; other prior-work big-$\mathcal{O}$ constants may depend on $p,q$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

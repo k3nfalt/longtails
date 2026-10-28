@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.ClusteredConvolutionalPerceptron",
+  "searched_at": "2026-10-28T12:10:11.474238+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(samples + 1\\right) \\cdot \\left(\\left\\lceil \\frac{128 \\cdot upper^{2}}{lower^{2}} \\cdot \\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right) \\right\\rceil_{+} + 3\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.ClusteredConvolutionalPerceptron.spec.Params → ℕ",
+        "value": "fun p => (p.samples + 1) * (⌈128 * p.upper ^ 2 / p.lower ^ 2 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)⌉₊ + 3)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(samples + 1\\right) \\cdot \\left(\\left\\lceil \\frac{128 \\cdot upper^{2}}{lower^{2}} \\cdot \\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right) \\right\\rceil_{+} + 3\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.ClusteredConvolutionalPerceptron.spec.Params → ℕ",
+          "value": "fun p => (p.samples + 1) * (⌈128 * p.upper ^ 2 / p.lower ^ 2 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)⌉₊ + 3)"
+        }
+      ],
+      "module": "LongTails.Theorems.ClusteredConvolutionalPerceptronAcceleration",
+      "namespace": "LongTails.Setups.ClusteredConvolutionalPerceptron",
+      "setup": "LongTails.Setups.ClusteredConvolutionalPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ClusteredConvolutionalPerceptron.spec\n  OracleTemplate.ClusteredConvolutionalPerceptron.budget",
+      "theorem": "OracleTemplate.ClusteredConvolutionalPerceptron.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ClusteredConvolutionalPerceptronAcceleration",
+      "theorem": "OracleTemplate.ClusteredConvolutionalPerceptron.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Nonconvex feasibility in jointly trained parameters θ=((a,b),v): find θ with a⟨D_i,v⟩+b⟨S D_i,v⟩>0 for every sample, where S is the cyclic shift. The margins are bilinear in the two parameter blocks; no scalar optimization objective is specified.",
+        "evidence": "LongTails/Setups/ClusteredConvolutionalPerceptron.lean: Separates, spec.successful; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Space, margin."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects a sample i and arbitrary θ=((a,b),v). The oracle returns the exact margin gradient ((⟨D_i,v⟩,⟨S D_i,v⟩),aD_i+bS D_i). Replies are independent of history and oracle seed; there is no oracle error or sampling requirement.",
+        "evidence": "LongTails/Setups/ClusteredConvolutionalPerceptron.lean: Query, answer, spec.admissible; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: direction."
+      },
+      {
+        "label": "function_value",
+        "details": "The same oracle call also returns the exact selected-sample margin a⟨D_i,v⟩+b⟨S D_i,v⟩.",
+        "evidence": "LongTails/Setups/ClusteredConvolutionalPerceptron.lean: answer; LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Reply; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in Euclidean R^d, with d>0; parameters lie in (R×R)×R^d. There are N=samples+1≥1 samples, and S cyclically permutes feature coordinates.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, Space, shift; LongTails/Setups/ClusteredConvolutionalPerceptron.lean: Data, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Write g=lower, R=upper, μ=contrast, κ=derivativeMargin, and e=d^(-1/2)1. Hidden data admit D_i=(β_i/√2)e+μz_i with g≤|β_i|≤R, ⟨e,z_i⟩=0, and a common hidden center c satisfying ‖c‖≤1/2, ‖(c−Sc)/√2‖≥2κ, and ‖z_i−c‖≤κ/64. Background signs may differ. Public parameters satisfy 0<g≤R, μ>0, 0<κ≤1/4, and (μ/(4R))²≤κ²(g/(4R))⁸/4096. All six Params fields are public; the data and geometric witnesses are hidden. No algorithm-family restriction is imposed.",
+        "evidence": "LongTails/Setups/ClusteredConvolutionalPerceptron.lean: Geometry, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Setups/ManySampleConvolutionalPerceptron.lean: axis; LongTails/Template.lean: Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The returned parameter must have strictly positive margin on every one of the N samples simultaneously. No ε tolerance, prescribed positive margin, norm bound, or objective-gap criterion is specified.",
+        "evidence": "LongTails/Setups/ClusteredConvolutionalPerceptron.lean: Separates, spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every algorithm and oracle seed, stronger than almost-sure success. The fixed budget is N(⌈128R²/g² log(16R²/μ²)⌉₊+3) individual margin-and-gradient oracle calls.",
+        "evidence": "LongTails/Setups/ClusteredConvolutionalPerceptron.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace; supplied extracted budget for OracleTemplate.ClusteredConvolutionalPerceptron.result."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines bilinear convolutional separation with a tightly clustered hidden defect geometry, signed background amplitudes, a cyclic-difference lower bound, and a restrictive contrast regime. These are specialized structural assumptions beyond standard separable classification."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ClusteredConvolutionalPerceptron.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ClusteredConvolutionalPerceptronAcceleration",
+          "theorem": "OracleTemplate.ClusteredConvolutionalPerceptron.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

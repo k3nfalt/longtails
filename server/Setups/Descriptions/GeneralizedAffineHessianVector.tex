@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Smoothness with Hessian-Vector Oracles}
+We consider minimizing a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer. The function $f$ is $(L_0,L_1)$-smooth with $L_0,L_1\geq0$ and has a continuously differentiable gradient. A given point $x^0\in\mathbb{R}^d$ has objective gap at most $\Delta\geq0$ above a global lower bound. The oracle returns either an unbiased stochastic gradient or an unbiased stochastic Hessian-vector product, using independent samples and allowing heavy-tailed, gradient-dependent errors. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable gradient norm satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, averaging over sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm $\|\cdot\|$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$. Let $\Omega$ be a measurable sample space. The noise parameters satisfy
+\[
+\sigma_g,\alpha_g,\sigma_h,\alpha_h\geq0,
+\qquad 1<p\leq2,\qquad 1<q\leq2.
+\]
+The algorithm receives $d$, $\Omega$, $L_0$, $L_1$, $\sigma_g$, $\alpha_g$, $\sigma_h$, $\alpha_h$, $p$, $q$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Generalized smoothness]
+The function $f$ is differentiable everywhere, its gradient is continuously differentiable, and
+\[
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in\mathbb{R}^d.
+\]
+Here $\nabla^2 f(x)$ is a linear operator on $\mathbb{R}^d$.
+\end{assumption}
+
+\begin{assumption}[Lower bound and initial gap]
+There exists $m\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f(x)&\geq m &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-m&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient and Hessian-vector access]
+There exist a probability measure $\nu$ on $\Omega$ and jointly measurable maps
+\[
+\begin{aligned}
+g &: \mathbb{R}^d\times\Omega\to\mathbb{R}^d,\\
+h &: (\mathbb{R}^d\times\mathbb{R}^d)\times\Omega\to\mathbb{R}^d.
+\end{aligned}
+\]
+For every $x,v\in\mathbb{R}^d$, the random vectors $g(x,\xi)$ and $h(x,v,\xi)$, with $\xi\sim\nu$, are Bochner integrable and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}[h(x,v,\xi)]&=\nabla^2 f(x)v.
+\end{aligned}
+\]
+Their respective error norms to powers $p$ and $q$ are integrable, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^p\bigr]
+&\leq \sigma_g^p+\alpha_g^p\|\nabla f(x)\|^p,\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|h(x,v,\xi)-\nabla^2 f(x)v\|^q\bigr]
+&\leq \bigl(\sigma_h^q+\alpha_h^q\|\nabla f(x)\|^q\bigr)\|v\|^q.
+\end{aligned}
+\]
+At call $k$, a gradient query at $x$ returns $g(x,\xi_k)$, while a Hessian-vector query at $(x,v)$ returns $h(x,v,\xi_k)$. The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and are independent of the algorithm's randomness.
+\end{assumption}
+
+Queries may use any $x,v\in\mathbb{R}^d$. Each call requests one of the two replies, and both query types count toward a single oracle-call budget. After the allotted calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+with $\|\nabla f(\bar{x})\|$ integrable under $P$, the joint law of the samples and the algorithm's randomness.
+\end{document}

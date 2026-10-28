@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.HessianLipschitzSecondOrder",
+  "searched_at": "2026-10-28T12:13:17.935461+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{120} \\cdot m^{\\frac{1}{3}} \\cdot \\left(1 + \\frac{\\Delta \\cdot \\sqrt{H}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right) \\cdot \\left(\\log\\left(2 + \\frac{\\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right) \\cdot m \\cdot \\left(1 + \\frac{\\Delta \\cdot \\sqrt{H}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right)}{\\rho}\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HessianLipschitzSecondOrder.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 120 * p.m ^ 3⁻¹ * (1 + p.Δ * √p.H / (p.ε * √p.ε)) *\n      Real.log (2 + (↑(Module.finrank ℝ p.E) + 1) * p.m * (1 + p.Δ * √p.H / (p.ε * √p.ε)) / p.ρ) ^ 2⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{44} \\cdot \\left(1 + \\frac{\\Delta \\cdot \\sqrt{H}}{m^{\\frac{2}{3}} \\cdot \\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right) \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.HessianLipschitzSecondOrder.spec.Params → ℕ",
+          "value": "fun p => ⌈2 ^ 44 * (1 + p.Δ * √p.H / (p.m ^ (2 / 3) * p.ε * √p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.MonotoneHessianSecondOrder",
+      "namespace": "LongTails.Setups.HessianLipschitzSecondOrder",
+      "setup": "LongTails.Setups.HessianLipschitzSecondOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HessianLipschitzSecondOrder.spec\n  LongTails.Theorems.MonotoneHessianSecondOrder.budget",
+      "theorem": "LongTails.Theorems.MonotoneHessianSecondOrder.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MonotoneHessianSecondOrder",
+      "theorem": "LongTails.Theorems.MonotoneHessianSecondOrder.result",
+      "references": "- Lesi Chen, Chengchang Liu, Luo Luo, Jingzhao Zhang. [Faster Newton Methods for Convex and Nonconvex Optimization in Gradient Complexity](https://arxiv.org/html/2501.17488v3). 2026 (COLT; author version v3). Complexity: $O(b+b^{1/3}\\Delta\\sqrt H/\\varepsilon^{3/2})$ exact-gradient oracle calls and $O(1+\\Delta\\sqrt H/(b^{2/3}\\varepsilon^{3/2}))$ full-Hessian oracle calls, including initialization and output selection, deterministically achieving $\\|\\nabla f(x)\\|\\le\\varepsilon$ with NALEN. Here $b\\ge1$ is the integer Hessian-refresh period; choose $b=\\max\\{1,\\lfloor\\min\\{m,(1+\\Delta\\sqrt H/\\varepsilon^{3/2})^{3/2}\\}\\rfloor\\}$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a twice continuously differentiable function f:E→ℝ. Nonconvex objectives are permitted, with f(x₀)−inf f≤Δ.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Oracle 0 returns the exact gradient together with the function value at the queried point, independently of history and seed.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.admissible, oracle 0 equality."
+      },
+      {
+        "label": "function_value",
+        "details": "The exact function value is bundled with the gradient in each oracle-0 call.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.Reply and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 1 returns the entire exact Hessian as a continuous linear operator. Full-Hessian calls and value–gradient calls have separate fixed budgets.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.admissible, oracle 1 equality; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: Params.normedE, Params.innerE, and Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "The Hessian is globally H-Lipschitz in operator norm; no global gradient-Lipschitz or Hessian-norm bound is imposed. Public parameters are E, x₀, H>0, Δ≥0, ε>0, m≥1, and 0<ρ<1. The objective is hidden. Parameter m imposes no additional restriction on the objective.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned point x must satisfy ‖∇f(x)‖≤ε.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "Both stationarity conditions must hold jointly with probability at least 1−ρ under the execution law.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The same returned point must satisfy ⟨v,∇²f(x)v⟩≥−√(Hε)‖v‖² for every v∈E.",
+        "evidence": "LongTails/Setups/HessianLipschitzSecondOrder.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Approximate second-order stationarity for unconstrained nonconvex objectives with Lipschitz Hessians and exact derivative oracles is a standard formulation; the budgets separately count gradient and Hessian evaluations."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MonotoneHessianSecondOrder.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MonotoneHessianSecondOrder",
+          "theorem": "LongTails.Theorems.MonotoneHessianSecondOrder.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

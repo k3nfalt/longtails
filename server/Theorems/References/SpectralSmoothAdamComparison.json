@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.SpectralSmoothAdamComparison",
+  "searched_at": "2026-10-28T12:16:05.381709+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "65 \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.SpectralSmoothAdamComparison.spec.Params → ℕ",
+        "value": "fun p => 65 * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "65 \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.SpectralSmoothAdamComparison.spec.Params → ℕ",
+          "value": "fun p => 65 * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.MuonAdamSgdSeparation",
+      "namespace": "LongTails.Setups.SpectralSmoothAdamComparison",
+      "setup": "LongTails.Setups.SpectralSmoothAdamComparison",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SpectralSmoothAdamComparison.spec\n  LongTails.Theorems.MuonAdamSgdSeparation.budget",
+      "theorem": "LongTails.Theorems.MuonAdamSgdSeparation.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MuonAdamSgdSeparation",
+      "theorem": "LongTails.Theorems.MuonAdamSgdSeparation.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on real r×r matrices; nonconvex objectives are permitted. There exists fmin with f(x) ≥ fmin everywhere and f(x0) − fmin ≤ Δ.",
+        "evidence": "LongTails/Setups/SpectralSmoothAdamComparison.lean: spec.admissible and Public.toBase; LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call returns a jointly measurable, integrable unbiased gradient sample G(x,ξ). Fresh seeds are IID across calls; replies depend only on the current query and seed. Individual samples, including all batch members, count as oracle calls.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For a fixed hidden orthonormal row basis (b_i) and hidden σ_i ≥ 0, E‖(G(X,ξ) − ∇f(X))ᵀb_i‖₂² ≤ σ_i² uniformly in X, with Σ_i σ_i ≤ ε. Only second moments are required; independence between rows is not assumed.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel.row_profile; LongTails/Setups/SpectralSmoothAdamComparison.lean: Public.toBase sets s = ε."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Global spectral-to-nuclear smoothness: ‖∇f(X) − ∇f(Y)‖nuc ≤ L‖X − Y‖op.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: spectralNorm and nuclearNorm."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝ^(r×r), represented as EuclideanSpace ℝ (Fin r × Fin r), with r ≥ 4.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: MatrixPolar.Space; LongTails/Setups/SpectralSmoothAdamComparison.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Public information is r, L, Δ, ε and x0, with L > 0, Δ ≥ 0, ε > 0 and LΔ ≥ 128ε². Allowed algorithms use constant positive stepsize, fixed positive batch size and exact polar directions, returning a uniformly sampled iterate.",
+        "evidence": "LongTails/Setups/SpectralSmoothAdamComparison.lean: Public, spec.valid and spec.allowedAlgorithm; LongTails/Setups/BatchedSpectralSmooth.lean: spec.allowedAlgorithm and FollowsBatched."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The measurable output Xout must have integrable nuclear gradient norm satisfying E‖∇f(Xout)‖nuc ≤ ε; the norm is not squared.",
+        "evidence": "LongTails/Setups/SpectralSmoothAdamComparison.lean: spec.successful; LongTails/Setups/BatchedSpectralSmooth.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over independent algorithm randomness and the IID oracle-seed sequence. The output is uniformly sampled from iterates 0,…,T after B(T+1) sample queries.",
+        "evidence": "LongTails/Template.lean: Convergence; LongTails/Setups/BatchedSpectralSmooth.lean: FollowsBatched and spec.successful."
+      },
+      {
+        "label": "other",
+        "details": "Success additionally requires worst-case separation statements. Writing N = B(T+1), every admissibly tuned constant-step batched Adam has an admissible instance where success implies r−1 ≤ 64N² or (r−1)LΔ ≤ 4096ε²N³. Every positive constant-step batched SGD has an admissible instance where success implies (r−1)LΔ ≤ 1728ε²N. Adam tuning satisfies η > 0, 0 ≤ β₁,β₂ < 1, β₁² ≤ β₂ and τ ≥ 0.",
+        "evidence": "LongTails/Setups/SpectralSmoothAdamComparison.lean: spec.successful, AdamLower, SgdLower, AdamTuning.Valid and FollowsAdam."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines spectral/nuclear geometry and a hidden rowwise variance profile tied to ε with algorithm restrictions and explicit Adam/SGD lower-bound statements as part of success."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MuonAdamSgdSeparation.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MuonAdamSgdSeparation",
+          "theorem": "LongTails.Theorems.MuonAdamSgdSeparation.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

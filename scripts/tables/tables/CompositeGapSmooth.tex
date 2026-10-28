@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Composite gap-curvature acceleration: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CompositeGapSmooth.lean}{CompositeGapSmooth}.}\label{tab:CompositeGapSmooth}
+\parbox{\linewidth}{\footnotesize In a real Hilbert space $E$, minimize $F=f+\psi$ over convex $Q$, with globally convex differentiable $f$ and real-valued $\psi$ convex on $Q$. Exact gradients and exact minimizers of $\psi(u)+\langle v,u-z\rangle+\|u-z\|^2/(2a)$ over $Q$ are available for every $a>0,z,v$. For $x_0,x_\star\in Q$, assume $x_\star\in\arg\min_Q F$, $\|x_0-x_\star\|\le R$, and $F(x_0)-F(x_\star)\le\Delta$, with $H_0,H_1\ge0$ and $R,\Delta,\varepsilon>0$. For every $x\in Q$ and ambient $y\in E$ with $\sqrt{H_1}\|y-x\|\le1$, assume $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+[H_0+H_1(F(x)-F(x_\star))]\|y-x\|^2$. Target: a deterministic $\widehat x\in Q$ with $F(\widehat x)-F(x_\star)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeGapAccelerated.lean}{Composite\allowbreak Gap\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeGapAccelerated.md}{(review)}
+& $\begin{aligned}\mathcal{O}\bigl(&[1+R\sqrt{H_0/\varepsilon+H_1}]\,\ell\\ &\cdot[1+\log(1+R^2(H_0/\varepsilon+H_1))]\bigr)\end{aligned}$ gradient plus prox calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} RCSAG \citep{gssgLobanov2026}, Thm.~9, noise-free specialization
+& $\begin{aligned}\mathcal{O}\bigl(&[\ell+R\sqrt{H_0/\varepsilon}\\ &+R\sqrt{H_1}\,\ell](1+\log\ell)\bigr)\end{aligned}$ gradient calls; closed-form ball projections. Special case: $Q=E=\mathbb{R}^d$, $\psi=0$, $\varepsilon\le\Delta$.
+& \textbf{(1)}: Scope extends to nonsmooth composite objectives and constraints, including $\nabla f(x_\star)\ne0$, using ordinary prox calls.
+& \textbf{(1)}: Extra logarithmic factors on the smooth overlap, including the restart logarithm on $R\sqrt{H_0/\varepsilon}$. \\
+\midrule
+\textbf{(3)} \citep{cgCompositeGeneralizedSource}, repository result
+& $\begin{aligned}\mathcal{O}\bigl(&R\sqrt{(L_0+L_1G)/\varepsilon}\\ &+(1+L_1R)\bigl[1+\log\bigl(1+\\ &(1+L_1R)\sqrt{\Delta/(L_0R^2)}\bigr)\bigr]\bigr)\end{aligned}$ gradient plus prox calls. Requires composite $(L_0,L_1)$-smoothness, $L_0>0$, and $\|\nabla f(x_\star)\|\le G$.
+& \textbf{(1)}: Total-gap curvature replaces gradient-norm curvature; no $G$ needed to stop. For the $\delta$-family, $\varepsilon=\delta\downarrow0$: $\mathcal{O}(\delta^{-3/2}\log^2(1/\delta))$ versus a startup term at least $\delta^{-2}$.
+&  \\
+\midrule
+\textbf{(4)} Derived bound: Moreau smoothing + \citep{gssgLobanov2026}, Thm.~9
+& $\begin{aligned}\mathcal{O}\bigl(&[\ell+R'\sqrt{H_0/\varepsilon}+R'G_\psi/\varepsilon\\ &+R'\sqrt{H_1}\,\ell](1+\log\ell)\bigr)\end{aligned}$ gradient plus prox calls. Requires $Q=E=\mathbb{R}^d$, globally $G_\psi$-Lipschitz $\psi$, $G_\psi>0$, $\varepsilon\le\Delta$, and a smoothed minimizer within known radius $R'$.
+& \textbf{(1)}: Removes $R'G_\psi/\varepsilon$ and the Lipschitz restriction. For $R'=\mathcal{O}(R)$, polynomial gain when $G_\psi/\sqrt{H_0\varepsilon}$ dominates logarithmic overhead and remaining terms; also covers constraints.
+& \textbf{(1)}: Extra logarithms. General total rates are not comparable without control of $R'/R$. \\
+\midrule
+\textbf{(5)} \citep{cgLobanov2026v1}, Thm.~5
+& $\mathcal{O}\bigl(\ell+\widetilde R\sqrt{H_0/\varepsilon}+\widetilde R\sqrt{H_1}\,\ell\bigr)$ gradient, value, and exact segment-minimization calls, counting each segment solve once. Requires $Q=E=\mathbb{R}^d$, $\psi=0$, finite $\widetilde R$, and $\varepsilon\le F(x_0)-F(x_\star)$.
+& \textbf{(1)}: Extends to composite constraints; needs only initial-distance radius $R$, no exact line search or function values. On this smooth restriction, prox updates are closed form.
+& \textbf{(1)}: Extra logarithmic factors when $\widetilde R=\mathcal{O}(R)$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+\Delta/\varepsilon)$. $L_0,L_1$ are gradient-norm smoothness constants; $G$ bounds $\|\nabla f(x_\star)\|$. $G_\psi$ is the Lipschitz constant of $\psi$; $R'$ bounds initial distance to a minimizer of $f+\psi_\lambda$, where $\psi_\lambda$ is the Moreau envelope and $\lambda=\varepsilon/G_\psi^2$. $\widetilde R=\sup_{f(x)\le f(x_0)}\|x-x_\star\|$. The $\delta$-family is $f(x,y)=2e^{\delta y}\cosh x$, $\psi(x,y)=|x|+2\delta|y|$, $Q=\mathbb{R}^2$, $x_0=(0,1/\delta)$, $0<\delta\le1$, with $R=1/\delta$, $\Delta=2e$, $H_0=2e$, $H_1=e$ and $L_1\ge1/\delta$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

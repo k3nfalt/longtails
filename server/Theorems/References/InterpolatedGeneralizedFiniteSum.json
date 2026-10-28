@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.InterpolatedGeneralizedFiniteSum",
+  "searched_at": "2026-10-28T12:12:32.999057+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 1073741824 \\cdot \\left(n \\cdot \\left(1 + L1^{2} \\cdot R^{2}\\right) + \\sqrt{\\frac{n \\cdot L0 \\cdot R^{2}}{\\varepsilon}}\\right) \\cdot \\log\\left(2 + n + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1^{2} \\cdot R^{2}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.InterpolatedGeneralizedFiniteSum.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈1073741824 * (↑p.n * (1 + p.L1 ^ 2 * p.R ^ 2) + √(↑p.n * p.L0 * p.R ^ 2 / p.ε)) *\n      Real.log (2 + ↑p.n + p.L0 * p.R ^ 2 / p.ε + p.L1 ^ 2 * p.R ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 1073741824 \\cdot \\left(n \\cdot \\left(1 + L1^{2} \\cdot R^{2}\\right) + \\sqrt{\\frac{n \\cdot L0 \\cdot R^{2}}{\\varepsilon}}\\right) \\cdot \\log\\left(2 + n + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1^{2} \\cdot R^{2}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.InterpolatedGeneralizedFiniteSum.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈1073741824 * (↑p.n * (1 + p.L1 ^ 2 * p.R ^ 2) + √(↑p.n * p.L0 * p.R ^ 2 / p.ε)) *\n      Real.log (2 + ↑p.n + p.L0 * p.R ^ 2 / p.ε + p.L1 ^ 2 * p.R ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedInterpolatedGeneralizedFiniteSum",
+      "namespace": "LongTails.Setups.InterpolatedGeneralizedFiniteSum",
+      "setup": "LongTails.Setups.InterpolatedGeneralizedFiniteSum",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.InterpolatedGeneralizedFiniteSum.spec\n  OracleTemplate.AcceleratedInterpolatedGeneralizedFiniteSum.budget",
+      "theorem": "OracleTemplate.AcceleratedInterpolatedGeneralizedFiniteSum.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedInterpolatedGeneralizedFiniteSum",
+      "theorem": "OracleTemplate.AcceleratedInterpolatedGeneralizedFiniteSum.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of differentiable convex component functions and their convex average. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: spec.admissible, ConvexOn and HasGradientAt clauses."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is f(x) = (1/n) ∑ᵢ lossᵢ(x), with n ≥ 1.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: objective; Params.n and Params.nonzero."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query chooses an index i and point x and returns exactly ∇lossᵢ(x), independently of oracle history and seed. Each component-gradient evaluation costs one call; a full gradient costs n calls. Function values are not supplied.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: spec.Query, spec.Reply, and spec.admissible oracle-answer clause; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Each component has continuous gradient and satisfies ‖∇lossᵢ(x) − ∇lossᵢ(y)‖ ≤ (L0 + L1 M)‖x − y‖ whenever its gradient norm is at most M throughout [x,y]. Public parameters satisfy L0 > 0 and L1 ≥ 0; global Lipschitz smoothness is not required.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: ComponentSmooth; spec.admissible continuity clause; spec.valid and spec.publicInput."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is an arbitrary finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: Params.normedE, Params.innerE, and Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "Interpolation: all components share a global minimizer xstar with ‖x0 − xstar‖ ≤ R. The positive radius R, starting point x0, n, smoothness parameters, and ε > 0 are public. The component functions and common minimizer are hidden; neither optimal function values nor a strong-growth condition is supplied.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: Instance; spec.admissible common-minimizer clause; spec.Public, spec.publicInput, and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x with f(x) − f(xstar) ≤ ε, where xstar is a common global minimizer of every component.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "The objective-gap guarantee must hold with probability at least 2/3 under the algorithm–oracle seed law, within the fixed supplied component-gradient budget.",
+        "evidence": "LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines convex finite-sum optimization with componentwise gradient-dependent smoothness and an exact common-minimizer assumption. This is a meaningful variant of the classical globally smooth finite-sum formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AcceleratedInterpolatedGeneralizedFiniteSum.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedInterpolatedGeneralizedFiniteSum",
+          "theorem": "OracleTemplate.AcceleratedInterpolatedGeneralizedFiniteSum.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

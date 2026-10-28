@@ -1,0 +1,86 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Cyclic Full-Width Perceptron}
+We consider strict separation by a two-layer linear model with parameters $W\in\mathbb{R}^{(d+1)\times(d+1)}$ and $v\in\mathbb{R}^{d+1}$, where $d$ is the feature dimension. Its margin on an input $q\in\mathbb{R}^{d+1}$ is $m_q(W,v)=v^\top Wq$. The inputs comprise an anchor and perturbed opposite inputs whose residual features have bounded norms and a common positive separating projection. The perturbation scales obey explicit smallness conditions. The oracle returns the exact margin and its parameter gradient. We analyze the cyclic full-width perceptron, initialized at the identity matrix and zero head. The goal is an output with strictly positive margins on every input, for every realization.
+
+Write $n\geq 1$ for the number of non-anchor inputs and take $d\in\mathbb{Z}_{\geq 0}$. The algorithm receives $d,n,\kappa,\mu,\nu$, with
+\[
+\begin{aligned}
+0<\kappa&\leq 1,\\
+0<\mu&\leq \frac{\kappa^4}{2^{20}},\\
+0\leq\nu&\leq \frac{\kappa^{12}\mu^2}{2^{56}}.
+\end{aligned}
+\]
+The instance consists of residual vectors $r_i\in\mathbb{R}^d$ and offsets $\delta_i\in\mathbb{R}$, for $i=1,\ldots,n$, accessed through the oracle. They define the inputs
+\[
+q_0=\begin{pmatrix}1\\0\end{pmatrix},
+\qquad
+q_i=\begin{pmatrix}-(1+\delta_i)\\-\mu r_i\end{pmatrix},
+\quad i=1,\ldots,n.
+\]
+All vector inner products and norms are Euclidean.
+
+Our assumptions:
+\begin{assumption}[Residual separation and offsets]
+The data satisfy
+\[
+0\leq\delta_i\leq\nu,
+\qquad \|r_i\|\leq 1,
+\qquad i=1,\ldots,n.
+\]
+There exists $w\in\mathbb{R}^d$ such that
+\[
+\|w\|=1,
+\qquad \langle w,r_i\rangle\geq\kappa,
+\qquad i=1,\ldots,n.
+\]
+\end{assumption}
+
+To specify the full-width parameterization, write
+\[
+W=\begin{pmatrix}a&u^\top\\c&M\end{pmatrix},
+\qquad
+v=\begin{pmatrix}b\\h\end{pmatrix},
+\]
+where $a,b\in\mathbb{R}$, $u,c,h\in\mathbb{R}^d$, and $M:\mathbb{R}^d\to\mathbb{R}^d$ is linear. For $q=(s,z)\in\mathbb{R}\times\mathbb{R}^d$, the margin is
+\[
+m_q(W,v)=b\bigl(as+\langle u,z\rangle\bigr)
++\langle h,sc+Mz\rangle.
+\]
+A query specifies an index $i\in\{0,\ldots,n\}$ and parameters $(W,v)$. The oracle returns
+\[
+\bigl(m_{q_i}(W,v),\; (vq_i^\top,Wq_i)\bigr).
+\]
+The second component is the parameter gradient, using the Frobenius inner product for matrices and the Euclidean inner product for the head.
+
+Our result is algorithm-specific: we analyze the cyclic full-width perceptron. The method chooses a fixed step size $\eta>0$ from the available inputs and initializes
+\[
+W^0=I_{d+1},\qquad v^0=0,\qquad i_0=0.
+\]
+At call $t\geq 0$, it queries $(i_t,W^t,v^t)$ and sets
+\[
+\begin{aligned}
+\gamma_t&=m_{q_{i_t}}(W^t,v^t),\\
+(W^{t+1},v^{t+1})
+&=\begin{cases}
+\bigl(W^t+\eta v^tq_{i_t}^\top,
+      v^t+\eta W^tq_{i_t}\bigr),&\gamma_t\leq 0,\\
+(W^t,v^t),&\gamma_t>0,
+\end{cases}\\
+i_{t+1}&=(i_t+1)\bmod(n+1).
+\end{aligned}
+\]
+Both parameter updates use the parameters before the update. The index advances after every query, including queries with positive margin.
+
+After an allotted budget of $T\in\mathbb{Z}_{\geq 0}$ oracle calls, the output is the last parameter pair $(\bar W,\bar v)=(W^T,v^T)$. The required accuracy is strict separation:
+\[
+m_{q_i}(\bar W,\bar v)>0,
+\qquad i=0,\ldots,n,
+\]
+for every realization of any algorithm randomness.
+\end{document}

@@ -1,0 +1,33 @@
+\begin{table}[tp]
+\centering
+\caption{Heavy-tailed two-point zeroth-order optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedTwoPointZerothOrder.lean}{HeavyTailedTwoPointZerothOrder}.}\label{tab:HeavyTailedTwoPointZerothOrder}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^d\to\mathbb{R}$, $d\geq1$, has a lower bound $f_*$ with $f(x_0)-f_*\leq\Delta$. Samples $F(\cdot;\xi)$ have $L$-Lipschitz gradients $G$, with $F,G$ jointly measurable, $\int G(x;\xi)\,d\nu=\nabla f(x)$ and $\int\|G(x;\xi)-\nabla f(x)\|^p\,d\nu\leq\sigma^p$, with the corresponding integrability, $1<p\leq2$. Each oracle call returns two values sharing one sample; successive samples are IID with law $\nu$. Target: $\int\|\nabla f(x_{\rm out})\|\,dP\leq\varepsilon$. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ClippedSpsaHeavyTailed.lean}{Clipped\allowbreak Spsa\allowbreak Heavy\allowbreak Tailed} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ClippedSpsaHeavyTailed.md}{(review)}
+& $\mathcal{O}\!\left(1+132^q\frac{dL\Delta}{\varepsilon^2}\left[1+\left(\frac{\sigma}{\varepsilon}\right)^q\right]\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: RS-NSGD + finite differences \citep{htzoOmiya2026v1}, Thm.~5.4/C.3, $r=1$
+& $\mathcal{O}_p\!\left(1+\frac{dL\Delta}{\varepsilon^2}\left[1+\left(\frac{\sigma}{\varepsilon}\right)^q\right]\right)$
+\newline Sample-smooth two-point emulation; all minibatch calls counted.
+& \textbf{(1)}: Matches known rate for fixed $p$; new batch-free scalar-clipped SPSA analysis. Same tuning knowledge $L,\Delta,\sigma,p,\varepsilon$.
+& \textbf{(1)}: Worse explicit constant. \\
+\midrule
+\textbf{(3)} RSC-ZO \citep{htzoElBakkali2026v1}, Thm.~2.3, Rem.~2.4
+& $\begin{gathered}\mathcal{O}_p\!\left(\left[1+\frac{L\Delta}{\varepsilon^2}\right](1+A^q)\right.\\[-2pt]\left.{}\cdot\log\frac{2+L\Delta/\varepsilon^2}{\delta}\,[1+\log(1+A)]^{q/2}\right)\end{gathered}$
+\newline $\Pr\!\left\{T^{-1}\sum_{t<T}\|\nabla f(x_t)\|^2\leq\varepsilon^2\right\}\geq1-\delta$; $\varepsilon^2\leq32L\Delta$.
+& \textbf{(1)}: On bounded $p$-moments, fixed $p<2$, expected accuracy costs $d$ instead of $d^{q/2}$, removing $\sqrt{L\Delta}$ and logarithms; not an identical-output speedup.
+& \textbf{(1)}: Expectation only; requires bounded $p$-moments instead of weak-$L_p$ tails. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=p/(p-1)$; $A=\sqrt d\,(\sqrt{L\Delta}+\sigma)/\varepsilon$; $\Delta$ is the initial-gap bound; $\sigma$ is the noise scale; $\delta\in(0,1)$ is the failure probability; $T$ is the iteration count. Costs count shared-sample two-point calls (two scalar evaluations each), including batches. $\mathcal{O}_p$ allows unquantified dependence on $p$. Weak-$L_p$: $\Pr(\|G-\nabla f\|>t)\leq(\sigma/t)^p$. $P$ is the output probability law, including algorithmic randomness.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
