@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Relative-error acceleration under generalized smoothness: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeGeneralizedSmoothConvex.lean}{RelativeGeneralizedSmoothConvex}.}\label{tab:RelativeGeneralizedSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a real Hilbert space has continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1M)\|x-y\|$ whenever $\|\nabla f\|\le M$ on $[x,y]$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$; $L_0,R,\Delta,\varepsilon>0$, $L_1\ge0$. Every possibly history-dependent reply obeys $\|v-\nabla f(x)\|\le\alpha\|\nabla f(x)\|$, $0\le\alpha\le1/100$. Target: $f(x_N)-f(x_\star)\le\varepsilon$ on every oracle path.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RelativeErrorGeneralizedAcceleration.lean}{Relative\allowbreak Error\allowbreak Generalized\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RelativeErrorGeneralizedAcceleration.md}{(review)} & $\mathcal{O}\!\left(\begin{gathered}\sqrt{L_0R^2/\varepsilon}+\alpha^2L_0R^2/\varepsilon\\ +(1+L_1R)\ell+\alpha^2(L_1R)^2\ell^2\end{gathered}\right)$ relative-gradient replies. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{cgsTyurin2026v2}, Thm.~4.3 & $\mathcal{O}\!\left(\begin{gathered}1+\sqrt{L_0R^2/\varepsilon}\\ +L_1R\log\!\left(1+\min\!\left\{\frac{L_1^2\Delta}{L_0},\frac{\Delta}{\varepsilon}\right\}\right)\\ +\log\!\left(1+\frac{\Delta}{L_0R^2}\right)\end{gathered}\right)$ exact-gradient calls. Special case: $\alpha=0$, finite-dimensional Hessian-form class; $R=\|x_0-x_\star\|$. & \textbf{(1)}: Scope extends exact gradients to adversarial relative errors. Matches the leading $\sqrt{L_0R^2/\varepsilon}$ term at $\alpha=0$. & \textbf{(1)}: Larger logarithmic transient; at fixed $L_0,L_1,R,\Delta$, it grows with $\log(1/\varepsilon)$. Needs ball projection. \\
+\midrule
+\textbf{(3)} \citep{rgscExactRepository}, Generalized\allowbreak Accelerated\allowbreak Convex & $\mathcal{O}\!\left(\begin{gathered}1+\sqrt{L_0R^2/\varepsilon}\\ +\bigl(1+(L_1R)^{2/3}\bigr)\log(1+\Delta/\varepsilon)\end{gathered}\right)$ exact-gradient calls, $\varepsilon<\Delta$. Special case: $\alpha=0$, Hessian-form class. & \textbf{(1)}: Scope extends exact gradients to relative errors, allowing biased, history-dependent replies. & \textbf{(1)}: At $\alpha=0$, worse large-$L_1R$ transient: $L_1R$ instead of $(L_1R)^{2/3}$, with different logarithms. \\
+\midrule
+\textbf{(4)} \citep{rgscVasin2026v1}, Remark~3.1, convex guarantee & $\mathcal{O}\!\left(1+\sqrt{\frac{L_0R^2}{(1-\alpha)\varepsilon}}+\frac{\alpha^2L_0R^2}{(1-\alpha)\varepsilon}\right)$ relative-gradient calls. Special case: $L_1=0$, $\alpha<1$. & \textbf{(1)}: Scope permits unbounded curvature with polynomial $L_1R$ dependence. At $L_1=0$, matches the polynomial accuracy terms for $\alpha\le1/100$. & \textbf{(1)}: Requires $\alpha\le1/100$; adds $\ell$ at $L_1=0$ and needs $\Delta$ in addition. \\
+\midrule
+\textbf{(5)} Normalized GD \citep{rgscKovalev2026v2}, Thm.~3.1 & $\mathcal{O}(1+L_1^2+L_0/\varepsilon)$ direction replies; best-iterate guarantee. Finite-dimensional setting, $R=\|x_0-x_\star\|$, $\hat\beta=R$, with sufficient tolerance
+$\delta\le c\min\!\left\{\frac{1}{RL_1},\frac{\sqrt{\varepsilon/L_0}}{R},\frac{1}{1+L_1+\sqrt{L_0/\varepsilon}}\right\}$. & \textbf{(1)}: Fixed relative-error tolerance and last-iterate accuracy. Rates are not comparable: \textbf{(5)} requires direction tolerance shrinking with $\varepsilon$. & \textbf{(1)}: Needs gradient magnitudes and $\Delta$; \textbf{(5)} uses directions alone. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+L_0R^2/\varepsilon+L_1R+\Delta/(L_0R^2))$. Hessian-form class: twice differentiable $f$ with $\|\nabla^2f(x)\|\le L_0+L_1\|\nabla f(x)\|$. In \textbf{(5)}, $\|\tilde g\|=1$, $\|\tilde g-\nabla f/\|\nabla f\|\|\le\delta$; $c>0$ is a sufficiently small universal constant, and $1/L_1=+\infty$ when $L_1=0$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

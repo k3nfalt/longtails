@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Heavy-Tailed Two-Point Zeroth-Order Optimization}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$, with a lower bound $\ell\in\mathbb{R}$ and given starting point $x^0$ satisfying $f(x^0)-\ell\leq\Delta$, where $\Delta\geq0$. The oracle returns two scalar values $F(x,\xi)$ and $F(y,\xi)$ using a shared sample $\xi\sim\nu$, with independent samples across calls. Each sample function $F(\cdot,\xi)$ has an $L$-Lipschitz gradient, where $L>0$; these gradients are unbiased for $\nabla f$ and have centered $p$th moments bounded by $\sigma^p$, where $1<p\leq2$ and $\sigma\geq0$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, with expectation over sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+where $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives $d$, the measurable sample space $\Omega$, $L$, $\Delta$, $\sigma$, $p$, $\varepsilon$, and $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Objective and initial gap]
+The function $f$ is differentiable everywhere. There exists $\ell\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f(x)&\geq\ell &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-\ell&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Sample smoothness]
+There exist a probability measure $\nu$ on $\Omega$ and jointly measurable maps
+\[
+F:\mathbb{R}^d\times\Omega\to\mathbb{R},
+\qquad
+G:\mathbb{R}^d\times\Omega\to\mathbb{R}^d.
+\]
+For every $\omega\in\Omega$, the function $F(\cdot,\omega)$ is differentiable everywhere, and for every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\nabla_x F(x,\omega)&=G(x,\omega),\\
+\|G(x,\omega)-G(y,\omega)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased gradients and heavy-tailed noise]
+For every $x\in\mathbb{R}^d$, the map $G(x,\cdot)$ is Bochner integrable under $\nu$, and $\|G(x,\cdot)-\nabla f(x)\|^p$ is integrable under $\nu$. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[G(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|G(x,\xi)-\nabla f(x)\|^p\bigr]&\leq\sigma^p.
+\end{aligned}
+\]
+\end{assumption}
+
+At call $k\geq0$, the algorithm queries any pair $(x_k,y_k)\in\mathbb{R}^d\times\mathbb{R}^d$ and receives
+\[
+\bigl(F(x_k,\xi_k),F(y_k,\xi_k)\bigr).
+\]
+The sample variables $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. They are independent of the algorithm's randomness. Thus both values in a reply use the same sample, while distinct calls use independent samples. One oracle call returns this pair of scalar values; the budget counts such paired calls.
+
+After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable, its gradient norm must be integrable, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the samples and the independent algorithm randomness.
+\end{document}

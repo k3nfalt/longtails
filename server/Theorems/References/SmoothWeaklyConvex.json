@@ -1,0 +1,93 @@
+{
+  "setup": "LongTails.Setups.SmoothWeaklyConvex",
+  "searched_at": "2026-10-28T12:20:39.855055+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{32 \\cdot L \\cdot \\left(\\frac{\\rho}{L}\\right)^{\\frac{3}{20}} \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + \\left\\lceil 13 \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)^{\\frac{4}{5}} \\right\\rceil_{+} + 3",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothWeaklyConvex.spec.Params → ℕ",
+        "value": "fun p => ⌈32 * p.L * (p.ρ / p.L) ^ (3 / 20) * p.Δ / p.ε ^ 2⌉₊ + ⌈13 * (p.L * p.Δ / p.ε ^ 2) ^ (4 / 5)⌉₊ + 3"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{32 \\cdot L \\cdot \\left(\\frac{\\rho}{L}\\right)^{\\frac{3}{20}} \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + \\left\\lceil 13 \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)^{\\frac{4}{5}} \\right\\rceil_{+} + 3",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothWeaklyConvex.spec.Params → ℕ",
+          "value": "fun p => ⌈32 * p.L * (p.ρ / p.L) ^ (3 / 20) * p.Δ / p.ε ^ 2⌉₊ + ⌈13 * (p.L * p.Δ / p.ε ^ 2) ^ (4 / 5)⌉₊ + 3"
+        }
+      ],
+      "module": "LongTails.Theorems.WeaklyConvexSilver",
+      "namespace": "LongTails.Setups.SmoothWeaklyConvex",
+      "setup": "LongTails.Setups.SmoothWeaklyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothWeaklyConvex.spec OracleTemplate.WeaklyConvexSilverGd.budget",
+      "theorem": "OracleTemplate.WeaklyConvexSilverGd.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.WeaklyConvexSilver",
+      "theorem": "OracleTemplate.WeaklyConvexSilverGd.result",
+      "references": "- Guanghui Lan and Yu Yang. [Accelerated Stochastic Algorithms for Nonconvex Finite-sum and Multi-block Optimization](https://arxiv.org/pdf/1805.05411v5). 2019 (preprint 2018; version 5 consulted). Complexity: $O\\!\\left(1+\\sqrt{L/\\mu}\\,(1+\\mu\\Delta/\\varepsilon^2)\\log(2+L/\\mu)\\right)$ fixed-budget exact-gradient calls, including initialization, for single-component unconstrained RapGrad to obtain $\\mathbb E\\|\\nabla f(x)\\|^2\\le\\varepsilon^2$. Here $\\mu=\\min\\{L,\\max\\{\\rho,\\varepsilon^2/\\Delta\\}\\}$ is a positive weak-convexity upper bound when $\\Delta>0$; $\\Delta=0$ requires only returning $x_0$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained, globally L-smooth, rho-weakly convex objectives on a real Hilbert space: f(x)+(rho/2)||x||² is convex. Nonconvex objectives are permitted; rho=0 gives the convex subcase. L>0 and rho>=0.",
+        "evidence": "LongTails/Setups/SmoothWeaklyConvex.lean: Params; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every reply is the exact gradient at the queried point, for every history and oracle seed. No function values or noisy gradients are supplied.",
+        "evidence": "LongTails/Setups/SmoothWeaklyConvex.lean: spec.admissible, HasGradientAt requirement; spec.Query and spec.Reply."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary complete real inner-product space. Public information includes L, rho, Delta, epsilon and x0, with Delta>=0 and epsilon>0. A global lower bound exists with f(x0)-lower<=Delta; neither the lower bound nor f is public. Allowed algorithms use positive, predetermined scalar gradient steps and retain the queried iterate with smallest observed gradient norm.",
+        "evidence": "LongTails/Setups/SmoothWeaklyConvex.lean: Params; spec.Public; spec.publicInput; spec.valid; spec.admissible; gdFamily; spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The output must satisfy E[||gradient f(output)||²]<=epsilon². It must be measurable, and its squared gradient norm must be integrable. gdFamily requires outputting the retained best queried iterate.",
+        "evidence": "LongTails/Setups/SmoothWeaklyConvex.lean: spec.successful; gdFamily."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is an expectation over the product of algorithm-seed and oracle-seed laws, under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/SmoothWeaklyConvex.lean: spec.successful; LongTails/Template.lean: Convergence; executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth weakly convex stationarity with exact gradients and an initial objective-gap bound is an established optimization formulation. The setup additionally restricts admissible algorithms to predetermined positive-step gradient descent."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.WeaklyConvexSilverGd.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.WeaklyConvexSilver",
+          "theorem": "OracleTemplate.WeaklyConvexSilverGd.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

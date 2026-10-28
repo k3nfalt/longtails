@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Smooth weakly convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothWeaklyConvex.lean}{SmoothWeaklyConvex}.}\label{tab:SmoothWeaklyConvex}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $f$ has an $L$-Lipschitz gradient, $f+(\rho/2)\|\cdot\|^2$ is convex, and $f(x_0)-\inf f\leq\Delta$, with $L,\varepsilon>0$ and $\rho,\Delta\geq0$. Access is to exact gradients. The setup requires positive predetermined GD steps and the best-gradient queried iterate. The deterministic output satisfies $\|\nabla f(x_{\mathrm{out}})\|\leq\varepsilon$, hence the setup's expected squared-gradient target.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/WeaklyConvexSilver.lean}{Weakly\allowbreak Convex\allowbreak Silver} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/WeaklyConvexSilver.md}{(review)}
+& $\mathcal{O}\!\left(1+(\rho/L)^{3/20}T+T^{4/5}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Constant-step GD, $h=1/L$ \citep[Eq.~(12)]{swcRotaru2026v2}
+& $\mathcal{O}(1+L\Delta/\varepsilon^2)$
+& \textbf{(1)}: Method-specific speedup factor $\min\{(L/\rho)^{3/20},T^{1/5}\}$ for $0<\rho\ll L$, $T\gg1$; at $\rho=0$, $\mathcal{O}(1+T^{4/5})$ instead of $\mathcal{O}(1+T)$.
+& \textbf{(1)} needs $\rho,T$ for scheduling. Large constants: savings require roughly $\rho/L\lesssim10^{-8}$ and $T\gtrsim4\cdot10^5$ (not sufficient jointly). For $\rho>L$, its curvature term exceeds $T$. \\
+\midrule
+\textbf{(3)} Almost-convex-AGD \citep[Lemma~3.1]{swcCarmon2017v2}\newline Derived bound; $\mathbb{R}^d$, $0\leq\rho\leq L$, $T\geq1$
+& $\mathcal{O}\!\left(\left(\dfrac{\sqrt{L\rho}\,\Delta}{\varepsilon^2}+\dfrac{\sqrt{L\Delta}}{\varepsilon}\right)\log(1+T)\right)$\newline Choose $\gamma=\max\{\rho,\varepsilon^2/\Delta\}$. Includes inner gradient calls and stopping checks.
+& \textbf{(1)}: Predetermined GD analysis; \textbf{(3)} uses momentum and gradient-solved regularized subproblems. Same gradient oracle; no established problem-class improvement.
+& \textbf{(1)} has term ratios $(L/\rho)^{7/20}/\log(1+T)$ ($\rho>0$) and $T^{3/10}/\log(1+T)$; each loses when its ratio grows. Fixed budget replaces gradient-based stopping. \\
+\midrule
+\textbf{(4)} Long-step GD \citep[Theorem~1]{swcGrimmer2024v4}\newline Special case: $\mathbb{R}^d$, $\rho=0$, minimizer exists
+& $\mathcal{O}\!\left(1+(L\Delta/\varepsilon^2)^{\log_{1+\sqrt2}2}\right)$
+& \textbf{(1)}: Scope extends to $\rho>0$ and bounded-below functions without an attained minimum.
+& \textbf{(1)}: On the convex overlap, $T^{4/5}$ instead of $T^{0.7864\ldots}$; best queried iterate instead of last iterate. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L$: gradient Lipschitz constant; $\rho$: weak-convexity modulus; $\Delta$: initial objective-gap bound; $\varepsilon$: gradient-norm accuracy; $T=L\Delta/\varepsilon^2$; GD: gradient descent; AGD: accelerated gradient descent. All costs count exact gradient calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

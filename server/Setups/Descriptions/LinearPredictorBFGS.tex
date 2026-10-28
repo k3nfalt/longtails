@@ -1,0 +1,86 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{BFGS for Linear Predictors}
+We consider BFGS for minimizing $f(x)=h(Ax)$ on $\mathbb{R}^d$, where $A:\mathbb{R}^d\to\mathbb{R}^m$ is linear and $h:\mathbb{R}^m\to\mathbb{R}$ is convex with Lipschitz gradient. A given starting point $x^0$ lies within distance $R\geq0$ of a global minimizer $x^\star$, and the objective gap controls squared prediction distance on the initial sublevel set. The oracle returns a step length and the exact gradient at the resulting point, satisfying Armijo--Wolfe conditions for descent directions. For $\varepsilon>0$, the goal is a last iterate $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the oracle's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+Here $d,m\in\mathbb{N}_0$, both spaces carry their Euclidean inner products and norms, and $\|A\|_{\mathrm{op}}$ denotes the induced operator norm. The parameters satisfy
+\[
+0<\mu\leq L_h,\qquad L>0,\qquad
+0<c_1<c_2<1,\qquad R\geq0,\qquad\varepsilon>0.
+\]
+The algorithm receives only $d,m,x^0,L$; the parameters $L_h,\mu,c_1,c_2,R,\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+The function $h$ is differentiable everywhere, and for every $z,w\in\mathbb{R}^m$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+h((1-t)z+tw)&\leq(1-t)h(z)+t h(w),\\
+\|\nabla h(z)-\nabla h(w)\|&\leq L_h\|z-w\|.
+\end{aligned}
+\]
+The linear map satisfies
+\[
+L_h\|A\|_{\mathrm{op}}^2\leq L.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and prediction growth]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x)\qquad\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+For every $x\in\mathbb{R}^d$ with $f(x)\leq f(x^0)$,
+\[
+\frac{\mu}{2}\|Ax-Ax^\star\|^2
+\leq f(x)-f(x^\star).
+\]
+\end{assumption}
+
+\begin{assumption}[Armijo--Wolfe oracle]
+A query is any pair $(x,v)\in\mathbb{R}^d\times\mathbb{R}^d$. The oracle returns $(\alpha,g)\in\mathbb{R}\times\mathbb{R}^d$ with
+\[
+g=\nabla f(x+\alpha v).
+\]
+Whenever $\langle\nabla f(x),v\rangle<0$, the reply also satisfies
+\[
+\begin{aligned}
+\alpha&>0,\\
+f(x+\alpha v)&\leq f(x)+c_1\alpha\langle\nabla f(x),v\rangle,\\
+\langle g,v\rangle&\geq c_2\langle\nabla f(x),v\rangle.
+\end{aligned}
+\]
+These conditions hold for every query, every prior query--reply history, and every realization of the oracle randomness. Replies may depend on the history and may be dependent across calls.
+\end{assumption}
+
+The task is algorithm-specific: we analyze BFGS with a scalar initial Hessian approximation. The algorithm chooses $c>0$ using only its available inputs and initializes $B_0=cI_d$ at the given point $x^0$. One initial query $(x^0,0)$ supplies $g_0=\nabla f(x^0)$; its step-length reply is discarded. For $k\geq0$, the method queries $(x^k,v_k)$, receives $(\alpha_k,g_{k+1})$, and updates
+\[
+\begin{aligned}
+v_k&=-B_k^{-1}g_k,\\
+s_k&=\alpha_k v_k,\qquad x^{k+1}=x^k+s_k,\\
+y_k&=g_{k+1}-g_k,\\
+B_{k+1}&=B_k
+-\frac{(B_ks_k)(B_ks_k)^{\mathsf T}}{s_k^{\mathsf T}B_ks_k}
++\frac{y_ky_k^{\mathsf T}}{y_k^{\mathsf T}s_k}.
+\end{aligned}
+\]
+To define the recurrence also in singular cases, a scalar reciprocal at zero is taken to be zero, and the inverse of a singular matrix is the zero matrix.
+
+After the initial query and $K\in\mathbb{N}_0$ updates, the output is the last iterate $\bar{x}=x^K$, using $K+1$ oracle calls in total. With zero calls, the output is $x^0$. The required accuracy is
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

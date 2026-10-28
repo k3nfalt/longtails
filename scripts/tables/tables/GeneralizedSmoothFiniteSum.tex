@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Generalized-smooth finite sums: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothFiniteSum.lean}{GeneralizedSmoothFiniteSum}.}\label{tab:GeneralizedSmoothFiniteSum}
+\parbox{\linewidth}{\footnotesize
+On a real Hilbert space, $F=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, with convex $f_i$ and continuous gradients satisfying
+$\|\nabla f_i(x)-\nabla f_i(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f_i(z)\|)\|x-y\|$.
+Here $L_0,R,\Delta,\varepsilon>0$ and $L_1,G\ge0$; some minimizer $x^\star$ satisfies
+$\|x_0-x^\star\|\le R$, $F(x_0)-F(x^\star)\le\Delta$, and $n^{-1}\sum_i\|\nabla f_i(x^\star)\|\le G$.
+Exact component value--gradient queries are available. The target is a measurable returned point with integrable gap and $\int(F(\mathrm{out}(\omega))-F(x^\star))\,dP(\omega)\le\varepsilon$, where $P$ is the algorithm's probability law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LocalFiniteSumAcceleration.lean}{Local\allowbreak Finite\allowbreak Sum\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LocalFiniteSumAcceleration.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&n(1+L_1R)\ell^2\\[-2pt]&{}+\sqrt{n(L_0+L_1G)R^2/\varepsilon}\,\ell\end{aligned}\right)$ component value--gradient calls, including trials and selection.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Varag \citep[Thm.~1]{gsfsLanLiZhou2019}. Derived bound on $B(x_0,R)$; finite-dimensional overlap.
+& $\mathcal{O}\!\left(\begin{aligned}&n\log(1+n)\\[-2pt]&{}+e^{L_1R}\sqrt{n(L_0+L_1G)R^2/\varepsilon}\end{aligned}\right)$ component gradients; includes $n$ initialization queries. Ball projection is closed-form.
+& \textbf{(1)}: $e^{L_1R}$ becomes $\ell$ in the accuracy term. Total gain when $e^{L_1R}\gg\ell$ and $e^{L_1R}\sqrt{T/n}\gg(1+L_1R)\ell^2$.
+For $T=n(L_1R)^2$, $L_1R\ge1$: $\mathcal{O}(n\log(1+n)+nL_1R e^{L_1R})$ becomes $\mathcal{O}(nL_1R\ell^2)$.
+& \textbf{(1)}: for $L_1R=\mathcal{O}(1)$, pays $\ell$ on the accuracy term and $\ell^2$ versus $\log(1+n)$ on the $n$ term; additionally needs values, $G,\Delta$. \\
+\midrule
+\textbf{(3)} $(L_0,L_1)$-SGD \citep[Thm.~7.2]{gsfsGorbunov2024v2}. Special case: $G=0$ on $\mathbb{R}^d$.
+& $\mathcal{O}(1+L_0R^2/\varepsilon)$ component gradients for $\min_{k\le N}\mathbb{E}[\min\{\tau,F(x_k)-F(x^\star)\}]\le\varepsilon$; informative only for $\varepsilon<\tau$.
+& \textbf{(1)}: untruncated expected returned gap; permits $G>0$. At $G=0$, cheaper even for this weaker criterion when $L_0R^2/\varepsilon\gg n(1+L_1R)^2\ell^4$, with gain at least of order $\sqrt{L_0R^2/(n\varepsilon)}/\ell^2$.
+& \textbf{(1)}: needs component values and $\Delta$ in addition on $G=0$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+\Delta/\varepsilon)$; $T=(L_0+L_1G)R^2/\varepsilon$; $[x,y]$ is the line segment; $\tau=\nu L_0/(4nL_1^2)$, where $\nu=e^{-\nu}>0$, with $\tau=+\infty$ when $L_1=0$; $N$ is the number of SGD iterations. $\mathbb{E}$ denotes expectation over the sampled component indices; $\gg$ denotes asymptotic domination.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

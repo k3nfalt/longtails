@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
+  "searched_at": "2026-10-28T12:13:05.207813+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 8 \\cdot \\left(33 \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)^{20} \\cdot \\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{5}{8}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SharpRelativeErrorSmoothConvex.spec.Params → ℕ",
+        "value": "fun p => ⌈8 * (33 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε))) ^ 20 * (2 + p.L * p.R ^ 2 / p.ε) ^ (5 / 8)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 8 \\cdot \\left(33 \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)^{20} \\cdot \\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{5}{8}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SharpRelativeErrorSmoothConvex.spec.Params → ℕ",
+          "value": "fun p => ⌈8 * (33 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε))) ^ 20 * (2 + p.L * p.R ^ 2 / p.ε) ^ (5 / 8)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex",
+      "namespace": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
+      "setup": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SharpRelativeErrorSmoothConvex.spec\n  LongTails.Theorems.PolylogPrecisionRelativeErrorConvex.budget",
+      "theorem": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex",
+      "theorem": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on a real Hilbert space. The objective satisfies the global quadratic upper bound with L > 0. A minimizer xstar exists with ‖x0 − xstar‖ ≤ R.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.admissible; LongTails/Setups/SmoothAndConvex.lean: Public."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "inexact_gradient",
+        "details": "A query x returns only a vector g satisfying ‖g − ∇f(x)‖ ≤ α‖∇f(x)‖ for every history and seed. No function values, unbiasedness, or independence are assumed.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: Oracle.answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "relative_error",
+        "details": "The pointwise relative error may be adversarial and history dependent. It satisfies 0 ≤ α < 1 and α ≤ 1/[100(33(1 + log(2 + LR²/ε)))¹²].",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.valid and spec.admissible; LongTails/Setups/SharpRelativeErrorSmoothConvex.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space, potentially infinite dimensional. E, L, x0, α, R, and ε are public; the objective is hidden. R ≥ 0 and ε > 0.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: Public; LongTails/Setups/RelativeErrorSmoothConvex.lean: Public, spec.Params, spec.publicInput, spec.Instance, spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a single point x with f(x) − f(xstar) ≤ ε for a global minimizer xstar.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law, using a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/RelativeErrorSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth convex minimization uses a standard relative gradient-error model, but imposes an unusual accuracy-dependent inverse-logarithmic error threshold, with arbitrary history dependence and an almost-sure guarantee in a general Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex",
+          "theorem": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Composite Minimization with Gap Smoothness}
+We consider minimizing $F=f+\psi$ over a convex set $Q$ in a real Hilbert space $E$, where $f,\psi:E\to\mathbb{R}$, $f$ is differentiable and convex, and $\psi$ is convex on $Q$. A local quadratic upper model for $f$ depends on the objective gap to a minimizer $x^\star\in Q$. A given feasible starting point has bounded distance and objective gap to $x^\star$. The oracle returns exact gradients and proximal minimizers. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in Q} F(x),
+\qquad F(x)=f(x)+\psi(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, the starting point $x^0\in E$, and the parameters
+\[
+H_0,H_1\geq 0,
+\qquad R,\Delta,\varepsilon>0.
+\]
+
+Our assumptions:
+\begin{assumption}[Convexity and differentiability]
+The function $f$ is convex and Fr\'echet differentiable on $E$. The set $Q\subseteq E$ is convex, and $\psi$ is convex on $Q$.
+\end{assumption}
+
+\begin{assumption}[Minimizer and initialization]
+There exists $x^\star\in Q$ such that $x^0\in Q$ and
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Gap-dependent upper model]
+For every $x\in Q$ and $y\in E$ satisfying $\sqrt{H_1}\|y-x\|\leq 1$,
+\[
+\begin{aligned}
+f(y)\leq {}&f(x)+\langle\nabla f(x),y-x\rangle\\
+&+\bigl(H_0+H_1(F(x)-F(x^\star))\bigr)\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact proximal access]
+There is a map $\mathcal{P}:\mathbb{R}\times E\times E\to E$ such that, for every $a>0$ and $z,v\in E$,
+\[
+\mathcal{P}(a,z,v)\in
+\operatorname*{arg\,min}_{u\in Q}
+\left\{\frac{\|u-z\|^2}{2a}
++\langle v,u-z\rangle+\psi(u)\right\}.
+\]
+\end{assumption}
+
+The oracle returns $\nabla f(x)$ at $x$. Gradient queries may use any $x\in E$. A proximal query $(a,z,v)\in\mathbb{R}\times E\times E$ returns $\mathcal{P}(a,z,v)$, with the minimization property above required for positive $a$. Gradient and proximal calls count toward a single total oracle-call budget.
+
+After the allotted calls, the output must satisfy
+\[
+\bar{x}\in Q,
+\qquad F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

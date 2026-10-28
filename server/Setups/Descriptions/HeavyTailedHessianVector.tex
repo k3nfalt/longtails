@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Heavy-Tailed Second-Order Stationarity}
+We consider minimizing a twice differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$. Its gradient and Hessian are Lipschitz with constants $L>0$ and $\rho>0$, respectively, and a given point $x^0$ has objective gap at most $\Delta\geq0$ above a global lower bound. The oracle returns unbiased gradient or Hessian-vector estimates using independent samples, with bounded error moments of order $p\in(1,2]$, allowing heavy-tailed noise. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying both $\|\nabla f(\bar{x})\|\leq\varepsilon$ and $\langle v,\nabla^2 f(\bar{x})v\rangle\geq-\sqrt{\rho\varepsilon}\|v\|^2$ for every $v\in\mathbb{R}^d$, with probability at least $2/3$. Here the norm and inner product are Euclidean.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+We use $\|\cdot\|_{\mathrm{op}}$ for the induced operator norm on linear maps from $\mathbb{R}^d$ to itself. The algorithm receives $d$, the measurable sample space $\Omega$, $L$, $\rho$, the noise bounds $\sigma_g,\sigma_h\geq0$, $p$, $\Delta$, $\varepsilon$, and $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Gradient and Hessian regularity]
+The function $f$ is differentiable everywhere, its gradient is differentiable everywhere, and, for every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}&\leq\rho\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Lower bound and initial gap]
+There exists $m\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f(x)&\geq m &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-m&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased oracles with bounded moments]
+There is a probability measure $\nu$ on $\Omega$ and jointly measurable maps
+\[
+\begin{aligned}
+g &: \mathbb{R}^d\times\Omega\to\mathbb{R}^d,\\
+H &: \mathbb{R}^d\times\Omega\to\mathcal{L}(\mathbb{R}^d,\mathbb{R}^d),
+\end{aligned}
+\]
+where $\mathcal{L}(\mathbb{R}^d,\mathbb{R}^d)$ is the space of linear operators equipped with its operator norm. For every $x,v\in\mathbb{R}^d$, the random vectors $g(x,\xi)$ and $H(x,\xi)v$, with $\xi\sim\nu$, are Bochner integrable and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}[H(x,\xi)v]&=\nabla^2 f(x)v.
+\end{aligned}
+\]
+Their error moments are integrable and obey
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^p\bigr]
+&\leq\sigma_g^p,\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|H(x,\xi)v-\nabla^2 f(x)v\|^p\bigr]
+&\leq\sigma_h^p\|v\|^p.
+\end{aligned}
+\]
+The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. They are independent of the algorithm's randomness.
+\end{assumption}
+
+At call $k$, the algorithm may query any $x\in\mathbb{R}^d$ for the vector $g(x,\xi_k)$, or any pair $x,v\in\mathbb{R}^d$ for the vector $H(x,\xi_k)v$. Each call returns one of these two vectors and uses the next sample in the same sequence. Both query types count toward a single total oracle-call budget.
+
+After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable and satisfy
+\[
+P\!\left(
+\begin{gathered}
+\|\nabla f(\bar{x})\|\leq\varepsilon,\\
+\langle v,\nabla^2 f(\bar{x})v\rangle
+\geq-\sqrt{\rho\varepsilon}\|v\|^2
+\quad\text{for every }v\in\mathbb{R}^d
+\end{gathered}
+\right)\geq\frac{2}{3},
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

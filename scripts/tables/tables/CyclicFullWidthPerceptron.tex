@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Cyclic full-width Perceptron: comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CyclicFullWidthPerceptron.lean}{CyclicFullWidthPerceptron}.}\label{tab:CyclicFullWidthPerceptron}
+\parbox{\linewidth}{\footnotesize Signed data in $\mathbb R^{d+1}$ are $q_0=(1,0)$ and $q_i=(-(1+\nu_i),-\mu u_i)$, $1\le i\le N$, with $N\ge1$, $\|u_i\|\le1$, and a unit $w$ satisfying $\langle w,u_i\rangle\ge\kappa$. Parameters obey $0<\kappa\le1$, $0<\mu\le\kappa^4/2^{20}$, and $0\le\nu_i\le\nu\le\kappa^{12}\mu^2/2^{56}$. The exact per-example oracle returns $v^\top Wq_i$ and its parameter gradient. The setup requires cyclic, constant-positive-step mistake updates from $W=I,v=0$, with the current parameters as output; \textbf{(1)} uses $\eta=\kappa^6/2^{28}$. The target is deterministic strict separation, $v^\top Wq_i>0$ for every $i$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CyclicFullWidthPerceptronAcceleration.lean}{Cyclic\allowbreak Full\allowbreak Width\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CyclicFullWidthPerceptronAcceleration.md}{(review)}
+& $\mathcal O((N+1)/\kappa^4)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Read then solve LP; derived bound \citep{cfwpOracleSource}
+& $\mathcal O(N+1)$ calls; recover each $q_i$ at $W=I,v=0$, then solve an offline LP. Applies to all separable data, outside the required update family.
+& \textbf{(1)}: No established improvement.
+& \textbf{(1)}: $\kappa^{-4}$ worse call bound; needs $\kappa$ and the slab. Uses $\mathcal O(d^2)$ arithmetic per update; \textbf{(2)} incurs offline LP arithmetic. \\
+\midrule
+\textbf{(3)} Rescaled linear Perceptron; derived bound \citep{cfwpNovikoff1963}
+& $\mathcal O((N+1)/\kappa^2)$ calls on $(q_{i,0},q_i'/\mu)$, including a certifying pass. Same oracle; outside the required update family.
+& \textbf{(1)}: Adaptivity: updates and budget need no $\mu$; \textbf{(3)} needs $\mu$ for rescaling.
+& \textbf{(1)}: $\kappa^{-2}$ worse call bound; needs $\kappa$ and the slab. \textbf{(3)} certifies separation without $\kappa$ and converges on arbitrary separable data. \\
+\midrule
+\textbf{(4)} Unrescaled linear Perceptron \citep{cfwpNovikoff1963,cfwpLinearComparison}
+& Derived cyclic bound: $\mathcal O((N+1)/(\mu^2\kappa^2))$. Any constant step from zero, any order: $>1/(2\mu^2)$ calls on the target data.
+& \textbf{(1)}: Rate gain if $(N+1)\lceil256/\kappa^4\rceil<1/(2\mu^2)$. Fixed $\kappa$, $\mu=\kappa^4/[2^{20}(N+1)]$: $\mathcal O(N)$ versus $\Omega(N^2)$ calls. Gain is confined to unrescaled updates.
+& \textbf{(1)} requires the slab and known $\kappa$; \textbf{(4)} converges on arbitrary separable data. \\
+\midrule
+\textbf{(5)} Noisy quadratic Perceptron \citep{tqpTyurin2026v2}, Thm.~5.1
+& $\mathcal O\!\left(\frac{\sqrt D}{m}L_1L_2\left[1+\log\!\left(\frac{\sqrt D}{m}L_1L_2\right)\right]\right)$ calls, success probability $\ge1-\rho$. Two-sample dataset (5), $0<m\le1/10$, nonzero initial alignment; prescribed step and noise tuning.
+& \textbf{(1)}: Method-specific analysis for many conflicting residual directions, noiseless and deterministic. \textbf{(5)} uses tuned noise on two samples outside the slab; rates are not comparable.
+& \textbf{(1)} analyzes full width, not the size-2 convolution of \textbf{(5)}; its slab theorem does not cover \textbf{(5)}'s dataset. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N$: negative-example count; $d$: residual dimension; $\kappa$: latent margin; $\mu$: residual scale; $\nu$: offset bound; $W,v$: layer matrix and head; LP: linear program. Costs count individual example queries, including scans. In \textbf{(5)}, $D,m$ are that paper's dimension and margin parameter (distinct from $d,\mu$ here), $0<\rho<1$ is failure probability, $r=\|\theta_0\|^2/|\langle\theta_0,v_{m,+}\rangle|^2$, $v_{m,+}$ is its unit eigenvector of eigenvalue $m$, $L_1=1+\log(r/\rho)$, and $L_2=1+\log(Dr/m)$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

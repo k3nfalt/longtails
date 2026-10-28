@@ -1,0 +1,51 @@
+\begin{table}[tp]
+\centering
+\caption{Interpolated generalized-smooth finite sums: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/InterpolatedGeneralizedFiniteSum.lean}{InterpolatedGeneralizedFiniteSum}.}\label{tab:InterpolatedGeneralizedFiniteSum}
+\parbox{\linewidth}{\footnotesize
+Let $F=n^{-1}\sum_{i=1}^{n}f_i$ on a finite-dimensional real inner-product space, with $n\ge1$, $L_0,R,\varepsilon>0$ and $L_1\ge0$. Each $f_i$ is convex with continuous gradient and satisfies
+$\|\nabla f_i(x)-\nabla f_i(y)\|\le (L_0+L_1\max_{z\in[x,y]}\|\nabla f_i(z)\|)\|x-y\|$.
+The components share a minimizer $x^\star$ with $\|x_0-x^\star\|\le R$. The oracle returns exact component gradients. The target is $P\{F(\hat x)-F(x^\star)\le\varepsilon\}\ge2/3$; costs count all component-gradient calls.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AcceleratedInterpolatedGeneralizedFiniteSum.lean}{Accelerated\allowbreak Interpolated\allowbreak Generalized\allowbreak Finite\allowbreak Sum} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AcceleratedInterpolatedGeneralizedFiniteSum.md}{(review)}
+& $\mathcal{O}\bigl([n(1+L_1^2R^2)+\sqrt{n\kappa}]\ell\bigr)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} $(L_0,L_1)$-SGD \citep[Thm.~7.2, App.~H.1]{gsfsGorbunov2024v2}; Derived bound
+& $\mathcal{O}(1+\kappa+nL_1^2R^2)$.\newline Uniform random iterate; telescoping and Markov conversion to probability $2/3$.
+& \textbf{(1)}: $\kappa\to\sqrt{n\kappa}\ell$; total gain when $\kappa\ge C\max\{n\ell^2,nL_1^2R^2\ell\}$. Fixed $n,L_1R$: $\mathcal{O}(\varepsilon^{-1})\to\mathcal{O}(\varepsilon^{-1/2}\log(1/\varepsilon))$. Final snapshot replaces random iterate.
+& \textbf{(1)}: extra $\ell$ when $nL_1^2R^2$ dominates; worse at $\kappa\lesssim n$. Updates additionally need $R,\varepsilon$ and ball projection; \textbf{(2)} uses them only for stopping. \\
+\midrule
+\textbf{(3)} \citep[v2, Eq.~(8)]{fvTyurin2026v2}; full gradients
+& $\mathcal{O}\bigl(n[1+\sqrt{\kappa}+L_1^2R^2]\bigr)$.\newline Special-case overlap: $d=1$, twice-differentiable $F$; deterministic accuracy.
+& \textbf{(1)}: up to $\sqrt n/\ell$ cost saving for the shared target when $n\ge C\ell^2$, $\sqrt\kappa\ge C\ell(1+L_1^2R^2)$. Scope: no mean-smoothness assumption in higher dimensions.
+& \textbf{(1)}: probability $2/3$ replaces deterministic accuracy; extra $\ell$ on $nL_1^2R^2$. Rates not comparable in general dimensions without mean smoothness. \\
+\midrule
+\textbf{(4)} \citep[v2, Thm.~4.3]{fvTyurin2026v2}; full gradients
+& $\begin{aligned}\mathcal{O}\bigl(n[&1+\sqrt\kappa\\
+ &+L_1R\log_+\min\{L_1^2\Delta/L_0,\Delta/\varepsilon\}\\
+ &+\log_+(\Delta/(L_0R^2))]\bigr)\end{aligned}$\newline
+Special-case overlap: $d=1$, twice-differentiable $F$; $R=\|x_0-x^\star\|>0$, supplied gap bound $\Delta>0$.
+& \textbf{(1)}: scope extends to higher dimensions without mean smoothness; those rates are not comparable without that assumption.
+& \textbf{(1)}: loses deterministic accuracy; \textbf{(4)} sharpens the curvature term using an initial-gap bound. \\
+\midrule
+\textbf{(5)} VARAG \citep[Thm.~1]{gsfsLanLiZhou2019}
+& $\displaystyle\begin{cases}
+\mathcal{O}(n[1+\log_+\kappa]),&\kappa\le n,\\
+\mathcal{O}(n[1+\log n]+\sqrt{n\kappa}),&\kappa>n.
+\end{cases}$\newline
+Special case $L_1=0$; expected gap converted to probability $2/3$ by Markov.
+& \textbf{(1)}: scope extends to $L_1>0$ with component-gradient access.
+& \textbf{(1)}: at $L_1=0$, extra $\ell$ on $\sqrt{n\kappa}$; no rate improvement. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L_0R^2/\varepsilon$; $\ell=\log(2+n+\kappa+L_1^2R^2)$; $d$ is the dimension; $\Delta\ge F(x_0)-F(x^\star)$; $\log_+t=\max\{0,\log t\}$, with $\log_+0=0$; $C$ denotes a sufficiently large universal constant. A full gradient costs $n$ component queries.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

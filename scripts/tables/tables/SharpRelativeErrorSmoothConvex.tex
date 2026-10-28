@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SharpRelativeErrorSmoothConvex.lean}{SharpRelativeErrorSmoothConvex}.}\label{tab:SharpRelativeErrorSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a real Hilbert space satisfies $f(y)\le f(x)+\langle\nabla f(x),y-x\rangle+\frac L2\|y-x\|^2$, with $L>0$ and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$, $R\ge0$. Every oracle reply obeys $\|g-\nabla f(x)\|\le\alpha\|\nabla f(x)\|$, with $0\le\alpha\le\alpha_\star=[100(33(1+\log(2+LR^2/\varepsilon)))^{12}]^{-1}$. Target: $f(x_{\rm out})-f(x_\star)\le\varepsilon$, $\varepsilon>0$, for every admissible reply sequence. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PolylogPrecisionRelativeErrorConvex.lean}{Polylog\allowbreak Precision\allowbreak Relative\allowbreak Error\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PolylogPrecisionRelativeErrorConvex.md}{(review)}
+& $\mathcal{O}\bigl((2+T)^{5/8}(1+\ell)^{20}\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Regularized acceleration \citep[Theorem~9.3]{pgVasinGasnikov2026v1}
+& $\mathcal{O}\bigl((\sqrt T+\alpha T)(1+\log T)\bigr)$\newline
+$T\ge1$, $0<\alpha\le1/9$; Euclidean space.
+& \textbf{(1)}: At $\alpha=\alpha_\star$, exponent $1-o(1)\to5/8$; smaller stated budget only for $\log T\gtrsim837$. Adaptivity: no knowledge of $\alpha$.
+& \textbf{(1)} requires $\alpha\le\alpha_\star$; much larger constant. At $\alpha=\alpha_\star$, larger budget below the crossover; smaller $\alpha$ delays it. \\
+\midrule
+\textbf{(3)} Damped acceleration \citep{srscDampedRepository}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{T}{1-\alpha}}+\frac{\alpha^2T}{1-\alpha}\right)$\newline
+Every $0\le\alpha<1$.
+& \textbf{(1)}: At $\alpha=\alpha_\star$, $\mathcal{O}(T/\log^{24}T)\to\mathcal{O}(T^{5/8}\log^{20}T)$, with stated-budget crossover $\log T\gtrsim1273$. No knowledge of $\alpha$.
+& \textbf{(1)} requires $\alpha\le\alpha_\star$; much larger constant. Worse roughly when $\alpha\lesssim10^{16}T^{-3/16}(\log T)^{10}$ for large $T$. \\
+\midrule
+\textbf{(4)} Recursive envelopes \citep{srscRecursiveRepository}
+& $\begin{gathered}\mathcal{O}\bigl(\sqrt{2+T}\,\cdot{}\\ (32+\ell)^{32(1+\sqrt\ell)}\bigr)\end{gathered}$\newline
+Requires $\alpha\le e^{-8(1+\sqrt\ell)}/100$.
+& \textbf{(1)}: Scope extends to $e^{-8(1+\sqrt\ell)}/100<\alpha\le\alpha_\star$ when nonempty. On overlap, smaller stated budget for $\log T\lesssim1.8\cdot10^7$.
+& \textbf{(1)} has exponent $5/8$ instead of $1/2+o(1)$; larger budget on overlap for $\log T\gtrsim1.8\cdot10^7$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $\ell=\log(2+T)$; $\log$ is natural. Costs count physical inexact-gradient calls, including all inner solves. $\alpha_\star$ is the threshold above. Crossovers compare explicit budgets before suppressing universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

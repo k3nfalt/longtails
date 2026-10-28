@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzSecondOrder.lean}{HessianLipschitzSecondOrder}.}\label{tab:HessianLipschitzSecondOrder}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^2$, $\|\nabla^2 f(x)-\nabla^2 f(y)\|\le H\|x-y\|$, and $f(x_0)-f(x)\le\Delta$ for every $x$. Here $H,\epsilon>0$, $\Delta\ge0$, $m\ge1$, and $0<\rho<1$. Oracles return exact $(f,\nabla f)$ and full Hessians. The target is $\mathbb P\{\|\nabla f(y)\|\le\epsilon,\ \nabla^2 f(y)\succeq-\sqrt{H\epsilon}I\}\ge1-\rho$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MonotoneHessianSecondOrder.lean}{Monotone\allowbreak Hessian\allowbreak Second\allowbreak Order} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MonotoneHessianSecondOrder.md}{(review)}
+& $\mathcal O\!\left(m+m^{1/3}(1+S)\ell^2\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Cubic regularization \citep{hlsNP2006}, Thm.~1
+& $\mathcal O\!\left(m(1+S)\right)$
+& \textbf{(1)}: cheaper for $S\ge1$, $\ell^2\ll m^{2/3}$. For $d=S=m$, $\rho=1/m$, costs $\mathcal O(m^{4/3}\log^2m)$ versus $\mathcal O(m^2)$.
+& \textbf{(1)}: probabilistic instead of deterministic; $\ell^2$ overhead when $m=\mathcal O(1)$. \\
+\midrule
+\textbf{(3)} Lazy cubic Newton \citep{hlsDCJ2023}, Cor.~3.7
+& $\mathcal O(m+\sqrt m\,S)$; separate minima: gradient $\mathcal O(\epsilon)$, negative curvature $\mathcal O(\sqrt{mH\epsilon})$.
+& \textbf{(1)}: one point satisfies the gradient and curvature targets; removes the $\sqrt m$ curvature inflation in \textbf{(3)}.
+& \textbf{(1)}: probabilistic instead of deterministic; additional dimension- and confidence-dependent logarithms. \\
+\midrule
+\textbf{(4)} Derived bound \citep{hlsDCJ2023}, Thm.~3.1, (15)
+& $\mathcal O\!\left(m^2(1+S)\right)$; reuse period $\lceil m\rceil$, separate minima at tolerances $\epsilon$, $\sqrt{H\epsilon}$.
+& \textbf{(1)}: same-point certificate; for $S\ge1$, $\ell^2\ll m^{2/3}$, lowers cost to $\mathcal O(m+m^{1/3}S\ell^2)$ while strengthening \textbf{(4)}'s output.
+& \textbf{(1)}: probabilistic instead of deterministic. \\
+\midrule
+\textbf{(5)} \citep{hlsABSZ2025v1}, Cor.~2
+& $\mathcal O\!\left(m+m^{1/3}S\log^{18}(2+S)\right)$; $S\ge1$, first-order target only.
+& \textbf{(1)}: adds the second-order certificate with matching polynomial powers; logarithmic overhead becomes $\ell^2$ instead of $\log^{18}(2+S)$, smaller when $\ell^2\ll\log^{18}(2+S)$.
+& \textbf{(1)}: probabilistic instead of deterministic. \\
+\midrule
+\textbf{(6)} NALEN \citep{hlsCLLZ2026v3}, Thm.~4.1
+& $\mathcal O(m+m^{1/3}S)$; first-order target only.
+& \textbf{(1)}: extends the $m^{1/3}S$ polynomial dependence to a same-point second-order certificate.
+& \textbf{(1)}: extra $\ell^2$ overhead; probabilistic instead of deterministic. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d=\dim E$, $S=\Delta\sqrt H/\epsilon^{3/2}$, $\ell=\log\!\left(2+(d+1)m(1+S)/\rho\right)$. Costs are $G+mJ$, where $G$ counts ordinary oracle calls and $J$ counts full-Hessian calls; $m$ is the assigned Hessian cost. First-order target: $\|\nabla f(y)\|\le\epsilon$. Negative curvature: $\max\{0,-\lambda_{\min}(\nabla^2 f)\}$. Separate minima may occur at different iterates.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

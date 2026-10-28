@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Interpolated Generalized Smooth Finite Sums}
+We consider minimizing $f(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a finite-dimensional real inner product space $E$, where $n\geq1$ is an integer. Each component $f_i:E\to\mathbb{R}$ is convex, continuously differentiable, and $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$. The components share a global minimizer $x^\star$, with $\|x^0-x^\star\|\leq R$ for a given $x^0\in E$ and $R>0$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. Given $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $2/3$ over the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $n$, $L_0$, $L_1$, $R$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Component convexity and differentiability]
+Each $f_i$ is differentiable everywhere on $E$ with continuous gradient $\nabla f_i:E\to E$. For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq (1-t)f_i(x)+t f_i(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $M\in\mathbb{R}$, the segment bound
+\[
+\|\nabla f_i(x+\theta(y-x))\|\leq M
+\qquad\text{for every }\theta\in[0,1]
+\]
+implies
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|
+\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Interpolation and initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f_i(x^\star)&\leq f_i(x)
+&&\text{for every }i\in\{1,\ldots,n\},\ x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may select any component $i\in\{1,\ldots,n\}$ and any point $x\in E$, with each call returning its exact component gradient. After the allotted oracle calls, the output must satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)\leq\varepsilon\bigr)
+\geq \frac{2}{3},
+\]
+where $P$ is the law of the algorithm's randomness and $x^\star$ is a fixed common global minimizer.
+\end{document}

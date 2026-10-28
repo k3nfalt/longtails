@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LipschitzJacobianMonotone.lean}{LipschitzJacobianMonotone}.}\label{tab:LipschitzJacobianMonotone}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $X$ is compact and convex, $x_0\in X$, and $\operatorname{diam}(X)\le D$. The operator $F$ is differentiable at every point of $X$, monotone on $X$, and its Jacobian $J$ is $L$-Lipschitz on $X$. Given $L,D,\varepsilon>0$ and integer $m\ge1$, exact values and Jacobians are available separately. The target is $u\in X$ and $n\in N_X(u)$ with $\|F(u)+n\|\le\varepsilon$; \textbf{(1)} guarantees this deterministically. Costs count oracle calls, with known affine-VI solves uncharged.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CachedJacobian.lean}{Cached\allowbreak Jacobian} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CachedJacobian.md}{(review)}
+& $W=\mathcal{O}((m+\sqrt{mQ})\ell)$;\newline $G=\mathcal{O}((1+\sqrt{mQ})\ell)$,\newline $H=\mathcal{O}((1+\sqrt{Q/m})\ell)$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Fresh jets \citep{ljmZhang2026OptimalV1}, Thm.~3.1 ($p=2$)
+& $W=\mathcal{O}(m(1+Q^{2/5}))$ for tangent residual $\le\varepsilon$.
+& \textbf{(1)}: lower cost for $Q^{1/5}\ell^2\ll m\le Q$. At $m=\sqrt Q$, $\mathcal{O}(Q^{3/4}\log Q)$ instead of $\mathcal{O}(Q^{9/10})$ as $Q\to\infty$.
+& \textbf{(1)}: worse accuracy dependence when Jacobians are cheap; at $m=1$, $\mathcal{O}(Q^{1/2}\log Q)$ versus $\mathcal{O}(Q^{2/5})$ as $Q\to\infty$. \\
+\midrule
+\textbf{(3)} Halpern-NPE \citep{ljmChen2026HalpernV1}, Thm.~4.1
+& $W=\mathcal{O}\!\left(m(1+\sqrt Q)\right.$\newline $\left.{}\cdot[1+\log\log(e+Q)]\right)$ for $\|x-P_\eta x\|/\eta\le\varepsilon$.
+& \textbf{(1)}: tangent residual at the output instead of normalized proximal residual. Without a conversion cost, rates are not directly comparable.
+& \\
+\midrule
+\textbf{(4)} VIJI, derived bound \citep{ljmAgafonov2024VIJI}, Thm.~3.2; reuse $J(x_0)$
+& $W=\mathcal{O}(m+Q)$ for gap $\le\varepsilon D$; $G=\mathcal{O}(1+Q^{2/3}+Q)$, $H=1$, Jacobian error $\delta=LD$.
+& \textbf{(1)}: lower cost for the shared gap target when $1\le m\ll Q/\ell^2$, by order $\sqrt{Q/m}/\ell$; additionally certifies last-inner-iterate tangent residual instead of averaged gap.
+& \textbf{(1)}: logarithmic cost overhead when $m\ge Q$. \\
+\midrule
+\textbf{(5)} LEN \citep{ljmChen2025LazyV2}, Thm.~4.1; unconstrained convex--concave saddles only
+& $W=\mathcal{O}\!\left(m+\left(\frac{mLR^3}{\varepsilon D}\right)^{2/3}\right)$ for restricted saddle gap $\le\varepsilon D$; lazy period $m$, globally $L$-Lipschitz $\nabla^2 f$.
+& \textbf{(1)}: scope extends to general monotone VIs on compact convex sets; tangent residual replaces ergodic restricted gap. Setups are not nested; rates are not comparable.
+& \textbf{(1)} needs a compact feasible set; \textbf{(5)} permits unconstrained domains. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $Q=LD^2/\varepsilon$, $\ell=\log(2+mQ)$; $G,H$ count value and Jacobian calls, $W=G+mH$ charges a Jacobian at $m$ value calls, and a full jet at $m+1$. $N_X(u)=\{n:\langle n,z-u\rangle\le0\ \forall z\in X\}$. Gap means $\sup_{z\in X}\langle F(z),u-z\rangle$. $P_\eta=(I+\eta(F+N_X))^{-1}$, with $\eta=\Theta(1/\sqrt{L\varepsilon})$ in \textbf{(3)}. In \textbf{(5)}, $R=\|z_0-z^*\|$ for a saddle point $z^*$; the restricted gap uses radius $3R$. The symbol $\ll$ denotes an asymptotically vanishing ratio.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

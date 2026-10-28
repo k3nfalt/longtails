@@ -2,6 +2,13 @@ import BudgetLatex
 
 open Lean Elab Command Term
 
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (x : ℝ) => Nat.floor (x / 3) + 1)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\left\\lfloor \\frac{x}{3} \\right\\rfloor_{+} + 1" do
+    throwError "Unexpected natural floor budget: {result}"
+
 namespace BudgetLatexTests
 structure Public where
   L : ℝ

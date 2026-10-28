@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.AffineHeavyTailedAdam",
+  "searched_at": "2026-10-28T12:12:27.251798+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(1 + \\left\\lceil \\left(131072 \\cdot \\left(\\sigma 1 + \\frac{\\left(\\sum_{i=0}^{d-1} \\sigma 0\\left(i\\right)\\right)}{\\varepsilon}\\right)\\right)^{\\frac{p}{p - 1}} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\frac{4294967296 \\cdot \\Delta \\cdot \\left(L0 + L1 \\cdot \\varepsilon\\right)}{\\varepsilon^{2}} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.AffineHeavyTailedAdam.spec.Params → ℕ",
+        "value": "fun q =>\n  (1 + ⌈(131072 * (q.σ1 + (∑ i, q.σ0 i) / q.ε)) ^ (q.p / (q.p - 1))⌉₊) *\n    (1 + ⌈4294967296 * q.Δ * (q.L0 + q.L1 * q.ε) / q.ε ^ 2⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(1 + \\left\\lceil \\left(131072 \\cdot \\left(\\sigma 1 + \\frac{\\left(\\sum_{i=0}^{d-1} \\sigma 0\\left(i\\right)\\right)}{\\varepsilon}\\right)\\right)^{\\frac{p}{p - 1}} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\frac{4294967296 \\cdot \\Delta \\cdot \\left(L0 + L1 \\cdot \\varepsilon\\right)}{\\varepsilon^{2}} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.AffineHeavyTailedAdam.spec.Params → ℕ",
+          "value": "fun q =>\n  (1 + ⌈(131072 * (q.σ1 + (∑ i, q.σ0 i) / q.ε)) ^ (q.p / (q.p - 1))⌉₊) *\n    (1 + ⌈4294967296 * q.Δ * (q.L0 + q.L1 * q.ε) / q.ε ^ 2⌉₊)"
+        }
+      ],
+      "module": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails",
+      "namespace": "LongTails.Setups.AffineHeavyTailedAdam",
+      "setup": "LongTails.Setups.AffineHeavyTailedAdam",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AffineHeavyTailedAdam.spec\n  LongTails.Theorems.FixedMemoryAdamAffineHeavyTails.budget",
+      "theorem": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails",
+      "theorem": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable optimization on R^d, permitting nonconvex objectives. The initial objective gap satisfies f(x0) − inf_x f(x) ≤ Δ, with Δ ≥ 0; attainment of the infimum is not required.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: spec.Instance, spec.admissible gradient and initial-gap conditions, spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call returns a full vector g(x, ξ) using a fresh IID sample. The oracle is unbiased: E[g(x, ξ)] = ∇f(x). Coordinates within a sample need not be independent. Oracle cost counts individual samples, including every sample in a minibatch.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: spec.admissible, step; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For L1‖y−x‖∞ ≤ 1, ‖∇f(y)−∇f(x)‖1 ≤ (L0 + L1‖∇f(x)‖1)‖y−x‖∞. Here L0,L1 ≥ 0 and L0+L1 > 0; either coefficient may vanish.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: sumNorm, maxNorm, spec.valid, spec.admissible smoothness condition."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every x and coordinate i, E[|g_i(x,ξ)−∇_i f(x)|^p] ≤ σ0(i)^p + σ1^p|∇_i f(x)|^p, where 1 < p ≤ 2 and σ0(i),σ1 ≥ 0. This is a coordinatewise affine central-moment condition; finite variance is not required when p < 2.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: spec.valid and spec.admissible coordinatewise moment conditions."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Smoothness pairs ℓ∞ displacement with ℓ1 gradient variation; stationarity is measured in ℓ1, although points are represented in Euclidean space.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: sumNorm, maxNorm, spec.admissible, spec.successful."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is R^d for a public natural-number dimension d.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: Point, Params.d; LongTails/Setups/HeavyTailedAdam.lean: OracleTemplate.Adam.Point."
+      },
+      {
+        "label": "other",
+        "details": "All setup parameters are public, including L0, L1, σ0, σ1, p, Δ, ε and x0; the objective and sampling law are hidden. Allowed algorithms use the supplied minibatched, bias-corrected Adam family with fixed configuration, β1,β2 ∈ [0,1), positive stepsize and denominator offset, and positive batch size.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: Params, spec.Public, spec.publicInput, Config, coreStep, spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output X must satisfy E[‖∇f(X)‖1] ≤ ε, with ε > 0. The norm is unsquared. The output must be measurable and its gradient ℓ1 norm integrable. The allowed method saves an iterate selected uniformly by its initialization seed.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: spec.successful, spec.valid, method, coreStep."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee averages over both the algorithm's random seed and the IID oracle sequence, under their product probability law, with a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/AffineHeavyTailedAdam.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines coordinatewise gradient-dependent heavy-tailed noise, local ℓ∞-to-ℓ1 generalized smoothness, and expected ℓ1 stationarity within a restricted Adam family. These are meaningful departures from the classical globally smooth, bounded-variance benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails",
+          "theorem": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

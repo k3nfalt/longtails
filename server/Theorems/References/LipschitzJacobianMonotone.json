@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.LipschitzJacobianMonotone",
+  "searched_at": "2026-10-28T12:14:16.969925+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 100000 \\cdot \\left(1 + \\sqrt{\\frac{m \\cdot L \\cdot D^{2}}{\\varepsilon}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{m \\cdot L \\cdot D^{2}}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.LipschitzJacobianMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈100000 * (1 + √(↑p.m * p.L * p.D ^ 2 / p.ε)) * (1 + Real.log (2 + ↑p.m * p.L * p.D ^ 2 / p.ε))⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 20000 \\cdot \\left(1 + \\sqrt{\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{m \\cdot L \\cdot D^{2}}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.LipschitzJacobianMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈20000 * (1 + √(p.L * p.D ^ 2 / (↑p.m * p.ε))) * (1 + Real.log (2 + ↑p.m * p.L * p.D ^ 2 / p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CachedJacobian",
+      "namespace": "LongTails.Setups.LipschitzJacobianMonotone",
+      "setup": "LongTails.Setups.LipschitzJacobianMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.LipschitzJacobianMonotone.spec LongTails.Theorems.CachedJacobian.budget",
+      "theorem": "LongTails.Theorems.CachedJacobian.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CachedJacobian",
+      "theorem": "LongTails.Theorems.CachedJacobian.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Constrained monotone variational inequality: find an approximate zero of F+N_X. The feasible set X is nonempty, compact and convex, with diameter at most D and x0∈X. F need not be a gradient or arise from a saddle-point objective.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: spec.valid, spec.admissible, spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Two separately counted exact oracles return F(x) and the full Fréchet derivative DF(x). Replies are exact for every query, history and seed. All Params, including X, x0, L, D, ε and m, are public; F is hidden. No stochastic or inexact oracle error is present.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: spec.Public, spec.publicInput, spec.Instance, spec.Reply, spec.admissible; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm; no dimension bound is imposed.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: Params.normedE, Params.innerE, Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "F is differentiable at every point of X, monotone on X, and satisfies ‖DF(x)−DF(y)‖≤L‖x−y‖ on X. No bound on ‖DF(x)‖ is supplied. L,D,ε>0 and the public integer m≥1; m imposes no structural restriction on F.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: Params, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to X exactly.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the residual bound must hold almost surely under the joint algorithm and oracle seed law, within fixed separate oracle budgets.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "The output x must admit n∈N_X(x) with ‖F(x)+n‖≤ε, where N_X(x)={n: ⟨n,z−x⟩≤0 for every z∈X}. This is an unsquared tangent-residual norm criterion.",
+        "evidence": "LongTails/Setups/LipschitzJacobianMonotone.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "A standard smooth monotone variational inequality on a compact convex set, with exact operator/Jacobian access and a normal-cone residual accuracy criterion. Separate oracle accounting does not change the underlying formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CachedJacobian.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CachedJacobian",
+          "theorem": "LongTails.Theorems.CachedJacobian.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

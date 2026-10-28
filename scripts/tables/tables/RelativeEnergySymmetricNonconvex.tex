@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RelativeEnergySymmetricNonconvex.lean}{RelativeEnergySymmetricNonconvex}.}\label{tab:RelativeEnergySymmetricNonconvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space with its Borel structure, $f$ is differentiable, $\nabla f$ is $L$-Lipschitz, and $f(x_0)-\inf f\le\Delta$. The jointly measurable oracle $g(x,\xi)$ has marginally symmetric noise $\zeta_x=g(x,\xi)-\nabla f(x)$ with $\Pr(\|\zeta_x\|>r)\le1/64$ and $\mathbb E[(\|\zeta_x-\zeta_y\|/(r+\|\zeta_x\|+\|\zeta_y\|))^2]\le\kappa^2\|x-y\|^2$. Samples are IID across query pairs, with a shared sample within each pair; no noise moments are assumed. Here $L,\varepsilon>0$ and $r,\kappa,\Delta\ge0$. The target is a measurable output $\widehat x$ with integrable gradient norm and $\int\|\nabla f(\widehat x(\omega))\|\,dP(\omega)\le\varepsilon$, for the execution law $P$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FairRelativeEnergyNonconvex.lean}{Fair\allowbreak Relative\allowbreak Energy\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FairRelativeEnergyNonconvex.md}{(review)}
+& $\mathcal O\!\left((1+\log A)\left[A+\dfrac{\min\{\kappa\varepsilon,L\}(r+\varepsilon)^2\Delta}{\varepsilon^4}\right]\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} NSGD-MVR \citep[Thm.~4.2, v2]{mshFradin2026v2}, $1<p<2$, $q=2$
+& $\mathcal O\!\left(1+\left(\dfrac{\sigma_p}{\varepsilon}\right)^{\!p/(p-1)}+\dfrac{(L+\delta)\Delta}{\varepsilon^2}\right.$\newline
+$\left.{}+\dfrac{\delta\Delta}{\varepsilon^2}\left(\dfrac{\sigma_p}{\varepsilon}\right)^{\!p/[2(p-1)]}\right)$.
+Special case: $\mathbb R^d$, unbiased $p$-moment noise and mean-square similarity $\delta$.
+& \textbf{(1)}: On symmetric overlap, $\sigma_p\gg\varepsilon$, initialization and tracking powers become $2$ and $1$, up to logs. At $p=3/2$, fixed positive $L,\Delta,\delta,\sigma_p$: $\mathcal O(\varepsilon^{-7/2})$ becomes $\mathcal O(\varepsilon^{-3}\log(1/\varepsilon))$. Scope: momentless noise via robust-location coupling.
+& \textbf{(1)} needs exact symmetry; choose $r=\max\{64^{1/p}\sigma_p,\varepsilon\}$, $\kappa=\delta/r$ on the overlap. Fair-root computation is noncomputable and uncounted. \\
+\midrule
+\textbf{(3)} NSGD-MVR \citep[Thm.~4.2, v2]{mshFradin2026v2}, $p=q=2$
+& $\mathcal O\!\left(1+\dfrac{\sigma_2^2+(L+\delta)\Delta}{\varepsilon^2}+\dfrac{\delta\sigma_2\Delta}{\varepsilon^3}\right)$.
+Special case: $\mathbb R^d$, unbiased finite-variance noise and mean-square similarity $\delta$.
+& \textbf{(1)}: Matches polynomial rate on symmetric overlap for $\sigma_2\ge\varepsilon$; extends to noise with undefined means using a central quantile and relative energy.
+& \textbf{(1)} needs symmetry and pays an extra $1+\log A$; overlap: $r=\max\{8\sigma_2,\varepsilon\}$, $\kappa=\delta/r$. Large universal budget constant. \\
+\midrule
+\textbf{(4)} N-SGD \citep[Thm.~1, v2]{resnArmacki2026v2}; derived bound
+& $\mathcal O\!\left(\dfrac{D_\rho^2}{\varepsilon^4}\left[1+\log\!\left(\dfrac{D_\rho}{\varepsilon^2}\right)\right]^2\right)$ fresh calls, $0<\varepsilon\le1$;
+$\Pr(\min_{k\le N}\|\nabla f(x_k)\|\le\varepsilon)\ge1-\rho$.
+Special case: $\mathbb R^d$, symmetric conditional densities uniformly positive near zero; bounded joint clipping or normalization, with admissible $a/\sqrt{t+1}$ steps.
+& \textbf{(1)}: No density condition. Rates are not comparable in $(r,\kappa)$; the density constants in \textbf{(4)} have no established conversion.
+& \textbf{(1)} needs shared-sample pairs and relative-energy regularity; guarantees expectation rather than high probability. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} The relative-energy ratio is zero when its denominator is zero. $A=((r+\varepsilon)^2+L\Delta)/\varepsilon^2$; $\sigma_p^p$ bounds $\mathbb E\|\zeta_x\|^p$; mean-square similarity means $\mathbb E\|\zeta_x-\zeta_y\|^2\le\delta^2\|x-y\|^2$. Costs count individual oracle replies, including batches, paired replies and unused refresh replies. For \textbf{(4)}, $\rho\in(0,1)$ is failure probability, $C$ bounds the nonlinearity $\Psi$, and the density-dependent $\beta_1,\beta_2>0$ satisfy $\langle\mathbb E\Psi(y+\zeta_x),y\rangle\ge\min\{\beta_1\|y\|,\beta_2\|y\|^2\}$; $\beta=\min\{\beta_1,\beta_2\}$, $a=\min\{1,\beta_2/(8C^2),\beta_1/[16C^2(LC+\sqrt{2L\Delta}/2)]\}$, and $D_\rho=1+(\Delta+\log(1/\rho))/(a\beta)+aLC^2/\beta$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

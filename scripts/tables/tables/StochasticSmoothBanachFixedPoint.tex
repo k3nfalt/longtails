@@ -1,0 +1,54 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic fixed points in smooth norms: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticSmoothBanachFixedPoint.lean}{StochasticSmoothBanachFixedPoint}.}\label{tab:StochasticSmoothBanachFixedPoint}
+\parbox{\linewidth}{\footnotesize
+A finite-dimensional real Banach space $E$ with its Borel measurable structure; $C\geq1$, $R,\sigma\geq0$, $\varepsilon>0$. There is a continuous $J:E\to E^*$ with $\|J(x)\|\leq\|x\|$ and $\|x+y\|^2\leq\|x\|^2+2J(x)[y]+C\|y\|^2$. The nonexpansive map $T:E\to E$ has $Tx_\star=x_\star$ and $\|x_0-x_\star\|\leq R$. A jointly measurable oracle $g$ satisfies $\int g(x,\xi)\,dp(\xi)=Tx$ and $\int\|g(x,\xi)-Tx\|^2\,dp(\xi)\leq\sigma^2$, with these integrands integrable. Samples are IID with marginal probability measure $p$ under probability measure $P$. Target: measurable output $Z$ with integrable squared residual and $\int\|TZ-Z\|^2\,dP\leq\varepsilon^2$. The construction uses $R,C,\sigma,\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticSmoothBanachFixedPoint.lean}{Stochastic\allowbreak Smooth\allowbreak Banach\allowbreak Fixed\allowbreak Point} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticSmoothBanachFixedPoint.md}{(review)}
+& $\mathcal{O}\!\left((1+R/\varepsilon+C\sigma^2/\varepsilon^2)\ell^4\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Dual Halpern \citep[Thm.~3]{ssbfpLee2026v1}
+& $\mathcal{O}\!\left(R/\varepsilon+(p-1)R\sigma^2/\varepsilon^3\right)$.
+Whole-space $\ell_p$, $2\leq p<\infty$, $0<\varepsilon\leq R$; expected residual $\leq\varepsilon$.
+& \textbf{(1)}: noise term saves $R/(\varepsilon\ell^4)$; total gain when $R/\varepsilon\gg\ell^4$ and $(p-1)\sigma^2/\varepsilon^2\gg\ell^4$. RMS strengthens expected residual.
+& \textbf{(1)}: loses $\ell^4$ at negligible noise (fixed $p$); excludes $1<p<2$ and $p=\infty$ covered by \textbf{(2)}. \\
+\midrule
+\textbf{(3)} Recursive anchoring \citep[Thm.~5, Cor.~6]{ssbfpDgm2026v1}
+& $\mathcal{O}\!\left(\left[\frac D\varepsilon+\frac{(p-1)D\sigma^2}{\varepsilon^3}\right]\right.$\newline
+$\left.{}\cdot\operatorname{polylog}(D/\varepsilon)[1+\log(1/\delta)]\right)$.
+Invariant compact $\ell_p$ ball, $2\leq p<\infty$, diameter $D$, radial retraction, $\varepsilon\leq D/2$; HP residual.
+& \textbf{(1)}: on whole-space maps preserving that ball, $R\leq D$, fixed $\delta$, noise term saves $D/\varepsilon$ up to logarithms. No invariant compact domain needed.
+& \textbf{(1)} requires whole-space $T$; excludes nonsmooth type-2 norms and $\ell_\infty$. HP conversion costs $\mathcal{O}((1+D/(\varepsilon\sqrt\delta)+C\sigma^2/(\delta\varepsilon^2))\ell_\delta^4)$: polynomial confidence loss. \\
+\midrule
+\textbf{(4)} VR-GHAL \citep[Cor.~1]{ssbfpDiakonikolas2026v1}
+& $\mathcal{O}_{\kappa,\log(1/\delta)}\!\left(\left[1+\frac{(R+\sigma)^2}{\varepsilon^2}+\frac{(R+\sigma)^6}{\varepsilon^5}\right]\right.$\newline
+$\left.{}\cdot\operatorname{polylog}(2+(R+\sigma)/\varepsilon)\right)$.
+Variance-only oracle; quadratically smoothable norm; anytime HP residual.
+& \textbf{(1)}: on smooth native norms, fixed positive remaining parameters and constant confidence, $\varepsilon^{-5}$ becomes $\varepsilon^{-2}$ up to logarithms for the shared probability target.
+& \textbf{(1)} gives no anytime HP guarantee; requires the native norm to be smooth, excluding merely equivalent smoothable norms such as $\ell_\infty$. \\
+\midrule
+\textbf{(5)} VR-GHAL \citep[Cor.~3]{ssbfpDiakonikolas2026v1}
+& $\mathcal{O}_{\kappa,\log(1/\delta)}\!\left(\left[1+\frac{(R+\sigma)^2}{\varepsilon^2}+\frac{(R+\sigma)^4}{\varepsilon}\right]\right.$\newline
+$\left.{}\cdot\operatorname{polylog}(2+(R+\sigma)/\varepsilon)\right)$.
+Samplewise nonexpansive oracle with same-seed queries; quadratically smoothable norm; anytime HP residual.
+& \textbf{(1)}: removes samplewise nonexpansiveness while matching the $\varepsilon^{-2}$ exponent up to logarithms at constant confidence. Other parameter factors are not compared.
+& \textbf{(1)} loses anytime HP accuracy and applicability to merely equivalent smoothable norms, including $\ell_\infty$. \\
+\midrule
+\textbf{(6)} RAIN \citep[Thm.~4.2 and subsequent remark]{ssbfpChenLuo2024}
+& $\mathcal{O}\!\left(1+\frac R\varepsilon[1+\log\ell]+\frac{\sigma^2}{\varepsilon^2}\ell^3\right)$.
+Hilbert special case $C=1$, applied to $I-T$; expected residual $\leq\varepsilon$.
+& \textbf{(1)}: matches known polynomial rate in Hilbert space, up to logarithms.
+& \textbf{(1)} pays extra logarithmic factors. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $R$: initial fixed-point distance bound; $\sigma^2$: oracle variance bound; $C$: squared-norm smoothness ($C=p-1$ in $\ell_p$, $2\leq p<\infty$); $\ell=1+\log(1+R/\varepsilon)$; $D$: invariant-domain diameter; $\ell_\delta=1+\log(1+D/(\varepsilon\sqrt\delta))$; HP: residual at most $\varepsilon$ with probability at least $1-\delta$, $0<\delta<1$; RMS: root mean square. Costs count individual oracle evaluations, including batches and paired queries. $\operatorname{polylog}$ denotes logarithmic factors left unspecified in the cited bounds. The subscript $\kappa,\log(1/\delta)$ retains unspecified smoothability and logarithmic-confidence dependence: $\kappa=Ba^2$ for an equivalent squared-norm smoothness constant $B$ and norm distortion $a$ (native smooth case: $\kappa=C$).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

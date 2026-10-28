@@ -1,0 +1,47 @@
+\begin{table}[tp]
+\centering
+\caption{Affine-moment convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineMomentConvex.lean}{AffineMomentConvex}.}\label{tab:AffineMomentConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a separable real Hilbert space with its Borel measurable structure; globally $L$-Lipschitz gradient and a minimizer $x^\star$ with $\|x_0-x^\star\|\le R$. IID samples have law $\nu$; the jointly measurable oracle is integrable and satisfies $\int g(x,\omega)\,d\nu=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^p\,d\nu\le\sigma_0^p+\sigma^p\|\nabla f(x)\|^p$, with integrable moments. Here $L,R,\varepsilon>0$, $\sigma_0,\sigma\ge0$, $1<p\le2$, and $0<\delta<1$ are supplied parameters. Target: measurable output with $P\{f(\mathrm{out})-f(x^\star)>\varepsilon\}\le\delta$ under the IID execution law $P$. Costs count all individual stochastic-gradient replies. Literature comparisons are on the common finite-dimensional restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecursiveAffineMomentAcceleration.lean}{Recursive\allowbreak Affine\allowbreak Moment\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecursiveAffineMomentAcceleration.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{H}{\delta}\big[(1+\sigma)^q\sqrt T+1+V\big]\right)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AffineMomentAcceleration.lean}{Affine\allowbreak Moment\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AffineMomentAcceleration.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(2^{256q}\ell^{q+1}\left[(1+\sigma)^q(4+T)^{\frac{q}{q+2}}\right.\right.$\par
+$\displaystyle\left.\left.{}+\left(\sigma_0\left(\frac{4}{LR}+\frac R\varepsilon\right)\right)^q\right]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(3)} Clip-SSTM \citep{amcNekrasova2026v1}, Thm.~5.2, Cor.~I.2; finite-moment specialization
+& $\mathcal{O}_p\!\left(B\left[1+\log(B/\delta)\right]\right)$
+& \textbf{(1)}: for fixed $p<2,\delta,\sigma\ge1$ and $V=\mathcal{O}(\sqrt T)$, $T^{q/2}\to T^{1/2+o(1)}$; crossover requires roughly $\log T\gtrsim10^{26}$ (parameter-dependent).\par
+\textbf{(2)}: relative term $\sigma^qT^{q/2}\to(1+\sigma)^qT^{q/(q+2)}$; total gain for large $T$, $\sigma\ge1$, $\sigma_0\ll\sigma\sqrt{L\varepsilon}$, up to logs.
+& \textbf{(1)}, \textbf{(2)} require global smoothness and finite moments; \textbf{(3)} permits local smoothness and weak tails. \textbf{(1)} pays $H/\delta$; \textbf{(2)} has larger constants/log powers. For $p<2$, \textbf{(2)} loses when $\sigma\lesssim T^{1/(q+2)-1/2}$ and initialization dominates. \\
+\midrule
+\textbf{(4)} RCSAG \citep{amcLobanov2026v1}, Thm.~9; $H_1=\sigma_2=0$, $Q=B_R(x_0)$
+& $\mathcal{O}_p\!\left(B\left[1+\log\!\left(\dfrac{1+\log(1+T)}{\delta}\right)\right]\right)$
+& \textbf{(1)}: same relative-term exponent gain as against \textbf{(3)}, under the stated regime.\par
+\textbf{(2)}: $p=3/2$, $L=R=\sigma=1$, $\sigma_0=\eta\to0$, $\varepsilon=\eta^{3/2}$: $\mathcal{O}_p(\eta^{-9/4}\log\log(1/\eta))$ versus $\mathcal{O}(\eta^{-3/2}\log^4(1/\eta))$ at fixed $\delta$.
+& \textbf{(1)}, \textbf{(2)} exclude generalized smoothness and gap-dependent noise. \textbf{(1)} loses logarithmic confidence dependence; at $\sigma=0$, its overhead is $H/\delta$. \textbf{(2)} loses $\sqrt T$ scaling when $p<2$ and noise is small. \\
+\midrule
+\textbf{(5)} AGNES \citep{amcGupta2024v3}, Thm.~3 + Markov; $p=2$, $\sigma_0=0$
+& $\mathcal{O}\!\left(1+(1+\sigma^2)\sqrt{T/\delta}\right)$
+& \textbf{(2)}: confidence cost $\delta^{-1/2}\to\ell^3$, with matching polynomial $T,\sigma$ dependence for $T\ge1$. Scope: \textbf{(1)}, \textbf{(2)} admit $p<2$ and $\sigma_0>0$.
+& \textbf{(2)} adds three logarithmic factors to the expected-accuracy rate. \textbf{(1)} pays $H/\delta$. \textbf{(5)} also supplies an expectation guarantee. \\
+\midrule
+\textbf{(6)} Clipped-SSTM \citep{amcSadiev2023}, Thm.~3.2; $\sigma=0$
+& $\mathcal{O}_p\!\left((1+\sqrt T+V)\right.$\par
+$\left.{}\cdot[1+\log((1+\sqrt T+V)/\delta)]\right)$
+& \textbf{(1)}, \textbf{(2)}: no established improvement on $\sigma=0$.
+& \textbf{(2)}: $T^{q/(q+2)}$ instead of $\sqrt T$ when $p<2$ and initialization dominates. \textbf{(1)} adds $H/\delta$ overhead. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $p=\alpha$ in the setup; $q=p/(p-1)$; $T=LR^2/\varepsilon$; $V=(\sigma_0R/\varepsilon)^q$; $B=1+\sqrt T+V+\sigma^qT^{q/2}$; $\ell=\log(20+q+T+1/\delta)$; $M=4+T+V+1/\delta$; $H=(2+q+\log M)^{2^{32}q^4(1+\sqrt{\log M})}=M^{o(1)}$ for fixed $p$. $\mathcal{O}_p$ permits constants depending on $p$. In \textbf{(4)}, $H_1$ and $\sigma_2$ denote the additional curvature and gap-noise parameters; $\Delta_0=LR^2/2$ and the ball projection is closed form.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

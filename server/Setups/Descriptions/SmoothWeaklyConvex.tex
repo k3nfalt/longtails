@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gradient Descent for Weakly Convex Optimization}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and $x\mapsto f(x)+(\rho/2)\|x\|^2$ is convex, with $\rho\geq0$. A given starting point $x^0\in E$ satisfies $f(x^0)-\ell\leq\Delta$ for a global lower bound $\ell\in\mathbb{R}$ and $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, gradient descent must return a queried point $\bar{x}$ of smallest gradient norm satisfying $\mathbb{E}_{P}[\|\nabla f(\bar{x})\|^2]\leq\varepsilon^2$, where $P$ is the law of the algorithm's randomness; with no calls, it returns $x^0$.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is also equipped with a measurable structure. The algorithm receives $E$, $L$, $\rho$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Weak convexity]
+The function $h:E\to\mathbb{R}$ defined by
+\[
+h(x)=f(x)+\frac{\rho}{2}\|x\|^2
+\]
+is convex: for every $x,y\in E$ and $t\in[0,1]$,
+\[
+h((1-t)x+ty)\leq(1-t)h(x)+t h(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $\ell\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+\ell&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-\ell&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze gradient descent with positive, iteration-dependent step sizes and an output selected by gradient norm. The algorithm chooses a sequence $(\eta_t)_{t\geq0}$ with $\eta_t>0$, fixed independently of oracle replies and algorithm randomness. Starting from the given $x^0$, it queries and updates according to
+\[
+\begin{aligned}
+g^t&=\nabla f(x^t),\\
+x^{t+1}&=x^t-\eta_t g^t,
+\qquad t=0,1,\ldots.
+\end{aligned}
+\]
+Queries may be made at any point of $E$. After $K\geq1$ oracle calls, the output is
+\[
+\begin{aligned}
+j_K&=\max\!\left\{j\in\{0,\ldots,K-1\}:
+\|g^j\|^2=\min_{0\leq i<K}\|g^i\|^2\right\},\\
+\bar{x}&=x^{j_K}.
+\end{aligned}
+\]
+Thus ties are resolved in favor of the most recent query. For $K=0$, set $\bar{x}=x^0$.
+
+The output must be measurable, its squared gradient norm must be integrable under $P$, and the required accuracy is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}
