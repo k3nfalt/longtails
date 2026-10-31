@@ -7,7 +7,7 @@ open scoped ENNReal NNReal
 
 namespace LongTails.Proofs.FreyaConditionalCosts
 
-open LongTails.Proofs.FreyaModel LongTails.Proofs.FreyaCollectors
+open LongTails.Setups.FreyaModel LongTails.Proofs.FreyaCollectors
 open LongTails.Algorithms.FreyaInputs LongTails.Algorithms.FreyaRandomness
 open LongTails.Algorithms.FreyaPage
 
@@ -52,7 +52,7 @@ noncomputable def restartAnswer (q : Raw)
     (z : Seed q.K × ((k : ℕ) → O.Seed k)) : Reply q.d q.n :=
   let data := invocationData q O batch z
   let call := (batchStartCall q O z.1 z.2 batch).getD 0 + a
-  (O.answer call (0, liftRequest q O batch z request) (z.2 call)).map
+  (replyAt q O z.1 z.2 call (0, liftRequest q O batch z request)).map
     fun (i, id, clock, _) => (i, id - data.2.2.2.2, clock - data.2.2.2.1, 0)
 
 noncomputable def restartOracle (q : Raw)
@@ -62,7 +62,7 @@ noncomputable def restartOracle (q : Raw)
     Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1 where
   Seed := fun _ => Seed q.K × ((k : ℕ) → O.Seed k)
   law := (restrictedProbability (executionLaw q O) E hE).map (fun z => fun _ : ℕ => z)
-  answer := fun a request z => restartAnswer q O batch a request.2 z
+  answer := fun history request z => restartAnswer q O batch history.length request.2 z
 
 noncomputable def batchEndCall (q : Raw)
     (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
@@ -83,7 +83,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     (τ : Fin q.n → ℝ≥0∞)
     (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
     (z : Seed q.K × ((k : ℕ) → O.Seed k))
-    (hservice : servicePath f τ (fun a r => O.answer a (0, r) (z.2 a)))
+    (hservice : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0, r)))
     (batch firstID : ℕ) (full : Bool) (x y : Space q.d) (clock : ℝ≥0)
     (hinvoke : invocation q O z.1 z.2 batch = some (full, x, y, clock, firstID)) :
     (batchEndCall q O z.1 z.2 batch).isSome ∧
@@ -99,7 +99,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     set_option maxRecDepth 4096 in
     open scoped BigOperators ENNReal NNReal in
     open MeasureTheory ProbabilityTheory OracleTemplate in
-    open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaInputs in
+    open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaInputs in
     open LongTails.Algorithms.FreyaRandomness LongTails.Algorithms.FreyaCollectors in
     open LongTails.Algorithms.FreyaPage LongTails.Proofs.FreyaCollectors in
     by
@@ -132,7 +132,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         induction k with
         | zero => rfl
         | succ k ih =>
-          change (update q (trace q O seed ω k) _).seed = seed
+          change (update q (trace q O seed ω k) (replyAt q O seed ω k (query q (trace q O seed ω k)))).seed = seed
           rw [freyaPageUpdateSeed,ih]
       have freyaPageHaltedUpdate (q : Raw) (s : State q) (reply : Reply q.d q.n)
           (h : active s = false) : update q s reply = s := by
@@ -277,7 +277,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           have hprev := hfacts.2.2.2 k (Nat.lt_succ_self k)
           rw [← hfacts.2.1] at hprev
           obtain ⟨t,htseed,ht⟩ := freyaPageDifferenceEntryAdvance q
-            (trace q O seed ω k) (O.answer k (query q (trace q O seed ω k)) (ω k)) c hphase hprev
+            (trace q O seed ω k) (replyAt q O seed ω k (query q (trace q O seed ω k))) c hphase hprev
           have httrace : advance q t = trace q O seed ω (k+1) := ht
           have htc : (advance q t).phase = Phase.difference c := by rw [httrace]; exact hphase
           obtain ⟨hit,hc⟩ := freyaPageAdvanceDifference q t c htc
@@ -392,7 +392,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hq : differenceQuery c = some ⟨c.clock,c.pending⟩)
           (i : Fin q.n) (job : Job q.d q.m) (time : ℝ≥0) (value : Space q.d)
           (hj : c.pending i = some job)
-          (hr : O.answer (call+j.val) (0,differenceQuery c) (ω (call+j.val)) =
+          (hr : replyAt q O seed ω (call+j.val) (0,differenceQuery c) =
             some (i,job.id,time,value)) : completedJob q O seed ω batch j = some job := by
         clear * - q O seed ω batch call j hstart c hphase hq i job time value hj hr freyaPageDifferenceQuery
         have hquery := freyaPageDifferenceQuery q _ c hphase
@@ -410,7 +410,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hS : 0 < q.S) (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (seed : Seed q.K) (ω : (k : ℕ) → O.Seed k)
-          (hservice : servicePath f τ (fun a r => O.answer a (0,r) (ω a)))
+          (hservice : servicePath f τ (fun a r => replyAt q O seed ω a (0,r)))
           (batch firstID call : ℕ) (x y : Space q.d) (clock : ℝ≥0)
           (hstart : batchStartCall q O seed ω batch = some call)
           (hphase : (trace q O seed ω call).phase = Phase.difference
@@ -474,20 +474,20 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             exact ⟨job,hj,hs,ht,hk⟩
           obtain ⟨i,job,time,next,hjob,hquery,hreply,hclock,hnid,hnkind,hnstart,hnlabel,hnext,hpnext⟩ :=
             freyaDifferenceLiveStep hm hn c f τ
-              (fun r => O.answer (call+a) (0,r) (ω (call+a)))
+              (fun r => replyAt q O seed ω (call+a) (0,r))
               (hservice (call+a)).2 (by omega) hp
-          let t := differenceUpdate c (O.answer (call+a) (0,differenceQuery c) (ω (call+a)))
+          let t := differenceUpdate c (replyAt q O seed ω (call+a) (0,differenceQuery c))
           have ht := hnext
           change t = _ at ht
           have hqueryPage := freyaPageDifferenceQuery q _ c hc
           have hactive : t.count<t.target := by rw [ht]; dsimp only; omega
           have hcontinue := freyaPageDifferenceContinue q _ c
-            (O.answer (call+a) (0,differenceQuery c) (ω (call+a))) hc hactive
+            (replyAt q O seed ω (call+a) (0,differenceQuery c)) hc hactive
           have hupdate : trace q O seed ω (call+(a+1)) =
               update q (trace q O seed ω (call+a))
-                (O.answer (call+a) (0,differenceQuery c) (ω (call+a))) := by
+                (replyAt q O seed ω (call+a) (0,differenceQuery c)) := by
             rw [← Nat.add_assoc]
-            change update q _ _ = _
+            rw [trace_succ]
             rw [hqueryPage]
           obtain ⟨old,hold,_,_,hkind,hlabel⟩ := hpending i
           have heq : old=job := Option.some.inj (hold.symm.trans hjob)
@@ -881,7 +881,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (seed : Seed q.K) (ω : (k : ℕ) → O.Seed k)
-          (hservice : servicePath f τ (fun a r => O.answer a (0,r) (ω a))) :
+          (hservice : servicePath f τ (fun a r => replyAt q O seed ω a (0,r))) :
           let Safe := fun s : State q =>
             (∀ first c,s.phase=Phase.full first c →
               c.original.length=q.m ∧ c.remaining≠[] ∧
@@ -968,18 +968,18 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         | succ k ih =>
           let s := trace q O seed ω k
           change Safe s at ih
-          change Safe (update q s (O.answer k (query q s) (ω k)))
+          change Safe (update q s (replyAt q O seed ω k (query q s)))
           cases hs : s.phase with
           | halted =>
-            have hu : update q s (O.answer k (query q s) (ω k))=s := by delta update; rw [hs]
+            have hu : update q s (replyAt q O seed ω k (query q s))=s := by delta update; rw [hs]
             rw [hu]
             exact ih
           | full first c =>
             obtain ⟨hlen,hne,hb,hl⟩ := ih.1 first c hs
             have hquery := freyaPageFullQuery q s first c hs
             rw [hquery]
-            let t := fullUpdate c (O.answer k (0,fullQuery c) (ω k))
-            have ht := freyaFullSafeUpdate c hne hb f τ (fun r => O.answer k (0,r) (ω k)) hl (hservice k).2
+            let t := fullUpdate c (replyAt q O seed ω k (0,fullQuery c))
+            have ht := freyaFullSafeUpdate c hne hb f τ (fun r => replyAt q O seed ω k (0,r)) hl (hservice k).2
             change t.original=c.original ∧ _ at ht
             delta update
             rw [hs]
@@ -997,7 +997,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             have hquery := freyaPageDifferenceQuery q s c hs
             rw [hquery]
             obtain ⟨i,job,time,next,_,_,_,_,_,_,_,_,ht,hpn⟩ :=
-              freyaDifferenceLiveStep hm hn c f τ (fun r => O.answer k (0,r) (ω k)) (hservice k).2 hcount hp
+              freyaDifferenceLiveStep hm hn c f τ (fun r => replyAt q O seed ω k (0,r)) (hservice k).2 hcount hp
             delta update
             rw [hs]
             dsimp only
@@ -1019,7 +1019,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (seed : Seed q.K) (ω : (k : ℕ) → O.Seed k)
-          (hservice : servicePath f τ (fun a r => O.answer a (0,r) (ω a))) :
+          (hservice : servicePath f τ (fun a r => replyAt q O seed ω a (0,r))) :
           (trace q O seed ω (eventLimit q)).phase=Phase.halted ∧
             ∀ N,eventLimit q≤N → query q (trace q O seed ω N)=(0,none) := by
         clear * - q hm hn hS hK f τ O seed ω hservice freyaPageHaltedUpdate freyaDifferenceLiveStep freyaPageDifferenceQuery freyaFullPotentialDecrease freyaFullSafeUpdate freyaFullInitialPotential freyaPageFullQuery freyaPagePhaseSafety
@@ -1070,7 +1070,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             R (trace q O seed ω (k+1))+1≤R (trace q O seed ω k) := by
           let s := trace q O seed ω k
           have hi := hsafe k
-          change R (update q s (O.answer k (query q s) (ω k)))+1≤R s
+          change R (update q s (replyAt q O seed ω k (query q s)))+1≤R s
           cases hs : s.phase with
           | halted =>
             change active s=true at ha
@@ -1081,12 +1081,12 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             obtain ⟨_,hne,hbound,hlegal⟩ := hi.1 first c hs
             have hquery := freyaPageFullQuery q s first c hs
             rw [hquery]
-            let t := fullUpdate c (O.answer k (0,fullQuery c) (ω k))
+            let t := fullUpdate c (replyAt q O seed ω k (0,fullQuery c))
             have ht := freyaFullSafeUpdate c hne hbound f τ
-              (fun r => O.answer k (0,r) (ω k)) hlegal (hservice k).2
+              (fun r => replyAt q O seed ω k (0,r)) hlegal (hservice k).2
             change t.original=c.original ∧ _ at ht
             have hd := freyaFullPotentialDecrease hn c.original c rfl hne hbound f τ
-              (fun r => O.answer k (0,r) (ω k)) hlegal (hservice k).2
+              (fun r => replyAt q O seed ω k (0,r)) hlegal (hservice k).2
             have hV : fullV t+1≤fullV c := by
               dsimp only [fullV]
               rw [ht.1]
@@ -1119,7 +1119,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             have hquery := freyaPageDifferenceQuery q s c hs
             rw [hquery]
             obtain ⟨i,job,time,next,_,_,_,_,_,_,_,_,ht,_⟩ := freyaDifferenceLiveStep hm hn c f τ
-              (fun r => O.answer k (0,r) (ω k)) (hservice k).2 hcount hpending
+              (fun r => replyAt q O seed ω k (0,r)) (hservice k).2 hcount hpending
             have hr : R s=(rounds q-s.iteration)*M+(c.target-c.count) := by dsimp only [R]; rw [hs]
             rw [hr]
             delta update
@@ -1166,7 +1166,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
               by_contra he
               have hf : active (trace q O seed ω k)=false := Bool.eq_false_of_not_eq_true he
               have hh := freyaPageHaltedUpdate q (trace q O seed ω k)
-                (O.answer k (query q (trace q O seed ω k)) (ω k)) hf
+                (replyAt q O seed ω k (query q (trace q O seed ω k))) hf
               change trace q O seed ω (k+1)=trace q O seed ω k at hh
               rw [hh,hf] at ha
               contradiction
@@ -1230,7 +1230,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           induction N,hN using Nat.le_induction with
           | base => rfl
           | succ N hN ih =>
-            change update q (trace q O seed ω N) (O.answer N (query q (trace q O seed ω N)) (ω N))=_
+            change update q (trace q O seed ω N) (replyAt q O seed ω N (query q (trace q O seed ω N)))=_
             rw [ih]
             delta update
             rw [hhalt]
@@ -1276,7 +1276,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a))) (batch : ℕ) :
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r))) (batch : ℕ) :
           servicePath (fun (_ : Fin q.m) (_ : Space q.d) => 0) τ
             (fun a r => restartAnswer q O batch a r z) := by
         clear * - q f τ O z hs batch freyaLiftJob freyaLiftRequest freyaLiftDeadline freyaLiftLegal freyaZeroJobValue
@@ -1295,8 +1295,8 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             cases j.kind <;> rfl
         constructor
         · have hnone := (hs call).1
-          change O.answer call (0,none) (z.2 call)=none at hnone
-          change Option.map _ (O.answer call (0,none) (z.2 call))=none
+          change replyAt q O z.1 z.2 call (0,none)=none at hnone
+          change Option.map _ (replyAt q O z.1 z.2 call (0,none))=none
           rw [hnone]
           rfl
         · intro r hr
@@ -1306,15 +1306,15 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           obtain ⟨k,hk,hkj⟩ := Option.map_eq_some_iff.mp hj
           subst j
           change data.2.2.2.1+r.clock≤c at hc
-          change O.answer call (0,some R) (z.2 call)=some
+          change replyAt q O z.1 z.2 call (0,some R)=some
             (i,data.2.2.2.2+k.id,c,jobValue f (freyaLiftJob data.2.1 data.2.2.1 data.2.2.2.1 data.2.2.2.2 k)) at ha
           have ht : data.2.2.2.1≤c := (le_add_of_nonneg_right (show (0 : ℝ≥0)≤r.clock from bot_le)).trans hc
           refine ⟨i,k,c-data.2.2.2.1,hk,?_,?_,?_⟩
           · change Option.map (fun t : Fin q.n × ℕ × ℝ≥0 × Space q.d =>
               (t.1,t.2.1-data.2.2.2.2,t.2.2.1-data.2.2.2.1,(0 : Space q.d)))
-              (O.answer call (0,liftRequest q O batch z (some r)) (z.2 call))=_
+              (replyAt q O z.1 z.2 call (0,liftRequest q O batch z (some r)))=_
             rw [hlift]
-            change Option.map _ (O.answer call (0,some R) (z.2 call))=_
+            change Option.map _ (replyAt q O z.1 z.2 call (0,some R))=_
             rw [ha]
             dsimp only [Option.map_some]
             rw [Nat.add_sub_cancel_left,freyaZeroJobValue]
@@ -1501,7 +1501,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID : ℕ) (full : Bool) (x y : Space q.d) (clock : ℝ≥0)
           (hi : invocation q O z.1 z.2 batch=some (full,x,y,clock,firstID)) :
           (batchEndCall q O z.1 z.2 batch).isSome := by
@@ -1658,7 +1658,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           have hprev := hfacts.2.2.2 k (Nat.lt_succ_self k)
           rw [← hfacts.2.1] at hprev
           obtain ⟨t,htseed,ht⟩ := freyaPageFullEntryAdvance q
-            (trace q O seed ω k) (O.answer k (query q (trace q O seed ω k)) (ω k)) first c hphase hprev
+            (trace q O seed ω k) (replyAt q O seed ω k (query q (trace q O seed ω k))) first c hphase hprev
           have httrace : advance q t=trace q O seed ω (k+1) := ht
           have htc : (advance q t).phase=Phase.full first c := by rw [httrace]; exact hphase
           obtain ⟨hit,_,hc⟩ := freyaPageAdvanceFull q t first c htc
@@ -1750,8 +1750,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hc : batchStartCall q O z.1 z.2 batch=some call)
           (request : Option (Request q.d q.m q.n)) (i : Fin q.n) (id : ℕ)
           (time : ℝ≥0) (value : Space q.d)
-          (hr : O.answer (call+a) (0,request.map (freyaLiftRequest x y clock firstID))
-            (z.2 (call+a))=some (i,firstID+id,time,value)) :
+          (hr : replyAt q O z.1 z.2 (call+a) (0,request.map (freyaLiftRequest x y clock firstID))=some (i,firstID+id,time,value)) :
           restartAnswer q O batch a request z=some (i,id,time-clock,0) := by
         clear * - q O z batch firstID call a full x y clock hi hc request i id time value hr freyaLiftJob freyaLiftRequest
         have hd : invocationData q O batch z=(full,x,y,clock,firstID) := by
@@ -1793,7 +1792,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hS : 0<q.S) (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID call : ℕ) (x y : Space q.d) (clock : ℝ≥0)
           (hi : invocation q O z.1 z.2 batch=some (false,x,y,clock,firstID))
           (hstart : batchStartCall q O z.1 z.2 batch=some call)
@@ -1828,7 +1827,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             exact ⟨j,hj,hb,he,by simpa (config := { iota := false }) only [hx,hy] using hk⟩
           obtain ⟨i,j,time,next,hj,hquery,hr,htime,_,_,_,_,hu,_⟩ :=
             freyaDifferenceLiveStep hm hn s f τ
-              (fun r => O.answer (call+a) (0,r) (z.2 (call+a))) (hs (call+a)).2 (by omega) hlegal
+              (fun r => replyAt q O z.1 z.2 (call+a) (0,r)) (hs (call+a)).2 (by omega) hlegal
           let c := differenceTrace q.n q.S 0 0 0 (restartedRows q O batch z)
             (fun a r => restartAnswer q O batch a r z) a
           change freyaDifferenceCorresponds x y clock firstID s c at hcorr
@@ -1844,14 +1843,14 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           have hucorr := freyaDifferenceUpdateCorresponds x y clock firstID s c hcorr i j' time
             (jobValue f (freyaLiftJob x y clock firstID j')) hj'
             (by rw [← hcorr.2.2.2.2.2.1]; exact htime)
-          let snew := differenceUpdate s (O.answer (call+a) (0,differenceQuery s) (z.2 (call+a)))
+          let snew := differenceUpdate s (replyAt q O z.1 z.2 (call+a) (0,differenceQuery s))
           have hcont := freyaPageDifferenceContinue q _ s
-            (O.answer (call+a) (0,differenceQuery s) (z.2 (call+a))) hp
+            (replyAt q O z.1 z.2 (call+a) (0,differenceQuery s)) hp
             (by rw [hu]; dsimp only; omega)
           refine ⟨snew,?_,?_⟩
           · rw [← Nat.add_assoc]
             change (update q (trace q O z.1 z.2 (call+a))
-              (O.answer (call+a) (query q (trace q O z.1 z.2 (call+a))) (z.2 (call+a)))).phase=_
+              (replyAt q O z.1 z.2 (call+a) (query q (trace q O z.1 z.2 (call+a))))).phase=_
             rw [freyaPageDifferenceQuery q _ s hp]
             exact hcont.1
           · change freyaDifferenceCorresponds x y clock firstID snew
@@ -1912,7 +1911,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hS : 0<q.S) (hK : 0<q.K) (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID : ℕ) (x y : Space q.d) (clock : ℝ≥0)
           (hi : invocation q O z.1 z.2 batch=some (false,x,y,clock,firstID)) :
           (differenceTrace q.n q.S 0 0 0 (restartedRows q O batch z)
@@ -1937,7 +1936,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           exact ⟨j,hj,hb,he,by simpa (config := { iota := false }) only [hx,hy] using hk⟩
         obtain ⟨i,j,time,next,hj,hquery,hr,htime,_,_,_,_,hu,_⟩ :=
           freyaDifferenceLiveStep hm hn s f τ
-            (fun r => O.answer (call+a) (0,r) (z.2 (call+a))) (hs (call+a)).2 (by omega) hlegal
+            (fun r => replyAt q O z.1 z.2 (call+a) (0,r)) (hs (call+a)).2 (by omega) hlegal
         let c := differenceTrace q.n q.S 0 0 0 (restartedRows q O batch z)
           (fun a r => restartAnswer q O batch a r z) a
         change freyaDifferenceCorresponds x y clock firstID s c at hcorr
@@ -1953,7 +1952,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         have hucorr := freyaDifferenceUpdateCorresponds x y clock firstID s c hcorr i j' time
           (jobValue f (freyaLiftJob x y clock firstID j')) hj'
           (by rw [← hcorr.2.2.2.2.2.1]; exact htime)
-        let snew := differenceUpdate s (O.answer (call+a) (0,differenceQuery s) (z.2 (call+a)))
+        let snew := differenceUpdate s (replyAt q O z.1 z.2 (call+a) (0,differenceQuery s))
         let cnew := differenceTrace q.n q.S 0 0 0 (restartedRows q O batch z)
           (fun a r => restartAnswer q O batch a r z) q.S
         have hcnew : freyaDifferenceCorresponds x y clock firstID snew cnew := by
@@ -1972,7 +1971,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         have hfinal : trace q O z.1 z.2 (call+q.S)=advance q t := by
           rw [← haS,← Nat.add_assoc]
           change update q (trace q O z.1 z.2 (call+a))
-            (O.answer (call+a) (query q (trace q O z.1 z.2 (call+a))) (z.2 (call+a)))=_
+            (replyAt q O z.1 z.2 (call+a) (query q (trace q O z.1 z.2 (call+a))))=_
           rw [freyaPageDifferenceQuery q _ s hp]
           dsimp only [update]
           rw [hp]
@@ -1999,7 +1998,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID call a : ℕ) (x : Space q.d) (clock : ℝ≥0) (first : Bool)
           (hi : invocation q O z.1 z.2 batch=some (true,x,x,clock,firstID))
           (hstart : batchStartCall q O z.1 z.2 batch=some call)
@@ -2042,7 +2041,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         obtain ⟨k,hk,he⟩ := Option.map_eq_some_iff.mp hj
         subst j
         have hquerycorr := freyaFullQueryCorresponds x clock firstID s c hcorr
-        have hr' : O.answer (call+a) (0,fullQuery s) (z.2 (call+a))=
+        have hr' : replyAt q O z.1 z.2 (call+a) (0,fullQuery s)=
             some (i,firstID+k.id,time,jobValue f (freyaLiftJob x x clock firstID k)) := by
           rw [hquerycorr,hcquery]
           exact hr
@@ -2051,7 +2050,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (by rw [← hquerycorr]; exact hr')
         have hucorr := freyaFullUpdateCorresponds x clock firstID s c hcorr i k time
           (jobValue f (freyaLiftJob x x clock firstID k)) hk htime
-        let snew := fullUpdate s (O.answer (call+a) (0,fullQuery s) (z.2 (call+a)))
+        let snew := fullUpdate s (replyAt q O z.1 z.2 (call+a) (0,fullQuery s))
         have hcnew : freyaFullCorresponds x clock firstID snew
             (fullTrace q.n (List.ofFn id) 0 0 (restartedRows q O batch z)
               (fun a r => restartAnswer q O batch a r z) (a+1)) := by
@@ -2068,7 +2067,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             if snew.remaining.isEmpty then advance q {t with g := fullResult snew} else t := by
           rw [← Nat.add_assoc]
           change update q (trace q O z.1 z.2 (call+a))
-            (O.answer (call+a) (query q (trace q O z.1 z.2 (call+a))) (z.2 (call+a)))=_
+            (replyAt q O z.1 z.2 (call+a) (query q (trace q O z.1 z.2 (call+a))))=_
           rw [freyaPageFullQuery q _ first s hp]
           dsimp only [update]
           rw [hp]
@@ -2089,7 +2088,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID call N : ℕ) (x : Space q.d) (clock : ℝ≥0) (first : Bool)
           (hi : invocation q O z.1 z.2 batch=some (true,x,x,clock,firstID))
           (hstart : batchStartCall q O z.1 z.2 batch=some call)
@@ -2139,7 +2138,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hS : 0<q.S) (hK : 0<q.K) (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID : ℕ) (x y : Space q.d) (clock : ℝ≥0)
           (hi : invocation q O z.1 z.2 batch=some (true,x,y,clock,firstID)) :
           (fullTrace q.n (List.ofFn id) 0 0 (restartedRows q O batch z)
@@ -2200,7 +2199,7 @@ theorem restart_coupling (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (hS : 0<q.S) (hK : 0<q.K) (f : Fin q.m → Space q.d → ℝ) (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hservice : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)))
+          (hservice : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)))
           (batch firstID : ℕ) (full : Bool) (x y : Space q.d) (clock : ℝ≥0)
           (hinvoke : invocation q O z.1 z.2 batch=some (full,x,y,clock,firstID)) :
           (batchEndCall q O z.1 z.2 batch).isSome ∧
@@ -2240,7 +2239,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
   set_option maxRecDepth 4096 in
   open scoped BigOperators ENNReal NNReal in
   open MeasureTheory ProbabilityTheory OracleTemplate in
-  open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaInputs in
+  open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaInputs in
   open LongTails.Algorithms.FreyaRandomness LongTails.Algorithms.FreyaCollectors in
   open LongTails.Algorithms.FreyaPage LongTails.Proofs.FreyaCollectors in
     run_tac
@@ -2282,7 +2281,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     (invocation q O z.1 z.2 batch, fun k : ℕ =>
       if k < (batchStartCall q O z.1 z.2 batch).getD 0 then
         let s := trace q O z.1 z.2 k
-        let reply := O.answer k (query q s) (z.2 k)
+        let reply := replyAt q O z.1 z.2 k (query q s)
         some (query q s,reply,collectorPendingAfter q s reply)
       else none)
   have freyaDevelopmentOptionElimMeas {α β : Type} [MeasurableSpace α] [MeasurableSpace β]
@@ -2894,11 +2893,8 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       Measurable (fun z : Seed q.K × ((k : ℕ) → O.Seed k) => trace q O z.1 z.2 k) := by
     clear * - q f τ O hservice k freyaPageInitialMeas freyaPageUpdateMeas freyaPageQueryMeas
 
-    induction k with
-    | zero => exact (freyaPageInitialMeas q).comp measurable_fst
-    | succ k ih =>
-      exact (freyaPageUpdateMeas q).comp (ih.prodMk ((hservice.1 k).comp
-        (((freyaPageQueryMeas q).comp ih).prodMk ((measurable_pi_apply k).comp measurable_snd))))
+    exact (measurable_trajectory q O hservice.1.2 (freyaPageInitialMeas q)
+      (freyaPageUpdateMeas q) (freyaPageQueryMeas q) k).1
   have freyaFindMeas {Ω α : Type} [MeasurableSpace Ω] [MeasurableSpace α]
       (l : List α) (p : Ω → α → Bool) (hp : ∀ a,Measurable (fun z => p z a)) :
       Measurable (fun z => l.find? (p z)) := by
@@ -2998,7 +2994,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
       (hservice : PrimitiveService f τ O) (batch : ℕ) :
       historyBefore q O batch≤(inferInstance : MeasurableSpace (Seed q.K × ((k : ℕ) → O.Seed k))) := by
-    clear * - q f τ O hservice batch freyaDevelopmentOptionElimMeas freyaOptionSomeMeas freyaPageQueryMeas freyaPageTraceMeas freyaPageBatchStartMeas freyaPageInvocationMeas freyaPendingAfterMeas
+    clear * - q f τ O hservice batch freyaDevelopmentOptionElimMeas freyaOptionSomeMeas freyaPageQueryMeas freyaPageTraceMeas freyaPageBatchStartMeas freyaPageInvocationMeas freyaPendingAfterMeas freyaPageInitialMeas freyaPageUpdateMeas
 
     have hcall := (freyaDevelopmentOptionElimMeas (0 : ℕ) id measurable_id).comp
       (freyaPageBatchStartMeas q f τ O hservice batch)
@@ -3006,7 +3002,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         (invocation q O z.1 z.2 batch,fun k : ℕ =>
           if k<(batchStartCall q O z.1 z.2 batch).getD 0 then
             let s := trace q O z.1 z.2 k
-            let reply := O.answer k (query q s) (z.2 k)
+            let reply := replyAt q O z.1 z.2 k (query q s)
             some (query q s,reply,collectorPendingAfter q s reply)
           else none)) := by
       apply (freyaPageInvocationMeas q f τ O hservice batch).prodMk
@@ -3014,7 +3010,8 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       intro k
       have hs := freyaPageTraceMeas q f τ O hservice k
       have hq := (freyaPageQueryMeas q).comp hs
-      have hr := (hservice.1 k).comp (hq.prodMk ((measurable_pi_apply k).comp measurable_snd))
+      have hr := measurable_replyAt q O hservice.1.2 (freyaPageInitialMeas q) (freyaPageUpdateMeas q)
+          (freyaPageQueryMeas q) k measurable_id hq
       have hp := (freyaPendingAfterMeas q).comp (hs.prodMk hr)
       apply (freyaOptionSomeMeas.comp (hq.prodMk (hr.prodMk hp))).ite _ measurable_const
       have he : Measurable (fun z : Seed q.K × ((k : ℕ) → O.Seed k) =>
@@ -3077,7 +3074,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       (τ : Fin q.n → ℝ≥0∞)
       (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
       (z : Seed q.K × ((k : ℕ) → O.Seed k))
-      (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a))) (batch : ℕ) :
+      (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r))) (batch : ℕ) :
       servicePath (fun (_ : Fin q.m) (_ : Space q.d) => 0) τ
         (fun a r => restartAnswer q O batch a r z) := by
     clear * - q f τ O z hs batch freyaLiftJob freyaLiftRequest freyaLiftDeadline freyaLiftLegal freyaZeroJobValue
@@ -3097,8 +3094,8 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         cases j.kind <;> rfl
     constructor
     · have hnone := (hs call).1
-      change O.answer call (0,none) (z.2 call)=none at hnone
-      change Option.map _ (O.answer call (0,none) (z.2 call))=none
+      change replyAt q O z.1 z.2 call (0,none)=none at hnone
+      change Option.map _ (replyAt q O z.1 z.2 call (0,none))=none
       rw [hnone]
       rfl
     · intro r hr
@@ -3108,15 +3105,15 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       obtain ⟨k,hk,hkj⟩ := Option.map_eq_some_iff.mp hj
       subst j
       change data.2.2.2.1+r.clock≤c at hc
-      change O.answer call (0,some R) (z.2 call)=some
+      change replyAt q O z.1 z.2 call (0,some R)=some
         (i,data.2.2.2.2+k.id,c,jobValue f (freyaLiftJob data.2.1 data.2.2.1 data.2.2.2.1 data.2.2.2.2 k)) at ha
       have ht : data.2.2.2.1≤c := (le_add_of_nonneg_right (show (0 : ℝ≥0)≤r.clock from bot_le)).trans hc
       refine ⟨i,k,c-data.2.2.2.1,hk,?_,?_,?_⟩
       · change Option.map (fun t : Fin q.n × ℕ × ℝ≥0 × Space q.d =>
           (t.1,t.2.1-data.2.2.2.2,t.2.2.1-data.2.2.2.1,(0 : Space q.d)))
-          (O.answer call (0,liftRequest q O batch z (some r)) (z.2 call))=_
+          (replyAt q O z.1 z.2 call (0,liftRequest q O batch z (some r)))=_
         rw [hlift]
-        change Option.map _ (O.answer call (0,some R) (z.2 call))=_
+        change Option.map _ (replyAt q O z.1 z.2 call (0,some R))=_
         rw [ha]
         dsimp only [Option.map_some]
         rw [Nat.add_sub_cancel_left,freyaZeroJobValue]
@@ -3237,7 +3234,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       (hservice : PrimitiveService f τ O) (batch a : ℕ) :
       Measurable (fun z : Option (Request q.d q.m q.n) × (Seed q.K × ((k : ℕ) → O.Seed k)) =>
         restartAnswer q O batch a z.1 z.2) := by
-    clear * - q f τ O hservice batch a freyaDevelopmentOptionElimMeas freyaOptionSomeMeas freyaMeasurableSelect freyaOptionParamMeas freyaPageBatchStartMeas freyaHistoryAmbient freyaInvocationDataHistoryMeas freyaLiftRequestAmbientMeas
+    clear * - q f τ O hservice batch a freyaDevelopmentOptionElimMeas freyaOptionSomeMeas freyaMeasurableSelect freyaOptionParamMeas freyaPageBatchStartMeas freyaHistoryAmbient freyaInvocationDataHistoryMeas freyaLiftRequestAmbientMeas freyaPageInitialMeas freyaPageUpdateMeas freyaPageQueryMeas
 
     let Ω := Seed q.K × ((k : ℕ) → O.Seed k)
     let T := Option (Request q.d q.m q.n) × Ω
@@ -3254,12 +3251,12 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       cases batchStartCall q O z.2.1 z.2.2 batch <;> rfl
     have hr : Measurable (fun z : T =>
         let k := (batchStartCall q O z.2.1 z.2.2 batch).getD 0+a
-        O.answer k (0,liftRequest q O batch z.2 z.1) (z.2.2 k)) := by
-      apply freyaMeasurableSelect _ hcall (fun k z => O.answer k (0,liftRequest q O batch z.2 z.1) (z.2.2 k))
+        replyAt q O z.2.1 z.2.2 k (0,liftRequest q O batch z.2 z.1)) := by
+      apply freyaMeasurableSelect _ hcall (fun k z => replyAt q O z.2.1 z.2.2 k (0,liftRequest q O batch z.2 z.1))
       intro k
-      exact (hservice.1 k).comp
-        ((measurable_const.prodMk (freyaLiftRequestAmbientMeas q f τ O hservice batch)).prodMk
-          ((measurable_pi_apply k).comp measurable_snd.snd))
+      exact measurable_replyAt q O hservice.1.2 (freyaPageInitialMeas q) (freyaPageUpdateMeas q)
+          (freyaPageQueryMeas q) k measurable_snd
+          (measurable_const.prodMk (freyaLiftRequestAmbientMeas q f τ O hservice batch))
     have hbody : Measurable (fun z : T × (Fin q.n × ℕ × ℝ≥0 × Space q.d) =>
         some (z.2.1,z.2.2.1-(invocationData q O batch z.1.2).2.2.2.2,
           z.2.2.2.1-(invocationData q O batch z.1.2).2.2.2.1,(0 : Space q.d))) :=
@@ -3268,15 +3265,13 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           ((measurable_snd.snd.snd.fst.sub (hd.snd.snd.snd.fst.comp measurable_fst)).prodMk measurable_const)))
     have h := freyaOptionParamMeas _ hr (fun _ : T => (none : Reply q.d q.n)) measurable_const _ hbody
     let F : T → Reply q.d q.n := fun z =>
-      (O.answer ((batchStartCall q O z.2.1 z.2.2 batch).getD 0+a)
-        (0,liftRequest q O batch z.2 z.1) (z.2.2 ((batchStartCall q O z.2.1 z.2.2 batch).getD 0+a))).elim none
+      (replyAt q O z.2.1 z.2.2 ((batchStartCall q O z.2.1 z.2.2 batch).getD 0+a) (0,liftRequest q O batch z.2 z.1)).elim none
         (fun t => some (t.1,t.2.1-(invocationData q O batch z.2).2.2.2.2,
           t.2.2.1-(invocationData q O batch z.2).2.2.2.1,0))
     have he : (fun z : T => restartAnswer q O batch a z.1 z.2)=F := by
       funext z
       dsimp only [restartAnswer,F]
-      cases O.answer ((batchStartCall q O z.2.1 z.2.2 batch).getD 0+a)
-        (0,liftRequest q O batch z.2 z.1) (z.2.2 ((batchStartCall q O z.2.1 z.2.2 batch).getD 0+a)) <;> rfl
+      cases replyAt q O z.2.1 z.2.2 ((batchStartCall q O z.2.1 z.2.2 batch).getD 0+a) (0,liftRequest q O batch z.2 z.1) <;> rfl
     rw [he]
     exact h
   have freyaRestartPrimitive (q : Raw) (f : Fin q.m → Space q.d → ℝ)
@@ -3293,8 +3288,9 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     let P := (executionLaw q O : Measure Ω)
     let Q := restrictedProbability (executionLaw q O) E hE
     let R := restartOracle q O batch E hE
-    have hs : ∀ᵐ z ∂P,servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)) :=
-      measurePreserving_snd.quasiMeasurePreserving.ae hservice.2
+    have hs : ∀ᵐ z ∂P,servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)) :=
+      (measurePreserving_snd.quasiMeasurePreserving.ae hservice.2).mono
+          fun z hz => servicePath_replyAt z.1 hz
     have hz : ∀ᵐ z ∂P,servicePath (fun (_ : Fin q.m) (_ : Space q.d) => 0) τ
         (fun a r => restartAnswer q O batch a r z) := by
       filter_upwards [hs] with z hz
@@ -3306,25 +3302,47 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       have hdiag : Measurable (fun z : Ω => fun _ : ℕ => z) := Measurable.of_eval (fun _ => measurable_id)
       exact (Measure.map_map (measurable_pi_apply k) hdiag).trans Measure.map_id
     have hprimitive : PrimitiveService (fun (_ : Fin q.m) (_ : Space q.d) => 0) τ R := by
-      change (∀ k,Measurable (fun z : (Fin 1 × Option (Request q.d q.m q.n)) × Ω =>
-        restartAnswer q O batch k z.1.2 z.2)) ∧
-          ∀ᵐ ω ∂((Q : Measure Ω).map (fun z => fun _ : ℕ => z)),
-            servicePath (fun (_ : Fin q.m) (_ : Space q.d) => 0) τ (fun k r => restartAnswer q O batch k r (ω k))
-      constructor
-      · intro k
-        exact (freyaRestartAnswerMeas q f τ O hservice batch k).comp
-          (measurable_fst.snd.prodMk measurable_snd)
-      · apply ae_all_iff.mpr
-        intro k
-        have hk : ∀ᵐ z ∂(((Q : Measure Ω).map (fun z => fun _ : ℕ => z)).map (fun ω => ω k)),
-            restartAnswer q O batch k none z=none ∧
+      refine ⟨⟨?_,fun k => ?_⟩,?_⟩
+      · intro history other x ω hlen
+        change restartAnswer q O batch history.length x.2 (ω history.length)=
+          restartAnswer q O batch other.length x.2 (ω other.length)
+        rw [hlen]
+      · have hg : Measurable (fun z : (HistoryAt (Option (Request q.d q.m q.n)) (Reply q.d q.n) k ×
+            (Fin 1 × Option (Request q.d q.m q.n))) × Ω => (z.1.2.2, z.2)) :=
+          measurable_fst.snd.snd.prodMk measurable_snd
+        have h := (freyaRestartAnswerMeas q f τ O hservice batch k).comp hg
+        have he : (fun z : (HistoryAt (Option (Request q.d q.m q.n)) (Reply q.d q.n) k ×
+            (Fin 1 × Option (Request q.d q.m q.n))) × Ω => answerAt R k z.1.1 z.1.2 z.2)=
+            (fun z : Option (Request q.d q.m q.n) × Ω => restartAnswer q O batch k z.1 z.2) ∘
+              (fun z => (z.1.2.2, z.2)) := by
+          funext z
+          obtain ⟨⟨⟨history,hlen⟩,x⟩,w⟩ := z
+          subst hlen
+          rfl
+        exact (congrArg Measurable he).mpr h
+      · have hk : ∀ k,∀ᵐ ω ∂((Q : Measure Ω).map (fun z => fun _ : ℕ => z)),
+            ∀ history : List ((Fin 1 × Option (Request q.d q.m q.n)) × Reply q.d q.n),
+              history.length=k →
+              restartAnswer q O batch history.length none (ω history.length)=none ∧
               ∀ r,legalRequest τ r → ∃ i j c,r.pending i=some j ∧
-                restartAnswer q O batch k (some r) z=some (i,j.id,c,jobValue (fun (_ : Fin q.m) (_ : Space q.d) => 0) j) ∧
+                restartAnswer q O batch history.length (some r) (ω history.length)=
+                  some (i,j.id,c,jobValue (fun (_ : Fin q.m) (_ : Space q.d) => 0) j) ∧
                 r.clock≤c ∧ ∀ i' j',r.pending i'=some j' → (c : ℝ≥0∞)≤deadline τ j' i' := by
-          erw [heval k]
-          filter_upwards [hrestricted] with z hz
-          exact hz k
-        exact ae_of_ae_map (measurable_pi_apply k).aemeasurable hk
+          intro k
+          have h : ∀ᵐ z ∂(((Q : Measure Ω).map (fun z => fun _ : ℕ => z)).map (fun ω => ω k)),
+              restartAnswer q O batch k none z=none ∧
+                ∀ r,legalRequest τ r → ∃ i j c,r.pending i=some j ∧
+                  restartAnswer q O batch k (some r) z=
+                    some (i,j.id,c,jobValue (fun (_ : Fin q.m) (_ : Space q.d) => 0) j) ∧
+                  r.clock≤c ∧ ∀ i' j',r.pending i'=some j' → (c : ℝ≥0∞)≤deadline τ j' i' := by
+            erw [heval k]
+            filter_upwards [hrestricted] with z hz
+            exact hz k
+          filter_upwards [ae_of_ae_map (measurable_pi_apply k).aemeasurable h] with ω hω history hlen
+          subst hlen
+          exact hω
+        filter_upwards [ae_all_iff.mpr hk] with ω hω history
+        exact hω history.length history rfl
     exact ⟨hprimitive,finite_completion _ τ R hprimitive⟩
   have freyaPageAdvanceSeed (q : Raw) (s : State q) : (advance q s).seed = s.seed := by
     clear * - q s
@@ -3357,7 +3375,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     induction k with
     | zero => rfl
     | succ k ih =>
-      change (update q (trace q O seed ω k) _).seed = seed
+      change (update q (trace q O seed ω k) (replyAt q O seed ω k (query q (trace q O seed ω k)))).seed = seed
       rw [freyaPageUpdateSeed,ih]
   have freyaPageAdvanceIteration (q : Raw) (s : State q) :
       (advance q s).iteration = s.iteration ∨ (advance q s).iteration = s.iteration+1 := by
@@ -3394,7 +3412,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     apply monotone_nat_of_le_succ
     intro k
     have h := freyaPageUpdateIteration q (trace q O seed ω k)
-      (O.answer k (query q (trace q O seed ω k)) (ω k))
+      (replyAt q O seed ω k (query q (trace q O seed ω k)))
     change (trace q O seed ω (k+1)).iteration = (trace q O seed ω k).iteration ∨
       (trace q O seed ω (k+1)).iteration = (trace q O seed ω k).iteration+1 at h
     omega
@@ -3484,7 +3502,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       induction k,hk using Nat.le_induction with
       | base => rfl
       | succ k hk ih =>
-        change update q (trace q O seed ω k) (O.answer k (query q (trace q O seed ω k)) (ω k))=_
+        change update q (trace q O seed ω k) (replyAt q O seed ω k (query q (trace q O seed ω k)))=_
         rw [ih]
         exact freyaPageHaltedUpdate q _ _ ha
     rw [hs b hab,ha] at hb
@@ -3506,12 +3524,13 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       intro he
       exact hprev k hk ⟨he,hka⟩
     omega
-  have freyaPageTraceBeforeBatch (q : Raw)
+  have freyaPageRunBeforeBatch (q : Raw)
       (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
       (seed new : Seed q.K) (ω : (k : ℕ) → O.Seed k) (batch call : ℕ)
       (hstart : batchStartCall q O seed ω batch=some call)
       (hbits : new.2=seed.2) (hrows : ∀ i,i<batch → new.1 i=seed.1 i) :
-      ∀ k,k<call → trace q O new ω k={trace q O seed ω k with seed:=new} := by
+      ∀ k,k<call → trace q O new ω k={trace q O seed ω k with seed:=new} ∧
+        (run q O new ω k).2=(run q O seed ω k).2 := by
     clear * - q O seed new ω batch call hstart hbits hrows freyaPageTraceSeed freyaPageUpdateSeedCongruence freyaPageInitialSeedCongruence freyaPageSeedQuery freyaPagePreBatchIteration
 
     have hpre := freyaPagePreBatchIteration q O seed ω batch call hstart
@@ -3523,16 +3542,49 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       have hleft : trace q O new ω 0=initial q new := by rfl'
       have hright : trace q O seed ω 0=initial q seed := by rfl'
       rw [hleft,hright]
-      exact freyaPageInitialSeedCongruence q seed new (hrows 0 hb)
+      exact ⟨freyaPageInitialSeedCongruence q seed new (hrows 0 hb),rfl⟩
     | succ k ih =>
       intro hk
       have hkcall : k<call := by omega
-      have hs := ih hkcall
+      obtain ⟨hs,hh⟩ := ih hkcall
       have hseed := freyaPageTraceSeed q O seed ω k
-      change update q (trace q O new ω k) (O.answer k (query q (trace q O new ω k)) (ω k))=_
-      rw [hs,freyaPageSeedQuery]
-      exact freyaPageUpdateSeedCongruence q _ new _ batch
-        (by rw [hseed]; exact hbits) (by rw [hseed]; exact hrows) (hpre (k+1) hk)
+      have hquery : query q (trace q O new ω k)=query q (trace q O seed ω k) := by
+        rw [hs,freyaPageSeedQuery]
+      have hreply : replyAt q O new ω k (query q (trace q O new ω k))=
+          replyAt q O seed ω k (query q (trace q O seed ω k)) := by
+        rw [hquery]
+        show O.answer (run q O new ω k).2 _ (ω (run q O new ω k).2.length)=
+          O.answer (run q O seed ω k).2 _ (ω (run q O seed ω k).2.length)
+        rw [hh]
+      refine ⟨?_,?_⟩
+      · change update q (trace q O new ω k) (replyAt q O new ω k (query q (trace q O new ω k)))=_
+        rw [hreply,hs]
+        exact freyaPageUpdateSeedCongruence q _ new _ batch
+          (by rw [hseed]; exact hbits) (by rw [hseed]; exact hrows) (hpre (k+1) hk)
+      · change (run q O new ω k).2++[(query q (trace q O new ω k),
+            replyAt q O new ω k (query q (trace q O new ω k)))]=
+          (run q O seed ω k).2++[(query q (trace q O seed ω k),
+            replyAt q O seed ω k (query q (trace q O seed ω k)))]
+        rw [hreply,hh,hquery]
+  have freyaPageTraceBeforeBatch (q : Raw)
+      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
+      (seed new : Seed q.K) (ω : (k : ℕ) → O.Seed k) (batch call : ℕ)
+      (hstart : batchStartCall q O seed ω batch=some call)
+      (hbits : new.2=seed.2) (hrows : ∀ i,i<batch → new.1 i=seed.1 i) :
+      ∀ k,k<call → trace q O new ω k={trace q O seed ω k with seed:=new} :=
+    fun k hk => (freyaPageRunBeforeBatch q O seed new ω batch call hstart hbits hrows k hk).1
+  have freyaPageReplyBeforeBatch (q : Raw)
+      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
+      (seed new : Seed q.K) (ω : (k : ℕ) → O.Seed k) (batch call : ℕ)
+      (hstart : batchStartCall q O seed ω batch=some call)
+      (hbits : new.2=seed.2) (hrows : ∀ i,i<batch → new.1 i=seed.1 i) :
+      ∀ k,k<call → ∀ x,replyAt q O new ω k x=replyAt q O seed ω k x := by
+    clear * - q O seed new ω batch call hstart hbits hrows freyaPageTraceSeed freyaPageUpdateSeedCongruence freyaPageInitialSeedCongruence freyaPageSeedQuery freyaPagePreBatchIteration freyaPageRunBeforeBatch
+
+    intro k hk x
+    show O.answer (run q O new ω k).2 x (ω (run q O new ω k).2.length)=
+      O.answer (run q O seed ω k).2 x (ω (run q O seed ω k).2.length)
+    rw [(freyaPageRunBeforeBatch q O seed new ω batch call hstart hbits hrows k hk).2]
   let freyaEntryView (q : Raw) (s : State q) :
       ℕ × Bool × Option (Bool × Space q.d × Space q.d × ℝ≥0 × ℕ) :=
     (s.iteration, active s, s.phase.casesOn
@@ -3591,15 +3643,16 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       (hstart : batchStartCall q O seed ω batch=some call)
       (hbits : new.2=seed.2) (hrows : ∀ i,i<batch → new.1 i=seed.1 i) :
       freyaEntryView q (trace q O new ω call)=freyaEntryView q (trace q O seed ω call) := by
-    clear * - q O seed new ω batch call hstart hbits hrows freyaPageTraceSeed freyaPageSeedQuery freyaPageTraceBeforeBatch freyaEntryView freyaPageUpdateEntry freyaPageInitialEntry
+    clear * - q O seed new ω batch call hstart hbits hrows freyaPageTraceSeed freyaPageSeedQuery freyaPageTraceBeforeBatch freyaEntryView freyaPageUpdateEntry freyaPageInitialEntry freyaPageReplyBeforeBatch
 
     cases call with
     | zero => exact freyaPageInitialEntry q seed new
     | succ k =>
       have hs := freyaPageTraceBeforeBatch q O seed new ω batch (k+1) hstart hbits hrows k (by omega)
       change freyaEntryView q (update q (trace q O new ω k)
-        (O.answer k (query q (trace q O new ω k)) (ω k)))=_
-      rw [hs,freyaPageSeedQuery]
+        (replyAt q O new ω k (query q (trace q O new ω k))))=_
+      rw [freyaPageReplyBeforeBatch q O seed new ω batch (k+1) hstart hbits hrows k (by omega),
+        hs,freyaPageSeedQuery]
       exact freyaPageUpdateEntry q _ new _ (by rw [freyaPageTraceSeed]; exact hbits)
   have freyaPageFirstMatchConverse (N : ℕ) (p : ℕ → Bool) (k : ℕ)
       (hk : k<N) (hp : p k=true) (hprev : ∀ r<k,p r≠true) :
@@ -3617,7 +3670,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       (hstart : batchStartCall q O seed ω batch=some call)
       (hbits : new.2=seed.2) (hrows : ∀ i,i<batch → new.1 i=seed.1 i) :
       batchStartCall q O new ω batch=some call := by
-    clear * - q O seed new ω batch call hstart hbits hrows freyaPageBatchStartFacts freyaPageTraceBeforeBatch freyaPageBoundaryEntry freyaPageFirstMatchConverse
+    clear * - q O seed new ω batch call hstart hbits hrows freyaPageBatchStartFacts freyaPageTraceBeforeBatch freyaPageBoundaryEntry freyaPageFirstMatchConverse freyaPageReplyBeforeBatch
 
     obtain ⟨hcall,hit,ha,hprev⟩ := freyaPageBatchStartFacts q O seed ω batch call hstart
     have he := freyaPageBoundaryEntry q O seed new ω batch call hstart hbits hrows
@@ -3862,13 +3915,15 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     exact Function.update_of_ne (by omega : j≠batch) _ _
   have freyaMaskAnswer (q : Raw)
       (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (batch a k : ℕ)
-      (z : Seed q.K × ((k : ℕ) → O.Seed k)) (r : Option (Request q.d q.m q.n)) :
+      (z : Seed q.K × ((k : ℕ) → O.Seed k)) (r : Option (Request q.d q.m q.n))
+      (hobl : HistoryOblivious O) :
       restartAnswer q O batch k r (freyaMask q O batch a z)=restartAnswer q O batch k r z := by
-    clear * - q O batch a k z r freyaMask freyaMaskData freyaMaskCall
+    clear * - q O batch a k z r hobl freyaMask freyaMaskData freyaMaskCall
 
     dsimp only [restartAnswer,liftRequest]
     rw [freyaMaskData,freyaMaskCall]
-    try rfl
+    congr 1
+    exact hobl _ _ _ z.2 (by rw [run_length,run_length])
   have freyaMaskRows (q : Raw)
       (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (batch a : ℕ)
       (z : Seed q.K × ((k : ℕ) → O.Seed k)) (k : ℕ) (hk : k<a) :
@@ -3880,19 +3935,19 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     dsimp only [freyaMask]
     rw [Function.update_self,ite_eq_left (Nat.add_lt_add_left hk _)]
   have freyaMaskContext (q : Raw)
-      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (batch a : ℕ)
-      (z : Seed q.K × ((k : ℕ) → O.Seed k)) :
+      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (hobl : HistoryOblivious O)
+      (batch a : ℕ) (z : Seed q.K × ((k : ℕ) → O.Seed k)) :
       dispatchContext q.n (List.ofFn id) (0 : Space q.d) 0
           (restartedRows q O batch (freyaMask q O batch a z))
           (fun k r => restartAnswer q O batch k r (freyaMask q O batch a z)) a=
         dispatchContext q.n (List.ofFn id) (0 : Space q.d) 0 (restartedRows q O batch z)
           (fun k r => restartAnswer q O batch k r z) a := by
-    clear * - q O batch a z freyaDispatchContextRowChange freyaMask freyaMaskAnswer freyaMaskRows
+    clear * - q O hobl batch a z freyaDispatchContextRowChange freyaMask freyaMaskAnswer freyaMaskRows
 
     have ha : (fun k r => restartAnswer q O batch k r (freyaMask q O batch a z))=
         (fun k r => restartAnswer q O batch k r z) := by
       funext k r
-      exact freyaMaskAnswer q O batch a k z r
+      exact freyaMaskAnswer q O batch a k z r hobl
     rw [ha]
     exact freyaDispatchContextRowChange q.n (List.ofFn id) 0 0 _ _ _ a
       (fun k hk => freyaMaskRows q O batch a z k hk)
@@ -3985,34 +4040,36 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     have he : (fun z => g (freyaMask q O batch a z))=g := funext hinv
     rwa [he] at h
   have freyaMaskContextOfLe (q : Raw)
-      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (batch a b : ℕ)
+      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (hobl : HistoryOblivious O)
+      (batch a b : ℕ)
       (hab : a≤b) (z : Seed q.K × ((k : ℕ) → O.Seed k)) :
       dispatchContext q.n (List.ofFn id) (0 : Space q.d) 0
           (restartedRows q O batch (freyaMask q O batch b z))
           (fun k r => restartAnswer q O batch k r (freyaMask q O batch b z)) a=
         dispatchContext q.n (List.ofFn id) (0 : Space q.d) 0 (restartedRows q O batch z)
           (fun k r => restartAnswer q O batch k r z) a := by
-    clear * - q O batch a b hab z freyaDispatchContextRowChange freyaMask freyaMaskAnswer freyaMaskRows
+    clear * - q O hobl batch a b hab z freyaDispatchContextRowChange freyaMask freyaMaskAnswer freyaMaskRows
 
     have ha : (fun k r => restartAnswer q O batch k r (freyaMask q O batch b z))=
         (fun k r => restartAnswer q O batch k r z) := by
       funext k r
-      exact freyaMaskAnswer q O batch b k z r
+      exact freyaMaskAnswer q O batch b k z r hobl
     rw [ha]
     exact freyaDispatchContextRowChange q.n (List.ofFn id) 0 0 _ _ _ a
       (fun k hk => freyaMaskRows q O batch b z k (hk.trans_le hab))
   have freyaMaskChoice (q : Raw)
-      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (batch a : ℕ)
+      (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1) (hobl : HistoryOblivious O)
+      (batch a : ℕ)
       (z : Seed q.K × ((k : ℕ) → O.Seed k)) :
       assignmentChoice q.n (List.ofFn id) (0 : Space q.d) 0
           (restartedRows q O batch (freyaMask q O batch (a+1) z))
           (fun k r => restartAnswer q O batch k r (freyaMask q O batch (a+1) z)) a=
         assignmentChoice q.n (List.ofFn id) (0 : Space q.d) 0 (restartedRows q O batch z)
           (fun k r => restartAnswer q O batch k r z) a := by
-    clear * - q O batch a z freyaMask freyaMaskRows freyaMaskContextOfLe
+    clear * - q O hobl batch a z freyaMask freyaMaskRows freyaMaskContextOfLe
 
     dsimp only [assignmentChoice]
-    rw [freyaMaskContextOfLe q O batch a (a+1) (Nat.le_succ a) z,
+    rw [freyaMaskContextOfLe q O hobl batch a (a+1) (Nat.le_succ a) z,
       freyaMaskRows q O batch (a+1) z a (Nat.lt_succ_self a)]
   have freyaFullQueryMeas {d m n : ℕ} : Measurable (@fullQuery d m n) := by
     clear * - d m n freyaFullCodeMeas freyaPendingRequestMeas
@@ -4195,7 +4252,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         dispatchContext q.n (List.ofFn id) (0 : Space q.d) 0
           (restartedRows q O batch z) (fun k r => restartAnswer q O batch k r z) a) :=
     freyaMaskFactorMeas q O batch a _ (freyaRestartContextMeas q f τ O hservice batch a)
-      (freyaMaskContext q O batch a)
+      (freyaMaskContext q O hservice.1.1 batch a)
   have freyaInfiniteResampleIndex {ι : Type} [DecidableEq ι] {α : Type} [MeasurableSpace α]
       (μ : Measure α) [IsProbabilityMeasure μ] (i : ι) :
       MeasurePreserving (fun z : (ι → α) × α => Function.update z.1 i z.2)
@@ -4349,7 +4406,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       (seed new : Seed q.K) (ω : (k : ℕ) → O.Seed k) (batch : ℕ)
       (hbits : new.2=seed.2) (hrows : ∀ i,i<batch → new.1 i=seed.1 i) :
       freyaHistoryView q O batch (new,ω)=freyaHistoryView q O batch (seed,ω) := by
-    clear * - q O seed new ω batch hbits hrows freyaHistoryView freyaPageSeedQuery freyaPageTraceBeforeBatch freyaPageBatchStartInvariant freyaPageInvocationInvariant freyaPageSeedPendingAfter
+    clear * - q O seed new ω batch hbits hrows freyaHistoryView freyaPageSeedQuery freyaPageTraceBeforeBatch freyaPageBatchStartInvariant freyaPageInvocationInvariant freyaPageSeedPendingAfter freyaPageReplyBeforeBatch
 
     apply Prod.ext
     · exact freyaPageInvocationInvariant q O seed new ω batch hbits hrows
@@ -4364,7 +4421,8 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         by_cases hk : k<call
         · simp (config := { iota := false }) only [ite_eq_left hk]
           have ht := freyaPageTraceBeforeBatch q O seed new ω batch call hs hbits hrows k hk
-          rw [ht,freyaPageSeedQuery,freyaPageSeedPendingAfter]
+          rw [freyaPageReplyBeforeBatch q O seed new ω batch call hs hbits hrows k hk,
+            ht,freyaPageSeedQuery,freyaPageSeedPendingAfter]
         · simp (config := { iota := false }) only [ite_eq_right hk]
   have freyaPageHistoryEventInvariant (q : Raw)
       (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
@@ -4675,7 +4733,7 @@ theorem restart_service (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
         ((hCH a).snd.fst.prodMk ((hCH a).snd.snd.fst.prodMk (hCH a).snd.snd.snd))
     · intro a
       exact freyaMaskFactorMeas q O batch (a+1) _ (freyaRestartChoiceMeas q f τ O hservice batch a)
-        (freyaMaskChoice q O batch a)
+        (freyaMaskChoice q O hservice.1.1 batch a)
   have _ := hm
   have _ := hn
   have _ := hS
@@ -4706,7 +4764,7 @@ theorem conditional_full_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       multisetTimeBound τ q.m * P E := by
   open scoped BigOperators ENNReal NNReal in
   open MeasureTheory ProbabilityTheory OracleTemplate in
-  open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaInputs in
+  open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaInputs in
   open LongTails.Algorithms.FreyaRandomness LongTails.Algorithms.FreyaCollectors in
   open LongTails.Algorithms.FreyaPage LongTails.Proofs.FreyaCollectors in
     classical
@@ -4745,18 +4803,18 @@ theorem conditional_full_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (fun k => (measurable_pi_apply k).comp ((measurable_pi_apply batch).comp measurable_fst.fst))
       have ha (a : ℕ) : Measurable (fun z : Option (Request q.d q.m q.n) × (Seed q.K × ((k : ℕ) → O.Seed k)) =>
           restartAnswer q O batch a z.1 z.2) := by
-        have h := hprimitive.1 a
-        change Measurable (fun z : (Fin 1 × Option (Request q.d q.m q.n)) ×
-          (Seed q.K × ((k : ℕ) → O.Seed k)) => restartAnswer q O batch a z.1.2 z.2) at h
-        let g : Option (Request q.d q.m q.n) × (Seed q.K × ((k : ℕ) → O.Seed k)) →
-            (Fin 1 × Option (Request q.d q.m q.n)) × (Seed q.K × ((k : ℕ) → O.Seed k)) :=
-          fun z => ((0,z.1),z.2)
-        have hg : Measurable g := (measurable_const.prodMk measurable_fst).prodMk measurable_snd
-        exact Measurable.comp (g:=fun z : (Fin 1 × Option (Request q.d q.m q.n)) ×
-          (Seed q.K × ((k : ℕ) → O.Seed k)) => restartAnswer q O batch a z.1.2 z.2) (f:=g) h hg
+        let h0 : HistoryAt (Option (Request q.d q.m q.n)) (Reply q.d q.n) a :=
+          ⟨List.replicate a ((0, none), none), List.length_replicate⟩
+        have h := (hprimitive.1.2 a).comp (f := fun z : Option (Request q.d q.m q.n) ×
+          (Seed q.K × ((k : ℕ) → O.Seed k)) => ((h0, ((0 : Fin 1), z.1)), z.2))
+          ((measurable_const.prodMk (measurable_const.prodMk measurable_fst)).prodMk measurable_snd)
+        convert h using 1
+        funext z
+        simp [answerAt, h0]
       have hdiag : Measurable (fun z : Seed q.K × ((k : ℕ) → O.Seed k) => fun _ : ℕ => z) :=
         Measurable.of_eval (fun _ => measurable_id)
-      have hp := ae_of_ae_map hdiag.aemeasurable hprimitive.2
+      have hp := (ae_of_ae_map hdiag.aemeasurable hprimitive.2).mono fun z hz a => by
+        simpa only [List.length_replicate] using hz (List.replicate a ((0, none), none))
       have hb := (full_gradient_time (restrictedProbability (executionLaw q O) E hE) hm q.n hn
         (0 : Space q.d) 0 (restartedRows q O batch) (fun (_ : Fin q.m) (_ : Space q.d) => 0)
         τ hmono (restartAnswer q O batch) hr ha hp hfresh).2
@@ -4769,8 +4827,9 @@ theorem conditional_full_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       rw [hz] at hb
       let P := (executionLaw q O : Measure (Seed q.K × ((k : ℕ) → O.Seed k)))
       have hEm := hambient E hEmeas
-      have hpaths : ∀ᵐ z ∂P,servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)) :=
-        measurePreserving_snd.quasiMeasurePreserving.ae hservice.2
+      have hpaths : ∀ᵐ z ∂P,servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)) :=
+        (measurePreserving_snd.quasiMeasurePreserving.ae hservice.2).mono
+          fun z hz => servicePath_replyAt z.1 hz
       have he : (fun z => ((fullTrace q.n (List.ofFn id) (0 : Space q.d) 0 (restartedRows q O batch z)
           (fun a r => restartAnswer q O batch a r z) (q.n*q.m)).clock : ℝ≥0∞))=ᵐ[
             (restrictedProbability (executionLaw q O) E hE : Measure _)]
@@ -4799,7 +4858,7 @@ theorem conditional_full_cost_sharp (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       5 * equilibriumTime τ q.m * P E := by
   open scoped BigOperators ENNReal NNReal in
   open MeasureTheory ProbabilityTheory OracleTemplate in
-  open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaInputs in
+  open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaInputs in
   open LongTails.Algorithms.FreyaRandomness LongTails.Algorithms.FreyaCollectors in
   open LongTails.Algorithms.FreyaPage LongTails.Proofs.FreyaCollectors in
     classical
@@ -4838,18 +4897,18 @@ theorem conditional_full_cost_sharp (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (fun k => (measurable_pi_apply k).comp ((measurable_pi_apply batch).comp measurable_fst.fst))
       have ha (a : ℕ) : Measurable (fun z : Option (Request q.d q.m q.n) × (Seed q.K × ((k : ℕ) → O.Seed k)) =>
           restartAnswer q O batch a z.1 z.2) := by
-        have h := hprimitive.1 a
-        change Measurable (fun z : (Fin 1 × Option (Request q.d q.m q.n)) ×
-          (Seed q.K × ((k : ℕ) → O.Seed k)) => restartAnswer q O batch a z.1.2 z.2) at h
-        let g : Option (Request q.d q.m q.n) × (Seed q.K × ((k : ℕ) → O.Seed k)) →
-            (Fin 1 × Option (Request q.d q.m q.n)) × (Seed q.K × ((k : ℕ) → O.Seed k)) :=
-          fun z => ((0,z.1),z.2)
-        have hg : Measurable g := (measurable_const.prodMk measurable_fst).prodMk measurable_snd
-        exact Measurable.comp (g:=fun z : (Fin 1 × Option (Request q.d q.m q.n)) ×
-          (Seed q.K × ((k : ℕ) → O.Seed k)) => restartAnswer q O batch a z.1.2 z.2) (f:=g) h hg
+        let h0 : HistoryAt (Option (Request q.d q.m q.n)) (Reply q.d q.n) a :=
+          ⟨List.replicate a ((0, none), none), List.length_replicate⟩
+        have h := (hprimitive.1.2 a).comp (f := fun z : Option (Request q.d q.m q.n) ×
+          (Seed q.K × ((k : ℕ) → O.Seed k)) => ((h0, ((0 : Fin 1), z.1)), z.2))
+          ((measurable_const.prodMk (measurable_const.prodMk measurable_fst)).prodMk measurable_snd)
+        convert h using 1
+        funext z
+        simp [answerAt, h0]
       have hdiag : Measurable (fun z : Seed q.K × ((k : ℕ) → O.Seed k) => fun _ : ℕ => z) :=
         Measurable.of_eval (fun _ => measurable_id)
-      have hp := ae_of_ae_map hdiag.aemeasurable hprimitive.2
+      have hp := (ae_of_ae_map hdiag.aemeasurable hprimitive.2).mono fun z hz a => by
+        simpa only [List.length_replicate] using hz (List.replicate a ((0, none), none))
       have hb := full_gradient_time_sharp (restrictedProbability (executionLaw q O) E hE) hm q.n hn hlarge
         (0 : Space q.d) 0 (restartedRows q O batch) (fun (_ : Fin q.m) (_ : Space q.d) => 0)
         τ hmono (restartAnswer q O batch) hr ha hp hfresh
@@ -4862,8 +4921,9 @@ theorem conditional_full_cost_sharp (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
       rw [hz] at hb
       let P := (executionLaw q O : Measure (Seed q.K × ((k : ℕ) → O.Seed k)))
       have hEm := hambient E hEmeas
-      have hpaths : ∀ᵐ z ∂P,servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)) :=
-        measurePreserving_snd.quasiMeasurePreserving.ae hservice.2
+      have hpaths : ∀ᵐ z ∂P,servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)) :=
+        (measurePreserving_snd.quasiMeasurePreserving.ae hservice.2).mono
+          fun z hz => servicePath_replyAt z.1 hz
       have he : (fun z => ((fullTrace q.n (List.ofFn id) (0 : Space q.d) 0 (restartedRows q O batch z)
           (fun a r => restartAnswer q O batch a r z) (q.n*q.m)).clock : ℝ≥0∞))=ᵐ[
             (restrictedProbability (executionLaw q O) E hE : Measure _)]
@@ -4895,7 +4955,7 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
     set_option maxRecDepth 4096 in
     open scoped BigOperators ENNReal NNReal in
     open MeasureTheory ProbabilityTheory OracleTemplate in
-    open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaInputs in
+    open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaInputs in
     open LongTails.Algorithms.FreyaRandomness LongTails.Algorithms.FreyaCollectors in
     open LongTails.Algorithms.FreyaPage LongTails.Proofs.FreyaCollectors in
     by
@@ -5455,11 +5515,8 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (hservice : PrimitiveService f τ O) (k : ℕ) :
           Measurable (fun z : Seed q.K × ((k : ℕ) → O.Seed k) => trace q O z.1 z.2 k) := by
-        induction k with
-        | zero => exact (freyaPageInitialMeas q).comp measurable_fst
-        | succ k ih =>
-          exact (freyaPageUpdateMeas q).comp (ih.prodMk ((hservice.1 k).comp
-            (((freyaPageQueryMeas q).comp ih).prodMk ((measurable_pi_apply k).comp measurable_snd))))
+        exact (measurable_trajectory q O hservice.1.2 (freyaPageInitialMeas q)
+          (freyaPageUpdateMeas q) (freyaPageQueryMeas q) k).1
       have freyaFindMeas {Ω α : Type} [MeasurableSpace Ω] [MeasurableSpace α]
           (l : List α) (p : Ω → α → Bool) (hp : ∀ a,Measurable (fun z => p z a)) :
           Measurable (fun z => l.find? (p z)) := by
@@ -5555,7 +5612,7 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             (invocation q O z.1 z.2 batch,fun k : ℕ =>
               if k<(batchStartCall q O z.1 z.2 batch).getD 0 then
                 let s := trace q O z.1 z.2 k
-                let reply := O.answer k (query q s) (z.2 k)
+                let reply := replyAt q O z.1 z.2 k (query q s)
                 some (query q s,reply,collectorPendingAfter q s reply)
               else none)) := by
           apply (freyaPageInvocationMeas q f τ O hservice batch).prodMk
@@ -5563,7 +5620,8 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           intro k
           have hs := freyaPageTraceMeas q f τ O hservice k
           have hq := (freyaPageQueryMeas q).comp hs
-          have hr := (hservice.1 k).comp (hq.prodMk ((measurable_pi_apply k).comp measurable_snd))
+          have hr := measurable_replyAt q O hservice.1.2 (freyaPageInitialMeas q) (freyaPageUpdateMeas q)
+              (freyaPageQueryMeas q) k measurable_id hq
           have hp := (freyaPendingAfterMeas q).comp (hs.prodMk hr)
           apply (freyaOptionSomeMeas.comp (hq.prodMk (hr.prodMk hp))).ite _ measurable_const
           have he : Measurable (fun z : Seed q.K × ((k : ℕ) → O.Seed k) =>
@@ -5609,7 +5667,7 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           (τ : Fin q.n → ℝ≥0∞)
           (O : Oracle (Option (Request q.d q.m q.n)) (Reply q.d q.n) 1)
           (z : Seed q.K × ((k : ℕ) → O.Seed k))
-          (hs : servicePath f τ (fun a r => O.answer a (0,r) (z.2 a))) (batch : ℕ) :
+          (hs : servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r))) (batch : ℕ) :
           servicePath (fun (_ : Fin q.m) (_ : Space q.d) => 0) τ
             (fun a r => restartAnswer q O batch a r z) := by
         intro a
@@ -5627,8 +5685,8 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             cases j.kind <;> rfl
         constructor
         · have hnone := (hs call).1
-          change O.answer call (0,none) (z.2 call)=none at hnone
-          change Option.map _ (O.answer call (0,none) (z.2 call))=none
+          change replyAt q O z.1 z.2 call (0,none)=none at hnone
+          change Option.map _ (replyAt q O z.1 z.2 call (0,none))=none
           rw [hnone]
           rfl
         · intro r hr
@@ -5638,15 +5696,15 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
           obtain ⟨k,hk,hkj⟩ := Option.map_eq_some_iff.mp hj
           subst j
           change data.2.2.2.1+r.clock≤c at hc
-          change O.answer call (0,some R) (z.2 call)=some
+          change replyAt q O z.1 z.2 call (0,some R)=some
             (i,data.2.2.2.2+k.id,c,jobValue f (freyaLiftJob data.2.1 data.2.2.1 data.2.2.2.1 data.2.2.2.2 k)) at ha
           have ht : data.2.2.2.1≤c := (le_add_of_nonneg_right (show (0 : ℝ≥0)≤r.clock from bot_le)).trans hc
           refine ⟨i,k,c-data.2.2.2.1,hk,?_,?_,?_⟩
           · change Option.map (fun t : Fin q.n × ℕ × ℝ≥0 × Space q.d =>
               (t.1,t.2.1-data.2.2.2.2,t.2.2.1-data.2.2.2.1,(0 : Space q.d)))
-              (O.answer call (0,liftRequest q O batch z (some r)) (z.2 call))=_
+              (replyAt q O z.1 z.2 call (0,liftRequest q O batch z (some r)))=_
             rw [hlift]
-            change Option.map _ (O.answer call (0,some R) (z.2 call))=_
+            change Option.map _ (replyAt q O z.1 z.2 call (0,some R))=_
             rw [ha]
             dsimp only [Option.map_some]
             rw [Nat.add_sub_cancel_left,freyaZeroJobValue]
@@ -5672,8 +5730,9 @@ theorem conditional_difference_cost (q : Raw) (hm : 0 < q.m) (hn : 0 < q.n)
             4*equilibriumTime τ q.S*(executionLaw q O : Measure _) E := by
         let P := (executionLaw q O : Measure (Seed q.K × ((k : ℕ) → O.Seed k)))
         have hEm : MeasurableSet E := freyaHistoryAmbient q f τ O hservice batch E hEmeas
-        have hs : ∀ᵐ z ∂P,servicePath f τ (fun a r => O.answer a (0,r) (z.2 a)) :=
-          measurePreserving_snd.quasiMeasurePreserving.ae hservice.2
+        have hs : ∀ᵐ z ∂P,servicePath f τ (fun a r => replyAt q O z.1 z.2 a (0,r)) :=
+          (measurePreserving_snd.quasiMeasurePreserving.ae hservice.2).mono
+          fun z hz => servicePath_replyAt z.1 hz
         have hbound : ∀ᵐ z ∂P.restrict E,
             (batchElapsed q O z.1 z.2 batch : ℝ≥0∞)≤4*equilibriumTime τ q.S := by
           filter_upwards [ae_restrict_of_ae hs,ae_restrict_mem hEm] with z hz hze

@@ -1,4 +1,4 @@
-import LongTails.Algorithms.Muon
+import LongTails.Setups.MuonFrobenius
 import LongTails.Setups.MuonFrobenius
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 

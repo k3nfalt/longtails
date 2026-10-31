@@ -55,7 +55,7 @@ lemma execute_prefix (p : Public) {Ω : Type} [MeasurableSpace Ω]
   let st : ℕ → State p := fun r =>
     ⟨r, X r, if j.val ≤ r then X j.val else p.x0, j⟩
   let step : ℕ → State p → State p := fun r (s : State p) => (algorithm p).update s
-    ((oracle p P g).answer r ((algorithm p).query s) (ξ r))
+    ((batchEstimator p.S g ((algorithm p).query s).2 (ξ r)))
   have hstep (r : ℕ) : step r (st r) = st (r + 1) := by
     have hx := path_step (batchEstimator p.S g) p.gamma p.x0 ξ r
     change X (r+1) = X r - p.gamma • batchEstimator p.S g (X r) (ξ r) at hx
@@ -88,6 +88,7 @@ lemma execute_prefix (p : Public) {Ω : Type} [MeasurableSpace Ω]
       congr 1
       omega
   have hexe := executeCounted_advance (oracle p P g) (algorithm p) (p.N+1) j ξ
+    (fun k query => batchEstimator p.S g query.2 (ξ k)) (fun _ _ => rfl)
   apply hexe.trans
   change ((StochasticGradient.advance step (p.N+1) 0
     (⟨0, p.x0, p.x0, j⟩ : State p)).selected, p.N+1) = _
@@ -201,7 +202,8 @@ lemma query_cost (p : Public) {Ω : Type} [MeasurableSpace Ω]
       Fintype.card (Fin K × Fin p.S) = K * p.S := by
   constructor
   · exact congrArg Prod.snd (executeCounted_advance
-      (oracle p P g) (algorithm p) K j ξ)
+      (oracle p P g) (algorithm p) K j ξ
+      (fun k query => batchEstimator p.S g query.2 (ξ k)) (fun _ _ => rfl))
   · simp only [Fintype.card_prod, Fintype.card_fin]
 
 end OracleTemplate.BatchIterations

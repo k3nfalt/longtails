@@ -522,7 +522,8 @@ theorem arrival_accuracy (p : LongTails.Setups.RingmasterIterations.Params) (K :
       execute (arrivalOracle q arrive P g) (ringmasterPoint q) (fun _ => K) j ω =
         delayedIterate g q.gamma a q.x0 ω j.val := by
     have hadv := advance_ringmaster q hR1 g event ans (fun _ _ _ _ => rfl) hev j ω q.K le_rfl
-    erw [StochasticGradient.execute_advance]
+    erw [StochasticGradient.execute_advance_of_answer _ _ _ _ _
+      (fun c query => ans c query.2 (ω c)) (fun _ _ => rfl)]
     change ((ringmaster q).output (StochasticGradient.advance (fun c s => (ringmaster q).update s
       (ans c ((ringmaster q).query s).2 (ω c))) q.K 0 ((ringmaster q).initial j))).1 = _
     rw [hadv]
@@ -615,7 +616,8 @@ theorem universal_accuracy (p : LongTails.Setups.RingmasterUniversalTime.Params)
       execute (eventOracle q V P g) (ringmaster q) (fun _ => timeHorizon p.L p.σ p.ε p.Δ) j ω =
         (delayedIterate g q.gamma a q.x0 ω j.val, (timing q.R event q.K).clock) := by
     have hadv := advance_ringmaster q hR1 g event ans (fun _ _ _ _ => rfl) hev j ω q.K le_rfl
-    erw [StochasticGradient.execute_advance]
+    erw [StochasticGradient.execute_advance_of_answer _ _ _ _ _
+      (fun c query => ans c query.2 (ω c)) (fun _ _ => rfl)]
     change (ringmaster q).output (StochasticGradient.advance (fun c s => (ringmaster q).update s
       (ans c ((ringmaster q).query s).2 (ω c))) q.K 0 ((ringmaster q).initial j)) = _
     rw [hadv]

@@ -1,4 +1,4 @@
-import LongTails.Algorithms.BatchIterations
+import LongTails.Setups.RennalaIterations
 
 open MeasureTheory
 

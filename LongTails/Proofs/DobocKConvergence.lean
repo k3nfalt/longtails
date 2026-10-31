@@ -1,4 +1,5 @@
 import LongTails.Algorithms.DobocK
+import LongTails.Proofs.Execution
 import LongTails.Setups.DobocK
 import LongTails.Proofs.DobocKAnalysis
 import Mathlib.Algebra.QuadraticDiscriminant
@@ -414,26 +415,8 @@ theorem execute_dobocK (q : Public) (f : Fin q.n → EuclideanSpace ℝ (Fin q.d
     (hO : ∀ k x seed, O.answer k (0, x) seed = localOracle q f x) (k : ℕ)
     (seed : (dobocK q).Seed) (ξ : (j : ℕ) → O.Seed j) :
     execute O (dobocK q) (fun _ => k) seed ξ = iterate q f k := by
-  unfold execute iterate
-  simp only [Fin.sum_univ_one]
-  change _ = (fun x => step q x (localOracle q f x))^[k] ((dobocK q).initial seed)
-  generalize (dobocK q).initial seed = state
-  generalize (0 : ℕ) = call
-  induction k generalizing state call with
-  | zero => rfl
-  | succ k ih =>
-      change (if k + 1 = 0 then _ else _) = _
-      simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, ite_false]
-      have hr : Function.update (fun _ : Fin 1 => k + 1) ((dobocK q).query state).1 k = fun _ => k := by
-        funext i
-        have hi : i = ((dobocK q).query state).1 := Subsingleton.elim _ _
-        subst i
-        simp
-      simp only [Nat.add_sub_cancel]
-      rw [hr]
-      have ha : O.answer call ((dobocK q).query state) (ξ call) = localOracle q f state := hO _ _ _
-      rw [ha]
-      exact (ih _ _).trans (Function.iterate_succ_apply _ k state).symm
+  rw [execute_eq_of_answer_eq O (localOracle q f) hO, execute_iterate]
+  rfl
 
 end OracleTemplate.DobocK
 

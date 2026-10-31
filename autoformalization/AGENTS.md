@@ -2,10 +2,14 @@
 
 These are the task-specific instructions for formalizing existing mathematics in
 auto-math. Apply this file, WORKFLOW.md, PROTOCOL.md, OUTPUT_CONTRACT.md and the
-role prompt supplied in each packet. These workflow policies state all output
-requirements explicitly; do not infer them from the target repository's AGENTS.md,
-README, tutorial or example modules. The user's latest instructions take precedence. This workflow
-does not invoke auto-math's novelty-seeking research prompt.
+role prompt supplied in each packet. The target repository's own AGENTS.md
+(supplied as repository_instructions) and its LongTails/Template.lean (supplied in
+repository_interfaces) are authoritative for the Lean interface and repository
+conventions; these workflow policies add the autoformalization process, source
+fidelity and review requirements and do not restate those conventions. Do not
+infer conventions from README files, tutorials or example modules. The user's
+latest instructions take precedence. This workflow does not invoke auto-math's
+novelty-seeking research prompt.
 
 ## Repository context
 
@@ -18,9 +22,9 @@ In task packets, paths.project identifies that checkout and paths.workflow
 identifies these instructions. Generated outputs/, copied LongTails/ dependencies, server/ and build
 paths resolve under paths.project. The packet supplies absolute resource paths,
 run-local instructions, the complete workflow policy and actual template/renderer
-source. Apply these supplied contents before planning. Submit candidates through
-the controller. The original repository AGENTS.md hash is provenance, not an
-additional source of unstated mathematical or output requirements.
+source, plus the repository's AGENTS.md read from the run's pinned checkout.
+Apply these supplied contents before planning. Submit candidates through the
+controller.
 
 Generated modules use outputs.*; copied dependencies retain LongTails.*.
 The controller copies only the selected transitive dependency closure and builds
@@ -117,60 +121,41 @@ wrapper is a separate unit. Supporting propositions and derived transport lemmas
 do not each require public wrappers. Do not infer output counts from the requested
 target alone. Review the inventory and actual catalog together.
 
-Use the existing paths and mathematical interfaces:
+Generated modules live under outputs/{Algorithms,Setups,Proofs,Theorems}/ with
+outputs.* namespaces, mirroring the repository's LongTails/<Category>/ layout.
+Apply the repository instructions to them with that path and namespace mapping:
+which declarations belong in which category, which categories may import which,
+naming, style, assumption encodings and verification all come from the
+repository, not from this workflow. Keep LongTails/Template.lean unchanged.
+Reuse the pinned lean-toolchain and lake-manifest.json. Do not copy old compiled
+artifacts from another Lean version. Preserve existing repository declarations.
+No generic Formalized namespace or alternative public theorem API.
 
-- outputs/Algorithms/<UpperCamelCase>.lean: algorithms and their outputs.
-- outputs/Setups/<UpperCamelCase>.lean: concrete setup and assumptions.
-- outputs/Proofs/<UpperCamelCase>.lean: cohesive supporting lemma modules.
-- outputs/Theorems/<UpperCamelCase>.lean: public convergence results.
+The Template is a mathematical contract, not just a folder convention. Read its
+current source from repository_interfaces for every structure it declares
+(Algorithm, Oracle, execute, Setup, Convergence and others) instead of relying on
+a remembered form. Public results instantiate its Convergence statement for a
+setup spec and an explicit budget in the form the repository's Comparator and
+metadata tools accept; the controller runs those tools on every public candidate.
+Put supporting results in Proofs, even if their informal labels say 'theorem'.
+Distinct public cases use separate appropriately named modules. Pin the source
+algorithm family when an unrestricted existential algorithm would weaken its
+claim, placing the pinned method where the repository instructions require.
 
-Keep LongTails/Template.lean unchanged. Reuse the pinned lean-toolchain and
-lake-manifest.json. Do not copy old compiled artifacts from another Lean version.
-Preserve existing repository declarations. No generic Formalized namespace, flat
-assumptions.lean/algorithms.lean output, or alternative public theorem API.
-
-Follow the explicit OUTPUT_CONTRACT.md templates: imports, namespace, abbrev spec : Setup, one
-explicit single-line public budget definition, and theorem result : Convergence
-outputs.Setups.<Module>.spec budget. Put supporting results in Proofs, even if their informal labels say
-'theorem'. Group related lemmas; do not create one file per local fact. Distinct
-public cases use separate appropriately named modules. Validate namespace/name
-compatibility with Comparator and catalog extraction. Each public module has
-exactly one main theorem; supporting theorems belong in Proofs.
-
-The template is a mathematical contract, not just a folder convention. Its entire
-source and the construction rules are supplied in OUTPUT_CONTRACT.md and
-repository_interfaces; no external example is needed to determine requirements:
-
-- Algorithms use OracleTemplate.Algorithm, including the seed/law, state,
-  initialization, query, update and output needed by the source method. Queries
-  select an oracle ID in Fin numOracles as well as the query value.
-- Setups export abbrev spec : Setup under their module namespace,
-  outputs.Setups.<Module>. Public results import that module directly and name
-  its spec explicitly. Several results may reuse a compatible setup.
-  Specify numOracles, Params, Public, Instance, Query, Reply, Output, publicInput,
-  valid, admissible, successful and allowedAlgorithm as required by the source.
-  Preserve the distinction between public algorithm inputs and hidden instance
-  information. Pin the source algorithm family when an unrestricted existential
-  algorithm would weaken its claim.
-- Theorems define budget : spec.Params → Fin spec.numOracles → Nat in their own
-  module and export result : Convergence outputs.Setups.<Module>.spec budget.
-  Convergence asserts an allowed algorithm built from Public inputs and successful output for
-  every valid parameter and admissible instance/oracle under the template's law.
-  Each budget component counts calls to its oracle. execute returns the output
-  directly and stops if the next selected oracle's remaining budget is zero.
-  Review the complete indexed budget, routing and stopping behavior using the
-  existing cost and algorithm correspondence checks.
-  Record the source's headline quantity separately, with its own units and domain.
-  Iteration counts, batch work, elapsed time and other source quantities are not
-  interchangeable with this execution budget. Preserve the headline claim in
-  the reviewed setup/success/output or supporting statements as appropriate;
-  plan and prove the necessary correspondence. A definition naming a quantity
-  is not a proof that actual execution satisfies it.
-  Prove the correspondence to the source's iterations, output and probability
-  model in Proofs. Never replace these interfaces with look-alike definitions.
+Each budget component counts calls to its oracle as the Template's execute
+charges them. Review the complete indexed budget, routing and stopping behavior
+against the supplied execute definition. Record the source's headline quantity
+separately, with its own units and domain. Iteration counts, batch work, elapsed
+time and other source quantities are not interchangeable with this execution
+budget. Preserve the headline claim in the reviewed setup/success/output or
+supporting statements as appropriate; plan and prove the necessary
+correspondence. A definition naming a quantity is not a proof that actual
+execution satisfies it. Prove the correspondence to the source's iterations,
+output and probability model in Proofs. Never replace these interfaces with
+look-alike definitions.
 
 Select the namespace, imported proof modules and explicit budget from the reviewed
-source contract and explicit workflow templates. Inspect library declarations
+source contract, the repository instructions and the supplied Template. Inspect library declarations
 only for justified reuse; do not infer syntax/style requirements or import their
 mathematical assumptions, algorithm variants or rate formulas as defaults.
 
@@ -197,10 +182,16 @@ repairs require reopening the affected statement closure. Compatibility checking
 does not write server/theorems.json or server/Theorems/Descriptions; publishing
 those website artifacts is a separate operation.
 
-This workflow explicitly selects the layout and mathematical requirements above
-and in OUTPUT_CONTRACT.md. Research defaults in external repository instructions
-are not part of this workflow. Preserve the supplied source's method and cases;
-do not substitute novelty search or a different algorithm variant.
+Research-direction guidance in the repository instructions (seeking stronger
+rates, exploring new algorithms) does not apply to this workflow. Preserve the
+supplied source's method and cases; do not substitute novelty search or a
+different algorithm variant. If a repository convention and a workflow
+requirement appear to conflict, report the exact conflict instead of choosing.
+
+Integration (the controller's integrate command) copies a completed run's modules
+into a repository checkout with the outputs.* to LongTails.* mapping and runs
+that repository's own lint script and Comparator there. Its result, not this
+workflow's restatement of any rule, decides repository conformance.
 
 Do not add explanatory Lean comments/docstrings unless requested. Keep source
 correspondence, reviews and unresolved issues in run artifacts outside the Lean

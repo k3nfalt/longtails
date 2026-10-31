@@ -6,7 +6,7 @@ open scoped ENNReal NNReal
 
 namespace LongTails.Proofs.FreyaParameterTuning
 
-open LongTails.Proofs.FreyaModel LongTails.Proofs.FreyaEquilibrium
+open LongTails.Setups.FreyaModel LongTails.Proofs.FreyaEquilibrium
 open LongTails.Algorithms.FreyaInputs LongTails.Algorithms.FreyaTuning
 
 noncomputable def scalarCoefficient (L D a b : ℝ) (S : ℕ) (ρ : ℝ) : ℝ :=

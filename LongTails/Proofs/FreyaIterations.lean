@@ -7,7 +7,7 @@ open scoped BigOperators ENNReal NNReal
 
 namespace LongTails.Proofs.FreyaIterations
 
-open LongTails.Proofs.FreyaModel LongTails.Proofs.FreyaCollectors LongTails.Proofs.FreyaIndependence
+open LongTails.Setups.FreyaModel LongTails.Proofs.FreyaCollectors LongTails.Setups.FreyaIndependence
 open LongTails.Algorithms.FreyaInputs LongTails.Algorithms.FreyaRandomness
 open LongTails.Algorithms.FreyaPage LongTails.Algorithms.FreyaTuning
 
@@ -199,7 +199,7 @@ theorem iterations_execution_accuracy (p : LongTails.Setups.FreyaPageIterations.
         dsimp only [success]
         have hout (z : (constantPoint (none : Option (Request p.d p.m p.n)) p.x0).Seed × ((k : ℕ) → O.Seed k)) :
             execute O (constantPoint none p.x0) (fun _ => B) z.1 z.2=p.x0 := by
-          erw [StochasticGradient.execute_advance]
+          erw [execute_advance_history]
           rfl
         simp only [hout,hz,norm_zero,zero_pow (by decide : 2≠0)]
         exact ⟨integrable_const (0 : ℝ),by simpa only [integral_zero] using hε.le⟩
@@ -227,8 +227,8 @@ theorem iterations_execution_accuracy (p : LongTails.Setups.FreyaPageIterations.
         rw [halg]
         have hout (seed : Seed q.K) (ω : (k : ℕ) → O.Seed k) :
             execute O (pointOnly q) (fun _ => B) seed ω=(execute O (factory q) (fun _ => B) seed ω).1 := by
-          erw [StochasticGradient.execute_advance,StochasticGradient.execute_advance]
-          rfl
+          exact (LongTails.Proofs.FreyaExecution.execute_pointOnly q O seed ω B).trans
+            (congrArg Prod.fst (LongTails.Proofs.FreyaExecution.execute_correspondence q O seed ω B)).symm
         have he : (fun z : Seed q.K × ((k : ℕ) → O.Seed k) =>
             ‖gradient (objective f) (execute O (pointOnly q) (fun _ => B) z.1 z.2)‖^2)=ᵐ[(executionLaw q O : Measure (Seed q.K × ((k : ℕ) → O.Seed k)))]
             (fun z => ‖gradient (objective f) (execute O (factory q) (fun _ => B) z.1 z.2).1‖^2) :=

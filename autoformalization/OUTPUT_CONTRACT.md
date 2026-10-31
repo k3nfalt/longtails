@@ -1,207 +1,59 @@
 # Explicit LongTails output contract for autoformalization
 
 This is normative workflow policy, supplied in full to both agents in every task
-packet. Together with the other supplied workflow policies, it states the output
-requirements completely. Do not infer requirements from repository-root
-AGENTS.md, the research prompt, a README, the tutorial, or existing results.
-Library retrieval is for exact declarations and reusable mathematics, not for
-discovering unstated conventions. The user selects a source theorem; this
-workflow formalizes it and proves its adaptation to this public interface. It
-does not search for a different algorithm or an improved research result.
+packet. It adds autoformalization requirements (source fidelity, explicit derived
+budgets, review evidence) on top of the target repository's own interface and
+conventions; it does not restate or replace them. Library retrieval is for exact
+declarations and reusable mathematics. The user selects a source theorem; this
+workflow formalizes it and proves its adaptation to the repository's public
+interface. It does not search for a different algorithm or an improved research result.
 
-## 1. Exact imported interface
+## 1. Repository interface and conventions
 
-The following is the complete interface currently used by the workflow. It is
-reference code: import `LongTails.Template` in delivered modules; do not redeclare
-these structures. The controller checks this block against the actual pinned
-`repository_interfaces["LongTails/Template.lean"]` before issuing task packets.
-A mismatch is an interface-version error requiring a workflow contract update,
-not permission to edit the project's template or ignore the mismatch.
+The run's pinned repository checkout is the single source of truth for the Lean
+interface and for repository conventions. Every task packet supplies, read from
+that checkout when the packet is issued:
 
-<!-- BEGIN PINNED TEMPLATE -->
-```lean
-import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
-import Mathlib.MeasureTheory.Measure.Prod
+- `repository_interfaces["LongTails/Template.lean"]`: the complete OracleTemplate
+  API (Algorithm, Oracle, execute, Setup, Convergence and anything else it
+  declares). Import `LongTails.Template`; never redeclare, copy or edit it.
+- `repository_instructions`: the repository's own AGENTS.md. Its conventions for
+  file placement, imports between Algorithms/Setups/Proofs/Theorems, naming,
+  style, assumption encodings, measurability, oracle modelling and verification
+  apply to every generated module. Read `LongTails/<Category>/` paths and
+  `LongTails.<Category>.` namespaces in those instructions as the run's
+  `outputs/<Category>/` paths and `outputs.<Category>.` namespaces.
 
-open MeasureTheory
+The repository's research-direction guidance (seeking stronger rates, exploring
+new algorithms) does not override this workflow's source-fidelity requirements:
+formalize the selected source method and claim. If a repository convention and a
+workflow requirement appear to conflict, report the exact conflict instead of
+choosing silently. Integration runs the repository's own lint and Comparator on
+the delivered modules in the repository layout, so any convention the modules
+violate blocks integration even when the controller's earlier gates passed.
 
-namespace OracleTemplate
-
-universe uP uD uI uQ uR uO
-
-structure Algorithm (Query : Type uQ) (Reply : Type uR) (Output : Type uO) (numOracles : ℕ := 1) where
-  Seed : Type := Unit
-  [seedSpace : MeasurableSpace Seed]
-  law : ProbabilityMeasure Seed := by exact ⟨MeasureTheory.Measure.dirac (), inferInstance⟩
-  State : Type (max uQ uR uO)
-  initial : Seed → State
-  query : State → Fin numOracles × Query
-  update : State → Reply → State
-  output : State → Output
-
-attribute [instance] Algorithm.seedSpace
-
-structure Oracle (Query : Type uQ) (Reply : Type uR) (numOracles : ℕ := 1) where
-  Seed : ℕ → Type := fun _ => Unit
-  [seedSpace : ∀ k, MeasurableSpace (Seed k)]
-  law : ProbabilityMeasure ((k : ℕ) → Seed k) := by
-    exact ⟨MeasureTheory.Measure.dirac (fun _ => ()), inferInstance⟩
-  answer : (k : ℕ) → (Fin numOracles × Query) → Seed k → Reply
-
-attribute [instance] Oracle.seedSpace
-
-private def _run
-    {Query : Type uQ} {Reply : Type uR} {Output : Type uO}
-    {numOracles : ℕ}
-    (oracle : ℕ → (Fin numOracles × Query) → Reply)
-    (A : Algorithm Query Reply Output numOracles) :
-    Nat → Nat → (Fin numOracles → ℕ) → A.State → Output
-  | 0, _, _, state => A.output state
-  | k + 1, call, remaining, state =>
-      let query := A.query state
-      if remaining query.1 = 0 then A.output state
-      else
-        let reply := oracle call query
-        let remaining := Function.update remaining query.1 (remaining query.1 - 1)
-        _run oracle A k (call + 1) remaining (A.update state reply)
-
-def execute
-    {Query : Type uQ} {Reply : Type uR} {Output : Type uO}
-    {numOracles : ℕ}
-    (oracle : Oracle Query Reply numOracles) (A : Algorithm Query Reply Output numOracles)
-    (budget : Fin numOracles → ℕ) (seed : A.Seed := by exact ())
-    (oracleSeed : (k : ℕ) → oracle.Seed k := by exact fun _ => ()) : Output :=
-  _run (fun k query => oracle.answer k query (oracleSeed k))
-    A (∑ i, budget i) 0 budget (A.initial seed)
-
-structure Setup where
-  numOracles : ℕ := 1
-  Params : Type uP
-  Public : Type uD
-  Instance : Public → Type uI
-  Query : Public → Type uQ
-  Reply : Public → Type uR
-  Output : Public → Type uO
-  publicInput : Params → Public
-  valid : Params → Prop
-  admissible : (p : Params) → Instance (publicInput p) →
-    Oracle (Query (publicInput p)) (Reply (publicInput p)) numOracles → Prop
-  successful : {Ω : Type} → [MeasurableSpace Ω] →
-    (p : Params) → Instance (publicInput p) →
-    (Ω → Output (publicInput p)) → ProbabilityMeasure Ω → Prop
-  allowedAlgorithm : (p : Public) → Algorithm (Query p) (Reply p) (Output p) numOracles → Prop :=
-    fun _ _ => True
-
-def Convergence (S : Setup)
-    (budget : S.Params → Fin S.numOracles → ℕ) : Prop :=
-  ∃ makeAlgorithm : (p : S.Public) → Algorithm (S.Query p) (S.Reply p) (S.Output p) S.numOracles,
-    (∀ p, S.valid p →
-      ∀ (I : S.Instance (S.publicInput p))
-        (oracle : Oracle (S.Query (S.publicInput p)) (S.Reply (S.publicInput p)) S.numOracles),
-        S.admissible p I oracle →
-          let A := makeAlgorithm (S.publicInput p)
-          let result := fun seed : A.Seed × ((k : ℕ) → oracle.Seed k) =>
-            execute oracle A (budget p) seed.1 seed.2
-          S.successful p I result
-            ⟨(A.law : Measure _).prod (oracle.law : Measure _), inferInstance⟩) ∧
-    ∀ p, S.valid p → S.allowedAlgorithm (S.publicInput p) (makeAlgorithm (S.publicInput p))
-
-end OracleTemplate
-```
-<!-- END PINNED TEMPLATE -->
-
-## 2. File and declaration templates
+## 2. Files and declarations
 
 Generate only `outputs/{Algorithms,Setups,Proofs,Theorems}/Name.lean` modules.
-Use UpperCamelCase module filenames and new directory names. Copied library
-dependencies retain their original namespaces and are read-only. Do not create
-an alias library, a `Formalized` namespace, or a parallel public theorem API.
-Group related supporting lemmas into cohesive modules. Do not add explanatory
-Lean comments/docstrings unless the user requests them; keep source evidence,
-design decisions and reviews in run artifacts. Do not publish, commit or push.
+Copied library dependencies retain their original namespaces and are read-only.
+Do not create an alias library, a `Formalized` namespace, or a parallel public
+theorem API. Keep source evidence, design decisions and reviews in run artifacts.
+Do not publish, commit or push.
 
-The angle-bracket tokens below are explicitly schematic substitution positions,
-not Lean syntax to submit. Replace every token with reviewed, concrete Lean.
-Do not substitute an opaque helper for an expression required to be inline.
+Which declarations live in which category, and which categories may import which,
+follow `repository_instructions` exactly (for example, where a setup's pinned
+method must be defined). Setups instantiate the `Setup` structure declared in the
+supplied Template and set every field the source requires; algorithms instantiate
+its `Algorithm` structure; oracles instantiate its `Oracle` structure with exactly
+the `answer` signature the Template declares. Do not rely on remembered or example
+forms of these structures: read their current fields from
+`repository_interfaces["LongTails/Template.lean"]`. Every component must use the
+same reviewed parameter mapping, and concrete definitions must be complete Lean,
+not schematic placeholders.
 
-```lean
--- outputs/Setups/<Name>.lean
-import LongTails.Template
-import outputs.Algorithms.<Method>
-
-namespace outputs.Setups.<Name>
-open OracleTemplate MeasureTheory
-
-structure Params where
-  <problem class constants, accuracy, initial data and type instances>
-
-structure Public where
-  <exactly the inputs legitimately available to the algorithm>
-
-def publicInput (p : Params) : Public := <explicit projection or derived inputs>
-
-noncomputable abbrev spec : Setup where
-  numOracles := <number of separately counted oracle IDs>
-  Params := Params
-  Public := Public
-  Instance p := <hidden instance type>
-  Query p := <query type>
-  Reply p := <reply type>
-  Output p := <returned object type>
-  publicInput := publicInput
-  valid p := <parameter domain>
-  admissible p I O := <instance and oracle assumptions>
-  successful p I output P := <explicit output criterion and needed regularity>
-  allowedAlgorithm p A := <source algorithm family restriction>
-
-end outputs.Setups.<Name>
-```
-
-```lean
--- outputs/Algorithms/<Method>.lean
-import LongTails.Template
-
-namespace outputs.Algorithms.<Method>
-open OracleTemplate MeasureTheory
-
-noncomputable def algorithm (p : <public input type>) :
-    Algorithm (<Query p>) (<Reply p>) (<Output p>) <numOracles> where
-  Seed := <private randomness type; Unit for a deterministic method>
-  seedSpace := <measurable space instance>
-  law := <probability law of private randomness>
-  State := <state including all output-selection memory>
-  initial seed := <initial state>
-  query state := (<oracle ID>, <query computed from state>)
-  update state reply := <actual source update and memory update>
-  output state := <named returned object extracted from state>
-
-end outputs.Algorithms.<Method>
-```
-
-Place shared public input types in the algorithm module or a shared definition
-module when necessary to avoid an import cycle; the setup can refer to that
-type. Every component must use the same reviewed parameter mapping. The agent
-must supply actual definitions, not the schematic tokens above.
-
-```lean
--- outputs/Theorems/<Name>.lean
-import outputs.Setups.<Name>
-import outputs.Proofs.<Name>Convergence
-
-namespace outputs.Theorems.<Name>
-open OracleTemplate
-
-noncomputable def budget : (let S := outputs.Setups.<Name>.spec; S.Params → Fin S.numOracles → ℕ) := fun p i => <one explicit formula in the setup parameters for oracle i>
-
-theorem result : Convergence outputs.Setups.<Name>.spec budget := by
-  refine ⟨<algorithm factory on Public>, ?_, ?_⟩
-  · intro p hp I O hadm
-    <prove successful for the actual execute output and its product law>
-  · intro p hp
-    <prove allowedAlgorithm for the same algorithm factory>
-
-end outputs.Theorems.<Name>
-```
+Each public module in `outputs/Theorems/` exports one explicit `budget` and one
+main `result` in the form the repository's Comparator and convergence-metadata
+tools accept for the run's checkout (both are run on every public candidate).
 
 The setup namespace must equal its module path. Public result and budget share
 their module namespace. Import the setup directly and name its fully qualified
@@ -218,7 +70,7 @@ requires every proof, including all support, to be free of admissions.
   explicitly justified method-family settings. Classify every field as problem
   data, accuracy, known input, analysis-only bound, or fixed family setting.
   Derived tuning and derived execution counts must never be Params fields:
-  compute them in publicInput or the algorithm using named definitions in Algorithms.
+  compute them in publicInput or the algorithm using named definitions.
   Do not put an arbitrary sufficient call count in Params to
   avoid deriving complexity. No field may encode the conclusion as an assumption.
 - `Public` and `publicInput`: the algorithm receives only these inputs, not I or
@@ -421,32 +273,15 @@ the public accuracy expression. Name local step size, initial gap and iteration
 count `η`, `Δ`, and `K` respectively, where those quantities occur. Reuse their
 definitions in the algorithm and proof; keep the public budget formula expanded.
 
-For IID samples reuse this exact existing declaration, importing
-`LongTails.Setups.StochasticGeneralizedSmoothAndConvex`; do not redeclare IID:
+For IID samples reuse the repository's existing IID declaration named in
+`repository_instructions`, with the fully qualified name and argument order shown
+there; inspect its current fields in the copied library source rather than a
+remembered form, and do not redeclare it. This requirement does not impose IID on a source with dependent noise.
 
-```lean
--- Existing API, shown completely as reference, not code to redeclare.
-structure IID {Ω Ξ : Type*} [MeasurableSpace Ω] [MeasurableSpace Ξ]
-    (ξ : ℕ → Ξ → Ω) (p : Measure Ω) (P : Measure Ξ) : Prop where
-  measurable : ∀ k, Measurable (ξ k)
-  independent : ProbabilityTheory.iIndepFun ξ P
-  marginal : ∀ k, P.map (ξ k) = p
-```
-
-Use the fully qualified type in assumptions:
-
-```lean
-(h_samples : LongTails.Setups.StochasticGeneralizedSmoothAndConvex.IID ξ p P)
-```
-
-Here Ω is the single-sample space, Ξ the ambient space, ξ the sample maps,
-p their common marginal measure, and P the ambient measure. Supply the source's
-probability-measure instances explicitly. The fields are accessed as
-`h_samples.measurable`, `h_samples.independent`, and `h_samples.marginal`.
-This requirement does not impose IID on a source with dependent noise.
-
-Convergence uses the product of the algorithm's seed law and the oracle tape law;
-check that this independence matches the source. An average expected rate can be
+Read the execution law and the arguments passed to `Oracle.answer` from the
+supplied Template's `Convergence` and `execute`. Check that this law matches the
+source's probability model, and state oracle admissibility for every argument
+the Template supplies to `answer`; do not assume a narrower calling convention. An average expected rate can be
 converted using an independent uniform output index with a proved law. A best
 iterate selector must use accessible replies; stochastic gradients are not exact
 gradient norms. Distinguish pre-update, post-update, last and average iterates,

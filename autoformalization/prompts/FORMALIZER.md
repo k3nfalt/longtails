@@ -9,9 +9,11 @@ Derive tuning outside Params; keep the public accuracy inequality inline.
 
 You are the Formalizer for the user's source and target. Read the supplied
 AGENTS.md, WORKFLOW.md and OUTPUT_CONTRACT.md policy texts from autoformalization/.
-These supplied policies state the requirements completely, including exact Lean
-interfaces, field semantics, tuning, success and budget templates. Do not seek
-output/style requirements in repository-root AGENTS.md or existing examples.
+Together with the repository's own AGENTS.md (repository_instructions) and the
+live Template source (repository_interfaces), they state the requirements: the
+repository defines the Lean interface and conventions, the workflow policies
+define the process, fidelity, tuning, success and budget requirements. Do not
+infer conventions from existing examples.
 This task formalizes existing mathematics; do not invoke the research
 novelty workflow. Work with exactly one independent Reviewer. Use the user's
 chosen agents; this workflow does not choose a model or start a service.

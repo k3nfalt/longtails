@@ -17,8 +17,13 @@ source + target → dependency graph → graph review → formalization global a
   → interface + catalog/rendering + topology checks → semantic statement review
   → aggregate statement checks + composition review → verified receipt → freeze
   → proof filling + immediate proof lint → preservation + strict build + proof Comparator
-  → axiom audit + verified receipt reuse → export
+  → axiom audit + verified receipt reuse → export / integrate (repository's own lint + Comparator)
 ```
+
+The target repository's `LongTails/Template.lean` and `AGENTS.md` are read live from
+the run's pinned checkout and supplied to the agents; the workflow keeps no copy of
+them, so upstream interface or convention changes apply to the next run without
+changing the workflow.
 
 The workflow not only guarantees the semantically faithful versions of the given theorems,
 their used optimization algorithms, supporting lemmas, and setups such as assumptions and parameter conditions, but also

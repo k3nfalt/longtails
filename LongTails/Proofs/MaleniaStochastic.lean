@@ -599,7 +599,7 @@ theorem execute_iter (p : BatchIterations.Public) (n : ℕ) (B : ℕ → Fin n �
     ⟨r, X r, if j.val ≤ r then X j.val else p.x0, j⟩
   let step : ℕ → BatchIterations.State p → BatchIterations.State p := fun r s =>
     (BatchIterations.algorithm p).update s
-      ((iterOracle p n B P g).answer r ((BatchIterations.algorithm p).query s) (ξ r))
+      ((estimator (B r) g ((BatchIterations.algorithm p).query s).2 (ξ r)))
   have hstep (r : ℕ) : step r (st r) = st (r + 1) := by
     have hx : X (r + 1) = X r - p.gamma • estimator (B r) g (X r) (ξ r) := rfl
     change (⟨r + 1, X r - p.gamma • estimator (B r) g (X r) (ξ r),
@@ -631,7 +631,8 @@ theorem execute_iter (p : BatchIterations.Public) (n : ℕ) (B : ℕ → Fin n �
       rw [hstep, ih]
       congr 1
       omega
-  erw [executeCounted_advance]
+  erw [executeCounted_advance _ _ _ _ _ (fun k query => estimator (B k) g query.2 (ξ k))
+    (fun _ _ => rfl)]
   change ((StochasticGradient.advance step (p.N + 1) 0
     ((BatchIterations.algorithm p).initial j)).selected, p.N + 1) = _
   rw [hinit, hadvance]

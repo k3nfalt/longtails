@@ -83,6 +83,14 @@ def parser():
     )
     export.add_argument("--run", required=True)
     export.add_argument("--destination", required=True)
+    integrate = sub.add_parser(
+        "integrate",
+        help="Copy proved modules into a repository checkout and run its own lint and Comparator",
+    )
+    integrate.add_argument("--run", required=True)
+    integrate.add_argument("--repository", required=True)
+    integrate.add_argument("--timeout", type=int, default=86400)
+    integrate.add_argument("--out")
     drive = sub.add_parser(
         "drive", help="Run external Formalizer/Reviewer command adapters"
     )
@@ -336,6 +344,8 @@ def main(argv=None):
                                 )
                             elif args.command == "export":
                                 result = run.export(args.destination)
+                            elif args.command == "integrate":
+                                result = run.integrate(args.repository, args.timeout)
                             else:
                                 result = getattr(run, args.command)()
                         if result is None:

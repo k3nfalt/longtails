@@ -1,5 +1,5 @@
 import LongTails.Template
-import LongTails.Proofs.FreyaModel
+import LongTails.Setups.FreyaPageUniform
 import Mathlib.NumberTheory.Harmonic.Bounds
 import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
 
@@ -7,7 +7,7 @@ open scoped BigOperators ENNReal NNReal
 
 namespace LongTails.Proofs.FreyaEquilibrium
 
-open LongTails.Proofs.FreyaModel
+open LongTails.Setups.FreyaModel
 
 theorem prefix_threshold {n : ℕ} (hn : 0 < n) (τ : Fin n → ℝ≥0∞)
     (hmono : Monotone τ) (hpos : ∀ i, 0 < τ i) (hfinite : ∃ i, τ i ≠ ⊤)

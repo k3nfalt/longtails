@@ -7,7 +7,7 @@ open scoped BigOperators ENNReal NNReal
 
 namespace LongTails.Proofs.FreyaFreeTime
 
-open LongTails.Proofs.FreyaModel LongTails.Proofs.FreyaCollectors LongTails.Proofs.FreyaIndependence
+open LongTails.Setups.FreyaModel LongTails.Proofs.FreyaCollectors LongTails.Setups.FreyaIndependence
 open LongTails.Algorithms.FreyaInputs LongTails.Algorithms.FreyaRandomness
 open LongTails.Algorithms.FreyaPage LongTails.Algorithms.FreyaTuning
 
@@ -138,7 +138,7 @@ theorem free_time_execution_accuracy (p : LongTails.Setups.FreyaPageTime.Params)
         dsimp only [success]
         have hout (z : (constantPoint (none : Option (Request p.d p.m p.n)) (p.x0,(0 : ℝ≥0))).Seed × ((k : ℕ) → O.Seed k)) :
             execute O (constantPoint none (p.x0,0)) (fun _ => B) z.1 z.2=(p.x0,0) := by
-          erw [StochasticGradient.execute_advance]
+          erw [execute_advance_history]
           rfl
         simp only [hout,hz,norm_zero,zero_pow (by decide : 2≠0),ENNReal.coe_zero,lintegral_zero]
         exact ⟨integrable_const (0 : ℝ),by simpa only [integral_zero] using hε.le,zero_le⟩

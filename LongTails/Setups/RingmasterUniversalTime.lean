@@ -1,6 +1,6 @@
 import LongTails.Template
-import LongTails.Algorithms.RingmasterAsgd
-import LongTails.Algorithms.BatchIterations
+import LongTails.Setups.RingmasterIterations
+import LongTails.Setups.RennalaIterations
 import LongTails.Setups.RennalaUniformTime
 
 open MeasureTheory

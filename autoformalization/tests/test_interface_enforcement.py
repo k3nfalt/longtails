@@ -421,11 +421,17 @@ class EnforcementTests(unittest.TestCase):
         for rule in [
             "letI : MeasureSpace",
             "sampleMean",
-            "LongTails.Setups.StochasticGeneralizedSmoothAndConvex.IID",
+            "repository_instructions",
             "`η`, `Δ`, and `K`",
             "IsMinOn f Set.univ p.xstar",
         ]:
             self.assertIn(rule, contract)
+        for copied in [
+            "structure IID",
+            "structure Oracle",
+            "import outputs.Algorithms",
+        ]:
+            self.assertNotIn(copied, contract)
         self.assertNotIn("∃ xstar, IsMinOn", contract)
         protocol = (ROOT / "PROTOCOL.md").read_text(encoding="utf-8")
         self.assertIn('"schema_version": 3', protocol)
@@ -525,7 +531,6 @@ class EnforcementTests(unittest.TestCase):
 
     def test_real_packet_builder_and_next_envelope_with_indirect_evidence(self):
         from autoformalize.engine import controller_version
-        from autoformalize.interface_contract import BEGIN, END
 
         plan, graph, invs = fixture()
         with temporary_workspace() as tmp:
@@ -534,14 +539,12 @@ class EnforcementTests(unittest.TestCase):
                 path = run.compiler.project / u["file"]
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("def sourceWitness := 0\n")
-            template = (
-                (ROOT / "OUTPUT_CONTRACT.md")
-                .read_text(encoding="utf-8")
-                .split(BEGIN, 1)[1]
-                .split(END, 1)[0]
+            template = (ROOT.parent / "LongTails/Template.lean").read_text(
+                encoding="utf-8"
             )
             for relative, body in {
                 "AGENTS.md": "Run guidance",
+                "REPOSITORY_AGENTS.md": "Repository guidance",
                 "LongTails/Template.lean": template,
                 "server/Theorems/BudgetLatex.lean": "-- fixture",
             }.items():

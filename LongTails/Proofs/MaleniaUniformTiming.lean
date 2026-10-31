@@ -103,8 +103,7 @@ theorem harmonic_mono {n S : ℕ} (B B' : Fin n → ℕ) (hle : ∀ i, B i ≤ B
 
 theorem round_step_h (q : Public) (V : Fin q.n → ℝ → ℝ)
     (hV : ∀ i, ContinuousOn (V i) (Set.Ici 0) ∧ MonotoneOn (V i) (Set.Ici 0)) (hn : 0 < q.n)
-    {Ω : Type} [MeasurableSpace Ω] (P : ProbabilityMeasure (ℕ → Ω))
-    (g : Fin q.n → Point q.d → Ω → Point q.d)
+    {Ω : Type} (g : Fin q.n → Point q.d → Ω → Point q.d)
     (r : ℕ) (hr : r < q.K) (s : ℝ) (hs : 0 ≤ s) (tstar : ℝ) (htstar : 0 ≤ tstar)
     (hready : harmonicReady q.n q.S (fun i => (⌊V i tstar - V i s⌋).toNat)) (call0 : ℕ) :
     ∃ (E : ℕ) (c : ℝ) (Bf : Fin q.n → ℕ) (mm : ℕ → ℕ),
@@ -112,7 +111,7 @@ theorem round_step_h (q : Public) (V : Fin q.n → ℝ → ℝ)
       E = ∑ i, Bf i ∧
       ∀ (X sel : Point q.d) (jv : ℕ) (z : ℕ → ℕ → ℕ → Ω),
         StochasticGradient.advance (fun k state => (malenia q).update state
-            ((eventOracle q V P g).answer k ((malenia q).query state) (z k))) E call0
+            ((eventAnswer q V g ((malenia q).query state).2 (z k)))) E call0
           (⟨r, fun _ => 0, fun _ => 0, X, fun _ => s, s, jv, sel⟩ : State q) =
         ⟨r + 1, fun _ => 0, fun _ => 0, X - q.gamma • estimator Bf g X (fun c' => z (mm c') r c'),
           fun _ => c, c, jv,
@@ -164,7 +163,7 @@ theorem round_step_h (q : Public) (V : Fin q.n → ℝ → ℝ)
         (∀ i, (Bf i : ℝ) ≤ V i c - V i s) ∧ E + ∑ i, cnt i = ∑ i, Bf i ∧
         ∀ (X sel : Point q.d) (jv : ℕ) (z : ℕ → ℕ → ℕ → Ω) (sums : Fin q.n → Point q.d),
           StochasticGradient.advance (fun k state => (malenia q).update state
-              ((eventOracle q V P g).answer k ((malenia q).query state) (z k))) E call
+              ((eventAnswer q V g ((malenia q).query state).2 (z k)))) E call
             (⟨r, cnt, sums, X, st, clk, jv, sel⟩ : State q) =
           ⟨r + 1, fun _ => 0, fun _ => 0,
             X - q.gamma • ((1 / (q.n : ℝ)) • ∑ i, (1 / (Bf i : ℝ)) •
@@ -216,8 +215,7 @@ theorem round_step_h (q : Public) (V : Fin q.n → ℝ → ℝ)
         omega
       have hstep : ∀ (X sel : Point q.d) (jv : ℕ) (z : ℕ → ℕ → ℕ → Ω) (sums : Fin q.n → Point q.d),
           (malenia q).update (⟨r, cnt, sums, X, st, clk, jv, sel⟩ : State q)
-            ((eventOracle q V P g).answer call
-              ((malenia q).query (⟨r, cnt, sums, X, st, clk, jv, sel⟩ : State q)) (z call)) =
+            ((eventAnswer q V g ((malenia q).query (⟨r, cnt, sums, X, st, clk, jv, sel⟩ : State q)).2 (z call))) =
           step q ⟨r, cnt, sums, X, st, clk, jv, sel⟩
             (some (e, a, g e X (z call r (code q.n e (cnt e))))) := by
         intro X sel jv z sums
@@ -226,7 +224,7 @@ theorem round_step_h (q : Public) (V : Fin q.n → ℝ → ℝ)
           show (0, if q.K ≤ r then none else some (X, st, r, cnt)) = _
           rw [ite_eq_right (by omega)]
         rw [hq]
-        have hans : (eventOracle q V P g).answer call (0, some (X, st, r, cnt)) (z call) =
+        have hans : (eventAnswer q V g (0, some (X, st, r, cnt)).2 (z call)) =
             some (e, a, g e X (z call r (code q.n e (cnt e)))) := by
           show Option.elim (RennalaUniform.earliest (fun i => RennalaUniform.completion (V i) (st i))
             (List.finRange q.n)) none
@@ -432,7 +430,7 @@ theorem execute_malenia (q : Public) (V : Fin q.n → ℝ → ℝ)
       (∀ i, ((∑ r' ∈ Finset.range r, B r' i : ℕ) : ℝ) ≤ V i c - V i 0) ∧
       E = ∑ r' ∈ Finset.range r, ∑ i, B r' i ∧
       ∀ (j : Fin (q.K + 1)) (z : ℕ → ℕ → ℕ → Ω),
-        StochasticGradient.advance (fun k state => (malenia q).update state ((eventOracle q V P g).answer k ((malenia q).query state) (z k))) E 0 ((malenia q).initial j) =
+        StochasticGradient.advance (fun k state => (malenia q).update state ((eventAnswer q V g ((malenia q).query state).2 (z k)))) E 0 ((malenia q).initial j) =
           (⟨r, fun _ => 0, fun _ => 0, iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') r,
             fun _ => c, c, j.val,
             if j.val ≤ r then iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') j.val
@@ -489,7 +487,7 @@ theorem execute_malenia (q : Public) (V : Fin q.n → ℝ → ℝ)
         have h2 : ⌊V i tstar - V i τ⌋ ≤ ⌊V i tstar - V i c⌋ := Int.floor_mono (by linarith)
         omega
       obtain ⟨Er, c', Bf, mm, hcc', hc't, hRf, hBfV, hEr, hround⟩ :=
-        round_step_h q V hV hn P g r (by omega) c hc0 tstar ht0 hready E
+        round_step_h q V hV hn g r (by omega) c hc0 tstar ht0 hready E
       refine ⟨c', E + Er, Function.update B r Bf, Function.update M r mm, hc0.trans hcc', ?_, ?_, ?_, ?_, ?_⟩
       · rw [hd1']
         exact ENNReal.ofReal_le_ofReal hc't
@@ -550,7 +548,7 @@ theorem execute_malenia (q : Public) (V : Fin q.n → ℝ → ℝ)
     have h1 := hmono i hc0 hcτ
     linarith [hBV i]
   refine ⟨c, B, M, hcd, hB, fun j z => ?_⟩
-  have hidle : ∀ m call, StochasticGradient.advance (fun k state => (malenia q).update state ((eventOracle q V P g).answer k ((malenia q).query state) (z k))) m call
+  have hidle : ∀ m call, StochasticGradient.advance (fun k state => (malenia q).update state ((eventAnswer q V g ((malenia q).query state).2 (z k)))) m call
       (⟨q.K, fun _ => 0, fun _ => 0, iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') q.K,
         fun _ => c, c, j.val,
         if j.val ≤ q.K then iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') j.val
@@ -564,15 +562,14 @@ theorem execute_malenia (q : Public) (V : Fin q.n → ℝ → ℝ)
     | zero => intro call; rfl
     | succ m ih =>
       intro call
-      show StochasticGradient.advance (fun k state => (malenia q).update state ((eventOracle q V P g).answer k ((malenia q).query state) (z k))) m (call + 1) ((malenia q).update _ _) = _
+      show StochasticGradient.advance (fun k state => (malenia q).update state ((eventAnswer q V g ((malenia q).query state).2 (z k)))) m (call + 1) ((malenia q).update _ _) = _
       have hu : (malenia q).update (⟨q.K, fun _ => 0, fun _ => 0,
           iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') q.K, fun _ => c, c, j.val,
           if j.val ≤ q.K then iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') j.val
-          else q.x0⟩ : State q) ((eventOracle q V P g).answer call
-            ((malenia q).query ⟨q.K, fun _ => 0, fun _ => 0,
+          else q.x0⟩ : State q) ((eventAnswer q V g ((malenia q).query ⟨q.K, fun _ => 0, fun _ => 0,
               iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') q.K, fun _ => c, c, j.val,
               if j.val ≤ q.K then iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') j.val
-              else q.x0⟩) (z call)) =
+              else q.x0⟩).2 (z call))) =
           ⟨q.K, fun _ => 0, fun _ => 0,
             iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') q.K, fun _ => c, c, j.val,
             if j.val ≤ q.K then iterate g q.gamma B q.x0 (fun r' c' => z (M r' c') r' c') j.val
@@ -580,8 +577,9 @@ theorem execute_malenia (q : Public) (V : Fin q.n → ℝ → ℝ)
         show (if q.K ≤ q.K then _ else _) = _
         erw [ite_eq_left le_rfl]
       rw [hu, ih]
-  erw [executeCounted_advance]
-  change ((malenia q).output (StochasticGradient.advance (fun k state => (malenia q).update state ((eventOracle q V P g).answer k ((malenia q).query state) (z k))) calls 0 ((malenia q).initial j)), calls) = _
+  erw [executeCounted_advance _ _ _ _ _ (fun k query => eventAnswer q V g query.2 (z k))
+    (fun _ _ => rfl)]
+  change ((malenia q).output (StochasticGradient.advance (fun k state => (malenia q).update state ((eventAnswer q V g ((malenia q).query state).2 (z k)))) calls 0 ((malenia q).initial j)), calls) = _
   rw [show calls = E + (calls - E) by omega, hadd, hadv j z, hidle]
   show ((if j.val ≤ q.K then _ else q.x0, c), E + (calls - E)) = _
   rw [ite_eq_left (by omega), show E + (calls - E) = calls by omega]

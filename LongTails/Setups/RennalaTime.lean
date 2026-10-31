@@ -1,10 +1,27 @@
-import LongTails.Proofs.RennalaAllocation
+import LongTails.Setups.RennalaIterations
+import Mathlib.Data.Finset.Lattice.Fold
 
-open MeasureTheory
+open scoped BigOperators
 
 namespace OracleTemplate.Rennala
 
+noncomputable def prefixRate {n : ℕ} (tau : Fin n → ℝ) (m : Fin n) : ℝ :=
+  ∑ i : Fin n, if i ≤ m then 1 / tau i else 0
+
+noncomputable def allocationTime {n : ℕ} (tau : Fin n → ℝ) (S : ℕ) (m : Fin n) : ℝ :=
+  ((S : ℝ) + (m.val + 1 : ℕ)) / prefixRate tau m
+
+noncomputable def deadline (p : Params) : ℝ :=
+  if hn : 0 < p.n then
+    96 * Finset.univ.inf' (show (Finset.univ : Finset (Fin p.n)).Nonempty from
+      ⟨⟨0, hn⟩, Finset.mem_univ _⟩)
+      (fun m : Fin p.n => (prefixRate p.tau m / (m.val + 1 : ℕ))⁻¹ *
+        (p.L * p.Delta / p.eps + p.v * p.L * p.Delta / ((m.val + 1 : ℕ) * p.eps ^ 2)))
+  else 0
+
 end OracleTemplate.Rennala
+
+open MeasureTheory
 
 namespace LongTails.Setups.RennalaTime
 

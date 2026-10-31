@@ -1,7 +1,7 @@
 import LongTails.Template
 import LongTails.Setups.BirchSgd
 import LongTails.Setups.StochasticGeneralizedSmoothAndConvex
-import LongTails.Algorithms.BirchMethods
+import LongTails.Setups.BirchLocalSgd
 
 open MeasureTheory ProbabilityTheory
 

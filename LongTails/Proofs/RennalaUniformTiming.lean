@@ -186,12 +186,12 @@ theorem earliest_spec {n : ℕ} (c : Fin n → Option ℝ) (l : List (Fin n)) :
 
 theorem round_step (q : Public) (V : Fin q.n → ℝ → ℝ)
     (hV : ∀ i, ContinuousOn (V i) (Set.Ici 0) ∧ MonotoneOn (V i) (Set.Ici 0)) (hS : 0 < q.S)
-    {Ω : Type} [MeasurableSpace Ω] (P : ProbabilityMeasure (ℕ → Ω)) (g : Point q.d → Ω → Point q.d)
+    {Ω : Type} (g : Point q.d → Ω → Point q.d)
     (r : ℕ) (hr : r < q.K) (s : ℝ) (hs : 0 ≤ s) (tstar : ℝ) (htstar : 0 ≤ tstar)
     (hcond : (q.S : ℝ) ≤ ∑ i, (⌊V i tstar - V i s⌋ : ℝ)) :
     ∃ c, s ≤ c ∧ c ≤ tstar ∧ ∀ (X sel : Point q.d) (jv : ℕ) (ξ : ℕ → Ω),
       StochasticGradient.advance (fun k state => (rennala q).update state
-          ((eventOracle q V P g).answer k ((rennala q).query state) (ξ k))) q.S (r * q.S)
+          ((eventAnswer q V g ((rennala q).query state).2 (ξ k)))) q.S (r * q.S)
         (⟨r, 0, 0, X, fun _ => s, s, jv, sel⟩ : State q) =
       ⟨r + 1, 0, 0, X - q.gamma • batchEstimator q.S g X (fun i => ξ (r * q.S + i.val)),
         fun _ => c, c, jv, if jv = r + 1 then X - q.gamma • batchEstimator q.S g X (fun i => ξ (r * q.S + i.val)) else sel⟩ := by
@@ -243,7 +243,7 @@ theorem round_step (q : Public) (V : Fin q.n → ℝ → ℝ)
       (∀ i, s ≤ st i ∧ st i ≤ tstar ∧ V i (st i) ≤ V i s + cnt i) ∧ (∑ i, cnt i = m) ∧ s ≤ clk ∧
       ∀ (X sel : Point q.d) (jv : ℕ) (ξ : ℕ → Ω),
         StochasticGradient.advance (fun k state => (rennala q).update state
-          ((eventOracle q V P g).answer k ((rennala q).query state) (ξ k))) m (r * q.S)
+          ((eventAnswer q V g ((rennala q).query state).2 (ξ k)))) m (r * q.S)
           (⟨r, 0, 0, X, fun _ => s, s, jv, sel⟩ : State q) =
         ⟨r, m, ∑ l ∈ Finset.range m, (1 / (q.S : ℝ)) • g X (ξ (r * q.S + l)), X, st, clk, jv, sel⟩ := by
     intro m
@@ -286,7 +286,7 @@ theorem round_step (q : Public) (V : Fin q.n → ℝ → ℝ)
           show (0, if q.K ≤ r then none else some (X, st)) = (0, some (X, st))
           rw [ite_eq_right (by omega)]
         rw [hq]
-        have hans : (eventOracle q V P g).answer (r * q.S + m) (0, some (X, st)) (ξ (r * q.S + m)) =
+        have hans : (eventAnswer q V g (0, some (X, st)).2 (ξ (r * q.S + m))) =
             some (j, a, g X (ξ (r * q.S + m))) := by
           show eventAnswer q V g (some (X, st)) (ξ (r * q.S + m)) = _
           show Option.elim (earliest (fun i => completion (V i) (st i)) (List.finRange q.n)) none
@@ -308,7 +308,7 @@ theorem round_step (q : Public) (V : Fin q.n → ℝ → ℝ)
     show (1 / (q.S : ℝ)) • ∑ i : Fin q.S, g X (ξ (r * q.S + i.val)) = _
     rw [← Finset.smul_sum, ← hSS, Fin.sum_univ_eq_sum_range (fun l => g X (ξ (r * q.S + l))) q.S]
   rw [hbe]
-  have h1 := hadv (fun k state => (rennala q).update state ((eventOracle q V P g).answer k ((rennala q).query state) (ξ k)))
+  have h1 := hadv (fun k state => (rennala q).update state ((eventAnswer q V g ((rennala q).query state).2 (ξ k))))
     (q.S - 1) (r * q.S) (⟨r, 0, 0, X, fun _ => s, s, jv, sel⟩ : State q)
   rw [Nat.sub_add_cancel hS] at h1
   rw [h1, heq X sel jv ξ]
@@ -317,7 +317,7 @@ theorem round_step (q : Public) (V : Fin q.n → ℝ → ℝ)
     show (0, if q.K ≤ r then none else some (X, st)) = (0, some (X, st))
     rw [ite_eq_right (by omega)]
   rw [hq]
-  have hans : (eventOracle q V P g).answer (r * q.S + (q.S - 1)) (0, some (X, st)) (ξ (r * q.S + (q.S - 1))) =
+  have hans : (eventAnswer q V g (0, some (X, st)).2 (ξ (r * q.S + (q.S - 1)))) =
       some (j, a, g X (ξ (r * q.S + (q.S - 1)))) := by
     show eventAnswer q V g (some (X, st)) (ξ (r * q.S + (q.S - 1))) = _
     show Option.elim (earliest (fun i => completion (V i) (st i)) (List.finRange q.n)) none
@@ -367,7 +367,7 @@ theorem execute_uniform (q : Public) (V : Fin q.n → ℝ → ℝ)
   have main : ∀ r, r ≤ q.K → ∃ c : ℝ, 0 ≤ c ∧ ENNReal.ofReal c ≤ deadline V q.S r ∧
       ∀ (j : Fin (q.K + 1)) (ξ : ℕ → Ω),
         StochasticGradient.advance (fun k state => (rennala q).update state
-            ((eventOracle q V P g).answer k ((rennala q).query state) (ξ k))) (r * q.S) 0
+            ((eventAnswer q V g ((rennala q).query state).2 (ξ k)))) (r * q.S) 0
           ((rennala q).initial j) =
         (⟨r, 0, 0, iterate g q.gamma q.S q.x0 ξ r, fun _ => c, c, j.val,
           if j.val ≤ r then iterate g q.gamma q.S q.x0 ξ j.val else q.x0⟩ : State q) := by
@@ -411,7 +411,7 @@ theorem execute_uniform (q : Public) (V : Fin q.n → ℝ → ℝ)
         have : V i c ≤ V i τ := (hV i).2 (Set.mem_Ici.mpr hc0) (Set.mem_Ici.mpr hτ0) hcτ
         have h2 : V i tstar - V i τ ≤ V i tstar - V i c := by linarith
         exact_mod_cast Int.floor_mono h2
-      obtain ⟨c', hcc', hc't, hround⟩ := round_step q V hV hS P g r (by omega) c hc0 tstar ht0 hcond
+      obtain ⟨c', hcc', hc't, hround⟩ := round_step q V hV hS g r (by omega) c hc0 tstar ht0 hcond
       refine ⟨c', hc0.trans hcc', ?_, fun j ξ => ?_⟩
       · rw [hd1']
         exact ENNReal.ofReal_le_ofReal hc't
@@ -428,7 +428,8 @@ theorem execute_uniform (q : Public) (V : Fin q.n → ℝ → ℝ)
           · rw [ite_eq_right hjr, ite_eq_right (by omega)]
   obtain ⟨c, -, hcd, hadv⟩ := main q.K le_rfl
   refine ⟨c, hcd, fun j ξ => ?_⟩
-  erw [executeCounted_advance, hadv j ξ]
+  erw [executeCounted_advance _ _ _ _ _ (fun k query => eventAnswer q V g query.2 (ξ k))
+    (fun _ _ => rfl), hadv j ξ]
   show ((if j.val ≤ q.K then iterate g q.gamma q.S q.x0 ξ j.val else q.x0, c), q.K * q.S) = _
   rw [ite_eq_left (by omega)]
 

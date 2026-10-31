@@ -2,7 +2,9 @@
 
 import base64
 import copy
+import re
 import shutil
+import sys
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -10,6 +12,7 @@ from . import __version__
 from .common import (
     WorkflowError,
     canonical,
+    command,
     digest,
     fields,
     now,
@@ -27,7 +30,6 @@ from .contracts import (
     validate_plan,
     validate_review,
 )
-from .interface_contract import validate_template_contract
 from .layout import in_category
 from .lean import (
     Compiler,
@@ -50,7 +52,14 @@ from .output_contract import (
     output_checks,
     review_clauses,
 )
-from .project import MANIFEST, compact_manifest, materialize, sync_index
+from .project import (
+    MANIFEST,
+    REPOSITORY_INSTRUCTIONS,
+    compact_manifest,
+    materialize,
+    repository_instructions,
+    sync_index,
+)
 from .public_design import observed_design
 from .review_evidence import (
     attach_interface_evidence,
@@ -1140,6 +1149,71 @@ class Run:
         write_json(destination / "verification.json", result)
         return result
 
+    def integrate(self, repository, timeout=86400):
+        """Place the proved modules in a repository checkout and let that repository's
+        own verification decide conformance; nothing is committed."""
+        require(
+            self.state["phase"] == "complete",
+            "Only a fully proved run can be integrated",
+        )
+        repository = Path(repository).resolve()
+        for name in ("lint.sh", "run_comparator.py", "LongTails/Template.lean"):
+            require((repository / name).is_file(), "Not a LongTails checkout: " + name)
+        result = self.get(self.state["final"])
+        placed = {}
+        for relative, expected in result["files"].items():
+            original = scoped(self.compiler.project, relative)
+            require(digest(original.read_bytes()) == expected, "Final source changed")
+            require(
+                relative.startswith("outputs/"), "Unexpected output path " + relative
+            )
+            target = "LongTails/" + relative.removeprefix("outputs/")
+            code = re.sub(
+                r"(?<![A-Za-z0-9_.])outputs\.",
+                "LongTails.",
+                original.read_text(encoding="utf-8"),
+            )
+            path = scoped(repository, target)
+            require(
+                not path.exists() or path.read_text(encoding="utf-8") == code,
+                "Repository already has a different " + target,
+            )
+            placed[target] = code
+        for target, code in placed.items():
+            path = scoped(repository, target)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(code, encoding="utf-8", newline="\n")
+        checks = [["./lint.sh"]] + [
+            [sys.executable, "run_comparator.py", Path(t).name]
+            for t in sorted(placed)
+            if t.startswith("LongTails/Theorems/")
+        ]
+        outcomes = []
+        for args in checks:
+            observed = command(args, repository, timeout=timeout)
+            outcomes.append(
+                {
+                    "command": args[-1] if args[0] == sys.executable else args[0],
+                    "exit_code": observed["exit_code"],
+                    "output_tail": (observed["stdout"] + observed["stderr"])[-20000:],
+                }
+            )
+            if observed["exit_code"] != 0:
+                break
+        record = {
+            "repository": str(repository),
+            "repository_commit": command(["git", "rev-parse", "HEAD"], repository)[
+                "stdout"
+            ].strip(),
+            "files": sorted(placed),
+            "checks": outcomes,
+            "passed": all(o["exit_code"] == 0 for o in outcomes)
+            and len(outcomes) == len(checks),
+        }
+        self.state["integration"] = self.put(record)
+        self.save("integration_checked")
+        return record
+
     def check_public_designs(self, plan, inventory):
         units = {u["id"]: u for u in plan["units"]}
         for e in plan["output_contract"]["public_results"]:
@@ -1161,7 +1235,7 @@ class Run:
             "target": s["target"],
             "run": str(self.root),
             "last_review": s.get("last_review"),
-            "instructions": "Apply the complete supplied workflow policy, including OUTPUT_CONTRACT.md and your role prompt. Do not infer output requirements from external repository guidance or examples. Never invent tool observations.",
+            "instructions": "Apply the complete supplied workflow policy, including OUTPUT_CONTRACT.md and your role prompt, together with repository_instructions (the repository's own AGENTS.md) and the live Template in repository_interfaces, which define the Lean interface and repository conventions under the outputs/ to LongTails/ mapping. Do not infer conventions from examples. Never invent tool observations.",
         }
         common["project"] = str(self.compiler.project)
         common["paths"] = {
@@ -1171,7 +1245,7 @@ class Run:
             **{
                 key: str(self.compiler.project / relative)
                 for key, relative in {
-                    "repository_instructions": "AGENTS.md",
+                    "repository_instructions": REPOSITORY_INSTRUCTIONS,
                     "template": "LongTails/Template.lean",
                     "outputs": "outputs",
                     "algorithms": "outputs/Algorithms",
@@ -1203,14 +1277,10 @@ class Run:
                 "server/Theorems/BudgetLatex.lean",
             )
         }
-        validate_template_contract(
-            policy_documents()["OUTPUT_CONTRACT.md"].read_text(encoding="utf-8"),
-            common["repository_interfaces"]["LongTails/Template.lean"],
-        )
         common["repository_commit"] = s["repository_commit"]
-        common["repository_instructions"] = (
-            self.compiler.project / "AGENTS.md"
-        ).read_text(encoding="utf-8")
+        common["repository_instructions"] = repository_instructions(
+            self.compiler.project, s["repository"], s["repository_commit"]
+        )
         role_prompt = "REVIEWER.md" if s["pending"] else "FORMALIZER.md"
         common["policy"] = {
             name: path.read_text(encoding="utf-8")

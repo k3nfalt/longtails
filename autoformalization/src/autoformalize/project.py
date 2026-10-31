@@ -7,6 +7,7 @@ from .common import checked, digest, read_json, require, scoped, write_json
 from .layout import CATEGORIES, adapt_comparator, adapt_metadata
 
 MANIFEST = "autoformalization-project.json"
+REPOSITORY_INSTRUCTIONS = "REPOSITORY_AGENTS.md"
 SUPPORT = (
     "AGENTS.md",
     "lean-toolchain",
@@ -145,6 +146,9 @@ def initialize_compact(repository, destination, cache=None):
         newline="\n",
     )
     policy = Path(__file__).resolve().parents[2]
+    (destination / REPOSITORY_INSTRUCTIONS).write_bytes(
+        (destination / "AGENTS.md").read_bytes()
+    )
     (destination / "AGENTS.md").write_text(
         "Read "
         + str(policy / "AGENTS.md")
@@ -152,8 +156,11 @@ def initialize_compact(repository, destination, cache=None):
         + str(policy / "WORKFLOW.md")
         + ".\n"
         "Explicit Lean output contract: " + str(policy / "OUTPUT_CONTRACT.md") + ".\n"
-        "All output and style requirements are in the supplied workflow policies.\n"
-        "Do not infer additional requirements from repository-root AGENTS.md or examples.\n"
+        "Repository conventions: "
+        + REPOSITORY_INSTRUCTIONS
+        + " (the repository's own AGENTS.md), with LongTails/<Category> read as\n"
+        "outputs/<Category> and LongTails.* namespaces as outputs.*. Read the live\n"
+        "LongTails/Template.lean for the interface. Do not infer conventions from examples.\n"
         "Generate only outputs/{Algorithms,Setups,Proofs,Theorems} modules (outputs.*).\n"
         "LongTails/ contains only pinned dependencies; it is read-only. No library alias.\n"
         "Build explicit output modules or outputs, never the whole LongTails library.\n"
@@ -284,3 +291,11 @@ def imports(source):
             )
             result.extend(names)
     return result
+
+
+def repository_instructions(project, repository, commit):
+    """The repository's own AGENTS.md at the run's pinned commit."""
+    path = Path(project) / REPOSITORY_INSTRUCTIONS
+    if path.is_file():
+        return path.read_text(encoding="utf-8")
+    return checked(["git", "show", commit + ":AGENTS.md"], repository)

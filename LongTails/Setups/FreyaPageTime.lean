@@ -1,13 +1,13 @@
 import LongTails.Template
-import LongTails.Algorithms.FreyaTuning
-import LongTails.Proofs.FreyaIndependence
+import LongTails.Setups.FreyaPageUniform
+import LongTails.Setups.FreyaPageIterations
 
 open MeasureTheory OracleTemplate
 open scoped BigOperators ENNReal NNReal
 
 namespace LongTails.Setups.FreyaPageTime
 
-open LongTails.Proofs.FreyaModel
+open LongTails.Setups.FreyaModel
 
 structure Params where
   d : ℕ
@@ -59,7 +59,7 @@ noncomputable abbrev spec : Setup where
       ‖gradient (objective f) x - gradient (objective f) y‖ ^ 2 ≤
       p.Lpm ^ 2 * ‖x - y‖ ^ 2) ∧
     PrimitiveService f p.τ O ∧
-    LongTails.Proofs.FreyaIndependence.batchScheduleIndependent
+    LongTails.Setups.FreyaIndependence.batchScheduleIndependent
       (LongTails.Algorithms.FreyaTuning.familyRaw (publicInput p) true) f p.τ O
   successful p f output P :=
     Integrable (fun ω => ‖gradient (objective f) ((output ω).1)‖ ^ 2) (P : Measure _) ∧

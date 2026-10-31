@@ -89,7 +89,7 @@ theorem execute_muon [MeasurableSpace Ω] (p : Public) (hB : 1 ≤ p.B) (P : Pro
     (g : Mat p.m p.n → Ω → Mat p.m p.n) (seed : (muon p).Seed) (s : ℕ → Ω) :
     execute (sampleOracle P g) (muon p) (fun _ => p.T * p.B) seed s =
       fun j : Fin (p.T + 1) => (trajectory p g s j).2.1 := by
-  erw [execute_indexed]
+  erw [execute_indexed_of_answer _ _ _ _ _ (fun k query => g query.2 (s k)) (fun _ _ => rfl)]
   set F := fun sc : State p × ℕ => (step p sc.1 (g sc.1.point (s sc.2)), sc.2 + 1)
   have hinit : (muon p).initial seed = stateAt p g s 0 := by
     change (⟨0, 0, p.W0, 0, 0, fun _ => p.W0⟩ : State p) = _

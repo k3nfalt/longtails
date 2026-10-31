@@ -8,7 +8,7 @@ open scoped BigOperators
 
 namespace LongTails.Proofs.FreyaMoments
 
-open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaRandomness
+open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaRandomness
 open LongTails.Setups.StochasticGeneralizedSmoothAndConvex
 
 theorem choice_row_uniform (j : ℕ) :

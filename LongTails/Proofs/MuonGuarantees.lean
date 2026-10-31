@@ -338,9 +338,10 @@ theorem execute_random {Ω : Type} [MeasurableSpace Ω] (q : OracleTemplate.Muon
       rw [Function.iterate_succ_apply', Function.iterate_succ_apply', ih]
   have hj : j.val < q.T + 1 := by have := j.isLt; omega
   have hsource := congrFun (execute_muon q hB P g () tape) ⟨j.val, hj⟩
-  erw [execute_indexed] at hsource
+  erw [execute_indexed_of_answer _ _ _ _ _ (fun k query => g query.2 (tape k))
+    (fun _ _ => rfl)] at hsource
   change (F^[q.T * q.B] (s0, 0)).1.iterates j.val = (trajectory q g tape j.val).2.1 at hsource
-  erw [execute_indexed]
+  erw [execute_indexed_of_answer _ _ _ _ _ (fun k query => g query.2 (tape k)) (fun _ _ => rfl)]
   change (F'^[q.T * q.B] ((s0, j), 0)).1.1.iterates
     (F'^[q.T * q.B] ((s0, j), 0)).1.2.val = (trajectory q g tape j.val).2.1
   rw [hit]

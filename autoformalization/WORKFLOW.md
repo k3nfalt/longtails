@@ -12,14 +12,16 @@ auto-math/autoformalization; initialization uses the containing repository unles
 --repo selects another checkout. The controller creates a compact <run>/project
 and supplies its absolute resource paths in each task packet. Repository-relative
 Generated outputs/, copied LongTails/ dependencies and server/ paths refer to paths.project. The packet also includes the
-actual template and renderer source in repository_interfaces and the complete
-OUTPUT_CONTRACT.md in policy. The contract includes the exact imported Lean API,
-construction templates and all output requirements; no external examples or
-repository-root instructions are required to determine them.
+actual template and renderer source in repository_interfaces, the repository's
+own AGENTS.md in repository_instructions, and the complete OUTPUT_CONTRACT.md in
+policy. The Template and repository instructions define the Lean interface and
+repository conventions; the workflow policies add the autoformalization process
+and its requirements. No external examples are needed.
 
 Inspect the actual repository revision, worktree state, supplied workflow policy
-and interface source, toolchain, manifest and verification scripts. Consult
-library modules for reuse only, not for unstated output/style requirements.
+and interface source, repository instructions, toolchain, manifest and
+verification scripts. Consult library modules for reuse only, not for unstated
+output/style requirements.
 Do not reset or overwrite other work. Use the compact run project when editing; retrieve library sources read-only from paths.repository.
 Record the baseline and run identity. Do not run research_prompt.md.
 
@@ -299,7 +301,13 @@ statement-only checks already passed in steps 6 and 7. Full proof Comparator,
 strict warning-free build and transitive axiom audit run here because they require
 completed proofs. Native lint is a proof-change regression, not a first statement
 format check. A failed final check prevents completion and export.
-Do not
+
+Integration into a repository checkout is a separate, explicit step:
+`autoformalize integrate --run <run> --repository <checkout>` copies the proved
+modules with the outputs.* to LongTails.* mapping (refusing to overwrite a
+different existing file) and runs that checkout's own `lint.sh` and
+`run_comparator.py` for each public theorem. Its recorded outcome is the
+repository-conformance verdict; nothing is committed. Do not
 generate or publish website metadata as part of compatibility checking.
 Keep existing core files unchanged. Report
 exact files, source coverage, verification results and any remaining source

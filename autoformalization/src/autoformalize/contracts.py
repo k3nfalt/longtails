@@ -330,7 +330,7 @@ def validate_plan(plan, graph):
         )
         category = unit["file"].split("/")[1]
         allowed = {
-            "algorithm": {"Algorithms"},
+            "algorithm": {"Algorithms", "Setups"},
             "setup": {"Setups"},
             "target": {"Proofs", "Theorems"},
             "lemma": {"Proofs"},

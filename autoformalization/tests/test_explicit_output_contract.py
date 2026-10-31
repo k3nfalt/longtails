@@ -14,7 +14,6 @@ sys.path.insert(0, str(ROOT / "src"))
 from autoformalize import engine  # noqa: E402
 from autoformalize.common import WorkflowError  # noqa: E402
 from autoformalize.contracts import validate_review  # noqa: E402
-from autoformalize.interface_contract import BEGIN, END, validate_template_contract  # noqa: E402
 from autoformalize.output_contract import output_checks  # noqa: E402
 
 
@@ -34,23 +33,16 @@ def temporary_workspace():
 class ExplicitOutputContractTests(unittest.TestCase):
     def setUp(self):
         self.contract = (ROOT / "OUTPUT_CONTRACT.md").read_text(encoding="utf-8")
-        self.template = self.contract.split(BEGIN, 1)[1].split(END, 1)[0]
+        self.template = (ROOT.parent / "LongTails/Template.lean").read_text(
+            encoding="utf-8"
+        )
+        self.instructions = "Repository conventions fixture.\n"
 
-    def test_exact_template_and_line_endings(self):
-        validate_template_contract(self.contract, self.template + "\n")
-        validate_template_contract(self.contract.replace("\n", "\r\n"), self.template)
-
-    def test_interface_drift_is_rejected(self):
-        with self.assertRaisesRegex(WorkflowError, "differs"):
-            validate_template_contract(
-                self.contract,
-                self.template.replace("numOracles : ℕ := 1", "numOracles : ℕ := 2", 1),
-            )
-
-    def test_missing_or_duplicate_template_is_rejected(self):
-        for text in ("No embedded API", self.contract + "\n" + self.contract):
-            with self.assertRaisesRegex(WorkflowError, "exactly one"):
-                validate_template_contract(text, self.template)
+    def test_policy_embeds_no_repository_interface_copy(self):
+        for name, path in engine.policy_documents().items():
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn("structure Oracle", text, name)
+            self.assertNotIn("def Convergence", text, name)
 
     def test_policy_is_fingerprinted(self):
         self.assertIn("OUTPUT_CONTRACT.md", engine.policy_documents())
@@ -66,6 +58,7 @@ class ExplicitOutputContractTests(unittest.TestCase):
     def packet_run(self, project, pending=None):
         for relative, text in {
             "AGENTS.md": "Run-local instructions only.",
+            "REPOSITORY_AGENTS.md": self.instructions,
             "LongTails/Template.lean": self.template,
             "server/Theorems/BudgetLatex.lean": "-- renderer fixture\n",
         }.items():
@@ -104,15 +97,23 @@ class ExplicitOutputContractTests(unittest.TestCase):
                     packet["repository_interfaces"]["LongTails/Template.lean"],
                     self.template,
                 )
+                self.assertEqual(packet["repository_instructions"], self.instructions)
 
-    def test_packet_blocks_interface_drift(self):
+    def test_packet_follows_repository_interface_changes(self):
         with temporary_workspace() as tmp:
             run = self.packet_run(Path(tmp))
+            changed = self.template + "\n-- upstream change\n"
             (Path(tmp) / "LongTails/Template.lean").write_text(
-                self.template + "\n-- changed\n", encoding="utf-8"
+                changed, encoding="utf-8"
             )
-            with self.assertRaisesRegex(WorkflowError, "differs"):
-                run.next()
+            (Path(tmp) / "REPOSITORY_AGENTS.md").write_text(
+                "New upstream rule.\n", encoding="utf-8"
+            )
+            packet = run.next()
+            self.assertEqual(
+                packet["repository_interfaces"]["LongTails/Template.lean"], changed
+            )
+            self.assertEqual(packet["repository_instructions"], "New upstream rule.\n")
 
     def test_checks_are_generated_per_public_result_and_unit(self):
         plan = {

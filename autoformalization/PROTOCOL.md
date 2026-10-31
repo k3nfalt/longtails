@@ -39,9 +39,10 @@ Repository-relative paths in this protocol resolve under `paths.project`.
 checkout. Agent adapters may have a different working directory; use these paths
 and submit code through the controller rather than editing repositories directly.
 The complete workflow policy is in `policy`, including OUTPUT_CONTRACT.md and the
-current role prompt. Do not consult repository-root AGENTS.md or examples to
-infer requirements. The controller checks the embedded Template.lean reference
-against the run's actual imported template; mismatch blocks packet generation.
+current role prompt. `repository_instructions` is the repository's own AGENTS.md
+from the run's pinned checkout; it is authoritative for repository conventions,
+read with the outputs/ to LongTails/ mapping. Do not infer conventions from
+README files or example modules.
 
 ## Graph
 

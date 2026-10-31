@@ -3,13 +3,14 @@ import LongTails.Setups.FreyaPageUniform
 import LongTails.Proofs.FreyaMoments
 import LongTails.Proofs.RecursiveGradientStep
 import LongTails.Proofs.SingleOracleCounted
+import LongTails.Proofs.ExecutionHistory
 
 open MeasureTheory ProbabilityTheory OracleTemplate
 open scoped BigOperators
 
 namespace LongTails.Proofs.FreyaSerialAnalysis
 
-open LongTails.Proofs.FreyaModel LongTails.Algorithms.FreyaInputs
+open LongTails.Setups.FreyaModel LongTails.Algorithms.FreyaInputs
 open LongTails.Algorithms.FreyaRandomness LongTails.Algorithms.FreyaSerial
 open LongTails.Algorithms.FreyaTuning
 
@@ -110,11 +111,15 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
     (hf : ∀ i, Differentiable ℝ (f i))
     (O : Oracle (Option (Fin q.m × Space q.d)) (Space q.d) 1)
     (seed : Seed q.K) (ω : (k : ℕ) → O.Seed k)
-    (hO : ∀ k, O.answer k (0, none) (ω k) = 0 ∧
-      ∀ i x, O.answer k (0, some (i, x)) (ω k) = gradient (f i) x)
+    (hservice : ∀ history, O.answer history (0, none) (ω history.length) = 0 ∧
+      ∀ i x, O.answer history (0, some (i, x)) (ω history.length) = gradient (f i) x)
     (N : ℕ) (hN : q.m + q.K * max q.m (2 * q.S) ≤ N) :
     execute O (algorithm q) (fun _ => N) seed ω =
       idealOutput q f (canonicalize q seed) := by
+  let A : ℕ → Fin 1 × Option (Fin q.m × Space q.d) → Space q.d :=
+    executeAnswerAt O (algorithm q) seed ω
+  have hO : ∀ k, A k (0, none) = 0 ∧ ∀ i x, A k (0, some (i, x)) = gradient (f i) x :=
+    fun k => hservice (executeIndexedState O (algorithm q) seed ω k).2
   open scoped BigOperators in
     have freyaDevelopmentSelectedStable (q : SerialRaw) (s : State q)
         (hselected : (outputIndex s.seed).val ≤ s.iteration) (reply : Space q.d) :
@@ -153,16 +158,15 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
         · exact ⟨rfl, le_rfl, rfl⟩
         · exact hadv _ hselected
     have freyaDevelopmentSelectedStableRun (q : SerialRaw)
-        (O : Oracle (Option (Fin q.m × Space q.d)) (Space q.d) 1)
-        (ω : (k : ℕ) → O.Seed k) (N call : ℕ) (s : State q)
+        (A : ℕ → Fin 1 × Option (Fin q.m × Space q.d) → Space q.d) (N call : ℕ) (s : State q)
         (hselected : (outputIndex s.seed).val ≤ s.iteration) :
         (StochasticGradient.advance
-          (fun k s => update q s (O.answer k (query q s) (ω k))) N call s).selected = s.selected := by
+          (fun k s => update q s (A k (query q s))) N call s).selected = s.selected := by
       induction N generalizing call s with
       | zero => rfl
       | succ N ih =>
         rw [StochasticGradient.advance]
-        have h := freyaDevelopmentSelectedStable q s hselected (O.answer call (query q s) (ω call))
+        have h := freyaDevelopmentSelectedStable q s hselected (A call (query q s))
         rw [ih]
         · exact h.2.2
         · rw [h.1]
@@ -179,19 +183,18 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
         omega
     have freyaDevelopmentFullBlock (q : SerialRaw) (hm : 0 < q.m)
         (f : Fin q.m → Space q.d → ℝ) (hf : ∀ i, Differentiable ℝ (f i))
-        (O : Oracle (Option (Fin q.m × Space q.d)) (Space q.d) 1)
-        (ω : (k : ℕ) → O.Seed k)
-        (hO : ∀ k, O.answer k (0, none) (ω k) = 0 ∧
-          ∀ i x, O.answer k (0, some (i, x)) (ω k) = gradient (f i) x)
+        (A : ℕ → Fin 1 × Option (Fin q.m × Space q.d) → Space q.d)
+        (hO : ∀ k, A k (0, none) = 0 ∧
+          ∀ i x, A k (0, some (i, x)) = gradient (f i) x)
         (s : State q) (hphase : s.phase = .full) (hcomp : s.component = 0)
         (hsum : s.sum = 0) (hiter : s.iteration < q.K) (call : ℕ) :
         StochasticGradient.advance
-          (fun k s => update q s (O.answer k (query q s) (ω k))) q.m call s =
+          (fun k s => update q s (A k (query q s))) q.m call s =
           advance q { s with g := gradient (objective f) s.x } := by
       classical
       let G (j : ℕ) : Space q.d := if h : j < q.m then gradient (f ⟨j,h⟩) s.x else 0
       let F (c : ℕ) : State q := {s with sum := ∑ j ∈ Finset.range c, G j, component := c}
-      let step := fun k t => update q t (O.answer k (query q t) (ω k))
+      let step := fun k t => update q t (A k (query q t))
       have hquery (c : ℕ) (hc : c < q.m) :
           query q (F c) = (0, some (⟨c,hc⟩,s.x)) := by
         delta query
@@ -247,25 +250,23 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
       simp only [Nat.not_le.mpr hiter, ite_false]
     have freyaDevelopmentOptionAnswer (q : SerialRaw)
         (f : Fin q.m → Space q.d → ℝ)
-        (O : Oracle (Option (Fin q.m × Space q.d)) (Space q.d) 1)
-        (ω : (k : ℕ) → O.Seed k)
-        (hO : ∀ k, O.answer k (0, none) (ω k) = 0 ∧
-          ∀ i x, O.answer k (0, some (i, x)) (ω k) = gradient (f i) x)
+        (A : ℕ → Fin 1 × Option (Fin q.m × Space q.d) → Space q.d)
+        (hO : ∀ k, A k (0, none) = 0 ∧
+          ∀ i x, A k (0, some (i, x)) = gradient (f i) x)
         (k : ℕ) (l : Option (Fin q.m)) (x : Space q.d) :
-        O.answer k (0,l.map fun i => (i,x)) (ω k) = l.elim 0 (fun i => gradient (f i) x) := by
+        A k (0,l.map fun i => (i,x)) = l.elim 0 (fun i => gradient (f i) x) := by
       cases l with
       | none => exact (hO k).1
       | some i => exact (hO k).2 i x
     have freyaDevelopmentDifferenceBlock (q : SerialRaw) (hS : 0 < q.S)
         (f : Fin q.m → Space q.d → ℝ)
-        (O : Oracle (Option (Fin q.m × Space q.d)) (Space q.d) 1)
-        (ω : (k : ℕ) → O.Seed k)
-        (hO : ∀ k, O.answer k (0, none) (ω k) = 0 ∧
-          ∀ i x, O.answer k (0, some (i, x)) (ω k) = gradient (f i) x)
+        (A : ℕ → Fin 1 × Option (Fin q.m × Space q.d) → Space q.d)
+        (hO : ∀ k, A k (0, none) = 0 ∧
+          ∀ i x, A k (0, some (i, x)) = gradient (f i) x)
         (s : State q) (hphase : s.phase = .firstDifference) (hsample : s.sample = 0)
         (hsum : s.sum = 0) (hiter : s.iteration < q.K) (call : ℕ) :
         StochasticGradient.advance
-          (fun k s => update q s (O.answer k (query q s) (ω k))) (2*q.S) call s =
+          (fun k s => update q s (A k (query q s))) (2*q.S) call s =
           advance q { s with g := s.g + (q.S : ℝ)⁻¹ •
             (∑ j : Fin q.S, (labelAt (s.seed.1 s.iteration j.val) q.m).elim 0
               (fun i => gradient (f i) s.x - gradient (f i) s.previous)) } := by
@@ -278,14 +279,14 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
           sum := ∑ j ∈ Finset.range c, D j
           sample := c
           first := if c=0 then s.first else New (c-1)}
-      let step := fun k t => update q t (O.answer k (query q t) (ω k))
+      let step := fun k t => update q t (A k (query q t))
       have hfirst (c k : ℕ) : step k (F c) = {F c with first := New c, phase := .secondDifference} := by
         have hquery : query q (F c) = (0,(labelAt (s.seed.1 s.iteration c) q.m).map fun i => (i,s.x)) := by
           delta query
           dsimp only [F]
           rw [hphase]
         dsimp only [step]
-        rw [hquery, freyaDevelopmentOptionAnswer q f O ω hO]
+        rw [hquery, freyaDevelopmentOptionAnswer q f A hO]
         delta update
         dsimp only [F]
         rw [hphase]
@@ -305,7 +306,7 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
         dsimp only [step]
         have hquery : query q {F c with first := New c, phase := .secondDifference} =
             (0,(labelAt (s.seed.1 s.iteration c) q.m).map fun i => (i,s.previous)) := rfl
-        rw [hquery, freyaDevelopmentOptionAnswer q f O ω hO]
+        rw [hquery, freyaDevelopmentOptionAnswer q f A hO]
         rfl
       have hprefix (c : ℕ) (hc : c < q.S) :
           StochasticGradient.advance step (2*c) call s = F c := by
@@ -352,7 +353,7 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
     let z := canonicalize q seed
     let st : ℕ → State q := fun k => Nat.rec (initial q seed)
       (fun a s => advance q {s with g := (idealTrace q f z a).2}) k
-    let step := fun k s => update q s (O.answer k (query q s) (ω k))
+    let step := fun k s => update q s (A k (query q s))
     have hrec (a : ℕ) : idealTrace q f z (a+1) = idealTrace._sunfold q f z (a+1) := by
       conv_lhs => delta idealTrace
       refine (Nat.brecOn.eq (motive := fun _ => Space q.d × Space q.d) (a+1)
@@ -409,7 +410,7 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
         have hphase : (st 0).phase = .full := by
           change (if q.m=0 ∨ q.K=0 then Phase.halted else .full) = .full
           exact ite_eq_right (by omega)
-        have hb := freyaDevelopmentFullBlock q hm f hf O ω hO (st 0) hphase hcomp hsum
+        have hb := freyaDevelopmentFullBlock q hm f hf A hO (st 0) hphase hcomp hsum
           (by rw [hi]; exact hK) call
         exact hb
       · obtain ⟨hprevious,hg,hphase⟩ := hpast (by omega)
@@ -432,7 +433,7 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
         · rw [ite_eq_left hb] at hphase
           rw [ite_eq_left (show z.1 ⟨k-1,hkprev⟩ = true from hb)] at hgk
           refine ⟨q.m,le_max_left _ _,?_⟩
-          rw [freyaDevelopmentFullBlock q hm f hf O ω hO (st k) hphase hcomp hsum
+          rw [freyaDevelopmentFullBlock q hm f hf A hO (st k) hphase hcomp hsum
             (by rw [hi]; exact hk) call]
           change advance q {st k with g := gradient (objective f) (st k).x} =
             advance q {st k with g := (idealTrace q f z k).2}
@@ -445,7 +446,7 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
           rw [hrows] at hgk
           dsimp only at hgk
           refine ⟨2*q.S,le_max_right _ _,?_⟩
-          rw [freyaDevelopmentDifferenceBlock q hS f O ω hO (st k) hphase hsample hsum
+          rw [freyaDevelopmentDifferenceBlock q hS f A hO (st k) hphase hsample hsum
             (by rw [hi]; exact hk) call]
           change advance q {st k with g := _} = advance q {st k with g := (idealTrace q f z k).2}
           apply congrArg (fun g => advance q {st k with g := g})
@@ -473,11 +474,11 @@ theorem serial_execution (q : SerialRaw) (hm : 0 < q.m) (hS : 0 < q.S)
     have htN : t ≤ N := ht.trans ((Nat.mul_le_mul_right _ hi.le).trans (by omega))
     have hsplit := freyaDevelopmentAdvanceAdd step t (N-t) 0 (initial q seed)
     rw [Nat.add_sub_of_le htN] at hsplit
-    erw [StochasticGradient.execute_advance]
+    erw [execute_advance_history]
     change (StochasticGradient.advance step N 0 (initial q seed)).selected = _
     rw [hsplit,hreach]
     have hfields := hfields i hi.le
-    rw [freyaDevelopmentSelectedStableRun q O ω (N-t) (0+t) (st i)
+    rw [freyaDevelopmentSelectedStableRun q A (N-t) (0+t) (st i)
       (by rw [hfields.1,hfields.2.1])]
     exact hfields.2.2.2.2.2.2.2.1 rfl
 
@@ -1255,7 +1256,7 @@ theorem serial_execution_accuracy (p : LongTails.Setups.FreyaPageUniform.Params)
       dsimp only [success]
       have hout (z : (constantPoint (none : Option (Fin p.m × Space p.d)) p.x0).Seed × ((k : ℕ) → O.Seed k)) :
           execute O (constantPoint none p.x0) (fun _ => B) z.1 z.2 = p.x0 := by
-        erw [StochasticGradient.execute_advance]
+        erw [execute_advance_history]
         rfl
       simp only [hout,hz,norm_zero,zero_pow (by decide : 2 ≠ 0)]
       exact ⟨integrable_const (0 : ℝ),by simpa only [integral_zero] using hε.le⟩
@@ -1291,8 +1292,8 @@ theorem serial_execution_accuracy (p : LongTails.Setups.FreyaPageUniform.Params)
         ⟨measurable_fst.aemeasurable,measurePreserving_fst.map_eq⟩
       have hlaw := (serial_law q).comp hfst
       have hserv : ∀ᵐ z : Seed q.K × ((k : ℕ) → O.Seed k) ∂μ.prod ν,
-          ∀ k, O.answer k (0,none) (z.2 k) = 0 ∧
-            ∀ i x, O.answer k (0,some (i,x)) (z.2 k) = gradient (f i) x :=
+          ∀ history, O.answer history (0,none) (z.2 history.length) = 0 ∧
+            ∀ i x, O.answer history (0,some (i,x)) (z.2 history.length) = gradient (f i) x :=
         measurePreserving_snd.quasiMeasurePreserving.ae hservice
       have heq : (fun z : Seed q.K × ((k : ℕ) → O.Seed k) =>
           ‖gradient (objective f) (execute O (algorithm q) (fun _ => B) z.1 z.2)‖^2) =ᵐ[μ.prod ν]

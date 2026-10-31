@@ -388,7 +388,7 @@ lemma execute_prefix (p : Public) (hn : 0 < p.n) (tau : Fin p.n → ℝ)
     omega
   let stopped := fun r => if r < T then st r else st T
   let step := fun r (s : State p) => (algorithm p).update s
-    ((eventOracle p tau P g).answer r ((algorithm p).query s) (seeds r))
+    ((eventAnswer p tau g ((algorithm p).query s).2 (seeds r)))
   have hstopped : ∀ r, step r (stopped r) = stopped (r + 1) := by
     intro r
     by_cases hr : r < T
@@ -424,6 +424,7 @@ lemma execute_prefix (p : Public) (hn : 0 < p.n) (tau : Fin p.n → ℝ)
       simp only [stopped, hT0]
       rfl
   have hexe := executeCounted_advance (eventOracle p tau P g) (algorithm p) B j seeds
+    (fun k query => eventAnswer p tau g query.2 (seeds k)) (fun _ _ => rfl)
   change executeCounted (eventOracle p tau P g) (algorithm p) B j seeds =
     ((algorithm p).output (StochasticGradient.advance step B 0 ((algorithm p).initial j)), B) at hexe
   have hav : StochasticGradient.advance step B 0 ((algorithm p).initial j) = stopped (0 + B) := by
@@ -474,7 +475,8 @@ lemma execution_cost (p : Public) (hn : 0 < p.n) (tau : Fin p.n → ℝ)
     exact (Nat.find_min' he hr).trans hb
   refine ⟨hbound, by omega, by nlinarith, ?_⟩
   intro B j seeds
-  exact congrArg Prod.snd (executeCounted_advance (eventOracle p tau P g) (algorithm p) B j seeds)
+  exact congrArg Prod.snd (executeCounted_advance (eventOracle p tau P g) (algorithm p) B j seeds
+    (fun k query => eventAnswer p tau g query.2 (seeds k)) (fun _ _ => rfl))
 
 
 end OracleTemplate.Rennala
