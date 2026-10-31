@@ -12,6 +12,6 @@ ruff format --check .
 
 # mk_all returns nonzero when it creates or updates the import index.
 lake exe mk_all --lib LongTails || lake exe mk_all --lib LongTails --check
-lake --wfail build LongTails BudgetLatex
+lake --wfail build LongTails BudgetLatex Tutorial
 lake exe lint-style
 lake exe runLinterNoDocString

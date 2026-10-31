@@ -1,5 +1,5 @@
 import tutorial.ToBeDiscovered.Algorithms.RandomSgd
-import Mathlib.Tactic
+import LongTails.Proofs.Execution
 
 namespace OracleTemplate.StochasticNonconvex
 
@@ -10,26 +10,20 @@ def advance {S : Type*} (step : ℕ → S → S) : ℕ → ℕ → S → S
   | K + 1, call, s => advance step K (call + 1) (step call s)
 
 lemma execute_advance {Q R A : Type*} (O : Oracle Q R) (method : Algorithm Q R A)
-    (K : ℕ) (seed : method.Seed) (ξ : (k : ℕ) → O.Seed k) :
+    (K : ℕ) (seed : method.Seed) (ξ : (k : ℕ) → O.Seed k)
+    (response : ℕ → (Fin 1 × Q) → R)
+    (h : ∀ history query, O.answer history query (ξ history.length) = response history.length query) :
     execute O method (fun _ => K) seed ξ =
-      method.output (advance (fun k s => method.update s (O.answer k (method.query s) (ξ k)))
+      method.output (advance (fun k s => method.update s (response k (method.query s)))
         K 0 (method.initial seed)) := by
-  unfold execute
-  simp only [Fin.sum_univ_one]
+  rw [execute_indexed_of_answer O method K seed ξ response h]
+  congr 1
   generalize method.initial seed = s
   generalize (0 : ℕ) = call
   induction K generalizing s call with
   | zero => rfl
   | succ K ih =>
-    change (if K + 1 = 0 then _ else _) = _
-    simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, ite_false]
-    have hr : Function.update (fun _ : Fin 1 => K + 1) (method.query s).1 K = fun _ => K := by
-      funext i
-      have he : i = (method.query s).1 := Subsingleton.elim _ _
-      subst i
-      simp
-    simp only [Nat.add_sub_cancel]
-    rw [hr]
+    rw [Function.iterate_succ_apply]
     exact ih _ _
 
 variable {E : Type*} {Ω : Type} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -66,7 +60,7 @@ lemma execute_randomSgd [MeasurableSpace Ω] (P : MeasureTheory.ProbabilityMeasu
               answer := fun _ (_, x) seed => g x seed }
       (randomSgd η N x0) (fun _ => N) i ξ =
         selected g η N x0 (fun j => ξ j.val) i := by
-  erw [execute_advance]
+  erw [execute_advance _ _ _ _ _ (fun k q => g q.2 (ξ k)) (fun _ _ => rfl)]
   simpa [randomSgd] using advance_selected g η ξ N 0 x0 x0 i
 
 end OracleTemplate.StochasticNonconvex
