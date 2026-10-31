@@ -5,26 +5,18 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Strongly Convex Optimization with Drift}
-We consider tracking minimizers $x_k^\star$ of differentiable objectives $f_k:E\to\mathbb{R}$, indexed by nonnegative integers $k$, on a separable real Hilbert space $E$. Each objective is $\mu$-strongly convex with $L$-Lipschitz gradient, where $0<\mu\leq L$. The minimizer sequence has bounded initial distance, initial velocity, and second differences, with the latter sufficiently small relative to the target accuracy. Call $k$ returns an unbiased stochastic gradient of $f_k$ with variance at most $\sigma^2$, where $\sigma\geq0$, using independent samples. For $\varepsilon>0$, the output $(\bar{x},K)$ must satisfy $\mathbb{E}\|\bar{x}-x_{\max\{K-1,0\}}^\star\|^2\leq\varepsilon$, where $K$ is the number of calls and expectation includes all randomness.
+\section*{Tracking Smooth Strongly Convex Objectives}
+We consider tracking the minimizers $x_k^\star$ of differentiable functions $f_k:E\to\mathbb{R}$, indexed by $k\geq0$, on a separable real Hilbert space $E$. Each objective is $\mu$-strongly convex with $L$-Lipschitz gradient, where $0<\mu\leq L$. The minimizer path has bounded initial distance from a given point $x^0\in E$, bounded initial velocity, and uniformly bounded second differences. At call $k$, the oracle returns an unbiased estimate of $\nabla f_k(x)$ with variance at most $\sigma^2$, where $\sigma\geq0$, using a fresh independent sample. For $\varepsilon>0$, the goal is an output $(\bar{x},N)$ satisfying $\mathbb{E}\|\bar{x}-x_{\max\{N-1,0\}}^\star\|^2\leq\varepsilon$, where $N$ counts completed calls and expectation covers oracle and algorithm randomness.
 
 The time-indexed optimization problems are
 \[
-\min_{x\in E} f_k(x),\qquad k\in\mathbb{N}_0,
+\min_{x\in E} f_k(x),\qquad k\in\mathbb{N}_0.
 \]
-where $\mathbb{N}_0=\{0,1,2,\ldots\}$ and the norm is induced by the inner product on $E$. Equip $E$ with its Borel sigma-algebra, and let $\Omega$ be a measurable sample space. The public inputs are $(E,\Omega,\mu,L,\sigma,\varepsilon,x^0)$, with $x^0\in E$. The additional parameters $\Gamma,R,V$ and $H$ are not supplied to the algorithm.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, the measurable sample space $\Omega$, $\mu$, $L$, $\sigma$, $\varepsilon$, and $x^0$; the parameters $\Gamma,R,V\geq0$ and $H\in\mathbb{N}_0$ may enter only the oracle-call budget. The parameter $H$ imposes no additional condition on the objectives or the minimizer path.
 
-\begin{assumption}[Parameter regime]
-The parameters satisfy $0<\mu\leq L$, $\sigma\geq0$, $\varepsilon>0$, $\Gamma,R,V\geq0$, and $H\in\mathbb{N}_0$, together with
-\[
-9792\Gamma^2
-\left(\frac{2L}{\mu}+\frac{99\sigma^2}{\mu^2\varepsilon}\right)^4
-\leq\varepsilon.
-\]
-\end{assumption}
-
+Our assumptions:
 \begin{assumption}[Strong convexity and smoothness]
-Each $f_k$ is differentiable everywhere. For every $k\in\mathbb{N}_0$ and $x,y\in E$,
+Each $f_k$ is Fr\'echet differentiable everywhere. For every $k\in\mathbb{N}_0$ and $x,y\in E$,
 \[
 \begin{aligned}
 f_k(y)&\geq f_k(x)+\langle\nabla f_k(x),y-x\rangle
@@ -34,38 +26,45 @@ f_k(y)&\geq f_k(x)+\langle\nabla f_k(x),y-x\rangle
 \]
 \end{assumption}
 
-\begin{assumption}[Minimizers and temporal drift]
-There exists a sequence $(x_k^\star)_{k\in\mathbb{N}_0}$ in $E$ such that, for every $k\in\mathbb{N}_0$,
+\begin{assumption}[Minimizer path and drift]
+There exists a sequence $(x_k^\star)_{k\geq0}$ of global minimizers satisfying
 \[
 \begin{aligned}
-f_k(x_k^\star)&\leq f_k(x) \qquad\text{for every }x\in E,\\
+f_k(x_k^\star)&\leq f_k(x) &&(k\geq0,\ x\in E),\\
 \|x^0-x_0^\star\|&\leq R,\\
 \|x_1^\star-x_0^\star\|&\leq V,\\
 \|(x_{k+2}^\star-x_{k+1}^\star)
- -(x_{k+1}^\star-x_k^\star)\|&\leq\Gamma.
+ -(x_{k+1}^\star-x_k^\star)\|&\leq\Gamma &&(k\geq0).
 \end{aligned}
+\]
+The drift bound and tolerance satisfy
+\[
+9792\,\Gamma^2
+\left(\frac{2L}{\mu}
+      +\frac{99\sigma^2}{\mu^2\varepsilon}\right)^4
+\leq\varepsilon.
 \]
 \end{assumption}
 
-\begin{assumption}[Stochastic gradient access]
-There exist a probability measure $p$ on $\Omega$ and jointly measurable maps $g_k:E\times\Omega\to E$. For every $k\in\mathbb{N}_0$ and fixed $x\in E$, the map $g_k(x,\cdot)$ is Bochner integrable and $\|g_k(x,\cdot)-\nabla f_k(x)\|^2$ is integrable with respect to $p$, with
+\begin{assumption}[Stochastic gradient oracle]
+There is a probability measure $\nu$ on $\Omega$ and, for every $k\in\mathbb{N}_0$, a jointly measurable map $g_k:E\times\Omega\to E$. For every fixed $x\in E$, $g_k(x,\cdot)$ is Bochner integrable and $\|g_k(x,\cdot)-\nabla f_k(x)\|^2$ is integrable under $\nu$, with
 \[
 \begin{aligned}
-\int_\Omega g_k(x,\omega)\,p(d\omega)&=\nabla f_k(x),\\
-\int_\Omega\|g_k(x,\omega)-\nabla f_k(x)\|^2\,p(d\omega)&\leq\sigma^2.
+\mathbb{E}_{\xi\sim\nu}[g_k(x,\xi)]&=\nabla f_k(x),\\
+\mathbb{E}_{\xi\sim\nu}
+ \bigl[\|g_k(x,\xi)-\nabla f_k(x)\|^2\bigr]&\leq\sigma^2.
 \end{aligned}
 \]
-The single oracle, with ID $0$, returns $g_k(x,\xi_k)$ on its zero-based call $k$ at query $x$. The samples $(\xi_k)_{k\in\mathbb{N}_0}$ have joint law $p^{\otimes\mathbb{N}_0}$. Each reply costs one oracle call, and any internal algorithm randomness is independent of this sample sequence.
+At call $k$, a query $x\in E$ receives $g_k(x,\xi_k)$, where the samples $(\xi_k)_{k\geq0}$ are independent with common law $\nu$ and are independent of the algorithm's randomness.
 \end{assumption}
 
-Queries may be chosen adaptively anywhere in $E$; the objective index advances with each oracle call. The algorithm is selected using only the public inputs. An externally specified budget $K\in\mathbb{N}_0$ may depend on the full parameter tuple, including $(\Gamma,R,V,H)$.
+The output includes the number of completed oracle calls. Specifically, its counter starts at $c_0=0$, increases according to $c_{k+1}=c_k+1$ after each reply, and equals the reported value $N$ at termination. Thus the objective advances with each oracle call, and the reported time cannot be chosen independently of the number of calls.
 
-After $K$ calls, the algorithm returns $(\bar{x},K)\in E\times\mathbb{N}_0$: its reported integer must equal the actual number of completed calls, including zero if no calls are made. Let $\mathbb{P}$ denote the joint probability law of the algorithm and oracle randomness, and set $j_K=\max\{K-1,0\}$. Success requires integrability of the squared tracking error and the bound
+Let $P$ be the joint law of the algorithm's randomness and the independent oracle samples. After the allotted calls, the output $(\bar{x},N)\in E\times\mathbb{N}_0$ must have integrable squared tracking error under $P$ and satisfy
 \[
-\begin{aligned}
-\|\bar{x}-x_{j_K}^\star\|^2&\in L^1(\mathbb{P}),\\
-\int\|\bar{x}-x_{j_K}^\star\|^2\,d\mathbb{P}&\leq\varepsilon.
-\end{aligned}
+\mathbb{E}_{P}\bigl[
+\|\bar{x}-x_{\max\{N-1,0\}}^\star\|^2
+\bigr]\leq\varepsilon.
 \]
-Thus the output is assessed against the minimizer of the last queried objective, with index zero used when $K=0$.
+For $N\geq1$, the reference minimizer belongs to the objective queried on the final call; for $N=0$, it is $x_0^\star$.
 \end{document}

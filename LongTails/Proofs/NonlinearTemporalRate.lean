@@ -136,7 +136,7 @@ lemma execute_twoPhase_accuracy (p : Params) (hp : spec.valid p) (hεΔ : p.ε <
     (hH : ∀ x y, ‖fderiv ℝ (gradient f) x - fderiv ℝ (gradient f) y‖ ≤ p.M * ‖x - y‖)
     (u : p.E) (hmin : IsMinOn f Set.univ u) (hgap : f p.x0 - f u ≤ p.Δ)
     (O : Oracle p.E p.E) (e : ℕ → p.E)
-    (hO : ∀ k x seed, O.answer k (0, x) seed = gradient f x + e k)
+    (hO : ∀ history x seed, O.answer history (0, x) seed = gradient f x + e history.length)
     (he : ∀ n, ‖∑ i ∈ Finset.range n, e i‖ ≤ p.D)
     (K : ℕ) (hK : 2 * finalLength p + warmupBatch p * warmupLength p ≤ K)
     (seed : (twoPhaseAccelerated (warmupMomentum p) (finalMomentum p) p.μ p.x0

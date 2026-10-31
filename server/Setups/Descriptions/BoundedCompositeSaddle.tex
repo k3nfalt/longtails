@@ -5,97 +5,78 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Bounded Composite Saddle Optimization}
-We consider $\min_{x\in X}\sup_{y\in Y}\Phi(x,y)$, where $\Phi(x,y)=g(x)+\langle y,\mathcal Kx\rangle-h(y)$ on real inner product spaces $E$ and $F$. The convex sets $X\subset E$ and $Y\subset F$ lie in radius-$R$ balls, with $R>0$. The functions $g:E\to\mathbb R$ and $h:F\to\mathbb R$ are convex and $M$-Lipschitz on their respective feasible sets, with $M\geq0$; the continuous linear map $\mathcal K:E\to F$ satisfies $\|\mathcal K\|\leq L$, with $L>0$. Each oracle call returns an exact operator action or constrained proximal point. Given $\varepsilon>0$, the output $(\bar x,\bar y)\in X\times Y$ must satisfy $\sup_{y\in Y}\Phi(\bar x,y)-\inf_{x\in X}\Phi(x,\bar y)\leq\varepsilon$ almost surely.
+\section*{Arrow--Hurwicz for Bounded Composite Saddles}
+We consider the saddle objective $\Phi(x,y)=g(x)+\langle y,Kx\rangle-h(y)$ on convex sets $X\subset E$ and $Y\subset F$, where $E,F$ are real inner product spaces. Both sets lie in balls of radius $R>0$ about zero; $g:E\to\mathbb{R}$ and $h:F\to\mathbb{R}$ are convex and $M$-Lipschitz on their respective sets, with $M\geq0$, and $K:E\to F$ is bounded linear with operator norm at most $L>0$. The oracle returns exact linear-map, adjoint, and constrained proximal evaluations. From given feasible points, Arrow--Hurwicz must return a feasible pair $(\bar{x},\bar{y})$ satisfying $\Phi(\bar{x},y)-\Phi(x,\bar{y})\leq\varepsilon$ for every $(x,y)\in X\times Y$, almost surely, where $\varepsilon>0$ is the tolerance.
 
-The spaces may be infinite dimensional. Their norms are induced by their inner products, and the product space is equipped with
+The optimization problem is
 \[
-\|(x,y)\|_{E\times F}=\max\{\|x\|_E,\|y\|_F\}.
+\inf_{x\in X}\sup_{y\in Y}\Phi(x,y).
 \]
-The saddle problem is
-\[
-\min_{x\in X}\sup_{y\in Y}
-\bigl\{g(x)+\langle y,\mathcal Kx\rangle-h(y)\bigr\}.
-\]
-The public inputs are $(E,F,X,Y,R,L,M,\varepsilon,x^0,y^0)$, where $x^0$ and $y^0$ are the initial points. The instance consists of $\mathcal K$, $g$, and $h$, accessed through the oracle described below.
+The norms on $E$ and $F$ are induced by their inner products, and we use the product norm $\|(x,y)\|=\max\{\|x\|,\|y\|\}$. Operator norms are the induced operator norms. The algorithm receives $E,F,X,Y,R,L,M,\varepsilon$ and the starting points $x^0,y^0$; access to $K,g,h$ is through the oracle.
 
-\begin{assumption}[Feasible sets and parameters]
-The sets $X$ and $Y$ are convex, and
+Our assumptions:
+\begin{assumption}[Bounded feasible sets]
+The sets $X$ and $Y$ are convex, $x^0\in X$, $y^0\in Y$, and
 \[
 \begin{aligned}
-x^0&\in X, & y^0&\in Y,\\
-\|x\|_E&\leq R &&\text{for every }x\in X,\\
-\|y\|_F&\leq R &&\text{for every }y\in Y,\\
-R&>0, & L&>0,\qquad M\geq0,\qquad\varepsilon>0.
-\end{aligned}
-\]
-Consequently, $X\times Y$ has diameter at most $2R$ in the product norm.
-\end{assumption}
-
-\begin{assumption}[Convex composite terms]
-For every $t\in[0,1]$, $a,b\in X$, and $c,d\in Y$,
-\[
-\begin{aligned}
-g((1-t)a+tb)&\leq(1-t)g(a)+tg(b),\\
-h((1-t)c+td)&\leq(1-t)h(c)+th(d),\\
-|g(a)-g(b)|&\leq M\|a-b\|_E,\\
-|h(c)-h(d)|&\leq M\|c-d\|_F.
+\|x\|&\leq R &&\text{for every }x\in X,\\
+\|y\|&\leq R &&\text{for every }y\in Y.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Linear coupling and proximal solutions]
-The map $\mathcal K:E\to F$ is continuous and linear, with $\|\mathcal K\|\leq L$. There exists a map $\mathcal K^*:F\to E$ satisfying
-\[
-\langle\mathcal K^*y,z\rangle_E
-=\langle y,\mathcal Kz\rangle_F
-\qquad(y\in F,\ z\in E).
-\]
-There are maps $P_X:E\times\mathbb R\to E$ and $P_Y:F\times\mathbb R\to F$ such that, for every $\tau>0$, $u\in E$, and $v\in F$,
+\begin{assumption}[Convex composite objective]
+The functions $g$ and $h$ are convex on $X$ and $Y$, respectively, and satisfy
 \[
 \begin{aligned}
-P_X(u,\tau)&\in X, & P_Y(v,\tau)&\in Y,\\
-\tau g(P_X(u,\tau))
-+\tfrac12\|P_X(u,\tau)-u\|_E^2
-&\leq\tau g(w)+\tfrac12\|w-u\|_E^2
-&& (w\in X),\\
-\tau h(P_Y(v,\tau))
-+\tfrac12\|P_Y(v,\tau)-v\|_F^2
-&\leq\tau h(z)+\tfrac12\|z-v\|_F^2
-&& (z\in Y).
+|g(a)-g(b)|&\leq M\|a-b\| &&(a,b\in X),\\
+|h(a)-h(b)|&\leq M\|a-b\| &&(a,b\in Y).
 \end{aligned}
+\]
+The map $K:E\to F$ is bounded linear with $\|K\|_{\mathrm{op}}\leq L$. There exists a map $K^*:F\to E$ satisfying
+\[
+\langle K^*y,z\rangle=\langle y,Kz\rangle,
+\qquad y\in F,\ z\in E.
 \]
 \end{assumption}
 
-\begin{assumption}[Exact operator and proximal access]
-Each call requests one of four operations: $\mathcal K^*y$ for any $y\in F$, $\mathcal Kx$ for any $x\in E$, $P_X(u,\tau)$ for any $(u,\tau)\in E\times\mathbb R$, or $P_Y(v,\tau)$ for any $(v,\tau)\in F\times\mathbb R$. The reply is the requested vector, exactly, at every call index and for every realization of oracle randomness. Each operation costs one oracle call. Proximal replies at $\tau\leq0$ are specified by these same maps but have no required minimization property. Queries may be adaptive and may lie outside the feasible sets. Any internal algorithm randomness is independent of oracle randomness.
-\end{assumption}
-
-The permitted algorithm is the Arrow--Hurwicz iteration with a fixed step size $\eta>0$, selected using only the public inputs. Starting from $(x^0,y^0)$, each complete iteration makes four calls in the order $\mathcal K^*y^t$, $P_X$, $\mathcal Kx^{t+1}$, and $P_Y$, implementing
+\begin{assumption}[Exact proximal access]
+For every $u\in E$, $v\in F$, and $t>0$, the oracle provides points
 \[
 \begin{aligned}
-x^{t+1}&=P_X(x^t-\eta\mathcal K^*y^t,\eta),\\
-y^{t+1}&=P_Y(y^t+\eta\mathcal Kx^{t+1},\eta).
+p_X(u,t)&\in\operatorname*{arg\,min}_{x\in X}
+\left\{t g(x)+\tfrac12\|x-u\|^2\right\},\\
+p_Y(v,t)&\in\operatorname*{arg\,min}_{y\in Y}
+\left\{t h(y)+\tfrac12\|y-v\|^2\right\}.
 \end{aligned}
 \]
-Thus the coupling enters with the descent sign in $x$ and the ascent sign in $y$.
+The oracle also returns $Kx$ for any $x\in E$ and $K^*y$ for any $y\in F$. Each linear-map, adjoint, or proximal evaluation counts as one call to the same oracle. Proximal queries accept arbitrary real $t$, with the stated minimization requirement applying when $t>0$.
+\end{assumption}
 
-An externally specified budget $N\in\mathbb N$ may depend on the full public parameter tuple. Write $N=4n+r$, with $n\in\mathbb N$ and $r\in\{0,1,2,3\}$. The execution uses exactly $N$ oracle calls. If $n\geq1$, its output averages only the completed iterations:
+Our result is algorithm-specific: we analyze Arrow--Hurwicz with a constant step size $\eta>0$ chosen from the available inputs. Starting from the given pair $(x^0,y^0)$, the updates are
 \[
-\bar x=\frac1n\sum_{t=1}^{n}x^t,
+\begin{aligned}
+x^{k+1}&=p_X\bigl(x^k-\eta K^*y^k,\eta\bigr),\\
+y^{k+1}&=p_Y\bigl(y^k+\eta Kx^{k+1},\eta\bigr),
+\qquad k\geq0.
+\end{aligned}
+\]
+Each iteration makes four calls, in the order $K^*y^k$, the primal proximal evaluation, $Kx^{k+1}$, and the dual proximal evaluation. After $N\geq1$ complete iterations, the output is
+\[
+\bar{x}=\frac1N\sum_{k=1}^{N}x^k,
 \qquad
-\bar y=\frac1n\sum_{t=1}^{n}y^t.
+\bar{y}=\frac1N\sum_{k=1}^{N}y^k.
 \]
-The remaining $r$ calls do not enter these averages. If $n=0$, the output is $(x^0,y^0)$ for $r=0,1$, and $(x^1,y^0)$ for $r=2,3$.
+If the call budget ends during a subsequent iteration, that incomplete iteration is excluded from the averages. If no iteration has been completed, the output is the current pair: $(x^0,y^0)$ after zero or one call, and $(x^1,y^0)$ after two or three calls.
 
-Writing $\mathbb P$ for the joint law of algorithm and oracle randomness, success requires
+The required accuracy is feasibility together with a uniform primal--dual gap bound:
 \[
-(\bar x,\bar y)\in X\times Y,
-\qquad
-\sup_{y\in Y}\Phi(\bar x,y)
--\inf_{x\in X}\Phi(x,\bar y)
-\leq\varepsilon
-\qquad\mathbb P\text{-almost surely}.
+\begin{gathered}
+(\bar{x},\bar{y})\in X\times Y,\\
+\Phi(\bar{x},y)-\Phi(x,\bar{y})\leq\varepsilon
+\quad\text{for every }x\in X,\ y\in Y,
+\qquad P\text{-a.s.},
+\end{gathered}
 \]
-Equivalently, on a single event of probability one, the output is feasible and $\Phi(\bar x,y)-\Phi(x,\bar y)\leq\varepsilon$ holds simultaneously for every $x\in X$ and $y\in Y$.
+where $P$ is the law of the algorithm's randomness; the specified Arrow--Hurwicz method and its oracle replies are deterministic.
 \end{document}

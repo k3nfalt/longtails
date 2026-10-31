@@ -5,59 +5,57 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Stochastic Generalized Monotone Root Finding}
-We seek a zero of a continuous monotone operator $F:E\to E$ on a finite-dimensional real Hilbert space $E$. For known constants $L_0,L_1\geq0$, its variation along any segment is bounded by the endpoint distance times $L_0+L_1M$ whenever $M\in\mathbb{R}$ bounds the operator norm throughout that segment. A given point $x^0\in E$ lies within a known distance $R\geq0$ of a zero $x^\star$. Each oracle call returns an unbiased random vector estimating $F(x)$ at the query $x\in E$, using independent samples and with mean squared error at most a known $\sigma^2$, where $\sigma\geq0$. For $\varepsilon>0$ and $\delta\in(0,1)$, a measurable output $\bar{x}\in E$ must satisfy $\mathbb{P}(\|F(\bar{x})\|>\varepsilon)\leq\delta$, where $\mathbb{P}$ includes all algorithm and oracle randomness.
+\section*{Stochastic Generalized Monotone Equations}
+We seek a zero of a continuous monotone operator $F:E\to E$ on a finite-dimensional real Hilbert space $E$. For $L_0,L_1\geq0$, its Lipschitz constant along each segment is bounded by $L_0+L_1M$ whenever $M$ bounds the operator norm values on that segment. A given point $x^0\in E$ lies within distance $R\geq0$ of a zero. The oracle returns unbiased estimates of $F(x)$ with variance at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. Given $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ with probability at least $1-\delta$ over oracle and independent algorithm randomness.
 
-The root-finding problem is
+The operator equation is
 \[
-\text{find }x\in E\text{ such that }F(x)=0,
+F(x)=0,\qquad x\in E.
 \]
-where the norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$. The operator and its stochastic oracle satisfy the following conditions.
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $L_0$, $L_1$, $x^0$, $R$, $\sigma$, $\varepsilon$, and $\delta$; it accesses $F$ through the oracle.
 
-\begin{assumption}[Monotonicity and generalized Lipschitz continuity]
+Our assumptions:
+\begin{assumption}[Continuity and monotonicity]
 The operator $F$ is continuous, and for every $x,y\in E$,
 \[
 \langle F(x)-F(y),x-y\rangle\geq0.
 \]
-For every $x,y\in E$ and $M\in\mathbb{R}$, the segment bound
+\end{assumption}
+
+\begin{assumption}[Generalized Lipschitz condition]
+For every $x,y\in E$ and $M\in\mathbb{R}$, the following implication holds:
 \[
-\|F(x+\theta(y-x))\|\leq M
-\qquad\text{for every }\theta\in[0,1]
-\]
-implies
-\[
+\begin{aligned}
+&\|F(x+\theta(y-x))\|\leq M
+&&\text{for all }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
 \|F(x)-F(y)\|\leq(L_0+L_1M)\|x-y\|.
+\end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Existence of a nearby zero]
+\begin{assumption}[Nearby zero]
 There exists $x^\star\in E$ such that
 \[
-\begin{aligned}
-F(x^\star)&=0,\\
-\|x^0-x^\star\|&\leq R.
-\end{aligned}
+F(x^\star)=0,
+\qquad \|x^0-x^\star\|\leq R.
 \]
 \end{assumption}
 
-\begin{assumption}[Unbiased stochastic operator]
-Let $\Omega$ be a measurable sample space. There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $p$, the function $\omega\mapsto\|g(x,\omega)-F(x)\|^2$ is integrable under $p$, and
+\begin{assumption}[Stochastic operator oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-F(x)\|^2$ is integrable under $\nu$, with
 \[
 \begin{aligned}
-\int_\Omega g(x,\omega)\,p(d\omega)&=F(x),\\
-\int_\Omega\|g(x,\omega)-F(x)\|^2\,p(d\omega)&\leq\sigma^2.
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr]&\leq\sigma^2.
 \end{aligned}
 \]
+At call $k\geq0$, a query $x\in E$ receives $g(x,\xi_k)$. The sample variables $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. The algorithm's randomness is independent of the entire sample sequence.
 \end{assumption}
 
-\begin{assumption}[Independent sampling and oracle access]
-There is a probability law $P$ on $\Omega^{\mathbb{N}}$ under which the coordinate samples $\xi_k$, $k\in\mathbb{N}$, are measurable, mutually independent, and each has distribution $p$. At call $k$, a query $x\in E$ returns the vector $g(x,\xi_k)\in E$ and costs one oracle call. Any internal algorithm randomness is independent of the entire sample sequence.
-\end{assumption}
-
-The operator is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The public inputs are the space $E$, the measurable sample space $\Omega$, the initial point $x^0$, and all numerical parameters $(L_0,L_1,R,\sigma,\varepsilon,\delta)$ in the ranges stated above. The operator $F$, the oracle map $g$, the sampling laws $p$ and $P$, and the witnessing zero $x^\star$ are not supplied as public inputs. An externally specified budget $K\in\mathbb{N}$ may depend on the public parameter tuple and counts every oracle call.
-
-After $K$ calls, the algorithm returns a measurable point $\bar{x}\in E$. Under the joint law $\mathbb{P}$ of its internal randomness and the oracle samples, the required residual accuracy is
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
 \[
-\mathbb{P}\bigl(\|F(\bar{x})\|>\varepsilon\bigr)\leq\delta.
+\mathbb{P}_{P}\bigl(\|F(\bar{x})\|>\varepsilon\bigr)\leq\delta,
 \]
+where $P$ is the joint law of the algorithm's randomness and the oracle sample sequence.
 \end{document}

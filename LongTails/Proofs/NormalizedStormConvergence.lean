@@ -334,13 +334,13 @@ theorem convergence : Convergence LongTails.Setups.ExpectedSmoothnessNonconvex.s
       fun ω => (stormPair g η a b0 q.x0 ω.2 ω.1.val).1 := by
     funext seed; exact hexec seed.1 seed.2
   refine ⟨?_, ?_⟩
-  · rw [hout]; exact measurable_out hgm η a b0 T q.x0
+  · erw [hout]; exact measurable_out hgm η a b0 T q.x0
   have hfun : (fun ω : (normalizedStorm η a b0 T q.x0).Seed × (ℕ → q.Ω) =>
       ‖gradient f (execute ({ Seed := fun _ => q.Ω, law := P, answer := fun _ (_, z) ω => (g z.1 ω, g z.2 ω) } :
         Oracle (q.E × q.E) (q.E × q.E)) (normalizedStorm η a b0 T q.x0) (fun _ => K) ω.1 ω.2)‖) =
       fun ω => ‖gradient f (stormPair g η a b0 q.x0 ω.2 ω.1.val).1‖ := by
     funext ω; rw [hexec ω.1 ω.2]
-  rw [hfun]
+  erw [hfun]
   change Integrable (fun ω : Fin (T + 1) × (ℕ → q.Ω) => ‖gradient f (stormPair g η a b0 q.x0 ω.2 ω.1.val).1‖)
       ((PMF.uniformOfFintype (Fin (T + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧
     ∫ ω : Fin (T + 1) × (ℕ → q.Ω), ‖gradient f (stormPair g η a b0 q.x0 ω.2 ω.1.val).1‖

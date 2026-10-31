@@ -5,49 +5,51 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Cyclic Optimization of Interpolated Finite Sums}
-We consider minimizing $F(x)=m^{-1}\sum_{i=0}^{m-1}f_i(x)$ on a real Hilbert space $E$, where $m\geq1$ is an integer and each $f_i:E\to\mathbb{R}$ is convex with $L$-Lipschitz gradient, for $L>0$. The components share a global minimizer $x^\star\in E$ satisfying $\|x^0-x^\star\|\leq R$, where $x^0\in E$ is the initial point and $R\geq0$. A query $(i,x)$ returns the exact component gradient $\nabla f_i(x)$. The prescribed algorithm uses cyclic component gradients with step size $1/L$. For $\varepsilon>0$, its last iterate $\bar{x}\in E$ must satisfy $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely. Only $(E,m,L,x^0)$ are public inputs.
+\section*{Cyclic Gradient Under Interpolation}
+We consider minimizing $F(x)=m^{-1}\sum_{i=0}^{m-1}f_i(x)$ on a real Hilbert space $E$, where $m\geq1$ is an integer. Each component $f_i:E\to\mathbb{R}$ is convex and differentiable with an $L$-Lipschitz gradient, where $L>0$. The components share a global minimizer $x^\star$, and the given starting point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for $R\geq0$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. Cyclic gradient descent with step size $1/L$ must return its last iterate $\bar{x}$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under the output law $P$, for $\varepsilon>0$.
 
 The optimization problem is
 \[
 \min_{x\in E} F(x).
 \]
-The space $E$ may be infinite dimensional, and its norm is induced by its inner product. The component indices are $0,\ldots,m-1$. The admissible objectives and oracle access satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $m$, $L$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
+Our assumptions:
 \begin{assumption}[Component convexity and smoothness]
-Each component $f_i$ is differentiable everywhere on $E$. For every component index $i$, every $x,y\in E$, and every $t\in[0,1]$,
-\begin{align*}
-f_i((1-t)x+ty) &\leq (1-t)f_i(x)+tf_i(y),\\
-\|\nabla f_i(x)-\nabla f_i(y)\| &\leq L\|x-y\|.
-\end{align*}
+Each $f_i$ is Fr\'echet differentiable everywhere on $E$. For every $i\in\{0,\ldots,m-1\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+\begin{aligned}
+f_i((1-t)x+ty)&\leq(1-t)f_i(x)+t f_i(y),\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Common minimizer and initial distance]
+\begin{assumption}[Interpolation and initial distance]
 There exists $x^\star\in E$ such that
-\begin{align*}
-f_i(x^\star) &\leq f_i(x)
-\quad\text{for every }i\text{ and }x\in E,\\
-\|x^0-x^\star\| &\leq R.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Exact component-gradient access]
-At every call index and every query $(i,x)$, with $x\in E$, the oracle returns $\nabla f_i(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Algorithm randomness, if present, is independent of oracle randomness.
-\end{assumption}
-
-The permitted algorithm is fixed to cyclic gradient descent. Starting from the public point $x^0$, it queries component $i_t=t\bmod m$ at $x^t$ and updates according to
 \[
-x^{t+1}=x^t-\frac{1}{L}\nabla f_{i_t}(x^t),
-\qquad t=0,1,2,\ldots.
+\begin{aligned}
+f_i(x^\star)&\leq f_i(x)
+&&\text{for every }i\in\{0,\ldots,m-1\},\ x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
 \]
-Oracle queries are admissible anywhere in $E$; the prescribed queries follow this recurrence. The distance bound $R$ and accuracy level $\varepsilon$ are not supplied to the algorithm. An externally specified budget $K\in\{0,1,2,\ldots\}$ may depend on the full parameter tuple $(E,m,L,x^0,R,\varepsilon)$. Execution uses exactly $K$ component-gradient calls and returns the last iterate $\bar{x}=x^K$.
+\end{assumption}
 
-Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, success requires a common global minimizer $x^\star$ such that
+The oracle accepts any component index and any point in $E$ and returns the exact component gradient. Our formulation is algorithm-specific: we analyze cyclic gradient descent, initialized at the given point $x^0$. Its updates are
 \[
-\frac{1}{m}\sum_{i=0}^{m-1}
-\bigl(f_i(\bar{x})-f_i(x^\star)\bigr)
+\begin{aligned}
+i_k&=k\bmod m,\\
+x^{k+1}&=x^k-\frac{1}{L}\nabla f_{i_k}(x^k),
+\qquad k=0,1,\ldots.
+\end{aligned}
+\]
+Each update uses one component-gradient call. After an allotted budget of $K\geq0$ calls, with $K$ an integer, the output is the last iterate $\bar{x}=x^K$. The required accuracy is
+\[
+F(\bar{x})-F(x^\star)
+=\frac{1}{m}\sum_{i=0}^{m-1}\bigl(f_i(\bar{x})-f_i(x^\star)\bigr)
 \leq\varepsilon
-\qquad \mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
-Every common global minimizer has the same value for each component, so the minimizer witnessing the initial distance bound can also witness this accuracy requirement.
+The common minimizer in this requirement is fixed independently of the output; all common minimizers have the same component objective values.
 \end{document}

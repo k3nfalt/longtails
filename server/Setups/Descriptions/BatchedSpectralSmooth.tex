@@ -1,0 +1,89 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Batched Polar Matrix Optimization}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^{m\times n}\to\mathbb{R}$, where $m,n$ are nonnegative integers. Its gradient is $L$-Lipschitz from the spectral norm to the nuclear norm, with $L>0$, and a given starting matrix $x^0$ has objective gap at most $\Delta\geq0$ above a global lower bound. The oracle returns unbiased stochastic gradients using independent, identically distributed samples, with rowwise standard deviations summing to at most $s\geq0$ in a fixed orthonormal basis. Batched polar updates must produce a random output $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|_*\leq\varepsilon$, where $\|\cdot\|_*$ is the nuclear norm, $\varepsilon>0$, and expectation includes sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^{m\times n}} f(x).
+\]
+Equip the matrix space with the Frobenius inner product $\langle U,V\rangle_F=\operatorname{tr}(U^\top V)$ and its norm $\|\cdot\|_F$; gradients are taken with respect to this inner product. Write $\|\cdot\|_{\mathrm{op}}$ for the induced Euclidean operator norm, also called the spectral norm. Its dual under the Frobenius pairing is the nuclear norm:
+\[
+\|G\|_* = \sup_{\|U\|_{\mathrm{op}}\leq1}\langle G,U\rangle_F.
+\]
+The algorithm receives $m,n,L,\Delta,s,\varepsilon$, and $x^0$; the objective and the oracle's distributional model are accessible only through queries.
+
+Our assumptions:
+\begin{assumption}[Spectral smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_*
+\leq L\|x-y\|_{\mathrm{op}},
+\qquad x,y\in\mathbb{R}^{m\times n}.
+\]
+\end{assumption}
+
+\begin{assumption}[Lower bound and initial gap]
+There exists $f_{\min}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_{\min}&\leq f(x) &&\text{for every }x\in\mathbb{R}^{m\times n},\\
+f(x^0)-f_{\min}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased oracle with a row variance profile]
+Let $\nu$ be a probability measure on a measurable sample space $\Omega$. The oracle is specified by a jointly measurable map
+$g:\mathbb{R}^{m\times n}\times\Omega\to\mathbb{R}^{m\times n}$.
+For every $x$, the random matrix $g(x,\xi)$ is Bochner integrable for $\xi\sim\nu$, and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+There exist a fixed orthonormal basis $(b_i)_{i=1}^m$ of $\mathbb{R}^m$ and numbers $\sigma_i\geq0$ with
+\[
+\sum_{i=1}^m\sigma_i\leq s.
+\]
+For every $x$ and $i$, the vector
+$(g(x,\xi)-\nabla f(x))^\top b_i\in\mathbb{R}^n$ belongs to $L^2(\nu;\mathbb{R}^n)$ and satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|(g(x,\xi)-\nabla f(x))^\top b_i\|_2^2\bigr]
+\leq\sigma_i^2.
+\]
+At call $k\geq0$, a query $x$ receives $g(x,\xi_k)$, where the measurable sample variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$. Algorithm randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze batched polar updates. Define the polar direction as the minimum-Frobenius-norm maximizer of the linear objective over the spectral unit ball:
+\[
+\begin{aligned}
+\mathcal{S}(G)
+&=\underset{\|U\|_{\mathrm{op}}\leq1}{\operatorname{arg\,max}}
+\langle G,U\rangle_F,\\
+\operatorname{polar}(G)
+&=\underset{U\in\mathcal{S}(G)}{\operatorname{arg\,min}}\|U\|_F.
+\end{aligned}
+\]
+The second minimizer is unique, including at rank-deficient $G$. The method chooses a constant step size $\eta>0$, a batch size $B\in\{1,2,\ldots\}$, and an integer $T\geq0$ from its inputs. Starting at the given $x^0$, it makes $B$ queries at each $x^t$, for $t=0,\ldots,T$, and follows
+\[
+\begin{aligned}
+G_t&=\frac{1}{B}\sum_{j=0}^{B-1}g(x^t,\xi_{Bt+j}),\\
+x^{t+1}&=x^t-\eta\operatorname{polar}(G_t).
+\end{aligned}
+\]
+These query and update rules must hold for every possible sequence of oracle replies. A measurable index $J$, drawn from the algorithm's randomness independently of the samples, is uniform on $\{0,\ldots,T\}$. After $B(T+1)$ oracle calls, the output is
+\[
+\bar{x}=x^J.
+\]
+The output remains $x^J$ after any additional calls. The call count includes the batch at $x^T$, although the output is selected from $x^0,\ldots,x^T$.
+
+Let $P$ be the joint law of the algorithm randomness and the sample sequence. The output must be measurable, its gradient's nuclear norm must be integrable under $P$, and the required accuracy is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|_*\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -5,64 +5,63 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Power-Geometry Relative-Error Convex Optimization}
-We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a finite-dimensional real normed space $E$, with $L$-Lipschitz derivative, $L>0$. The squared norm centered at an initial point $x^0\in E$ is differentiable and satisfies a power-type Bregman lower bound with exponent $p>2$ and constant $c>0$. Some global minimizer $x^\star$ satisfies $\|x^\star-x^0\|\leq R$, where $R\geq0$. Each oracle call returns a dual vector approximating the derivative with relative error at most $\alpha\in[0,1/4]$. For $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. Only $(E,L,\alpha,p,c,x^0)$ are public algorithm inputs.
+\section*{Power Geometry with Relative Errors}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a finite-dimensional real normed space $E$. Its derivative $Df$ is $L$-Lipschitz, with $L>0$. At a given point $x^0\in E$, the squared norm is differentiable and satisfies a power-type curvature bound with exponent $p>2$ and constant $c>0$. A global minimizer $x^\star$ satisfies $\|x^0-x^\star\|\leq R$, where $R\geq0$. The oracle returns a dual vector $g$ with $\|g-Df(x)\|_{\mathrm{op}}\leq\alpha\|Df(x)\|_{\mathrm{op}}$ at $x$, where $0\leq\alpha\leq1/4$. For $\varepsilon>0$, the goal is $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely for an output $\bar{x}\in E$ under the joint law of algorithm and oracle randomness.
 
 The optimization problem is
 \[
 \min_{x\in E} f(x).
 \]
-Write $E^*$ for the space of continuous linear functionals on $E$, equipped with the dual norm $\|\cdot\|_*$, and $Df(x)\in E^*$ for the Fr\'echet derivative. The parameters satisfy
+Write $E^*$ for the continuous dual of $E$ and $\|\cdot\|_{\mathrm{op}}$ for its induced operator norm. Define
 \[
-L>0,\qquad p>2,\qquad c>0,\qquad
-0\leq\alpha\leq\tfrac14,\qquad R\geq0,\qquad\varepsilon>0.
+\psi(x)=\frac{1}{2}\|x-x^0\|^2.
 \]
-The geometry, objective, and oracle satisfy the following conditions.
+The algorithm receives $E$, $L$, $\alpha$, $p$, $c$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter only the oracle-call budget.
 
+Our assumptions:
 \begin{assumption}[Power geometry]
-The function $\psi:E\to\mathbb{R}$ defined by
-\[
-\psi(x)=\frac{\|x-x^0\|^2}{2}
-\]
-is Fr\'echet differentiable everywhere. For every $x,y\in E$,
+The function $\psi$ is Fr\'echet differentiable everywhere, and for every $x,y\in E$,
 \[
 \frac{c\|y-x\|^p}
 {(\|y-x^0\|+\|x-x^0\|)^{p-2}}
 \leq \psi(y)-\psi(x)-D\psi(x)[y-x].
 \]
-The fraction is defined to be zero when its denominator vanishes, which occurs precisely when $x=y=x^0$.
+The fraction is defined to be zero when $x=y=x^0$.
 \end{assumption}
 
 \begin{assumption}[Convexity and smoothness]
-The objective $f$ is Fr\'echet differentiable everywhere on $E$. For all $x,y\in E$ and $t\in[0,1]$,
-\begin{align*}
-f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
-\|Df(x)-Df(y)\|_*&\leq L\|x-y\|.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Attainment and initial distance]
-There exists $x^\star\in E$ such that
-\begin{align*}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
-\|x^\star-x^0\|&\leq R.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Relative-error derivative access]
-The sole oracle, with ID $0$, returns a functional $g_k(x)\in E^*$ at query $x\in E$ and call index $k\in\{0,1,\ldots\}$. For every call index, every query point, and every realization of the oracle randomness,
+The function $f$ is Fr\'echet differentiable everywhere. For every $x,y\in E$ and $t\in[0,1]$,
 \[
-\|g_k(x)-Df(x)\|_*\leq\alpha\|Df(x)\|_*.
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+\|Df(x)-Df(y)\|_{\mathrm{op}}&\leq L\|x-y\|.
+\end{aligned}
 \]
-Each query costs one oracle call. The algorithm's internal randomness is independent of the oracle randomness; the oracle randomness may be dependent across calls.
 \end{assumption}
 
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only $(E,L,\alpha,p,c,x^0)$; neither $R$ nor $\varepsilon$ is supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,\alpha,p,c,x^0,R,\varepsilon)$.
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^\star-x^0\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
 
-After at most $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the independent algorithm and oracle randomness, success requires a global minimizer $x^\star$ such that
+\begin{assumption}[Relative-error oracle]
+Queries may be made at any point $x\in E$. Every oracle reply $g\in E^*$ satisfies
+\[
+\|g-Df(x)\|_{\mathrm{op}}
+\leq\alpha\|Df(x)\|_{\mathrm{op}}.
+\]
+This bound holds for every query history and every realization of the oracle randomness. Replies may depend on the history, and oracle randomness across calls may be dependent. The algorithm's randomness is independent of the oracle randomness.
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}\in E$ must satisfy
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.},
 \]
-The minimizer witnessing the initial distance bound can be used here, since all global minimizers have the same objective value.
+where $P$ is the joint law of the algorithm and oracle randomness, and $x^\star$ is a fixed global minimizer.
 \end{document}

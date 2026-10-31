@@ -1,0 +1,84 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Convex Minimization with Hessians}
+We consider minimizing a convex function $f:\mathbb{R}^d\to\mathbb{R}$ over a nonempty compact convex set $C$, where $d$ is a nonnegative integer. The gradient is differentiable everywhere, and the Hessian is Lipschitz on $C$. At each query, the oracle returns either an unbiased stochastic gradient or a possibly biased, symmetric positive semidefinite Hessian estimate, using independent, identically distributed samples. Both estimates have bounded mean-square error on $C$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ lying in $C$ for every realization and satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $x^\star$ minimizes $f$ on $C$ and expectation includes oracle and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+We use the Euclidean inner product and norm on $\mathbb{R}^d$; $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The parameters satisfy
+\[
+D>0,\qquad \rho>0,\qquad \sigma_g\geq0,\qquad
+\sigma_h\geq0,\qquad \varepsilon>0.
+\]
+The algorithm receives only $d$, $C$, a given point $x^0$, $D$, $\rho$, and $\sigma_g$; $\sigma_h$ and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Feasible set and minimizer]
+The set $C\subseteq\mathbb{R}^d$ is nonempty, compact, and convex, and
+\[
+\begin{aligned}
+x^0&\in C,\\
+\|x-y\|&\leq D &&\text{for all }x,y\in C.
+\end{aligned}
+\]
+There is a fixed $x^\star\in C$ such that $f(x^\star)\leq f(x)$ for every $x\in C$.
+\end{assumption}
+
+\begin{assumption}[Convexity and Hessian regularity]
+The function $f$ is differentiable on $\mathbb{R}^d$, its gradient is differentiable on $\mathbb{R}^d$, and
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y)
+\qquad
+(x,y\in\mathbb{R}^d,\ t\in[0,1]).
+\]
+Its Hessian satisfies
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
+\leq \rho\|x-y\|,
+\qquad x,y\in C.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient and Hessian estimates]
+Let $\nu$ be a probability measure on a measurable sample space $\Omega$. The maps
+\[
+\begin{aligned}
+g&:\mathbb{R}^d\times\Omega\to\mathbb{R}^d,\\
+H&:\mathbb{R}^d\times\Omega\to\mathcal{L}(\mathbb{R}^d,\mathbb{R}^d)
+\end{aligned}
+\]
+are jointly measurable, where $\mathcal{L}(\mathbb{R}^d,\mathbb{R}^d)$ is the space of linear operators equipped with its operator norm and Borel sigma-algebra. For every $x\in C$, $g(x,\cdot)$ is Bochner integrable under $\nu$, and both squared error norms below are integrable. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
+&\leq\sigma_g^2,\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|H(x,\xi)-\nabla^2 f(x)\|_{\mathrm{op}}^2\bigr]
+&\leq\sigma_h^2.
+\end{aligned}
+\]
+For every $x\in C$, $\omega\in\Omega$, and $u,v\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\langle u,H(x,\omega)v\rangle
+&=\langle H(x,\omega)u,v\rangle,\\
+\langle u,H(x,\omega)u\rangle&\geq0.
+\end{aligned}
+\]
+\end{assumption}
+
+At call $k\geq0$, the algorithm chooses a point $x\in\mathbb{R}^d$ and requests either $g(x,\xi_k)$ or $H(x,\xi_k)$. The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$; the algorithm's randomness is independent of the entire sample sequence. Each request returns only the selected estimate and counts as one call toward a common budget. Queries may be made throughout $\mathbb{R}^d$, while the stated oracle error and positivity conditions apply on $C$.
+
+After the allotted calls, the output $\bar{x}$ must be measurable and belong to $C$ for every realization. The objective gap must be integrable and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle sample sequence.
+\end{document}

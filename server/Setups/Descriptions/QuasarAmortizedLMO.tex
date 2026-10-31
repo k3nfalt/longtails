@@ -5,32 +5,33 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Quasar Optimization with Amortized Linear Oracles}
-We consider minimizing a differentiable function $f:E\to\mathbb{R}$ over a convex set $C$ in a real Hilbert space $E$. Its gradient is $L$-Lipschitz, where $L\geq0$, and a minimizer $x^\star\in C$ satisfies $\tau(f(x)-f(x^\star))\leq\langle\nabla f(x),x-x^\star\rangle$ for all $x\in C$, with $\tau\in(0,1]$. The oracle returns exact gradients or approximate linear minimizers; linear replies at odd call indices have nonnegative additive errors totaling at most $\Gamma\geq0$. Given $\varepsilon>0$, the required output $\bar{x}\in C$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. Only $E$, $L$, $\tau$, and an initial point $x^0\in C$ are public inputs.
+\section*{Quasar Minimization with Amortized LMO}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ over a bounded convex set $C$ in a real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L\geq0$, and $f$ is $\tau$-quasar-convex relative to a minimizer $x^\star\in C$, with $0<\tau\leq1$. A starting point $x^0\in C$ is given. The oracle returns $\nabla f(x)$ at $x$. It also supplies approximate linear minimizers on calls with an odd number of preceding calls, with summable errors. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
 
-The constrained optimization problem is
+The optimization problem is
 \[
-\min_{x\in C} f(x),
+\min_{x\in C} f(x).
 \]
-where the norm on $E$ is induced by its inner product. The feasible set, objective, and oracle satisfy the following conditions.
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $L$, $x^0$, and $\tau$; the set $C$, its diameter bound $D\geq0$, the error budget $\Gamma\geq0$, and the tolerance $\varepsilon>0$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Feasible geometry]
-For a parameter $D\geq0$, the set $C\subseteq E$ is convex, contains $x^0$, and satisfies
+Our assumptions:
+\begin{assumption}[Feasible set]
+The set $C\subseteq E$ is convex, contains $x^0$, and satisfies
 \[
-\|x-y\|\leq D
-\qquad\text{for every }x,y\in C.
-\]
-\end{assumption}
-
-\begin{assumption}[Global smoothness]
-The function $f$ is differentiable everywhere on $E$, with gradient $\nabla f(x)$ at each $x\in E$, and
-\[
-\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|
-\qquad\text{for every }x,y\in E.
+\|x-y\|\leq D,
+\qquad x,y\in C.
 \]
 \end{assumption}
 
-\begin{assumption}[Attainment and quasar inequality]
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Quasar convexity]
 There exists $x^\star\in C$ such that, for every $x\in C$,
 \[
 \begin{aligned}
@@ -41,36 +42,31 @@ f(x^\star)&\leq f(x),\\
 \]
 \end{assumption}
 
-\begin{assumption}[Exact gradients and amortized linear minimization]
-Oracle calls have indices $j=0,1,2,\ldots$. Each call specifies either a gradient query at $x\in E$ or a linear-minimization query with direction $v\in E$, and returns one vector in $E$. At every call index, a gradient query returns $\nabla f(x)$ for every realization of the oracle randomness.
-
-There exists a deterministic sequence $(\delta_k)_{k\geq0}$ satisfying
+\begin{assumption}[Amortized linear minimization]
+There is a fixed sequence $(\delta_k)_{k\geq0}$ satisfying
 \[
-\begin{aligned}
-\delta_k&\geq0 &&\text{for every }k\geq0,\\
-\sum_{k=0}^{n-1}\delta_k&\leq\Gamma
-&&\text{for every }n\geq0.
-\end{aligned}
+\delta_k\geq0\quad(k\geq0),
+\qquad
+\sum_{k=0}^{n-1}\delta_k\leq\Gamma\quad(n\geq0).
 \]
-At call index $j=2k+1$, the reply $s\in E$ to any linear-minimization query $v\in E$ satisfies, for every realization of the oracle randomness,
+For any query history containing $2k+1$ preceding calls and any direction $v\in E$, a linear minimization query returns a vector $s\in E$ satisfying
 \[
 \begin{aligned}
 s&\in C,\\
-\langle v,s\rangle&\leq\langle v,u\rangle+\delta_k
-\qquad\text{for every }u\in C.
+\langle v,s\rangle&\leq\langle v,u\rangle+\delta_k,
+\qquad u\in C.
 \end{aligned}
 \]
-These linear-minimization guarantees apply only at odd indices in the total sequence of calls. Each query of either kind costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+These conditions hold for every such history and every realization of the oracle randomness. The linear minimization guarantee applies only at these history lengths.
 \end{assumption}
 
-Queries may be chosen adaptively, with gradient query points and linear query directions anywhere in $E$. The algorithm is selected using only $(E,L,x^0,\tau)$; the set $C$ and parameters $D$, $\Gamma$, and $\varepsilon$ are not supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,x^0,\tau,C,D,\Gamma,\varepsilon)$ and counts both gradient and linear-minimization calls.
+Gradient queries may be made at any point of $E$, and linear minimization queries may use any direction in $E$. Both query types count toward a single total oracle-call budget; the history length counts both types. Oracle replies to linear minimization queries may depend on the preceding history. Algorithm randomness is independent of oracle randomness.
 
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a minimizer $x^\star\in C$ for which
+After the allotted calls, the output must satisfy
 \[
-\bar{x}\in C
-\quad\text{and}\quad
-f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\bar{x}\in C,
+\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
 \]
-The minimizer in the quasar inequality may be used here, since all minimizers over $C$ have the same objective value.
+The minimizer $x^\star$ is fixed independently of the randomness.
 \end{document}

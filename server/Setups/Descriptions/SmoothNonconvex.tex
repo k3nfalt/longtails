@@ -5,43 +5,38 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Smooth Nonconvex Exact-Gradient Stationarity}
-We consider a differentiable, possibly nonconvex objective $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with $L$-Lipschitz gradient $\nabla f$ for $L>0$. A global lower bound $\ell\in\mathbb{R}$ satisfies $f(x^0)-\ell\leq\Delta$ at the initial point $x^0\in E$, where $\Delta\geq0$. Each oracle call at $x\in E$ returns $\nabla f(x)$. Given $\varepsilon>0$, success requires a measurable output $\bar{x}\in E$ with integrable squared gradient norm and $\mathbb{E}_{\mathbb{P}}\|\nabla f(\bar{x})\|^2\leq\varepsilon^2$, where $\mathbb{P}$ is the joint law of algorithm and oracle randomness. The quantities $(E,L,\Delta,\varepsilon,x^0)$ are public.
+\section*{Smooth Nonconvex Stationarity}
+We consider a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is $L$-Lipschitz, where $L>0$, and a given starting point $x^0\in E$ satisfies $f(x^0)-\ell\leq\Delta$ for a global lower bound $\ell\in\mathbb{R}$ and $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable squared gradient norm satisfying $\mathbb{E}_{P}[\|\nabla f(\bar{x})\|^2]\leq\varepsilon^2$, where $P$ is the law of the algorithm's randomness.
 
-The underlying optimization problem is
-\begin{equation}
-\label{eq:problem}
-\inf_{x\in E} f(x),
-\end{equation}
-with stationarity as the required accuracy criterion. The space $E$ may be infinite dimensional, carries a specified measurable structure, and has the norm induced by its inner product. The admissible objectives and oracle access satisfy the following conditions.
+We seek approximate stationarity for the optimization problem
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is equipped with a measurable structure. The algorithm receives $E$, $L$, $\Delta$, $\varepsilon$, and $x^0$; the objective is accessed through the oracle.
 
-\begin{assumption}[Differentiability and smoothness]
-The function $f$ is differentiable everywhere on $E$, and its gradient satisfies
-\begin{equation}
-\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|
-\qquad\text{for every }x,y\in E.
-\end{equation}
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
 \end{assumption}
 
 \begin{assumption}[Lower bound and initial gap]
 There exists $\ell\in\mathbb{R}$ such that
-\begin{align}
-\ell &\leq f(x) \qquad\text{for every }x\in E,\\
-f(x^0)-\ell &\leq\Delta.
-\end{align}
-The lower bound need not be attained.
+\[
+\begin{aligned}
+\ell&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-\ell&\leq\Delta.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Exact-gradient access]
-At every call index and every query point $x\in E$, the oracle returns $\nabla f(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using the public tuple $(E,L,\Delta,\varepsilon,x^0)$; the objective $f$ and the witnessing lower bound $\ell$ are not supplied as public inputs. An externally specified call budget $K\in\mathbb{N}$ may depend on the entire public tuple.
-
-After $K$ calls, the algorithm returns $\bar{x}:\Omega\to E$, where $(\Omega,\mathbb{P})$ is the probability space carrying the joint randomness. The output must be measurable, and the scalar function $\omega\mapsto\|\nabla f(\bar{x}(\omega))\|^2$ must be integrable with respect to $\mathbb{P}$. The required accuracy is
-\begin{equation}
-\label{eq:accuracy}
-\int_{\Omega}\|\nabla f(\bar{x}(\omega))\|^2\,\mathrm{d}\mathbb{P}(\omega)
-\leq\varepsilon^2.
-\end{equation}
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable with respect to the given measurable structure on $E$, and must satisfy
+\[
+\mathbb{E}_{P}\!\left[\|\nabla f(\bar{x})\|^2\right]<\infty,
+\qquad
+\mathbb{E}_{P}\!\left[\|\nabla f(\bar{x})\|^2\right]\leq\varepsilon^2.
+\]
 \end{document}

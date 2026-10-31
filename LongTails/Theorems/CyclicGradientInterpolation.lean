@@ -15,11 +15,11 @@ theorem result : Convergence LongTails.Setups.InterpolatedFiniteSum.spec budget 
   intro N hN
   rintro f oracle ⟨hc, hg, hlip, xstar, hmin, hdist⟩
   let seed0 := (Classical.choice oracle.law.nonempty) 0
-  let g : Fin q.m × q.E → q.E := fun z => oracle.answer 0 (0, z) seed0
+  let g : Fin q.m × q.E → q.E := fun z => oracle.answer [] (0, z) seed0
   have hanswer : ∀ k z seed, oracle.answer k (0, z) seed = g z :=
-    fun k z seed => (hg k seed z.1 z.2).unique (hg 0 seed0 z.1 z.2)
+    fun k z seed => (hg k seed z.1 z.2).unique (hg [] seed0 z.1 z.2)
   have hyp : Hyp q.m f g q.L xstar :=
-    ⟨hL, hc, fun i x => hg 0 seed0 i x, fun i x y => hlip 0 seed0 i x y, hmin⟩
+    ⟨hL, hc, fun i x => hg [] seed0 i x, fun i x y => hlip [] seed0 i x y, hmin⟩
   have hexec (seed : (cyclicGradient q.m q.L q.x0).Seed × ((k : ℕ) → oracle.Seed k)) :
       execute oracle (cyclicGradient q.m q.L q.x0) (fun _ => (q.m * N)) seed.1 seed.2 =
         iter q.m g q.L q.x0 (q.m * N) := by

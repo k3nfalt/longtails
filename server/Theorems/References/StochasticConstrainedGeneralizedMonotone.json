@@ -1,0 +1,119 @@
+{
+  "setup": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
+  "searched_at": "2026-10-24T06:17:15.603128+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{128} \\cdot \\left(\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot \\left(1 + L1 \\cdot R\\right)^{2} \\cdot R}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}\\right)\\right)^{3} \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}}{\\delta}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 128 * ((q.L0 + q.L1 * q.G) * (1 + q.L1 * q.R) ^ 2 * q.R / q.ε + (1 + q.L1 * q.R) ^ 4 + q.σ ^ 2 / q.ε ^ 2) *\n        (1 + Real.log (2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε)) ^ 3 *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε) / q.δ))⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{128} \\cdot \\left(\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot \\left(1 + L1 \\cdot R\\right)^{2} \\cdot R}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}\\right)\\right)^{3} \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{\\left(L0 + L1 \\cdot G + L1 \\cdot \\varepsilon\\right) \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot R}{\\varepsilon}}{\\delta}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 128 * ((q.L0 + q.L1 * q.G) * (1 + q.L1 * q.R) ^ 2 * q.R / q.ε + (1 + q.L1 * q.R) ^ 4 + q.σ ^ 2 / q.ε ^ 2) *\n        (1 + Real.log (2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε)) ^ 3 *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε) / q.δ))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticConstrainedGeneralizedMonotone",
+      "namespace": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
+      "setup": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticConstrainedGeneralizedMonotone.spec\n  OracleTemplate.StochasticConstrainedGeneralizedMonotone.budget",
+      "theorem": "OracleTemplate.StochasticConstrainedGeneralizedMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticConstrainedGeneralizedMonotone",
+      "theorem": "OracleTemplate.StochasticConstrainedGeneralizedMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Constrained monotone variational inequality: find x*∈X with ⟨F(x*),w−x*⟩≥0 for every w∈X. X is convex and F is globally continuous and monotone. No objective function, strong monotonicity, or bounded feasible-set diameter is assumed.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Oracle 1 returns the exact Euclidean projection onto X, characterized by proj(z)∈X and ⟨z−proj(z),w−proj(z)⟩≤0 for every w∈X. Projection calls and stochastic operator calls have separately capped, fixed budgets.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.admissible; LongTails/Template.lean: executeWithTrace and Convergence; supplied extracted budgets."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 0 returns a single stochastic operator evaluation g(x,ω), with E[g(x,ω)]=F(x) and E[‖g(x,ω)−F(x)‖²]≤σ². Seeds are IID across calls; samples cannot be requested again at another point. F need not be a gradient.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.admissible, oracle answer; LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y and every M bounding ‖F(x+θ(y−x))‖ over θ∈[0,1], ‖F(x)−F(y)‖≤(L0+L1M)‖x−y‖. Here L0>0 and L1≥0; a global Lipschitz constant is not required.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform central second-moment bound σ² with σ≥0, unbiasedness, joint measurability, and integrability. No bounded-sample or exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator; LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space, with completeness and its Borel measurable structure.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: Params; LongTails/Setups/GeneralizedLipschitzMonotone.lean: Public."
+      },
+      {
+        "label": "other",
+        "details": "The public input includes E, x0, L0, L1, R, G, σ, ε, δ and the sampling type. R>0, G≥0, ε>0, and 0<δ<1. There exists a hidden solution x*∈X with ‖x0−x*‖≤R and ‖F(x*)‖≤G; x0∈X. F, X, the solution, and the sampling law are hidden.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: Params, Instance, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The output must belong to X on the same success event as the residual guarantee.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "Joint feasibility and residual accuracy hold with probability at least 1−δ over algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The measurable output x must admit ξ∈N_X(x) such that ‖F(x)+ξ‖≤ε, where N_X(x)={ξ: ⟨ξ,w−x⟩≤0 for every w∈X}. This is an unsquared normal-cone residual criterion; ξ need not be returned.",
+        "evidence": "LongTails/Setups/StochasticConstrainedGeneralizedMonotone.lean: spec.successful and spec.Output."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The monotone variational-inequality formulation combines operator-dependent generalized smoothness, potentially unbounded constraints, bounded-variance stochastic evaluations, and a high-probability normal-cone residual requirement. This classification does not establish novelty."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticConstrainedGeneralizedMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticConstrainedGeneralizedMonotone",
+          "theorem": "OracleTemplate.StochasticConstrainedGeneralizedMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

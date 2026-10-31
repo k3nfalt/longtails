@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedStrongGrowthConvex",
+  "searched_at": "2026-10-28T12:10:49.868017+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "130 \\cdot \\left\\lceil 128 \\cdot \\sqrt{\\max\\left\\{ 1, \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\}} \\right\\rceil_{+} + 2 \\cdot \\left\\lceil \\left(17179869184 \\cdot \\rho\\right)^{\\frac{1}{p - 1}} \\right\\rceil_{+} \\cdot \\left(130 + \\left\\lceil 2 \\cdot \\log\\left(\\max\\left\\{ 1, \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\}\\right) \\right\\rceil_{+}\\right) \\cdot \\left\\lceil 128 \\cdot \\left(\\max\\left\\{ 1, \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\}\\right)^{\\frac{p}{3 \\cdot p - 2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedStrongGrowthConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  130 * ⌈128 * √(max 1 (q.L * q.R ^ 2 / q.ε))⌉₊ +\n    2 * ⌈(17179869184 * q.ρ) ^ (q.p - 1)⁻¹⌉₊ * (130 + ⌈2 * Real.log (max 1 (q.L * q.R ^ 2 / q.ε))⌉₊) *\n      ⌈128 * max 1 (q.L * q.R ^ 2 / q.ε) ^ (q.p / (3 * q.p - 2))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "130 \\cdot \\left\\lceil 128 \\cdot \\sqrt{\\max\\left\\{ 1, \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\}} \\right\\rceil_{+} + 2 \\cdot \\left\\lceil \\left(17179869184 \\cdot \\rho\\right)^{\\frac{1}{p - 1}} \\right\\rceil_{+} \\cdot \\left(130 + \\left\\lceil 2 \\cdot \\log\\left(\\max\\left\\{ 1, \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\}\\right) \\right\\rceil_{+}\\right) \\cdot \\left\\lceil 128 \\cdot \\left(\\max\\left\\{ 1, \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\}\\right)^{\\frac{p}{3 \\cdot p - 2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedStrongGrowthConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  130 * ⌈128 * √(max 1 (q.L * q.R ^ 2 / q.ε))⌉₊ +\n    2 * ⌈(17179869184 * q.ρ) ^ (q.p - 1)⁻¹⌉₊ * (130 + ⌈2 * Real.log (max 1 (q.L * q.R ^ 2 / q.ε))⌉₊) *\n      ⌈128 * max 1 (q.L * q.R ^ 2 / q.ε) ^ (q.p / (3 * q.p - 2))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SplitRobustHeavyTailedAcceleration",
+      "namespace": "LongTails.Setups.HeavyTailedStrongGrowthConvex",
+      "setup": "LongTails.Setups.HeavyTailedStrongGrowthConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedStrongGrowthConvex.spec\n  OracleTemplate.SplitRobustHeavyTailedAcceleration.budget",
+      "theorem": "OracleTemplate.SplitRobustHeavyTailedAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SplitRobustHeavyTailedAcceleration",
+      "theorem": "OracleTemplate.SplitRobustHeavyTailedAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on a second-countable real Hilbert space. The gradient is globally L-Lipschitz, and a minimizer x★ exists with ‖x0−x★‖≤R. No strong convexity is assumed.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: Params; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns g(x,ξ) using a fresh IID seed, with E[g(x,ξ)]=∇f(x). Only gradient samples are supplied; neither objective values nor individual sample functions are available. The extracted budget counts individual oracle calls and is fixed in advance.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: spec.admissible; IsRelativeMomentOracle.unbiased. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID. LongTails/Template.lean: executeWithTrace; Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Only a finite central p-th noise moment is required, where 1<p≤2. Infinite variance is permitted when p<2; no exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: spec.valid; IsRelativeMomentOracle.moment_integrable; IsRelativeMomentOracle.moment."
+      },
+      {
+        "label": "relative_error",
+        "details": "The stochastic relative-moment condition is E‖g(x,ξ)−∇f(x)‖^p≤ρ‖∇f(x)‖^p for every x, with ρ≥0. This is a moment bound, not a pointwise relative-error bound. Noise vanishes almost surely at each stationary point.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: IsRelativeMomentOracle.moment; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space may be infinite-dimensional and is a complete, second-countable real inner-product space with its Borel measurable structure. All setup parameters, including L>0, R≥0, ρ≥0, p, ε>0, and x0, are public; the objective and oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: Params; spec.Public; spec.publicInput; spec.Instance; spec.valid; spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable point-valued output X whose objective gap f(X)−f(x★) is integrable and has expectation at most ε for a global minimizer x★. No last-iterate or best-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: spec.Output; spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[f(X)−f(x★)]≤ε, with expectation over both algorithm randomness and the IID oracle seed sequence.",
+        "evidence": "LongTails/Setups/HeavyTailedStrongGrowthConvex.lean: spec.successful. LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth convex geometry and expected objective-gap criterion are standard, but the defining oracle assumption is a relative central p-moment bound that permits infinite variance while forcing noise to vanish at stationary points."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SplitRobustHeavyTailedAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SplitRobustHeavyTailedAcceleration",
+          "theorem": "OracleTemplate.SplitRobustHeavyTailedAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

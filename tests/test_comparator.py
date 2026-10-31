@@ -37,8 +37,8 @@ PROOF = """by
   · intro p hp I oracle ho
     dsimp only
     intro seed
-    change oracle.answer 0 (0, ()) (seed.2 0) = I
-    exact ho 0 (0, ()) (seed.2 0)
+    change oracle.answer _ _ _ = I
+    exact ho _ _ _
   · intro p hp
     trivial
 """
@@ -63,9 +63,25 @@ class ComparatorTests(unittest.TestCase):
         (cls.root / ".lake/packages").symlink_to(
             ROOT / ".lake/packages", target_is_directory=True
         )
-        for name in ("tools/ConvergenceMetadata.lean", "LongTails/Template.lean"):
+        for name in (
+            "tools/ConvergenceMetadata.lean",
+            "LongTails/Template.lean",
+            "LongTails/TemplateOnline.lean",
+        ):
             shutil.copy2(ROOT / name, cls.root / name)
         (cls.root / "LongTails/Setups/ComparatorTest.lean").write_text(SETUP)
+        (cls.root / "LongTails/Setups/ComparatorOnlineTest.lean").write_text(
+            SETUP.replace("LongTails.Template", "LongTails.TemplateOnline")
+            .replace("ComparatorTest", "ComparatorOnlineTest")
+            .replace("spec : Setup", "spec : OnlineSetup")
+            .replace("publicInput := id", "publicInput := fun _ _ => ()")
+            .replace("valid _ :=", "valid _ _ :=")
+            .replace("admissible _ target", "admissible _ _ target")
+            .replace(
+                "successful _ target output _ := ∀ seed, output seed = target",
+                "successful _ _ _ _ _ bound := 0 ≤ bound",
+            )
+        )
 
     def audit(
         self,
@@ -73,11 +89,18 @@ class ComparatorTests(unittest.TestCase):
         *,
         budget="fun _ _ => 1",
         proof=PROOF,
-        statement="Convergence spec budget",
+        statement=None,
         extra="",
         rejection=None,
+        online=False,
+        bound_declaration=None,
     ):
-        source = f"""import LongTails.Setups.ComparatorTest
+        if statement is None:
+            statement = (
+                "OnlineConvergence spec budget" if online else "Convergence spec budget"
+            )
+        source = f"""import LongTails.TemplateOnline
+import LongTails.Setups.ComparatorTest
 namespace LongTails.Theorems.{name}
 open OracleTemplate LongTails.Setups.ComparatorTest
 {ALGORITHM}
@@ -86,6 +109,17 @@ noncomputable def budget : (let S := spec; S.Params → Fin S.numOracles → Nat
 theorem result : {statement} := {proof}
 end LongTails.Theorems.{name}
 """
+        if online:
+            source = (
+                source.replace("ComparatorTest", "ComparatorOnlineTest")
+                .replace("budget", "bound")
+                .replace("S.Params → Fin S.numOracles → Nat", "S.Params → Horizon → ℝ")
+            )
+        if bound_declaration is not None:
+            source = source.replace(
+                "def bound : (let S := spec; S.Params → Horizon → ℝ)",
+                f"def bound {bound_declaration}",
+            )
         (self.root / f"LongTails/Theorems/{name}.lean").write_text(source)
         result = subprocess.run(
             [sys.executable, "run_comparator.py", f"{name}.lean"],
@@ -104,6 +138,108 @@ end LongTails.Theorems.{name}
             self.assertNotEqual(result.returncode, 0, result.stdout)
             self.assertIn(rejection, result.stdout)
 
+    def test_online_results(self):
+        proof = "by exact ⟨fun _ => algorithm, fun _ _ _ _ _ _ => zero_le_one, fun _ _ _ => trivial⟩"
+        for name, budget, body, statement, rejection in (
+            (
+                "OnlineValid",
+                "fun _ _ => 1",
+                proof,
+                "OnlineConvergence spec budget",
+                None,
+            ),
+            (
+                "OnlineMissingProof",
+                "fun _ _ => 1",
+                "by sorry",
+                "OnlineConvergence spec budget",
+                "Illegal axiom detected: 'sorryAx'",
+            ),
+            (
+                "OnlineMissingBound",
+                "by sorry",
+                "by sorry",
+                "OnlineConvergence spec budget",
+                "Illegal axiom detected: 'sorryAx'",
+            ),
+            (
+                "OnlineExtraHypothesis",
+                "fun _ _ => 1",
+                "by intro h; exact h.elim",
+                "False → OnlineConvergence spec budget",
+                "without extra hypotheses",
+            ),
+        ):
+            with self.subTest(name=name):
+                self.audit(
+                    name,
+                    budget=budget,
+                    proof=body,
+                    statement=statement,
+                    rejection=rejection,
+                    online=True,
+                )
+
+    def test_online_explicit_bound_parameters(self):
+        self.audit(
+            "OnlineExplicitBound",
+            online=True,
+            bound_declaration="(_p : Unit) (_T : Horizon) : ℝ",
+            budget="1",
+            proof="by exact ⟨fun _ => algorithm, fun _ _ _ _ _ _ => zero_le_one, fun _ _ _ => trivial⟩",
+        )
+
+    def test_mixed_protocols_fail(self):
+        for name, online, statement, budget in (
+            (
+                "SetupWithOnlineConvergence",
+                False,
+                "OnlineConvergence spec budget",
+                "fun _ _ => 1",
+            ),
+            (
+                "OnlineSetupWithConvergence",
+                True,
+                "Convergence spec budget",
+                "fun _ _ => 1",
+            ),
+            (
+                "SetupWithOnlineBound",
+                False,
+                None,
+                "fun (_ : Unit) (_ : Horizon) => (1 : ℝ)",
+            ),
+            (
+                "OnlineSetupWithOracleBudget",
+                True,
+                None,
+                "fun (_ : Unit) (_ : Fin 1) => (1 : ℕ)",
+            ),
+        ):
+            with self.subTest(name=name):
+                self.audit(
+                    name,
+                    online=online,
+                    statement=statement,
+                    budget=budget,
+                    proof="by sorry",
+                    rejection="mismatch",
+                )
+
+    def test_online_hidden_axiom_in_bound(self):
+        self.audit(
+            "OnlineBoundAxiom",
+            online=True,
+            extra="axiom invented : ℝ",
+            budget="fun _ _ => 1 + (invented - invented)",
+            proof="""by
+  unfold budget
+  simp only [sub_self, add_zero]
+  exact ⟨fun _ => algorithm, fun _ _ _ _ _ _ => zero_le_one, fun _ _ _ => trivial⟩
+""",
+            rejection="Illegal axiom detected: 'LongTails.Theorems.OnlineBoundAxiom.invented'",
+        )
+
     def test_valid_one_call_result(self):
         self.audit("Valid")
 
@@ -116,8 +252,8 @@ end LongTails.Theorems.{name}
   · intro p hp I oracle ho
     dsimp only
     intro seed
-    change oracle.answer 1 (0, ()) (seed.2 1) = I
-    exact ho 1 (0, ()) (seed.2 1)
+    change oracle.answer _ _ _ = I
+    exact ho _ _ _
   · intro p hp
     trivial
 """,

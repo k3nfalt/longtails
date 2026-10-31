@@ -1,0 +1,35 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NoisyBatchQuadraticPerceptron.lean}{NoisyBatchQuadraticPerceptron}.}\label{tab:NoisyBatchQuadraticPerceptron}
+\parbox{\linewidth}{\footnotesize Signed data $a_1,\ldots,a_n\in\mathbb R^d$, $n\ge1$, satisfy $\|a_i\|\le R$ and $\langle u,a_i\rangle\ge\delta$ for some $\|u\|=1$, with $0<\delta\le R$. The setup requires averaged full-batch quadratic perceptron updates for $w=(c,v)$, arbitrary $w_0$, and IID $\mathcal N(0,I_{d+1})$ perturbations scaled by fixed $\sigma>0$, freezing after a successful scan. Result \textbf{(1)} uses $\eta=\delta/[8(n+1)R^2]$. Target: $\mathbb P\{\exists i:\ v\langle a_i,c\rangle\le0\}\le\rho$, $0<\rho<1$. One call returns $v\langle a_i,c\rangle$ and $(va_i,\langle a_i,c\rangle)$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NoisyBatchQuadraticPerceptronGlobal.lean}{Noisy\allowbreak{}Batch\allowbreak{}Quadratic\allowbreak{}Perceptron\allowbreak{}Global} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NoisyBatchQuadraticPerceptronGlobal.md}{(review)}
+& $\displaystyle\begin{gathered}\mathcal{O}\!\Bigl(\frac n\rho\Bigl[\frac{n^2R^2}{\delta^2}+\frac{\|w_0\|^2}{(d+1)\sigma^2}\Bigr]\\ {}\cdot\Bigl(\frac2\rho\Bigr)^H\Bigr)\end{gathered}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Data recovery + linear feasibility; derived bound \citep{nbqpOracleSource}
+& $\mathcal{O}(n)$ calls; deterministic. Query $(c,v)=(0,1)$ to recover every $a_i$; solve offline.
+& \textbf{(1)}: No established improvement in classification cost, data scope, or output. \textbf{(2)} uses the same oracle but falls outside the prescribed family.
+& \textbf{(1)} has larger cost throughout the domain and allows failure probability $\rho$; \textbf{(2)} assumes unrestricted offline computation. \\
+\midrule
+\textbf{(3)} Cyclic perceptron \citep{nbqpNovikoff1962}; derived scan cost
+& $\mathcal{O}\!\left(n[1+R^2/\delta^2]\right)$ calls; deterministic, initialized at zero. Queries $(x,1)$ use the same oracle.
+& \textbf{(1)}: No established improvement in classification cost or scope. \textbf{(3)} uses linear updates outside the prescribed family; arbitrary initialization also converges.
+& \textbf{(1)} adds dimension, noise, initialization and confidence dependence; its displayed cost is worse. The arbitrary-start bound for \textbf{(3)} adds initialization dependence. \\
+\midrule
+\textbf{(4)} Two-sample noisy QPA \citep[Theorem 5.1, v2]{nbqpTyurin2026v2}
+& $\mathcal{O}\!\left(tL[1+\log(tL)]\right)$ per-example convolutional calls, success probability $1-\rho$; $n=2$, dataset (5), kernel $k=2$.
+& \textbf{(1)}: Method-specific global convergence for arbitrary $n$, separable data, $w_0$ and fixed $\sigma>0$ in the width-one model; frozen output eventually constant almost surely.
+& Rates not comparable: different models. \textbf{(4)} requires $0<\mu\le1/10$, nonzero initial projection and theorem-tuned noise; its acceleration is not established for \textbf{(1)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} QPA: quadratic perceptron algorithm; $H=5\exp\!\bigl(25000(d+1)^2(n+1)^4R^4/\delta^4\bigr)$. For \textbf{(4)}, $a_1=\mathbf1$, $a_2=-(\mathbf1+\mu e_1)$, $t=\sqrt d/\mu$, $q=\|\theta_0\|^2/|\langle\theta_0,v_{\mu,+}\rangle|^2$, and $L=[1+\log(q/\rho^3)][1+\log(tq)]$; $v_{\mu,+}$ is the unit eigenvector of the second sample's convolutional matrix with eigenvalue $\mu$, and $\theta_0$ its initial weight. $\log$ denotes the natural logarithm. Costs count all per-example calls, including full scans; offline arithmetic is not counted.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

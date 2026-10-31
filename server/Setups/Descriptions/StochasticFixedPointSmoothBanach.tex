@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Fixed Points in Banach Spaces}
+We seek a fixed point of a nonexpansive map $T:E\to E$ on a separable real Banach space $E$ with a 2-uniformly smooth norm $\|\cdot\|$. A given point $x^0\in E$ lies within distance $D>0$ of a fixed point $x^\star$. At $x\in E$, the oracle returns an unbiased estimate of $T(x)$ with mean squared error at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable residual satisfying $\mathbb{E}[\|\bar{x}-T(\bar{x})\|]\leq\varepsilon$, averaging over oracle and independent algorithm randomness.
+
+The fixed-point problem is to find $x\in E$ such that
+\[
+T(x)=x.
+\]
+Equip $E$ with its Borel sigma-algebra. Let $\Xi$ be a measurable sample space, let $\nu$ be a probability measure on $\Xi$, and write $G:\Xi\times E\to E$ for the sampled map. The algorithm receives $E$, $\Xi$, $x^0$, and the parameters $K\geq0$, $D>0$, $\sigma\geq0$, and $\varepsilon>0$; the map $T$, the sampled map $G$, and the distribution $\nu$ are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Uniform smoothness of the norm]
+There exists a map $j:E\to E^*$, where $E^*$ is the continuous real dual of $E$, such that
+\[
+\|x+y\|^2\leq\|x\|^2+2j(x)(y)+K\|y\|^2,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Nonexpansiveness and initial distance]
+The map $T$ satisfies
+\[
+\|T(x)-T(y)\|\leq\|x-y\|,
+\qquad x,y\in E.
+\]
+There exists $x^\star\in E$ such that
+\[
+T(x^\star)=x^\star,
+\qquad \|x^0-x^\star\|\leq D.
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased stochastic oracle]
+The map $G$ is jointly measurable. For every $x\in E$, the random vector $G(\xi,x)$ is Bochner integrable under $\xi\sim\nu$, and $\|G(\xi,x)-T(x)\|^2$ is integrable, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[G(\xi,x)]&=T(x),\\
+\mathbb{E}_{\xi\sim\nu}[\|G(\xi,x)-T(x)\|^2]&\leq\sigma^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ receives $G(\xi_k,x)$. The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$ under their joint probability law on $\Xi^{\mathbb{N}}$. The algorithm's randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. Let $P$ be the joint law of the algorithm's randomness and the oracle samples. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its residual $\|\bar{x}-T(\bar{x})\|$ must be $P$-integrable, and
+\[
+\mathbb{E}_{P}\bigl[\|\bar{x}-T(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.LinearPredictorBFGS",
+  "searched_at": "2026-10-28T12:18:49.350307+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 35 \\cdot \\frac{Lh}{\\mu \\cdot c1 \\cdot \\left(1 - c2\\right)} \\cdot \\sqrt{\\frac{Lh \\cdot L \\cdot R^{2}}{\\mu \\cdot c1 \\cdot \\left(1 - c2\\right) \\cdot \\varepsilon}} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.LinearPredictorBFGS.spec.Params → ℕ",
+        "value": "fun q => ⌈35 * (q.Lh / (q.μ * q.c1 * (1 - q.c2))) * √(q.Lh * q.L * q.R ^ 2 / (q.μ * q.c1 * (1 - q.c2) * q.ε))⌉₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 35 \\cdot \\frac{Lh}{\\mu \\cdot c1 \\cdot \\left(1 - c2\\right)} \\cdot \\sqrt{\\frac{Lh \\cdot L \\cdot R^{2}}{\\mu \\cdot c1 \\cdot \\left(1 - c2\\right) \\cdot \\varepsilon}} \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.LinearPredictorBFGS.spec.Params → ℕ",
+          "value": "fun q => ⌈35 * (q.Lh / (q.μ * q.c1 * (1 - q.c2))) * √(q.Lh * q.L * q.R ^ 2 / (q.μ * q.c1 * (1 - q.c2) * q.ε))⌉₊ + 1"
+        }
+      ],
+      "module": "LongTails.Theorems.LinearPredictorBFGS",
+      "namespace": "LongTails.Setups.LinearPredictorBFGS",
+      "setup": "LongTails.Setups.LinearPredictorBFGS",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.LinearPredictorBFGS.spec LongTails.Theorems.LinearPredictorBFGS.budget",
+      "theorem": "LongTails.Theorems.LinearPredictorBFGS.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LinearPredictorBFGS",
+      "theorem": "LongTails.Theorems.LinearPredictorBFGS.result",
+      "references": "- Yu. E. Nesterov. [A method of solving a convex programming problem with convergence rate O(1/k²)](https://hengshuaiyao.github.io/papers/nesterov83.pdf). 1983. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ exact-gradient oracle calls for $f(x_N)-f^*\\le\\varepsilon$, using accelerated gradient with known $L$ and no function-value evaluations.\n- Amir Beck and Marc Teboulle. [A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems](https://www.tau.ac.il/~becka/FISTA.pdf). 2009. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ exact-gradient oracle calls for $f(x_N)-f^*\\le\\varepsilon$, using constant-step FISTA with zero nonsmooth term and known $L$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of f(x)=h(Ax), where h is convex and has an Lh-Lipschitz gradient. The condition Lh‖A‖²≤L makes f L-smooth. Neither h nor f is required to be strongly convex.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: Instance, objective, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query (x,v) returns (α,∇f(x+αv)). In particular, v=0 supplies ∇f(x) exactly. Gradient correctness holds for every history and seed; there is no gradient error.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: spec.Query, spec.Reply, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Bundled Armijo–weak-Wolfe line-search oracle: for descent directions, α>0, f(x+αv)≤f(x)+c1 α⟨∇f(x),v⟩ and ⟨∇f(x+αv),v⟩≥c2⟨∇f(x),v⟩. Each bundled reply costs one call; internal line-search evaluations are not separately counted. No function value is returned. Step choices may depend on history and jointly distributed seeds, without independence assumptions.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: spec.admissible; LongTails/Template.lean: Oracle, executeWithTrace, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "quadratic_growth",
+        "details": "There exists a minimizer x* with ‖x0−x*‖≤R such that μ‖Ax−Ax*‖²/2≤f(x)−f(x*) whenever f(x)≤f(x0). Growth is measured in prediction space, and A may be rank deficient. Parameters satisfy 0<μ≤Lh and R≥0.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: spec.valid, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The optimization and prediction spaces are Euclidean spaces ℝ^d and ℝ^m with their standard inner-product norms.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: Space, Public, Instance."
+      },
+      {
+        "label": "other",
+        "details": "Public information consists of d, m, x0 and L>0. Lh, μ, c1, c2, R and ε are hidden parameters, with 0<c1<c2<1 and ε>0; A and h are instance data. The allowed algorithm family is the supplied BFGS scheme initialized with cI for some c>0 selected from public information.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: Public, Params, spec.publicInput, spec.valid, spec.allowedAlgorithm; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−f(x*)≤ε for a global minimizer x*. The supplied algorithm returns its current iterate after the fixed oracle budget, including its initial gradient query.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: spec.successful, bfgs.output; supplied extracted budget; LongTails/Template.lean: execute."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint execution law. The oracle seed sequence may have arbitrary dependence.",
+        "evidence": "LongTails/Setups/LinearPredictorBFGS.lean: spec.successful; LongTails/Template.lean: Oracle.law, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This is a structured smooth convex problem with prediction-space quadratic growth, a bundled unit-cost Armijo–Wolfe oracle, hidden line-search parameters, and an explicit BFGS-family restriction."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.LinearPredictorBFGS.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LinearPredictorBFGS",
+          "theorem": "LongTails.Theorems.LinearPredictorBFGS.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

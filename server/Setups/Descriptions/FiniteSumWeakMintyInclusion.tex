@@ -1,0 +1,71 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Finite-Sum Weak Minty Inclusions}
+We consider finding $x\in E$ with $0\in F(x)+T(x)$ in a real Hilbert space $E$, where $F=n^{-1}\sum_{i=1}^n F_i$ averages $n\geq1$ component maps $F_i:E\to E$ and $T:E\rightrightarrows E$ is monotone. The average is Lipschitz, component differences satisfy a mean-square Lipschitz bound, and a weak Minty solution lies within a prescribed distance of the given starting point. The oracle returns exact component values and resolvent evaluations of $T$. For $\varepsilon>0$, the goal is a measurable pair $(\bar{x},\bar{v})\in E\times E$ with $\bar{v}\in T(\bar{x})$ almost surely and $\mathbb{E}_{P}\|F(\bar{x})+\bar{v}\|^2\leq\varepsilon^2$, where $P$ is the law of the algorithm's randomness.
+
+More precisely, the inclusion is
+\[
+\text{find }x\in E\text{ such that }0\in F(x)+T(x),
+\qquad F(x)=\frac1n\sum_{i=1}^n F_i(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The parameters satisfy
+\[
+n\in\mathbb{N},\quad n\geq1,\quad
+0<L\leq\Lambda,\quad \rho\geq0,\quad
+\rho L<1,\quad R\geq0,\quad \varepsilon>0.
+\]
+The algorithm receives $E,n,L,\Lambda,\rho,R,\varepsilon$ and the starting point $x^0\in E$; the maps $F_i$ and $T$ are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Monotonicity and resolvent access]
+For every $x,y\in E$, $a\in T(x)$, and $b\in T(y)$,
+\[
+\langle a-b,x-y\rangle\geq0.
+\]
+There is a map $J:\mathbb{R}\times E\to E$, written $J_\eta(z)$, such that
+\[
+\frac{z-J_\eta(z)}{\eta}\in T(J_\eta(z)),
+\qquad \eta>0,\quad z\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Finite-sum Lipschitz bounds]
+For all $x,y\in E$,
+\[
+\begin{aligned}
+\|F(x)-F(y)\|&\leq L\|x-y\|,\\
+\frac1n\sum_{i=1}^n\|F_i(x)-F_i(y)\|^2
+&\leq\Lambda^2\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty solution and initial distance]
+There exists $x^\star\in E$ such that
+\[
+-F(x^\star)\in T(x^\star),
+\qquad \|x^0-x^\star\|\leq R,
+\]
+and, for every $y\in E$ and $v\in T(y)$,
+\[
+\langle F(y)+v,y-x^\star\rangle
+\geq-\rho\|F(y)+v\|^2.
+\]
+\end{assumption}
+
+A component query $(i,x)$ returns $F_i(x)$ for any $i\in\{1,\ldots,n\}$ and $x\in E$. A resolvent query $(\eta,z)$ returns $J_\eta(z)$ for any $\eta\in\mathbb{R}$ and $z\in E$; the stated resolvent condition applies when $\eta>0$. Each query of either kind counts as one call toward a common oracle-call budget.
+
+After the allotted calls, the output $(\bar{x},\bar{v})$ must be measurable, its squared residual must be integrable under $P$, and it must satisfy
+\[
+\begin{aligned}
+\bar{v}&\in T(\bar{x})\quad P\text{-a.s.},\\
+\mathbb{E}_{P}\bigl[\|F(\bar{x})+\bar{v}\|^2\bigr]
+&\leq\varepsilon^2.
+\end{aligned}
+\]
+\end{document}

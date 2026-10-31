@@ -1,0 +1,131 @@
+{
+  "setup": "LongTails.Setups.AffineMomentConvex",
+  "searched_at": "2026-10-28T12:10:51.650415+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{256 \\cdot \\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(\\left(1 + \\sigma\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(4 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{\\alpha}{3 \\cdot \\alpha - 2}} + \\left(\\sigma 0 \\cdot \\left(\\frac{4}{L \\cdot R} + \\frac{R}{\\varepsilon}\\right)\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right) \\cdot \\left(\\log\\left(20 + \\frac{\\alpha}{\\alpha - 1} + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{1}{\\delta}\\right)\\right)^{\\frac{\\alpha}{\\alpha - 1} + 1} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.AffineMomentConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ (256 * (p.α / (p.α - 1))) *\n        ((1 + p.σ) ^ (p.α / (p.α - 1)) * (4 + p.L * p.R ^ 2 / p.ε) ^ (p.α / (3 * p.α - 2)) +\n          (p.σ0 * (4 / (p.L * p.R) + p.R / p.ε)) ^ (p.α / (p.α - 1))) *\n      Real.log (20 + p.α / (p.α - 1) + p.L * p.R ^ 2 / p.ε + p.δ⁻¹) ^ (p.α / (p.α - 1) + 1)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{256 \\cdot \\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(\\left(1 + \\sigma\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(4 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{\\alpha}{3 \\cdot \\alpha - 2}} + \\left(\\sigma 0 \\cdot \\left(\\frac{4}{L \\cdot R} + \\frac{R}{\\varepsilon}\\right)\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right) \\cdot \\left(\\log\\left(20 + \\frac{\\alpha}{\\alpha - 1} + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{1}{\\delta}\\right)\\right)^{\\frac{\\alpha}{\\alpha - 1} + 1} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.AffineMomentConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ (256 * (p.α / (p.α - 1))) *\n        ((1 + p.σ) ^ (p.α / (p.α - 1)) * (4 + p.L * p.R ^ 2 / p.ε) ^ (p.α / (3 * p.α - 2)) +\n          (p.σ0 * (4 / (p.L * p.R) + p.R / p.ε)) ^ (p.α / (p.α - 1))) *\n      Real.log (20 + p.α / (p.α - 1) + p.L * p.R ^ 2 / p.ε + p.δ⁻¹) ^ (p.α / (p.α - 1) + 1)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AffineMomentAcceleration",
+      "namespace": "LongTails.Setups.AffineMomentConvex",
+      "setup": "LongTails.Setups.AffineMomentConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AffineMomentConvex.spec LongTails.Theorems.AffineMomentAcceleration.budget",
+      "theorem": "LongTails.Theorems.AffineMomentAcceleration.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{\\exp\\left(2^{32} \\cdot \\left(\\frac{\\alpha}{\\alpha - 1}\\right)^{4} \\cdot \\left(1 + \\sqrt{\\log\\left(4 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\left(\\frac{\\sigma 0 \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} + \\frac{1}{\\delta}\\right)}\\right) \\cdot \\log\\left(2 + \\frac{\\alpha}{\\alpha - 1} + \\log\\left(4 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\left(\\frac{\\sigma 0 \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} + \\frac{1}{\\delta}\\right)\\right)\\right) \\cdot \\left(\\left(1 + \\sigma\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 1 + \\left(\\frac{\\sigma 0 \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)}{\\delta} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.AffineMomentConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈Real.exp\n          (2 ^ 32 * (p.α / (p.α - 1)) ^ 4 *\n              (1 + √(Real.log (4 + p.L * p.R ^ 2 / p.ε + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1)) + p.δ⁻¹))) *\n            Real.log\n              (2 + p.α / (p.α - 1) +\n                Real.log (4 + p.L * p.R ^ 2 / p.ε + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1)) + p.δ⁻¹))) *\n        ((1 + p.σ) ^ (p.α / (p.α - 1)) * √(p.L * p.R ^ 2 / p.ε) + 1 + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1))) /\n      p.δ⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{\\exp\\left(2^{32} \\cdot \\left(\\frac{\\alpha}{\\alpha - 1}\\right)^{4} \\cdot \\left(1 + \\sqrt{\\log\\left(4 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\left(\\frac{\\sigma 0 \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} + \\frac{1}{\\delta}\\right)}\\right) \\cdot \\log\\left(2 + \\frac{\\alpha}{\\alpha - 1} + \\log\\left(4 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\left(\\frac{\\sigma 0 \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} + \\frac{1}{\\delta}\\right)\\right)\\right) \\cdot \\left(\\left(1 + \\sigma\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + 1 + \\left(\\frac{\\sigma 0 \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)}{\\delta} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.AffineMomentConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈Real.exp\n          (2 ^ 32 * (p.α / (p.α - 1)) ^ 4 *\n              (1 + √(Real.log (4 + p.L * p.R ^ 2 / p.ε + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1)) + p.δ⁻¹))) *\n            Real.log\n              (2 + p.α / (p.α - 1) +\n                Real.log (4 + p.L * p.R ^ 2 / p.ε + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1)) + p.δ⁻¹))) *\n        ((1 + p.σ) ^ (p.α / (p.α - 1)) * √(p.L * p.R ^ 2 / p.ε) + 1 + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1))) /\n      p.δ⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RecursiveAffineMomentAcceleration",
+      "namespace": "LongTails.Setups.AffineMomentConvex",
+      "setup": "LongTails.Setups.AffineMomentConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AffineMomentConvex.spec\n  LongTails.Theorems.RecursiveAffineMomentAcceleration.budget",
+      "theorem": "LongTails.Theorems.RecursiveAffineMomentAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AffineMomentAcceleration",
+      "theorem": "LongTails.Theorems.AffineMomentAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.RecursiveAffineMomentAcceleration",
+      "theorem": "LongTails.Theorems.RecursiveAffineMomentAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on a second-countable real Hilbert space E. The gradient is globally L-Lipschitz, and a minimizer x* exists with ‖x0−x*‖≤R. L,R>0; strong convexity is not required.",
+        "evidence": "LongTails/Setups/AffineMomentConvex.lean: Params; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call returns g(x,ξ) using a fresh IID seed, with E[g(x,ξ)]=∇f(x). The jointly measurable oracle has integrable replies and finite central α-moments. Only gradient samples are supplied. All Params, including L,R,σ,σ0,α,ε,δ,x0, are public; f and the oracle distribution are hidden. Budgets cap total individual oracle calls.",
+        "evidence": "LongTails/Setups/AffineMomentConvex.lean: IsFiniteMomentOracle; spec.Public, publicInput, admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every x, E‖g(x,ξ)−∇f(x)‖^α≤σ0^α+σ^α‖∇f(x)‖^α, with 1<α≤2 and σ,σ0≥0. Infinite variance is permitted when α<2; no exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/AffineMomentConvex.lean: IsFiniteMomentOracle.integrable_moment, moment; spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The central noise moment has additive and gradient-dependent multiplicative components. Neither a uniform noise bound nor an almost-sure relative-error bound is required. The ambient Hilbert space need not be finite-dimensional.",
+        "evidence": "LongTails/Setups/AffineMomentConvex.lean: IsFiniteMomentOracle.moment; Params."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output x̂ satisfying f(x̂)−f(x*)≤ε on the success event, for a global minimizer x*. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/AffineMomentConvex.lean: spec.Output, successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(x̂)−f(x*)>ε)≤δ, with ε>0 and 0<δ<1. Probability includes algorithm randomness and the IID oracle sequence under a fixed oracle-call cap.",
+        "evidence": "LongTails/Setups/AffineMomentConvex.lean: spec.valid, successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth convex minimization is classical, but the affine gradient-dependent central α-moment oracle, allowing infinite variance, is a substantive variant of the standard uniformly bounded-variance formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AffineMomentAcceleration.result",
+        "LongTails.Theorems.RecursiveAffineMomentAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AffineMomentAcceleration",
+          "theorem": "LongTails.Theorems.AffineMomentAcceleration.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.RecursiveAffineMomentAcceleration",
+          "theorem": "LongTails.Theorems.RecursiveAffineMomentAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

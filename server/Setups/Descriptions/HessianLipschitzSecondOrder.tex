@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Hessian-Lipschitz Second-Order Stationarity}
+We consider minimizing a possibly nonconvex, twice continuously differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$, with induced norm $\|\cdot\|$. Its Hessian is $H$-Lipschitz for $H>0$, and a given point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$ for $\Delta\geq0$. Two exact oracles return $(f(x),\nabla f(x))$ and $\nabla^2 f(x)$, respectively. For $\varepsilon>0$ and $\rho\in(0,1)$, the goal is an output $\bar{x}\in E$ satisfying both $\|\nabla f(\bar{x})\|\leq\varepsilon$ and $\langle v,\nabla^2 f(\bar{x})v\rangle\geq-\sqrt{H\varepsilon}\|v\|^2$ for every $v\in E$, with probability at least $1-\rho$ over the algorithm's randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The Hessian $\nabla^2 f(x):E\to E$ is a linear operator, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $x^0$, $H$, $\Delta$, $\varepsilon$, $\rho$, and an additional real parameter $m\geq1$; the setup imposes no further condition involving $m$.
+
+Our assumptions:
+\begin{assumption}[Hessian regularity]
+The function $f$ is twice continuously Fr\'echet differentiable on $E$, and
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
+\leq H\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given point $x^0$ satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Queries to either oracle may be made at any point of $E$. The first oracle returns the exact function value and gradient together; the second returns the exact Hessian. Calls to these two oracles are counted separately.
+
+After the allotted calls, the output must satisfy
+\[
+P\!\left(
+\left\{
+\begin{aligned}
+&\|\nabla f(\bar{x})\|\leq\varepsilon,\\
+&\langle v,\nabla^2 f(\bar{x})v\rangle
+\geq-\sqrt{H\varepsilon}\|v\|^2
+\quad\text{for every }v\in E
+\end{aligned}
+\right\}
+\right)\geq1-\rho,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

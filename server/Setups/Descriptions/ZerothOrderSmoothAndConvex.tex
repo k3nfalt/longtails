@@ -5,55 +5,50 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Smooth Convex Zeroth-Order Optimization}
-We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a $d$-dimensional real Hilbert space $E$, where $d\geq 1$, with $L$-Lipschitz gradient for $L>0$. A given point $x^0\in E$ is within distance $R\geq 0$ of a global minimizer $x^\star$. Each oracle call returns an unbiased scalar estimate of the queried function value, with variance at most $\sigma^2$ for $\sigma\geq 0$, using an independent sample. For $\varepsilon>0$, the required measurable output $\bar{x}\in E$ has integrable objective gap and satisfies $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+\section*{Stochastic Zeroth-Order Convex Minimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a $d$-dimensional real Hilbert space $E$, where $d\geq1$. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for a global minimizer $x^\star$ and $R\geq0$. At each query $x$, the oracle returns an unbiased scalar estimate of $f(x)$ with variance at most $\sigma^2$, where $\sigma\geq0$, using an independent sample. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, averaging over algorithm and oracle randomness.
 
 The optimization problem is
-\begin{equation}
-\label{eq:problem}
-\min_{x\in E} f(x),
-\end{equation}
-where $E$ is linearly isometric to $\mathbb{R}^d$ with its Euclidean norm, and is equipped with its Borel sigma-algebra. The public inputs are $E$, a measurable sample space $\Omega$, the dimension $d\in\mathbb{N}$ with $d>0$, the constants $L>0$, $R\geq 0$, $\sigma\geq 0$, and $\varepsilon>0$, and the initial point $x^0\in E$. The admissible objectives and oracle access satisfy the following conditions.
+\[
+\min_{x\in E} f(x).
+\]
+The space $E$ is linearly isometric to $\mathbb{R}^d$ with its Euclidean norm; $\|\cdot\|$ denotes the induced norm on $E$. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $d$, $L$, $R$, $\sigma$, $\varepsilon$, and $x^0$; the objective and the oracle's sampling distribution are accessed only through oracle replies.
 
+Our assumptions:
 \begin{assumption}[Convexity and smoothness]
-The function $f$ is differentiable everywhere on $E$, and, for every $x,y\in E$ and $t\in[0,1]$,
-\begin{align}
-f((1-t)x+ty) &\leq (1-t)f(x)+tf(y),\\
-\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|.
-\end{align}
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq (1-t)f(x)+t f(y),\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial distance]
+\begin{assumption}[Initial distance]
 There exists $x^\star\in E$ such that
-\begin{align}
-f(x^\star) &\leq f(x) \qquad \text{for every }x\in E,\\
-\|x^0-x^\star\| &\leq R.
-\end{align}
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Independent scalar oracle]
-There exist a probability measure $p$ on $\Omega$, a probability measure $P$ on $\Omega^{\mathbb{N}}$, and a jointly measurable function $g:E\times\Omega\to\mathbb{R}$. Under $P$, the coordinate samples $\xi_k(\omega)=\omega_k$, $k\in\mathbb{N}$, are mutually independent and satisfy
-\begin{equation}
-P\circ\xi_k^{-1}=p \qquad \text{for every }k\in\mathbb{N}.
-\end{equation}
-At call $k$, a query $x\in E$ returns the scalar $g(x,\xi_k)$ and costs one oracle call. Any internal algorithm randomness is independent of the entire sample sequence.
+\begin{assumption}[Stochastic function values]
+There are a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to\mathbb{R}$. For every $x\in E$, both $g(x,\cdot)$ and $(g(x,\cdot)-f(x))^2$ are $\nu$-integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=f(x),\\
+\mathbb{E}_{\xi\sim\nu}[(g(x,\xi)-f(x))^2]&\leq\sigma^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ receives the scalar reply $g(x,\xi_k)$. Under their joint law $Q$ on $\Omega^{\mathbb{N}}$, the samples $(\xi_k)_{k\geq0}$ are independent and each has distribution $\nu$. Algorithm randomness is independent of this entire sample sequence.
 \end{assumption}
 
-\begin{assumption}[Unbiasedness and bounded variance]
-For every $x\in E$, both $g(x,\cdot)$ and $(g(x,\cdot)-f(x))^2$ are integrable with respect to $p$, and
-\begin{align}
-\int_{\Omega} g(x,z)\,dp(z) &= f(x),\\
-\int_{\Omega} (g(x,z)-f(x))^2\,dp(z) &\leq \sigma^2.
-\end{align}
-\end{assumption}
-
-The objective is accessed through this scalar oracle. Queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only the public inputs $(E,\Omega,d,L,R,\sigma,\varepsilon,x^0)$; the objective, a minimizing point, the oracle function, and the sampling laws are not supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full public parameter tuple. Every scalar evaluation counts separately, including repeated evaluations at the same point.
-
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Let $\mathbb{P}$ denote the joint law of the independent algorithm randomness and oracle sample sequence. Success requires $\bar{x}$ to be measurable and, for some global minimizer $x^\star$, the map $\omega\mapsto f(\bar{x}(\omega))-f(x^\star)$ to be integrable with respect to $\mathbb{P}$, with
-\begin{equation}
-\label{eq:accuracy}
-\int \bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)\,d\mathbb{P}(\omega)
-\leq \varepsilon.
-\end{equation}
-All global minimizers have the same objective value, so the minimizer witnessing the initial distance bound may also be used in \eqref{eq:accuracy}.
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon,
+\]
+with $f(\bar{x})-f(x^\star)$ integrable under $P$, where $P$ is the joint law of the algorithm's randomness and the oracle sample sequence.
 \end{document}

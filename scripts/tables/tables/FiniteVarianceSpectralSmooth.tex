@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-variance spectral-smooth optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteVarianceSpectralSmooth.lean}{FiniteVarianceSpectralSmooth}.}\label{tab:FiniteVarianceSpectralSmooth}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb{R}^{m\times n}\to\mathbb{R}$ satisfies $f\ge f_{\min}$, $f(X_0)-f_{\min}\le\Delta$, and $\|\nabla f(X)-\nabla f(Y)\|_*\le L\|X-Y\|_{\mathrm{op}}$. The jointly measurable, integrable oracle uses IID samples, with $\mathbb{E}G(X)=\nabla f(X)$ and, in a fixed orthonormal row basis $(u_i)$, $\mathbb{E}\|(G(X)-\nabla f(X))^\top u_i\|_2^2\le\sigma_i^2$, $\sigma_i\ge0$, $\sum_i\sigma_i\le s$. Here $L,\Delta,s\ge0$, $\varepsilon>0$, $0<\delta<1$. Target: $\Pr(\|\nabla f(\widehat X)\|_*>\varepsilon)\le\delta$, over sampling and algorithm randomness. The setup restricts algorithms to exact-polar EMA Muon with random candidate selection and batched robust validation (or returning $X_0$ when already certified).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteVarianceMuonHighProbability.lean}{Finite\allowbreak Variance\allowbreak Muon\allowbreak High\allowbreak Probability} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteVarianceMuonHighProbability.md}{(review)}
+& $\mathcal{O}\!\left(A[R+\sqrt R\,J^2]\right)$ stochastic-gradient calls, including validation. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Minibatch spectral-normalized SGD, derived bound from \citep[Thm.~4]{fvssHubler2025v3}, with validation
+& $\mathcal{O}\!\left(A[R\ell+\ell(\ell+\log\ell)]\right)$ calls on the shared row-profile setup; batch size $\mathcal{O}(A)$.
+& \textbf{(1)}: high-probability persistent momentum with one-sample training. Up to an $\ell$-factor cost saving, only when $\sqrt R\,\ell\gtrsim J^2$; no uniform speedup.
+& \textbf{(1)}: validation remains batched. Worse for fixed $\delta$ when $\sqrt R\ll[1+\log(AR)]^2$, or for $\ell\gg R$ (up to $\sqrt R$ factor). \\
+\midrule
+\textbf{(3)} Muon \citep[Thm.~3.5]{fvssHubler2026v1}, expected guarantee
+& $\mathcal{O}\!\left(R+\frac{dL\Delta s^2}{\varepsilon^4}+\frac{d^{3/2}s^3}{\varepsilon^3}\right)$ calls at $p=2$, $\sigma=s$; expected average nuclear gradient norm $\le\varepsilon$.
+& \textbf{(1)}: high-probability guarantee for persistent Muon. Dimension-free bound on the row-profile class; rates are not directly comparable across probability and expectation.
+& \textbf{(1)} needs the stronger row profile and $p=2$; \textbf{(3)} permits nuclear central $p$-moments, $1<p\le2$. The dimension difference reflects this stronger noise assumption. \\
+\midrule
+\textbf{(4)} Clipped normalized momentum \citep[Thm.~2]{fvssCutkosky2021v2}; special case: $m=1$
+& $\mathcal{O}_{L,\Delta,G}\!\left(1+\varepsilon^{-4}\left[1+\log\frac{1+\varepsilon^{-1}}{\delta}\right]^4\right)$ calls at $p=2$; high-probability average gradient norm $\le\varepsilon$. Fixed tuning; parameter dependence not extracted.
+& \textbf{(1)}: extends to matrix nuclear stationarity; on the Euclidean overlap, central variance replaces bounded noncentral moments, allowing unbounded gradients and unclipped momentum. Rates not comparable as stated.
+& \textbf{(1)} covers only $p=2$; \textbf{(4)} allows $1<p\le2$ under $\mathbb{E}\|G(X)\|_*^p\le G^p$ and a $2$-smooth dual norm. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\|\cdot\|_*$: nuclear norm; $\|\cdot\|_{\mathrm{op}}$: spectral norm; $\|\cdot\|_2$: Euclidean norm; $d=\min(m,n)$; $A=1+s^2/\varepsilon^2$; $R=1+L\Delta/\varepsilon^2$; $\ell=1+\log(1/\delta)$; $J=1+\log(AR/\delta)$; $p$: noise moment order; $\sigma$: nuclear central-moment scale; $G$: noncentral-moment scale. $\mathcal{O}_{L,\Delta,G}$ holds with these parameters and tuning fixed. EMA: exponential moving average; IID: independent, identically distributed.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

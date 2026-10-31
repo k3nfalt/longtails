@@ -53,14 +53,14 @@ theorem convergence : Convergence LongTails.Setups.MeanSquaredHolderNonconvex.sp
       fun ω => X cfg g q.x0 0 ω.2 ω.1.val := by
     funext seed; exact hexec seed.1 seed.2
   refine ⟨?_, ?_⟩
-  · rw [hout]; exact hmX
+  · erw [hout]; exact hmX
   have hfun : (fun ω : (dyadicVR cfg q.x0).Seed × (ℕ → q.Ω) =>
       ‖gradient f (execute ({ Seed := fun _ => q.Ω, law := P, answer := fun _ (_, z) ω =>
         (g z.1 ω, g z.2 ω) } :
         Oracle (q.E × q.E) (q.E × q.E)) (dyadicVR cfg q.x0) (fun _ => B) ω.1 ω.2)‖) =
       fun ω => ‖gradient f (X cfg g q.x0 0 ω.2 ω.1.val)‖ := by
     funext ω; rw [hexec ω.1 ω.2]
-  rw [hfun]
+  erw [hfun]
   change Integrable (fun ω : Fin (cfg.K + 1) × (ℕ → q.Ω) =>
       ‖gradient f (X cfg g q.x0 0 ω.2 ω.1.val)‖)
       ((PMF.uniformOfFintype (Fin (cfg.K + 1))).toMeasure.prod (P : Measure (ℕ → q.Ω))) ∧

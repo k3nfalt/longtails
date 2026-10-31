@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Constrained Monotone Inclusions}
+We consider a variational inequality for a continuous monotone operator $F:E\to E$ on a convex set $X$ in a finite-dimensional real Hilbert space $E$. The operator satisfies a segmentwise generalized Lipschitz bound with constants $L_0>0$ and $L_1\geq0$. A given $x^0\in X$ lies within distance $R>0$ of a solution $x^\star$ with $\|F(x^\star)\|\leq G$, where $G\geq0$. Two oracles return independent unbiased estimates of $F(x)$ with variance at most $\sigma^2$, where $\sigma\geq0$, and exact projections onto $X$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a feasible output $\bar{x}$ admitting a normal vector $v$, meaning $\langle v,w-\bar{x}\rangle\leq0$ for all $w\in X$, with $\|F(\bar{x})+v\|\leq\varepsilon$, with probability at least $1-\delta$.
+
+The variational inequality is to find $x^\star\in X$ such that
+\[
+\langle F(x^\star),w-x^\star\rangle\geq0
+\qquad\text{for every }w\in X.
+\]
+The norm is induced by the inner product on $E$. The algorithm receives $E$, the measurable sample space $\Omega$, $x^0$, and the parameters $L_0,L_1,R,G,\sigma,\varepsilon,\delta$; it accesses $F$ and $X$ through the two oracles. Both oracles accept queries at any point of $E$, and their calls are counted separately.
+
+Our assumptions:
+\begin{assumption}[Constraint set and nearby solution]
+The set $X$ is convex and contains $x^0$. There exists a solution $x^\star$ of the variational inequality satisfying
+\[
+\|x^0-x^\star\|\leq R,
+\qquad
+\|F(x^\star)\|\leq G.
+\]
+The projection oracle returns $\Pi_X(z)$ at $z\in E$, where
+\[
+\begin{aligned}
+\Pi_X(z)&\in X,\\
+\langle z-\Pi_X(z),w-\Pi_X(z)\rangle&\leq0
+&&\text{for every }w\in X.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Monotonicity and generalized Lipschitz continuity]
+The operator $F$ is continuous on $E$ and satisfies
+\[
+\langle F(x)-F(y),x-y\rangle\geq0
+\qquad\text{for all }x,y\in E.
+\]
+For all $x,y\in E$ and $M\in\mathbb{R}$, the segment bound
+\[
+\|F(x+\theta(y-x))\|\leq M
+\qquad\text{for every }\theta\in[0,1]
+\]
+implies
+\[
+\|F(x)-F(y)\|\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic operator oracle]
+There is a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-F(x)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\nu}[g(x,Z)]&=F(x),\\
+\mathbb{E}_{Z\sim\nu}\bigl[\|g(x,Z)-F(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+Let $(Z_k)_{k\geq0}$ be measurable, mutually independent samples with common law $\nu$, independent of the algorithm's randomness. At the $k$th call across both oracles, a stochastic operator query at $x$ returns $g(x,Z_k)$, while a projection query returns $\Pi_X(x)$.
+\end{assumption}
+
+The output $\bar{x}\in E$ must be measurable. For $x\in X$, define the normal cone
+\[
+N_X(x)=\{v\in E:\langle v,w-x\rangle\leq0
+\text{ for every }w\in X\}.
+\]
+The required accuracy is
+\[
+P\!\left(\bar{x}\in X\ \text{and}\ 
+\exists v\in N_X(\bar{x}):
+\|F(\bar{x})+v\|\leq\varepsilon\right)\geq1-\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the independent sample sequence.
+\end{document}

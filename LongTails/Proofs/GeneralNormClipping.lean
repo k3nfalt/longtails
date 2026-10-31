@@ -1,4 +1,4 @@
-import LongTails.Algorithms.Clipping
+import LongTails.Proofs.Clipping
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.IntegrableOn
 import Mathlib.Tactic

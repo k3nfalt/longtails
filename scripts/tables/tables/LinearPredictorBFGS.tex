@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{BFGS for linear-predictor objectives: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LinearPredictorBFGS.lean}{LinearPredictorBFGS}.}\label{tab:LinearPredictorBFGS}
+\parbox{\linewidth}{\footnotesize $f(x)=h(Ax)$ on $\mathbb{R}^d$, with linear $A:\mathbb{R}^d\to\mathbb{R}^m$, convex $L_h$-smooth $h$, $L\ge L_h\|A\|^2$, $L>0$, and $0<\mu\le L_h$. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\frac{\mu}{2}\|A(x-x_\star)\|^2\le f(x)-f(x_\star)$ whenever $f(x)\le f(x_0)$. The setup restricts algorithms to BFGS with positive scalar initialization; \textbf{(1)} uses $B_0=LI$. The oracle returns an Armijo--weak-Wolfe step and its endpoint gradient, with $0<c_1<c_2<1$. Target: $f(x_K)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, for every admissible oracle history. Bundled line-search calls include initialization; internal search trials have no stated gradient/value-call budget.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LinearPredictorBFGS.lean}{Linear\allowbreak{}Predictor\allowbreak{}BFGS} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LinearPredictorBFGS.md}{(review)}
+& $\mathcal{O}\!\left(1+\kappa^{3/2}\gamma^{-3/2}\sqrt{LR^2/\varepsilon}\right)$ line-search calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} BFGS \citep[Thm.~3.1, Eq.~(11)]{lpbDingYangZhou2026v1}
+& $\mathcal{O}\!\left(1+\frac{LW_0^2}{\gamma\varepsilon}\right)$ line-search calls; $B_0=LI$, $W_0<\infty$.
+& \textbf{(1)}: Distance-only BFGS bound, independent of design conditioning; $\varepsilon^{-1/2}$ instead of $\varepsilon^{-1}$. For $W_0\asymp R$, total gain when $LR^2/\varepsilon\gg\kappa^3/\gamma$. No uniform $W_0$ bound in setup parameters: $h(z)=\|z\|^2/2$, $A=\operatorname{diag}(1,\delta)$, $x_0=(R,0)$ give $W_0\ge R/(2\delta)$.
+& \textbf{(1)} needs composite growth; \textbf{(2)} covers general convex smooth objectives with finite $W_0$. For $W_0\asymp R$, \textbf{(1)} loses at coarse accuracy and has worse $\gamma$ dependence. \\
+\midrule
+\textbf{(3)} AGD/FISTA \citep[Thm.~4.4]{ifsBeckTeboulle2009}, fixed step, $\psi=0$
+& $\mathcal{O}\!\left(1+\sqrt{LR^2/\varepsilon}\right)$ gradient calls, available through $v=0$ queries; applies throughout the target objective class.
+& \textbf{(1)} matches the $\varepsilon^{-1/2}$ order for BFGS, with extra parameter factors; no problem-class complexity improvement.
+& \textbf{(1)} pays $\kappa^{3/2}\gamma^{-3/2}$ and a larger leading constant; needs composite growth and line-search access instead of gradients alone. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L_h/\mu$; $\gamma=c_1(1-c_2)$; $f_\star=f(x_\star)$; $X_\star=\operatorname{argmin} f$; $W_0=\sup_{x\notin X_\star,\,f(x)\le f(x_0)}(f(x)-f_\star)/\|\nabla f(x)\|$; $\psi$ is the FISTA nonsmooth term; $\delta>0$ is a design singular value; $\asymp$ means equality up to universal factors; $\gg$ means asymptotically larger.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

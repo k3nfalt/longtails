@@ -5,47 +5,50 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Smooth Convex Relative-Error Optimization}
-We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with smoothness constant $L>0$. A given initial point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for some global minimizer $x^\star$, where $R\geq0$. Each oracle call at $x\in E$ returns a vector $g\in E$ satisfying $\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|$ for every realization, with $0\leq\alpha<1$. Given $\varepsilon>0$, the required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. The quantities $(E,L,x^0,\alpha,R,\varepsilon)$ are public algorithm inputs.
+\section*{Convex Minimization with Relative Error}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. The function admits a quadratic upper model with curvature $L>0$, and a given starting point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$. At $x$, the oracle returns a vector $g$ satisfying $\|g-\nabla f(x)\|\leq\alpha\|\nabla f(x)\|$, where $0\leq\alpha<1$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where $E$ may be infinite dimensional and its norm is induced by its inner product. The objective and oracle satisfy the following conditions.
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, $L$, $x^0$, $\alpha$, $R$, and $\varepsilon$.
 
+Our assumptions:
 \begin{assumption}[Convexity and smoothness]
-The function $f$ is differentiable everywhere on $E$, with gradient $\nabla f(x)$ at each $x\in E$. For every $x,y\in E$,
-\begin{align*}
-f(x)+\langle\nabla f(x),y-x\rangle &\leq f(y),\\
-f(y) &\leq f(x)+\langle\nabla f(x),y-x\rangle\\
-&\quad+\frac{L}{2}\|y-x\|^2.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Attainment and initial distance]
-There exists $x^\star\in E$ such that
-\begin{align*}
-f(x^\star) &\leq f(x) \qquad \text{for every }x\in E,\\
-\|x^0-x^\star\| &\leq R.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Relative-error gradient access]
-At each call index $k\in\{0,1,2,\ldots\}$ and query point $x\in E$, the oracle returns a vector $g_k(x)\in E$. For every realization of its randomness,
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$,
 \[
-\|g_k(x)-\nabla f(x)\|
+\begin{aligned}
+f(x)+\langle\nabla f(x),y-x\rangle
+&\leq f(y),\\
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
++\frac{L}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Relative oracle error]
+Queries may be made at any point of $E$. For every finite query--reply history $h$, every query $x\in E$, and every realization $s$ of the oracle randomness used for that reply, the returned vector $g(h,x,s)\in E$ satisfies
+\[
+\|g(h,x,s)-\nabla f(x)\|
 \leq\alpha\|\nabla f(x)\|.
 \]
-Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+Oracle randomness may be dependent across calls, and replies may depend on the history. The algorithm's randomness is independent of the oracle randomness.
 \end{assumption}
 
-The objective is accessed through this oracle, with queries chosen adaptively anywhere in $E$. The algorithm is selected using only the public tuple $(E,L,x^0,\alpha,R,\varepsilon)$. An externally specified call budget $K\in\{0,1,2,\ldots\}$ may depend on this tuple.
-
-After $K$ calls, the algorithm returns a point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires the existence of a global minimizer $x^\star$ such that
+After the allotted oracle calls, the output must satisfy
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad \mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
-Since all global minimizers have the same objective value, the minimizer witnessing the initial distance bound may also witness this accuracy requirement.
 \end{document}

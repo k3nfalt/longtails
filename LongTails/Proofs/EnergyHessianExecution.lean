@@ -99,7 +99,8 @@ lemma execute_of_counts (g : Fin n × Q → R) (q0 : Fin n × Q) (u0 : U)
     state remaining K (eval g plan)
   · rfl
   · intro k
-    change state (k + 1) = update (state k) (O.answer k (query q0 (state k)) (ξ k))
+    change state (k.length + 1) = update (state k.length)
+      (O.answer k (query q0 (state k.length)) (ξ k.length))
     rw [hO, hstep]
   · rfl
   · exact hremaining

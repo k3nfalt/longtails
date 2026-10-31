@@ -5,21 +5,22 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Cohypomonotone Equations with Adjoint Access}
-We consider finding a zero of a differentiable map $F:E\to E$ on a finite-dimensional real inner product space $E$. The map is $L$-Lipschitz, its derivative $DF$ is $L_2$-Lipschitz, and it is $\rho$-cohypomonotone, where $L>0$ and $L_2,\rho\geq0$. An initial point $x^0\in E$ lies within distance $R\geq0$ of a zero $x^\star$. Each oracle call returns either $F(x)$ or the adjoint product $DF(x)^*w$ for queried $x,w\in E$. For $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $\|F(\bar{x})\|\leq\varepsilon$ almost surely. Only $E,L,L_2,\rho,x^0$ are public inputs; $R$ and $\varepsilon$ are not supplied to the algorithm.
+\section*{Cohypomonotone Root Finding with Adjoints}
+We seek a zero of a differentiable map $F:E\to E$ on a finite-dimensional real inner product space $E$. The map is $L$-Lipschitz and $\rho$-cohypomonotone, and its derivative $J(x):E\to E$ is $L_2$-Lipschitz, where $L>0$, $L_2\geq0$, and $\rho\geq0$. A given point $x^0\in E$ lies within distance $R\geq0$ of a zero. The oracle returns $F(x)$ or the adjoint product $J(x)^*w$ for $x,w\in E$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
-The equation to be solved is
+The root-finding problem is to find $x\in E$ such that
 \[
-F(x)=0,\qquad x\in E,
+F(x)=0.
 \]
-where $\langle\cdot,\cdot\rangle$ denotes the inner product and $\|\cdot\|$ its induced norm. For linear maps on $E$, the same norm notation denotes the induced operator norm. The admissible maps and oracle access satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives only $E$, $L$, $L_2$, $\rho$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Differentiability and smoothness]
-The map $F$ is Fr\'echet differentiable at every point of $E$. Writing $J(x)=DF(x)$, for every $x,y\in E$,
+Our assumptions:
+\begin{assumption}[Differentiability and Lipschitz bounds]
+The map $F$ is Fr\'echet differentiable at every $x\in E$, with derivative $J(x)$. For every $x,y\in E$,
 \[
 \begin{aligned}
-\|F(x)-F(y)\| &\leq L\|x-y\|,\\
-\|J(x)-J(y)\| &\leq L_2\|x-y\|.
+\|F(x)-F(y)\|&\leq L\|x-y\|,\\
+\|J(x)-J(y)\|_{\mathrm{op}}&\leq L_2\|x-y\|.
 \end{aligned}
 \]
 \end{assumption}
@@ -32,7 +33,7 @@ For every $x,y\in E$,
 \]
 \end{assumption}
 
-\begin{assumption}[Existence of a nearby zero]
+\begin{assumption}[Initial distance to a zero]
 There exists $x^\star\in E$ such that
 \[
 \begin{aligned}
@@ -42,20 +43,14 @@ F(x^\star)&=0,\\
 \]
 \end{assumption}
 
-\begin{assumption}[Exact value and adjoint access]
-A value query at $x\in E$ returns $F(x)\in E$. An adjoint query at $(x,w)\in E\times E$ returns $J(x)^*w\in E$, characterized by
+Oracle queries may use any $x,w\in E$. Both reply types are exact, with the adjoint characterized by
 \[
-\langle J(x)^*w,h\rangle=\langle w,J(x)h\rangle
-\qquad\text{for every }h\in E.
+\langle J(x)^*w,h\rangle=\langle w,J(x)h\rangle,
+\qquad h\in E.
 \]
-These replies are exact at every call index and for every realization of the oracle randomness. Each query of either kind costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The map is accessed through this oracle, with adaptive queries permitted anywhere in $E$ and arbitrary adjoint-query vectors in $E$. The algorithm is selected using only the public inputs $(E,L,L_2,\rho,x^0)$. An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,L_2,\rho,x^0,R,\varepsilon)$ and counts both kinds of oracle calls.
-
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required accuracy is
+Each evaluation of $F(x)$ or $J(x)^*w$ counts as one call toward a shared oracle-call budget. After the allotted calls, the output must satisfy
 \[
 \|F(\bar{x})\|\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
 \end{document}

@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gradient Descent for Gaussian Recovery}
+We study recovery of two unknown means $\mu_0,\mu_1\in\mathbb{R}^d$, where $d\geq1$, from exact gradients of a reverse Fisher loss for equal-weight Gaussian mixtures with identity covariance. Their separation lies in $[a,1]$, where $a\in[0,1]$, and their midpoint has norm at most $C\geq0$. The loss $F_\mu$ averages the squared difference between candidate and target scores under the candidate mixture. The oracle returns $\nabla F_\mu(\theta)$ at $\theta\in(\mathbb{R}^d)^2$. Constant-step gradient descent must return two means whose summed squared distances to the target means, minimized over the two matchings, are at most $\varepsilon\in(0,1]$ with probability at least $1-\delta$, where $\delta\in(0,1]$.
+
+Write $E=\mathbb{R}^d$ with its Euclidean norm and equip $E^2$ with the product norm
+\[
+\|\theta\|^2=\|\theta_0\|^2+\|\theta_1\|^2.
+\]
+For a candidate pair $\theta=(\theta_0,\theta_1)\in E^2$, define its mixture density and score by
+\[
+\begin{aligned}
+q_\theta(x)
+&=\frac{1}{2(2\pi)^{d/2}}\sum_{i=0}^1
+\exp\!\left(-\frac{\|x-\theta_i\|^2}{2}\right),\\
+w_i(\theta,x)
+&=\frac{\exp(-\|x-\theta_i\|^2/2)}
+{\sum_{j=0}^1\exp(-\|x-\theta_j\|^2/2)},\\
+s_\theta(x)
+&=\nabla_x\log q_\theta(x)
+=\sum_{i=0}^1 w_i(\theta,x)\theta_i-x.
+\end{aligned}
+\]
+The reverse Fisher loss and the associated optimization problem are
+\[
+F_\mu(\theta)
+=\frac12\sum_{i=0}^1
+\mathbb{E}_{Z\sim\mathcal{N}(0,I_d)}
+\left[\|s_\theta(\theta_i+Z)-s_\mu(\theta_i+Z)\|^2\right],
+\qquad
+\min_{\theta\in E^2}F_\mu(\theta).
+\]
+Here $I_d$ is the identity matrix. Both candidate means are free optimization variables. The algorithm receives $d,C,a,\varepsilon,\delta$; the target pair $\mu$ is unknown.
+
+Our assumptions:
+\begin{assumption}[Target geometry]
+The target means satisfy
+\[
+\begin{aligned}
+a&\leq\|\mu_0-\mu_1\|\leq1,\\
+\left\|\frac{\mu_0+\mu_1}{2}\right\|&\leq C.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any $\theta\in E^2$. The oracle returns $\nabla F_\mu(\theta)$ at $\theta$, with the gradient taken in the product Euclidean space.
+
+Our result is algorithm-specific: we analyze constant-step gradient descent. The algorithm chooses an initialization $\theta^0\in E^2$, which may be random, and a fixed step size $\gamma>0$. Each query is at the current iterate, and the update is
+\[
+\theta^{k+1}=\theta^k-\gamma\nabla F_\mu(\theta^k).
+\]
+After $K\in\mathbb{N}_0$ oracle calls, the output is the last iterate $\bar{\theta}=\theta^K$. The initialization and step size are chosen using the available inputs.
+
+Define the squared matching error by
+\[
+\begin{aligned}
+M_\mu(\theta)=\min\bigl\{
+&\|\theta_0-\mu_0\|^2+\|\theta_1-\mu_1\|^2,\\
+&\|\theta_0-\mu_1\|^2+\|\theta_1-\mu_0\|^2
+\bigr\}.
+\end{aligned}
+\]
+The output must be measurable and satisfy
+\[
+P\bigl(M_\mu(\bar{\theta})\leq\varepsilon\bigr)\geq1-\delta,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

@@ -1,4 +1,3 @@
-import LongTails.Algorithms.Clipping
 import Mathlib.MeasureTheory.Function.SpecialFunctions.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.InnerProductSpace.Basic
@@ -8,6 +7,10 @@ open MeasureTheory
 open scoped RealInnerProductSpace
 
 namespace OracleTemplate
+
+noncomputable def clip {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (B : ℝ) (v : E) : E :=
+  if ‖v‖ ≤ B then v else (B / ‖v‖) • v
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 

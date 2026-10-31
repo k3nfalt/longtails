@@ -5,50 +5,43 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Strongly Convex Coordinate-Oracle Optimization}
-We consider minimizing a differentiable function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean norm, where $d\geq 1$. The objective is $\mu$-strongly convex, with $\mu>0$, and satisfies coordinate quadratic upper bounds with constants $L_i\geq\mu$ for $i=1,\ldots,d$. A given point $x^0\in\mathbb{R}^d$ satisfies $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$ and $\Delta\geq0$. Each oracle call selects a coordinate $i$ and point $x$, returning the exact scalar $\partial_i f(x)$. Given $\varepsilon>0$, the required measurable output $\bar{x}$ has integrable objective gap and satisfies $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, with expectation over all randomness. All listed parameters are public.
+\section*{Coordinate-Smooth Strongly Convex Minimization}
+We consider minimizing a differentiable, $\mu$-strongly convex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$, with coordinate smoothness constants $L_i\geq\mu>0$ for $i=1,\ldots,d$. A given starting point $x^0$ satisfies $f(x^0)-f(x^\star)\leq\Delta$, where $\Delta\geq0$ and $x^\star$ is a global minimizer. At a query $(i,x)$, the oracle returns the scalar $\nabla_i f(x)$, the $i$th gradient coordinate. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable objective gap satisfying $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
 
 The optimization problem is
-\begin{equation}
-\label{eq:problem}
-\min_{x\in\mathbb{R}^d} f(x),
-\end{equation}
-where $\langle\cdot,\cdot\rangle$ and $\|\cdot\|$ denote the standard Euclidean inner product and norm. Let $e_i$ denote the $i$th standard basis vector. The admissible objectives and oracle access satisfy the following conditions.
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean inner product and norm, and write $e_i$ for the $i$th standard basis vector. The algorithm receives $d$, $(L_i)_{i=1}^d$, $\mu$, $\Delta$, $\varepsilon$, and $x^0$.
 
-\begin{assumption}[Differentiability and coordinate smoothness]
+Our assumptions:
+\begin{assumption}[Coordinate smoothness]
 The function $f$ is differentiable everywhere. For every $x\in\mathbb{R}^d$, $i\in\{1,\ldots,d\}$, and $t\in\mathbb{R}$,
-\begin{equation}
- f(x+t e_i)\leq f(x)+t\,\partial_i f(x)+\frac{L_i}{2}t^2.
-\end{equation}
+\[
+f(x+t e_i)\leq f(x)+t\nabla_i f(x)+\frac{L_i}{2}t^2.
+\]
 \end{assumption}
 
 \begin{assumption}[Strong convexity]
 For every $x,y\in\mathbb{R}^d$,
-\begin{equation}
- f(y)\geq f(x)+\langle\nabla f(x),y-x\rangle
- +\frac{\mu}{2}\|y-x\|^2.
-\end{equation}
+\[
+f(y)\geq f(x)+\langle\nabla f(x),y-x\rangle
++\frac{\mu}{2}\|y-x\|^2.
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial gap]
+\begin{assumption}[Initial objective gap]
 There exists $x^\star\in\mathbb{R}^d$ such that
-\begin{align}
- f(x^\star)&\leq f(x) \qquad\text{for every }x\in\mathbb{R}^d,\\
- f(x^0)-f(x^\star)&\leq\Delta.
-\end{align}
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Exact coordinate access]
-At every call index, a query $(i,x)\in\{1,\ldots,d\}\times\mathbb{R}^d$ returns the scalar $\partial_i f(x)$ for every realization of the oracle randomness. Each such query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle, and both query coordinates and query points may be chosen adaptively. The algorithm is selected using the public inputs $(d,(L_i)_{i=1}^d,\mu,\Delta,\varepsilon,x^0)$. An externally specified call budget $K\in\mathbb{N}$ may depend on this full parameter tuple.
-
-After $K$ calls, the algorithm returns $\bar{x}\in\mathbb{R}^d$. Let $(\Omega,\mathcal{F},\mathbb{P})$ carry the joint law of the algorithm and oracle randomness. Success requires that $\bar{x}:\Omega\to\mathbb{R}^d$ be measurable, that $\omega\mapsto f(\bar{x}(\omega))-f(x^\star)$ be integrable with respect to $\mathbb{P}$, and that
-\begin{equation}
-\label{eq:accuracy}
- \int_{\Omega}\bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)
- \,\mathrm{d}\mathbb{P}(\omega)\leq\varepsilon.
-\end{equation}
-The minimizer witnessing the initial gap may be used in \eqref{eq:accuracy}, since all global minimizers have the same objective value.
+Coordinate queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
 \end{document}

@@ -16,8 +16,8 @@ theorem result : Convergence LongTails.Setups.GeneralizedSmoothParameterFree.spe
   intro N hcap
   rintro f oracle ⟨hc, hg, hgd, hH, u, hmin, hdist, hgap⟩
   let seed0 := (Classical.choice oracle.law.nonempty) 0
-  let g := fun x => oracle.answer 0 (0, x) seed0
-  have H : Hyp f g q.L0 q.L1 u := ⟨hL0, hL1, hc, hg 0 seed0, hgd 0 seed0, hH 0 seed0, hmin⟩
+  let g := fun x => oracle.answer [] (0, x) seed0
+  have H : Hyp f g q.L0 q.L1 u := ⟨hL0, hL1, hc, hg [] seed0, hgd [] seed0, hH [] seed0, hmin⟩
   have hacc : f ((trial g)^[N] ⟨0, q.x0, q.x0, q.h0⟩).x - f u ≤ q.ε := by
     apply trial_accuracy H hR hh0 hε hdist N
     have hb := budget_bound H hR hh0 hε hgap
@@ -29,7 +29,7 @@ theorem result : Convergence LongTails.Setups.GeneralizedSmoothParameterFree.spe
       execute oracle (algorithm q.toPublic) (fun _ => (2 * N)) seed.1 seed.2 =
         ((trial g)^[N] ⟨0, q.x0, q.x0, q.h0⟩).x := by
     rw [execute_eq_of_answer_eq oracle g
-      (fun k x sample => (hg k sample x).unique (hg 0 seed0 x))]
+      (fun k x sample => (hg k sample x).unique (hg [] seed0 x))]
     exact execute_algorithm q.toPublic g N
   refine ⟨u, hmin, Filter.Eventually.of_forall ?_⟩
   · intro seed

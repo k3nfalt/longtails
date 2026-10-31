@@ -5,31 +5,33 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Gap-Dependent Convex Stochastic Optimization}
-We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Around each point, a local quadratic upper model has coefficient $H_0+H_1(f(x)-f(x^\star))$, where $H_0,H_1\geq0$ and $x^\star$ is a global minimizer. The initial point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$, with $R,\Delta>0$. Each call returns an unbiased stochastic gradient with independent sampling and variance bounded by $(\rho-1)\|\nabla f(x)\|^2$, where $\rho\geq1$ and $\nabla f$ is the gradient of $f$. For $0<\varepsilon\leq\Delta$ and $0<\delta<1$, the required measurable output $\bar{x}\in E$ satisfies $\mathbb{P}(f(\bar{x})-f(x^\star)>\varepsilon)\leq\delta$, where $\mathbb{P}$ is the joint law of algorithm and oracle randomness.
+\section*{Gap-Smooth Convex Minimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. A local quadratic upper model has curvature controlled by the gap to a global minimizer $x^\star$, and a given starting point has bounded distance and objective gap to that minimizer. The oracle returns independent-sample, unbiased stochastic gradients whose variance is bounded proportionally to the squared gradient norm. For tolerance $\varepsilon>0$ and failure probability $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ satisfying $P\{f(\bar{x})-f(x^\star)>\varepsilon\}\leq\delta$, where $P$ is the joint law of sampling and independent algorithm randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where the norm on $E$ is induced by its inner product and $E$ carries its Borel sigma-algebra. The public inputs are $E$, a measurable sample space $\Omega$, the initial point $x^0$, and the parameters
+Equip $E$ with its Borel sigma-algebra, and write $\|\cdot\|$ for the norm induced by its inner product. Let $\Omega$ be a measurable sample space and $x^0\in E$ the given starting point. The parameters satisfy
 \[
 \begin{aligned}
-&H_0,H_1\geq0,\qquad R,\Delta>0,\qquad \rho\geq1,\\
-&0<\varepsilon\leq\Delta,\qquad 0<\delta<1.
+&H_0\geq0,\qquad H_1\geq0,\qquad R>0,\qquad \Delta>0,\\
+&\rho\geq1,\qquad 0<\varepsilon\leq\Delta,\qquad 0<\delta<1.
 \end{aligned}
 \]
-The admissible objective and oracle satisfy the following conditions.
+The algorithm receives $E$, $\Omega$, $x^0$, and all seven parameters $H_0,H_1,R,\Delta,\rho,\varepsilon,\delta$.
 
+Our assumptions:
 \begin{assumption}[Convexity and initialization]
-The function $f$ is differentiable everywhere on $E$. For every $x,y\in E$ and $t\in[0,1]$,
+The function $f$ is Fr\'echet differentiable everywhere on $E$ and satisfies
 \[
-f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y),
+\qquad x,y\in E,\quad t\in[0,1].
 \]
-There exists a global minimizer $x^\star\in E$ such that
+There exists $x^\star\in E$ such that
 \[
 \begin{aligned}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
 \|x^0-x^\star\|&\leq R,\\
 f(x^0)-f(x^\star)&\leq\Delta.
 \end{aligned}
@@ -48,30 +50,22 @@ f(y)\leq{}&f(x)+\langle\nabla f(x),y-x\rangle\\
 &+\bigl(H_0+H_1(f(x)-f(x^\star))\bigr)\|y-x\|^2.
 \end{aligned}
 \]
-Here $x^\star$ is the minimizer witnessing the initialization bounds.
 \end{assumption}
 
-\begin{assumption}[Strong-growth gradient oracle]
-There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and the function $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^2$ is integrable with respect to $p$. They satisfy
+\begin{assumption}[Strong-growth stochastic oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable under $\nu$, with
 \[
 \begin{aligned}
-\int_\Omega g(x,\omega)\,dp(\omega)&=\nabla f(x),\\
-\int_\Omega\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
 &\leq(\rho-1)\|\nabla f(x)\|^2.
 \end{aligned}
 \]
+At call $k\geq0$, a query $x\in E$ receives $g(x,\xi_k)$, where the measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$. Algorithm randomness is independent of the entire sample sequence.
 \end{assumption}
 
-\begin{assumption}[Independent sampling and access]
-The oracle uses a probability law $P$ on $\Omega^{\mathbb{N}}$. The coordinate samples $\xi_k(\xi)=\xi(k)$, for $k\in\mathbb{N}$, are measurable and mutually independent under $P$, and each has law $p$. At call $k$, a query $x\in E$ receives the vector $g(x,\xi_k)\in E$ and costs one oracle call. Queries may be adaptive and may lie anywhere in $E$. Internal algorithm randomness is independent of the entire oracle sample sequence.
-\end{assumption}
-
-The objective is accessed through this oracle. The algorithm is selected using only the public inputs; the objective $f$, minimizer $x^\star$, oracle map $g$, and probability laws $p$ and $P$ are not supplied as public inputs. An externally specified call budget $K\in\mathbb{N}$ may depend on the full public parameter tuple.
-
-After $K$ calls, the algorithm returns an $E$-valued measurable random point $\bar{x}$. Under the joint law $\mathbb{P}$ of its independent internal randomness and the oracle samples, success requires
+After the allotted oracle calls, the algorithm must return a measurable output $\bar{x}\in E$ with
 \[
-\int \mathbf{1}_{\{f(\bar{x})-f(x^\star)>\varepsilon\}}\,d\mathbb{P}
-\leq\delta.
+P\bigl\{f(\bar{x})-f(x^\star)>\varepsilon\bigr\}\leq\delta.
 \]
-The criterion concerns the objective gap of the returned point relative to a global minimizer. Since all global minimizers have the same objective value, the minimizer witnessing the initialization bounds can be used here.
 \end{document}

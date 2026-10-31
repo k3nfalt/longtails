@@ -5,65 +5,61 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Hessian Smoothness and Temporal Gradient Discrepancy}
-We consider minimizing a twice continuously differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. The function is $\mu$-strongly convex, its gradient is $L$-Lipschitz, and its Hessian is $M$-Lipschitz in operator norm, where $0<\mu\leq L$ and $M\geq0$. A given point $x^0\in E$ satisfies $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$ and $\Delta\geq0$. Call $k\geq0$ at $x\in E$ returns $\nabla f(x)+e_k$, where the fixed errors $e_k\in E$ satisfy $\|\sum_{k=0}^{n-1}e_k\|\leq D$ for every integer $n\geq0$, with $D\geq0$. The required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely, for $\varepsilon>0$.
+\section*{Minimization with Bounded Temporal Discrepancy}
+We consider minimizing a twice continuously differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. The function is $\mu$-strongly convex with $L$-Lipschitz gradient and $M$-Lipschitz Hessian, where $0<\mu\leq L$ and $M\geq0$. A given starting point $x^0\in E$ has objective gap at most $\Delta\geq0$ above a global minimizer $x^\star$. The oracle returns the gradient plus a fixed deterministic error sequence whose partial sums have norm at most $D\geq0$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-with the norm on $E$ induced by its inner product. The space $E$, initial point $x^0$, and all parameters $(L,\mu,M,D,\Delta,\varepsilon)$ are public algorithm inputs. The objective and oracle satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $x^0$, $\mu$, $L$, $M$, $D$, $\Delta$, and $\varepsilon$.
 
-\begin{assumption}[Strong convexity and gradient smoothness]
-The function $f$ belongs to $C^2(E;\mathbb{R})$. For every $x,y\in E$,
+Our assumptions:
+\begin{assumption}[Strong convexity and smoothness]
+The function $f$ is twice continuously Fr\'echet differentiable. For every $x,y\in E$,
 \[
 \begin{aligned}
-f(y) &\geq f(x)+\langle\nabla f(x),y-x\rangle
-          +\frac{\mu}{2}\|y-x\|^2,\\
-\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|.
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|^2,\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Hessian regularity]
-Writing $\nabla^2 f(x)=D(\nabla f)(x)$ for the derivative of the gradient, the Hessian satisfies
+\begin{assumption}[Lipschitz Hessian]
+The Hessian $\nabla^2 f(x):E\to E$ satisfies
 \[
 \|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
-\leq M\|x-y\|
-\qquad \text{for every }x,y\in E,
+\leq M\|x-y\|,
+\qquad x,y\in E.
 \]
-where $\|\cdot\|_{\mathrm{op}}$ is the operator norm induced by the norm on $E$.
 \end{assumption}
 
-\begin{assumption}[Attainment and initial objective gap]
+\begin{assumption}[Bounded temporal discrepancy]
+There is a fixed deterministic sequence $(e_k)_{k\geq0}$ in $E$. At the $k$th call, indexed from zero, a query $x\in E$ returns
+\[
+g_k(x)=\nabla f(x)+e_k.
+\]
+The cumulative errors satisfy
+\[
+\left\|\sum_{k=0}^{n-1}e_k\right\|\leq D,
+\qquad n=0,1,2,\ldots.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
 There exists $x^\star\in E$ such that
 \[
 \begin{aligned}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
 f(x^0)-f(x^\star)&\leq\Delta.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Temporally bounded gradient discrepancy]
-There exists a fixed sequence $(e_k)_{k\geq0}$ in $E$ such that, at every call index $k\geq0$ and query point $x\in E$, the oracle returns the vector
-\[
-g_k(x)=\nabla f(x)+e_k
-\]
-for every realization of its randomness. The same error sequence applies to all query points and satisfies
-\[
-\left\|\sum_{k=0}^{n-1}e_k\right\|\leq D
-\qquad\text{for every integer }n\geq0,
-\]
-with the empty sum equal to zero. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using the public inputs; neither the objective nor the error sequence is supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full public parameter tuple.
-
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required accuracy is
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely},
+\quad P\text{-a.s.}
 \]
-where $x^\star$ is the global minimizer appearing in the initial objective-gap condition.
 \end{document}

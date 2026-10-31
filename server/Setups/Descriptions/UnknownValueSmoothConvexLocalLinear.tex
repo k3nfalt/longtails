@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Local Linear Oracles}
+We consider minimizing $f:E\to\mathbb{R}$ over a closed convex set $C$ in a real Hilbert space $E$. On $C$, $f$ is differentiable and convex with a quadratic upper model of unknown curvature $L\geq0$. A given point $x^0\in C$ is within distance $R\geq0$ and objective gap $\Delta\geq0$ of a minimizer $x^\star\in C$; $\Delta$ is unknown. The oracle returns exact values and gradients, or a linear minimizer over a ball intersected with $C$. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $R$, $\varepsilon$, and $x^0$, together with oracle access; $L$ and $\Delta$ may enter the call budget but are not algorithm inputs. The optimal objective value is not supplied.
+
+Our assumptions:
+\begin{assumption}[Feasible set and first-order models]
+The set $C\subseteq E$ is closed and convex, and $x^0\in C$. The function $f$ is Fr\'echet differentiable at every point of $C$. For every $x,y\in C$,
+\[
+\begin{aligned}
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle,\\
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{L}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and objective gap]
+There exists $x^\star\in C$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in C,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact value-gradient and local linear access]
+At any $x\in C$, a value-gradient query returns $(f(x),\nabla f(x))$. A local linear query takes a center $x\in C$, a radius $r\geq0$, and a direction $g\in E$, and returns a point
+\[
+v\in\operatorname*{arg\,min}_{\substack{z\in C\\\|z-x\|\leq r}}
+\langle g,z\rangle.
+\]
+Such a minimizer exists for every admissible query. Every reply must satisfy this requirement, even when the choice among minimizers depends on previous queries and replies or on oracle randomness.
+\end{assumption}
+
+Both query types count toward a single oracle-call budget, with one call charged for either type. After the allotted calls, the output must satisfy
+\[
+\bar{x}\in C,
+\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The algorithm's randomness is independent of the oracle's randomness, and the minimizer in this requirement is fixed independently of both.
+\end{document}

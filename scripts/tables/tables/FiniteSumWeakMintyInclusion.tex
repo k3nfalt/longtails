@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-sum weak-Minty inclusions: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumWeakMintyInclusion.lean}{FiniteSumWeakMintyInclusion}.}\label{tab:FiniteSumWeakMintyInclusion}
+\parbox{\linewidth}{\footnotesize In a real Hilbert space with its Borel measurable structure, $F=n^{-1}\sum_{i=1}^{n}F_i$ is $L$-Lipschitz and $n^{-1}\sum_i\|F_i(x)-F_i(y)\|^2\leq\Lambda^2\|x-y\|^2$. The operator $A$ is monotone with exact, everywhere-defined resolvents for every positive step size. There is $x_\star$ with $0\in F(x_\star)+A(x_\star)$, $\|x_0-x_\star\|\leq R$, and $\langle F(y)+v,y-x_\star\rangle\geq-\rho\|F(y)+v\|^2$ for every $v\in A(y)$. Here $n\geq1$, $0<L\leq\Lambda$, $\rho,R\geq0$, $\rho L<1$, and $\varepsilon>0$. The target is a measurable pair $(Y,V)$ with $V\in A(Y)$ almost surely and integrable squared residual satisfying $\int\|F(Y)+V\|^2\,dP\leq\varepsilon^2$, where $P$ is the execution law. Each component evaluation or resolvent evaluation costs one call.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/VarianceReducedWeakMintyInclusion.lean}{Variance\allowbreak Reduced\allowbreak Weak\allowbreak Minty\allowbreak Inclusion} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/VarianceReducedWeakMintyInclusion.md}{(review)}
+& $\displaystyle\mathcal{O}\!\left(\frac{\ell}{\delta}\min\left\{
+\begin{gathered}
+ n(1+T/\delta^2),\\
+ \frac{n+\Lambda^2/L^2}{\delta^3}\\[-2pt]
+ {}+\frac{(\sqrt n\Lambda/L+\Lambda^2/L^2)T}{\delta^5}
+\end{gathered}\right\}\right)$\par Deterministic total-call budget.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[Cor.~6.3]{newmPethick2025}\par Full weak-Minty range; finite-dimensional setting.
+& $\mathcal{O}\!\left(\dfrac{n\ell}{\delta}\left(1+\dfrac{T}{\delta^2}\right)\right)$
+& \textbf{(1)}: For $\delta=1/2$, $\Lambda=L$, costs $\mathcal{O}(n+\sqrt nT)$ instead of $\mathcal{O}(n+nT)$. Generally, accuracy-term gain $\min\{\sqrt n\delta^3L/\Lambda,n\delta^3L^2/\Lambda^2\}$ when $n\gtrsim\Lambda^2/(L^2\delta^6)$ and $T\gtrsim\delta^{-1}(1+\Lambda^2/(nL^2))$. Exact fallback matches \textbf{(2)}.
+& \textbf{(1)}: Variance-reduced branch needs known $\Lambda$; margin power $\delta^{-6}$ instead of $\delta^{-3}$. Conservative leading constant. \\
+\midrule
+\textbf{(3)} \citep[Sec.~3.3, Corollaries 2--3]{fswmTranNguyen2026v2}\par Finite-dimensional; $\rho\Lambda<1/(24\sqrt2)$.
+& $\mathcal{O}\!\left(n+\dfrac{n^{2/3}(R^2/\eta^2+r_0^2)}{C\varepsilon^2}\right)$\par Expected component and resolvent calls; $8\rho\leq\eta<1/(3\sqrt2\Lambda)$.
+& \textbf{(1)}: Scope: $\rho L<1$. On \textbf{(3)}'s range, accuracy coefficient $(\sqrt n\Lambda L+\Lambda^2)R^2$ instead of $n^{2/3}\Lambda^2\widehat R^2$, with gain at least $\min\{n^{1/6}\Lambda/L,n^{2/3}\}$. Deterministic budget instead of expected calls.
+& \textbf{(1)}: Larger universal constants. \\
+\midrule
+\textbf{(4)} \citep[Cor.~4.5]{fswmCai2023v2}\par Special case: $A=0$, maximally pairwise $\rho$-cohypomonotone $F$ in $\mathbb R^d$.
+& $\mathcal{O}\!\left(\left(n+\dfrac{\sqrt n\Lambda R}{\varepsilon}\right)\left[1+\log\!\left(1+\dfrac{\Lambda R}{\sqrt n\varepsilon}\right)\right]\right)$\par For $\tau=\sqrt n/\Lambda$, $\rho<\tau/2$, and $\rho\tau L^2\leq c<1$ fixed; target $\int\|P^\tau(u)\|^2\,dP\leq\tau^2\varepsilon^2$.
+& \textbf{(1)}: Scope: graph weak Minty, arbitrary monotone $A$, and full $\rho L<1$ range instead of \textbf{(4)}'s pairwise condition and restricted range.
+& \textbf{(1)}: $\varepsilon^{-2}$ instead of $\varepsilon^{-1}$ up to a logarithm. Different residual targets; no identical-output cost comparison established. \\
+\midrule
+\textbf{(5)} \citep[Cor.~2, v3]{fswmAlizadeh2025v3}\par Euclidean special case: $A=\partial(h+I_X)$, $n>1$, $\rho\Lambda<1/[32(1+\sqrt2)]$.
+& Claimed $\mathcal{O}\!\left(n+\dfrac{\Lambda^2R^2}{\varepsilon^2}\right)$ component/proximal calls.\par Existential iterate satisfying $\int\operatorname{dist}(0,F(x_t)+A(x_t))\,dP\leq\varepsilon$.
+& \textbf{(1)}: Full $\rho L<1$ range; certified pair with expected squared residual instead of \textbf{(5)}'s existential expected-distance guarantee.
+& \textbf{(1)}: No cost saving against \textbf{(5)}'s claimed bound on this restricted range; accuracy criteria differ. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\delta=1-\rho L$, $\ell=1+\log(1/\delta)$, $T=L^2R^2/\varepsilon^2$. In \textbf{(3)}, $v_0\in A(x_0)$, $r_0=\|F(x_0)+v_0\|$, $C=1-18\Lambda^2\eta^2$, and $\widehat R^2=(R^2/\eta^2+r_0^2)/(C\Lambda^2)$; one may take $\eta=(8\rho+1/(3\sqrt2\Lambda))/2$. In \textbf{(4)}, $P^\tau=\mathrm{Id}-(\mathrm{Id}+\tau F)^{-1}$ and $c$ is a fixed constant below one. $I_X$ is the convex indicator of $X$; $h$ is proper closed convex. Prior-work comparisons use the finite-dimensional overlap.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

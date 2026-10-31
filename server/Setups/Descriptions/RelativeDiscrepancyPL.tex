@@ -5,56 +5,49 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Relative-Discrepancy Gradient Optimization under PL}
-We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is $L$-Lipschitz, and it satisfies the Polyak--\L{}ojasiewicz inequality with constant $0<\mu\leq L$. A global minimizer $x^\star$ exists, with $f(x^0)-f(x^\star)\leq\Delta$ for an initial point $x^0\in E$ and $\Delta\geq0$. Call $k\in\mathbb{N}$ at $x\in E$ returns a deterministic vector $g_k(x)\in E$; accumulated errors over every consecutive interval at fixed $x$ have norm at most $D\|\nabla f(x)\|$, where $D\geq0$. The output $\bar{x}\in E$ must satisfy $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely, for $\varepsilon>0$. Only $(E,L,x^0,D)$ are public inputs.
+\section*{PL Minimization with Relative Discrepancy}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and it satisfies the Polyak--\L{}ojasiewicz condition with parameter $\mu\in(0,L]$. A given point $x^0\in E$ has objective gap at most $\Delta\geq0$ above a global minimizer $x^\star$. At call $k\geq0$, the oracle returns a deterministic vector $g_k(x)\in E$ at $x$; accumulated errors over every consecutive block at a fixed point have norm at most $D\|\nabla f(x)\|$, with $D\geq0$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where the norm on $E$ is induced by its inner product. The objective and oracle satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $L$, $D$, and $x^0$; the parameters $\mu$, $\Delta$, and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
+Our assumptions:
 \begin{assumption}[Smoothness]
-The function $f$ is differentiable everywhere on $E$, and its gradient satisfies
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and its gradient satisfies
 \[
-\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|
-\qquad\text{for every }x,y\in E.
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
 \]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial gap]
-There exists a global minimizer $x^\star\in E$ such that
+\begin{assumption}[Polyak--\L{}ojasiewicz condition and initial gap]
+There exists $x^\star\in E$ such that
 \[
 \begin{aligned}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
-f(x^0)-f(x^\star)&\leq\Delta.
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f(x^\star)&\leq\Delta,\\
+2\mu\bigl(f(x)-f(x^\star)\bigr)&\leq\|\nabla f(x)\|^2
+&&\text{for every }x\in E.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Polyak--\L{}ojasiewicz inequality]
-For every $x\in E$,
-\[
-2\mu\bigl(f(x)-f(x^\star)\bigr)
-\leq\|\nabla f(x)\|^2.
-\]
-\end{assumption}
-
-\begin{assumption}[Relative interval discrepancy]
-There exists a sequence of maps $g_k:E\to E$, indexed by $k\in\mathbb{N}$, such that the oracle reply at call $k$ and query $x$ equals $g_k(x)$ for every realization of its randomness. For every starting index $s\in\mathbb{N}$, length $n\in\mathbb{N}$, and fixed point $x\in E$,
+\begin{assumption}[Relative discrepancy]
+The oracle is specified by a fixed sequence of maps $g_k:E\to E$, indexed by $k=0,1,\ldots$. For every $x\in E$ and all nonnegative integers $s,n$,
 \[
 \left\|\sum_{i=0}^{n-1}
 \bigl(g_{s+i}(x)-\nabla f(x)\bigr)\right\|
 \leq D\|\nabla f(x)\|.
 \]
-The empty sum is zero. Each query returns one vector and costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+The sum is zero when $n=0$. Each block in this condition is evaluated at the same point $x$.
 \end{assumption}
 
-The objective is accessed through this oracle, with queries chosen adaptively anywhere in $E$. The discrepancy condition evaluates an entire interval at the same point $x$. The algorithm is selected using only the public inputs $(E,L,x^0,D)$; the parameters $\mu$, $\Delta$, and $\varepsilon$ are not supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,x^0,D,\mu,\Delta,\varepsilon)$.
-
-After $K$ oracle calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required accuracy is
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
 \end{document}

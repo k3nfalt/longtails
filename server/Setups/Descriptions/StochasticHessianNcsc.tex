@@ -5,111 +5,88 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Hessian-Lipschitz Stochastic Minimax Optimization}
-We consider minimizing the possibly nonconvex value function $\Phi(x)=\max_{y\in F}f(x,y)$, where $f:E\times F\to\mathbb{R}$ and $E,F$ are finite-dimensional real inner-product spaces. The objective is strongly concave in its second argument, with globally Lipschitz joint gradient and Hessian. Given initial points satisfy bounds on the initial value gap and the inner gradient. Each oracle call returns unbiased estimates of both partial gradients, using an independent sample and with bounded combined variance. For $\varepsilon>0$, the required measurable output $\bar{x}\in E$ satisfies $\mathbb{E}\|\nabla\Phi(\bar{x})\|\leq\varepsilon$, with integrable gradient norm; expectation is over all algorithm and oracle randomness.
+\section*{Stochastic Nonconvex Strongly Concave Minimax}
+We consider a possibly nonconvex minimax objective $f:E\times F\to\mathbb{R}$ on finite-dimensional real inner product spaces $E$ and $F$. The function is strongly concave in its second argument, with a Lipschitz gradient and Lipschitz Hessian. Given points $x^0\in E$ and $y^0\in F$ satisfy bounds on the initial value gap and dual gradient. Each oracle call returns unbiased estimates of both partial gradients using one shared sample, independently across calls, with bounded joint variance. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}[\|\nabla\Phi(\bar{x})\|]\leq\varepsilon$, where $\Phi(x)=\max_{y\in F}f(x,y)$ and expectation includes sampling and independent algorithm randomness.
 
 The optimization problem is
 \[
-\inf_{x\in E}\Phi(x),
-\qquad \Phi(x)=\max_{y\in F}f(x,y).
+\min_{x\in E}\max_{y\in F} f(x,y).
 \]
-Equip the product space with the norm
+We equip $E\times F$ with the product inner product and norm
 \[
-\|(u,v)\|_2^2=\|u\|^2+\|v\|^2,
-\qquad (u,v)\in E\times F.
+\|(u,v)\|^2=\|u\|^2+\|v\|^2.
 \]
-The public data consist of these spaces, a measurable sample space $\Omega$, initial points $x^0\in E$ and $y^0\in F$, and real parameters satisfying
+All operator norms below are induced by these norms. The parameters satisfy
 \[
-0<\mu\leq L,\qquad \rho>0,\qquad \sigma>0,
-\qquad \Delta\geq0,\qquad G\geq0,\qquad \varepsilon>0.
+0<\mu\leq L,\qquad \rho>0,\qquad \sigma>0,\qquad
+\Delta\geq0,\qquad G\geq0,\qquad \varepsilon>0.
 \]
-The objective and its oracle satisfy the following conditions.
+The algorithm receives $E$, $F$, the measurable sample space $\Omega$, all seven scalar parameters, and the given points $x^0,y^0$.
 
+Our assumptions:
 \begin{assumption}[Gradient and Hessian regularity]
-The partial gradients exist everywhere. Write
-\[
-g_x(x,y)=\nabla_x f(x,y),
-\qquad g_y(x,y)=\nabla_y f(x,y).
-\]
-Both maps are Fr\'echet differentiable on $E\times F$, with derivatives
-\[
-H_x(z)=Dg_x(z):E\times F\to E,
-\qquad H_y(z)=Dg_y(z):E\times F\to F.
-\]
-These derivatives are continuous linear maps. For every $z,z'\in E\times F$ and $w\in E\times F$,
+Both partial gradients of $f$ exist everywhere and are Fr\'echet differentiable as functions on $E\times F$. Writing $z=(x,y)$ and $\nabla f(z)=(\nabla_x f(x,y),\nabla_y f(x,y))$, we require, for every $z,z'\in E\times F$,
 \[
 \begin{aligned}
-\|g_x(z)-g_x(z')\|^2
- +\|g_y(z)-g_y(z')\|^2
- &\leq L^2\|z-z'\|_2^2,\\
-\|(H_x(z)-H_x(z'))w\|^2
- +\|(H_y(z)-H_y(z'))w\|^2
- &\leq \rho^2\|z-z'\|_2^2\|w\|_2^2.
+\|\nabla f(z)-\nabla f(z')\|&\leq L\|z-z'\|,\\
+\|\nabla^2 f(z)-\nabla^2 f(z')\|_{\mathrm{op}}
+&\leq \rho\|z-z'\|.
 \end{aligned}
 \]
+Here $\nabla^2 f(z)$ is the linear operator from $E\times F$ to $E\times F$ obtained by differentiating the two partial gradients.
 \end{assumption}
 
 \begin{assumption}[Strong concavity]
 For every $x\in E$ and $y,y'\in F$,
 \[
-f(x,y')\leq f(x,y)
- +\langle g_y(x,y),y'-y\rangle
- -\frac{\mu}{2}\|y'-y\|^2.
+f(x,y')\leq f(x,y)+\langle\nabla_y f(x,y),y'-y\rangle
+-\frac{\mu}{2}\|y'-y\|^2.
 \]
 \end{assumption}
 
-\begin{assumption}[Initialization]
-The initial points satisfy
+\begin{assumption}[Initial bounds]
+The given points satisfy
 \[
 \begin{aligned}
-&\text{for every }x\in E,\ y\in F,
-  \text{ there exists }y'\in F
-  \text{ such that }f(x^0,y)-f(x,y')\leq\Delta,\\
-&\|g_y(x^0,y^0)\|\leq G.
+&\forall x\in E\ \forall y\in F\ \exists y'\in F:
+&&f(x^0,y)-f(x,y')\leq\Delta,\\
+&&&\|\nabla_y f(x^0,y^0)\|\leq G.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Stochastic partial-gradient access]
-There are a probability measure $p$ on $\Omega$ and jointly measurable maps
+\begin{assumption}[Stochastic partial gradients]
+There is a probability measure $\nu$ on $\Omega$ and jointly measurable maps
 \[
 o_x:(E\times F)\times\Omega\to E,
-\qquad o_y:(E\times F)\times\Omega\to F.
+\qquad
+o_y:(E\times F)\times\Omega\to F.
 \]
-For every fixed $z\in E\times F$, both replies are Bochner integrable under $p$ and satisfy
+For each fixed $z=(x,y)$, both replies are Bochner integrable under $\nu$, and
 \[
 \begin{aligned}
-\int_\Omega o_x(z,\omega)\,dp(\omega)&=g_x(z),\\
-\int_\Omega o_y(z,\omega)\,dp(\omega)&=g_y(z).
+\mathbb{E}_{\xi\sim\nu}[o_x(z,\xi)]&=\nabla_x f(x,y),\\
+\mathbb{E}_{\xi\sim\nu}[o_y(z,\xi)]&=\nabla_y f(x,y).
 \end{aligned}
 \]
-The combined squared error is integrable and obeys
+The sum of squared errors is integrable and satisfies
 \[
-\int_\Omega
-\bigl(\|o_x(z,\omega)-g_x(z)\|^2
-     +\|o_y(z,\omega)-g_y(z)\|^2\bigr)
-\,dp(\omega)\leq\sigma^2.
+\mathbb{E}_{\xi\sim\nu}\!\left[
+\|o_x(z,\xi)-\nabla_x f(x,y)\|^2
++\|o_y(z,\xi)-\nabla_y f(x,y)\|^2
+\right]\leq\sigma^2.
 \]
-Under a probability law $P$ on $\Omega^{\mathbb{N}}$, the coordinate samples $\xi_k$, $k\in\mathbb{N}$, are measurable, mutually independent, and each has law $p$. At call $k$, a query $z$ returns the pair
-\[
-\bigl(o_x(z,\xi_k),o_y(z,\xi_k)\bigr).
-\]
-This pair costs one oracle call. Internal algorithm randomness is independent of the sample sequence.
+The samples $(\xi_k)_{k\geq0}$ are measurable, independent, and identically distributed with law $\nu$, and are independent of algorithm randomness. At query $z_k\in E\times F$, call $k$ returns the pair $(o_x(z_k,\xi_k),o_y(z_k,\xi_k))$ using the same sample for both components.
 \end{assumption}
 
-The algorithm accesses the objective through this oracle and may choose queries adaptively anywhere in $E\times F$. It is selected using the full public tuple $(E,F,\Omega,L,\mu,\rho,\sigma,\Delta,G,\varepsilon,x^0,y^0)$. A call budget $K\in\mathbb{N}$ may depend on this tuple, and the output after $K$ calls is a point $\bar{x}\in E$.
-
-Write $\mathbb{P}$ for the joint probability law of all randomness. Success requires that $\bar{x}$ be measurable and that a maximizing selection $y^\star:E\to F$ exist, meaning
+Queries may be made anywhere in $E\times F$. The output requirement includes the existence of a maximizing selection $y^\star:E\to F$ satisfying
 \[
 f(x,y)\leq f(x,y^\star(x))
 \qquad\text{for every }x\in E,\ y\in F.
 \]
-For every such selection, set $\Phi_{y^\star}(x)=f(x,y^\star(x))$. The output must satisfy
+For every such selection, the value function is $\Phi(x)=f(x,y^\star(x))$. The output $\bar{x}$ must be measurable, its gradient norm $\|\nabla\Phi(\bar{x})\|$ must be integrable, and it must satisfy
 \[
-\|\nabla\Phi_{y^\star}(\bar{x})\|\in L^1(\mathbb{P}),
-\qquad
-\int \|\nabla\Phi_{y^\star}(\bar{x}(\omega))\|
-\,d\mathbb{P}(\omega)\leq\varepsilon.
+\mathbb{E}_{P}\bigl[\|\nabla\Phi(\bar{x})\|\bigr]\leq\varepsilon,
 \]
-Every maximizing selection defines the same value function $\Phi$, so this is the expected gradient-norm accuracy criterion stated above.
+where $P$ is the joint law of the oracle samples and the independent algorithm randomness.
 \end{document}

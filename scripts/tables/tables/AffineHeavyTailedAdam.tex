@@ -1,0 +1,54 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AffineHeavyTailedAdam.lean}{AffineHeavyTailedAdam}.}\label{tab:AffineHeavyTailedAdam}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb R^d\to\mathbb R$ satisfies $f(x_0)-f(x)\le\Delta$ for every $x$ and
+$\|\nabla f(y)-\nabla f(x)\|_1\le(L_0+L_1\|\nabla f(x)\|_1)\|y-x\|_\infty$ whenever $L_1\|y-x\|_\infty\le1$.
+Here $L_0,L_1,\Delta,\sigma_{0,i},\sigma_1\ge0$, $L_0+L_1>0$, $1<p\le2$, and $\varepsilon>0$.
+IID samples have law $\mu$; the jointly measurable oracle is integrable, with
+$\int g(x,\omega)\,d\mu=\nabla f(x)$ and integrable coordinate errors satisfying
+$\int|g_i(x,\omega)-\partial_i f(x)|^p\,d\mu\le\sigma_{0,i}^p+\sigma_1^p|\partial_i f(x)|^p$.
+The setup restricts algorithms to bias-corrected coordinatewise Adam with arithmetic minibatches and a uniformly selected pre-update iterate $x_I$.
+The target is $\int\|\nabla f(x_I)\|_1\,dP\le\varepsilon$, with measurable output and integrable gradient norm; $P$ includes the IID samples and independent uniform selection.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FixedMemoryAdamAffineHeavyTails.lean}{Fixed\allowbreak Memory\allowbreak Adam\allowbreak Affine\allowbreak Heavy\allowbreak Tails} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FixedMemoryAdamAffineHeavyTails.md}{(review)}
+& $\mathcal O\!\left(\left[1+\frac{\Delta(L_0+L_1\varepsilon)}{\varepsilon^2}\right]\right.$\newline
+$\left.\qquad\cdot\left[1+2^{17q}(\sigma_1+s_0/\varepsilon)^q\right]\right)$ stochastic-gradient calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Minibatch signSGD, Derived bound from \citep{ahtaKornilov2025v2}
+& $\mathcal O\!\left(\left[1+\frac{\Delta(L_0+L_1\varepsilon)}{\varepsilon^2}\right]\right.$\newline
+$\left.\qquad\cdot[1+(\sigma_1+s_0/\varepsilon)^q]\right)$ calls; same problem and expected accuracy, without the Adam restriction.
+& \textbf{(1)}: Matches known rate for fixed $p$ using canonical bias-corrected Adam with fixed memories $(0.9,0.999)$; no problem-class complexity improvement.
+& \textbf{(1)} has much larger constants, including $2^{17q}$, unbounded as $p\downarrow1$. \\
+\midrule
+\textbf{(3)} Minibatch signSGD \citep{ahtaKornilov2025v2}, Thm.~1
+& $\mathcal O\!\left(\left[1+\frac{\Delta dL_0^E}{\varepsilon^2}+\frac{\Delta d^{3/2}L_1^E}{\varepsilon}\right]\right.$\newline
+$\left.\qquad\cdot[1+(s_0/\varepsilon)^q](1+\log(1/\alpha))\right)$ calls for average gradient norm $\le\varepsilon$ with probability $1-\alpha$; Euclidean generalized smoothness, $\sigma_1=0$.
+& \textbf{(1)}: Scope extends to affine noise and anchored $\ell_\infty\!\to\!\ell_1$ smoothness; \textbf{(2)} already covers this problem class. No established same-guarantee rate improvement.
+& \textbf{(1)} gives expected accuracy, not the high-probability average-gradient guarantee of \textbf{(3)}. \\
+\midrule
+\textbf{(4)} Adam \citep{ahtaLiDongLin2026v4}, Cor.~1
+& $\mathcal O\!\left(1+\frac{dL\Delta}{\varepsilon^2}+\frac{d^2L\Delta\sigma^2}{\varepsilon^4}\right)$ single-sample calls; $p=2$, $L_1=\sigma_1=0$, Euclidean $L$-smoothness and variance $\sigma^2$.
+& \textbf{(1)}: Extends Adam to $p<2$, affine noise and generalized smoothness; fixed memories. On the overlap, no worse order if $L_0\le dL$, $s_0\le\sqrt d\sigma$, $dL\Delta\ge\varepsilon^2$. For $L_0=L$, $s_0=\sigma$, $L\Delta\ge\varepsilon^2$, $\sigma\ge\varepsilon$: $\mathcal O(L\Delta\sigma^2/\varepsilon^4)$ versus $\mathcal O(d^2L\Delta\sigma^2/\varepsilon^4)$.
+& \textbf{(1)} needs batches of order $1+s_0^2/\varepsilon^2$, accuracy-dependent damping and a much smaller step. If $dL\Delta<\varepsilon^2$, its additional $s_0^2/\varepsilon^2$ cost can be worse. \\
+\midrule
+\textbf{(5)} Vector Adam \citep{htaPang2026}, Thm.~6.4
+& Polynomial cost for relaxed $(\rho,\varepsilon)$-stationarity; bounded gradients, additive $p$-moment noise, $p>4/3$. Different criterion and function class; rates not comparable.
+& \textbf{(1)}: Ordinary gradient stationarity, unbounded gradients and all $1<p\le2$ under generalized smoothness; canonical updates instead of random step multipliers.
+& \textbf{(1)} requires generalized smoothness and accuracy-sized batches; \textbf{(5)} does not require gradient Lipschitz regularity. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $s_0=\sum_i\sigma_{0,i}$; $q=p/(p-1)$; $\alpha\in(0,1)$ is failure probability.
+$L_0^E,L_1^E$ are Euclidean generalized-smoothness constants; $L$ is the Euclidean gradient Lipschitz constant; $\sigma^2$ bounds $\mathbb E\|g-\nabla f\|_2^2$ in \textbf{(4)}.
+$\rho>0$ is the relaxation parameter in \textbf{(5)}.
+The $\mathcal O$ constants in \textbf{(2)}, \textbf{(3)} may depend on fixed $p$; all costs count individual stochastic-gradient calls, including batches.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

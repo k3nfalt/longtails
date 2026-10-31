@@ -5,33 +5,34 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Generalized Smooth Convex Optimization}
-We consider minimizing a convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is differentiable and satisfies $\|D(\nabla f)(x)\|_{\mathrm{op}}\leq L_0+L_1\|\nabla f(x)\|$ for every $x\in E$, where $D$ denotes the Fr\'echet derivative, $\|\cdot\|_{\mathrm{op}}$ the operator norm, and $L_0>0$, $L_1\geq0$. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for some global minimizer $x^\star$, with $R,\Delta>0$. Each oracle call returns the exact gradient. For $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. The algorithm receives $E,L_0,L_1,R,\Delta,x^0$, but not $\varepsilon$.
+\section*{Generalized Smooth Convex Minimization}
+We consider minimizing a convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$, and has an everywhere differentiable gradient. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$, where $R,\Delta>0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where $E$ may be infinite dimensional and its norm is induced by its inner product. The admissible objectives and oracle access satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $L_0$, $L_1$, $R$, $\Delta$, and $x^0$; the tolerance $\varepsilon$ may enter the oracle-call budget but is not an algorithm input.
 
+Our assumptions:
 \begin{assumption}[Convexity]
-The function $f$ is differentiable everywhere on $E$, and, for every $x,y\in E$ and $t\in[0,1]$,
+For every $x,y\in E$ and $t\in[0,1]$,
 \[
-f((1-t)x+ty)\leq (1-t)f(x)+tf(y).
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
 \]
 \end{assumption}
 
 \begin{assumption}[Generalized smoothness]
-The gradient map $\nabla f:E\to E$ is Fr\'echet differentiable everywhere, with
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and its gradient $\nabla f:E\to E$ is Fr\'echet differentiable everywhere. Its Hessian $\nabla^2 f(x):E\to E$ satisfies
 \[
-\|D(\nabla f)(x)\|_{\mathrm{op}}
-\leq L_0+L_1\|\nabla f(x)\|
-\qquad\text{for every }x\in E.
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in E.
 \]
 \end{assumption}
 
-\begin{assumption}[Attainment and initialization]
-There exists a global minimizer $x^\star\in E$ satisfying
+\begin{assumption}[Minimizer and initialization]
+There exists $x^\star\in E$ such that
 \[
 \begin{aligned}
 f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
@@ -41,16 +42,9 @@ f(x^0)-f(x^\star)&\leq\Delta.
 \]
 \end{assumption}
 
-\begin{assumption}[Exact-gradient access]
-At every call index and every query point $x\in E$, the oracle returns $\nabla f(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only the public inputs $(E,L_0,L_1,R,\Delta,x^0)$. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L_0,L_1,R,\Delta,x^0,\varepsilon)$.
-
-After $K$ calls, the algorithm returns a point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a global minimizer $x^\star$ such that
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
-The minimizer witnessing the initialization bounds can be used here, since all global minimizers have the same objective value.
 \end{document}

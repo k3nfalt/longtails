@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.CyclicFullWidthPerceptron",
+  "searched_at": "2026-10-28T12:10:39.766425+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(count + 1\\right) \\cdot \\left\\lceil \\frac{256}{\\kappa^{4}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CyclicFullWidthPerceptron.spec.Params → ℕ",
+        "value": "fun p => (p.count + 1) * ⌈256 / p.κ ^ 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(count + 1\\right) \\cdot \\left\\lceil \\frac{256}{\\kappa^{4}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CyclicFullWidthPerceptron.spec.Params → ℕ",
+          "value": "fun p => (p.count + 1) * ⌈256 / p.κ ^ 4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CyclicFullWidthPerceptronAcceleration",
+      "namespace": "LongTails.Setups.CyclicFullWidthPerceptron",
+      "setup": "LongTails.Setups.CyclicFullWidthPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CyclicFullWidthPerceptron.spec\n  OracleTemplate.CyclicFullWidthPerceptronAcceleration.budget",
+      "theorem": "OracleTemplate.CyclicFullWidthPerceptronAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CyclicFullWidthPerceptronAcceleration",
+      "theorem": "OracleTemplate.CyclicFullWidthPerceptronAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict feasibility in a bilinear parameterization: writing θ=(W,v), each sample must satisfy vᵀWqᵢ>0. These constraints are nonconvex jointly in W and v; no scalar optimization objective is specified.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: Space, linearPart, margin, Separates."
+      },
+      {
+        "label": "other",
+        "details": "Finite-data linear separation represented by a two-layer linear model of width dimension+1, with a prescribed cyclic, mistake-triggered update family.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: sample, margin, family, spec.allowedAlgorithm."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects one sample index and parameter θ and returns its exact margin derivative, represented by direction using Euclidean and Frobenius coordinates. Replies have no noise or history dependence.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: direction, answer, spec.Query, spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same query returns the exact scalar margin of the selected sample. Every query counts, including those with positive margin that cause no parameter update.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: Reply, answer, family; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in ℝᵈ with Euclidean geometry; W is an unrestricted (d+1)×(d+1) linear map and v∈ℝᵈ⁺¹.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: Features, Space, Input, linearPart."
+      },
+      {
+        "label": "other",
+        "details": "Public parameters are d, n=count>0, κ, μ, ν, with 0<κ≤1, 0<μ≤κ⁴/2²⁰, and 0≤ν≤κ¹²μ²/2⁵⁶. Hidden residuals rᵢ and offsets δᵢ satisfy ‖rᵢ‖≤1, 0≤δᵢ≤ν, and ⟨w,rᵢ⟩≥κ for some hidden unit w. Signed samples are q₀=(1,0) and qᵢ₊₁=(-(1+δᵢ),-μrᵢ). Offsets are fixed data, not oracle errors.\nInitialization is W=I and v=0. A fixed positive step size updates both layers using the returned direction exactly when the margin is nonpositive. Queries cycle through all n+1 samples, starting at index zero.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: Params, Data, sample, Geometry, spec.publicInput, spec.valid.\nLongTails/Setups/CyclicFullWidthPerceptron.lean: initial, move, family."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The final output must have strictly positive margin on every sample. There is no epsilon tolerance or required positive margin magnitude. The supplied fixed budget is (n+1)⌈256/κ⁴⌉ oracle calls.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: Separates, spec.successful, family; supplied extracted budget for OracleTemplate.CyclicFullWidthPerceptronAcceleration.result."
+      },
+      {
+        "label": "deterministic",
+        "details": "Separation is required for every outcome ω, including every algorithm and oracle seed, rather than only in expectation or almost surely.",
+        "evidence": "LongTails/Setups/CyclicFullWidthPerceptron.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines specially scaled, nearly opposing samples and tightly bounded offsets with a prescribed bilinear initialization and cyclic mistake-triggered updates. These restrictions define a specialized separation problem."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CyclicFullWidthPerceptronAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CyclicFullWidthPerceptronAcceleration",
+          "theorem": "OracleTemplate.CyclicFullWidthPerceptronAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

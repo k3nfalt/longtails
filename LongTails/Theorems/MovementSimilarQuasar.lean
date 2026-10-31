@@ -26,10 +26,15 @@ theorem result : Convergence LongTails.Setups.ContinuizedSimilarQuasar.spec budg
         (run p g (epochs p) (p.x0, p.x0) seed).1 := by
     rw [execute_eq_of_answer_eq O g (fun k ix ξ => ho.2.1 k ix.1 ix.2 ξ),
       execute_accelerated p g seed (budget p 0) hK]
+  have heq : (fun ω : (accelerated p).Seed × ((k : ℕ) → O.Seed k) =>
+      execute O (accelerated p) (fun _ => budget p 0) ω.1 ω.2) =
+      fun ω => (run p g (epochs p) (p.x0, p.x0) ω.1).1 := by
+    funext ω
+    exact he ω.1 ω.2
   refine ⟨u, hmin, ?_, ?_⟩
-  · simp only [he]
-    exact hi.comp_fst (O.law : Measure ((k : ℕ) → O.Seed k))
-  · simp only [he]
+  · rw [heq]
+    exact (measurePreserving_fst).integrable_comp_of_integrable hi
+  · rw [heq]
     change (∫ ω : (Fin (epochs p) → Fin p.n → ℝ × Fin p.n) × ((k : ℕ) → O.Seed k),
       LongTails.Setups.FiniteSumSmoothAndConvex.objective f (run p g (epochs p) (p.x0, p.x0) ω.1).1 - LongTails.Setups.FiniteSumSmoothAndConvex.objective f u
       ∂(samplesLaw p.n p.n (epochs p) : Measure _).prod

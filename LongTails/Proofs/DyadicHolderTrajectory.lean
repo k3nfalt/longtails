@@ -283,10 +283,10 @@ lemma execute_dyadicVR [MeasurableSpace Ω] (cfg : DyadicConfig) (hb : ∀ k, 1 
     (τ : (dyadicVR (E := E) cfg x0).Seed) (ξ : ℕ → Ω) (hB : off cfg (cfg.K + 1) ≤ B) :
     execute (pairOracle g P) (dyadicVR cfg x0) (fun _ => B) τ ξ =
       X cfg g x0 0 ξ (τ : Fin (cfg.K + 1)).val := by
-  refine (execute_indexed (pairOracle g P) (dyadicVR cfg x0) B τ ξ).trans ?_
+  refine (execute_indexed_of_answer (pairOracle g P) (dyadicVR cfg x0) B τ ξ (fun k q => (g q.2.1 (ξ k), g q.2.2 (ξ k))) (fun _ _ => rfl)).trans ?_
   change Fin (cfg.K + 1) at τ
   have hit : ∀ c, (fun sc : DyadicState E × ℕ =>
-      (dyadicUpdate cfg sc.1 ((pairOracle g P).answer sc.2 (0, dyadicQuery cfg sc.1) (ξ sc.2)),
+      (dyadicUpdate cfg sc.1 ((pairOracle g P).answer [] (0, dyadicQuery cfg sc.1) (ξ sc.2)),
         sc.2 + 1))^[c] ((dyadicVR cfg x0).initial τ, 0) = (callState cfg g x0 τ.val ξ c, c) := by
     intro c
     induction c with
@@ -295,10 +295,10 @@ lemma execute_dyadicVR [MeasurableSpace Ω] (cfg : DyadicConfig) (hb : ∀ k, 1 
         rw [Function.iterate_succ_apply', ih]
         rfl
   change (((fun sc : DyadicState E × ℕ =>
-      (dyadicUpdate cfg sc.1 ((pairOracle g P).answer sc.2 (0, dyadicQuery cfg sc.1) (ξ sc.2)),
+      (dyadicUpdate cfg sc.1 ((pairOracle g P).answer [] (0, dyadicQuery cfg sc.1) (ξ sc.2)),
         sc.2 + 1))^[B] ((dyadicVR cfg x0).initial τ, 0)).1).xs
       (((fun sc : DyadicState E × ℕ =>
-      (dyadicUpdate cfg sc.1 ((pairOracle g P).answer sc.2 (0, dyadicQuery cfg sc.1) (ξ sc.2)),
+      (dyadicUpdate cfg sc.1 ((pairOracle g P).answer [] (0, dyadicQuery cfg sc.1) (ξ sc.2)),
         sc.2 + 1))^[B] ((dyadicVR cfg x0).initial τ, 0)).1).tau = _
   rw [hit]
   have hbd := callState_boundary (g := g) hb x0 τ.val ξ (cfg.K + 1) le_rfl

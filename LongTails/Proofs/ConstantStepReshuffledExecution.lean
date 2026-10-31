@@ -26,8 +26,8 @@ lemma convergence : Convergence spec (fun p _ => p.n * epochCount p) := by
   have hans : ∀ k (q : Fin p.n × p.E) seed, O.answer k (0, q) seed = g q.1 q.2 :=
     fun k q seed => (hgrad k seed q.1 q.2).gradient.symm
   have hgradg : ∀ i x, HasGradientAt (f i) (g i x) x := fun i x => by
-    have hh := hgrad 0 (ξ0 0) i x
-    rw [hans 0 (i, x) (ξ0 0)] at hh
+    have hh := hgrad [] (ξ0 0) i x
+    rw [hans [] (i, x) (ξ0 0)] at hh
     exact hh
   have hyp : Hyp f g ℓ p.Lavg p.Lmax p.σ xstar :=
     ⟨hLa, hLm, hconv, hgradg, hℓ0, hℓmax, havg, hlip, hmin, hnoise⟩

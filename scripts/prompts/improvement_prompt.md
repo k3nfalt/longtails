@@ -44,7 +44,7 @@ The Researcher must not write the Reviewer’s assessment or approve its own wor
 
 3. Git workflow
 
-Read and follow section 3 (Git workflow and authentication) of `scripts/prompts/research_prompt.md`. Use separate worktrees based on freshly fetched `origin/main` and deliver the approved improvement on a unique `agent/<unique-task-name>` branch with exactly one research commit. Keep the recorded starting base even if `origin/main` advances; being behind alone does not require rebasing or repeating validation. Never push or merge into `main`.
+Read and follow section 3 (Git workflow and authentication) of `scripts/prompts/research_pr_delivery.md`. Use separate worktrees based on freshly fetched `origin/main` and deliver the approved improvement on a unique `agent/<unique-task-name>` branch with exactly one research commit. Keep the recorded starting base even if `origin/main` advances; being behind alone does not require rebasing or repeating validation. Never push or merge into `main`.
 
 4. Researcher
 
@@ -110,7 +110,7 @@ Before committing, the Reviewer must:
 
 Any substantive change after approval requires renewed review and validation.
 
-After acceptance, follow the submission instructions at the end of section 7 of `scripts/prompts/research_prompt.md`. Push the single approved research commit and open one draft PR targeting `main`. Verify that the PR contains the approved commit, perform the worktree cleanup required by section 7, report its URL, and stop. Verification and novelty reviews start automatically. Do not dispatch or monitor workflows, append commits, force-push, merge, or automatically retry, repair, replace, or close the PR.
+After acceptance, follow the submission instructions at the end of section 7 of `scripts/prompts/research_pr_delivery.md`. Push the single approved research commit and open one draft PR targeting `main`. Verify that the PR contains the approved commit, perform the worktree cleanup required by section 7, report its URL, and stop. Verification and novelty reviews start automatically. Do not dispatch or monitor workflows, append commits, force-push, merge, or automatically retry, repair, replace, or close the PR.
 
 Finish with:
 - The original guarantee and the improved guarantee side by side.

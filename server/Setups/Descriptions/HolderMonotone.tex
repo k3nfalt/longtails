@@ -5,42 +5,41 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Exact-Oracle Monotone Root Finding}
-We seek a zero of a monotone operator $F:E\to E$ on a finite-dimensional real inner product space $E$. Its regularity satisfies $\|F(x)-F(y)\|\leq L\|x-y\|+H\|x-y\|^\alpha$ for all $x,y\in E$, with hidden constants $L,H\geq0$ and $\alpha\in(0,1]$. A given point $x^0\in E$ lies within a hidden radius $R$ of a zero $x^\star$. The algorithm receives only $E$, $x^0$, a scale $r_0$ with $0<r_0\leq R$, and an accuracy $\varepsilon>0$. Each oracle call returns the exact vector $F(x)$. The required output $\bar{x}\in E$ satisfies $\|F(\bar{x})\|\leq\varepsilon$ almost surely.
+\section*{Zeros of H\"older Monotone Operators}
+We seek a zero of a monotone operator $F:E\to E$ on a finite-dimensional real inner product space $E$. The operator satisfies a mixed Lipschitz--H\"older bound with constants $L,H\geq 0$ and exponent $\alpha\in(0,1]$. A given point $x^0\in E$ lies within distance $R>0$ of a zero $x^\star$ of $F$. These regularity parameters and $R$ are hidden from the algorithm. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
-The root-finding problem is
+The problem is to find
 \[
-\text{find }x\in E\text{ such that }F(x)=0,
+x^\star\in E\quad\text{such that}\quad F(x^\star)=0.
 \]
-where the norm is induced by the inner product on $E$. The admissible operators and oracle access satisfy the following conditions.
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The algorithm receives only $E$, $x^0$, a radius parameter $r_0$, and $\varepsilon$, where $0<r_0\leq R$; the parameters $L,H,\alpha,R$ may enter only the oracle-call budget.
 
-\begin{assumption}[Monotonicity and mixed regularity]
+Our assumptions:
+\begin{assumption}[Monotonicity]
 For every $x,y\in E$,
-\begin{align*}
-\langle F(x)-F(y),x-y\rangle &\geq 0,\\
-\|F(x)-F(y)\| &\leq L\|x-y\|+H\|x-y\|^\alpha.
-\end{align*}
-The regularity parameters satisfy $L,H\geq0$ and $0<\alpha\leq1$.
+\[
+\langle F(x)-F(y),x-y\rangle\geq 0.
+\]
 \end{assumption}
 
-\begin{assumption}[Zero and initial radius]
-There exists $x^\star\in E$ such that
-\begin{align*}
-F(x^\star)&=0,\\
-\|x^0-x^\star\|&\leq R.
-\end{align*}
-The supplied scale and accuracy satisfy $0<r_0\leq R$ and $\varepsilon>0$.
+\begin{assumption}[Mixed Lipschitz--H\"older continuity]
+For every $x,y\in E$,
+\[
+\|F(x)-F(y)\|
+\leq L\|x-y\|+H\|x-y\|^{\alpha}.
+\]
 \end{assumption}
 
-\begin{assumption}[Exact operator access]
-At every call index and every query point $x\in E$, the oracle returns $F(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+\begin{assumption}[Initial distance to a zero]
+There exists a zero $x^\star$ of $F$ satisfying
+\[
+\|x^0-x^\star\|\leq R.
+\]
 \end{assumption}
 
-The operator is accessed through this oracle, with adaptive queries permitted anywhere in $E$. The algorithm is selected using only the public inputs $(E,x^0,r_0,\varepsilon)$; the parameters $(L,H,\alpha,R)$ are hidden. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,x^0,r_0,\varepsilon,L,H,\alpha,R)$.
-
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required residual accuracy is
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy the residual criterion
 \[
 \|F(\bar{x})\|\leq\varepsilon
-\qquad \mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
 \end{document}

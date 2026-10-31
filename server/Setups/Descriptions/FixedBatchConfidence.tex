@@ -5,41 +5,41 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Fixed-Batch Quadratic Confidence Optimization}
-We minimize a population quadratic $f:\mathbb{R}^2\to\mathbb{R}$ from an initial point $x^0\in\mathbb{R}^2$. For a probability law $p$ and a hidden center $u\in\mathbb{R}^2$, the objective is $f(x)=\mathbb{E}_{a\sim p}[\langle a,x-u\rangle^2/2]$, where $\|a\|^2\leq L$ almost surely and $\|x^0-u\|\leq R$. An oracle call at $x$ returns $\langle a,x-u\rangle a$ using an independent sample $a\sim p$. Given $\varepsilon>0$ and $\delta\in(0,1)$, the output $\bar{x}$ must satisfy $\mathbb{P}(f(\bar{x})-f(u)>\varepsilon)\leq\delta$. Only $L>0$ and $x^0$ are public algorithm inputs.
+\section*{Confidence Guarantees for Quadratic Minimization}
+We consider minimizing $f(x)=\tfrac12\mathbb{E}_{a\sim\nu}[\langle a,x-x^\star\rangle^2]$ over $x\in\mathbb{R}^2$, where $\nu$ is a probability distribution and $x^\star\in\mathbb{R}^2$ is an unknown minimizer. In the Euclidean norm, $\|a\|^2\leq L$ holds $\nu$-almost surely for $L>0$, and a given point $x^0$ satisfies $\|x^0-x^\star\|\leq R$ for $R>0$. Each oracle call at $x$ returns $\langle a,x-x^\star\rangle a$ using a fresh independent sample from $\nu$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
 
-The problem is
+The optimization problem is
 \[
-\min_{x\in\mathbb{R}^2} f(x),
+\min_{x\in\mathbb{R}^2} f(x).
 \]
-with the Euclidean norm and inner product. The parameters satisfy $L>0$, $R>0$, $\varepsilon>0$, and $0<\delta<1$.
+We use the standard Euclidean inner product and its induced norm. The algorithm receives only $L$ and $x^0$; the parameters $R$, $\varepsilon$, and $\delta$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Population quadratic and radius]
-There exist a probability law $p$ on $\mathbb{R}^2$ and a point $u\in\mathbb{R}^2$ such that
+Our assumptions:
+\begin{assumption}[Population quadratic and initial distance]
+There exist a Borel probability distribution $\nu$ on $\mathbb{R}^2$ and a point $x^\star\in\mathbb{R}^2$ such that
 \[
 \begin{aligned}
-\|a\|^2 &\leq L \quad p\text{-almost surely},\\
-\|x^0-u\| &\leq R,\\
-f(x) &= \int_{\mathbb{R}^2}\frac{\langle a,x-u\rangle^2}{2}\,p(da)
-\quad\text{for every }x\in\mathbb{R}^2.
+f(x)&=\frac12\mathbb{E}_{a\sim\nu}
+    [\langle a,x-x^\star\rangle^2],
+    &&x\in\mathbb{R}^2,\\
+\|a\|^2&\leq L,
+    &&\nu\text{-almost surely},\\
+\|x^0-x^\star\|&\leq R.
 \end{aligned}
 \]
+In particular, $f$ is a convex quadratic and $f(x^\star)=0$ is its global minimum.
 \end{assumption}
 
-\begin{assumption}[Independent oracle samples]
-The oracle samples form a measurable sequence $(a_k)_{k\geq 0}$ with a common joint law under which the coordinates are independent and each has law $p$.
-\end{assumption}
-
-\begin{assumption}[Oracle access]
-At call $k$, a query $x\in\mathbb{R}^2$ receives the vector
+\begin{assumption}[Independent stochastic gradient samples]
+The sample sequence $(a_k)_{k\geq0}$ consists of measurable, mutually independent random vectors with common distribution $\nu$. It is independent of the algorithm's randomness. At call $k$, a query $x\in\mathbb{R}^2$ receives
 \[
-\langle a_k,x-u\rangle a_k\in\mathbb{R}^2.
+g(x,a_k)=\langle a_k,x-x^\star\rangle a_k.
 \]
-Each reply costs one oracle call. Queries may be chosen adaptively anywhere in $\mathbb{R}^2$, and any algorithm randomness is independent of the oracle samples.
 \end{assumption}
 
-The algorithm is selected using only $(L,x^0)$; the law $p$, center $u$, and parameters $R$, $\varepsilon$, and $\delta$ are not supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple. After at most $K$ calls, the algorithm returns a measurable point $\bar{x}\in\mathbb{R}^2$. The population representation makes $u$ a global minimizer. Under the joint law $\mathbb{P}$ of algorithm and oracle randomness, success requires
+Queries may be made anywhere in $\mathbb{R}^2$. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^2$ must be measurable and satisfy
 \[
-\mathbb{P}\bigl(f(\bar{x})-f(u)>\varepsilon\bigr)\leq\delta.
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta,
 \]
+where $P$ is the joint law of the sample sequence and the algorithm's independent randomness.
 \end{document}

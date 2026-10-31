@@ -1,0 +1,96 @@
+{
+  "setup": "LongTails.Setups.OnlineConvexBoundedGradient",
+  "searched_at": "2026-10-21T20:12:01.575152+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "D \\cdot G \\cdot \\sqrt{T}",
+        "type": "LongTails.Setups.OnlineConvexBoundedGradient.Params → OracleTemplate.Horizon → ℝ",
+        "value": "fun p T => p.D * p.G * √↑T"
+      },
+      "budgets": [
+        {
+          "latex": "D \\cdot G \\cdot \\sqrt{T}",
+          "type": "LongTails.Setups.OnlineConvexBoundedGradient.Params → OracleTemplate.Horizon → ℝ",
+          "value": "fun p T => p.D * p.G * √↑T"
+        }
+      ],
+      "module": "LongTails.Theorems.OnlineGradientDescent",
+      "namespace": "LongTails.Setups.OnlineConvexBoundedGradient",
+      "setup": "LongTails.Setups.OnlineConvexBoundedGradient",
+      "statement": "OracleTemplate.OnlineConvergence LongTails.Setups.OnlineConvexBoundedGradient.spec\n  OracleTemplate.OnlineGradientDescent.bound",
+      "theorem": "OracleTemplate.OnlineGradientDescent.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.OnlineGradientDescent",
+      "theorem": "OracleTemplate.OnlineGradientDescent.result",
+      "references": "- Martin Zinkevich. [Online Convex Programming and Generalized Infinitesimal Gradient Ascent](https://people.eecs.berkeley.edu/~brecht/cs294docs/week1/03.Zinkevich.pdf). 2003 (ICML). Complexity: $O(T)$ exact-gradient oracle calls, one per round, for deterministic regret $O(DG\\sqrt{T})$ using Greedy Projection; its proved bound is $D^2/(2\\eta_T)+(G^2/2)\\sum_{t=1}^T\\eta_t$, giving $DG\\sqrt{T}$ with $\\eta_t=D/(G\\sqrt{T})$. Equivalently, $O(1+D^2G^2/\\varepsilon^2)$ calls suffice for average regret at most $\\varepsilon>0$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Online convex optimization with an arbitrary sequence of differentiable losses f_t, each convex on the same nonempty compact convex set K. No strong convexity or Lipschitz-gradient assumption.",
+        "evidence": "LongTails/Setups/OnlineConvexBoundedGradient.lean: Params.x0; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "At round t, choose x_t in K before receiving exactly ∇f_t(x_t). The reply depends on history only through its length and is independent of the oracle seed. Execution makes exactly T gradient calls, with no additional initialization calls. Public information is d, K, x0, D, G, T; the loss sequence is hidden.",
+        "evidence": "LongTails/Setups/OnlineConvexBoundedGradient.lean: Public, spec.publicInput, spec.Instance, spec.Query, spec.admissible; LongTails/TemplateOnline.lean: OnlineConvergence; LongTails/Template.lean: executeWithTrace and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "K is a subset of Euclidean R^d, with d a natural number, using the Euclidean norm.",
+        "evidence": "LongTails/Setups/OnlineConvexBoundedGradient.lean: Params.d and Params.K."
+      },
+      {
+        "label": "other",
+        "details": "Known positive bounds D and G satisfy diam(K) ≤ D and ‖∇f_t(x)‖ ≤ G for every t and x in K. The positive integer horizon T is known. Losses need not obey any distributional or temporal regularity assumption.",
+        "evidence": "LongTails/Setups/OnlineConvexBoundedGradient.lean: Public; spec.valid; spec.admissible; spec.Instance."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "deterministic",
+        "details": "The regret inequality must hold for every combined algorithm/oracle seed ω and every comparator u, not merely in expectation or almost surely.",
+        "evidence": "LongTails/Setups/OnlineConvexBoundedGradient.lean: spec.successful explicitly quantifies ∀ ω and ∀ u."
+      },
+      {
+        "label": "other",
+        "details": "Static cumulative regret: for every u in K, ∑_{t=0}^{T−1}[f_t(x_t)−f_t(u)] ≤ DG√T. Equivalently, average regret is at most DG/√T. Accuracy concerns the entire query trace; the terminal output is Unit.",
+        "evidence": "LongTails/Setups/OnlineConvexBoundedGradient.lean: spec.successful and spec.Output; supplied budget for OracleTemplate.OnlineGradientDescent.result; LongTails/TemplateOnline.lean: OnlineConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Standard finite-dimensional online convex optimization with bounded gradients, a bounded convex decision set, exact gradient feedback, and static regret. Local implementation and proof verification were not checked; the literature match concerns only the supplied setup and bound."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.OnlineGradientDescent.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.OnlineGradientDescent",
+          "theorem": "OracleTemplate.OnlineGradientDescent.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

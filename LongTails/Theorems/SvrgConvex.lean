@@ -21,9 +21,9 @@ theorem result :
   rcases hp with ⟨hn, hL, hR, hε⟩
   rcases h with ⟨hc, hg, hlip, xstar, hmin, hdist⟩
   let seed0 := (Classical.choice oracle.law.nonempty) 0
-  let g := fun z => oracle.answer 0 (0, z) seed0
+  let g := fun z => oracle.answer [] (0, z) seed0
   have hanswer : ∀ k z seed, oracle.answer k (0, z) seed = g z :=
-    fun k z seed => (hg k seed z.1 z.2).unique (hg 0 seed0 z.1 z.2)
+    fun k z seed => (hg k seed z.1 z.2).unique (hg [] seed0 z.1 z.2)
   let S := Nat.clog 2 ⌈17 * q.L * q.R ^ 2 / (2 * q.ε)⌉₊
   let K := q.n * S + ⌈68 * q.L * q.R ^ 2 / q.ε⌉₊
   have hK : queryCount q.n 2 S ≤ K := by
@@ -46,7 +46,7 @@ theorem result :
     have hnat : 4 * 2 ^ S ≤ ⌈68 * q.L * q.R ^ 2 / q.ε⌉₊ := by
       exact_mod_cast hreal.trans (Nat.le_ceil _)
     exact (Nat.mul_le_mul_left 4 (Nat.sub_le _ _)).trans hnat
-  have hrate := epochRun_rate (oracle := g) hL hR hc (hg 0 seed0) (hlip 0 seed0) hmin hdist S
+  have hrate := epochRun_rate (oracle := g) hL hR hc (hg [] seed0) (hlip [] seed0) hmin hdist S
   have hceil : 17 * q.L * q.R ^ 2 / (2 * q.ε) ≤ (2 : ℝ) ^ S := by
     calc
       _ ≤ (⌈17 * q.L * q.R ^ 2 / (2 * q.ε)⌉₊ : ℝ) := Nat.le_ceil _

@@ -1,0 +1,63 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Noisy Batch Quadratic Perceptron}
+We consider strict separation of vectors $a_1,\ldots,a_n\in\mathbb{R}^d$, where $n\geq1$ and $d\geq0$ are integers, by quadratic weights $x=(v,s)\in\mathbb{R}^d\times\mathbb{R}$. The vectors are bounded and share a unit separating direction with positive margin. At a query $(i,x)$, the oracle returns the margin $s\langle a_i,v\rangle$ and direction $(s a_i,\langle a_i,v\rangle)$. We analyze the noisy batch quadratic perceptron, initialized at a given point, with independent standard Gaussian perturbations scaled by $\sigma>0$. For $\delta\in(0,1)$, the goal is an output $\bar{x}=(\bar{v},\bar{s})$ satisfying $\bar{s}\langle a_i,\bar{v}\rangle>0$ for every $i$ with probability at least $1-\delta$.
+
+Equip the weight space $E=\mathbb{R}^d\times\mathbb{R}$ with the Euclidean product norm
+\[
+\|(v,s)\|^2=\|v\|_2^2+s^2.
+\]
+For each data vector, define its quadratic margin and update direction by
+\[
+\begin{aligned}
+m_i(v,s)&=s\langle a_i,v\rangle,\\
+g_i(v,s)&=(s a_i,\langle a_i,v\rangle).
+\end{aligned}
+\]
+The task is to find $x\in E$ such that $m_i(x)>0$ for all $i\in\{1,\ldots,n\}$. The algorithm receives $d$, $n$, a radius $R$, a margin $\gamma$, the noise scale $\sigma$, the starting point $x^0\in E$, and the prescribed noise source; only the oracle-call budget may additionally depend on $\delta$.
+
+Our assumptions:
+\begin{assumption}[Bounded separable data]
+The parameters satisfy $0<\gamma\leq R$. There exists $u\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+\|u\|_2&=1,\\
+\|a_i\|_2&\leq R,\qquad
+\langle u,a_i\rangle\geq\gamma,
+&&i=1,\ldots,n.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Gaussian perturbations]
+The prescribed noise source consists of a probability space $(\Omega,\mathcal{F},\nu)$ and measurable maps $Z_k:\Omega\to E$, $k\geq0$. Under $\nu$, these maps are mutually independent and satisfy
+\[
+Z_k\sim\mathcal{N}(0,I_{d+1}),\qquad k\geq0,
+\]
+where $I_{d+1}$ is the identity on $E$. The perturbation scale satisfies $\sigma>0$.
+\end{assumption}
+
+Queries may use any index $i\in\{1,\ldots,n\}$ and any weight $x\in E$. The oracle returns the exact pair $(m_i(x),g_i(x))$; the Gaussian noise enters the weight updates.
+
+Our formulation is algorithm-specific: we analyze the noisy batch quadratic perceptron. The method chooses a fixed step size $\eta>0$ from its available inputs and starts at the given $x^0$. During batch $k$, it queries indices $1,\ldots,n$ in order at the unchanged weight $x^k$. Define
+\[
+V_k=\{i\in\{1,\ldots,n\}:m_i(x^k)\leq0\}.
+\]
+The accumulator starts at zero and adds $g_i(x^k)$ exactly when $i\in V_k$. After a complete scan with $V_k\ne\varnothing$, the method updates
+\[
+x^{k+1}=x^k+\frac{\eta}{n}\sum_{i\in V_k}g_i(x^k)+\sigma Z_k.
+\]
+It then resets the accumulator and begins the next scan at index $1$. If a complete scan has $V_k=\varnothing$, the method freezes at $x^k$: subsequent calls repeat the last query $(n,x^k)$ and leave the weight unchanged. No perturbation is applied on such a scan.
+
+Each complete scan uses $n$ oracle calls. For a prescribed total budget $N\in\mathbb{N}$, the output $\bar{x}$ is the current weight after those calls. An incomplete final scan does not change the weight, and calls made after freezing still count toward $N$. The output must satisfy
+\[
+P\bigl(\exists i\in\{1,\ldots,n\}:m_i(\bar{x})\leq0\bigr)
+\leq\delta,
+\]
+where $P$ is the law of the algorithm's randomness, realizing the prescribed noise source.
+\end{document}

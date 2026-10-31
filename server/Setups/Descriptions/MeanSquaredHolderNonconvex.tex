@@ -5,61 +5,53 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Nonconvex Optimization with Paired Stochastic Gradients}
-We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is Lipschitz, and its objective gap from a given initial point $x^0\in E$ is globally bounded. Each oracle call returns two unbiased stochastic gradients at queried points, evaluated using the same random sample; samples are independent across calls. The stochastic gradients have bounded variance and satisfy a mean-squared H\"older condition with exponent $\nu\in[1/2,1]$. For a prescribed tolerance $\varepsilon>0$, the goal is a measurable random output $\bar{x}\in E$ with integrable gradient norm satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where expectation includes oracle and algorithm randomness.
+\section*{Mean-Squared H\"older Nonconvex Optimization}
+We consider finding an approximate stationary point of a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, where $L>0$, and a given point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$, where $\Delta\geq0$. At a pair $x,y\in E$, the oracle returns unbiased gradient estimates $g(x,\xi),g(y,\xi)$ using one shared sample $\xi$, with independent samples across calls. Their variance is bounded by $\sigma^2$, and their mean-squared difference by $M\|x-y\|^{2\nu}$, where $\sigma,M\geq0$ and $\nu\in[1/2,1]$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, averaging over oracle and independent algorithm randomness.
 
 The underlying optimization problem is
 \[
-\inf_{x\in E} f(x),
+\inf_{x\in E} f(x).
 \]
-where the norm on $E$ is induced by its inner product and $E$ carries its Borel sigma-algebra. The public inputs are $E$, a measurable sample space $\Omega$, the initial point $x^0$, and the parameters
-\[
-L>0,\qquad M\geq0,\qquad \nu\in[1/2,1],\qquad
-\sigma\geq0,\qquad \Delta\geq0,\qquad \varepsilon>0.
-\]
-The objective and oracle satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, the measurable sample space $\Omega$, $x^0$, and all parameters $L,M,\nu,\sigma,\Delta,\varepsilon$.
 
+Our assumptions:
 \begin{assumption}[Smoothness and initial gap]
-The function $f$ is differentiable everywhere on $E$. For every $x,y\in E$,
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$,
 \[
 \begin{aligned}
-\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|,\\
-f(x^0)-f(x) &\leq \Delta.
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f(x)&\leq\Delta.
 \end{aligned}
 \]
 \end{assumption}
 
 \begin{assumption}[Unbiased stochastic gradients]
-There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $p$, the function $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^2$ is integrable under $p$, and
+There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the random vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable under $\xi\sim p$, with
 \[
 \begin{aligned}
-\int_{\Omega} g(x,\omega)\,dp(\omega) &= \nabla f(x),\\
-\int_{\Omega}\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega) &\leq \sigma^2.
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Mean-squared H\"older regularity]
-For every $x,y\in E$, the function $\omega\mapsto\|g(x,\omega)-g(y,\omega)\|^2$ is integrable under $p$ and satisfies
+\begin{assumption}[Mean-squared H\"older continuity]
+For every $x,y\in E$, the random variable $\|g(x,\xi)-g(y,\xi)\|^2$ is integrable under $\xi\sim p$, and
 \[
-\int_{\Omega}\|g(x,\omega)-g(y,\omega)\|^2\,dp(\omega)
+\mathbb{E}_{\xi\sim p}\bigl[\|g(x,\xi)-g(y,\xi)\|^2\bigr]
 \leq M\|x-y\|^{2\nu}.
 \]
 \end{assumption}
 
-\begin{assumption}[Paired oracle access and independent sampling]
-Let $P$ be a probability measure on $\Omega^{\mathbb{N}}$. The coordinate samples $\xi_k:\Omega^{\mathbb{N}}\to\Omega$, for $k=0,1,\ldots$, are measurable, mutually independent under $P$, and each has distribution $p$. At call $k$, the sole oracle, with ID $0$, accepts any pair $(x,y)\in E\times E$ and returns
+At call $k\geq0$, a query $(x_k,y_k)\in E\times E$ receives the pair
 \[
-\bigl(g(x,\xi_k),\,g(y,\xi_k)\bigr)\in E\times E.
+\bigl(g(x_k,\xi_k),g(y_k,\xi_k)\bigr).
 \]
-This paired reply costs one oracle call. Query pairs may be chosen adaptively anywhere in $E\times E$. Internal algorithm randomness is independent of the entire oracle sample sequence.
-\end{assumption}
+The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $p$, and are independent of the algorithm's randomness. Both evaluations within a pair use the same sample; one returned pair counts as one oracle call. Queries may depend on preceding replies.
 
-The algorithm accesses the objective through this oracle and is selected using the public inputs $(E,\Omega,L,M,\nu,\sigma,\Delta,\varepsilon,x^0)$. The function $f$, the map $g$, and the laws $p$ and $P$ are not supplied as public inputs. A call budget $K\in\mathbb{N}$ may depend on the full public parameter tuple and counts paired replies.
-
-After at most $K$ calls, the algorithm must return a point $\bar{x}\in E$. Let $\mathbb{P}$ denote the joint probability law of algorithm and oracle randomness on a measurable space $\Theta$. Success requires that $\bar{x}:\Theta\to E$ be measurable, that $\theta\mapsto\|\nabla f(\bar{x}(\theta))\|$ be integrable under $\mathbb{P}$, and that
+After the allotted calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable, and it must satisfy
 \[
-\int_{\Theta}\|\nabla f(\bar{x}(\theta))\|\,d\mathbb{P}(\theta)
-\leq\varepsilon.
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon,
 \]
+where $P$ is the joint law of the oracle samples and the algorithm's randomness.
 \end{document}

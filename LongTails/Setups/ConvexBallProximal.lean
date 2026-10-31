@@ -1,7 +1,18 @@
-import LongTails.Algorithms.BallProximal
+import LongTails.Template
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.Convex.Function
 import Mathlib.Analysis.Normed.Module.FiniteDimension
+
+namespace OracleTemplate.BallProximal
+
+noncomputable def algorithm {E : Type*} (x0 : E) : Algorithm E E E where
+  State := E
+  initial := fun _ => x0
+  query := fun x => (0, x)
+  update := fun _ y => y
+  output := id
+
+end OracleTemplate.BallProximal
 
 open Set MeasureTheory
 

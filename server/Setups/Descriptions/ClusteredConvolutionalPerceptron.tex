@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Clustered Convolutional Separation}
+We seek a convolutional separator $\theta=((a,b),w)\in\mathbb{R}^2\times\mathbb{R}^d$ for samples $z_0,\ldots,z_n\in\mathbb{R}^d$, where $d\geq1$ and $n\geq0$ are integers. Each sample combines a constant background of bounded, nonzero magnitude with an orthogonal defect; the defects cluster near a small center with a nonzero cyclic difference, subject to a quantitative small-contrast condition. Writing $S$ for the cyclic coordinate shift, the margin is $m_i(\theta)=a\langle z_i,w\rangle+b\langle Sz_i,w\rangle$. At a queried sample and parameter, the oracle returns this margin and its exact parameter derivative. The goal is an output $\bar\theta$ satisfying $m_i(\bar\theta)>0$ for every sample and every realization of the algorithm's randomness.
+
+Equip the feature space $\mathbb{R}^d$ with its Euclidean inner product and norm. For coordinates indexed by $j=0,\ldots,d-1$, define
+\[
+(Sv)_j=v_{(j-1)\bmod d},
+\qquad
+u=\frac{1}{\sqrt d}(1,\ldots,1).
+\]
+The task is the strict feasibility problem of finding $\theta\in\mathbb{R}^2\times\mathbb{R}^d$ with positive margins on all $n+1$ samples. The algorithm receives $d,n,g,R,\mu,\kappa$; the samples and their geometric decomposition are accessed only through the oracle.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The background bounds $g,R$, contrast $\mu$, and derivative margin $\kappa$ satisfy
+\[
+\begin{aligned}
+&0<g\leq R,\qquad \mu>0,\qquad 0<\kappa\leq\frac14,\\
+&\left(\frac{\mu}{4R}\right)^2
+\leq \frac{\kappa^2}{4096}
+\left(\frac{g}{4R}\right)^8.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Clustered sample geometry]
+There exist background coefficients $h_0,\ldots,h_n\in\mathbb{R}$, defects $v_0,\ldots,v_n\in\mathbb{R}^d$, and a center $c\in\mathbb{R}^d$ such that, for every $i=0,\ldots,n$,
+\[
+\begin{aligned}
+z_i&=\frac{h_i}{\sqrt2}\nu+\mu v_i,\\
+g&\leq |h_i|\leq R,\qquad \langle\nu,v_i\rangle=0,\\
+\|v_i-c\|&\leq\frac{\kappa}{64}.
+\end{aligned}
+\]
+The center satisfies
+\[
+\|c\|\leq\frac12,
+\qquad
+\left\|\frac{c-Sc}{\sqrt2}\right\|\geq2\kappa.
+\]
+\end{assumption}
+
+A query consists of an index $i\in\{0,\ldots,n\}$ and any parameter $\theta=((a,b),w)\in\mathbb{R}^2\times\mathbb{R}^d$. The exact oracle returns the scalar margin $m_i(\theta)$ and the direction
+\[
+G_i(\theta)=
+\bigl((\langle z_i,w\rangle,\langle Sz_i,w\rangle),
+      az_i+bSz_i\bigr).
+\]
+After the allotted oracle calls, the output $\bar\theta\in\mathbb{R}^2\times\mathbb{R}^d$ must satisfy
+\[
+m_i(\bar\theta)>0
+\qquad\text{for every }i\in\{0,\ldots,n\},
+\]
+for every realization of the algorithm's randomness.
+\end{document}

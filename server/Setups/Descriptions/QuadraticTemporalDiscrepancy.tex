@@ -5,57 +5,56 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Quadratic Optimization with Temporal Discrepancy}
-We consider minimizing $f(x)=\|A(x-x^\star)\|^2/2$ on a real Hilbert space $E$, where $A:E\to E$ is bounded and linear and $x^\star\in E$. For constants $0<\mu\leq L$, assume $\mu\|v\|^2\leq\|Av\|^2\leq L\|v\|^2$ for every $v\in E$. The initial point $x^0\in E$ satisfies $f(x^0)\leq\Delta$, where $\Delta\geq0$. Call $k$ at $x\in E$ returns $\nabla f(x)+e_k$, where $(e_k)_{k\geq0}\subset E$ is deterministic and every prefix sum has norm at most $D\geq0$. Given $\varepsilon>0$, the required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. Only $(E,L,x^0,\mu)$ are public algorithm inputs.
+\section*{Quadratic Minimization with Temporal Discrepancy}
+We consider minimizing $f(x)=\|A(x-x^\star)\|^2/2$ on a real Hilbert space $E$, where $A:E\to E$ is bounded and linear and $x^\star\in E$. For constants $0<\mu\leq L$, assume $\mu\|v\|^2\leq\|Av\|^2\leq L\|v\|^2$ for every $v\in E$. A given starting point $x^0\in E$ satisfies $f(x^0)\leq\Delta$, where $\Delta\geq0$. At call $k\geq0$, the oracle returns $\nabla f(x)+e_k$, with fixed errors $e_k\in E$ whose partial sums have norm at most $D\geq0$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where $E$ may be infinite dimensional and its norm is induced by its inner product. The objective and oracle satisfy the following conditions.
+The norm is induced by the inner product on $E$, and $A^*$ denotes the Hilbert-space adjoint of $A$. The algorithm receives only $E$, $L$, $\mu$, and $x^0$; the discrepancy bound $D$, initial objective bound $\Delta$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Quadratic structure and spectral bounds]
-The instance consists of a bounded linear operator $A:E\to E$ and a point $x^\star\in E$. Writing $A^*$ for the Hilbert space adjoint, the objective and its gradient are
+Our assumptions:
+\begin{assumption}[Quadratic structure]
+The objective and its gradient are
 \[
 \begin{aligned}
 f(x)&=\frac12\|A(x-x^\star)\|^2,\\
-\nabla f(x)&=A^*A(x-x^\star).
+\nabla f(x)&=A^*A(x-x^\star),
 \end{aligned}
+\qquad x\in E,
 \]
-The parameters satisfy $0<\mu\leq L$, and, for every $v\in E$,
+where $A:E\to E$ is a bounded linear operator satisfying
 \[
-\mu\|v\|^2\leq\|Av\|^2\leq L\|v\|^2.
+\mu\|v\|^2\leq\|Av\|^2\leq L\|v\|^2,
+\qquad v\in E.
 \]
-Thus $f$ is $\mu$-strongly convex with $L$-Lipschitz gradient, and $x^\star$ is its unique minimizer with $f(x^\star)=0$.
+In particular, $x^\star$ is the unique minimizer and $f(x^\star)=0$.
 \end{assumption}
 
 \begin{assumption}[Initial objective bound]
-The initial point $x^0\in E$ and the parameter $\Delta\geq0$ satisfy
+The given starting point satisfies
 \[
 f(x^0)\leq\Delta.
 \]
 \end{assumption}
 
-\begin{assumption}[Bounded temporal discrepancy]
-For a parameter $D\geq0$, there exists a fixed deterministic sequence $(e_k)_{k\geq0}\subset E$ such that, at every call index $k\geq0$ and every query $x\in E$, the oracle returns
+\begin{assumption}[Temporal discrepancy]
+There is a fixed deterministic sequence $(e_k)_{k\geq0}$ in $E$ such that the oracle reply at call $k$, for any query $x\in E$, is
 \[
-g_k(x)=A^*A(x-x^\star)+e_k
+g_k(x)=A^*A(x-x^\star)+e_k.
 \]
-for every realization of its randomness. The same sequence applies to all query points and satisfies
+Its cumulative error satisfies
 \[
-\left\|\sum_{k=0}^{n-1}e_k\right\|\leq D
-\qquad\text{for every integer }n\geq0,
+\left\|\sum_{k=0}^{n-1}e_k\right\|\leq D,
+\qquad n=0,1,2,\ldots,
 \]
-with the empty sum equal to zero. Each query returns one vector in $E$ and costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
+with the empty sum equal to zero.
 \end{assumption}
 
-Queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only $(E,L,x^0,\mu)$; the operator $A$, minimizer $x^\star$, and error sequence are accessed only through the oracle. The parameters $D$, $\Delta$, and $\varepsilon>0$ are not supplied to the algorithm. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,x^0,\mu,D,\Delta,\varepsilon)$.
-
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires
+After the allotted oracle calls, the output must satisfy
 \[
-f(\bar{x})-f(x^\star)
-=\frac12\|A(\bar{x}-x^\star)\|^2
-\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
 \]
 \end{document}

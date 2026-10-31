@@ -5,43 +5,56 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Strongly Convex Quadratic Finite Sums}
-We minimize the average of $n\geq1$ quadratic functions on a real Hilbert space $E$, possibly infinite dimensional. Each component has a symmetric linear operator of norm at most $L$, and the average has curvature at least $\mu$, where $0<\mu\leq L$. A given point $x^0\in E$ is within $R\geq0$ of a minimizer $x^\star$ whose component gradients have norms at most $G\geq0$. An oracle query specifies a component index and a point, and returns that component's exact gradient. For $\varepsilon>0$, the goal is a point $\bar{x}\in E$ whose expected objective gap from $x^\star$ is at most $\varepsilon$.
+\section*{Quadratic Finite-Sum Minimization}
+We consider minimizing $f=n^{-1}\sum_{i=1}^n f_i$ on a real Hilbert space $E$, where $n\geq1$ and each $f_i:E\to\mathbb{R}$ is quadratic. Component Hessians have operator norm at most $L>0$, and their average is bounded below by $\mu I$, where $0<\mu\leq L$ and $I$ is the identity on $E$. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for the minimizer $x^\star$, with $R\geq0$ and $\|\nabla f_i(x^\star)\|\leq G$ for $G\geq0$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
 
-Let $A_i:E\to E$ be continuous linear operators and $b_i\in E$ for $i\in\{1,\ldots,n\}$. With the norm induced by the inner product on $E$, the problem is
+Write the component objectives and their average as
 \[
-\min_{x\in E} f(x),\qquad
-f(x)=\frac{1}{n}\sum_{i=1}^{n}
-\left(\frac{1}{2}\langle x,A_i x\rangle+\langle b_i,x\rangle\right).
+\begin{aligned}
+f_i(x)&=\frac12\langle x,A_i x\rangle+\langle b_i,x\rangle,\qquad i=1,\ldots,n,\\
+f(x)&=\frac1n\sum_{i=1}^n f_i(x),
+\end{aligned}
 \]
-The component functions and oracle satisfy the following conditions.
-
-\begin{assumption}[Component operators and average curvature]
-Each $A_i$ is symmetric, and, for every $i$ and $x\in E$,
-\begin{align*}
-\|A_i\|&\leq L,\\
-\frac{1}{n}\sum_{i=1}^{n}\langle x,A_i x\rangle&\geq\mu\|x\|^2.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Stationary point and component bounds]
-There exists $x^\star\in E$ such that
-\begin{align*}
-\sum_{i=1}^{n}(A_i x^\star+b_i)&=0,\\
-\|x^0-x^\star\|&\leq R,\\
-\|A_i x^\star+b_i\|&\leq G
-\qquad\text{for every }i.
-\end{align*}
-The curvature condition makes this stationary point a global minimizer.
-\end{assumption}
-
-\begin{assumption}[Exact component oracle]
-A query $(i,x)\in\{1,\ldots,n\}\times E$ returns $A_i x+b_i\in E$ at every call index and for every realization of the oracle randomness. Each query costs one oracle call. Algorithm randomness is independent of oracle randomness.
-\end{assumption}
-
-The public inputs are $(E,n,L,\mu,R,G,\varepsilon,x^0)$; the component operators and vectors are accessed through oracle queries, which may be chosen adaptively anywhere in $E$. An algorithm selected from these public inputs returns a point $\bar{x}\in E$ after at most $K\in\mathbb{N}$ oracle calls, where the call budget may depend on the public inputs. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, success requires $\bar{x}$ to be measurable, its objective gap to be integrable, and
+where each $A_i:E\to E$ is a bounded linear operator and $b_i\in E$. The optimization problem is
 \[
-\int \bigl(f(\bar{x})-f(x^\star)\bigr)\,d\mathbb{P}
-\leq\varepsilon.
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $n$, $L$, $\mu$, $R$, $G$, $\varepsilon$, and $x^0$; the operators $A_i$ and vectors $b_i$ are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Component curvature and strong convexity]
+For every $i\in\{1,\ldots,n\}$, the operator $A_i$ is symmetric and bounded by $L$:
+\[
+\begin{aligned}
+\langle A_i x,y\rangle&=\langle x,A_i y\rangle,\qquad x,y\in E,\\
+\|A_i\|_{\mathrm{op}}&\leq L.
+\end{aligned}
+\]
+The average curvature satisfies
+\[
+\frac1n\sum_{i=1}^n\langle x,A_i x\rangle\geq\mu\|x\|^2,
+\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and component gradients]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+\sum_{i=1}^n(A_i x^\star+b_i)&=0,\\
+\|x^0-x^\star\|&\leq R,\\
+\|A_i x^\star+b_i\|&\leq G,\qquad i=1,\ldots,n.
+\end{aligned}
+\]
+The curvature condition makes $x^\star$ the unique global minimizer of $f$.
+\end{assumption}
+
+At any selected index $i\in\{1,\ldots,n\}$ and point $x\in E$, the oracle returns the exact component gradient
+\[
+\nabla f_i(x)=A_i x+b_i.
+\]
+After the allotted component-gradient calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
 \]
 \end{document}

@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Heavy-tailed relative-moment convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedStrongGrowthConvex.lean}{HeavyTailedStrongGrowthConvex}.}\label{tab:HeavyTailedStrongGrowthConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a separable real Hilbert space, with $L$-Lipschitz gradient, a minimizer $x^\star$, and $\|x_0-x^\star\|\le R$. Here $L,\varepsilon>0$, $R,\rho\ge0$, and $1<p\le2$. The jointly measurable oracle has integrable samples and integrable central $p$th moments, with $\int g(x,\omega)\,d\mu=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^p\,d\mu\le\rho\|\nabla f(x)\|^p$. Samples are IID with marginal $\mu$ under probability law $P$. Target: measurable output with integrable gap and $\int[f(\mathrm{output})-f(x^\star)]\,dP\le\varepsilon$. Result \textbf{(1)} constructs SplitRobustAcceleration, tuned using $L,R,\rho,p,\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SplitRobustHeavyTailedAcceleration.lean}{Split\allowbreak Robust\allowbreak Heavy\allowbreak Tailed\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SplitRobustHeavyTailedAcceleration.md}{(review)}
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt H+\mathbf{1}_{\{\rho>0\}}\bigl[1+(2^{34}\rho)^{1/(p-1)}\bigr]\\[-2pt]&\qquad\cdot(1+\log H)H^{p/(3p-2)}\end{aligned}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Clip-SSTM \citep[Theorem 5.2]{htsgNekrasova2026v1}; finite-dimensional restriction, moment model with $\sigma_0=0$, $\sigma_1^p=\rho$
+& $\mathcal{O}_{p}\!\left(A[1+\log(A/\beta)]\right)$ calls; $\Pr\{f(y)-f(x^\star)\le\varepsilon\}\ge1-\beta$.
+& \textbf{(1)}: For fixed $1<p<2$, $\rho>0$, and $\beta$, smaller accuracy exponent at large $T$, with expectation rather than high probability. At $p=3/2$: $\mathcal{O}(T^{3/5}\log T)$ versus $\mathcal{O}(T^{3/2}\log T)$.
+& \textbf{(1)}: Expectation only; excludes additive noise and weak-$L^p$ tails. Large $p$-dependent factor; batching floor loses for $0<\rho\lesssim T^{-p^2/[2(3p-2)]}$, up to logarithms, at fixed $p$ and confidence. \\
+\midrule
+\textbf{(3)} AGNES \citep[Theorem 3]{sgmssGupta2024v3}; $p=2$, finite-dimensional restriction
+& $\mathcal{O}\!\left((1+\rho)\sqrt H\right)$ calls; expected objective gap at most $\varepsilon$.
+& \textbf{(1)}: Scope extends to $1<p<2$, allowing infinite variance. Matches the deterministic accelerated rate at $\rho=0$.
+& \textbf{(1)}: At $p=2$ and fixed $\rho>0$, loses a factor $1+\log H$; uses batched median-of-means pilots. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$, $H=\max\{1,T\}$, $A=\sqrt H+\rho^{1/(p-1)}H^{p/[2(p-1)]}$; $\beta\in(0,1)$ is the failure probability. $\mathcal{O}_p$ allows constants depending on $p$; $\mathbf{1}_{\{\rho>0\}}$ is an indicator. Costs count individual stochastic-gradient samples, including all batches.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

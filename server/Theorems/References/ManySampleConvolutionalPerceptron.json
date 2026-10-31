@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.ManySampleConvolutionalPerceptron",
+  "searched_at": "2026-10-24T06:17:33.959550+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{34359738368 \\cdot \\left(\\frac{upper}{lower}\\right)^{4} \\cdot \\left(\\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)^{2} \\cdot \\left(samples + 1 + \\frac{upper}{lower} \\cdot \\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)}{derivativeMargin^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ManySampleConvolutionalPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈34359738368 * (p.upper / p.lower) ^ 4 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2) ^ 2 *\n        (↑p.samples + 1 + p.upper / p.lower * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)) /\n      p.derivativeMargin ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{34359738368 \\cdot \\left(\\frac{upper}{lower}\\right)^{4} \\cdot \\left(\\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)^{2} \\cdot \\left(samples + 1 + \\frac{upper}{lower} \\cdot \\log\\left(\\frac{16 \\cdot upper^{2}}{contrast^{2}}\\right)\\right)}{derivativeMargin^{2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ManySampleConvolutionalPerceptron.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈34359738368 * (p.upper / p.lower) ^ 4 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2) ^ 2 *\n        (↑p.samples + 1 + p.upper / p.lower * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)) /\n      p.derivativeMargin ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ManySampleConvolutionalPerceptronAcceleration",
+      "namespace": "LongTails.Setups.ManySampleConvolutionalPerceptron",
+      "setup": "LongTails.Setups.ManySampleConvolutionalPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ManySampleConvolutionalPerceptron.spec\n  OracleTemplate.ManySampleConvolutionalPerceptron.budget",
+      "theorem": "OracleTemplate.ManySampleConvolutionalPerceptron.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ManySampleConvolutionalPerceptronAcceleration",
+      "theorem": "OracleTemplate.ManySampleConvolutionalPerceptron.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict separation in jointly variable parameters θ=((c₁,c₂),v), with signed margins m_b(θ)=c₁⟨b,v⟩+c₂⟨Sb,v⟩, where S is the cyclic shift. These bilinear inequalities define a nonconvex feasibility problem; no optimization objective is specified.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Space, signedSample, Separates; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin, shift."
+      },
+      {
+        "label": "other",
+        "details": "Finite-data binary classification feasibility: find one parameter vector strictly separating one positive reference from n negative samples.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Data, signedSample, Separates, spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects an index i∈Fin(n+1) and arbitrary θ. The reply supplies the exact gradient of that signed sample's margin: ((⟨b,v⟩,⟨Sb,v⟩),c₁b+c₂Sb). Replies are independent of history and seeds; there is no oracle error or sampling requirement. Each indexed query counts as one oracle call.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Query, answer, spec.admissible; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: direction; LongTails/Template.lean: executeWithTrace."
+      },
+      {
+        "label": "function_value",
+        "details": "The same oracle call also returns the exact signed margin m_b(θ), without an additional charge.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Reply.margin, answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in Euclidean ℝᵈ and parameters in ℝ²×ℝᵈ, with d>0. The shift is a cyclic coordinate permutation and a=d⁻¹ᐟ²1 is the unit constant axis.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, Space, shift; LongTails/Setups/ManySampleConvolutionalPerceptron.lean: axis, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Write g=lower, R=upper, μ=contrast and κ=derivativeMargin. Hidden data satisfy reference=(r/√2)a and sampleᵢ=(hᵢ/√2)a+μeᵢ, with r,hᵢ∈[g,R], ⟨a,eᵢ⟩=0 and ‖eᵢ‖≤1/√2. A common hidden unit vector u satisfies −⟨(eᵢ−Seᵢ)/√2,u⟩≥κ for every sample. All six Params fields are public; the data and geometry witnesses are hidden. Validity requires n>0, 0<g≤R, μ>0 and 0<κ≤1. With ρ=g/(4R), δ=(μ/(4R))² and B=⌈8ρ⁻²log(1/δ)⌉₊+2, it additionally requires δ≤exp(−1), δ(B+1)³≤κ³/16777216 and δ(B+1)²≤κ²ρ⁴/16777216. No initialization or algorithm-family restriction is imposed by this setup.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Geometry, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Template.lean: Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "Return a single θ with m_reference(θ)>0 and m_sampleᵢ(θ)<0 for every i. There is no epsilon tolerance, prescribed positive margin magnitude, or norm bound on the output.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: signedSample, Separates, spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every seed outcome ω, including any algorithm randomness. This is a universal guarantee, stronger than almost-sure success; the probability measure is unused.",
+        "evidence": "LongTails/Setups/ManySampleConvolutionalPerceptron.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines bilinear two-tap convolutional separation with a constant-axis reference, centered small-contrast defects, a common cyclic-difference separator, and explicit coupled smallness restrictions. These are specialized geometric assumptions beyond standard separable classification."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ManySampleConvolutionalPerceptron.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ManySampleConvolutionalPerceptronAcceleration",
+          "theorem": "OracleTemplate.ManySampleConvolutionalPerceptron.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

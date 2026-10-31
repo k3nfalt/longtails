@@ -28,17 +28,18 @@ lemma execute_det {Q Rp O : Type*} {n : ℕ} (oracle : Oracle Q Rp n) (A : Algor
     (K : ℕ) (seed : A.Seed) (ξ : (k : ℕ) → oracle.Seed k) :
     execute oracle A (counts A ans K (A.initial seed)) seed ξ =
       A.output ((fun s => A.update s (ans (A.query s)))^[K] (A.initial seed)) := by
-  unfold execute
+  unfold execute executeWithTrace
   rw [counts_sum]
   generalize A.initial seed = state
-  generalize (0 : ℕ) = call
-  induction K generalizing state call with
+  generalize ([] : List ((Fin n × Q) × Rp)) = history
+  induction K generalizing state history with
   | zero => rfl
   | succ K ih =>
       have hc : counts A ans (K + 1) state (A.query state).1 =
           counts A ans K (A.update state (ans (A.query state))) (A.query state).1 + 1 := by
         simp [counts]
-      change (if counts A ans (K + 1) state (A.query state).1 = 0 then _ else _) = _
+      change (if counts A ans (K + 1) state (A.query state).1 = 0 then
+        (A.output state, history) else _).1 = _
       rw [hc]
       simp only [Nat.add_eq_zero_iff, Nat.one_ne_zero, and_false, ite_false]
       rw [h]

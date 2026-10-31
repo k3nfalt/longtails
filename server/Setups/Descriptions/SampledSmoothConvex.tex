@@ -5,62 +5,57 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Sampled Smooth Convex Optimization}
-We minimize $f(x)=\mathbb{E}_{\xi\sim\mu}[\ell(\xi,x)]$ on a separable real Hilbert space $E$, where $\mu$ is a probability law on a measurable sample space $\Xi$. Each sampled loss $\ell(\xi,\cdot)$ is convex with $L$-Lipschitz gradient, $L>0$, and losses are integrable. A given $x^0\in E$ is within $R\geq0$ of a global minimizer $x^\star$, where $\mathbb{E}_{\xi\sim\mu}\|\nabla_x\ell(\xi,x^\star)\|^2\leq\sigma^2$ for $\sigma\geq0$. Each call returns a sampled gradient using a fresh independent sample. For $\varepsilon>0$, success requires a measurable output $\bar{x}$ with integrable gap and $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, whose law equals that of a linearly decaying stochastic-gradient last iterate.
+\section*{Linearly Decaying SGD for Sampled Losses}
+We minimize $f(x)=\mathbb{E}_{\xi\sim\nu}[\ell(\xi,x)]$ on a separable real Hilbert space $E$, where $\nu$ is a probability law on a measurable sample space $\Xi$ and each sample loss $\ell(\xi,\cdot)$ is convex with $L$-Lipschitz gradient, $L>0$. A given starting point $x^0$ lies within distance $R\geq0$ of a minimizer $x^\star$, where $\mathbb{E}_{\xi\sim\nu}\|\nabla_x\ell(\xi,x^\star)\|^2\leq\sigma^2$ for $\sigma\geq0$. The oracle returns sample gradients using independent samples from $\nu$. We analyze linearly decaying stochastic gradient descent (SGD), seeking a measurable last iterate $\bar{x}$ with integrable objective gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $\varepsilon>0$ and expectation is over the samples.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
-\qquad
-f(x)=\int_{\Xi}\ell(\xi,x)\,\mu(d\xi).
+\min_{x\in E} f(x).
 \]
-The norm on $E$ is induced by its inner product. The public inputs are $E$, $\Xi$, $L$, $R$, $\sigma$, $\varepsilon$, and $x^0$, with the parameter ranges stated above. The probability law $\mu$, sampled losses $\ell$, and sampled-gradient map $g:\Xi\times E\to E$ belong to the unknown instance. They satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $\Xi$, $L$, $R$, $\sigma$, $\varepsilon$, and $x^0$; the distribution $\nu$ and sample losses are accessed through the oracle.
 
-\begin{assumption}[Sampled convexity and smoothness]
-For every $\xi\in\Xi$, the function $\ell(\xi,\cdot)$ is differentiable everywhere. For every $x,y\in E$ and $t\in[0,1]$,
-\begin{align*}
-g(\xi,x)&=\nabla_x\ell(\xi,x),\\
+Our assumptions:
+\begin{assumption}[Sample convexity and smoothness]
+For every $\xi\in\Xi$, the function $\ell(\xi,\cdot):E\to\mathbb{R}$ is Fr\'echet differentiable. Write $g(\xi,x)=\nabla_x\ell(\xi,x)$. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
 \ell(\xi,(1-t)x+ty)&\leq(1-t)\ell(\xi,x)+t\ell(\xi,y),\\
 \|g(\xi,x)-g(\xi,y)\|&\leq L\|x-y\|.
-\end{align*}
+\end{aligned}
+\]
+The map $g:\Xi\times E\to E$ is jointly measurable, and $\ell(\cdot,x)$ is integrable under $\nu$ for every $x\in E$.
 \end{assumption}
 
-\begin{assumption}[Measurability and loss integrability]
-The map $(\xi,x)\mapsto g(\xi,x)$ is jointly measurable. For every $x\in E$, the function $\xi\mapsto\ell(\xi,x)$ is integrable under $\mu$.
-\end{assumption}
-
-\begin{assumption}[Attainment and gradient moment]
+\begin{assumption}[Initial distance and noise at a minimizer]
 There exists $x^\star\in E$ such that
-\begin{align*}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
 \|x^0-x^\star\|&\leq R.
-\end{align*}
-At this same minimizer, $\xi\mapsto\|g(\xi,x^\star)\|^2$ is integrable and
+\end{aligned}
+\]
+The random variable $\|g(\xi,x^\star)\|^2$ is integrable under $\nu$ and satisfies
 \[
-\int_{\Xi}\|g(\xi,x^\star)\|^2\,\mu(d\xi)\leq\sigma^2.
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(\xi,x^\star)\|^2\bigr]\leq\sigma^2.
 \]
 \end{assumption}
 
-\begin{assumption}[Independent sampled-gradient access]
-At call index $k\geq0$, a query $x\in E$ returns $g(\xi_k,x)\in E$, where $(\xi_k)_{k\geq0}$ has law $\mu^{\otimes\mathbb{N}}$. Each query costs one oracle call. Queries may be chosen adaptively anywhere in $E$, and any internal algorithm randomness is independent of the sample sequence.
-\end{assumption}
+Queries may be made at any point of $E$. At call $k$, the oracle returns $g(\xi_k,x)$ for the queried point $x$, where $(\xi_k)_{k\geq0}$ are measurable, mutually independent random variables with common law $\nu$. Let $P$ denote their joint law.
 
-An externally specified budget $K\in\mathbb{N}$ may depend on the full public parameter tuple. The algorithm uses at most $K$ oracle calls and returns a point $\bar{x}\in E$. Besides the accuracy requirement, success imposes a specific output-distribution condition. For a deterministic integer $T\geq0$, define
+Our result is algorithm-specific: we analyze linearly decaying SGD. The method chooses a deterministic scale $\eta\geq0$ and an integer $T\geq0$ from the available inputs. Starting from the given $x^0$, it performs
 \[
-\eta_T=\frac{R}{8LR+\sigma\sqrt{T}},
+\begin{aligned}
+a_k&=\begin{cases}
+\eta(T-k)/T,&T>0,\\
+0,&T=0,
+\end{cases}\\
+x^{k+1}&=x^k-a_k g(\xi_k,x^k),\qquad k=0,\ldots,N-1,
+\end{aligned}
 \]
-with the quotient taken as zero when its denominator is zero. For independent samples $(\xi_k)_{k\geq0}$ with common law $\mu$, define the iterates by
-\begin{align*}
-x_T^0&=x^0,\\
-x_T^{k+1}&=x_T^k-\eta_T\frac{T-k}{T}\,g(\xi_k,x_T^k),
-\qquad 0\leq k<T.
-\end{align*}
-For $T=0$, the last iterate is $x_0^0=x^0$. Success requires the existence of such a $T$ for which the law of $\bar{x}$ equals the law of $x_T^T$; the distributional condition does not identify $T$ with the call budget $K$.
+where $N\geq0$ is the allotted number of oracle calls. The tuning parameter $T$ need not equal $N$. Each update uses one oracle reply, and the output is the last iterate $\bar{x}=x^N$, with $\bar{x}=x^0$ when $N=0$.
 
-Writing $\mathbb{P}$ for the joint probability law of the algorithm and oracle randomness, the output must be measurable. There must also exist a global minimizer $x^\star$ such that the objective gap is integrable under $\mathbb{P}$ and
+The output must be measurable under $P$, its objective gap must be integrable, and it must satisfy
 \[
-\int \bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)\,\mathbb{P}(d\omega)
-\leq\varepsilon.
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
 \]
-Since all global minimizers have the same objective value, the minimizer witnessing the initial distance and gradient-moment conditions may be used in this accuracy criterion.
 \end{document}

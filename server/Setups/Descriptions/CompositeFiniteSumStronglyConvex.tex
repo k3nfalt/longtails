@@ -6,60 +6,53 @@
 \newtheorem{assumption}{Assumption}
 \begin{document}
 \section*{Strongly Convex Composite Finite Sums}
-We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)+r(x)$ on a real Hilbert space $E$, where $n\geq1$ is an integer, each $f_i:E\to\mathbb{R}$ is convex with $L$-Lipschitz gradient, and $r:E\to\mathbb{R}$ is $\mu$-strongly convex, with $L,\mu>0$. A given $x^0\in E$ satisfies $F(x^0)-F(x^\star)\leq\Delta$ for a global minimizer $x^\star$ and $\Delta\geq0$. The oracle returns exact component gradients or exact minimizers of quadratically regularized linear perturbations of $r$. For $\varepsilon>0$, success requires a measurable output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where expectation is over all algorithm and oracle randomness.
+We minimize $F(x)=n^{-1}\sum_{i=1}^n f_i(x)+r(x)$ on a real Hilbert space $E$, where $n\geq1$, the functions $f_i:E\to\mathbb{R}$ are convex with $L$-Lipschitz gradients, and $r:E\to\mathbb{R}$ is $\mu$-strongly convex, with $L,\mu>0$. A given point $x^0\in E$ satisfies $F(x^0)-F(x^\star)\leq\Delta$ for a global minimizer $x^\star$ and $\Delta\geq0$. The oracle returns component gradients and exact proximal minimizers of $r$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
 
 The optimization problem is
-\begin{equation}
-\label{eq:problem}
-\min_{x\in E} F(x),
-\qquad F(x)=\frac{1}{n}\sum_{i=1}^n f_i(x)+r(x).
-\end{equation}
-The space $E$ may be infinite dimensional, is equipped with a measurable structure, and has norm induced by its inner product. The public inputs are $(E,n,L,\mu,\Delta,\varepsilon,x^0)$, with the ranges specified above. The component functions, regularizer, and proximal map are accessed through the oracle under the following conditions.
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$, which is equipped with a measurable structure. The algorithm receives $E$, $n$, $L$, $\mu$, $\Delta$, $\varepsilon$, and $x^0$; the component functions and regularizer are accessed through the oracle.
 
-\begin{assumption}[Component convexity and smoothness]
-Each $f_i$ is differentiable everywhere on $E$. For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
-\begin{align}
-f_i((1-t)x+ty)
-&\leq (1-t)f_i(x)+tf_i(y),\\
-\|\nabla f_i(x)-\nabla f_i(y)\|
-&\leq L\|x-y\|.
-\end{align}
+Our assumptions:
+\begin{assumption}[Convex smooth components]
+Each $f_i$ is Fr\'echet differentiable on $E$. For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+\begin{aligned}
+f_i((1-t)x+ty)&\leq(1-t)f_i(x)+t f_i(y),\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Strongly convex regularizer]
-For every $x,y\in E$ and $t\in[0,1]$, the real-valued regularizer satisfies
-\begin{align}
+\begin{assumption}[Strongly convex regularizer and proximal access]
+For every $x,y\in E$ and $t\in[0,1]$,
+\[
 r((1-t)x+ty)
-&\leq (1-t)r(x)+tr(y)\\
-&\quad-\frac{\mu}{2}t(1-t)\|x-y\|^2.
-\end{align}
+\leq (1-t)r(x)+t r(y)
+-\frac{\mu}{2}t(1-t)\|x-y\|^2.
+\]
 There is a map $p:\mathbb{R}\times E\times E\to E$ such that, for every $a>0$ and $z,g\in E$,
-\begin{equation}
+\[
 p(a,z,g)\in\operatorname*{arg\,min}_{v\in E}
-\left\{\frac{\|v-z\|^2}{2a}
-+\langle g,v-z\rangle+r(v)\right\}.
-\end{equation}
+\left\{\frac{\|v-z\|^2}{2a}+\langle g,v-z\rangle+r(v)\right\}.
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial gap]
+\begin{assumption}[Initial objective gap]
 There exists $x^\star\in E$ such that
-\begin{align}
-F(x^\star)&\leq F(x)\qquad\text{for every }x\in E,\\
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
 F(x^0)-F(x^\star)&\leq\Delta.
-\end{align}
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Exact component and proximal access]
-A component query $(i,x)$, with $i\in\{1,\ldots,n\}$ and $x\in E$, returns $\nabla f_i(x)\in E$. A proximal query $(a,z,g)$, with $a\in\mathbb{R}$ and $z,g\in E$, returns $p(a,z,g)\in E$. These replies are exact at every call index and for every realization of oracle randomness. For $a\leq0$, the map $p(a,z,g)$ has no prescribed minimization property. Each query of either type costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
+A component-gradient query specifies $i\in\{1,\ldots,n\}$ and $x\in E$; the oracle returns $\nabla f_i(x)$ at $x$. A proximal query specifies $a\in\mathbb{R}$ and $z,g\in E$; the oracle returns $p(a,z,g)$. Its minimization property is required only for $a>0$. Each query of either kind counts as one call toward a shared oracle-call budget.
 
-Queries may be chosen adaptively, with all point arguments unrestricted in $E$. The algorithm is selected using only the public inputs. A call budget $K\in\mathbb{N}$ may depend on this full public parameter tuple and counts both component-gradient and proximal queries.
-
-After $K$ calls, the algorithm returns $\bar{x}:\Omega\to E$, where $(\Omega,\mathbb{P})$ carries the joint probability law of the algorithm and oracle randomness. Success requires $\bar{x}$ to be measurable and, for a global minimizer $x^\star$, the function $\omega\mapsto F(\bar{x}(\omega))-F(x^\star)$ to be integrable with respect to $\mathbb{P}$ and to satisfy
-\begin{equation}
-\label{eq:accuracy}
-\int_{\Omega}\bigl(F(\bar{x}(\omega))-F(x^\star)\bigr)
-\,\mathrm{d}\mathbb{P}(\omega)\leq\varepsilon.
-\end{equation}
-All global minimizers have the same objective value, so the minimizer witnessing the initial gap bound may also be used in \eqref{eq:accuracy}.
+After the allotted calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon.
+\]
 \end{document}

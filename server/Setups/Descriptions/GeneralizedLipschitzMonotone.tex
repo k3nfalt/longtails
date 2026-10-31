@@ -6,57 +6,48 @@
 \newtheorem{assumption}{Assumption}
 \begin{document}
 \section*{Generalized Lipschitz Monotone Root Finding}
-We consider finding a zero of a continuous monotone operator $F:E\to E$ on a real inner product space $E$. Its generalized Lipschitz modulus along a segment is $L_0+L_1M$, where $L_0>0$, $L_1\geq0$, and $M$ bounds the norm of $F$ on that segment. An initial point $x^0\in E$ satisfies $\|F(x^0)\|\leq G$ and lies within distance $R$ of a zero $x^\star$, with $G,R\geq0$. Each oracle call returns $F(x)$ exactly at its query $x\in E$. For $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $\|F(\bar{x})\|\leq\varepsilon$ almost surely. Only $E,L_0,L_1,x^0$ are public algorithm inputs.
+We seek a zero of a continuous monotone operator $F:E\to E$ on a real inner product space $E$ with induced norm $\|\cdot\|$. For constants $L_0>0$ and $L_1\geq0$, the Lipschitz bound along each segment is $L_0+L_1M$ whenever $M$ bounds the norm of $F$ on that segment. A given point $x^0\in E$ satisfies $\|F(x^0)\|\leq G$ and lies within distance $R$ of a zero, where $G,R\geq0$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
-The root-finding problem is
+The root-finding problem is to find $x\in E$ such that
 \[
-\text{find }x\in E\text{ such that }F(x)=0,
+F(x)=0.
 \]
-where the norm on $E$ is induced by its inner product. The admissible operators and oracle access satisfy the following conditions.
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$. The algorithm receives only $E$, $L_0$, $L_1$, and $x^0$; the residual bound $G$, radius $R$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
+Our assumptions:
 \begin{assumption}[Continuity and monotonicity]
-The operator $F$ is continuous on $E$ and satisfies
+The operator $F$ is continuous, and for every $x,y\in E$,
 \[
-\langle F(x)-F(y),x-y\rangle\geq0
-\qquad\text{for every }x,y\in E.
+\langle F(x)-F(y),x-y\rangle\geq0.
 \]
 \end{assumption}
 
-\begin{assumption}[Segmentwise generalized Lipschitz continuity]
-For every $x,y\in E$ and every $M\in\mathbb{R}$, the following implication holds:
+\begin{assumption}[Generalized Lipschitz condition]
+For every $x,y\in E$ and $M\in\mathbb{R}$ satisfying
 \[
-\begin{aligned}
-&\|F(x+\theta(y-x))\|\leq M
-\quad\text{for every }\theta\in[0,1]\\
-&\qquad\Longrightarrow\quad
-\|F(x)-F(y)\|\leq(L_0+L_1M)\|x-y\|.
-\end{aligned}
+\|F(x+\theta(y-x))\|\leq M
+\qquad\text{for every }\theta\in[0,1],
+\]
+the operator satisfies
+\[
+\|F(x)-F(y)\|\leq (L_0+L_1M)\|x-y\|.
 \]
 \end{assumption}
 
-\begin{assumption}[Initial residual and nearby zero]
-The initial point and operator satisfy
-\[
-\|F(x^0)\|\leq G,
-\]
-and there exists $x^\star\in E$ such that
+\begin{assumption}[Initial residual and distance]
+There exists $x^\star\in E$ such that
 \[
 \begin{aligned}
 F(x^\star)&=0,\\
-\|x^0-x^\star\|&\leq R.
+\|x^0-x^\star\|&\leq R,\\
+\|F(x^0)\|&\leq G.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Exact operator access]
-At every call index and every query point $x\in E$, the oracle returns $F(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The operator is accessed through this oracle, with adaptive queries allowed anywhere in $E$. The algorithm is selected using only the public inputs $(E,L_0,L_1,x^0)$; the residual bound $G$, distance bound $R$, and accuracy level $\varepsilon$ are not supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L_0,L_1,x^0,G,R,\varepsilon)$.
-
-After $K$ calls, the algorithm returns a point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required accuracy is
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy the residual criterion
 \[
 \|F(\bar{x})\|\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
 \end{document}

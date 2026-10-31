@@ -5,46 +5,43 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Smooth Convex Finite-Sum Optimization}
-We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a real Hilbert space $E$, where $n\geq 1$ and each component $f_i:E\to\mathbb{R}$ is convex with $L$-Lipschitz gradient, for $L>0$. A given point $x^0\in E$ lies within distance $R\geq 0$ of a global minimizer $x^\star$. Each oracle call selects an index $i\in\{1,\ldots,n\}$ and a point $x\in E$, and returns $\nabla f_i(x)$. For $\varepsilon>0$, success requires a measurable output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where expectation is over algorithm and oracle randomness. All parameters $(E,n,L,R,\varepsilon,x^0)$ are public.
+\section*{Smooth Convex Finite-Sum Minimization}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^{n}f_i(x)$ on a real Hilbert space $E$, where $n\geq1$ is an integer and each $f_i:E\to\mathbb{R}$ is differentiable and convex with an $L$-Lipschitz gradient, for $L>0$. A given starting point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$ of $F$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
 
 The optimization problem is
-\begin{equation}
-\label{eq:problem}
-\min_{x\in E} F(x),
-\qquad F(x)=\frac{1}{n}\sum_{i=1}^n f_i(x).
-\end{equation}
-The space $E$ may be infinite dimensional, is equipped with a measurable structure, and has the norm induced by its inner product. The component functions and oracle satisfy the following conditions.
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is equipped with a measurable structure. The algorithm receives $E$, $n$, $L$, $R$, $\varepsilon$, and $x^0$.
 
-\begin{assumption}[Component convexity and smoothness]
-Each $f_i$ is differentiable everywhere on $E$. For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
-\begin{align}
-f_i((1-t)x+ty) &\leq (1-t)f_i(x)+tf_i(y),\\
-\|\nabla f_i(x)-\nabla f_i(y)\| &\leq L\|x-y\|.
-\end{align}
+Our assumptions:
+\begin{assumption}[Component convexity]
+For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq (1-t)f_i(x)+t f_i(y).
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial distance]
+\begin{assumption}[Component smoothness]
+Each $f_i$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|\leq L\|x-y\|,
+\qquad x,y\in E,\quad i\in\{1,\ldots,n\}.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
 There exists $x^\star\in E$ such that
-\begin{align}
-F(x^\star) &\leq F(x) \qquad \text{for every }x\in E,\\
-\|x^0-x^\star\| &\leq R.
-\end{align}
-\end{assumption}
-
-\begin{assumption}[Exact component-gradient access]
-At every call index, a query $(i,x)\in\{1,\ldots,n\}\times E$ returns the exact component gradient $\nabla f_i(x)\in E$ for every realization of the oracle randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The component functions are accessed through this oracle. Both indices and query points may be chosen adaptively, and query points may lie anywhere in $E$. The algorithm is selected using only the public tuple $(E,n,L,R,\varepsilon,x^0)$. A call budget $K\in\mathbb{N}$ may depend on this tuple and counts every component-gradient query.
-
-After $K$ calls, the algorithm returns $\bar{x}\in E$. Let $\mathbb{P}$ be the joint probability law of the algorithm and oracle randomness on a measurable space $\Omega$. The output map $\bar{x}:\Omega\to E$ must be measurable, and success requires a global minimizer $x^\star$ for which
-\begin{equation}
-\label{eq:accuracy}
+\[
 \begin{aligned}
-\int_\Omega \bigl|F(\bar{x}(\omega))-F(x^\star)\bigr|\,\mathrm{d}\mathbb{P}(\omega) &<\infty,\\
-\int_\Omega \bigl(F(\bar{x}(\omega))-F(x^\star)\bigr)\,\mathrm{d}\mathbb{P}(\omega) &\leq\varepsilon,
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
 \end{aligned}
-\end{equation}
-with the objective-gap integrand Bochner integrable under $\mathbb{P}$. All global minimizers have the same objective value, so the minimizer witnessing the initial distance bound may also be used in \eqref{eq:accuracy}.
+\]
+\end{assumption}
+
+Queries may select any component $i\in\{1,\ldots,n\}$ and any point $x\in E$, and each call returns its exact component gradient. After the allotted oracle calls, the output $\bar{x}$ must be measurable with respect to the given measurable structure on $E$, its objective gap must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon.
+\]
 \end{document}

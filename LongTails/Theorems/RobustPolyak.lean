@@ -17,6 +17,6 @@ theorem result : Convergence LongTails.Setups.UncalibratedSharp.spec budget := b
   · rintro ⟨⟨⟩, ξ⟩
     obtain ⟨v, hv, hacc⟩ := (execute_accuracy p f O hp ho ξ K (by simpa only [budget, one_div, inv_div] using hK))
     have he : f v = f u := le_antisymm (hv (Set.mem_univ _)) (hmin (Set.mem_univ _))
-    simpa only [budget, he, one_div, inv_div] using hacc
+    simpa only [execute, budget, he, one_div, inv_div] using hacc
 
 end OracleTemplate.UncalibratedSharp

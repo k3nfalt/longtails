@@ -5,43 +5,45 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Smooth Convex Exact-Gradient Optimization}
-We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$, with $L$-Lipschitz gradient for $L>0$. A given initial point $x^0\in E$ lies within distance $R\geq 0$ of some global minimizer $x^\star$. Each oracle call at $x\in E$ returns the exact gradient $\nabla f(x)$. Given an accuracy level $\varepsilon>0$, the required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. Only $E$, $L$, and $x^0$ are public algorithm inputs.
+\section*{Smooth Convex Minimization}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$. Its gradient is $L$-Lipschitz, where $L>0$, and a given starting point $x^0\in E$ lies within distance $R\geq 0$ of a global minimizer $x^\star$. The oracle returns $\nabla f(x)$ at $x$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
-\begin{equation}
-\label{eq:problem}
-\min_{x\in E} f(x),
-\end{equation}
-where $E$ may be infinite dimensional and its norm is induced by its inner product. The admissible objectives and oracle access satisfy the following conditions.
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $L$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Convexity and smoothness]
-The function $f$ is differentiable everywhere on $E$, and, for every $x,y\in E$ and $t\in[0,1]$,
-\begin{align}
-f((1-t)x+ty) &\leq (1-t)f(x)+tf(y),\\
-\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|.
-\end{align}
+Our assumptions:
+\begin{assumption}[Convexity]
+For every $x,y\in E$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial distance]
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
 There exists $x^\star\in E$ such that
-\begin{align}
-f(x^\star) &\leq f(x) \qquad \text{for every }x\in E,\\
-\|x^0-x^\star\| &\leq R.
-\end{align}
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Exact-gradient access]
-At every call index and every query point $x\in E$, the oracle returns $\nabla f(x)\in E$ for every realization of its randomness. Each such query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle. Queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only the public inputs $(E,L,x^0)$; the distance bound $R$ and accuracy level $\varepsilon$ are not supplied to it. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,x^0,R,\varepsilon)$.
-
-After $K$ calls, the algorithm returns a point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a global minimizer $x^\star$ for which
-\begin{equation}
-\label{eq:accuracy}
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
+\[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad \mathbb{P}\text{-almost surely}.
-\end{equation}
-All global minimizers have the same objective value, so the minimizer witnessing the initial distance bound may also be used in \eqref{eq:accuracy}.
+\quad P\text{-a.s.}
+\]
+Here the minimizer is fixed independently of the algorithm's randomness; any global minimizer gives the same objective value.
 \end{document}

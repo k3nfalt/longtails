@@ -5,44 +5,51 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Strongly Convex Minimizer-Regular Optimization}
-We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a nonzero finite-dimensional real Hilbert space $E$. Its gradient is $L$-Lipschitz, $f$ is $\mu$-strongly convex with $0<\mu\leq L$, and its Hessian varies at most linearly with rate $M\geq0$ relative to a global minimizer $x^\star$. A given point $x^0$ satisfies $\|x^0-x^\star\|\leq R$ for $R>0$. Each oracle call at $x\in E$ returns the exact gradient $\nabla f(x)$. For $\varepsilon>0$, the required output $\bar{x}\in E$ satisfies $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely.
+\section*{Minimization with Minimizer-Anchored Hessian Regularity}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a nonzero finite-dimensional real Hilbert space $E$. The function is $\mu$-strongly convex with an $L$-Lipschitz, differentiable gradient, where $0<\mu\leq L$. A given point $x^0\in E$ lies within distance $R>0$ of a global minimizer $x^\star$, and the Hessian satisfies $\|\nabla^2 f(x)-\nabla^2 f(x^\star)\|_{\mathrm{op}}\leq M\|x-x^\star\|$ for every $x\in E$, where $M\geq0$ and the norms are induced by the inner product. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
-\begin{equation*}
-\min_{x\in E} f(x),
-\end{equation*}
-where the norm is induced by the inner product on $E$. The function and oracle obey the following conditions.
+\[
+\min_{x\in E} f(x).
+\]
+The algorithm receives $E$, $L$, $\mu$, $M$, $x^0$, $R$, and $\varepsilon$. We write $\|\cdot\|_{\mathrm{op}}$ for the induced operator norm; each Hessian $\nabla^2 f(x)$ is a linear operator from $E$ to $E$.
 
-\begin{assumption}[Curvature and gradient smoothness]
-The function $f$ and its gradient are differentiable everywhere. For every $x,y\in E$,
-\begin{align*}
-f(y) &\geq f(x)+\langle\nabla f(x),y-x\rangle
-       +\frac{\mu}{2}\|y-x\|^2,\\
-\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|.
-\end{align*}
+Our assumptions:
+\begin{assumption}[Strong convexity]
+For every $x,y\in E$,
+\[
+f(y)\geq f(x)+\langle\nabla f(x),y-x\rangle
++\frac{\mu}{2}\|y-x\|^2.
+\]
 \end{assumption}
 
-\begin{assumption}[Minimizer and Hessian regularity]
-There exists $x^\star\in E$ such that, for every $x\in E$,
-\begin{align*}
-f(x^\star) &\leq f(x),\\
-\|x^0-x^\star\| &\leq R,\\
-\|\mathrm{D}(\nabla f)(x)-\mathrm{D}(\nabla f)(x^\star)\|_{\mathrm{op}}
-&\leq M\|x-x^\star\|.
-\end{align*}
-Here $\mathrm{D}(\nabla f)(x)$ is the derivative of the gradient, equipped with the operator norm.
+\begin{assumption}[Differentiability and smoothness]
+Both $f$ and $\nabla f$ are Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
 \end{assumption}
 
-\begin{assumption}[Exact-gradient oracle]
-At every call index and query point $x\in E$, the oracle returns $\nabla f(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Internal algorithm randomness is independent of oracle randomness.
+\begin{assumption}[Initial distance and Hessian regularity]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,
+\end{aligned}
+\]
+and the Hessian obeys the minimizer-anchored bound
+\[
+\|\nabla^2 f(x)-\nabla^2 f(x^\star)\|_{\mathrm{op}}
+\leq M\|x-x^\star\|,
+\qquad x\in E.
+\]
 \end{assumption}
 
-Queries may be chosen adaptively anywhere in $E$. All setup parameters $(E,L,x^0,\mu,M,R,\varepsilon)$ are available to the algorithm, while $f$ is accessed through the oracle. An externally specified budget $K\in\mathbb{N}$ may depend on these parameters.
-
-After $K$ oracle calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of its internal randomness and the oracle randomness, success requires a global minimizer $x^\star$ for which
-\begin{equation*}
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy
+\[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad \mathbb{P}\text{-almost surely}.
-\end{equation*}
+\quad P\text{-a.s.}
+\]
 \end{document}

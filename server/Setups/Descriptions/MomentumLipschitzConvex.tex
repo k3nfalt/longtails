@@ -5,15 +5,16 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Convex Optimization with Constant Momentum}
-We consider minimizing a convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. An initial point $x^0\in E$ is within distance $R\geq0$ of a global minimizer $x^\star$. Each oracle call returns $g(\xi,x)\in E$ at query $x$, using a fresh independent sample $\xi$ from a probability law $p$ on a measurable space $\Xi$. The jointly measurable oracle has mean in the subdifferential of $f$ and second moment at most $G^2$, where $G>0$. With fixed momentum $\beta\in[0,1)$, the required final iterate $\bar{x}$ satisfies $\int(f(\bar{x})-f(x^\star))\,d\mathbb{P}\leq\varepsilon$, where $\varepsilon>0$ and $\mathbb{P}$ is the joint randomness law.
+\section*{Momentum SGD for Convex Minimization}
+We consider minimizing a convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. A given point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$. At $x$, the oracle returns $g(\xi,x)\in E$ using a fresh independent sample $\xi$ from a probability law $\nu$ on a measurable space $\Xi$. The map $g$ is jointly measurable, its mean is a subgradient of $f$, and $\mathbb{E}_{\xi\sim\nu}\|g(\xi,x)\|^2\leq G^2$, where $G>0$. For $\varepsilon>0$, constant-momentum SGD must return a last iterate $\bar{x}$ with integrable objective gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$ under the sampling law.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where the norm on $E$ is induced by its inner product. The public inputs are $(E,\Xi,G,R,\beta,\varepsilon,x^0)$, including the measurable structure on $\Xi$; the objective $f$, sampling law $p$, and oracle map $g$ belong to the unknown instance. Their admissibility is specified below.
+The norm is induced by the inner product on $E$. The algorithm receives $E$, the measurable sample space $\Xi$, $G$, $R$, a momentum parameter $\beta\in[0,1)$, $\varepsilon$, and $x^0$; the objective, oracle map, and sampling law are accessed through oracle replies.
 
+Our assumptions:
 \begin{assumption}[Convexity]
 For every $x,y\in E$ and $t\in[0,1]$,
 \[
@@ -21,42 +22,42 @@ f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
 \]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial distance]
+\begin{assumption}[Stochastic subgradient oracle]
+The map $g:\Xi\times E\to E$ is jointly measurable. For every $x\in E$, the random variable $\|g(\xi,x)\|^2$ is integrable under $\nu$, and
+\[
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(\xi,x)\|^2\bigr]\leq G^2.
+\]
+Writing $h(x)=\mathbb{E}_{\xi\sim\nu}[g(\xi,x)]$ for the Bochner mean, we require
+\[
+f(x)+\langle h(x),y-x\rangle\leq f(y),
+\qquad x,y\in E.
+\]
+Successive calls use independent samples $\xi_0,\xi_1,\ldots$ with common law $\nu$, and queries may be made anywhere in $E$.
+\end{assumption}
+
+\begin{assumption}[Initial distance]
 There exists $x^\star\in E$ such that
-\begin{align*}
-f(x^\star)&\leq f(x) \qquad\text{for every }x\in E,\\
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
 \|x^0-x^\star\|&\leq R.
-\end{align*}
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Stochastic subgradient access]
-The law $p$ is a probability measure on $\Xi$, and $g:\Xi\times E\to E$ is jointly measurable, using the Borel measurable structure on $E$. For every $x\in E$, the scalar function $\xi\mapsto\|g(\xi,x)\|^2$ is integrable and
+Our result is algorithm-specific: we analyze constant-momentum SGD with a linearly decreasing step-size schedule. The algorithm chooses $\gamma\in\mathbb{R}$ and $N\in\{0,1,2,\ldots\}$ from its inputs and initializes $m^0=0$. At iteration $k\geq0$, it queries the oracle at $x^k$ and updates
 \[
-\int_{\Xi}\|g(\xi,x)\|^2\,p(d\xi)\leq G^2.
-\]
-Consequently, $g(\cdot,x)$ is Bochner integrable. Its mean
-\[
-h(x)=\int_{\Xi}g(\xi,x)\,p(d\xi)
-\]
-satisfies, for every $x,y\in E$,
-\[
-f(x)+\langle h(x),y-x\rangle\leq f(y).
-\]
-At call $k\geq0$, a query $x\in E$ returns $g(\xi_k,x)$ and costs one oracle call. The samples $(\xi_k)_{k\geq0}$ are independent with common law $p$, and independent of any internal algorithm randomness.
-\end{assumption}
-
-The allowed algorithms are restricted to constant-momentum stochastic gradient iterations. Using the public inputs, the algorithm selects $\gamma\in\mathbb{R}$ and $N\in\{0,1,2,\ldots\}$. Starting from $m^0=0$, it queries $x^k$ and updates
-\begin{align*}
+\begin{aligned}
+g_k&=g(\xi_k,x^k),\\
+m^{k+1}&=\beta m^k+(1-\beta)g_k,\\
 \eta_k&=\gamma\left(N+1-k+\frac{\beta}{1-\beta}\right),\\
-m^{k+1}&=\beta m^k+(1-\beta)g(\xi_k,x^k),\\
 x^{k+1}&=x^k-\eta_k m^{k+1}.
-\end{align*}
-Queries range over all of $E$. An externally specified budget $K\in\{0,1,2,\ldots\}$ may depend on the full public parameter tuple. Each iteration uses exactly one oracle call, and the output after $K$ calls is the final iterate $\bar{x}=x^K$.
-
-Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires that the objective gap be integrable and that
-\[
-\int\bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)\,\mathbb{P}(d\omega)
-\leq\varepsilon.
+\end{aligned}
 \]
-Here $x^\star$ is a global minimizer; the minimizer witnessing the initial distance bound can be used because all global minimizers have the same objective value.
+After $T\in\{0,1,2,\ldots\}$ oracle calls, the output is the last iterate $\bar{x}=x^T$. The schedule parameter $N$ and the call budget $T$ are separate quantities.
+
+Let $P=\nu^{\otimes\mathbb{N}}$ be the joint law of the samples. The required objective gap is integrable under $P$ and satisfies
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
 \end{document}

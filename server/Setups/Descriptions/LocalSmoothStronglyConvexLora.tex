@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Locally Initialized LoRA Gradient Descent}
+We consider minimizing a differentiable, strongly convex function $f:\mathbb{R}^{m\times n}\to\mathbb{R}$ with Lipschitz gradient through LoRA factors $x=(A,B)\in\mathbb{R}^{m\times r}\times\mathbb{R}^{r\times n}$, where $m,n,r$ are positive integers and $r<\min\{m,n\}$. A global minimizer $X^\star$ admits full-rank factors with controlled conditioning, and the given starting factors lie in a prescribed neighborhood of those factors. The oracle returns $\nabla f(X)$ at $X$. For $\varepsilon>0$, the goal is final factors $\bar{x}=(\bar{A},\bar{B})$ satisfying $f(\bar{A}\bar{B})-f(X^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+Write $E=\mathbb{R}^{m\times n}$ and $\mathcal{F}=\mathbb{R}^{m\times r}\times\mathbb{R}^{r\times n}$. We study
+\[
+\min_{(A,B)\in\mathcal{F}} f(AB).
+\]
+Matrix spaces carry the Frobenius inner product and norm. The factor space carries the product norm
+\[
+\|(A,B)\|^2=\|A\|_F^2+\|B\|_F^2.
+\]
+Vector norms are Euclidean, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $m,n,r$, the parameters $\mu,\rho,s,R,\varepsilon$, and the starting factors $x^0=(A^0,B^0)$, with
+\[
+0<\mu\leq\rho,\qquad 0<s\leq R,\qquad \varepsilon>0.
+\]
+
+Our assumptions:
+\begin{assumption}[Strong convexity and smoothness]
+The function $f$ is differentiable everywhere on $E$. For all $X,Y\in E$,
+\[
+\begin{aligned}
+f(Y)&\geq f(X)+\langle\nabla f(X),Y-X\rangle_F
+             +\frac{\mu}{2}\|Y-X\|_F^2,\\
+\|\nabla f(X)-\nabla f(Y)\|_F&\leq\rho\|X-Y\|_F.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizing factors and local initialization]
+There exist factors $x^\star=(A^\star,B^\star)\in\mathcal{F}$ such that $X^\star=A^\star B^\star$ is a global minimizer of $f$ on $E$:
+\[
+f(X^\star)\leq f(X)\qquad\text{for every }X\in E.
+\]
+Define the linear map $\mathcal{J}_\star:\mathcal{F}\to E$ by
+\[
+\mathcal{J}_\star(H_A,H_B)=H_A B^\star+A^\star H_B.
+\]
+These same factors satisfy
+\[
+\begin{aligned}
+\|\mathcal{J}_\star\|_{\mathrm{op}}&\leq R,\\
+\|A^\star w\|&\geq s\|w\| &&\text{for every }w\in\mathbb{R}^r,\\
+\|(B^\star)^\top w\|&\geq s\|w\| &&\text{for every }w\in\mathbb{R}^r,\\
+\|x^0-x^\star\|&\leq\frac{\mu s^2}{256\rho R}.
+\end{aligned}
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze LoRA gradient descent with simultaneous updates of both factors. Starting from the given $x^0$, each iteration queries the product $A^kB^k$ and uses the returned matrix $G^k$ in
+\[
+\begin{aligned}
+G^k&=\nabla f(A^kB^k),\\
+A^{k+1}&=A^k-\eta_k G^k(B^k)^\top,\\
+B^{k+1}&=B^k-\eta_k(A^k)^\top G^k.
+\end{aligned}
+\]
+The scalar step size $\eta_k$ must be strictly positive for every history and every oracle reply; it may depend on the algorithm's randomness, its accumulated information, and the current reply. After $K\geq0$ oracle calls, the output is the final factor pair $\bar{x}=x^K$, and it must satisfy
+\[
+f(\bar{A}\bar{B})-f(X^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

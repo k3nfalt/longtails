@@ -2,6 +2,7 @@ import LongTails.Setups.QuasarAmortizedLMO
 import LongTails.Algorithms.TwoCallFrankWolfe
 import LongTails.Proofs.AcceleratedMarkovExecution
 import LongTails.Proofs.GdConvex
+import LongTails.Proofs.ExecutionHistory
 
 open scoped RealInnerProductSpace
 open OracleTemplate.StochasticGradient OracleTemplate.HeavyTailedMarkovGradient
@@ -104,14 +105,55 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle (p.E ⊕ p.E) 
   rcases hp with ⟨hL, hτ, hτ1, hD, hΓ, hε, hconv, hx0, hdiam⟩
   rcases ho with ⟨hg, hlip, hans, ⟨δ, hδ, hsumδ, hlmo⟩, u, hu, hmin, hquasar⟩
   let η := fun k : ℕ => 2 / (p.τ * (k : ℝ) + 2)
-  let step := fun k x => (1 - η k) • x + η k •
-    O.answer (2 * k + 1) (0, (Sum.inr (gradient f x))) (ξ (2 * k + 1))
-  let x := fun k => advance step k 0 p.x0
-  let v := fun k => O.answer (2 * k + 1) (0, (Sum.inr (gradient f (x k)))) (ξ (2 * k + 1))
+  let A := twoCallFrankWolfe p.τ p.x0
+  let trace := executeIndexedState O A () ξ
+  let x := fun k => (trace (2 * k)).1.2.2.1
+  let v := fun k => O.answer (trace (2 * k + 1)).2
+    (0, Sum.inr (gradient f (x k))) (ξ (trace (2 * k + 1)).2.length)
+  have htrace_succ (n : ℕ) : trace (n + 1) =
+      let sc := trace n
+      let query := A.query sc.1
+      let reply := O.answer sc.2 query (ξ sc.2.length)
+      (A.update sc.1 reply, sc.2 ++ [(query, reply)]) := rfl
+  have hnextState (k : ℕ) (hs : (trace (2 * k)).1 = ((false, k, x k, 0) : A.State)) :
+      (trace (2 * k + 2)).1 =
+        ((false, k + 1, (1 - η k) • x k + η k • v k, 0) : A.State) := by
+    have hgrad : O.answer (trace (2 * k)).2 (0, Sum.inl (x k))
+        (ξ (trace (2 * k)).2.length) = gradient f (x k) := hans _ _ _
+    have hodd : (trace (2 * k + 1)).1 =
+        ((true, k, x k, gradient f (x k)) : A.State) := by
+      rw [show 2 * k + 1 = (2 * k) + 1 by omega, htrace_succ]
+      dsimp only
+      rw [hs]
+      simp [A, twoCallFrankWolfe, hgrad]
+    rw [show 2 * k + 2 = (2 * k + 1) + 1 by omega, htrace_succ]
+    dsimp only
+    rw [hodd]
+    simp [A, twoCallFrankWolfe, η, v]
+  have hstate : ∀ k, (trace (2 * k)).1 = ((false, k, x k, 0) : A.State) := by
+    intro k
+    induction k with
+    | zero => rfl
+    | succ k ih =>
+      have hnext := hnextState k ih
+      have hproj := congrArg (fun s : A.State => s.2.2.1) hnext
+      have hproj' : x (k + 1) = (1 - η k) • x k + η k • v k := by
+        have hidx : 2 * (k + 1) = 2 * k + 2 := by omega
+        simpa only [x, hidx] using hproj
+      have hidx : 2 * (k + 1) = 2 * k + 2 := by omega
+      rw [hidx, hnext, ← hproj']
   have hx (k : ℕ) : x (k + 1) = (1 - η k) • x k + η k • v k := by
-    dsimp only [x]
-    rw [advance_add, Nat.zero_add]
-    rfl
+    have hnext := hnextState k (hstate k)
+    have hidx : 2 * (k + 1) = 2 * k + 2 := by omega
+    simpa only [x, hidx] using
+      congrArg (fun s : A.State => s.2.2.1) hnext
+  have hlmoAt (k : ℕ) : v k ∈ p.C ∧
+      ∀ u ∈ p.C, ⟪gradient f (x k), v k⟫ ≤ ⟪gradient f (x k), u⟫ + δ k := by
+    have hlen := executeIndexedState_length O A () ξ (2 * k + 1)
+    have hhalf : (trace (2 * k + 1)).2.length / 2 = k := by rw [hlen]; omega
+    have hreply := hlmo (trace (2 * k + 1)).2 (by rw [hlen]; omega)
+      (gradient f (x k)) (ξ (trace (2 * k + 1)).2.length)
+    simpa [v, hhalf] using hreply
   have hη (k : ℕ) : 0 ≤ η k ∧ η k ≤ 1 := by
     have ht : 0 < p.τ * (k : ℝ) + 2 := by positivity
     exact ⟨by dsimp [η]; positivity, (div_le_one ht).mpr (by linarith [mul_nonneg hτ.le (Nat.cast_nonneg k)])⟩
@@ -121,14 +163,14 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle (p.E ⊕ p.E) 
     | zero => exact hx0
     | succ k ih =>
       rw [hx]
-      exact hconv ih (hlmo k _ _).1 (sub_nonneg.mpr (hη k).2) (hη k).1 (by ring)
+      exact hconv ih (hlmoAt k).1 (sub_nonneg.mpr (hη k).2) (hη k).1 (by ring)
   have hrate (k : ℕ) : ((k : ℝ) + 1) * (k + 2) * (f (x (k + 1)) - f u) ≤
       (k : ℝ) * (k + 1) * (f (x k) - f u) + 6 * p.L * p.D ^ 2 / p.τ ^ 2 +
         (2 * (k + 1) / p.τ) * δ k := by
     rw [hx]
     apply weighted_step f (x k) (v k) u p.L p.D p.τ (δ k) k hL hD hτ hτ1 hg hlip
-    · exact hdiam _ (hlmo k _ _).1 _ (hfeas k)
-    · exact (hlmo k _ _).2 u hu
+    · exact hdiam _ (hlmoAt k).1 _ (hfeas k)
+    · exact (hlmoAt k).2 u hu
     · rw [← hx]
       exact hdiam _ (hfeas (k + 1)) _ hu
     · rw [← hx]
@@ -171,20 +213,11 @@ lemma execute_accuracy (p : Params) (f : p.E → ℝ) (O : Oracle (p.E ⊕ p.E) 
         _ ≤ (K : ℝ) * ((K : ℝ) * p.ε) := hbudget'
         _ ≤ _ := by nlinarith only [mul_pos hKr hε]
     exact (mul_le_mul_iff_right₀ (show 0 < (K : ℝ) * (K + 1) by positivity)).mp hscale
-  let A := twoCallFrankWolfe p.τ p.x0
-  let rawStep := fun k s => A.update s (O.answer k (A.query s) (ξ k))
-  have hstate : ∀ k, advance rawStep (2 * k) 0 (A.initial ()) = (false, k, x k, 0) := by
-    intro k
-    induction k with
-    | zero => rfl
-    | succ k ih =>
-      rw [show 2 * (k + 1) = 2 * k + 2 by omega, advance_add, Nat.zero_add, ih]
-      simp only [advance, rawStep, A, twoCallFrankWolfe, Bool.false_eq_true,
-        ite_false, ite_true, hans]
-      rw [hx]
+  have hexec : execute O A (fun _ => 2 * K) () ξ = A.output (trace (2 * K)).1 := by
+    change (executeWithTrace O A (fun _ => 2 * K) () ξ).1 = _
+    exact congrArg Prod.fst (executeWithTrace_eq_executeIndexedState O A (2 * K) () ξ)
   dsimp only
-  erw [execute_advance]
-  erw [hstate K]
+  rw [hexec, hstate K]
   exact ⟨u, hu, hmin, hfeas K, hacc⟩
 
 end OracleTemplate.QuasarAmortizedLMO

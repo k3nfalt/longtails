@@ -129,16 +129,30 @@ lemma quadratic_pair_lower {μ D : ℝ} (hμ : 0 < μ) (N : ℕ) (x : ℝ) :
 
 lemma deterministic_oracle_lower {μ D : ℝ} (hμ : 0 < μ) (N : ℕ)
     (A : Algorithm ℝ ℝ ℝ) (seed : A.Seed) :
-    let outPlus := (execute { answer := fun k (_, x) _ => maskedGradient μ D 1 N k x }
+    let outPlus := (execute { answer := fun history (_, x) _ => maskedGradient μ D 1 N history.length x }
       A (fun _ => N) seed)
-    let outMinus := (execute { answer := fun k (_, x) _ => maskedGradient μ D (-1) N k x }
+    let outMinus := (execute { answer := fun history (_, x) _ => maskedGradient μ D (-1) N history.length x }
       A (fun _ => N) seed)
     D ^ 2 / (2 * μ * (N : ℝ) ^ 2) ≤
       max (quadratic μ (D / (μ * N)) outPlus)
         (quadratic μ (-(D / (μ * N))) outMinus) := by
   dsimp only
-  rw [StochasticGradient.execute_advance, StochasticGradient.execute_advance]
-  simp only
+  let Oplus : Oracle ℝ ℝ :=
+    { Seed := fun _ => PUnit
+      answer := fun history (_, x) _ => maskedGradient μ D 1 N history.length x }
+  let Ominus : Oracle ℝ ℝ :=
+    { Seed := fun _ => PUnit
+      answer := fun history (_, x) _ => maskedGradient μ D (-1) N history.length x }
+  change D ^ 2 / (2 * μ * (N : ℝ) ^ 2) ≤
+    max
+      (quadratic μ (D / (μ * N))
+        (execute Oplus A (fun _ => N) seed (fun _ => PUnit.unit)))
+      (quadratic μ (-(D / (μ * N)))
+        (execute Ominus A (fun _ => N) seed (fun _ => PUnit.unit)))
+  rw [StochasticGradient.execute_advance_of_answer Oplus A N seed (fun _ => PUnit.unit)
+      (fun k q => maskedGradient μ D 1 N k q.2) (by intro history query; rfl),
+    StochasticGradient.execute_advance_of_answer Ominus A N seed (fun _ => PUnit.unit)
+      (fun k q => maskedGradient μ D (-1) N k q.2) (by intro history query; rfl)]
   rw [adaptive_transcript A.update (fun s => (A.query s).2) μ D 1 N N 0 (by omega),
     adaptive_transcript A.update (fun s => (A.query s).2) μ D (-1) N N 0 (by omega)]
   exact quadratic_pair_lower hμ N _
@@ -146,7 +160,7 @@ lemma deterministic_oracle_lower {μ D : ℝ} (hμ : 0 < μ) (N : ℕ)
 lemma randomized_oracle_lower {μ D ε : ℝ} (hμ : 0 < μ) (N : ℕ)
     (A : Algorithm ℝ ℝ ℝ) :
     let output := fun sign seed => (execute
-      { answer := fun k (_, x) _ => maskedGradient μ D sign N k x } A (fun _ => N) seed)
+      { answer := fun history (_, x) _ => maskedGradient μ D sign N history.length x } A (fun _ => N) seed)
     (∀ᵐ seed ∂(A.law : MeasureTheory.Measure A.Seed),
       quadratic μ (D / (μ * N)) (output 1 seed) ≤ ε) →
     (∀ᵐ seed ∂(A.law : MeasureTheory.Measure A.Seed),
@@ -215,7 +229,7 @@ lemma initialized_randomized_lower {μ D Δ ε : ℝ} (hμ : 0 < μ) (hD : 0 ≤
     (hΔ : 0 ≤ Δ) {N : ℕ} (hN : 0 < N) (A : Algorithm ℝ ℝ ℝ) :
     let d := min D (Real.sqrt (2 * μ * Δ) * N)
     let output := fun sign seed => (execute
-      { answer := fun k (_, x) _ => maskedGradient μ d sign N k x } A (fun _ => N) seed)
+      { answer := fun history (_, x) _ => maskedGradient μ d sign N history.length x } A (fun _ => N) seed)
     (∀ᵐ seed ∂(A.law : MeasureTheory.Measure A.Seed),
       quadratic μ (d / (μ * N)) (output 1 seed) ≤ ε) →
     (∀ᵐ seed ∂(A.law : MeasureTheory.Measure A.Seed),

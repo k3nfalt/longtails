@@ -5,61 +5,57 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Adaptive Heavy-Tailed Simplex Optimization}
-We consider minimizing $f:\mathbb{R}^d\to\mathbb{R}$ over the simplex $\Delta_d=\{x\in\mathbb{R}^d:x_i\geq0,\ \sum_{i=1}^d x_i=1\}$, where $d\geq2$. The objective is convex on $\Delta_d$, differentiable at its points, and attains its minimum at $x^\star\in\Delta_d$. Its gradient is $L$-Lipschitz from the $\ell_1$ norm to the $\ell_\infty$ norm, with $L>0$. Each call returns an unbiased random gradient with independent sampling and $p$th noise moment at most $\sigma^p$ in $\ell_\infty$, where $1<p\leq2$ and $\sigma\geq0$. The measurable output $\bar{x}\in\Delta_d$ must satisfy $\mathbb{P}(f(\bar{x})-f(x^\star)>\varepsilon)\leq\delta$, where $\varepsilon>0$, $0<\delta<1$, and $\mathbb{P}$ is the joint randomness law. Only $(d,L,\delta)$ are public.
+\section*{Heavy-Tailed Convex Simplex Optimization}
+We consider minimizing $f:\mathbb{R}^d\to\mathbb{R}$ over the probability simplex $\Delta_d=\{x\in\mathbb{R}^d:x_i\geq0,\ \sum_{i=1}^d x_i=1\}$, where $d\geq2$. On this simplex, $f$ is convex and differentiable, attains its minimum at $x^\star$, and has an $L$-Lipschitz gradient from the $\ell_1$ norm to the $\ell_\infty$ norm, with $L>0$. The oracle returns unbiased gradient estimates using independent, identically distributed samples, with centered $p$th moments in $\ell_\infty$ bounded by $\sigma^p$, where $1<p\leq2$ and $\sigma\geq0$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in\Delta_d$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
 
-The constrained optimization problem is
+The optimization problem is
 \[
 \min_{x\in\Delta_d} f(x).
 \]
-The ambient space carries the standard Euclidean inner product, which defines $\nabla f$. The norms governing smoothness and oracle noise are
+We use the Euclidean inner product to define gradients, and write
 \[
 \|v\|_1=\sum_{i=1}^d |v_i|,
 \qquad
 \|v\|_\infty=\max_{1\leq i\leq d}|v_i|.
 \]
-The admissible objectives and oracle laws satisfy the following conditions.
+The algorithm receives only $d$, $L$, and $\delta$; the moment exponent $p$, noise bound $\sigma$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Convexity and smoothness]
-At every $x\in\Delta_d$, the function $f$ is differentiable as a function on $\mathbb{R}^d$, with gradient $\nabla f(x)$. For every $x,y\in\Delta_d$ and $t\in[0,1]$,
+Our assumptions:
+\begin{assumption}[Convexity and attainment]
+For all $x,y\in\Delta_d$ and $t\in[0,1]$,
 \[
-\begin{aligned}
-f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
-\|\nabla f(x)-\nabla f(y)\|_\infty
-&\leq L\|x-y\|_1.
-\end{aligned}
+f((1-t)x+ty)\leq(1-t)f(x)+t f(y).
 \]
-\end{assumption}
-
-\begin{assumption}[Attainment]
 There exists $x^\star\in\Delta_d$ such that
 \[
-f(x^\star)\leq f(x)
-\qquad\text{for every }x\in\Delta_d.
+f(x^\star)\leq f(x),\qquad x\in\Delta_d.
 \]
 \end{assumption}
 
-\begin{assumption}[Independent oracle sampling]
-Let $\Omega$ be a measurable space and $\nu$ a probability measure on it. The oracle uses samples $(\xi_k)_{k\geq0}$ whose joint law on $\Omega^{\mathbb{N}}$ makes the coordinate maps measurable and mutually independent, with marginal law $\nu$ at every index. A call at $x\in\Delta_d$ returns $g(x,\xi_k)\in\mathbb{R}^d$, where $g:\Delta_d\times\Omega\to\mathbb{R}^d$ is jointly measurable for the simplex's Borel structure. Each reply costs one oracle call. Internal algorithm randomness is independent of the entire sample sequence.
+\begin{assumption}[Smoothness in simplex geometry]
+The function $f$ is Fr\'echet differentiable as a function on $\mathbb{R}^d$ at every point of $\Delta_d$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_\infty
+\leq L\|x-y\|_1,
+\qquad x,y\in\Delta_d.
+\]
 \end{assumption}
 
-\begin{assumption}[Unbiasedness and heavy-tail moment]
-For every $x\in\Delta_d$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, and the scalar map $\|g(x,\cdot)-\nabla f(x)\|_\infty^p$ is integrable under $\nu$. They satisfy
+\begin{assumption}[Unbiased heavy-tailed oracle]
+Let $\Omega$ be a measurable space with probability measure $\nu$. The oracle is specified by a jointly measurable map $g:\Delta_d\times\Omega\to\mathbb{R}^d$. For each $x\in\Delta_d$, the map $g(x,\cdot)$ is Bochner integrable, the random variable $\|g(x,\xi)-\nabla f(x)\|_\infty^p$ is integrable for $\xi\sim\nu$, and
 \[
 \begin{aligned}
-\int_\Omega g(x,\omega)\,d\nu(\omega)
-&=\nabla f(x),\\
-\int_\Omega \|g(x,\omega)-\nabla f(x)\|_\infty^p\,d\nu(\omega)
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|_\infty^p\bigr]
 &\leq\sigma^p.
 \end{aligned}
 \]
+At call $k$, a query $x_k\in\Delta_d$ receives $g(x_k,\xi_k)$, where $(\xi_k)_{k\geq0}$ are measurable, mutually independent samples with common law $\nu$. The algorithm's randomness is independent of the entire sample sequence.
 \end{assumption}
 
-The objective is accessed through this oracle, with queries chosen adaptively within $\Delta_d$. The algorithm is selected using only $(d,L,\delta)$; the moment order $p$, noise bound $\sigma$, and accuracy level $\varepsilon$ are not supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full setup parameters and counts every oracle reply.
-
-After $K$ calls, the algorithm must return a measurable feasible point $\bar{x}\in\Delta_d$. Under the joint law $\mathbb{P}$ of its internal randomness and the oracle samples, success requires a minimizer $x^\star$ satisfying
+Queries are restricted to $\Delta_d$. After the allotted oracle calls, the algorithm must return a measurable $\Delta_d$-valued output $\bar{x}$ satisfying
 \[
-\mathbb{P}\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)
-\leq\delta.
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta,
 \]
+where $P$ is the joint law of the oracle samples and the algorithm's randomness.
 \end{document}

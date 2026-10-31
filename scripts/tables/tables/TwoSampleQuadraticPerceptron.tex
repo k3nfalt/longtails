@@ -1,0 +1,35 @@
+\begin{table}[tp]
+\centering
+\caption{Two-sample quadratic perceptron: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/TwoSampleQuadraticPerceptron.lean}{TwoSampleQuadraticPerceptron}.}\label{tab:TwoSampleQuadraticPerceptron}
+\parbox{\linewidth}{\footnotesize Two labeled samples $b_1,b_2\in\mathbb R^d$, $\|b_i\|\le R$. The width-one model is $m(b;(v,c))=c\langle v,b\rangle$, with $\langle b_1,b_2\rangle>0$ and $b_2\not\parallel b_1$; the kernel-two model is $m(b;((c_1,c_2),v))=c_1\langle b,v\rangle+c_2\langle Pb,v\rangle$, with $b_1=\bar b_1\mathbf1$, $\bar b_1,\bar b_2>0$, and $(I+P)(b_2-\bar b_2\mathbf1)\ne0$. In the setup's coordinates and spectrum, $g\le\lambda_1,\lambda_2$, $\beta^-\le\beta\le\beta^+$, and the kernel-two slow eigenvalue is at least $\mu$. All bounds $R,g,\beta^-,\beta^+,\mu,a,z,S$ are positive and $\rho\ge1$. The start satisfies $|r_0+y_0|\le\rho|r_0-y_0|$, $|z_0|\ge z$, $\sigma(p_0+q_0)\ge a$, $\sigma(p_0-q_0)\ge0$, and $2\sigma p_0+2|z_0|\le S$. One oracle call returns exact signed margins and gradients for the two samples. The setup requires constant-step, first-violated-sample updates and the current iterate as output; \textbf{(1)} uses $\gamma=1/(2R)$. Target: deterministically $m(b_1;\theta_T)>0>m(b_2;\theta_T)$, also at every later step.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/TwoSampleQuadraticPerceptronAcceleration.lean}{Two\allowbreak Sample\allowbreak Quadratic\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/TwoSampleQuadraticPerceptronAcceleration.md}{(review)}
+& $\begin{aligned}[t]\mathcal{O}\Bigl(&\bigl(1+\tfrac{R\log\rho}{\mu}\bigr)\bigl(1+\tfrac Rg\bigr)^2\\[-2pt]&\cdot\bigl[1+\tfrac{\beta^+\log\rho}{\mu}\\[-2pt]&\qquad+\log\bigl(\tfrac Sa+\tfrac{SR^3}{(\beta^-)^3z}\bigr)\bigr]\Bigr)\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Noisy quadratic perceptron \citep[Thm.~5.1, v2]{tqpTyurin2026v2}. Special case: kernel two, $b_1=\mathbf1$, $b_2=\mathbf1+\mu e_1$, $0<\mu\le1/10$.
+& $\mathcal{O}\!\left(\frac{\sqrt d}{\mu}L_1L_2\left[1+\log\!\left(\frac{\sqrt d L_1L_2}{\mu}\right)\right]\right)$ calls; success probability $1-\delta$. Requires $h>0$, $\gamma=1/(4\sqrt d)$, and the theorem's tuned Gaussian perturbations.
+& \textbf{(1)}: Deterministic, noise-free analysis; extends to general admissible convolutional data and width one. On this dataset, matches $\sqrt d/\mu$ up to unordered initialization logarithms; if $r_0y_0\le0$, gives $\mathcal{O}(1+\log(S/a+Sd^{3/2}/(\mu^3z)))$ instead.
+& \textbf{(1)} needs a data-dependent cone of starts; \textbf{(2)} covers every start with $h>0$. \\
+\midrule
+\textbf{(3)} Derived bound: direct reconstruction; linear representation \citep[Sec.~1.1]{tqpTyurin2026v2}. Same data and oracle, unrestricted updates.
+& $\mathcal{O}(1)$: one call recovers $b_1,b_2$; construct a linear separator and represent it in either model.
+& \textbf{(1)}: No established improvement in problem-class complexity. Its contribution concerns the prescribed perceptron dynamics.
+& \textbf{(1)} has a larger bound and restricts starts. \textbf{(3)} lies outside the required update family. \\
+\midrule
+\textbf{(4)} Batch linear perceptron \citep[Thm.~5.2, v2]{tqpTyurin2026v2}. Special case: $b_1=\mathbf1$, $b_2=\mathbf1+\mu e_1$, $0<\mu\le1/2$.
+& Lower bound $\Omega(d/\mu)$ paired-sample calls; step $\phi>0$, initial linear weight $u_0\in B(0,\phi\mu/(8\max_i\|b_i\|))$.
+& \textbf{(1)} retains the inherited quadratic-versus-linear method contrast; \textbf{(4)} is a lower bound, not a competing upper bound. Different initializations preclude an identical-start comparison.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $P$: cyclic coordinate shift; $\bar b=d^{-1}\langle b,\mathbf1\rangle$; $(p_0,q_0,z_0,r_0,y_0)$: the linked setup's coordinates of $\theta_0$; $\sigma=-\operatorname{sign}(z_0)$. $g$: lower bound on fast coefficients $\lambda_1,\lambda_2$; $\beta^-,\beta^+$: coupling bounds; $\mu$: slow-eigenvalue lower bound (also the sample perturbation in \textbf{(2)}, \textbf{(4)}); $a,z,S$: cone-margin, depth and size bounds; $\rho$: slow-coordinate ratio bound. Width one has $r_0=y_0=0$ and permits $\rho=1$. $h=|\langle\theta_0,v_{\mu,+}\rangle|$, with $v_{\mu,+}$ the unit positive slow eigenvector of the signed second-sample quadratic form; $\delta\in(0,1)$: failure probability; $L_1=1+\log(\|\theta_0\|^2/(\delta^3h^2))$, $L_2=1+\log(\sqrt d\|\theta_0\|^2/(\mu h^2))$. Costs count exact margin-and-gradient queries for the two samples; counting individual sample queries changes only a universal factor.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

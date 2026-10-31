@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Monotone Variational Inequalities with Lipschitz Jacobians}
+We consider a monotone map $F:E\to E$ on a compact convex set $X$ in a finite-dimensional real inner product space $E$. The map is differentiable on $X$ with an $L$-Lipschitz Jacobian, where $L>0$. Two exact oracles return $F(x)$ and its Jacobian, respectively. For $\varepsilon>0$, the goal is a feasible output $\bar{x}\in X$ admitting an outward normal $n\in E$, meaning $\langle n,z-\bar{x}\rangle\leq0$ for every $z\in X$, such that $\|F(\bar{x})+n\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The underlying variational inequality is to find $x\in X$ such that
+\[
+\langle F(x),z-x\rangle\geq0
+\qquad\text{for every }z\in X.
+\]
+Write $J_F(x):E\to E$ for the Fr\'echet derivative of $F$ at $x$. The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $X$, a given starting point $x^0$, constants $L,D,\varepsilon>0$, and an integer $m\geq1$.
+
+Our assumptions:
+\begin{assumption}[Feasible set and starting point]
+The set $X\subseteq E$ is compact and convex, and
+\[
+x^0\in X,
+\qquad
+\|x-y\|\leq D\quad\text{for every }x,y\in X.
+\]
+\end{assumption}
+
+\begin{assumption}[Monotonicity]
+For every $x,y\in X$,
+\[
+\langle F(x)-F(y),x-y\rangle\geq0.
+\]
+\end{assumption}
+
+\begin{assumption}[Lipschitz Jacobian]
+The map $F:E\to E$ is Fr\'echet differentiable at every point of $X$, and
+\[
+\|J_F(x)-J_F(y)\|_{\mathrm{op}}
+\leq L\|x-y\|
+\qquad\text{for every }x,y\in X.
+\]
+\end{assumption}
+
+Queries to either oracle may be made at any point of $E$. The value oracle returns $F(x)$ at $x$, and the Jacobian oracle returns $J_F(x)$ at $x$; outside $X$, the latter is interpreted as the zero operator wherever $F$ is not differentiable. Calls to the two oracles are counted separately.
+
+Define the normal cone at $x\in X$ by
+\[
+N_X(x)=\{n\in E:\langle n,z-x\rangle\leq0
+\text{ for every }z\in X\}.
+\]
+After the allotted oracle calls, the required accuracy is
+\[
+\bar{x}\in X,
+\qquad
+\exists n\in N_X(\bar{x}):\
+\|F(\bar{x})+n\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

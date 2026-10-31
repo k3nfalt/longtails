@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Adam under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothAdam.lean}{GeneralizedSmoothAdam}.}\label{tab:GeneralizedSmoothAdam}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb R^d\to\mathbb R$, $f(x_0)-\inf f\le\Delta$, and $\|\nabla f(y)-\nabla f(x)\|\le(L_0+L_1\|\nabla f(x)\|)\|y-x\|$ whenever $L_1\|y-x\|\le1$. The jointly measurable oracle uses IID samples, is unbiased, and satisfies $\mathbb E\|g(x,\xi)-\nabla f(x)\|^2\le\sigma^2$; $L_0,L_1,\sigma,\Delta\ge0$, $\varepsilon>0$. The setup requires uncorrected coordinate Adam with prescribed $\beta\in[0,1)$ and a uniformly selected pre-update iterate $X$. The target is $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$, over sampling and output randomization.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.24}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ExpectedGeneralizedSmoothAdam.lean}{Expected\allowbreak Generalized\allowbreak Smooth\allowbreak Adam} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ExpectedGeneralizedSmoothAdam.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{A(1+\sigma^2)}{\varepsilon^4}+\dfrac1{1-\beta}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Adam \citep{gsaJin2026v2}, Thm.~B.2; $0<p<1$
+& $\mathcal{O}\!\left(1+\dfrac{d^2}{\varepsilon^4}\left[1+\log_+\dfrac d\varepsilon\right]^2\right)$ Remaining parameters fixed; polynomial factors not displayed. Expected RMS; no $p=1$ guarantee.
+& \textbf{(1)}: Scope extends the same Adam expectation guarantee to $p=1$, including $f=\cosh$. On the overlap, removes horizon logarithms; no full-class rate comparison.
+& \textbf{(1)} needs IID bounded variance instead of conditional, gap/gradient-dependent second moments; fixes damping $1$ and $v_0=(1+\sigma^2)\mathbf1$. \\
+\midrule
+\textbf{(3)} Adam \citep{gsaJin2026v2}, Claim~B.1; globally smooth special case
+& $\mathcal{O}\!\left(1+d^2P^{112}\left[\dfrac{1+\sigma^2}{\varepsilon^4}+\dfrac1{\varepsilon^2}\right]\right)$; expected RMS, damping $1$, $v_0=(1+\sigma^2)\mathbf1$.
+& \textbf{(1)}: Smaller explicit polynomial parameter powers on the globally smooth overlap; matches the $\varepsilon^{-4}$ exponent. Constants are unoptimized.
+& \textbf{(1)} requires IID noise; \textbf{(3)} permits conditional bounded variance. \\
+\midrule
+\textbf{(4)} Adam \citep{gsaJin2026v2}, Thm.~B.1; $p=1$
+& $\mathcal{O}\!\left(1+d^2(1+\log(1/\delta))^2\left[\dfrac1{\delta\varepsilon^4}+\dfrac1{\varepsilon^2}\right]\right)$ Remaining parameters fixed; polynomial factors not displayed. Average squared gradient $\le\varepsilon^2$ with probability $1-\delta$.
+& \textbf{(1)}: Expected RMS for one fixed run; \textbf{(4)} tunes steps to $\delta$. Criteria differ; costs are not directly comparable.
+& \textbf{(1)} needs IID bounded variance instead of conditional, gap/gradient-dependent second moments. \\
+\midrule
+\textbf{(5)} Adam \citep{gsaZhang2025v3}, Thm.~2; global coordinatewise smoothness
+& $\mathcal{O}(\varepsilon^{-4})$ for sufficiently small $\varepsilon$, other parameters fixed; mean gradient norm $\le\varepsilon$. Parameter factors unextracted; $0<\beta_1\le\sqrt{\beta_2}<1$.
+& \textbf{(1)}: Local Euclidean instead of global coordinatewise smoothness (allows $\cosh$); RMS instead of mean norm. No established cost comparison.
+& \textbf{(1)} requires IID bounded variance; \textbf{(5)} allows conditional coordinatewise affine variance and uses damping inside the square root. \\
+\midrule
+\textbf{(6)} NSGD-M \citep{gsaHubler2024}, Cor.~16; $L_1>0$
+& $\mathcal{O}\!\left(1+\dfrac{S^4}{\varepsilon^4}\left[1+\log_+\dfrac S\varepsilon\right]^4\right)$; mean gradient norm $\le\varepsilon$. Schedule uses $L_1$; common $C^2$ class.
+& \textbf{(1)}: RMS certificate. For the shared mean target, noise dependence is $A\sigma^2$ instead of $\sigma^4$ up to logarithms when $\sigma\ge\max\{1,L_1\Delta,L_0/L_1\}$; total gain requires $\sigma^2\gg A$.
+& \textbf{(1)} has dimension dependence and worse smoothness/gap powers ($\Delta^{12}$ versus $\Delta^4$); needs $\sigma$ for initialization. Noise comparison concerns only \textbf{(6)}'s displayed schedule. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual stochastic-gradient calls. RMS means $(\mathbb E\|\nabla f(X)\|^2)^{1/2}$; mean means $\mathbb E\|\nabla f(X)\|$. $\log_+t=\max\{0,\log t\}$ for $t>0$, and $\log_+0=0$; $\delta\in(0,1)$ is failure probability. $A=(d+1)^2(1+L_0+L_1)^{10}(1+\Delta)^{12}/(1-\beta)^4$, $S=L_1\Delta+\sigma+L_0/L_1$. In \textbf{(2)}, $p$ replaces the gradient power $1$ in local smoothness, with coefficient $L_p>0$. In \textbf{(3)}, $L$ is a global gradient Lipschitz constant and $P=1+(1-\beta)^{-2}+\Delta+\|\nabla f(x_0)\|+L+\sigma^2$; compare with \textbf{(1)} at $L_0=L,L_1=0$. Global coordinatewise smoothness in \textbf{(5)} means $|\partial_i f(y)-\partial_i f(x)|\le(L_0/\sqrt d+L_1|\partial_i f(x)|)\|y-x\|$ for all $x,y,i$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

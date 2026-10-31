@@ -5,92 +5,90 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Composite Optimization with Lipschitz Hessian}
-We consider minimizing $f+\psi$ over a convex set $D$ in a finite-dimensional real inner product space $E$. The function $f:E\to\mathbb{R}$ is convex and twice continuously differentiable with $H$-Lipschitz Hessian, where $H>0$; $\psi:E\to\mathbb{R}$ is convex on $D$ with closed constrained epigraph. An initial point $x^0\in D$ satisfies $\|x^0-x^\star\|\leq R$ for a minimizer $x^\star\in D$ and $R>0$. Three separately counted oracles return exact gradients, exact Hessians, and exact composite model solutions. Given $\varepsilon>0$, the output $\bar{x}$ must belong to $D$ and satisfy $(f+\psi)(\bar{x})-(f+\psi)(x^\star)\leq\varepsilon$ almost surely.
+\section*{Composite Minimization with Lipschitz Hessian}
+We consider minimizing $F=f+\psi$ over a convex set $D$ in a finite-dimensional real inner product space $E$. The function $f:E\to\mathbb{R}$ is convex and twice continuously differentiable, with $H$-Lipschitz Hessian, where $H>0$; $\psi:E\to\mathbb{R}$ is convex on $D$ and has a closed epigraph restricted to $D$. A given point $x^0\in D$ satisfies $\|x^0-x^\star\|\leq R$ for a minimizer $x^\star\in D$ and $R>0$. Three oracles return exact gradients, exact Hessians, and exact composite model solutions. For $\varepsilon>0$, the goal is $\bar{x}\in D$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
 
-The problem is
+Write $F(x)=f(x)+\psi(x)$. The optimization problem is
 \[
-\min_{x\in D}\bigl\{f(x)+\psi(x)\bigr\},
+\min_{x\in D} F(x).
 \]
-where the norm on $E$ is induced by its inner product. The public inputs are $(E,x^0,H,R,\varepsilon,m)$, with $H,R,\varepsilon>0$ and an integer $m\geq1$. The functions $f,\psi$, the set $D$, and the minimizer $x^\star$ constitute the problem instance and are not public inputs. The admissible instances and oracle replies satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $x^0$, $H>0$, $R>0$, $\varepsilon>0$, and an integer $m\geq 1$.
 
-\begin{assumption}[Convexity and Hessian regularity]
-The function $f$ belongs to $C^2(E;\mathbb{R})$ and is convex on $E$. Writing $\nabla^2 f(x)=D(\nabla f)(x)$, for all $x,y\in E$ and $t\in[0,1]$,
+Our assumptions:
+\begin{assumption}[Convex composite objective]
+The function $f$ is convex on $E$, the set $D\subseteq E$ is convex, and $\psi$ is convex on $D$. In particular, for $t\in[0,1]$,
 \[
 \begin{aligned}
-f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
-\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
-&\leq H\|x-y\|.
+f((1-t)x+ty)&\leq (1-t)f(x)+tf(y),
+&&x,y\in E,\\
+\psi((1-t)x+ty)&\leq (1-t)\psi(x)+t\psi(y),
+&&x,y\in D.
 \end{aligned}
 \]
-\end{assumption}
-
-\begin{assumption}[Closed convex composite term]
-The set $D\subseteq E$ is convex, and for every $x,y\in D$ and $t\in[0,1]$,
-\[
-\psi((1-t)x+ty)\leq(1-t)\psi(x)+t\psi(y).
-\]
-The constrained epigraph
+The restricted epigraph
 \[
 \{(x,r)\in E\times\mathbb{R}:x\in D,\ \psi(x)\leq r\}
 \]
 is closed in $E\times\mathbb{R}$.
 \end{assumption}
 
-\begin{assumption}[Attainment and initialization]
-The points $x^0,x^\star$ belong to $D$ and satisfy
+\begin{assumption}[Lipschitz Hessian]
+The function $f$ is twice continuously Fr\'echet differentiable on $E$. Its Hessian, viewed as a linear operator from $E$ to $E$, satisfies
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
+\leq H\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial distance]
+The given starting point $x^0$ and a minimizer $x^\star$ belong to $D$, with
 \[
 \begin{aligned}
-\|x^0-x^\star\|&\leq R,\\
-f(x^\star)+\psi(x^\star)&\leq f(x)+\psi(x)
-\qquad(x\in D).
+F(x^\star)&\leq F(x) &&\text{for every }x\in D,\\
+\|x^0-x^\star\|&\leq R.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Exact derivative and model oracles]
-Oracle ID $0$, queried at any $x\in E$, returns $\nabla f(x)\in E$. Oracle ID $1$, queried at any $x\in E$, returns the linear operator $\nabla^2 f(x):E\to E$. These replies are exact at every call index and for every realization of oracle randomness; query points need not belong to $D$.
+Gradient and Hessian queries may be made at any $x\in E$. The gradient oracle returns $\nabla f(x)$ at $x$, and the Hessian oracle returns $\nabla^2 f(x)$ at $x$.
 
-Oracle ID $2$ accepts a model specified by a center $c\in E$, a vector $a\in E$, a linear operator $B:E\to E$, and scalars $\gamma,s\in\mathbb{R}$. A valid model satisfies
+The third oracle solves composite models. A model query consists of a center $c\in E$, a vector $a\in E$, a linear operator $B:E\to E$, a cubic coefficient $\gamma\geq 0$, and a scale $s>0$. The operator must satisfy
 \[
 \begin{aligned}
-s&>0,\qquad \gamma\geq0,\\
 \langle u,Bv\rangle&=\langle Bu,v\rangle
-&& (u,v\in E),\\
-\langle u,Bu\rangle&\geq0
-&& (u\in E),
+&&\text{for all }u,v\in E,\\
+\langle u,Bu\rangle&\geq 0
+&&\text{for all }u\in E.
 \end{aligned}
 \]
-and either $\gamma>0$ or there exists $\mu>0$ such that
+In addition, either $\gamma>0$, or there exists $\mu>0$ such that
 \[
-\langle u,Bu\rangle\geq\mu\|u\|^2
-\qquad(u\in E).
+\langle u,Bu\rangle\geq\mu\|u\|^2,
+\qquad u\in E.
 \]
-For each valid model, the oracle returns a point $z\in D$ satisfying
+For every such query, the model oracle returns a point $z\in D$ satisfying the exact variational inequality
 \[
 \begin{aligned}
-g(z)&=a+B(z-c)+\gamma\|z-c\|(z-c),\\
-0&\leq\langle g(z),u-z\rangle
-       +s\bigl(\psi(u)-\psi(z)\bigr)
-\qquad(u\in D).
+d(z)&=a+B(z-c)+\gamma\|z-c\|(z-c),\\
+0&\leq\langle d(z),u-z\rangle
++s\bigl(\psi(u)-\psi(z)\bigr),
+\qquad u\in D.
 \end{aligned}
 \]
-This requirement holds at every call index and for every realization of oracle randomness. It is the exact optimality condition for the composite model
+Equivalently, $z$ minimizes over $D$ the model
 \[
-\min_{z\in D}\left\{
-\langle a,z-c\rangle
-+\frac12\langle z-c,B(z-c)\rangle
-+\frac{\gamma}{3}\|z-c\|^3+s\psi(z)
-\right\}.
+M(x)=\langle a,x-c\rangle
++\frac{1}{2}\langle x-c,B(x-c)\rangle
++\frac{\gamma}{3}\|x-c\|^3+s\psi(x).
 \]
-Each query to oracle ID $i\in\{0,1,2\}$ costs one call to that oracle, counted separately. Internal algorithm randomness is independent of oracle randomness.
-\end{assumption}
+The model guarantee holds for every valid query and every oracle reply, including queries chosen using previous replies. Gradient, Hessian, and model-solution calls are counted separately.
 
-Queries may be adaptive. The algorithm is selected using only the public inputs, and its call budgets $K_0,K_1,K_2\in\mathbb{N}$ may depend on those inputs. After using at most $K_i$ calls to each oracle ID $i$, it returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, the required accuracy is
+After the allotted calls, the output must satisfy
 \[
-\bar{x}\in D,\qquad
-f(\bar{x})+\psi(\bar{x})
--\bigl(f(x^\star)+\psi(x^\star)\bigr)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\bar{x}\in D,
+\qquad F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
 \]
+Under the joint law $P$, the algorithm's randomness is independent of the oracle's randomness.
 \end{document}

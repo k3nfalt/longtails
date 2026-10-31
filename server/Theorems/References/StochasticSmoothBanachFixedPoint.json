@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.StochasticSmoothBanachFixedPoint",
+  "searched_at": "2026-10-28T12:15:28.527257+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{20} \\cdot \\left(1 + \\frac{R}{\\varepsilon} + \\frac{C \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(1 + \\frac{16 \\cdot R}{\\varepsilon}\\right)\\right)^{4} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticSmoothBanachFixedPoint.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 20 * (1 + q.R / q.ε + q.C * q.σ ^ 2 / q.ε ^ 2) * (1 + Real.log (1 + 16 * q.R / q.ε)) ^ 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{20} \\cdot \\left(1 + \\frac{R}{\\varepsilon} + \\frac{C \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(1 + \\frac{16 \\cdot R}{\\varepsilon}\\right)\\right)^{4} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticSmoothBanachFixedPoint.spec.Params → ℕ",
+          "value": "fun q => ⌈2 ^ 20 * (1 + q.R / q.ε + q.C * q.σ ^ 2 / q.ε ^ 2) * (1 + Real.log (1 + 16 * q.R / q.ε)) ^ 4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticSmoothBanachFixedPoint",
+      "namespace": "LongTails.Setups.StochasticSmoothBanachFixedPoint",
+      "setup": "LongTails.Setups.StochasticSmoothBanachFixedPoint",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticSmoothBanachFixedPoint.spec\n  LongTails.Theorems.StochasticSmoothBanachFixedPoint.budget",
+      "theorem": "LongTails.Theorems.StochasticSmoothBanachFixedPoint.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticSmoothBanachFixedPoint",
+      "theorem": "LongTails.Theorems.StochasticSmoothBanachFixedPoint.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Approximate fixed-point computation for a nonexpansive map T:E→E, with an existing fixed point xstar satisfying ‖x0−xstar‖≤R. No optimization objective is specified.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Single-point stochastic operator evaluations g(x,ξ), with E[g(x,ξ)]=T(x). Each call uses a fresh IID seed; joint measurability and pointwise integrability are required. The oracle does not provide reusable samples for evaluations at multiple points.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-central-moment bound E[‖g(x,ξ)−T(x)‖²]≤σ² for every x, including integrability. No tail bound or samplewise Lipschitz assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator.variance_integrable and variance; LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: spec.admissible."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The given norm has a smooth squared-norm bound: a continuous J:E→E* satisfies ‖J(x)‖≤‖x‖ and ‖x+y‖²≤‖x‖²+2J(x)(y)+C‖y‖², with C≥1. Nonexpansiveness, oracle variance, and residual accuracy all use this norm.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: HasSmoothSquaredNorm, spec.valid, spec.admissible, spec.successful."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real Banach space with its Borel measurable structure and second-countable topology.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: Params."
+      },
+      {
+        "label": "other",
+        "details": "All Params are public, including x0, C, R, σ, and ε, with R≥0, σ≥0, and ε>0. T, its fixed point, and the oracle distribution are hidden. The extracted budget counts individual oracle calls and is fixed in advance.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: Params, spec.Public, spec.publicInput, spec.valid; LongTails/Template.lean: executeWithTrace and Convergence; supplied extracted budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "Expectation is over the joint algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: spec.successful; LongTails/Template.lean: Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Output X∈E must be measurable, its squared fixed-point residual must be integrable, and E[‖T(X)−X‖²]≤ε². No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/StochasticSmoothBanachFixedPoint.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Stochastic nonexpansive fixed-point computation with unbiased bounded-variance evaluations and residual accuracy is an established formulation; quadratic norm smoothness specifies its Banach-space geometry."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StochasticSmoothBanachFixedPoint.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticSmoothBanachFixedPoint",
+          "theorem": "LongTails.Theorems.StochasticSmoothBanachFixedPoint.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

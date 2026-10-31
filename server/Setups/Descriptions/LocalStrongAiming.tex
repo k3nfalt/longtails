@@ -5,65 +5,68 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Exact Gradients with Local Strong Aiming}
-We minimize a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. A global minimizer $x^\star$ defines the solution set $M=\{x:f(x)=f(x^\star)\}$. Within distance $r>0$ of $M$, the gradient is $L$-Lipschitz, a quadratic lower model has coefficient $\sqrt{\mu L}$, and strong aiming toward nearest minimizers has parameter $0<\mu\leq L$. The initial point $x^0\in E$ lies in this neighborhood, with objective gap at most $\Delta\geq0$ satisfying $256\Delta\leq\mu r^2$. Each oracle call returns the exact gradient. For $\varepsilon>0$, the output $\bar{x}\in E$ must satisfy $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely. Only $E,L,\mu,x^0$ are public inputs.
+\section*{Nesterov under Local Strong Aiming}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$ using Nesterov's method. Around its nonempty minimizer set, $f$ has an $L$-Lipschitz gradient, a quadratic lower model, and a strong aiming condition toward nearest minimizers, with $0<\mu\leq L$. These conditions hold within distance $r>0$ of that set; the given starting point $x^0$ lies there with objective gap at most $\mu r^2/256$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is a last iterate $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of algorithm randomness, where $x^\star$ is a global minimizer.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where the norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$. The objective is differentiable everywhere on $E$. For a nonempty set $M\subseteq E$, write
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. For the minimizer set $M$, define
 \[
-d(x,M)=\inf_{z\in M}\|x-z\|.
+d(x,M):=\inf_{z\in M}\|x-z\|,
+\qquad U_r:=\{x\in E:d(x,M)<r\}.
 \]
-The admissible objectives, initialization, and oracle satisfy the following conditions.
+The algorithm receives only $E$, $L$, $\mu$, and $x^0$; the radius $r$, initial gap bound $\Delta$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
 
-\begin{assumption}[Attainment and initialization]
-There exists a global minimizer $x^\star\in E$ such that, with $M=\{x\in E:f(x)=f(x^\star)\}$,
+Our assumptions:
+\begin{assumption}[Minimizers and initialization]
+There exists a global minimizer $x^\star\in E$. With $M:=\{x\in E:f(x)=f(x^\star)\}$, the parameters and starting point satisfy
 \[
 \begin{aligned}
-f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
-f(x^0)-f(x^\star)&\leq\Delta, & d(x^0,M)&<r.
-\end{aligned}
-\]
-The parameters obey
-\[
-\begin{aligned}
-0<\mu\leq L,\qquad r&>0,\\
-\Delta\geq0,\qquad 256\Delta&\leq\mu r^2,\qquad \varepsilon>0.
+&0<\mu\leq L,\qquad r>0,\qquad \Delta\geq0,\qquad \varepsilon>0,\\
+&256\Delta\leq\mu r^2,\\
+&f(x^0)-f(x^\star)\leq\Delta,\qquad d(x^0,M)<r.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Local gradient and lower model]
-For every $x,y\in E$ with $d(x,M)<r$ and $d(y,M)<r$,
+\begin{assumption}[Local regularity]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in U_r$,
 \[
 \begin{aligned}
 \|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
-f(x)+\langle\nabla f(x),y-x\rangle
-&\leq f(y)+\sqrt{\mu L}\,\|y-x\|^2.
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+-\sqrt{\mu L}\,\|y-x\|^2.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Strong aiming toward nearest minimizers]
-For every $x\in E$ with $d(x,M)<r$ and every $z\in M$ satisfying $\|x-z\|=d(x,M)$,
+\begin{assumption}[Local strong aiming]
+For every $x\in U_r$ and every nearest minimizer $z\in M$, meaning $\|x-z\|=d(x,M)$,
 \[
 f(x)-f(x^\star)+\frac{\mu}{2}\|x-z\|^2
 \leq\langle\nabla f(x),x-z\rangle.
 \]
 \end{assumption}
 
-\begin{assumption}[Exact-gradient access]
-At every call index and every query point $x\in E$, the oracle returns $\nabla f(x)\in E$ for every realization of its randomness. Each query costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only $(E,L,\mu,x^0)$; the neighborhood radius $r$, initial gap bound $\Delta$, and accuracy level $\varepsilon$ are not supplied to it. An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,\mu,x^0,r,\Delta,\varepsilon)$.
-
-After $K$ oracle calls, the algorithm returns $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a global minimizer $x^\star$ such that
+The formulation is algorithm-specific: we analyze Nesterov's method with position $x^k$ and velocity $v^k$. Set
+\[
+s:=\frac{1}{2\sqrt{L}},\qquad q:=\sqrt{\mu}\,s,
+\qquad v^0:=0,
+\]
+with position initialized at the given $x^0$. At each iteration $k\geq0$, the method queries $y^k$ and updates according to
+\[
+\begin{aligned}
+y^k&=x^k+s v^k,\\
+g^k&=\nabla f(y^k),\\
+x^{k+1}&=x^k+s v^k-s^2g^k,\\
+v^{k+1}&=\frac{1-q}{1+q}(v^k-sg^k).
+\end{aligned}
+\]
+Queries may be made at any point of $E$. After $K\geq0$ oracle calls, the output is the last position $\bar{x}=x^K$. The required accuracy is
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad \mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
-Since all global minimizers have the same objective value, the minimizer witnessing the initialization condition may be used in this accuracy criterion.
 \end{document}

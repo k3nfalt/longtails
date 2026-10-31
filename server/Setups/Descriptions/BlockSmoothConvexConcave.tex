@@ -5,48 +5,38 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Block-Smooth Convex--Concave Saddle Points}
-We consider a saddle-point problem for a separately differentiable convex--concave function $f:E\times F\to\mathbb{R}$ on real Hilbert spaces $E$ and $F$, with globally Lipschitz partial gradients in each block. The initial pair $(x^0,y^0)\in E\times F$ lies within product distance $R\geq0$ of a saddle point. Each oracle call returns one requested exact partial gradient. For an accuracy level $\varepsilon>0$, the output $(\bar{x},\bar{y})\in E\times F$ must satisfy $\|\nabla_x f(\bar{x},\bar{y})\|_E^2+\|\nabla_y f(\bar{x},\bar{y})\|_F^2\leq\varepsilon^2$ almost surely. Algorithms are restricted to the alternating extrapolated gradient scheme specified below; neither $R$ nor $\varepsilon$ is supplied to the algorithm.
+\section*{Alex-GDA for Block-Smooth Saddle Problems}
+We consider $\min_{x\in E}\max_{y\in F} f(x,y)$ on real Hilbert spaces $E$ and $F$, where $f:E\times F\to\mathbb{R}$ is convex in $x$, concave in $y$, and has globally Lipschitz partial gradients in each variable. A given starting pair $(x^0,y^0)$ lies within distance $R\geq0$ of a saddle point in the Hilbert product norm. Each oracle query returns either $\nabla_x f(x,y)$ or $\nabla_y f(x,y)$. For $\varepsilon>0$, Alex-GDA must return $(\bar{x},\bar{y})$ satisfying $\|\nabla_x f(\bar{x},\bar{y})\|^2+\|\nabla_y f(\bar{x},\bar{y})\|^2\leq\varepsilon^2$ almost surely.
 
-The problem is
+The saddle-point problem is
 \[
 \min_{x\in E}\max_{y\in F} f(x,y).
 \]
-We equip the product space with the norm
+Norms on $E$ and $F$ are induced by their inner products, and we use the product norm $\|(x,y)\|=(\|x\|^2+\|y\|^2)^{1/2}$. The block constants satisfy
 \[
-\|(x,y)\|_{E\times F}^2=\|x\|_E^2+\|y\|_F^2.
+L_x,L_y,L_{xy}\geq0,
+\qquad L_x+L_{xy}>0,
+\qquad L_y+L_{xy}>0.
 \]
-The public inputs are $E,F$, the initial pair $(x^0,y^0)$, block smoothness constants $L_x,L_y,L_{xy}$, and extrapolation parameters $\gamma,\delta$. Their ranges are
-\[
-\begin{aligned}
-L_x,L_y,L_{xy}&\geq0,\\
-L_x+L_{xy}&>0,\qquad L_y+L_{xy}>0,\\
-1<\gamma&\leq2,\qquad \delta\geq1.
-\end{aligned}
-\]
-The admissible objectives and oracle satisfy the following conditions.
+The algorithm receives $E,F,L_x,L_y,L_{xy}$, the starting pair $(x^0,y^0)$, and parameters $\gamma,\delta$ satisfying $1<\gamma\leq2$ and $\delta\geq1$; the radius $R$ and tolerance $\varepsilon$ may enter only the oracle-call budget.
 
-\begin{assumption}[Convexity and partial differentiability]
-For every $y\in F$, the function $x\mapsto f(x,y)$ is convex and differentiable everywhere on $E$. For every $x\in E$, the function $y\mapsto f(x,y)$ is concave and differentiable everywhere on $F$. Write
-\[
-g_x(x,y)=\nabla_x f(x,y),\qquad
- g_y(x,y)=\nabla_y f(x,y)
-\]
-for the corresponding Hilbert-space gradients.
+Our assumptions:
+\begin{assumption}[Convexity and concavity]
+For every $y\in F$, the function $f(\cdot,y)$ is convex on $E$. For every $x\in E$, the function $f(x,\cdot)$ is concave on $F$.
 \end{assumption}
 
 \begin{assumption}[Block smoothness]
-For all $x,x'\in E$ and $y,y'\in F$,
+Both partial functions are Fr\'echet differentiable everywhere. For all $x,x'\in E$ and $y,y'\in F$, their gradients satisfy
 \[
 \begin{aligned}
-\|g_x(x,y)-g_x(x',y)\|_E
-&\leq L_x\|x-x'\|_E,\\
-\|g_x(x,y)-g_x(x,y')\|_E
-&\leq L_{xy}\|y-y'\|_F,\\
-\|g_y(x,y)-g_y(x,y')\|_F
-&\leq L_y\|y-y'\|_F,\\
-\|g_y(x,y)-g_y(x',y)\|_F
-&\leq L_{xy}\|x-x'\|_E.
+\|\nabla_x f(x,y)-\nabla_x f(x',y)\|
+&\leq L_x\|x-x'\|,\\
+\|\nabla_x f(x,y)-\nabla_x f(x,y')\|
+&\leq L_{xy}\|y-y'\|,\\
+\|\nabla_y f(x,y)-\nabla_y f(x,y')\|
+&\leq L_y\|y-y'\|,\\
+\|\nabla_y f(x,y)-\nabla_y f(x',y)\|
+&\leq L_{xy}\|x-x'\|.
 \end{aligned}
 \]
 \end{assumption}
@@ -58,43 +48,41 @@ f(x^\star,y)\leq f(x^\star,y^\star)\leq f(x,y^\star),
 \]
 and
 \[
-\|x^0-x^\star\|_E^2+\|y^0-y^\star\|_F^2\leq R^2.
+\|x^0-x^\star\|^2+\|y^0-y^\star\|^2\leq R^2.
 \]
 \end{assumption}
 
-\begin{assumption}[Exact partial-gradient access]
-At any query pair $(x,y)\in E\times F$, the algorithm requests either the $x$-gradient or the $y$-gradient. The oracle returns $g_x(x,y)\in E$ or $g_y(x,y)\in F$, respectively, at every call index and for every realization of its randomness. Each requested partial gradient costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
+Queries may be made at any pair in $E\times F$. The oracle returns the requested exact partial gradient, with each partial-gradient evaluation counted as one call.
 
-Queries may be chosen adaptively anywhere in $E\times F$. The algorithm must use the following scheme, with fixed step sizes $\alpha>0$ and $\beta>0$ selected using only the public inputs. Initialize $v^0=0\in F$. For $n=0,1,\ldots$, request the two partial gradients in the displayed order:
+Our result is algorithm-specific: we analyze Alex-GDA. The method chooses fixed step sizes $\alpha,\beta>0$ from its available inputs and initializes $v^0=0$. Starting from the given pair, each iteration $k\geq0$ makes two successive oracle calls and updates according to
 \[
 \begin{aligned}
-a^n&=g_x\bigl(x^n,y^n+(\delta-1)\beta v^n\bigr),\\
-b^n&=g_y\bigl(x^n-\gamma\alpha a^n,y^n\bigr).
+g^k&=\nabla_x f\bigl(x^k,y^k+(\delta-1)\beta v^k\bigr),\\
+h^k&=\nabla_y f\bigl(x^k-\gamma\alpha g^k,y^k\bigr),\\
+x^{k+1}&=x^k-\alpha g^k,\\
+y^{k+1}&=y^k+\beta h^k,\\
+v^{k+1}&=h^k.
 \end{aligned}
 \]
-After these two calls, update
+For each completed iteration, define
+\[
+s_k=\|g^k\|^2+\|h^k\|^2+\|v^k\|^2.
+\]
+Given a total budget of $B\geq0$ oracle calls, let $N=\lfloor B/2\rfloor$. If $N\geq1$, the output is the pre-update pair with the smallest score, with ties resolved by the earliest index:
 \[
 \begin{aligned}
-x^{n+1}&=x^n-\alpha a^n,\\
-y^{n+1}&=y^n+\beta b^n,\\
-v^{n+1}&=b^n.
+k_\star&=\min\mathop{\mathrm{arg\,min}}_{0\leq k<N}s_k,\\
+(\bar{x},\bar{y})&=(x^{k_\star},y^{k_\star}).
 \end{aligned}
 \]
-Thus the $x$-update uses descent and the $y$-update uses ascent, with extrapolated query points in both blocks.
+If $N=0$, the output is $(x^0,y^0)$. An unpaired final partial-gradient call does not change the output.
 
-An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple, including $R$ and $\varepsilon$. Execution makes $K$ partial-gradient calls and completes $m=\lfloor K/2\rfloor$ updates; an odd final call requests the next $x$-gradient without completing another update. For each completed update, define the selection score
+The required accuracy is the squared gradient-residual bound
 \[
-s_n=\|a^n\|_E^2+\|b^n\|_F^2+\|v^n\|_F^2.
-\]
-If $m\geq1$, let $j$ be the smallest index attaining the minimum of $s_n$ over $0\leq n<m$, and return $(\bar{x},\bar{y})=(x^j,y^j)$. If $m=0$, return $(\bar{x},\bar{y})=(x^0,y^0)$. The output is therefore a selected pair preceding a completed update.
-
-Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, the required accuracy is
-\[
-\|\nabla_x f(\bar{x},\bar{y})\|_E^2
-+\|\nabla_y f(\bar{x},\bar{y})\|_F^2
+\|\nabla_x f(\bar{x},\bar{y})\|^2
++\|\nabla_y f(\bar{x},\bar{y})\|^2
 \leq\varepsilon^2
-\qquad \mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.},
 \]
-This criterion evaluates both partial gradients at the returned pair itself.
+where $P$ is the law of the algorithm's randomness; the specified method and exact replies are deterministic.
 \end{document}

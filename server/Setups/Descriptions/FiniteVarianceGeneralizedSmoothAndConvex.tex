@@ -5,56 +5,55 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Generalized Smooth Convex Stochastic Optimization}
-We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is differentiable, with derivative norm bounded by an affine function of the gradient norm. A given initial point $x^0\in E$ has bounded distance and objective gap to a global minimizer $x^\star$. Each oracle call returns an unbiased stochastic gradient with uniformly bounded variance, using an independent sample. Given accuracy $\varepsilon>0$ and failure probability $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+\section*{Finite-Variance Generalized Smooth Convex Minimization}
+We consider minimizing a convex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$. A given point $x^0\in E$ has distance at most $R>0$ and objective gap at most $\Delta>0$ from a global minimizer $x^\star$. The oracle returns an unbiased stochastic gradient with variance at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ satisfying $P(f(\bar{x})-f(x^\star)>\varepsilon)\leq\delta$, where $P$ is the joint law of the samples and independent algorithm randomness.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where $E$ carries its Borel sigma-algebra and the norm induced by its inner product. The public data consist of $E$, a measurable sample space $\Omega$, the initial point $x^0$, and parameters
-\[
-L_0>0,\qquad L_1\geq0,\qquad R>0,\qquad \Delta>0,
-\qquad \sigma\geq0,\qquad \varepsilon>0,\qquad 0<\delta<1.
-\]
-The objective and oracle satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $x^0$, $L_0$, $L_1$, $R$, $\Delta$, $\sigma$, $\varepsilon$, and $\delta$; the objective and sampling distribution are accessed through the oracle.
 
+Our assumptions:
 \begin{assumption}[Convexity and generalized smoothness]
-The function $f$ is differentiable everywhere, its gradient $\nabla f:E\to E$ is Fr\'echet differentiable, and, for every $x,y\in E$ and $t\in[0,1]$,
-\begin{align*}
-f((1-t)x+ty) &\leq (1-t)f(x)+tf(y),\\
-\|D(\nabla f)(x)\|_{\mathrm{op}}
-&\leq L_0+L_1\|\nabla f(x)\|.
-\end{align*}
-Here $D(\nabla f)(x)$ denotes the Fr\'echet derivative of the gradient and $\|\cdot\|_{\mathrm{op}}$ its operator norm.
+The function $f$ is Fr\'echet differentiable on $E$, and its gradient $\nabla f:E\to E$ is Fr\'echet differentiable. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
+Generalized smoothness means that
+\[
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in E,
+\]
+where $\nabla^2 f(x)$ is a bounded linear operator from $E$ to $E$.
 \end{assumption}
 
-\begin{assumption}[Attainment and initialization]
+\begin{assumption}[Initial distance and objective gap]
 There exists $x^\star\in E$ such that
-\begin{align*}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
 \|x^0-x^\star\|&\leq R,\\
 f(x^0)-f(x^\star)&\leq\Delta.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Unbiasedness and finite variance]
-There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For each $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and the scalar map $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^2$ is integrable with respect to $p$. They satisfy
-\begin{align*}
-\int_{\Omega}g(x,\omega)\,p(d\omega)&=\nabla f(x),\\
-\int_{\Omega}\|g(x,\omega)-\nabla f(x)\|^2\,p(d\omega)&\leq\sigma^2.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Independent sampling and oracle access]
-The oracle samples have a joint probability law $P$ on $\Omega^{\mathbb{N}}$. The coordinate maps $\xi_k(\omega)=\omega_k$ are measurable and mutually independent under $P$, with marginal law $p$ for every $k\in\mathbb{N}$. At call $k$, a query $x\in E$ receives the vector $g(x,\xi_k)\in E$ and costs one oracle call. Any internal algorithm randomness is independent of the entire oracle sample sequence.
-\end{assumption}
-
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $E$. The algorithm is selected using only the public data $(E,\Omega,x^0,L_0,L_1,R,\Delta,\sigma,\varepsilon,\delta)$; the function $f$, the map $g$, and the laws $p$ and $P$ are not public inputs. An externally specified budget $K\in\mathbb{N}$ may depend on the public data and counts every oracle call.
-
-After $K$ calls, the algorithm returns a measurable random point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of the independent algorithm and oracle randomness, the required accuracy is
-\[
-\mathbb{P}\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta.
+\end{aligned}
 \]
-The minimizer witnessing the initialization bounds can be used here because all global minimizers have the same objective value.
+\end{assumption}
+
+\begin{assumption}[Finite-variance stochastic gradients]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, the squared error $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ receives $g(x,\xi_k)$. The sample variables $(\xi_k)_{k\geq0}$ are measurable and mutually independent, each with law $\nu$, and their joint law is independent of the algorithm's randomness.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the algorithm must return a measurable output $\bar{x}$ satisfying
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta.
+\]
 \end{document}

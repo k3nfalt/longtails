@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Adam under Generalized Smoothness}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer. The function $f$ is $(L_0,L_1)$-smooth with $L_0,L_1\geq0$, and a given starting point $x^0$ satisfies $f(x^0)-\inf_x f(x)\leq\Delta$ for $\Delta\geq0$. At $x$, the oracle returns an unbiased stochastic gradient with variance at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. We analyze Adam with positive initial second moments. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|^2\leq\varepsilon^2$, with expectation over sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+where $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives $d$, the measurable sample space $\Omega$, $L_0,L_1,\sigma,\Delta,\varepsilon$, the starting point $x^0\in\mathbb{R}^d$, and a momentum parameter $\beta\in[0,1)$.
+
+Our assumptions:
+\begin{assumption}[Generalized smoothness]
+The function $f$ is differentiable everywhere, and for every $x,y\in\mathbb{R}^d$,
+\[
+L_1\|y-x\|\leq1
+\quad\Longrightarrow\quad
+\|\nabla f(y)-\nabla f(x)\|
+\leq \bigl(L_0+L_1\|\nabla f(x)\|\bigr)\|y-x\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+For every $x\in\mathbb{R}^d$,
+\[
+f(x^0)-f(x)\leq\Delta.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+Let $p$ be a probability measure on $\Omega$. The oracle is represented by a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$. For every $x\in\mathbb{R}^d$, the map $g(x,\cdot)$ is Bochner integrable, the squared error $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+The sample sequence $(\xi_t)_{t\geq0}$ has a joint probability law $Q$ on $\Omega^{\mathbb{N}}$: its coordinate maps are measurable, mutually independent, and each has law $p$. At its $t$th query $x$, the oracle returns $g(x,\xi_t)$. The algorithm's randomness is independent of this sequence. Queries may be made at any point of $\mathbb{R}^d$.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze Adam with the following recurrence. The algorithm chooses constants
+\[
+0<\rho\leq1,\qquad \eta>0,\qquad \tau>0,\qquad v_{\mathrm{init}}>0,
+\qquad n\in\mathbb{Z}_{\geq0},
+\]
+using the available inputs. Starting from the given $x^0$, it initializes $m^0=0$ and $v_i^0=v_{\mathrm{init}}$ for $i=1,\ldots,d$. Each query and update is
+\[
+\begin{aligned}
+g^t&=g(x^t,\xi_t),\\
+m^{t+1}&=\beta m^t+(1-\beta)g^t,\\
+v_i^{t+1}&=(1-\rho)v_i^t+\rho(g_i^t)^2,\\
+x_i^{t+1}&=x_i^t-\eta\frac{m_i^{t+1}}{\sqrt{v_i^{t+1}}+\tau},
+\qquad i=1,\ldots,d.
+\end{aligned}
+\]
+The algorithm independently draws $K$ uniformly from $\{0,\ldots,n\}$. After an allotted budget of $T\in\mathbb{Z}_{\geq0}$ oracle calls, its output is
+\[
+\bar{x}=\begin{cases}
+x^K,&K<T,\\
+x^0,&K\geq T.
+\end{cases}
+\]
+Thus, when $T\geq n+1$, the output is the uniformly selected queried iterate $x^K$.
+
+The required output is measurable, its squared gradient norm is integrable, and it satisfies
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|^2\bigr]\leq\varepsilon^2,
+\]
+where $P$ is the joint law of the independent selection $K$ and sample sequence $(\xi_t)_{t\geq0}$.
+\end{document}

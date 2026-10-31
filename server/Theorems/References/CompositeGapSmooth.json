@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.CompositeGapSmooth",
+  "searched_at": "2026-10-28T12:09:42.751152+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 8192 \\cdot \\left(1 + R \\cdot \\sqrt{\\frac{H0}{\\varepsilon} + H1}\\right) \\cdot \\log\\left(4 + R^{2} \\cdot \\left(\\frac{H0}{\\varepsilon} + H1\\right)\\right) \\cdot \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CompositeGapSmooth.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈8192 * (1 + p.R * √(p.H0 / p.ε + p.H1)) * Real.log (4 + p.R ^ 2 * (p.H0 / p.ε + p.H1)) * Real.log (2 + p.Δ / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 8192 \\cdot \\left(1 + R \\cdot \\sqrt{\\frac{H0}{\\varepsilon} + H1}\\right) \\cdot \\log\\left(4 + R^{2} \\cdot \\left(\\frac{H0}{\\varepsilon} + H1\\right)\\right) \\cdot \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CompositeGapSmooth.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈8192 * (1 + p.R * √(p.H0 / p.ε + p.H1)) * Real.log (4 + p.R ^ 2 * (p.H0 / p.ε + p.H1)) * Real.log (2 + p.Δ / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CompositeGapAccelerated",
+      "namespace": "LongTails.Setups.CompositeGapSmooth",
+      "setup": "LongTails.Setups.CompositeGapSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CompositeGapSmooth.spec OracleTemplate.CompositeGapAccelerated.budget",
+      "theorem": "OracleTemplate.CompositeGapAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CompositeGapAccelerated",
+      "theorem": "OracleTemplate.CompositeGapAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F=f+ψ over a convex set Q. The function f is convex and differentiable throughout E; ψ is convex on Q. A minimizer x⋆∈Q exists.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: Conditions.convex_f, gradient, convex_domain, convex_regularizer, minimizer_feasible, minimizer."
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines differentiable f with a possibly nonsmooth convex regularizer ψ and feasibility constraint Q, handled by an exact proximal oracle.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: objective, Conditions.prox; LongTails/Setups/CompositeGeneralizedSmooth.lean: proxObjective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Queries return ∇f(x) exactly at arbitrary x∈E, independently of history and oracle seed. Function-value queries are unavailable.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: spec.admissible; LongTails/Setups/CompositeGeneralizedSmooth.lean: Query."
+      },
+      {
+        "label": "proximal",
+        "details": "For a>0 and arbitrary z,v∈E, returns an exact minimizer over Q of ‖u−z‖²/(2a)+⟨v,u−z⟩+ψ(u). Gradient and proximal calls share the single fixed oracle budget.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: Conditions.prox, spec.admissible; LongTails/Setups/CompositeGeneralizedSmooth.lean: proxObjective; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x∈Q and y∈E with √H1‖y−x‖≤1, f(y)≤f(x)+⟨∇f(x),y−x⟩+[H0+H1(F(x)−F(x⋆))]‖y−x‖². Thus local ambient curvature depends on the composite objective gap. H0,H1≥0; H1=0 makes the model global.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: AmbientGapUpperModel, Conditions.model, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space. Public inputs include H0,H1,R,Δ,ε,x0, with R,Δ,ε>0, ‖x0−x⋆‖≤R and F(x0)−F(x⋆)≤Δ. The minimizer and optimum value are not supplied. No bounded domain or bounded sublevel-set radius is assumed.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: Params, spec.publicInput, spec.valid, Conditions.initial_feasible, distance, gap."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point x must belong to Q and satisfy F(x)−F(x⋆)≤ε for a minimizer x⋆∈Q.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound hold almost surely under the joint algorithm and oracle seed law, within the fixed supplied oracle budget.",
+        "evidence": "LongTails/Setups/CompositeGapSmooth.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The composite convex formulation uses an unusual local ambient upper model whose curvature depends on the composite objective gap, with only exact gradient and proximal information in an arbitrary Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CompositeGapAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CompositeGapAccelerated",
+          "theorem": "OracleTemplate.CompositeGapAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

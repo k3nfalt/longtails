@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.GradientOnlyThirdOrderNonconvex",
+  "searched_at": "2026-10-28T12:09:33.878456+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lfloor \\frac{2048 \\cdot \\Delta \\cdot L_3^{\\frac{1}{3}}}{\\varepsilon^{\\frac{4}{3}}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left(97 \\cdot \\left\\lceil \\sqrt{\\frac{L_1}{L_3^{\\frac{1}{3}} \\cdot \\varepsilon^{\\frac{2}{3}}} + 4} \\cdot \\log\\left(1 + \\frac{200 \\cdot \\left(L_1 + 4 \\cdot L_3^{\\frac{1}{3}} \\cdot \\varepsilon^{\\frac{2}{3}}\\right) \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\right\\rceil_{+} + 290\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.GradientOnlyThirdOrderNonconvex.spec.Params → ℕ",
+        "value": "fun p =>\n  (⌊2048 * p.Δ * p.L₃ ^ 3⁻¹ / p.ε ^ (4 / 3)⌋₊ + 1) *\n    (97 *\n        ⌈√(p.L₁ / (p.L₃ ^ 3⁻¹ * p.ε ^ (2 / 3)) + 4) *\n            Real.log (1 + 200 * (p.L₁ + 4 * p.L₃ ^ 3⁻¹ * p.ε ^ (2 / 3)) * p.Δ / p.ε ^ 2)⌉₊ +\n      290)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lfloor \\frac{2048 \\cdot \\Delta \\cdot L_3^{\\frac{1}{3}}}{\\varepsilon^{\\frac{4}{3}}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left(97 \\cdot \\left\\lceil \\sqrt{\\frac{L_1}{L_3^{\\frac{1}{3}} \\cdot \\varepsilon^{\\frac{2}{3}}} + 4} \\cdot \\log\\left(1 + \\frac{200 \\cdot \\left(L_1 + 4 \\cdot L_3^{\\frac{1}{3}} \\cdot \\varepsilon^{\\frac{2}{3}}\\right) \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\right\\rceil_{+} + 290\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.GradientOnlyThirdOrderNonconvex.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌊2048 * p.Δ * p.L₃ ^ 3⁻¹ / p.ε ^ (4 / 3)⌋₊ + 1) *\n    (97 *\n        ⌈√(p.L₁ / (p.L₃ ^ 3⁻¹ * p.ε ^ (2 / 3)) + 4) *\n            Real.log (1 + 200 * (p.L₁ + 4 * p.L₃ ^ 3⁻¹ * p.ε ^ (2 / 3)) * p.Δ / p.ε ^ 2)⌉₊ +\n      290)"
+        }
+      ],
+      "module": "LongTails.Theorems.GradientOnlyThirdOrderAcceleration",
+      "namespace": "LongTails.Setups.GradientOnlyThirdOrderNonconvex",
+      "setup": "LongTails.Setups.GradientOnlyThirdOrderNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GradientOnlyThirdOrderNonconvex.spec\n  OracleTemplate.GradientOnlyThirdOrderAcceleration.budget",
+      "theorem": "OracleTemplate.GradientOnlyThirdOrderAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GradientOnlyThirdOrderAcceleration",
+      "theorem": "OracleTemplate.GradientOnlyThirdOrderAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of f:E→ℝ; nonconvex objectives are permitted. The initial objective gap satisfies f(x0)−inf f≤Δ.",
+        "evidence": "LongTails/Setups/GradientOnlyThirdOrderNonconvex.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns exactly ∇f(x), for every history and oracle seed. Function values and higher derivatives are unavailable. All parameters, including x0, L₁, L₃, Δ and ε, are public; f is hidden.",
+        "evidence": "LongTails/Setups/GradientOnlyThirdOrderNonconvex.lean: spec.Public, spec.publicInput, spec.Query, spec.Reply and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/GradientOnlyThirdOrderNonconvex.lean: Params.normedE, Params.innerE and Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "f is C³, ∇f is globally L₁-Lipschitz, and D²(∇f) is globally L₃-Lipschitz in operator norm, expressing Lipschitz third derivatives. L₁,L₃,Δ,ε are strictly positive.",
+        "evidence": "LongTails/Setups/GradientOnlyThirdOrderNonconvex.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return one point x∈E satisfying ‖∇f(x)‖≤ε; no second-order stationarity requirement.",
+        "evidence": "LongTails/Setups/GradientOnlyThirdOrderNonconvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The output satisfies the gradient-norm bound almost surely over the joint algorithm and oracle randomness, within the supplied fixed gradient-query budget.",
+        "evidence": "LongTails/Setups/GradientOnlyThirdOrderNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established smooth nonconvex stationarity formulation with exact gradient access, a bounded initial objective gap, and higher-order smoothness. The oracle supplies gradients alone."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GradientOnlyThirdOrderAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GradientOnlyThirdOrderAcceleration",
+          "theorem": "OracleTemplate.GradientOnlyThirdOrderAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

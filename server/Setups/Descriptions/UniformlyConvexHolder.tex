@@ -5,76 +5,71 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Frank--Wolfe with Uniform Convexity}
-We consider minimizing a convex function $f:E\to\mathbb{R}$ over a compact, power-type uniformly convex set $C$ in a finite-dimensional real inner product space $E$. On $C$, the gradient is $L$-Lipschitz, where $L>0$, and a H\"older error bound controls distance to the minimizer set by objective suboptimality. Each oracle call returns either an exact gradient or an exact linear minimizer over $C$. Starting from $x^0\in C$, the prescribed short-step Frank--Wolfe algorithm must return $\bar{x}\in C$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely, where $x^\star$ minimizes $f$ on $C$ and $\varepsilon>0$ is the target accuracy.
+\section*{Frank--Wolfe with Uniformly Convex Constraints}
+We consider minimizing a convex function $f:E\to\mathbb{R}$ over a compact uniformly convex set $C$ in a finite-dimensional real inner-product space $E$, starting from a given $x^0\in C$. The gradient is $L$-Lipschitz on $C$, with $L>0$, and distance to the minimizer set satisfies a H\"older error bound. The oracle returns $\nabla f(x)$ at $x\in C$ or a minimizer of a queried linear functional over $C$. We analyze short-step Frank--Wolfe. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely, where $x^\star$ minimizes $f$ on $C$ and the randomness comes from oracle tie-breaking.
 
-The constrained optimization problem is
+The optimization problem is
 \[
-\min_{x\in C} f(x),
+\min_{x\in C} f(x).
 \]
-with norm $\|x\|=\sqrt{\langle x,x\rangle}$. In addition to $L$ and $\varepsilon$, the setup has parameters
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The parameters satisfy
 \[
-D>0,\qquad a>0,\qquad q>3,\qquad c>0,\qquad r>2.
+L,D,a,c,\varepsilon>0,\qquad q>3,\qquad r>2.
 \]
-Only $(E,L,x^0)$ are public algorithm inputs. The constants $D,a,q,c,r$ and the accuracy $\varepsilon$ are not supplied to the algorithm.
+The algorithm receives only $E$, $L$, and $x^0$; the parameters $D,a,q,c,r,\varepsilon$ may enter only the oracle-call budget.
 
-\begin{assumption}[Feasible-set geometry]
-The set $C\subseteq E$ is compact, contains $x^0$, and satisfies
+Our assumptions:
+\begin{assumption}[Uniformly convex feasible set]
+The set $C$ is compact, contains $x^0$, and satisfies
 \[
-\|x-y\|\leq D\qquad\text{for all }x,y\in C.
+\|x-y\|\leq D,\qquad x,y\in C.
 \]
-It is uniformly convex with parameters $(a,q)$ in the following precise sense: for every $x,y\in C$, $t\in[0,1]$, and $z\in E$ with $\|z\|\leq1$,
+For every $x,y\in C$, $t\in[0,1]$, and $z\in E$ with $\|z\|\leq1$,
 \[
 tx+(1-t)y+a t(1-t)\|x-y\|^q z\in C.
 \]
 \end{assumption}
 
 \begin{assumption}[Convexity and smoothness]
-The function $f$ is differentiable at every point of $C$. For every $x,y\in C$ and $t\in[0,1]$,
-\begin{align*}
-f(tx+(1-t)y)&\leq t f(x)+(1-t)f(y),\\
+The function $f$ is Fr\'echet differentiable at every point of $C$. For all $x,y\in C$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+t f(y),\\
 \|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
-\end{align*}
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and H\"older error bound]
-There exists $x^\star\in C$ such that $f(x^\star)\leq f(x)$ for every $x\in C$. For every $x\in C$, there exists a possibly point-dependent minimizer $y\in C$ satisfying
-\begin{align*}
-f(y)&=f(x^\star),\\
-\|x-y\|&\leq c\bigl(f(x)-f(x^\star)\bigr)^{1/r}.
-\end{align*}
+\begin{assumption}[H\"older error bound]
+There exists $x^\star\in C$ minimizing $f$ over $C$. For every $x\in C$, there exists a minimizer $y\in C$ such that
+\[
+\|x-y\|\leq c\bigl(f(x)-f(x^\star)\bigr)^{1/r}.
+\]
 \end{assumption}
 
-\begin{assumption}[Exact gradient and linear minimization]
-The oracle accepts two types of queries, each costing one oracle call. A gradient query at $x\in C$ returns $\nabla f(x)\in E$. A linear-minimization query with any direction $g\in E$ returns a point $v\in C$ such that
+There are two query types. The gradient oracle returns $\nabla f(x)$ at $x\in C$. A linear minimization query accepts any $g\in E$ and returns an atom $s\in C$ satisfying
 \[
-\langle g,v\rangle\leq\langle g,x\rangle
-\qquad\text{for every }x\in C.
+\langle g,s\rangle\leq\langle g,x\rangle,
+\qquad x\in C.
 \]
-These requirements hold at every call index and for every realization of the oracle randomness. The oracle is defined on all gradient query points in $E$, but its gradient guarantees apply on $C$. Linear minimizers may depend on the call index and oracle randomness. Any algorithm randomness is independent of the oracle randomness.
-\end{assumption}
+Every reply must satisfy its stated condition; selection among minimizing atoms may depend on previous queries and oracle randomness. Both query types count toward a single total oracle-call budget.
 
-The allowed algorithm is short-step Frank--Wolfe initialized at $x^0$. At iteration $t\geq0$, it first requests $g^t=\nabla f(x^t)$ and then requests a linear minimizer $v^t$ in direction $g^t$. It updates according to
-\begin{align*}
-\gamma_t&=
-\begin{cases}
-\displaystyle\min\left\{1,\frac{\langle g^t,x^t-v^t\rangle}
-{L\|v^t-x^t\|^2}\right\},&v^t\ne x^t,\\
-0,&v^t=x^t,
-\end{cases}\\
-x^{t+1}&=x^t+\gamma_t(v^t-x^t).
-\end{align*}
-The zero case specifies the division-by-zero convention in the prescribed update. Each completed iteration costs two oracle calls.
+Our result is algorithm-specific: we analyze short-step Frank--Wolfe initialized at the given point $x^0$. Each iteration first queries the gradient and then a minimizing atom, and updates according to
+\[
+\begin{aligned}
+g^k&=\nabla f(x^k),\\
+s^k&\in\operatorname*{arg\,min}_{s\in C}\langle g^k,s\rangle,\\
+\gamma_k&=\min\left\{1,
+\frac{\langle g^k,x^k-s^k\rangle}{L\|s^k-x^k\|^2}\right\},\\
+x^{k+1}&=x^k+\gamma_k(s^k-x^k).
+\end{aligned}
+\]
+When $s^k=x^k$, the quotient is defined to be zero, so $\gamma_k=0$. Each completed iteration uses two oracle calls. After a total budget of $N\geq0$ calls, with $N$ an integer, the output is the last completed iterate $\bar{x}=x^{\lfloor N/2\rfloor}$. If $N$ is odd, the final gradient query leaves this output unchanged.
 
-An externally specified budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(E,L,x^0,D,a,q,c,r,\varepsilon)$. After exactly $K$ calls, the output is the last completed iterate
+The required accuracy is
 \[
-\bar{x}=x^{\lfloor K/2\rfloor}.
+\bar{x}\in C,\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.},
 \]
-When $K$ is odd, the final call requests a gradient without performing another update; this call is included in the budget. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness, success requires a minimizer $x^\star\in C$ for which
-\[
-\bar{x}\in C
-\quad\text{and}\quad
-f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
-\]
+where $P$ is the law of the oracle randomness.
 \end{document}

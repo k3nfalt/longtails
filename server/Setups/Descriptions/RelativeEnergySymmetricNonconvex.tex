@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Symmetric Noise}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$, where $\Delta\geq0$. The oracle returns $g(x,\xi)\in E$, with symmetric noise having tail radius $r\geq0$ and relative-energy regularity parameter $\kappa\geq0$. Consecutive pairs of calls share a sample $\xi$, independently across pairs. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where expectation includes sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, equipped with its Borel sigma-algebra. Let $\Omega$ be a measurable sample space. The algorithm receives $E$, $\Omega$, $L$, $\kappa$, $r$, $\Delta$, $\varepsilon$, and $x^0$; it accesses $f$ through the oracle described below.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable everywhere, and, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f(x)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Symmetry and tail radius]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. Define the noise by
+\[
+e(x,\omega)=g(x,\omega)-\nabla f(x).
+\]
+For every $x\in E$, under $\xi\sim\nu$,
+\[
+\begin{aligned}
+e(x,\xi)&\overset{\mathrm{d}}{=}-e(x,\xi),\\
+\mathbb{P}_{\xi\sim\nu}\bigl(\|e(x,\xi)\|>r\bigr)&\leq\frac{1}{64}.
+\end{aligned}
+\]
+Here equality in distribution is equality of the induced probability measures on $E$.
+\end{assumption}
+
+\begin{assumption}[Relative-energy regularity]
+For every $x,y\in E$, the noise evaluated with the same sample satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}\left[
+\left(
+\frac{\|e(x,\xi)-e(y,\xi)\|}
+{r+\|e(x,\xi)\|+\|e(y,\xi)\|}
+\right)^2
+\right]
+\leq\kappa^2\|x-y\|^2.
+\]
+The ratio is defined to be zero when its denominator is zero.
+\end{assumption}
+
+Oracle queries may be made at any point of $E$. Let $(\xi_j)_{j\geq0}$ be measurable, mutually independent sample variables, each with law $\nu$, and independent of the algorithm's randomness. Index calls starting at zero. At query $x_k\in E$, call $k$ returns
+\[
+g\bigl(x_k,\xi_{\lfloor k/2\rfloor}\bigr).
+\]
+Thus calls $2j$ and $2j+1$ use the same sample, including when the second query depends on the first reply.
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\mathbb{E}_{P}\|\nabla f(\bar{x})\|\leq\varepsilon,
+\qquad
+\|\nabla f(\bar{x})\|\in L^1(P),
+\]
+where $P$ is the joint law of the samples and the algorithm's independent randomness.
+\end{document}

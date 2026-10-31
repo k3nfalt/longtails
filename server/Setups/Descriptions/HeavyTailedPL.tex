@@ -5,62 +5,53 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Heavy-Tailed Polyak--Lojasiewicz Optimization}
-We consider minimizing a differentiable function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, and $2\mu(f(x)-f_{\inf})\leq\|\nabla f(x)\|^2$ for every $x\in E$, where $0<\mu\leq L$ and $f_{\inf}=\inf_{y\in E}f(y)>-\infty$. Each oracle call returns an unbiased random gradient with uniformly bounded second and $q$th centered moments, where $q>2$, using independent samples across calls. From a given point $x^0\in E$, the admissible method is gradient descent with a positive deterministic step-size schedule. Its measurable last iterate $\bar{x}$ must satisfy $\mathbb{P}(f(\bar{x})-f_{\inf}>\varepsilon)\leq\delta$, where $\varepsilon>0$, $\delta\in(0,1)$, and $\mathbb{P}$ is the execution law.
+\section*{Heavy-Tailed SGD under the PL Condition}
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is $L$-Lipschitz, and it satisfies the Polyak--\L{}ojasiewicz condition with constant $\mu$, where $0<\mu\leq L$. Write $f_\star=\inf_{x\in E}f(x)>-\infty$. A given starting point $x^0\in E$ satisfies $f(x^0)-f_\star\leq\Delta$, where $\Delta\geq0$. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with uniformly bounded second and $q$th noise moments for $q>2$, allowing heavy tails. For $\varepsilon>0$ and $\delta\in(0,1)$, scheduled SGD must return a measurable last iterate $\bar{x}$ satisfying $P(f(\bar{x})-f_\star>\varepsilon)\leq\delta$, where $P$ is the sample law.
 
 The optimization problem is
 \[
-\inf_{x\in E} f(x),
+\inf_{x\in E} f(x).
 \]
-with the norm induced by the inner product on $E$. Equip $E$ with its Borel sigma-algebra. The setup parameters satisfy
-\[
-0<\mu\leq L,\qquad \sigma>0,\qquad \nu>0,\qquad q>2,
-\qquad \Delta\geq0,\qquad \varepsilon>0,\qquad 0<\delta<1.
-\]
-The admissible objectives and oracle access satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives only $E$, $L$, $\mu$, and $x^0$; the noise parameters $\sigma,\nu>0$, moment order $q$, initial gap bound $\Delta$, tolerance $\varepsilon$, and failure probability $\delta$ may enter the oracle-call budget but not the step-size schedule.
 
-\begin{assumption}[Smoothness and Polyak--Lojasiewicz condition]
-The function $f$ is differentiable everywhere, is bounded below, and satisfies, for every $x,y\in E$,
-\begin{align*}
-\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|,\\
-2\mu\bigl(f(x)-f_{\inf}\bigr) &\leq \|\nabla f(x)\|^2.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Initial objective gap]
-The given initial point satisfies
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, with
 \[
-f(x^0)-f_{\inf}\leq\Delta.
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
 \]
 \end{assumption}
 
-\begin{assumption}[Independent stochastic-gradient access]
-Let $\Omega$ be a measurable sample space, let $P_0$ be a probability measure on $\Omega$, and let $P$ be a probability measure on $\Omega^{\mathbb{N}}$. The coordinate samples $\xi_t$, $t=0,1,\ldots$, are measurable, mutually independent under $P$, and each has law $P_0$. Oracle $0$, the sole oracle, returns $g(x,\xi_t)\in E$ at call $t$ and query $x\in E$, where $g:E\times\Omega\to E$ is jointly measurable. Each reply costs one oracle call. The sample process is independent of any algorithm randomness.
+\begin{assumption}[Polyak--\L{}ojasiewicz condition and initialization]
+The function $f$ is bounded below, and
+\[
+\begin{aligned}
+2\mu\bigl(f(x)-f_\star\bigr)&\leq\|\nabla f(x)\|^2,
+&&x\in E,\\
+f(x^0)-f_\star&\leq\Delta.
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Unbiasedness and heavy-tail moment bounds]
-For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $P_0$ and
+\begin{assumption}[Independent sampling and noise moments]
+Let $\Omega$ be a measurable space and $P_0$ a probability measure on $\Omega$. The measurable sample variables $(\xi_t)_{t\geq0}$ are mutually independent under $P$, each with distribution $P_0$. The oracle is a jointly measurable map $g:E\times\Omega\to E$ and returns $g(x,\xi_t)$ at the $t$th query $x\in E$. For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable, and the scalar maps $\|g(x,\cdot)-\nabla f(x)\|^2$ and $\|g(x,\cdot)-\nabla f(x)\|^q$ are integrable under $P_0$. They satisfy
 \[
-\int_{\Omega} g(x,\omega)\,dP_0(\omega)=\nabla f(x).
+\begin{aligned}
+\mathbb{E}_{\xi\sim P_0}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim P_0}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2,\\
+\mathbb{E}_{\xi\sim P_0}\bigl[\|g(x,\xi)-\nabla f(x)\|^q\bigr]&\leq\nu^q.
+\end{aligned}
 \]
-The scalar maps $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^2$ and $\omega\mapsto\|g(x,\omega)-\nabla f(x)\|^q$ are integrable under $P_0$, with
-\begin{align*}
-\int_{\Omega}\|g(x,\omega)-\nabla f(x)\|^2\,dP_0(\omega)
-&\leq\sigma^2,\\
-\int_{\Omega}\|g(x,\omega)-\nabla f(x)\|^q\,dP_0(\omega)
-&\leq\nu^q.
-\end{align*}
 \end{assumption}
 
-Only $(E,L,\mu,x^0)$ are public algorithm inputs. The quantities $\sigma$, $\nu$, $q$, $\Delta$, $\varepsilon$, and $\delta$, as well as the sample space and its laws, are not supplied to the algorithm. An externally specified call budget $K\in\mathbb{N}$ may depend on the full setup parameters.
-
-The admissible algorithm uses a deterministic schedule $(\eta_t)_{t\geq0}$ selected solely from the public inputs, with $\eta_t>0$ for every $t$. It queries oracle $0$ at its current iterate and updates according to
+Our result is algorithm-specific: we analyze scheduled stochastic gradient descent (SGD). Starting from the given $x^0$, the method uses a deterministic schedule $(\eta_t)_{t\geq0}$ with $\eta_t>0$ and performs
 \[
-x^{t+1}=x^t-\eta_t g(x^t,\xi_t),\qquad t=0,\ldots,K-1.
+x^{t+1}=x^t-\eta_t g(x^t,\xi_t),
+\qquad t=0,1,2,\ldots.
 \]
-Queries lie in $E$. After exactly $K$ calls, the output is the last iterate $\bar{x}=x^K$; for $K=0$, it is $x^0$. Success requires that $\bar{x}$ be measurable and that
+The schedule depends only on the algorithm inputs specified above. After $K\in\{0,1,2,\ldots\}$ oracle calls, the output is the last iterate $\bar{x}=x^K$. It must be measurable and satisfy
 \[
-\mathbb{P}\bigl(f(\bar{x})-f_{\inf}>\varepsilon\bigr)\leq\delta,
+P\bigl(f(\bar{x})-f_\star>\varepsilon\bigr)\leq\delta.
 \]
-where $\mathbb{P}$ denotes the law induced by the oracle samples and the algorithm.
 \end{document}

@@ -222,10 +222,15 @@ lemma execute_accuracy (p : Params) (f : Point p.d → ℝ) (O : Oracle (Point p
   have hacc : f (advance (fun k x => x - (1 / p.L) • v k x) K 0 p.x0) - f u ≤ p.ε := by
     linarith only [hr, hb]
   dsimp only
+  rw [StochasticGradient.execute_advance_of_answer O (driftCorrectedGD p.toPublic) (K * (p.d + 2)) () ξ
+    (fun k query => g query.2 k) (by
+      intro history query
+      rcases query with ⟨i, x⟩
+      have hi : i = 0 := Subsingleton.elim _ _
+      subst i
+      exact hans history x (ξ history.length))]
   unfold driftCorrectedGD
-  erw [execute_advance]
   simp only [batched]
-  simp only [hans]
   have he := advance_batched (show 0 < n by dsimp [n]; omega) (Gradient.gd (p.L, p.x0))
     (driftQuery h) (fun _ => driftDecode h) 0 g (fun k => k) K 0 p.x0
   simp only [Nat.zero_mul] at he

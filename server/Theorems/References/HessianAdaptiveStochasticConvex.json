@@ -1,0 +1,118 @@
+{
+  "setup": "LongTails.Setups.HessianAdaptiveStochasticConvex",
+  "searched_at": "2026-10-28T12:11:43.722650+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot \\left\\lceil 1000000000000000000 \\cdot \\left(1 + \\left(\\frac{\\sigma g \\cdot D}{\\varepsilon}\\right)^{2} + \\sqrt{\\frac{\\sigma h \\cdot D^{2}}{\\varepsilon}} + \\left(\\frac{\\rho \\cdot D^{3}}{\\varepsilon}\\right)^{\\frac{2}{7}}\\right) \\cdot \\left(1 + \\log\\left(\\left(1 + \\frac{\\sigma h}{\\rho \\cdot D}\\right) \\cdot \\left(1 + \\left(\\frac{\\sigma g \\cdot D}{\\varepsilon}\\right)^{2} + \\sqrt{\\frac{\\sigma h \\cdot D^{2}}{\\varepsilon}} + \\left(\\frac{\\rho \\cdot D^{3}}{\\varepsilon}\\right)^{\\frac{2}{7}}\\right)\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HessianAdaptiveStochasticConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  3 *\n    ⌈1000000000000000000 * (1 + (p.σg * p.D / p.ε) ^ 2 + √(p.σh * p.D ^ 2 / p.ε) + (p.ρ * p.D ^ 3 / p.ε) ^ (2 / 7)) *\n        (1 +\n            Real.log\n              ((1 + p.σh / (p.ρ * p.D)) *\n                (1 + (p.σg * p.D / p.ε) ^ 2 + √(p.σh * p.D ^ 2 / p.ε) + (p.ρ * p.D ^ 3 / p.ε) ^ (2 / 7)))) ^\n          2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot \\left\\lceil 1000000000000000000 \\cdot \\left(1 + \\left(\\frac{\\sigma g \\cdot D}{\\varepsilon}\\right)^{2} + \\sqrt{\\frac{\\sigma h \\cdot D^{2}}{\\varepsilon}} + \\left(\\frac{\\rho \\cdot D^{3}}{\\varepsilon}\\right)^{\\frac{2}{7}}\\right) \\cdot \\left(1 + \\log\\left(\\left(1 + \\frac{\\sigma h}{\\rho \\cdot D}\\right) \\cdot \\left(1 + \\left(\\frac{\\sigma g \\cdot D}{\\varepsilon}\\right)^{2} + \\sqrt{\\frac{\\sigma h \\cdot D^{2}}{\\varepsilon}} + \\left(\\frac{\\rho \\cdot D^{3}}{\\varepsilon}\\right)^{\\frac{2}{7}}\\right)\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HessianAdaptiveStochasticConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  3 *\n    ⌈1000000000000000000 * (1 + (p.σg * p.D / p.ε) ^ 2 + √(p.σh * p.D ^ 2 / p.ε) + (p.ρ * p.D ^ 3 / p.ε) ^ (2 / 7)) *\n        (1 +\n            Real.log\n              ((1 + p.σh / (p.ρ * p.D)) *\n                (1 + (p.σg * p.D / p.ε) ^ 2 + √(p.σh * p.D ^ 2 / p.ε) + (p.ρ * p.D ^ 3 / p.ε) ^ (2 / 7)))) ^\n          2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HessianAdaptiveCubic",
+      "namespace": "LongTails.Setups.HessianAdaptiveStochasticConvex",
+      "setup": "LongTails.Setups.HessianAdaptiveStochasticConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HessianAdaptiveStochasticConvex.spec\n  LongTails.Theorems.HessianAdaptiveCubic.budget",
+      "theorem": "LongTails.Theorems.HessianAdaptiveCubic.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HessianAdaptiveCubic",
+      "theorem": "LongTails.Theorems.HessianAdaptiveCubic.result",
+      "references": "- Artem Agafonov, Aslan Ashabokov, Dmitry Kamzolov, Alexander D’yakonov, Alexander Gasnikov, and Martin Takáč. [Matching the Lower Bounds: Stochastic Contracting Cubic Newton and Its Optimal Acceleration](https://arxiv.org/html/2610.11693v2). 2026 preprint, v2 (October 13; first submitted October 8). Complexity: $O(1+(\\sigma_gD/\\varepsilon)^2+\\sqrt{\\sigma_hD^2/\\varepsilon}+(\\rho D^3/\\varepsilon)^{2/7})$ total stochastic gradient and Hessian oracle calls for $\\mathbb E[f(w_T)-f^*]\\le\\varepsilon$, using Accelerated Stochastic Contracting Cubic Newton with known noise bounds; fixed cost of two gradient calls and one Hessian call per iteration.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a globally convex, differentiable function over a convex body C in Euclidean space, with a minimizer xstar in C. The gradient is differentiable and the Hessian is ρ-Lipschitz on C; strong convexity is not required.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A gradient query returns g(x,ω), with E[g(x,ω)]=∇f(x) and E[‖g(x,ω)−∇f(x)‖²]≤σg² on C. Each call uses a fresh IID seed.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: spec.Query, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "other",
+        "details": "A Hessian query returns a full symmetric PSD operator H(x,ω), with E[‖H(x,ω)−∇²f(x)‖op²]≤σh² on C. Hessian unbiasedness is not required. Each call selects either a gradient or a Hessian; no function values are supplied.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: IsPSD, spec.Query, spec.Reply, spec.admissible oracle.answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Gradient variance is bounded by σg²; Hessian mean-square operator-norm error is bounded by σh². Only second moments are required, with σg,σh≥0.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: spec.valid and spec.admissible moment bounds."
+      },
+      {
+        "label": "biased_oracle",
+        "details": "Hessian estimates may be biased, while every returned Hessian must be symmetric PSD. Gradient estimates must be unbiased.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: IsPSD and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝ^d with Euclidean norm; Hessian errors use the induced operator norm.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: Point and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Public information comprises d, C, x0, D, ρ, and σg. The Hessian error bound σh and accuracy ε are hidden from algorithm construction, although they determine the execution budget. D,ρ,ε>0, x0∈C, and diam(C)≤D. Hessian Lipschitz continuity is required only on C.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: Public, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must satisfy E[f(output)−f(xstar)]≤ε, with an integrable objective gap and measurable output.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output belongs to C for every random realization.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective guarantee averages over algorithm randomness and IID oracle randomness under a fixed total oracle-call budget.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The convex constrained objective is standard, but the combination of potentially biased PSD Hessian estimates, an unknown Hessian error bound, and separate stochastic derivative queries defines a specialized oracle formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HessianAdaptiveCubic.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HessianAdaptiveCubic",
+          "theorem": "LongTails.Theorems.HessianAdaptiveCubic.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

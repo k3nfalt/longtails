@@ -22,8 +22,9 @@ theorem result : Convergence LongTails.Setups.HessianLipschitzTemporalDiscrepanc
     by_cases hεΔ : p.Δ ≤ p.ε
     · rw [nonlinearTemporalAccelerated, ite_eq_left hεΔ]
       rintro ⟨seed, ξ⟩
-      rw [show budget p 0 = 0 by simp only [budget, ite_eq_left hεΔ], StochasticGradient.execute_advance]
-      exact hgap.trans hεΔ
+      rw [show budget p 0 = 0 by simp only [budget, ite_eq_left hεΔ], execute_indexed]
+      simp [Function.iterate_zero, QueryPlan.algorithm, QueryPlan.output]
+      linarith
     · have hK := execution_budget_bound p hp (lt_of_not_ge hεΔ)
       rw [nonlinearTemporalAccelerated, ite_eq_right hεΔ]
       rintro ⟨seed, ξ⟩

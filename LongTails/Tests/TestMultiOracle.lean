@@ -34,6 +34,17 @@ def zeroOracle : Oracle ℕ ℕ 2 where
 theorem adaptive_calls :
     execute zeroOracle algorithm ![2, 3] () (fun _ => ()) = 0 := by decide
 
+theorem ordered_trace :
+    executeWithTrace oracle algorithm ![1, 1] () (fun _ => ()) =
+      (15, [((0, 7), 14), ((1, 14), 15)]) := by decide
+
+theorem empty_trace :
+    executeWithTrace oracle algorithm ![0, 0] () (fun _ => ()) = (0, []) := rfl
+
+theorem trace_stops_at_exhausted_oracle :
+    executeWithTrace zeroOracle algorithm ![2, 3] () (fun _ => ()) =
+      (0, [((0, 7), 0), ((0, 7), 0)]) := by decide
+
 def stochasticOracle (P : ProbabilityMeasure (ℕ → Bool)) : Oracle ℕ ℕ 2 where
   Seed := fun _ => Bool
   law := P
@@ -76,7 +87,33 @@ theorem insufficient_budget : ¬ Convergence spec (fun _ => ![0, 2]) := by
   change (0 : ℕ) = 15 at h
   omega
 
+abbrev missingSuccessSpec : Setup where
+  numOracles := 2
+  Params := Unit
+  Public := Unit
+  Instance _ := Unit
+  Query _ := ℕ
+  Reply _ := ℕ
+  Output _ := ℕ
+  publicInput := id
+  valid _ := True
+  admissible _ _ O := O = oracle
+  allowedAlgorithm _ A := A = algorithm
+
+theorem missing_success (budget : Unit → Fin 2 → ℕ) : ¬ Convergence missingSuccessSpec budget := by
+  rintro ⟨_, hCorrect, _⟩
+  exact hCorrect () True.intro () oracle rfl
+
+def historyOracle : Oracle ℕ ℕ 2 where
+  answer history query _ := query.2 + (history.map fun entry => entry.2).sum
+
+theorem history_dependent_trace :
+    executeWithTrace historyOracle algorithm ![1, 2] () (fun _ => ()) =
+      (35, [((0, 7), 7), ((1, 7), 14), ((1, 14), 35)]) := by decide
+
 #print axioms separate_budgets
 #print axioms insufficient_budget
+#print axioms missing_success
+#print axioms history_dependent_trace
 
 end OracleTemplate.MultiOracleTests

@@ -48,7 +48,7 @@ abbrev spec : Setup where
     ∃ (oracle : ℕ → q.E → q.Ω → q.E) (P : ProbabilityMeasure q.Ω),
     O = { Seed := fun _ => q.Ω
           law := ⟨Measure.infinitePi (fun _ : ℕ => (P : Measure q.Ω)), inferInstance⟩
-          answer := fun k (_, x) seed => oracle k x seed } ∧
+          answer := fun history (_, x) seed => oracle history.length x seed } ∧
     (∀ k, IsStochasticGradient q.E q.Ω P (f k) (oracle k) q.σ) ∧
     (∀ k x, HasGradientAt (f k) (gradient (f k) x) x) ∧
     (∀ k x y, f k x + ⟪gradient (f k) x, y - x⟫ + q.μ / 2 * ‖y - x‖ ^ 2 ≤ f k y) ∧

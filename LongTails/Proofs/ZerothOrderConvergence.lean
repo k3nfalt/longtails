@@ -3,12 +3,23 @@ import Mathlib.Analysis.Calculus.FDeriv.Comp
 import Mathlib.Analysis.Calculus.FDeriv.Linear
 import LongTails.Proofs.ZerothOrderAccuracy
 import LongTails.Proofs.ZerothOrderExecution
+import LongTails.Proofs.ExecutionHistory
 
 open MeasureTheory
 
 namespace OracleTemplate.ZerothOrder
 
 open LongTails.Setups.ZerothOrderSmoothAndConvex
+
+noncomputable def coordinateHistory {d : ℕ} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (e : E ≃ₗᵢ[ℝ] Point d)
+    (history : List ((Fin 1 × Point d) × ℝ)) : List ((Fin 1 × E) × ℝ) :=
+  history.map fun (query, reply) => ((query.1, e.symm query.2), reply)
+
+private lemma cast_seed_apply {Seed : ℕ → Type*} (ξ : (k : ℕ) → Seed k)
+    {a b : ℕ} (h : a = b) : cast (congrArg Seed h) (ξ a) = ξ b := by
+  cases h
+  rfl
 
 @[reducible] def fixedSpaceSpec (E : Type) (Ω : Type) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [MeasurableSpace Ω] : Setup where
@@ -33,30 +44,59 @@ noncomputable def coordinateOracle {d : ℕ} (e : E ≃ₗᵢ[ℝ] Point d) (O :
   Seed := O.Seed
   seedSpace := O.seedSpace
   law := O.law
-  answer := fun k (_, x) seed => O.answer k (0, (e.symm x)) seed
+  answer := fun history (i, x) seed => by
+    have hlen : (coordinateHistory e history).length = history.length := by
+      simp [coordinateHistory]
+    exact O.answer (coordinateHistory e history) (i, (e.symm x))
+      (cast (congrArg O.Seed hlen.symm) seed)
+
+private lemma coordinateOracle_answer_at {d : ℕ} (e : E ≃ₗᵢ[ℝ] Point d)
+    (O : Oracle E ℝ) (history : List ((Fin 1 × Point d) × ℝ))
+    (query : Fin 1 × Point d) (ξ : (k : ℕ) → O.Seed k) :
+    (coordinateOracle e O).answer history query (ξ history.length) =
+      O.answer (coordinateHistory e history) (query.1, e.symm query.2)
+        (ξ (coordinateHistory e history).length) := by
+  dsimp [coordinateOracle]
+  have hlen : (coordinateHistory e history).length = history.length := by
+    simp [coordinateHistory]
+  rw [cast_seed_apply ξ hlen.symm]
 
 lemma execute_fromCoordinates {d : ℕ} (e : E ≃ₗᵢ[ℝ] Point d)
     (A : Algorithm (Point d) ℝ (Point d)) (O : Oracle E ℝ) (K : ℕ)
     (seed : A.Seed) (ξ : (k : ℕ) → O.Seed k) :
     execute O (fromCoordinates e A) (fun _ => K) seed ξ =
       e.symm (execute (coordinateOracle e O) A (fun _ => K) seed ξ) := by
-  erw [execute_indexed, execute_indexed]
-  generalize (0 : ℕ) = call
-  have h : ∀ K (state : A.State) (call : ℕ),
-      ((fun sc : A.State × ℕ =>
-          ((fromCoordinates e A).update sc.1
-            (O.answer sc.2 ((fromCoordinates e A).query sc.1) (ξ sc.2)), sc.2 + 1))^[K]
-        (state, call)) =
-      ((fun sc : A.State × ℕ =>
-          (A.update sc.1 ((coordinateOracle e O).answer sc.2 (A.query sc.1) (ξ sc.2)), sc.2 + 1))^[K]
-        (state, call)) := by
-    intro K state call
-    induction K generalizing state call with
+  have h : ∀ n,
+      executeIndexedState O (fromCoordinates e A) seed ξ n =
+        let sc := executeIndexedState (coordinateOracle e O) A seed ξ n
+        (sc.1, coordinateHistory e sc.2) := by
+    intro n
+    induction n with
     | zero => rfl
-    | succ K ih =>
-        rw [Function.iterate_succ_apply, Function.iterate_succ_apply]
-        simp only [fromCoordinates, coordinateOracle]
-  exact congrArg (fun sc : A.State × ℕ => e.symm (A.output sc.1)) (h K (A.initial seed) call)
+    | succ n ih =>
+        have hs : executeIndexedState O (fromCoordinates e A) seed ξ (n + 1) =
+            let sc := executeIndexedState O (fromCoordinates e A) seed ξ n
+            let query := (fromCoordinates e A).query sc.1
+            let reply := O.answer sc.2 query (ξ sc.2.length)
+            ((fromCoordinates e A).update sc.1 reply, sc.2 ++ [(query, reply)]) := rfl
+        have hc : executeIndexedState (coordinateOracle e O) A seed ξ (n + 1) =
+            let sc := executeIndexedState (coordinateOracle e O) A seed ξ n
+            let query := A.query sc.1
+            let reply := (coordinateOracle e O).answer sc.2 query (ξ sc.2.length)
+            (A.update sc.1 reply, sc.2 ++ [(query, reply)]) := rfl
+        have hindex (s : A.State) : (A.query s).1 = 0 := Subsingleton.elim _ _
+        rw [hs, hc, ih]
+        simp [fromCoordinates, coordinateOracle_answer_at, coordinateHistory,
+          List.map_append, hindex]
+  change (executeWithTrace O (fromCoordinates e A) (fun _ => K) seed ξ).1 =
+    e.symm ((executeWithTrace (coordinateOracle e O) A (fun _ => K) seed ξ).1)
+  rw [executeWithTrace_eq_executeIndexedState O (fromCoordinates e A) K seed ξ,
+    executeWithTrace_eq_executeIndexedState (coordinateOracle e O) A K seed ξ]
+  change (fromCoordinates e A).output
+      (executeIndexedState O (fromCoordinates e A) seed ξ K).1 =
+    e.symm (A.output (executeIndexedState (coordinateOracle e O) A seed ξ K).1)
+  rw [h K]
+  rfl
 
 variable [CompleteSpace E]
 
@@ -79,8 +119,10 @@ lemma admissible_coordinates {Ω : Type} [MeasurableSpace Ω] {d : ℕ}
       (coordinateOracle e O) := by
   rcases h with ⟨_,g,p,P,hi,hm,rfl,hc,hg,hl,⟨u,hu,hr⟩,hgm,hgi,hmean,hvi,hv⟩
   refine ⟨⟨LinearIsometryEquiv.refl ℝ (Point d)⟩,
-    (fun x z => g (e.symm x) z),p,P,hi,hm,rfl,?_,?_,?_,?_,?_,(fun x => hgi (e.symm x)),(fun x => hmean (e.symm x)),
+    (fun x z => g (e.symm x) z),p,P,hi,hm,?_,?_,?_,?_,?_,?_,(fun x => hgi (e.symm x)),(fun x => hmean (e.symm x)),
     (fun x => hvi (e.symm x)),(fun x => hv (e.symm x))⟩
+  · unfold coordinateOracle
+    congr 1
   · have h := hc.comp_linearMap e.symm.toLinearEquiv.toLinearMap
     simp only [Set.preimage_univ] at h
     exact h

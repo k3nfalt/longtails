@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.LocalSmoothStronglyConvexLora",
+  "searched_at": "2026-10-21T20:12:45.183049+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "128 \\cdot \\left\\lceil \\frac{64 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}} \\right\\rceil_{+} \\cdot \\left(\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+} + 1\\right) + \\left(2^{\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+}} - 1\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{32 \\cdot \\rho \\cdot R^{4}}{\\varepsilon}\\right)}{\\log\\left(4\\right)} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.LocalSmoothStronglyConvexLora.spec.Params → ℕ",
+        "value": "fun p =>\n  128 * ⌈64 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)⌉₊ *\n      (⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ + 1) +\n    (2 ^ ⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ - 1) *\n      ⌈Real.log (1 + 32 * p.ρ * p.R ^ 4 / p.ε) / Real.log 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "128 \\cdot \\left\\lceil \\frac{64 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}} \\right\\rceil_{+} \\cdot \\left(\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+} + 1\\right) + \\left(2^{\\left\\lceil \\frac{\\log\\left(1 + \\frac{512 \\cdot \\rho \\cdot R^{2}}{\\mu \\cdot s^{2}}\\right)}{\\log\\left(1 + \\sqrt{2}\\right)} \\right\\rceil_{+}} - 1\\right) \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{32 \\cdot \\rho \\cdot R^{4}}{\\varepsilon}\\right)}{\\log\\left(4\\right)} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.LocalSmoothStronglyConvexLora.spec.Params → ℕ",
+          "value": "fun p =>\n  128 * ⌈64 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)⌉₊ *\n      (⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ + 1) +\n    (2 ^ ⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ - 1) *\n      ⌈Real.log (1 + 32 * p.ρ * p.R ^ 4 / p.ε) / Real.log 4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SilverLoraLocalConvergence",
+      "namespace": "LongTails.Setups.LocalSmoothStronglyConvexLora",
+      "setup": "LongTails.Setups.LocalSmoothStronglyConvexLora",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.LocalSmoothStronglyConvexLora.spec\n  LongTails.Theorems.SilverLoraLocalConvergence.budget",
+      "theorem": "LongTails.Theorems.SilverLoraLocalConvergence.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SilverLoraLocalConvergence",
+      "theorem": "LongTails.Theorems.SilverLoraLocalConvergence.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "strongly_convex",
+        "details": "The matrix objective f on R^(m×n) is globally μ-strongly convex and has a globally ρ-Lipschitz gradient, with 0 < μ ≤ ρ. Its unconstrained global minimizer admits an exact rank-r factorization.",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "nonconvex",
+        "details": "The optimization variables are factors (A,B) in R^(m×r) × R^(r×n), and the optimized objective is f(AB), which need not be convex in the factors. Here 0 < r < min(m,n).",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: Factors, product, spec.Output, spec.valid, and gdFamily."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each oracle call at X returns the full matrix gradient ∇f(X), exactly, for every history and seed. Allowed algorithms query X=AB and form the factor gradient (∇f(AB)Bᵀ, Aᵀ∇f(AB)) algebraically. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: spec.admissible oracle equality, pullback, and gdFamily; LongTails/Template.lean: Oracle.answer and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Matrix and factor spaces are finite-dimensional real Euclidean spaces, using Frobenius norms and the combined Euclidean norm on the factor pair.",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: MatrixSpace and Factors."
+      },
+      {
+        "label": "other",
+        "details": "There exists a hidden optimal factor pair v=(A*,B*) with f(A*B*)=min f, σ_min(A*)≥s, σ_min(B*ᵀ)≥s, and operator norm ||D product(v)||≤R. The supplied initialization satisfies ||x₀−v||≤μs²/(256ρR), with 0<s≤R. No balancing condition A*ᵀA*=B*B*ᵀ is imposed. All parameters m,n,r,μ,ρ,s,R,ε,x₀ are public; f and the witnessing optimal factors are not. Allowed algorithms start at x₀ and use positive scalar steps along the negative factor gradient, outputting their current factor pair.",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: Params, spec.publicInput, spec.valid, spec.admissible, gdFamily, and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "For ε>0, the returned factor pair (Aout,Bout) must satisfy f(Aout Bout)−f(X*)≤ε for a global minimizer X* of the matrix objective. The output is the current factor iterate, not an average or a separately selected matrix.",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: spec.successful and gdFamily output equality."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm-seed and oracle-seed law, after execution with the supplied fixed oracle budget. It is not merely an expectation guarantee.",
+        "evidence": "LongTails/Setups/LocalSmoothStronglyConvexLora.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This is a local factorization formulation with an explicit parameter-dependent initialization radius, separate conditioning bounds on hidden optimal factors, and a restriction to positive scalar factor-gradient updates. These conditions specialize the standard smooth strongly convex matrix optimization problem."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SilverLoraLocalConvergence.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SilverLoraLocalConvergence",
+          "theorem": "LongTails.Theorems.SilverLoraLocalConvergence.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

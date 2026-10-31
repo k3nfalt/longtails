@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.GeneralCovarianceReverseFisher",
+  "searched_at": "2026-10-21T20:11:57.137293+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(1 + 8 \\cdot \\log\\left(components\\right)\\right) \\cdot \\left(\\frac{upper}{lower}\\right)^{2} \\cdot \\left(2 \\cdot \\log\\left(1 + \\frac{radius^{2}}{lower}\\right) + \\frac{4 \\cdot components \\cdot \\min\\left\\{ components, dimension \\right\\} \\cdot upper}{accuracy}\\right) \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralCovarianceReverseFisher.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(1 + 8 * Real.log ↑↑p.components) * (p.upper / p.lower) ^ 2 *\n        (2 * Real.log (1 + p.radius ^ 2 / p.lower) +\n          4 * ↑↑p.components * min ↑↑p.components ↑↑p.dimension * p.upper / p.accuracy)⌉₊ +\n    1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(1 + 8 \\cdot \\log\\left(components\\right)\\right) \\cdot \\left(\\frac{upper}{lower}\\right)^{2} \\cdot \\left(2 \\cdot \\log\\left(1 + \\frac{radius^{2}}{lower}\\right) + \\frac{4 \\cdot components \\cdot \\min\\left\\{ components, dimension \\right\\} \\cdot upper}{accuracy}\\right) \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralCovarianceReverseFisher.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈(1 + 8 * Real.log ↑↑p.components) * (p.upper / p.lower) ^ 2 *\n        (2 * Real.log (1 + p.radius ^ 2 / p.lower) +\n          4 * ↑↑p.components * min ↑↑p.components ↑↑p.dimension * p.upper / p.accuracy)⌉₊ +\n    1"
+        }
+      ],
+      "module": "LongTails.Theorems.GeneralCovarianceReverseFisherGD",
+      "namespace": "LongTails.Setups.GeneralCovarianceReverseFisher",
+      "setup": "LongTails.Setups.GeneralCovarianceReverseFisher",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralCovarianceReverseFisher.spec\n  LongTails.Theorems.GeneralCovarianceReverseFisherGD.budget",
+      "theorem": "LongTails.Theorems.GeneralCovarianceReverseFisherGD.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GeneralCovarianceReverseFisherGD",
+      "theorem": "LongTails.Theorems.GeneralCovarianceReverseFisherGD.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained optimization of reverse Fisher divergence over n Gaussian-mixture means in R^d. The student has equal weights and shared covariance Σ = AA*, and the target is N(μ*, Σ). This mixture parameterization permits nonconvex objectives.",
+        "evidence": "LongTails/Setups/GeneralCovarianceReverseFisher.lean: Means, logMixture, loss, Model."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each call returns the full Euclidean gradient of the population reverse Fisher loss with respect to all n means, exactly for every history and seed. Gaussian integration is internal to the oracle; samples and target scores are not separately available.",
+        "evidence": "LongTails/Setups/GeneralCovarianceReverseFisher.lean: spec.admissible, loss; LongTails/Template.lean: Oracle.answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The parameter space is the Euclidean product (R^d)^n, with positive integers d = dimension and n = components.",
+        "evidence": "LongTails/Setups/GeneralCovarianceReverseFisher.lean: Params, Space, Means."
+      },
+      {
+        "label": "other",
+        "details": "The shared covariance is arbitrary positive definite with lower·I ≼ Σ ≼ upper·I and 0 < lower ≤ upper. Its root A and the target mean μ* are hidden. Public information comprises d, n, lower, upper, radius R ≥ 0, accuracy ε > 0, and initial means satisfying max_i ||start_i − μ*|| ≤ R. Allowed algorithms use positive scalar gradient-descent steps from these initial means and output the current iterate.",
+        "evidence": "LongTails/Setups/GeneralCovarianceReverseFisher.lean: Params, Model, spectralBounds, startBound, gdFamily, spec.publicInput, spec.valid, spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The final output must satisfy max_i ||θ_i − μ*||² ≤ ε, where ε = accuracy; every mixture component must recover the same target mean.",
+        "evidence": "LongTails/Setups/GeneralCovarianceReverseFisher.lean: spec.successful, gdFamily."
+      },
+      {
+        "label": "deterministic",
+        "details": "The guarantee holds for every algorithm and oracle seed realization, including probability-zero realizations, under the fixed extracted oracle budget.",
+        "evidence": "LongTails/Setups/GeneralCovarianceReverseFisher.lean: spec.successful universally quantifies ω; LongTails/Template.lean: Convergence, execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A specialized population reverse-Fisher optimization problem with hidden shared general covariance, exact full-gradient access, scalar gradient-descent restrictions, and simultaneous componentwise parameter recovery. No qualifying reference was verified; this does not establish novelty. Local proofs and implementations were not inspected."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.GeneralCovarianceReverseFisherGD.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GeneralCovarianceReverseFisherGD",
+          "theorem": "LongTails.Theorems.GeneralCovarianceReverseFisherGD.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

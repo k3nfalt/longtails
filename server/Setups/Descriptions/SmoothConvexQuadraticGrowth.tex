@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gradient Descent with Quadratic Growth}
+We consider minimizing a differentiable convex function $f:E\to\mathbb{R}$ on a real Hilbert space $E$ with norm $\|\cdot\|$. Its gradient is $L$-Lipschitz, with $L>0$. At each point, the objective gap is at least $\mu/2$ times the squared distance to some global minimizer, where $\mu>0$. A given starting point $x^0\in E$ lies within distance $R\geq0$ of a global minimizer $x^\star$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, gradient descent with positive predetermined step sizes must return a last iterate $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm is induced by the inner product on $E$. The algorithm receives only $E$, $L$, and $x^0$; the parameters $\mu$, $R$, and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Convexity]
+For every $x,y\in E$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Quadratic growth]
+For every $x\in E$, there exists a global minimizer $z\in E$, possibly depending on $x$, such that
+\[
+\frac{\mu}{2}\|x-z\|^2\leq f(x)-f(z).
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze gradient descent. The step-size sequence $(\eta_t)_{t\geq0}$ is chosen from the algorithm inputs and satisfies $\eta_t>0$ for every $t$. Starting from the given $x^0$, the iterates obey
+\[
+x^{t+1}=x^t-\eta_t\nabla f(x^t),
+\qquad t=0,1,2,\ldots.
+\]
+After $K\geq0$ oracle calls, where $K$ is an integer, the output is the last iterate $\bar{x}=x^K$. The required accuracy is
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the law of the algorithm's randomness; the specified gradient descent method is deterministic.
+\end{document}

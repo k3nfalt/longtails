@@ -1,0 +1,47 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Online Convex Optimization}
+We consider online convex optimization on a nonempty compact convex set $K\subseteq\mathbb{R}^d$, where $d\geq0$ is an integer. The set has diameter at most $D>0$, and a point $x^0\in K$ is given. Each loss $f_t:\mathbb{R}^d\to\mathbb{R}$ is convex on $K$ and differentiable at every point of $K$, with gradient norm at most $G>0$. At round $t$, the oracle returns $\nabla f_t(x_t)$ at the chosen point $x_t\in K$. Over $T\geq1$ rounds, the goal is $\sum_{t=0}^{T-1}[f_t(x_t)-f_t(u)]\leq B$ for every $u\in K$ and every realization of algorithm randomness, where $B\in\mathbb{R}$ is the target regret bound.
+
+The comparison is with the best fixed decision in hindsight, whose cumulative loss is
+\[
+\min_{u\in K}\sum_{t=0}^{T-1}f_t(u).
+\]
+Throughout, $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives $d$, $K$, $x^0$, $D$, $G$, and the integer horizon $T$; the loss sequence is accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Feasible set]
+The set $K$ is compact and convex, contains the given point $x^0$, and satisfies
+\[
+\|x-y\|\leq D,
+\qquad x,y\in K.
+\]
+\end{assumption}
+
+\begin{assumption}[Convex losses and bounded gradients]
+For every integer $t\geq0$, the function $f_t$ is differentiable in the ambient space at every $x\in K$. For every $x,y\in K$ and $\lambda\in[0,1]$,
+\[
+\begin{aligned}
+f_t((1-\lambda)x+\lambda y)
+&\leq (1-\lambda)f_t(x)+\lambda f_t(y),\\
+\|\nabla f_t(x)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+At each round $t=0,\ldots,T-1$, the algorithm chooses $x_t\in K$ using its randomness and previous oracle replies. The oracle returns $\nabla f_t(x_t)$ at $x_t$. Thus there are exactly $T$ gradient queries, one for each successive loss. The given point $x^0$ is available to the algorithm; its first decision $x_0$ is chosen by the algorithm.
+
+The required performance concerns the decisions themselves. For a target bound $B$, which may depend on $d,K,x^0,D,G$, and $T$, they must satisfy
+\[
+\sum_{t=0}^{T-1}f_t(x_t)
+-\sum_{t=0}^{T-1}f_t(u)
+\leq B,
+\qquad \text{for every }u\in K,
+\]
+for every realization of the algorithm's randomness and every loss sequence satisfying the assumptions.
+\end{document}

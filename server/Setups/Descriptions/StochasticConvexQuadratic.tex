@@ -5,65 +5,66 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Stochastic Convex Quadratic Optimization}
-We consider minimizing a differentiable convex quadratic $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$, with $L$-Lipschitz gradient, where $L>0$. An initial point $x^0\in E$ is within distance $R\geq0$ of a global minimizer $x^\star$. Each oracle call returns an independent-sample unbiased gradient estimate with variance at most $\sigma^2$, where $\sigma\geq0$. Algorithms use batched stochastic gradient updates with nonnegative step sizes and positive integer batch sizes. For $\varepsilon>0$, the output $\bar{x}\in E$ must be measurable and have integrable objective gap satisfying $\mathbb{E}_{\mathbb{P}}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $\mathbb{P}$ is the joint randomness law.
+\section*{Batched SGD for Convex Quadratics}
+We consider minimizing a differentiable convex quadratic $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and the given starting point $x^0\in E$ is within distance $R\geq0$ of a global minimizer $x^\star$. Each oracle call returns an independent-sample, unbiased stochastic gradient with variance at most $\sigma^2$, where $\sigma\geq0$. We analyze batched stochastic gradient descent (SGD). For $\varepsilon>0$, its last completed iterate $\bar{x}$ must satisfy $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, with expectation over the oracle samples.
 
 The optimization problem is
 \[
-\min_{x\in E} f(x),
+\min_{x\in E} f(x).
 \]
-where the norm on $E$ is induced by its inner product. The public inputs are $E$, a measurable sample space $\Omega$, and $(L,R,\sigma,\varepsilon,x^0)$. The objective and the oracle distribution are accessed only through oracle replies. The admissible instances satisfy the following conditions.
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, the measurable sample space $\Omega$, $L$, $R$, $\sigma$, $\varepsilon$, and $x^0$.
 
-\begin{assumption}[Quadratic structure and smoothness]
-There exist a continuous linear map $A:E\to E$, a point $u\in E$, and a scalar $c\in\mathbb{R}$ such that
+Our assumptions:
+\begin{assumption}[Quadratic objective and smoothness]
+There exist a linear operator $A:E\to E$, a point $u\in E$, and a constant $c\in\mathbb{R}$ such that
 \[
-f(x)=c+\frac12\|A(x-u)\|^2
-\qquad\text{for every }x\in E.
+f(x)=c+\frac{1}{2}\|A(x-u)\|^2,
+\qquad x\in E.
 \]
-The function is differentiable everywhere and satisfies, for every $x,y\in E$ and $t\in[0,1]$,
-\begin{align*}
-f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
-\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
-\end{align*}
-The representation parameters $A$, $u$, and $c$ are not public inputs.
+The function $f$ is convex and Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial distance]
-There exists a global minimizer $x^\star\in E$ such that
-\begin{align*}
-f(x^\star)&\leq f(x)\qquad\text{for every }x\in E,\\
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
 \|x^0-x^\star\|&\leq R.
-\end{align*}
+\end{aligned}
+\]
 \end{assumption}
 
-\begin{assumption}[Independent stochastic-gradient access]
-There exist a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable, the squared gradient error is integrable, and
-\begin{align*}
-\int_{\Omega}g(x,\omega)\,dp(\omega)&=\nabla f(x),\\
-\int_{\Omega}\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)&\leq\sigma^2.
-\end{align*}
-At call $k\geq0$, a query $x\in E$ returns $g(x,\xi_k)$, where $(\xi_k)_{k\geq0}$ are independent samples with common law $p$. Each vector reply costs one oracle call. Queries may be adaptive and may lie anywhere in $E$. Algorithm randomness is independent of the oracle samples; neither $g$ nor $p$ is a public input.
+\begin{assumption}[Stochastic gradient oracle]
+Let $p$ be a probability measure on $\Omega$. The oracle is a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable, the map $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+Queries may be made at any point of $E$. Successive calls use independent samples $\xi_1,\xi_2,\ldots$ with common law $p$, and a call at $x$ using $\xi_j$ returns $g(x,\xi_j)$.
 \end{assumption}
 
-\begin{assumption}[Batched stochastic-gradient algorithms]
-The algorithm chooses deterministic schedules $(\eta_i)_{i\geq1}$ and $(b_i)_{i\geq1}$ using only the public inputs, with $\eta_i\geq0$ and $b_i\in\{1,2,\ldots\}$. Starting from $x^0$, it queries the same point throughout each batch and performs the updates
-\begin{align*}
-B_0&=0,\qquad B_i=\sum_{r=1}^{i}b_r,\\
+Our result is algorithm-specific: we analyze batched SGD with deterministic step sizes $\eta_i\geq0$ and positive integer batch sizes $b_i$, chosen from the algorithm inputs. Starting from the given $x^0$, define $s_0=0$ and, for $i\geq1$,
+\[
+\begin{aligned}
+s_i&=\sum_{r=1}^{i}b_r,\\
 x^i&=x^{i-1}-\frac{\eta_i}{b_i}
-\sum_{j=0}^{b_i-1}g(x^{i-1},\xi_{B_{i-1}+j}).
-\end{align*}
-Each completed update uses exactly $b_i$ calls. For an externally specified budget $K\in\mathbb{N}$, the algorithm makes $K$ calls and returns
-\[
-\bar{x}=x^{n(K)},\qquad
-n(K)=\max\{n\geq0:B_n\leq K\}.
+\sum_{j=1}^{b_i}g(x^{i-1},\xi_{s_{i-1}+j}).
+\end{aligned}
 \]
-If the final batch is incomplete, its replies count toward the budget but do not change the returned point. The budget may depend on the full public parameter tuple.
-\end{assumption}
+All queries in batch $i$ are made at $x^{i-1}$, and the point is updated only after all $b_i$ replies have been collected. For an oracle-call budget $N\in\mathbb{N}_0$, let
+\[
+T=\max\{i\in\mathbb{N}_0:s_i\leq N\}.
+\]
+The output is $\bar{x}=x^T$. If $s_T<N$, the remaining $N-s_T$ calls belong to an unfinished batch and do not change the output; these calls still count toward the budget.
 
-Writing $\mathbb{P}$ for the joint law of the randomness, success requires the output $\bar{x}$ to be measurable and the function $f(\bar{x})-f(x^\star)$ to be integrable, with
+Let $P$ be the joint law of the independent oracle samples. The output must be measurable, its objective gap must be integrable under $P$, and the required accuracy is
 \[
-\int \bigl(f(\bar{x}(\omega))-f(x^\star)\bigr)
-\,d\mathbb{P}(\omega)\leq\varepsilon.
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
 \]
-The output is the last completed batch iterate. Since all global minimizers have the same objective value, the minimizer witnessing the initial distance bound can be used in this criterion.
 \end{document}

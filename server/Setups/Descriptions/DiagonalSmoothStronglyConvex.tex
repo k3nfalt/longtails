@@ -5,50 +5,42 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Hidden Diagonal Smooth Strong Convexity}
-We consider minimizing a differentiable function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$. In the weighted Euclidean norm $\|v\|_w^2=\sum_{i=1}^d w_i v_i^2$, with hidden weights $w_i>0$, the objective is $1$-smooth and $\mu$-strongly convex for hidden $\mu\in(0,1]$. Its attained minimum value $f^\star$ and initial point $x^0$ are public, with $f(x^0)-f^\star\leq\Delta$ for hidden $\Delta\geq0$. Each oracle call returns the exact value $f(x)$ and Euclidean gradient $\nabla f(x)$. For a hidden tolerance $\varepsilon>0$, the output $\bar{x}\in\mathbb{R}^d$ must satisfy $f(\bar{x})-f^\star\leq\varepsilon$ almost surely. Only $(d,x^0,f^\star)$ are public algorithm inputs.
+\section*{Diagonal Smooth Strongly Convex Minimization}
+We consider minimizing a differentiable function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq 1$. For hidden weights $w_i>0$, define $\|v\|_w^2=\sum_{i=1}^d w_i v_i^2$. In this norm, $f$ is $1$-smooth and $\mu$-strongly convex, with hidden $\mu\in(0,1]$. Its known minimum value $f^\star=f(x^\star)$ is attained at a global minimizer $x^\star$. A given starting point $x^0$ satisfies $f(x^0)-f^\star\leq\Delta$, where $\Delta\geq0$. The oracle returns $(f(x),\nabla f(x))$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
 
 The optimization problem is
 \[
-\min_{x\in\mathbb{R}^d} f(x),
+\min_{x\in\mathbb{R}^d} f(x).
 \]
-where the ambient inner product is the standard Euclidean inner product. The weighted norm above specifies the diagonal quadratic bounds on the objective; gradients are taken with respect to the ambient inner product. The admissible objectives and oracle access satisfy the following conditions.
+The inner product $\langle\cdot,\cdot\rangle$ and gradient are Euclidean; the weighted norm specifies the quadratic bounds below. The algorithm receives only $d$, $x^0$, and $f^\star$; the weights $w=(w_i)_{i=1}^d$, strong convexity parameter $\mu$, initial gap bound $\Delta$, and tolerance $\varepsilon$ may enter only the oracle-call budget.
 
+Our assumptions:
 \begin{assumption}[Diagonal smoothness and strong convexity]
-The function $f$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$, its first-order remainder satisfies
+The function $f$ is differentiable everywhere on $\mathbb{R}^d$. For every $x,y\in\mathbb{R}^d$,
 \[
 \begin{aligned}
-\frac{\mu}{2}\|y-x\|_w^2
-&\leq f(y)-f(x)-\langle\nabla f(x),y-x\rangle\\
-&\leq \frac{1}{2}\|y-x\|_w^2.
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{1}{2}\|y-x\|_w^2,\\
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|_w^2.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Attainment and initial objective gap]
+\begin{assumption}[Attained minimum and initial gap]
 There exists $x^\star\in\mathbb{R}^d$ such that
 \[
 \begin{aligned}
-f(x^\star)&=f^\star,\\
-f(x^\star)&\leq f(x) \qquad\text{for every }x\in\mathbb{R}^d,\\
+f(x^\star)&=f^\star\leq f(x)
+&&\text{for every }x\in\mathbb{R}^d,\\
 f(x^0)-f^\star&\leq\Delta.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Exact value and gradient access]
-The single oracle, with ID $0$, returns
-\[
-\bigl(f(x),\nabla f(x)\bigr)\in\mathbb{R}\times\mathbb{R}^d
-\]
-at every query point $x\in\mathbb{R}^d$, at every call index, and for every realization of its randomness. Obtaining this pair costs one oracle call. Any internal algorithm randomness is independent of the oracle randomness.
-\end{assumption}
-
-The objective is accessed through this oracle, and queries may be chosen adaptively anywhere in $\mathbb{R}^d$. The algorithm is selected using only the public inputs stated above. An externally specified call budget $K\in\mathbb{N}$ may depend on the full parameter tuple $(d,x^0,f^\star,w,\mu,\Delta,\varepsilon)$.
-
-After at most $K$ calls, the algorithm returns $\bar{x}\in\mathbb{R}^d$. Writing $\mathbb{P}$ for the joint law of the algorithm and oracle randomness, success requires a global minimizer $x^\star$ with $f(x^\star)=f^\star$ such that
+Queries may be made at any point of $\mathbb{R}^d$, with each query returning both the exact function value and the exact gradient. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must satisfy
 \[
 f(\bar{x})-f(x^\star)\leq\varepsilon
-\qquad\mathbb{P}\text{-almost surely}.
+\quad P\text{-a.s.}
 \]
 \end{document}

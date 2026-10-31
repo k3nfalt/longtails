@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.TwoSampleQuadraticPerceptron",
+  "searched_at": "2026-10-24T06:18:28.960498+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 24 \\cdot \\left(\\frac{radius \\cdot \\log\\left(ratio\\right)}{slowLower} + 1\\right) \\cdot \\left(\\frac{radius}{gain} + 1\\right)^{2} \\cdot \\left(3 + \\frac{2 \\cdot couplingUpper \\cdot \\log\\left(ratio\\right)}{slowLower} + \\log\\left(size \\cdot \\left(\\frac{1}{wedgeLower} + \\frac{8 \\cdot radius^{3}}{couplingLower^{3} \\cdot depthLower}\\right)\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.TwoSampleQuadraticPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈24 * (p.radius * Real.log p.ratio / p.slowLower + 1) * (p.radius / p.gain + 1) ^ 2 *\n      (3 + 2 * p.couplingUpper * Real.log p.ratio / p.slowLower +\n        Real.log (p.size * (p.wedgeLower⁻¹ + 8 * p.radius ^ 3 / (p.couplingLower ^ 3 * p.depthLower))))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 24 \\cdot \\left(\\frac{radius \\cdot \\log\\left(ratio\\right)}{slowLower} + 1\\right) \\cdot \\left(\\frac{radius}{gain} + 1\\right)^{2} \\cdot \\left(3 + \\frac{2 \\cdot couplingUpper \\cdot \\log\\left(ratio\\right)}{slowLower} + \\log\\left(size \\cdot \\left(\\frac{1}{wedgeLower} + \\frac{8 \\cdot radius^{3}}{couplingLower^{3} \\cdot depthLower}\\right)\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.TwoSampleQuadraticPerceptron.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈24 * (p.radius * Real.log p.ratio / p.slowLower + 1) * (p.radius / p.gain + 1) ^ 2 *\n      (3 + 2 * p.couplingUpper * Real.log p.ratio / p.slowLower +\n        Real.log (p.size * (p.wedgeLower⁻¹ + 8 * p.radius ^ 3 / (p.couplingLower ^ 3 * p.depthLower))))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.TwoSampleQuadraticPerceptronAcceleration",
+      "namespace": "LongTails.Setups.TwoSampleQuadraticPerceptron",
+      "setup": "LongTails.Setups.TwoSampleQuadraticPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.TwoSampleQuadraticPerceptron.spec\n  OracleTemplate.TwoSampleQuadraticPerceptron.budget",
+      "theorem": "OracleTemplate.TwoSampleQuadraticPerceptron.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.TwoSampleQuadraticPerceptronAcceleration",
+      "theorem": "OracleTemplate.TwoSampleQuadraticPerceptron.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict binary separation in bilinear parameters: m(b;(v,a))=a⟨v,b⟩ or m(b;((a₁,a₂),v))=a₁⟨b,v⟩+a₂⟨shift(b),v⟩. The feasible parameter set need not be convex; no scalar minimization objective is specified.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin, Separates, spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "Each oracle call returns the exact parameter gradients of both signed sample margins, ∇θm(D.positive;θ) and −∇θm(D.negative;θ), bundled in one reply. Answers are independent of history and seeds; there is no oracle error or sampling noise.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: direction, answer, spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same call also returns both exact signed margins. One budget unit counts this entire joint value-and-gradient reply, rather than each sample evaluation separately.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Reply, answer; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features belong to ℝᵈ with the Euclidean inner product. Parameters belong to ℝᵈ×ℝ or ℝ²×ℝᵈ. Convolution uses a cyclic coordinate shift.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, Space, shift."
+      },
+      {
+        "label": "other",
+        "details": "Exactly two oppositely labeled samples have norms at most radius. The two-layer case requires positive sample inner product and a nonzero orthogonal component. The convolutional case requires a positive constant first sample, positive mean of the second sample, and a nonzero smooth component. Spectral coordinates satisfy first,second≥gain, couplingLower≤coupling≤couplingUpper, and, for convolution, slow≥slowLower. At initialization, with c=coordinates(start) and σ=−sign(c.z), require |c.r+c.y|≤ratio|c.r−c.y|, |c.z|≥depthLower, σ(c.p+c.q)≥wedgeLower, σ(c.p−c.q)≥0, and 2σc.p+2|c.z|≤size. All scalar bounds are positive, couplingLower≤couplingUpper, and ratio≥1. Only model, dimension, radius, and start are public; the remaining bounds are hidden. Allowed algorithms use a fixed positive step, update using the first nonpositive signed margin with priority to the positive sample, and output the current parameter.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: InClass, coordinates, eigenvalues, Params, Public, publicOf, family, spec.valid, spec.admissible; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The final output θ must satisfy m(D.positive;θ)>0 and m(D.negative;θ)<0 simultaneously. No epsilon, prescribed positive margin, norm tolerance, or objective-gap criterion is present.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Separates, spec.successful, family."
+      },
+      {
+        "label": "deterministic",
+        "details": "Separation is required for every combined algorithm/oracle seed, including probability-zero seeds, after execution with the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: spec.successful; LongTails/Template.lean: Convergence, execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This is a specialized two-example bilinear separation problem with spectral and initialization restrictions, hidden quantitative bounds, a bundled exact oracle, and a prescribed update family. Repository files and local proofs were not inspected. The absence of a qualifying reference is not a novelty claim."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.TwoSampleQuadraticPerceptron.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.TwoSampleQuadraticPerceptronAcceleration",
+          "theorem": "OracleTemplate.TwoSampleQuadraticPerceptron.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

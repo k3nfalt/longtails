@@ -6,73 +6,63 @@
 \newtheorem{assumption}{Assumption}
 \begin{document}
 \section*{Nonconvex Optimization with Curvature-Aligned Noise}
-We consider a differentiable, possibly nonconvex objective $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The objective has a global quadratic upper model, with controlled curvature along its gradient and in expectation along oracle noise. A given point $x^0\in E$ has bounded objective gap above a global lower bound. Each oracle call returns an unbiased stochastic gradient with bounded variance, using an independent sample. For a prescribed tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where expectation is over algorithm and oracle randomness.
+We consider minimizing a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The objective admits global quadratic upper models with bounded curvature along its gradient and a bounded initial gap to a lower bound. The oracle returns an unbiased stochastic gradient at each query, using independent, identically distributed samples. Its noise has bounded variance and bounded expected curvature relative to its second moment. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, where expectation includes oracle and independent algorithm randomness.
 
 The optimization problem is
 \[
-\inf_{x\in E} f(x),
+\inf_{x\in E} f(x).
 \]
-with accuracy measured by the gradient norm. Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The public inputs are $E$, a measurable sample space $\Omega$, the initial point $x^0$, and parameters
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. Fix a starting point $x^0\in E$ and parameters
 \[
-L_g>0,\qquad L_\xi\geq 0,\qquad \sigma\geq 0,
-\qquad \Delta\geq 0,\qquad \varepsilon>0.
+L_g>0,\qquad L_\xi\geq0,\qquad \sigma\geq0,\qquad
+\Delta\geq0,\qquad \varepsilon>0.
 \]
-The objective and oracle satisfy the following conditions.
+The algorithm receives $E$, the measurable sample space $\Omega$, $x^0$, and all five parameters; the objective and oracle distribution are accessed through oracle replies.
 
-\begin{assumption}[Directional quadratic upper model]
-The function $f$ is differentiable everywhere. There exists a map $Q:E\to\mathcal{L}(E,E)$, where $\mathcal{L}(E,E)$ denotes the continuous real-linear operators on $E$, such that, for every $x,u\in E$,
-\begin{align*}
-f(x+u)&\leq f(x)+\langle\nabla f(x),u\rangle
- +\tfrac12\langle Q(x)u,u\rangle,\\
-\langle Q(x)\nabla f(x),\nabla f(x)\rangle
- &\leq L_g\|\nabla f(x)\|^2.
-\end{align*}
-\end{assumption}
-
-\begin{assumption}[Lower bound and initialization]
-There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
-\[
-f_{\mathrm{low}}\leq f(x)\quad\text{for every }x\in E,
-\qquad f(x^0)-f_{\mathrm{low}}\leq\Delta.
-\]
-\end{assumption}
-
-\begin{assumption}[Independent stochastic-gradient access]
-There exist a probability measure $P_0$ on $\Omega$, a probability measure $P$ on $\Omega^{\mathbb{N}}$, and a jointly measurable map $g:E\times\Omega\to E$. Under $P$, the coordinate samples $\xi_k:\Omega^{\mathbb{N}}\to\Omega$, $\xi_k(\omega)=\omega_k$, are measurable and mutually independent, with
-\[
-P\circ\xi_k^{-1}=P_0\qquad\text{for every }k\in\mathbb{N}.
-\]
-At call $k$, oracle $0$ returns $g(x,\xi_k)$ for a query $x\in E$, at a cost of one oracle call. Queries may be chosen adaptively anywhere in $E$. Internal algorithm randomness is independent of the entire oracle sample sequence.
-\end{assumption}
-
-\begin{assumption}[Unbiasedness and bounded variance]
-For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $P_0$, and
-\[
-\int_\Omega g(x,\omega)\,dP_0(\omega)=\nabla f(x).
-\]
-Define the noise $\zeta(x,\omega)=g(x,\omega)-\nabla f(x)$. For every $x\in E$, its squared norm is integrable and satisfies
-\[
-\int_\Omega\|\zeta(x,\omega)\|^2\,dP_0(\omega)\leq\sigma^2.
-\]
-\end{assumption}
-
-\begin{assumption}[Noise curvature alignment]
-For every $x\in E$, the scalar map
-$\omega\mapsto\langle Q(x)\zeta(x,\omega),\zeta(x,\omega)\rangle$
-is integrable under $P_0$, and
+Our assumptions:
+\begin{assumption}[Quadratic upper models]
+The function $f$ is Fr\'echet differentiable everywhere. There exists a family of continuous linear maps $Q(x):E\to E$ such that, for every $x,u\in E$,
 \[
 \begin{aligned}
-&\int_\Omega\langle Q(x)\zeta(x,\omega),\zeta(x,\omega)\rangle\,dP_0(\omega)\\
-&\qquad\leq L_\xi\int_\Omega\|\zeta(x,\omega)\|^2\,dP_0(\omega).
+f(x+u)&\leq f(x)+\langle\nabla f(x),u\rangle
++\tfrac12\langle Q(x)u,u\rangle,\\
+\langle Q(x)\nabla f(x),\nabla f(x)\rangle
+&\leq L_g\|\nabla f(x)\|^2.
 \end{aligned}
 \]
 \end{assumption}
 
-The algorithm accesses the objective through oracle $0$ and is selected using only the public inputs. The maps $f$, $g$, and $Q$, the laws $P_0$ and $P$, and the lower bound $f_{\mathrm{low}}$ are not supplied as public inputs. An externally specified budget $K\in\mathbb{N}$ may depend on the full public parameter tuple and counts every oracle call.
-
-After at most $K$ calls, the algorithm must return a measurable point $\bar{x}\in E$. Writing $\mathbb{P}$ for the joint law of algorithm and oracle randomness on a measurable space $\mathcal{W}$, success requires that $w\mapsto\|\nabla f(\bar{x}(w))\|$ be integrable and that
+\begin{assumption}[Initial objective gap]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
 \[
-\int_{\mathcal{W}}\|\nabla f(\bar{x}(w))\|\,d\mathbb{P}(w)
-\leq\varepsilon.
+\begin{aligned}
+f(x)&\geq f_{\mathrm{low}} &&\text{for every }x\in E,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
 \]
+\end{assumption}
+
+\begin{assumption}[Unbiased curvature-aligned noise]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. Define the noise by
+\[
+\zeta(x,\omega)=g(x,\omega)-\nabla f(x).
+\]
+For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, and both $\|\zeta(x,\cdot)\|^2$ and $\langle Q(x)\zeta(x,\cdot),\zeta(x,\cdot)\rangle$ are integrable under $\nu$. For $\omega\sim\nu$, they satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\omega\sim\nu}[g(x,\omega)]&=\nabla f(x),\\
+\mathbb{E}_{\omega\sim\nu}\|\zeta(x,\omega)\|^2&\leq\sigma^2,\\
+\mathbb{E}_{\omega\sim\nu}
+\langle Q(x)\zeta(x,\omega),\zeta(x,\omega)\rangle
+&\leq L_\xi\mathbb{E}_{\omega\sim\nu}\|\zeta(x,\omega)\|^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ returns $g(x,\xi_k)$, where the measurable sample variables $(\xi_k)_{k\geq0}$ are mutually independent and each has law $\nu$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the oracle samples and the algorithm's randomness.
 \end{document}

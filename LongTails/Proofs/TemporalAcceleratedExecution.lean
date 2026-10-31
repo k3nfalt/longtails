@@ -25,7 +25,7 @@ lemma update_sub_const (θ μ : ℝ) (hθ : 1 + θ ≠ 0) (s : E × E) (u g : E)
   ext <;> simp only [Prod.snd_sub, Prod.fst_sub] <;> module
 
 lemma execute_tailAccelerated (O : Oracle E E) (g : ℕ → E → E)
-    (hO : ∀ k x seed, O.answer k (0, x) seed = g k x) (θ μ : ℝ) (x0 : E)
+    (hO : ∀ history x seed, O.answer history (0, x) seed = g history.length x) (θ μ : ℝ) (x0 : E)
     (K : ℕ) (seed : (tailAccelerated θ μ x0).Seed) (ξ : (k : ℕ) → O.Seed k) :
     execute O (tailAccelerated θ μ x0) (fun _ => K) seed ξ =
       tailAverage (fun k => (acceleratedRun g θ μ x0 k).1) (K / 2) (K - K / 2) := by
@@ -60,9 +60,12 @@ lemma execute_tailAccelerated (O : Oracle E E) (g : ℕ → E → E)
     rfl
   have hr := go K 0 (fun _ => (x0, x0)) hh
   simp only [Nat.zero_add] at hr
-  rw [StochasticGradient.execute_advance]
-  simp only [tailAccelerated]
-  simp_rw [hO]
+  rw [StochasticGradient.execute_advance_of_answer O A K seed ξ (fun k query => g k query.2) (by
+    intro history query
+    rcases query with ⟨i, x⟩
+    have hi : i = 0 := Subsingleton.elim _ _
+    subst i
+    exact hO history x (ξ history.length))]
   change A.output (StochasticGradient.advance step K 0 (0, fun _ => (x0, x0))) = _
   dsimp only [A, tailAccelerated]
   rw [hr.1]

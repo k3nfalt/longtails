@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Reverse Fisher Gradient Descent}
+We study gradient descent on the reverse Fisher loss $F$ between an equally weighted Gaussian mixture with $m\geq1$ means in $\mathbb{R}^d$, $d\geq1$, and a Gaussian target with mean $x^\star\in\mathbb{R}^d$. Both share an unknown covariance $\Sigma$ satisfying $\lambda_-I\preceq\Sigma\preceq\lambda_+I$, where $0<\lambda_-\leq\lambda_+$. The loss averages the squared Euclidean difference of their log-density gradients under the mixture. Each given initial mean $\theta_i^0$ lies within distance $R\geq0$ of $x^\star$. The oracle returns $\nabla F(\theta)$ at $\theta$. For $\varepsilon>0$, the final means must satisfy $\|\bar\theta_i-x^\star\|^2\leq\varepsilon$ for every component and every realization of algorithm randomness.
+
+Write $E=(\mathbb{R}^d)^m$, equipped with the product inner product and norm
+\[
+\|\theta\|_E^2=\sum_{i=1}^m\|\theta_i\|^2.
+\]
+The model consists of an invertible linear map $A:\mathbb{R}^d\to\mathbb{R}^d$ and the target mean $x^\star$, with $\Sigma=AA^\top$. Define the unnormalized log densities
+\[
+\begin{aligned}
+h_\theta(x)&=\log\left(\sum_{i=1}^m
+ \exp\left(-\frac{\|A^{-1}(x-\theta_i)\|^2}{2}\right)\right),\\
+h_\star(x)&=-\frac{\|A^{-1}(x-x^\star)\|^2}{2}.
+\end{aligned}
+\]
+Their gradients with respect to $x$ equal the corresponding log-density gradients. For $Z\sim\mathcal{N}(0,I_d)$, define
+\[
+F(\theta)=\frac{1}{m}\sum_{\ell=1}^m
+\mathbb{E}\left[
+\left\|\nabla h_\theta(\theta_\ell+AZ)
+-\nabla h_\star(\theta_\ell+AZ)\right\|^2
+\right].
+\]
+The optimization problem is
+\[
+\min_{\theta\in E}F(\theta).
+\]
+The algorithm receives $d,m,\lambda_-,\lambda_+,R,\varepsilon$, and $\theta^0\in E$; $A$ and $x^\star$ are accessible only through the oracle.
+
+Our assumptions:
+\begin{assumption}[Covariance bounds]
+For every $v\in\mathbb{R}^d$,
+\[
+\lambda_-\|v\|^2\leq\|A^\top v\|^2
+\leq\lambda_+\|v\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial localization]
+The given initial means satisfy
+\[
+\|\theta_i^0-x^\star\|\leq R,
+\qquad i=1,\ldots,m.
+\]
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze gradient descent with positive, potentially adaptive step sizes. Queries may be made at any point of $E$, and $\nabla F$ denotes the gradient under its product inner product. Starting from the given $\theta^0$, each oracle call and update have the form
+\[
+\begin{aligned}
+g^t&=\nabla F(\theta^t),\\
+\theta^{t+1}&=\theta^t-\eta_t g^t,
+\qquad \eta_t>0.
+\end{aligned}
+\]
+The step size is selected from the algorithm's current information before receiving $g^t$ and may depend on its randomness. The expectation defining $F$ is part of the objective; oracle replies are exact gradients of that objective.
+
+After $K$ oracle calls, the output is the last iterate $\bar\theta=\theta^K$. The required accuracy is
+\[
+\|\bar\theta_i-x^\star\|^2\leq\varepsilon,
+\qquad i=1,\ldots,m,
+\]
+for every realization of the algorithm's randomness.
+\end{document}

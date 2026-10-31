@@ -5,69 +5,79 @@
 \theoremstyle{definition}
 \newtheorem{assumption}{Assumption}
 \begin{document}
-\section*{Convex Optimization with Growing Oracle Moments}
-We consider minimizing a measurable function $f:\mathbb{R}^d\to\mathbb{R}$, convex on a closed convex set $C$, with the Euclidean norm $\|\cdot\|$. The initial point $x^0\in C$ satisfies $\|x^0-x^\star\|\leq R$ for a minimizer $x^\star\in C$ and $R\geq0$. Each oracle call returns either an exact projection onto $C$ or an independently sampled, possibly heavy-tailed vector whose mean is a subgradient on $C$ and whose second moment at $x\in C$ is at most $B^2\|x-x^0\|^2+G^2$, where $B,G>0$. Given $\varepsilon>0$ and $\delta\in(0,1)$, success requires a measurable feasible output $\bar{x}$ with $\mathbb{P}(f(\bar{x})-f(x^\star)>\varepsilon)\leq\delta$, where $\mathbb{P}$ includes oracle and algorithm randomness.
+\section*{Terminal Clipping for Convex Minimization}
+We consider minimizing a measurable convex function $f:\mathbb{R}^d\to\mathbb{R}$ over a closed convex set $D$, with a given $x^0\in D$ within distance $R\geq0$ of a minimizer $x^\star$. The oracle returns stochastic subgradient estimates $g(x,\xi)$ from independent samples $\xi$ with law $\nu$, or exact projections onto $D$. Their means are subgradients on $D$, and $\mathbb{E}_{\xi\sim\nu}\|g(x,\xi)\|^2\leq B^2\|x-x^0\|^2+G^2$, where $B,G>0$. Projected clipped updates must return a measurable terminal iterate $\bar{x}\in D$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$, where $\varepsilon>0$ and $\delta\in(0,1)$.
 
 The optimization problem is
 \[
-\min_{x\in C} f(x).
+\min_{x\in D} f(x).
 \]
-The dimension $d\in\{0,1,2,\ldots\}$ and the tuple $(x^0,B,G,\delta,R,\varepsilon)$ are public inputs. Inner products are Euclidean. The objective and feasible set are accessed through the oracle described below.
+Here $d$ is a nonnegative integer, and $\langle\cdot,\cdot\rangle$ and $\|\cdot\|$ denote the Euclidean inner product and norm. The algorithm receives $d,x^0,B,G,\delta,R,\varepsilon$ and accesses the objective and constraint set through the oracle.
 
-\begin{assumption}[Convexity and attainment]
-The set $C\subseteq\mathbb{R}^d$ is closed and convex, $x^0\in C$, and $f$ is Borel measurable. For every $x,y\in C$ and $t\in[0,1]$,
+Our assumptions:
+\begin{assumption}[Convexity and initial distance]
+The set $D\subseteq\mathbb{R}^d$ is closed and convex, $x^0\in D$, and $f$ is measurable on $\mathbb{R}^d$. For all $x,y\in D$ and $t\in[0,1]$,
 \[
 f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
 \]
-There exists $x^\star\in C$ satisfying
+There exists $x^\star\in D$ such that
 \[
 \begin{aligned}
-f(x^\star)&\leq f(x) &&\text{for every }x\in C,\\
+f(x^\star)&\leq f(x) &&\text{for every }x\in D,\\
 \|x^0-x^\star\|&\leq R.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Projection access]
-A projection query at $x\in\mathbb{R}^d$ returns $\Pi_C(x)$ deterministically. The map $\Pi_C:\mathbb{R}^d\to\mathbb{R}^d$ is Borel measurable and satisfies, for every $x\in\mathbb{R}^d$ and $u\in C$,
+\begin{assumption}[Stochastic subgradients]
+Let $\nu$ be a probability measure on a measurable sample space $\Omega$. The map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For every $x\in D$, $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)\|^2$ is integrable under $\nu$. Its mean satisfies the subgradient inequality
+\[
+f(x)-f(y)\leq
+\left\langle\mathbb{E}_{\xi\sim\nu}[g(x,\xi)],x-y\right\rangle,
+\qquad x,y\in D,
+\]
+and its second moment satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)\|^2\bigr]
+\leq B^2\|x-x^0\|^2+G^2,
+\qquad x\in D.
+\]
+The oracle samples form a sequence $(\xi_k)_{k\geq0}$ of measurable, mutually independent random variables, each with law $\nu$. This sequence is independent of the algorithm's randomness. At call $k$, a subgradient query at $x$ returns $g(x,\xi_k)$.
+\end{assumption}
+
+\begin{assumption}[Exact projection]
+A projection query at any $z\in\mathbb{R}^d$ returns $\Pi_D(z)$, where $\Pi_D:\mathbb{R}^d\to\mathbb{R}^d$ is measurable and satisfies
 \[
 \begin{aligned}
-\Pi_C(x)&\in C,\\
-\langle x-\Pi_C(x),u-\Pi_C(x)\rangle&\leq0.
+\Pi_D(z)&\in D,\\
+\langle z-\Pi_D(z),u-\Pi_D(z)\rangle&\leq0,
+\qquad u\in D.
 \end{aligned}
 \]
 \end{assumption}
 
-\begin{assumption}[Independent stochastic access]
-There is a measurable sample space $\Omega$, a probability measure $\nu$ on $\Omega$, and a jointly measurable map
+Our formulation is algorithm-specific: we analyze terminal clipping with projected stochastic subgradient updates. For a nonnegative threshold $C$, define
 \[
-g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d.
+\operatorname{clip}_{C}(v)=
+\begin{cases}
+v,&\|v\|\leq C,\\
+\dfrac{C}{\|v\|}v,&\|v\|>C.
+\end{cases}
 \]
-Under a probability law $P$ on $\Omega^{\mathbb{N}}$, the coordinate samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. At call index $k$, a stochastic subgradient query at $x$ returns $g(x,\xi_k)$. Internal algorithm randomness is independent of the entire sample sequence. The sample space, sampling laws, and map $g$ are not public inputs.
-\end{assumption}
+The method starts at the given $x^0$, with initial output $x^0$ and first query a subgradient query at $x^0$. It alternates subgradient and projection queries. Before receiving the subgradient reply at iteration $t$, it selects a step size $\eta_t\geq0$ and threshold $C_t\geq0$ using its available history and internal randomness. The updates are
+\[
+\begin{aligned}
+g_t&=g(x^t,\xi_{2t}),\\
+z^t&=x^t-\eta_t\operatorname{clip}_{C_t}(g_t),\\
+x^{t+1}&=\Pi_D(z^t).
+\end{aligned}
+\]
+The output remains $x^t$ after the subgradient reply and becomes $x^{t+1}$ after the projection reply; the next query is a subgradient query at $x^{t+1}$. Both query types count toward a single total oracle-call budget. Thus each completed update uses two calls. With a budget of $N\geq0$ calls, the terminal output is $\bar{x}=x^{\lfloor N/2\rfloor}$; an unmatched final subgradient call leaves it unchanged.
 
-\begin{assumption}[Mean subgradients and moment growth]
-For every $x\in C$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, and $\|g(x,\cdot)\|^2$ is integrable. Its mean
+The required output is measurable and belongs to $D$ for every realization. Its accuracy requirement is
 \[
-m(x):=\int_{\Omega}g(x,\omega)\,\nu(d\omega)
+\mathbb{P}_{P}\!\left(f(\bar{x})-f(x^\star)>\varepsilon\right)
+\leq\delta,
 \]
-satisfies, for every $x,y\in C$,
-\[
-f(x)-f(y)\leq\langle m(x),x-y\rangle.
-\]
-The second moment obeys, for every $x\in C$,
-\[
-\int_{\Omega}\|g(x,\omega)\|^2\,\nu(d\omega)
-\leq B^2\|x-x^0\|^2+G^2.
-\]
-\end{assumption}
-
-Queries may be adaptive and may use either oracle operation at any point in $\mathbb{R}^d$; the subgradient and moment guarantees apply on $C$. Each operation costs one oracle call, including every projection query. The algorithm is selected using only the public inputs and is run for an externally specified budget $K\in\mathbb{N}$, counting both kinds of calls.
-
-The returned point $\bar{x}$ must be measurable and belong to $C$ for every realization of the randomness. Under the joint law $\mathbb{P}$, success requires
-\[
-\mathbb{P}\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)
-\leq\delta.
-\]
-Here $x^\star$ may be the minimizer witnessing the initial distance bound, since all minimizers over $C$ have the same objective value.
+where $P$ is the joint law of the oracle samples and the independent algorithm randomness.
 \end{document}

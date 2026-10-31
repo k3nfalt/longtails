@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic fixed-point residual complexity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticFixedPointSmoothBanach.lean}{StochasticFixedPointSmoothBanach}.}\label{tab:StochasticFixedPointSmoothBanach}
+\parbox{\linewidth}{\footnotesize A separable real Banach space $E$ with its Borel structure admits $j:E\to E^*$ satisfying $\|x+y\|^2\leq\|x\|^2+2j(x)(y)+K\|y\|^2$. The map $T:E\to E$ is nonexpansive, $Tx^*=x^*$, and $\|x_0-x^*\|\leq D$. A jointly measurable oracle $G(x,\xi)$ uses IID samples of law $p$, with integrable replies, $\int G(x,\xi)\,dp(\xi)=Tx$, and integrable squared error $\int\|G(x,\xi)-Tx\|^2\,dp(\xi)\leq\sigma^2$. Here $K,\sigma\geq0$ and $D,\varepsilon>0$. Target: a measurable output $\hat x$ with integrable residual and $\int\|\hat x(\omega)-T\hat x(\omega)\|\,dP(\omega)\leq\varepsilon$, where $P$ is the IID execution law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecursiveAnchorKmSmoothBanach.lean}{Recursive\allowbreak Anchor\allowbreak Km\allowbreak Smooth\allowbreak Banach} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecursiveAnchorKmSmoothBanach.md}{(review)}
+& $\mathcal{O}\!\left((1+D/\varepsilon)\ell+K\sigma^2\ell^3/\varepsilon^2\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Dual Halpern \citep[Thm.~3]{sfpLee2026v1}
+& $\mathcal{O}\!\left(D/\varepsilon+(p-1)D\sigma^2/\varepsilon^3\right)$\par $E=\ell_p^d$, $2\leq p<\infty$, $0<\varepsilon\leq D$.
+& \textbf{(1)}: faster if $(p-1)\sigma^2\gg\varepsilon^2\ell$ and $D/\varepsilon\gg\ell^3$. For $\ell_4$, $D=\sigma=1$: $\mathcal{O}(\varepsilon^{-2}\ell^3)$ versus $\mathcal{O}(\varepsilon^{-3})$. Scope extends to infinite-dimensional $2$-smooth spaces.
+& \textbf{(1)}: extra factor $\ell$ in deterministic term; factor-$\ell$ loss when $(p-1)\sigma^2\lesssim\varepsilon^2$. \\
+\midrule
+\textbf{(3)} Recursive anchoring \citep[Thm.~5]{sfpDgm2026v1}
+& $\mathcal{O}\!\left((B/\varepsilon+KB\sigma^2/\varepsilon^3)\operatorname{polylog}(2+B/\varepsilon)\right)$\par Expected-residual conversion on compact convex self-maps of diameter $B$, $0<\varepsilon\leq B/2$, $2$-smooth norm, bounded retraction constant. Target $\varepsilon/2$, failure probability $\varepsilon/(2B)$; logarithmic powers unspecified.
+& \textbf{(1)}: on global maps preserving such a set with $B\asymp D$, noise dependence improves $\varepsilon^{-3}$ to $\varepsilon^{-2}$ up to logs; total gain requires $K\sigma^2\gg\varepsilon^2\operatorname{polylog}(2+D/\varepsilon)$ and $D/\varepsilon\gg\ell^3$.
+& \textbf{(1)}: requires $2$-smoothness rather than weak type $2$, and a global map; loses high-probability residual guarantee. \\
+\midrule
+\textbf{(4)} Batched Halpern \citep[Thm.~4.3, Rem.~4.4]{sfpShehu2026v1}
+& $\mathcal{O}\!\left(D/\varepsilon+KD^2\sigma^2/\varepsilon^4\right)$\par $K\geq1$, $0<\varepsilon<D$.
+& \textbf{(1)}: noise term smaller by $(D/\varepsilon)^2/\ell^3$ when this ratio exceeds one; no uniform total-cost dominance.
+& \textbf{(1)}: extra factor $\ell$ in deterministic term. \\
+\midrule
+\textbf{(5)} RAIN, derived bound \citep[Thm.~4.2]{sfpChenLuo2024}; reduction \citep[Thm.~4.8]{sfpShehu2026v1}
+& $\mathcal{O}\!\left((1+D/\varepsilon)(1+\log\ell)+\sigma^2\ell^3/\varepsilon^2\right)$\par Hilbert special case, $K=1$, via $F=I-T$.
+& \textbf{(1)}: extends Hilbert scope to $2$-smooth Banach spaces; matches the Hilbert noise term.
+& \textbf{(1)}: deterministic term worse by $\ell/(1+\log\ell)$ on the Hilbert overlap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+D/\varepsilon)$; $K$ is the squared-norm smoothness constant ($K=p-1$ for $\ell_p$, $p\geq2$); $B$ is a compact domain's diameter. Costs count individual oracle samples, including batches. $\operatorname{polylog}$ denotes unspecified polynomial logarithmic factors. $\asymp$ means equality up to universal factors; $\gg$ denotes asymptotic domination.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

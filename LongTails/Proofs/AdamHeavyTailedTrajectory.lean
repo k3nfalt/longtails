@@ -121,7 +121,7 @@ lemma execute_trajectory {d : ℕ} {Ω : Type} [MeasurableSpace Ω]
     (remaining := fun t _ => n + 1 - t) (T := n + 1)
   · simp [executionState, trajectory, method]
   · intro t
-    exact executionState_succ g q ρ η τ x0 ξ selected.val t
+    exact executionState_succ g q ρ η τ x0 ξ selected.val t.length
   · rfl
   · intro t
     funext i
