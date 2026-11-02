@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.SmoothHessianLipschitzGd",
+  "searched_at": "2026-11-02T10:43:33.634737+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{90 \\cdot L \\cdot \\Delta \\cdot \\left(\\frac{\\rho \\cdot \\varepsilon}{L^{2}}\\right)^{\\frac{1}{22}}}{\\varepsilon^{2}} \\right\\rceil_{+} + \\left\\lceil 400 \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)^{\\frac{4}{5}} \\right\\rceil_{+} + 8",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothHessianLipschitzGd.spec.Params → ℕ",
+        "value": "fun p => ⌈90 * p.L * p.Δ * (p.ρ * p.ε / p.L ^ 2) ^ 22⁻¹ / p.ε ^ 2⌉₊ + ⌈400 * (p.L * p.Δ / p.ε ^ 2) ^ (4 / 5)⌉₊ + 8"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{90 \\cdot L \\cdot \\Delta \\cdot \\left(\\frac{\\rho \\cdot \\varepsilon}{L^{2}}\\right)^{\\frac{1}{22}}}{\\varepsilon^{2}} \\right\\rceil_{+} + \\left\\lceil 400 \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right)^{\\frac{4}{5}} \\right\\rceil_{+} + 8",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothHessianLipschitzGd.spec.Params → ℕ",
+          "value": "fun p => ⌈90 * p.L * p.Δ * (p.ρ * p.ε / p.L ^ 2) ^ 22⁻¹ / p.ε ^ 2⌉₊ + ⌈400 * (p.L * p.Δ / p.ε ^ 2) ^ (4 / 5)⌉₊ + 8"
+        }
+      ],
+      "module": "LongTails.Theorems.AdaptiveSilverHessianLipschitz",
+      "namespace": "LongTails.Setups.SmoothHessianLipschitzGd",
+      "setup": "LongTails.Setups.SmoothHessianLipschitzGd",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothHessianLipschitzGd.spec\n  OracleTemplate.AdaptiveSilverHessianLipschitz.budget",
+      "theorem": "OracleTemplate.AdaptiveSilverHessianLipschitz.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdaptiveSilverHessianLipschitz",
+      "theorem": "OracleTemplate.AdaptiveSilverHessianLipschitz.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a twice continuously differentiable function; convexity is not required. Globally, f(x0)−f(x)≤Δ.",
+        "evidence": "LongTails/Setups/SmoothHessianLipschitzGd.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every query returns ∇f(x), independently of history and oracle seed. Function values and Hessian evaluations are unavailable.",
+        "evidence": "LongTails/Setups/SmoothHessianLipschitzGd.lean: spec.admissible, Query, Reply"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "An arbitrary finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/SmoothHessianLipschitzGd.lean: Params.finiteE, Params.innerE"
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz gradient and ρ-Lipschitz Hessian in operator norm, with L>0, ρ≥0, Δ≥0 and ε>0. All parameters, including x0, are public. Allowed algorithms take strictly positive scalar gradient steps and retain the queried point with smallest gradient norm.",
+        "evidence": "LongTails/Setups/SmoothHessianLipschitzGd.lean: spec.valid, spec.admissible, spec.publicInput, adaptiveGdFamily"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output must satisfy ‖∇f(output)‖≤ε. The output is the best queried iterate by squared gradient norm.",
+        "evidence": "LongTails/Setups/SmoothHessianLipschitzGd.lean: spec.successful, adaptiveGdFamily"
+      },
+      {
+        "label": "almost_sure",
+        "details": "Success holds almost surely under the joint algorithm-seed and oracle-seed probability law, within the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/SmoothHessianLipschitzGd.lean: spec.successful; LongTails/Template.lean: Convergence, execute"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth nonconvex stationarity with a Lipschitz Hessian is classical, but the explicit restriction to positive scalar gradient updates and best queried-iterate output makes this a restricted algorithm-family benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AdaptiveSilverHessianLipschitz.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdaptiveSilverHessianLipschitz",
+          "theorem": "OracleTemplate.AdaptiveSilverHessianLipschitz.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

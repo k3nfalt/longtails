@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothHessianLipschitzGd.lean}{SmoothHessianLipschitzGd}.}\label{tab:SmoothHessianLipschitzGd}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^2$ has $L$-Lipschitz gradient, $\rho$-Lipschitz Hessian, and $f(x_0)-f(x)\leq\Delta$ for every $x$, with $L,\varepsilon>0$ and $\rho,\Delta\geq0$. Exact gradient calls are counted. The setup requires positive, history-dependent GD steps and the best queried gradient-norm output; the target is $\|\nabla f(\hat x)\|\leq\varepsilon$ (deterministically for our construction).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdaptiveSilverHessianLipschitz.lean}{Adaptive\allowbreak Silver\allowbreak Hessian\allowbreak Lipschitz} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdaptiveSilverHessianLipschitz.md}{(review)}
+& $\mathcal{O}(1+Tq^{1/22}+T^{4/5})$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} GD, step $1/L$ \citep[\S1.2.3]{hlgsNesterov2018}
+& $\mathcal{O}(1+L\Delta/\varepsilon^2)$
+& \textbf{(1)}: Cost reduction by $\min\{q^{-1/22},T^{1/5}\}$ when $q\ll1$, $T\gg1$. Fixed positive $L,\rho,\Delta$: $\mathcal{O}(\varepsilon^{-21/11})$ versus $\mathcal{O}(\varepsilon^{-2})$ using momentum-free GD.
+& \textbf{(1)} needs Lipschitz Hessian and $\rho,\Delta$ in updates; much larger constants. Explicit-budget gain requires $q^{-1}>45^{22}$, $T>200^5$. No gain when $q>1$. \\
+\midrule
+\textbf{(3)} Restarted AGD \citep[Thm.~1, v4]{shlgLiLinV4}; derived bound
+& $\mathcal{O}\!\left(1+\min\{T,Tq^{1/4}+\sqrt T\}\right)$\par For $\Delta>0$, retune with $\rho'=\max\{\rho,\varepsilon^3/\Delta^2\}$; rescale accuracy; AGD requires $\rho\,{}^{\prime}\varepsilon/82\leq L^2/16$; otherwise use GD.
+& \textbf{(1)}: No established improvement in problem-class complexity. Momentum-free GD analysis; \textbf{(3)} permits momentum and thus lies outside the prescribed GD family.
+& \textbf{(1)}: Slower leading term by $q^{-9/44}$ for $0<q\leq1$; at $\rho=0$, $T^{4/5}$ versus $T^{1/2}$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=L\Delta/\varepsilon^2$, $q=\rho\varepsilon/L^2$; $L$ and $\rho$ bound the Lipschitz constants of $\nabla f$ and $\nabla^2 f$; $\Delta$ bounds the initial objective gap. GD: gradient descent; AGD: accelerated gradient descent.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

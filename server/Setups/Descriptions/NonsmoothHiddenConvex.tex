@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonsmooth Hidden Convex Minimization}
+We consider minimizing $F=H\circ c$ on a finite-dimensional real Hilbert space $E$, where $H:E\to\mathbb{R}$ is convex and $c:E\to E$ is a differentiable bi-Lipschitz homeomorphism with Lipschitz derivative. The objective $F$ can be nonsmooth and nonconvex. A global minimizer $x^\star$ exists, and $F(0)\leq F(y)$ whenever $\|y\|=R$, for a given radius $R>0$. The oracle returns independent-sample estimates of a subgradient of $H$ pulled back through the adjoint derivative of $c$, with unbiased means and uniformly bounded second moments. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, averaging over sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. Operator norms $\|\cdot\|_{\mathrm{op}}$ are the induced operator norms. The parameters satisfy
+\[
+0<\mu\leq L_c,\qquad L_J\geq0,\qquad G>0,\qquad R>0,\qquad\varepsilon>0.
+\]
+The algorithm receives $E$, a measurable sample space $\Omega$, and $\mu,L_c,L_J,G,R,\varepsilon$; the functions $F,H,c$, their derivative field, and the oracle distribution are accessible only through the specified oracle replies.
+
+Our assumptions:
+\begin{assumption}[Hidden convex structure]
+The function $H:E\to\mathbb{R}$ is convex: for all $u,v\in E$ and $t\in[0,1]$,
+\[
+H((1-t)u+tv)\leq(1-t)H(u)+tH(v).
+\]
+The map $c:E\to E$ is a homeomorphism, Fr\'echet differentiable at every point, with derivative $J(x):E\to E$. For all $x,y\in E$,
+\[
+\begin{aligned}
+F(x)&=H(c(x)),\\
+\mu\|x-y\|&\leq\|c(x)-c(y)\|\leq L_c\|x-y\|,\\
+\|J(x)-J(y)\|_{\mathrm{op}}&\leq L_J\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and boundary condition]
+There exists $x^\star\in E$ such that
+\[
+F(x^\star)\leq F(x)\qquad\text{for every }x\in E.
+\]
+The objective also satisfies
+\[
+F(0)\leq F(y)\qquad\text{for every }y\in E\text{ with }\|y\|=R.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic pulled subgradients]
+There is a field $g:E\to E$ such that, for every $x\in E$, some $s_x\in E$ satisfies
+\[
+\begin{aligned}
+H(c(x))+\langle s_x,u-c(x)\rangle&\leq H(u)
+&&\text{for all }u\in E,\\
+g(x)&=J(x)^*s_x,
+\end{aligned}
+\]
+where $J(x)^*$ is the adjoint of $J(x)$.
+
+Let $\nu$ be a probability measure on $\Omega$. The oracle map $a:E\times\Omega\to E$ is jointly measurable. For every $x\in E$, $a(x,\cdot)$ is Bochner integrable and $\|a(x,\cdot)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[a(x,\xi)]&=g(x),\\
+\mathbb{E}_{\xi\sim\nu}[\|a(x,\xi)\|^2]&\leq G^2.
+\end{aligned}
+\]
+At call $k$, a query $x\in E$ receives $a(x,\xi_k)$. The measurable samples $(\xi_k)_{k\geq0}$ are independent with common law $\nu$ under a joint probability law $Q$ on $\Omega^{\mathbb{N}}$. The algorithm's randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gap $F(\bar{x})-F(x^\star)$ must be integrable, and it must satisfy
+\[
+\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle sample sequence.
+\end{document}

@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Second-Order Stationarity in PL Minimax Problems}
+We consider minimizing $\Phi(x)=\max_{y\in F}f(x,y)$ for a possibly nonconvex function $f:E\times F\to\mathbb{R}$ on finite-dimensional real inner product spaces $E,F$. The gradient and Hessian of $f$ are Lipschitz with constants $L$ and $\rho>0$, respectively; every inner maximum is attained and satisfies a maximization Polyak--\L{}ojasiewicz condition with $0<\mu\leq L$. Initial value and maximization gaps are bounded. The oracle returns $f(z)$, $\nabla f(z)$, and $\nabla^2f(z)$ at $z\in E\times F$. For $\varepsilon>0$, the goal is twice differentiable $\Phi$ and an output $\bar{x}\in E$ satisfying $\|\nabla\Phi(\bar{x})\|\leq\varepsilon$ and $\nabla^2\Phi(\bar{x})\succeq-\sqrt{100\rho\sqrt{L/\mu}(4+L/\mu)\varepsilon}\,I_E$ almost surely, where $I_E$ is the identity and the probability concerns algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E}\Phi(x),
+\qquad \Phi(x)=\max_{y\in F}f(x,y).
+\]
+Equip $E\times F$ with the product inner product and norm
+\[
+\|(x,y)\|=\sqrt{\|x\|^2+\|y\|^2}.
+\]
+All operator norms below are the induced operator norms. The Hessian $\nabla^2 f(z)$ acts on $E\times F$, and $\nabla_y f(x,y)$ denotes the $F$ component of $\nabla f(x,y)$. The algorithm receives $E,F,L,\mu,\rho,\Delta,D,\varepsilon$ and the given points $x^0\in E$, $y^0\in F$, with parameter ranges
+\[
+0<\mu\leq L,\qquad \rho>0,\qquad
+\Delta\geq0,\qquad D\geq0,\qquad \varepsilon>0.
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, its gradient is Fr\'echet differentiable everywhere, and for all $z,w\in E\times F$,
+\[
+\begin{aligned}
+\|\nabla f(z)-\nabla f(w)\|&\leq L\|z-w\|,\\
+\|\nabla^2 f(z)-\nabla^2 f(w)\|_{\mathrm{op}}&\leq\rho\|z-w\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and maximization PL condition]
+For every $x\in E$, there exists $y_x\in F$ such that
+\[
+f(x,y)\leq f(x,y_x)\qquad\text{for every }y\in F.
+\]
+For all $x\in E$ and $y\in F$,
+\[
+2\mu\bigl(\Phi(x)-f(x,y)\bigr)
+\leq\|\nabla_y f(x,y)\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial gaps]
+The given points satisfy
+\[
+\begin{aligned}
+\Phi(x^0)-\Phi(x)&\leq\Delta
+&&\text{for every }x\in E,\\
+\Phi(x^0)-f(x^0,y^0)&\leq D.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point $z\in E\times F$. Each oracle call returns the exact triple
+\[
+\bigl(f(z),\nabla f(z),\nabla^2 f(z)\bigr).
+\]
+The required success condition includes Fr\'echet differentiability of both $\Phi$ and $\nabla\Phi$ everywhere on $E$. After the allotted oracle calls, the output $\bar{x}\in E$ must satisfy
+\[
+\begin{aligned}
+\|\nabla\Phi(\bar{x})\|&\leq\varepsilon,\\
+\langle v,\nabla^2\Phi(\bar{x})v\rangle
+&\geq-\sqrt{100\rho\sqrt{L/\mu}(4+L/\mu)\varepsilon}\,\|v\|^2
+\quad\text{for every }v\in E,
+\end{aligned}
+\qquad P\text{-a.s.},
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

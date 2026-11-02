@@ -1,0 +1,68 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Restarted Schedule Gradient Descent}
+We consider finding a stationary point of a possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. The function is twice continuously differentiable, with $L$-Lipschitz gradient and $\rho$-Lipschitz Hessian, where $L,\rho>0$. A given starting point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$ for $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, restarted schedule gradient descent must return $\bar{x}\in E$ with $\|\nabla f(\bar{x})\|\leq\varepsilon$ for every realization.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E,x^0,L,\rho,\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Gradient and Hessian regularity]
+The function $f$ belongs to $C^2(E;\mathbb{R})$. Its Hessian $\nabla^2 f(x)$ is a linear operator from $E$ to $E$, and for all $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}&\leq\rho\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta,\qquad x\in E.
+\]
+\end{assumption}
+
+Our result is algorithm-specific: we analyze restarted schedule gradient descent. The method chooses thresholds $G_1,R\in\mathbb{R}$ and a finite schedule $(h_0,\ldots,h_{m-1})$, with $m\geq0$ and $h_j>0$ for $0\leq j<m$, using the available inputs. Neither threshold has a sign restriction, and the schedule may be empty. Define $\widetilde h_j=h_j$ for $j<m$ and $\widetilde h_j=0$ for $j\geq m$.
+
+The method maintains a point $x^k$, a restart centre $c^k$, and an index $j_k$, initialized by
+\[
+(x^0,c^0,j_0)=(x^0,x^0,0).
+\]
+At call $k$, it queries $g^k=\nabla f(x^k)$. If $\|g^k\|\leq\varepsilon$, it freezes the point, centre, and index for all subsequent calls. Otherwise, while the method has not frozen, it applies the following update. If $j_k=0$ and $\|g^k\|>G_1$, then
+\[
+\begin{aligned}
+x^{k+1}&=x^k-L^{-1}g^k,\\
+c^{k+1}&=c^k,\qquad j_{k+1}=0.
+\end{aligned}
+\]
+In every other case, it sets
+\[
+\begin{aligned}
+y^k&=\begin{cases}
+x^k,&j_k=0,\\
+c^k,&j_k>0,
+\end{cases}\\
+x^{k+1}&=x^k-\widetilde h_{j_k}g^k,\\
+c^{k+1}&=y^k,\\
+j_{k+1}&=\begin{cases}
+j_k+1,&j_k+1<m\ \text{and }\|x^{k+1}-y^k\|\leq R,\\
+0,&\text{otherwise}.
+\end{cases}
+\end{aligned}
+\]
+Queries lie in $E$. After an allotted number $N\geq0$ of oracle calls, the output is the current point $\bar{x}=x^N$. The required accuracy is
+\[
+\|\nabla f(\bar{x})\|\leq\varepsilon
+\qquad\text{for every realization}.
+\]
+\end{document}

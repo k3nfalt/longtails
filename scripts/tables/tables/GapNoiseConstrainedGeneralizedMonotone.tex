@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Gap-dependent noise for constrained generalized-monotone VIs: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean}{GapNoiseConstrainedGeneralizedMonotone}.}\label{tab:GapNoiseConstrainedGeneralizedMonotone}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $X$ is convex with exact projection, $x_0\in X$, and $F$ is continuous and monotone on the whole space. For every segment $[x,y]$, $\|F(x)-F(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|F(z)\|)\|x-y\|$. A VI solution $x_\star\in X$ satisfies $\|x_0-x_\star\|\le R$ and $\|F(x_\star)\|\le G$. The jointly measurable, integrable IID oracle is unbiased on $X$, with integrable squared error bounded in expectation by $\sigma^2+v\langle F(x)-F(x_\star),x-x_\star\rangle$. Here $L_0,R,\varepsilon>0$, $L_1,G,\sigma,v\ge0$, and $0<\delta<1$. Target: under the IID sampling law $P$, with probability at least $1-\delta$, the measurable output lies in $X$ and admits $\xi\in N_X(x)$ with $\|F(x)+\xi\|\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GapNoiseConstrainedGeneralizedMonotone.lean}{Gap\allowbreak Noise\allowbreak Constrained\allowbreak Generalized\allowbreak Monotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GapNoiseConstrainedGeneralizedMonotone.md}{(review)} & $\mathcal{O}\!\left(\left[\frac{(L_0+L_1G+v)RQ^2}{\varepsilon}+Q^4\right.\right.$\newline $\left.\left.{}+\frac{\sigma^2Q}{\varepsilon^2}\right]\ell^5\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{gnJiLanZhuV2}, Theorem 3.1 & $\mathcal{O}\!\left(\left[\frac{L_0R}{\varepsilon}+\left(\frac{vR}{\varepsilon}+\frac{\sigma^2}{\varepsilon^2}\right)h_1^3\right]j_1\right)$\newline RMS residual $\le\varepsilon$; $L_1=0$, $\varepsilon\le L_0R$. & \textbf{(1)}: Scope extends to $L_1>0$ with gap noise, including non-Lipschitz cubic operators and unbounded variance. Matches polynomial accuracy dependence at $L_1=0$. & \textbf{(1)}: no expected-residual guarantee; larger logarithmic overhead. Requires global monotonicity and smoothness, whereas \textbf{(2)} requires them only on $X$. \\
+\midrule
+\textbf{(3)} Derived bound from \citep{gnJiLanZhuV2}, Theorem 3.1, Markov conversion & $\mathcal{O}\!\left(\left[\frac{L_0R}{\varepsilon\sqrt\delta}+\left(\frac{vR}{\varepsilon\sqrt\delta}+\frac{\sigma^2}{\varepsilon^2\delta}\right)h_\delta^3\right]j_\delta\right)$\newline $L_1=0$, $\varepsilon\sqrt\delta\le L_0R$; target probability $1-\delta$. & \textbf{(1)}: at $L_1=0$, confidence dependence is $\log^5(1/\delta)$ instead of $\delta^{-1/2},\delta^{-1}$, under second moments only. & \textbf{(1)}: global operator assumptions instead of assumptions only on $X$. \\
+\midrule
+\textbf{(4)} Projected clipped extragradient \citep{gnRepository2026} & $\mathcal{O}\!\left(\left[\frac{(L_0+L_1G)RQ^2}{\varepsilon}+Q^4\right.\right.$\newline $\left.\left.{}+\frac{\sigma^2}{\varepsilon^2}\right]a^3(a+\log(1/\delta))\right)$\newline Special case $v=0$; same probability target. & \textbf{(1)}: Scope replaces uniform variance by $\sigma^2+v\,\mathrm{gap}$, allowing unbounded variance on unbounded $X$; gap-noise cost is $vRQ^2/\varepsilon$ before logarithms. & \textbf{(1)}: at $v=0$, additive-noise term is larger by $Q$; greater logarithmic overhead and worse universal constant. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $Q=1+L_1R$; $\ell=1+\log((2+(L_0+L_1G)RQ^2/\varepsilon+Q^4)/\delta)$; $a=1+\log(2+(L_0+L_1G+L_1\varepsilon)QR/\varepsilon)$; $h_t=1+\log_+(L_0R/(\varepsilon\sqrt t))$; $j_t=(1+\log h_t)^{\mathcal{O}(1)}$ denotes the polynomial iterated-log factor in the cited bound; $\log_+u=\max\{0,\log u\}$. RMS is root mean square. $N_X(x)=\{\xi:\langle\xi,w-x\rangle\le0\ \forall w\in X\}$; $\mathrm{gap}=\langle F(x)-F(x_\star),x-x_\star\rangle$. Costs count stochastic-operator samples and exact projections, including batches; their sum has the displayed order.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

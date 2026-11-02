@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic monotone root finding: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticLipschitzMonotone.lean}{StochasticLipschitzMonotone}.}\label{tab:StochasticLipschitzMonotone}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real Hilbert space with its Borel structure, $F$ is monotone and globally $L$-Lipschitz, and $F(x_\star)=0$ with $\|x_0-x_\star\|\le R$. Here $L,\varepsilon>0$ and $R,\sigma\ge0$. The jointly measurable oracle $g$ has integrable values and squared errors, $\int g(x,\omega)\,dp=F(x)$ and $\int\|g(x,\omega)-F(x)\|^2\,dp\le\sigma^2$. Samples are IID with marginal probability law $p$ and joint law $P$. The target is $\int\|F(z(\xi))\|^2\,dP(\xi)\le\varepsilon^2$. Result \textbf{(1)} constructs batched inertial regularized extragradient, tuned using $L,R,\sigma,\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/InertialMonotoneResidual.lean}{Inertial\allowbreak Monotone\allowbreak Residual} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/InertialMonotoneResidual.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{LR}{\varepsilon}+\frac{\sigma^2}{\varepsilon^2}\ell^2\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} RRSEG \citep{slmLeeKim2026}, Cor.~6.2
+& $\mathcal{O}\!\left(1+\frac{LR}{\varepsilon}+\frac{\sigma^2}{\varepsilon^2}\log^3(2+\frac{LR}{\varepsilon}+\frac{\sigma}{\varepsilon})\right)$; $A=0$ specialization.
+& \textbf{(1)} saves at least a factor $\ell$ when $\sigma^2\ell^2/\varepsilon^2\ge LR/\varepsilon$; otherwise matches the deterministic order.
+& \textbf{(1)} uses growing batches instead of two calls per update; does not cover composite inclusions. \\
+\midrule
+\textbf{(3)} Accumulative regularization \citep{slmJiLanZhu2026}, Thm.~2.2
+& $\mathcal{O}\!\left(1+\frac{LR}{\varepsilon}h+\frac{\sigma^2}{\varepsilon^2}\ell^3h^2\right)$; $0<\varepsilon\le LR$, unconstrained specialization.
+& \textbf{(1)} replaces the statistical factor $\ell^3h^2$ by $\ell^2$. For fixed $L,R,\sigma>0$, the total saving grows as $\ell h^2$ as $\varepsilon\to0$.
+& \textbf{(1)} does not cover constrained variational inequalities. \\
+\midrule
+\textbf{(4)} S-Dual-OHM \citep{slmYoonLoizou2026}, Cor.~3.6
+& $\mathcal{O}\!\left((1+\frac{LR}{\varepsilon})\ell+\frac{\sigma^2}{\varepsilon^2}\ell^2\right)$; samplewise monotone, uniformly $L$-Lipschitz maps; same-sample queries.
+& \textbf{(1)} needs only mean regularity and fresh samples. On the overlap, removes the deterministic $\ell$ factor; total gain when $\sigma^2\lesssim\varepsilon LR/\ell$. Statistical order matches.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+LR/\varepsilon)$; $h=1+\log\ell$. Costs count individual stochastic operator evaluations, including batches and inner solves; $A$ denotes the additional maximally monotone operator in an inclusion $0\in F(x)+A(x)$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

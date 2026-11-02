@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Cohypomonotone equations with a Lipschitz Jacobian (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CohypomonotoneNewton.lean}{CohypomonotoneNewton}).}\label{tab:CohypomonotoneNewton}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is differentiable, $\|DF(x)-DF(y)\|\le H\|x-y\|$, and $\langle F(x)-F(y),x-y\rangle\ge-\rho\|F(x)-F(y)\|^2$. A root $x_\star$ satisfies $\|x_0-x_\star\|\le R$, with $H,R,\varepsilon>0$ and $\rho\ge0$. Exact paired $(F,DF)$ queries are available. The target is $\|F(x_{\rm out})\|\le\varepsilon$ almost surely; \textbf{(1)} holds for every seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CohypomonotoneNewtonAcceleration.lean}{Cohypomonotone\allowbreak Newton\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CohypomonotoneNewtonAcceleration.md}{(review)} & $\mathcal{O}\!\left([(1+\rho HR)^2+(1+Q)^{2/5}]\ell^2\right)$ paired value--Jacobian calls, including initialization and rejected trials. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{cohypJYv1}, Theorems 4.4, 4.6 & $\mathcal{O}\!\left((1+Q^{2/5})[1+\log(1+Q)]\right)$ value--Jacobian calls; monotone restriction $\rho=0$. & \textbf{(1)}: Scope extends to arbitrary $\rho\ge0$, with additive $(1+\rho HR)^2$ overhead. At $\rho=0$, matches the optimal polynomial exponent up to logarithms. & \textbf{(1)}: One extra logarithm at $\rho=0$; does not cover composite inclusions supported by \textbf{(2)}. \\
+\midrule
+\textbf{(3)} FEG \citep{glmLeeKim2021v3}, Theorem 4.1 & $\mathcal{O}\!\left(1+\frac{LR}{(1-2\rho L)\varepsilon}\right)$ value calls; $F$ globally $L$-Lipschitz, $\rho L<1/2$. & \textbf{(1)}: Removes global Lipschitzness and the $\rho L$ restriction. For $L=H=R=1$, $\rho=1/4$, calls become $\mathcal{O}(\varepsilon^{-2/5}\log^2(1/\varepsilon))$ versus $\mathcal{O}(\varepsilon^{-1})$ as $\varepsilon\to0$. & \textbf{(1)}: Needs an $H$-Lipschitz Jacobian and full-Jacobian queries; \textbf{(3)} uses only values. Call counts are different cost units. \\
+\midrule
+\textbf{(4)} Adjoint acceleration \citep{cnAdjointSource} & $\mathcal{O}\!\left(\begin{aligned}&(1+\rho L+LR/\varepsilon)\log(2+\rho L)\\&+(1+\rho L)^5\log(2+\rho L)\\&\quad\cdot(HR/L)\log^2(2+LR/\varepsilon)\end{aligned}\right)$ total value and vector--Jacobian-product calls; $F$ globally $L$-Lipschitz. & \textbf{(1)}: Removes global Lipschitzness. At $L=H=R=\rho=1$, calls become $\mathcal{O}(\varepsilon^{-2/5}\log^2(1/\varepsilon))$ versus $\mathcal{O}(\varepsilon^{-1})$ as $\varepsilon\to0$. & \textbf{(1)}: Full Jacobians instead of products. At $L=R=\rho=1$, $H=M$, $\varepsilon=M^{-1}$, costs $\mathcal{O}(M^2\log^2 M)$ versus $\mathcal{O}(M\log^2 M)$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $Q=HR^2/\varepsilon$; $\ell=1+\log(1+\rho HR+Q)$; $L>0$ is an operator-Lipschitz constant where required; $DF$ is the Jacobian. All costs count primitive oracle calls, including search trials.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

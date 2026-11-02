@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gradient-Only Generalized Quasar Minimization}
+We consider minimizing a continuously differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$, and is $\gamma$-quasar-convex relative to a global minimizer $x^\star$, meaning $\gamma(f(x)-f(x^\star))\leq\langle\nabla f(x),x-x^\star\rangle$ for every $x\in E$, where $0<\gamma\leq1$. A given starting point $x^0\in E$ has bounded distance and objective gap to this minimizer. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is an output $\bar{x}\in E$ with $P\{f(\bar{x})-f(x^\star)>\varepsilon\}\leq\delta$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. Let $R>0$ and $\Delta>0$ denote the initial distance and objective-gap bounds. The algorithm receives $E$, $L_0$, $L_1$, $R$, $\Delta$, $x^0$, $\gamma$, $\varepsilon$, and $\delta$.
+
+Our assumptions:
+\begin{assumption}[Generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, and $\nabla f:E\to E$ is continuous. For every $x,y\in E$ and $M\in\mathbb{R}$, the segment bound
+\[
+\|\nabla f(x+\theta(y-x))\|\leq M
+\qquad\text{for every }\theta\in[0,1]
+\]
+implies
+\[
+\|\nabla f(x)-\nabla f(y)\|
+\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Quasar convexity and initialization]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+Relative to this same minimizer, the quasar-convexity condition is
+\[
+\gamma\bigl(f(x)-f(x^\star)\bigr)
+\leq\langle\nabla f(x),x-x^\star\rangle
+\qquad\text{for every }x\in E.
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted gradient calls, the output must satisfy the failure-probability bound
+\[
+P\bigl\{f(\bar{x})-f(x^\star)>\varepsilon\bigr\}
+\leq\delta.
+\]
+\end{document}

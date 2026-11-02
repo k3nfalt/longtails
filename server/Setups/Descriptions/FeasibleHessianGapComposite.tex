@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Composite Minimization with Gap-Controlled Hessians}
+We consider minimizing $F=f+\psi$ over a convex set $Q$ in a real Hilbert space $E$, where $f,\psi:E\to\mathbb{R}$ are convex on $Q$. At each feasible point, $f$ has a positive semidefinite Hessian satisfying $\|\nabla^2 f(x)\|_{\mathrm{op}}\leq H_0+H_1(F(x)-F(x^\star))$, where $H_0,H_1\geq0$ and $x^\star\in Q$ minimizes $F$. A given $x^0\in Q$ satisfies $\|x^0-x^\star\|\leq R$ and $F(x^0)-F(x^\star)\leq\Delta$, with $R,\Delta>0$. The oracle returns exact feasible gradients or exact proximal minimizers of $\psi$. For $\varepsilon>0$, the goal is $\bar{x}\in Q$ with $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely.
+
+The optimization problem is
+\[
+\min_{x\in Q} F(x),
+\qquad F(x):=f(x)+\psi(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $H_0$, $H_1$, $R$, $\Delta$, $\varepsilon$, and $x^0$; the functions and feasible set are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Convexity]
+The set $Q\subseteq E$ is convex. For every $x,y\in Q$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+\psi((1-t)x+ty)&\leq(1-t)\psi(x)+t\psi(y).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizer and initialization]
+There exists $x^\star\in Q$ such that $x^0\in Q$ and
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Feasible Hessian bound]
+At every $x\in Q$, the function $f$ is Fr\'echet differentiable, and its gradient is Fr\'echet differentiable at $x$ as a map on $E$. The Hessian $\nabla^2 f(x):E\to E$ is a bounded self-adjoint linear operator satisfying
+\[
+\begin{aligned}
+\langle\nabla^2 f(x)h,h\rangle&\geq0 &&\text{for every }h\in E,\\
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+&\leq H_0+H_1\bigl(F(x)-F(x^\star)\bigr).
+\end{aligned}
+\]
+These derivatives are ambient derivatives, including at boundary points of $Q$.
+\end{assumption}
+
+\begin{assumption}[Exact proximal access]
+There is a map $\mathcal{P}:\mathbb{R}\times E\times E\to E$ such that, for every $a>0$ and $z,v\in E$,
+\[
+\mathcal{P}(a,z,v)\in
+\operatorname*{arg\,min}_{u\in Q}
+\left\{
+\frac{\|u-z\|^2}{2a}
++\langle v,u-z\rangle+\psi(u)
+\right\}.
+\]
+In particular, these minimizers exist and the returned point is feasible.
+\end{assumption}
+
+The oracle supports two query types. For a gradient query at $x\in Q$, the oracle returns $\nabla f(x)$ at $x$. For a proximal query $(a,z,v)\in\mathbb{R}\times E\times E$, it returns $\mathcal{P}(a,z,v)$, with the minimization property above applying when $a>0$. Both query types count toward one common oracle-call budget.
+
+After the allotted calls, the output must satisfy
+\[
+\bar{x}\in Q,
+\qquad F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the joint law of the algorithm's and oracle's randomness, which are independent.
+\end{document}

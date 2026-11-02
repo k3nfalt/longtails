@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Covariance-Bounded Convex Minimization}
+We consider minimizing a convex, $L$-Lipschitz function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$ and $L>0$. A global minimizer $x^\star$ satisfies $\|x^\star\|\leq R$, where $R>0$ and $\|\cdot\|$ is the Euclidean norm. The oracle returns an unbiased stochastic subgradient using independent, identically distributed samples, with noise variance at most $\sigma^2/d$ in every unit direction, where $\sigma\geq0$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $2/3$ under $P$, the joint law of the oracle samples and independent algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the Euclidean inner product. The algorithm receives $d\in\mathbb{N}_{\geq1}$, $L>0$, $R>0$, $\sigma\geq0$, $\varepsilon>0$, and the measurable sample space $\Omega$.
+
+Our assumptions:
+\begin{assumption}[Convexity and Lipschitz continuity]
+For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+|f(x)-f(y)|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Bounded minimizer]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+\|x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic subgradients and covariance]
+There exist a probability measure $p$ on $\Omega$, a map $v:\mathbb{R}^d\to\mathbb{R}^d$, and a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$. For every $x\in\mathbb{R}^d$, the map $g(x,\cdot)$ is Bochner integrable under $p$, and $\|g(x,\cdot)-v(x)\|^2$ is integrable under $p$. For all $x,y,u\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=v(x),\\
+\langle v(x),y-x\rangle&\leq f(y)-f(x),\\
+\mathbb{E}_{\xi\sim p}\big[\langle g(x,\xi)-v(x),u\rangle^2\big]
+&\leq \frac{\sigma^2}{d}\|u\|^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in\mathbb{R}^d$ receives $g(x,\xi_k)$. The sample variables $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $p$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable and satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\frac13.
+\]
+\end{document}

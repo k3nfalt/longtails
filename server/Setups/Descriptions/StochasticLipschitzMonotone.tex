@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Lipschitz Monotone Root Finding}
+We seek a zero of a monotone, $L$-Lipschitz operator $F:E\to E$ on a finite-dimensional real Hilbert space $E$, where $L>0$. A given point $x^0\in E$ lies within distance $R\geq0$ of a zero $x^\star$. At each query, the oracle returns an unbiased estimate of $F(x)$ with mean squared error at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable squared residual satisfying $\mathbb{E}\|F(\bar{x})\|^2\leq\varepsilon^2$, where expectation includes oracle and independent algorithm randomness.
+
+The root-finding problem is
+\[
+\text{find }x\in E\text{ such that }F(x)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $x^0$, $L$, $R$, $\sigma$, and $\varepsilon$; it accesses $F$ through the oracle.
+
+Our assumptions:
+\begin{assumption}[Monotonicity and Lipschitz continuity]
+For every $x,y\in E$,
+\[
+\begin{aligned}
+\langle F(x)-F(y),x-y\rangle&\geq0,\\
+\|F(x)-F(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nearby zero]
+There exists $x^\star\in E$ such that
+\[
+F(x^\star)=0,
+\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic operator oracle]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $\nu$, the squared error $\|g(x,\cdot)-F(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x\in E$ receives the reply $g(x,\xi_k)$. The measurable sample variables $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$ under a joint probability law on $\Omega^{\mathbb{N}}$. Algorithm randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. Let $P$ denote the joint law of the algorithm randomness and oracle samples. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its squared residual must be integrable under $P$, and
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}

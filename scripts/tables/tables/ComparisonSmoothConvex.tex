@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-comparison smooth convex optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ComparisonSmoothConvex.lean}{ComparisonSmoothConvex}.}\label{tab:ComparisonSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f:\mathbb{R}^n\to\mathbb{R}$, $n\ge1$, with $L$-Lipschitz gradient and a minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$; $L,R,\varepsilon>0$. The oracle returns $\mathbf{1}[f(x)\le f(y)]$. Target: $f(x_{\rm out})-f(x_\star)\le\varepsilon$ almost surely; \textbf{(1)} is deterministic and uses the public $n,L,R,\varepsilon,x_0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ComparisonOrthConvex.lean}{Comparison\allowbreak Orth\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ComparisonOrthConvex.md}{(review)} & $\mathcal{O}((1+\sqrt T)(n\ell+\ell^3))$ comparisons & & \\
+\midrule[1.2pt]
+\textbf{(2)} Comparison-AdaNGD \citep[Thm.~2]{csZhangLi2024v1} & $\mathcal{O}(n(1+T)\ell)$ comparisons & \textbf{(1)}: $\sqrt T$ instead of $T$ for $T\ge1$, $n\ge\ell^2$; last iterate instead of comparison-selected best iterate. & \textbf{(1)} adds $\mathcal{O}((1+\sqrt T)\ell^3)$ search overhead. \\
+\midrule
+\textbf{(3)} Comparison cutting plane \citep[Thm.~3]{csZhangLi2024v1} & $\mathcal{O}(n^2\ell)$ comparisons & \textbf{(1)}: gain $n/\sqrt T$ when $1\le T<n^2$, $n\ge\ell^2$. At $T=n$: $\mathcal{O}(n^{3/2}\log n)$ versus $\mathcal{O}(n^2\log n)$. & \textbf{(1)} loses $\sqrt T/n$ for $T>n^2$; polynomial rather than logarithmic accuracy dependence. \\
+\midrule
+\textbf{(4)} OrderACDM \citep[Thm.~4.1]{csLobanov2024v3}; $\mu$-strongly convex restriction & $\mathcal{O}\!\left(n\sqrt{L/\mu}\,[1+\log_+(LR^2/\varepsilon)]\,C_{\rm ls}\right)$ comparisons, uniform coordinate bounds; expected accuracy & \textbf{(1)}: scope extends to $\mu=0$; deterministic instead of expected accuracy. Rates are not comparable at $\mu=0$. & \textbf{(1)} lacks linear convergence for $\mu>0$ and coordinate-smoothness gains on anisotropic instances. \\
+\midrule
+\textbf{(5)} \citep[Thm.~3.3]{csWu2026v2}; unique-minimizer restriction & $\mathcal{O}(n\sqrt T)$ exact values, $T\ge1$; queries in $B(x_0,2R)$, output in $B(x_0,R)$ & \textbf{(1)} uses comparisons instead of values on the common unique-minimizer class. & \textbf{(1)} adds logarithmic factors and $\mathcal{O}(\sqrt T\ell^3)$ overhead; no bounded-query guarantee. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $\ell=1+\log(n(1+T))$; $\log_+u=\max\{0,\log u\}$; $\mu>0$ is the strong-convexity modulus. $C_{\rm ls}$ is the comparison cost of the line searches per OrderACDM iteration (logarithmic precision dependence, suppressed in its published oracle bound).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

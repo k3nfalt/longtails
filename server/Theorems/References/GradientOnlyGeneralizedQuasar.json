@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.GradientOnlyGeneralizedQuasar",
+  "searched_at": "2026-11-02T10:42:07.172313+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{65536 \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{4}{\\delta} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + L1 \\cdot R \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{8 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right)\\right)\\right)}{\\gamma} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GradientOnlyGeneralizedQuasar.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈65536 * (1 + ↑(Nat.clog 2 ⌈4 / q.δ⌉₊)) *\n        (1 + √(q.L0 * q.R ^ 2 / q.ε) + q.L1 * q.R * (1 + ↑(Nat.clog 2 ⌈8 * q.Δ / q.ε⌉₊))) /\n      q.γ⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{65536 \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{4}{\\delta} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + L1 \\cdot R \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{8 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right)\\right)\\right)}{\\gamma} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GradientOnlyGeneralizedQuasar.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈65536 * (1 + ↑(Nat.clog 2 ⌈4 / q.δ⌉₊)) *\n        (1 + √(q.L0 * q.R ^ 2 / q.ε) + q.L1 * q.R * (1 + ↑(Nat.clog 2 ⌈8 * q.Δ / q.ε⌉₊))) /\n      q.γ⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GradientOnlyQuasarHighProbability",
+      "namespace": "LongTails.Setups.GradientOnlyGeneralizedQuasar",
+      "setup": "LongTails.Setups.GradientOnlyGeneralizedQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GradientOnlyGeneralizedQuasar.spec OracleTemplate.GradientOnlyQuasar.budget",
+      "theorem": "OracleTemplate.GradientOnlyQuasar.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GradientOnlyQuasarHighProbability",
+      "theorem": "OracleTemplate.GradientOnlyQuasar.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Quasar convexity permits nonconvex objectives; convexity is not required.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "Unconstrained minimization with a global minimizer x⋆ satisfying γ(f(x)−f(x⋆)) ≤ ⟨∇f(x),x−x⋆⟩ for every x, where 0<γ≤1.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns precisely ∇f(x), independently of history and oracle seed. Function values are unavailable.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: spec.Query, spec.Reply, and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient exists everywhere and is continuous. Whenever its norm is bounded by M throughout [x,y], ‖∇f(x)−∇f(y)‖ ≤ (L0+L1 M)‖x−y‖, with L0>0 and L1≥0.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: spec.admissible and spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real Hilbert space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: Params; LongTails/Setups/GeneralizedSmoothAndConvex.lean: Public."
+      },
+      {
+        "label": "other",
+        "details": "Public inputs include x0, L0, L1, R, Δ, γ, ε, and δ. A hidden global minimizer satisfies ‖x0−x⋆‖≤R and f(x0)−f(x⋆)≤Δ, with R,Δ>0.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point X with f(X)−f(x⋆)≤ε, where ε>0; no gradient-norm or distance guarantee is required.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(X)−f(x⋆)>ε)≤δ for 0<δ<1, under a fixed gradient-query budget. Algorithmic randomization is allowed.",
+        "evidence": "LongTails/Setups/GradientOnlyGeneralizedQuasar.lean: spec.successful and spec.valid; LongTails/Template.lean: Algorithm and Convergence; supplied extracted budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines quasar convexity with gradient-dependent generalized smoothness, gradient-only information, and a high-probability objective-gap guarantee under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GradientOnlyQuasar.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GradientOnlyQuasarHighProbability",
+          "theorem": "OracleTemplate.GradientOnlyQuasar.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/KnownValueNondualGeneralizedConvex.lean}{KnownValueNondualGeneralizedConvex}.}\label{tab:KnownValueNondualGeneralizedConvex}
+\parbox{\linewidth}{\footnotesize Convex $f\in C^1(\mathbb R^d)$, $d\ge1$, with $L_0,L_1,R,\varepsilon>0$ and $\|\nabla f(x)-\nabla f(y)\|_2\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|_2)\|x-y\|_2$. A global minimizer satisfies $\|x_0-x_\star\|_1\le R$; $f_\star=f(x_\star)$ is known. Exact value--gradient oracle. Target: $f(\hat x)-f_\star\le\varepsilon$ deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/KnownValueNondualGeneralizedRate.lean}{Known\allowbreak Value\allowbreak Nondual\allowbreak Generalized\allowbreak Rate} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/KnownValueNondualGeneralizedRate.md}{(review)} & $\mathcal{O}((1+A^{1/3}+B^{2/3})\ell^2)$ paired value--gradient calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{kvngEverest2026v1}, Thm.~3.7 & $\mathcal{O}(\sqrt A+(1+B)\log(2+B))$ gradient calls; applies with $\|x_0-x_\star\|_2\le R$. & \textbf{(1)}: $A^{1/2}\to A^{1/3}$, $B\to B^{2/3}$ up to logarithms. For $A=B^2$, $d\le B\to\infty$: $\mathcal{O}(B\log B)\to\mathcal{O}(B^{2/3}\log^2 B)$. & \textbf{(1)} needs $f_\star$, values, and an $\ell_1$ prior; converting an $\ell_2$ radius costs $A\mapsto dA$, $B\mapsto\sqrt d B$. Worse dimension dependence, including $A,B=\mathcal{O}\textbf{(1)}$. \\
+\midrule
+\textbf{(3)} \citep{kvngNondual2026v1}, Thm.~1, (26), $p=1,q=2,\kappa=2$ & $\mathcal{O}((1+C^{1/3})h^8)$ value--gradient calls; uniform $L$-Lipschitz gradient near $\|x-x_0\|_1\le R$. Probability $1-\delta$; stated high-dimensional regime $T\le d$. & \textbf{(1)}: polynomial $B^{2/3}$ dependence where uniform $L$ can grow exponentially in $B$. Smooth overlap $L=L_0$, $B\le1$: matches $A^{1/3}$, with logarithmic power $2$ instead of $8$. & \textbf{(1)} needs $f_\star$; exact averaged-projection selector has no proved efficient implementation. \textbf{(3)} has polynomial runtime and also handles constrained minimizers. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=L_0R^2/\varepsilon$, $B=L_1R$, $\ell=1+\log(2d)+\log(2+A+B)$; $C=LR^2/\varepsilon$, $h=1+\log(2d)+\log(2+C)+\log(1/\delta)$; $\delta\in(0,1)$ is failure probability, $T$ is the query budget. $L$ is a uniform Euclidean gradient Lipschitz constant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

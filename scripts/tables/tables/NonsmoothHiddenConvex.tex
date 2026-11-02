@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Nonsmooth hidden convexity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NonsmoothHiddenConvex.lean}{NonsmoothHiddenConvex}.}\label{tab:NonsmoothHiddenConvex}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F=H\circ c$ attains its minimum, $H$ is finite convex, and $c$ is a differentiable homeomorphism with $\mu\|x-y\|\le\|c(x)-c(y)\|\le L_c\|x-y\|$ and $L_J$-Lipschitz Jacobian. Known $R>0$ satisfies $F(0)\le F(y)$ on $\|y\|=R$. Jointly measurable IID oracle samples satisfy $\int g(x,\omega)\,dp(\omega)=Dc(x)^*s_x$, $s_x\in\partial H(c(x))$, and $\int\|g(x,\omega)\|^2\,dp(\omega)\le G^2$. The target is $\int[F(\hat x)-F(x_\star)]\,dP\le\varepsilon$, with $P$ the IID sampling law. Parameters satisfy $0<\mu\le L_c$, $L_J\ge0$, $G,\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonsmoothHiddenConvexStochastic.lean}{Nonsmooth\allowbreak Hidden\allowbreak Convex\allowbreak Stochastic} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonsmoothHiddenConvexStochastic.md}{(review)} & $\mathcal{O}(W\log^3(2+W))$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{lhcsBhaskara2025}, Thm.~5.4 & $\mathcal{O}\!\left(1+\dfrac{G^3R^4L_c^4\rho'}{\mu^4\varepsilon^3}\right)$; $\rho'=\max\{L_J/\mu,\mu/(L_cR^2)\}$. Almost-sure bound $\|g\|\le G$; two-sphere condition specialized to $D_1=0,D_2=R$. & \textbf{(1)}: $\varepsilon^{-2}$ instead of $\varepsilon^{-3}$ up to logarithms; gain when $GR/\varepsilon\gg\log^3(2+W)$. For $L_JR\ge\mu$, factor $GL_cR/(\mu\varepsilon\log^3(2+W))$. Only second moments required. & \\
+\midrule
+\textbf{(3)} SGD \citep{nhcBubeck2015}, Thm.~6.1; affine special case $L_J=0$ & $\mathcal{O}(1+G^2R^2/\varepsilon^2)$ stochastic subgradients. & \textbf{(1)}: scope extends to nonlinear hidden maps; no rate improvement on $L_J=0$. & \textbf{(1)} costs an extra $(L_c/\mu)^3\log^3(2+W)$ for $L_J=0$, $\varepsilon<GR$. \\
+\midrule
+\textbf{(4)} \citep{lhcsFatkhullin2024v2}, Thm.~2, Cor.~1 & Not comparable: requires closed convex $X$ and bounded convex $c(X)$; the target has $c(E)=E$. & \textbf{(1)} handles the global unconstrained problem. No bounded-domain reduction is supplied; rates are not comparable. & \textbf{(1)} requires a global smooth homeomorphism and barrier radius; \textbf{(4)} permits constrained problems and nonsmooth maps. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $W=(1+L_JR/\mu)(L_c/\mu+G^2L_c^3R^2/(\mu^3\varepsilon^2))$; $x_\star$ is a global minimizer; $\hat x$ is the final epoch center in \textbf{(1)}; costs count individual stochastic oracle calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

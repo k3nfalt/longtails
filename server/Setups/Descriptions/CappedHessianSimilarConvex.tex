@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Capped Hessian-Similar Convex Minimization}
+We minimize $f=m^{-1}\sum_{i=1}^m f_i$ on a finite-dimensional real inner product space $E$, where $m\geq1$ is an integer. The components $f_i:E\to\mathbb{R}$ are differentiable and convex, $f$ is $\mu$-strongly convex for $\mu>0$, and the centered gradients $\nabla f_i-\nabla f$ are jointly $\delta$-Lipschitz in root mean square, with $\delta\geq0$. A given $x^0\in E$ has objective gap at most $\Delta\geq0$ from a minimizer $x^\star$. Each oracle call returns exact component gradients or proximal points for at most $s\in\{1,\ldots,m\}$ selected components. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable gap and $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x),
+\qquad f(x)=\frac{1}{m}\sum_{i=1}^m f_i(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is also equipped with a measurable structure. The algorithm receives $E$, $m$, $s$, $\delta$, $\mu$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Component convexity and strong convexity]
+Each $f_i$ is Fr\'echet differentiable everywhere. For all $x,y\in E$, $t\in[0,1]$, and $i\in\{1,\ldots,m\}$,
+\[
+\begin{aligned}
+f_i((1-t)x+ty)&\leq (1-t)f_i(x)+t f_i(y),\\
+f((1-t)x+ty)&\leq (1-t)f(x)+t f(y)\\
+&\quad-\frac{\mu}{2}t(1-t)\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Mean-square similarity]
+Define $h_i(x)=\nabla f_i(x)-\nabla f(x)$. For all $x,y\in E$,
+\[
+\frac{1}{m}\sum_{i=1}^m\|h_i(x)-h_i(y)\|^2
+\leq\delta^2\|x-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Oracle access is organized into capped calls. A call selects a set $S\subseteq\{1,\ldots,m\}$ with $|S|\leq s$. For each $i\in S$, it independently specifies a query point $z_i\in E$ and either a gradient request or a proximal request with coefficient $a_i>0$. The corresponding exact reply is, respectively,
+\[
+\nabla f_i(z_i)
+\qquad\text{or}\qquad
+\operatorname{prox}_{i,a_i}(z_i),
+\]
+where the proximal map satisfies, for every $i$, $a>0$, and $z\in E$,
+\[
+\operatorname{prox}_{i,a}(z)
+\in\operatorname*{arg\,min}_{u\in E}
+\left\{f_i(u)+\frac{a}{2}\|u-z\|^2\right\}.
+\]
+The reply has one entry per component, with zero entries outside $S$. Gradient and proximal requests may be combined within a single call; the budget counts these capped calls.
+
+After the allotted calls, the output $\bar{x}$ must be measurable and its objective gap must be integrable under $P$. The required accuracy is
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

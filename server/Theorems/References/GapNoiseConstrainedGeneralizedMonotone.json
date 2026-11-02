@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone",
+  "searched_at": "2026-11-02T10:42:32.193764+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{350} \\cdot \\left(\\frac{\\left(L0 + L1 \\cdot G + v\\right) \\cdot R \\cdot \\left(1 + L1 \\cdot R\\right)^{2}}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4} + \\frac{\\sigma^{2} \\cdot \\left(1 + L1 \\cdot R\\right)}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R \\cdot \\left(1 + L1 \\cdot R\\right)^{2}}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4}}{\\delta}\\right)\\right)^{5} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 350 *\n        ((q.L0 + q.L1 * q.G + q.v) * q.R * (1 + q.L1 * q.R) ^ 2 / q.ε + (1 + q.L1 * q.R) ^ 4 +\n          q.σ ^ 2 * (1 + q.L1 * q.R) / q.ε ^ 2) *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G) * q.R * (1 + q.L1 * q.R) ^ 2 / q.ε + (1 + q.L1 * q.R) ^ 4) / q.δ)) ^ 5⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{350} \\cdot \\left(\\frac{\\left(L0 + L1 \\cdot G + v\\right) \\cdot R \\cdot \\left(1 + L1 \\cdot R\\right)^{2}}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4} + \\frac{\\sigma^{2} \\cdot \\left(1 + L1 \\cdot R\\right)}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(\\frac{2 + \\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R \\cdot \\left(1 + L1 \\cdot R\\right)^{2}}{\\varepsilon} + \\left(1 + L1 \\cdot R\\right)^{4}}{\\delta}\\right)\\right)^{5} \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 350 *\n        ((q.L0 + q.L1 * q.G + q.v) * q.R * (1 + q.L1 * q.R) ^ 2 / q.ε + (1 + q.L1 * q.R) ^ 4 +\n          q.σ ^ 2 * (1 + q.L1 * q.R) / q.ε ^ 2) *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G) * q.R * (1 + q.L1 * q.R) ^ 2 / q.ε + (1 + q.L1 * q.R) ^ 4) / q.δ)) ^ 5⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.GapNoiseConstrainedGeneralizedMonotone",
+      "namespace": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone",
+      "setup": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone.spec\n  OracleTemplate.GapNoiseConstrainedGeneralizedMonotone.budget",
+      "theorem": "OracleTemplate.GapNoiseConstrainedGeneralizedMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GapNoiseConstrainedGeneralizedMonotone",
+      "theorem": "OracleTemplate.GapNoiseConstrainedGeneralizedMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Constrained monotone variational inequality: find x* ∈ X with ⟨F(x*),w−x*⟩ ≥ 0 for every w ∈ X. X is convex, F is continuous and globally monotone; no objective function or saddle representation is assumed. A solution satisfies ‖x0−x*‖ ≤ R and ‖F(x*)‖ ≤ G.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "Separately counted exact Euclidean projection onto X, characterized by proj(z) ∈ X and ⟨z−proj(z),w−proj(z)⟩ ≤ 0 for every w ∈ X.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: spec.numOracles and spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "Unbiased stochastic operator evaluations g(x,ω), valid on X, with independent identically distributed seeds. The oracle supplies operator values, not necessarily gradients.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: IsGapStochasticOperator and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For all x,y,M, a bound ‖F(x+θ(y−x))‖ ≤ M along the entire segment implies ‖F(x)−F(y)‖ ≤ (L0+L1 M)‖x−y‖. L0 > 0 and L1 ≥ 0.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: spec.valid and spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Finite-dimensional complete real inner-product space with its Borel measurable structure; no dimension-dependent restriction or bounded diameter of X is assumed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: Params; LongTails/Setups/GeneralizedLipschitzMonotone.lean: Public; LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: Params and spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "Gap-dependent second moment: E‖g(x,ω)−F(x)‖² ≤ σ²+v⟨F(x)−F(x*),x−x*⟩ on X, with σ,v ≥ 0. No uniform variance bound or exponential-tail assumption is imposed. All parameters, including x0,L0,L1,R,G,σ,v,ε,δ, are public; F,X,x*,g and their probability law are hidden.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: Params, IsGapStochasticOperator.variance, spec.Public, spec.publicInput and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The successful output must belong to X jointly with satisfying the residual criterion.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "Joint feasibility and residual accuracy hold with probability at least 1−δ, for ε > 0 and 0 < δ < 1, under the combined algorithm and oracle randomness. Both oracle budgets are fixed caps.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: spec.valid and spec.successful; LongTails/Template.lean: Convergence and executeWithTrace"
+      },
+      {
+        "label": "other",
+        "details": "A measurable output x must admit ξ ∈ N_X(x) with ‖F(x)+ξ‖ ≤ ε. This is an unsquared normal-cone residual criterion, not a variational gap or an unconstrained operator norm criterion.",
+        "evidence": "LongTails/Setups/GapNoiseConstrainedGeneralizedMonotone.lean: spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The constrained monotone VI combines operator-norm-dependent generalized smoothness, gap-dependent stochastic variance, and a high-probability normal-cone residual requirement under separately counted projection and sampling budgets."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GapNoiseConstrainedGeneralizedMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GapNoiseConstrainedGeneralizedMonotone",
+          "theorem": "OracleTemplate.GapNoiseConstrainedGeneralizedMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

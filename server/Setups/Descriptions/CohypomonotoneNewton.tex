@@ -1,0 +1,49 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Cohypomonotone Root Finding}
+We consider finding a zero of a differentiable map $F:E\to E$ on a finite-dimensional real inner product space $E$. The map is $\rho$-cohypomonotone, where $\rho\geq 0$, and its derivative $J(x)=DF(x)$ is $H$-Lipschitz in operator norm, where $H>0$. A given starting point $x^0\in E$ lies within distance $R>0$ of a zero $x^\star$ of $F$. The oracle returns $(F(x),J(x))$ at $x$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The root-finding problem is to find $x\in E$ such that
+\[
+F(x)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm; $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm for linear maps from $E$ to $E$. The algorithm receives $E$, $H$, $\rho$, $R$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Lipschitz derivative]
+The map $F$ is Fr\'echet differentiable everywhere on $E$, with derivative $J(x):E\to E$, and
+\[
+\|J(x)-J(y)\|_{\mathrm{op}}\leq H\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Cohypomonotonicity]
+For every $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle
+\geq -\rho\|F(x)-F(y)\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance to a zero]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$, and both components of the oracle reply are exact. After the allotted oracle calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}
