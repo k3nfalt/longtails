@@ -1,0 +1,82 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Constrained Monotone Operators with Gap Noise}
+We consider a variational inequality for a continuous monotone operator $F:E\to E$ on a convex set $X$ in a finite-dimensional real Hilbert space $E$. The operator satisfies a generalized Lipschitz bound, and a given point $x^0\in X$ lies near a solution. Two oracles return independent-sample unbiased estimates of $F$ on $X$, with variance controlled by an operator gap, and exact projections onto $X$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in X$ admitting $u\in E$ with $\langle u,w-\bar{x}\rangle\leq0$ for every $w\in X$ and $\|F(\bar{x})+u\|\leq\varepsilon$, with probability at least $1-\delta$.
+
+The underlying variational inequality is to find $x^\star\in X$ such that
+\[
+\langle F(x^\star),w-x^\star\rangle\geq0
+\qquad\text{for every }w\in X.
+\]
+The norm is induced by the inner product on $E$. The parameters satisfy
+\[
+L_0>0,\qquad L_1\geq0,\qquad R>0,\qquad
+G,\sigma,v\geq0.
+\]
+The algorithm receives $E$, a measurable sample space $\Omega$, $x^0$, and all parameters $L_0,L_1,R,G,\sigma,v,\varepsilon,\delta$; it accesses $F$ and $X$ through the two oracles.
+
+Our assumptions:
+\begin{assumption}[Feasibility and reference solution]
+The set $X\subseteq E$ is convex and contains $x^0$. There exists a solution $x^\star$ of the variational inequality satisfying
+\[
+\|x^0-x^\star\|\leq R,
+\qquad \|F(x^\star)\|\leq G.
+\]
+An exact projection map $\Pi_X:E\to E$ is available and satisfies, for every $z\in E$,
+\[
+\begin{aligned}
+\Pi_X(z)&\in X,\\
+\langle z-\Pi_X(z),w-\Pi_X(z)\rangle&\leq0
+\qquad\text{for every }w\in X.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Monotonicity and generalized Lipschitz bound]
+The operator $F$ is continuous on $E$, and for all $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle\geq0.
+\]
+For every $x,y\in E$ and $M\in\mathbb{R}$, the segment bound
+\[
+\|F(x+\theta(y-x))\|\leq M
+\qquad\text{for every }\theta\in[0,1]
+\]
+implies
+\[
+\|F(x)-F(y)\|\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Gap-dependent stochastic noise]
+There is a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in X$, the random vector $g(x,Z)$ is Bochner integrable and $\|g(x,Z)-F(x)\|^2$ is integrable for $Z\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\nu}[g(x,Z)]&=F(x),\\
+\mathbb{E}_{Z\sim\nu}\bigl[\|g(x,Z)-F(x)\|^2\bigr]
+&\leq \sigma^2+v\langle F(x)-F(x^\star),x-x^\star\rangle.
+\end{aligned}
+\]
+The reference solution $x^\star$ is the same as above. The oracle samples $(Z_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. This sequence is independent of the algorithm's randomness.
+\end{assumption}
+
+Both oracles accept queries in $E$. At the $k$th oracle call, a stochastic query at $x$ returns $g(x,Z_k)$, whereas a projection query at $z$ returns $\Pi_X(z)$. The stochastic moment conditions apply to queries in $X$. Stochastic-operator calls and projection calls are counted separately.
+
+Define the normal cone at $x\in X$ by
+\[
+N_X(x)=\{u\in E:\langle u,w-x\rangle\leq0
+\text{ for every }w\in X\}.
+\]
+After the allotted calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+P\!\left(\neg\left[\bar{x}\in X\ \text{and}\
+\exists u\in N_X(\bar{x}):\|F(\bar{x})+u\|\leq\varepsilon\right]\right)
+\leq\delta,
+\]
+where $P$ is the joint law of the oracle samples and the independent algorithm randomness.
+\end{document}

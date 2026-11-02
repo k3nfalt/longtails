@@ -1,0 +1,43 @@
+\begin{table}[tp]
+\centering
+\caption{Scheduled momentum comparison under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ScheduledMomentumComparison.lean}{ScheduledMomentumComparison}.}\label{tab:ScheduledMomentumComparison}
+\parbox{\linewidth}{\footnotesize Differentiable $f:\mathbb R^{m\times n}\to\mathbb R$ satisfies $\|\nabla f(X)-\nabla f(Y)\|_*\le L\|X-Y\|_{\rm op}$ and $f(X_0)-f_{\min}\le\Delta$, where $f\ge f_{\min}$. Here $r\ge2$, $L,\varepsilon>0$, $s,\Delta\ge0$, and $L\Delta\ge72\varepsilon^2$. Jointly measurable, integrable unbiased gradients use IID samples; in a fixed orthonormal row basis, $\mathbb E\|N^\top b_i\|_2^2\le\sigma_i^2$ and $\sum_i\sigma_i\le s$. The setup requires constant-step, momentum-free batched polar updates and uniform-random output, targeting $\mathbb E\|\nabla f(\widehat X)\|_*\le\varepsilon$, together with the comparator lower bounds below.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MuonWidthSeparation.lean}{Muon\allowbreak Width\allowbreak Separation} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MuonWidthSeparation.md}{(review)} &
+$\mathcal{O}(L\Delta/\varepsilon^2+L\Delta s^2/\varepsilon^4)$ gradient calls.
+Comparator lower bounds, any deterministic schedule, batch size and fixed $0\le\beta<1$, uniform-random output:
+$N_{\rm SGD}\ge c(1-\beta)(r-1)L\Delta s/\varepsilon^3$;
+$N_{\rm NSGD}\ge c(r-1)\min\{\frac{(1-\beta)L\Delta s}{\varepsilon^3\ell},\frac{(1-\beta)^2s^2}{\varepsilon^2}\}$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Muon \citep{smcTYZ2026v1}, Thm.~4 &
+$\mathcal{O}(1+L\Delta/\varepsilon^2+L\Delta s^2/\varepsilon^4)$.
+One-sided covariance model: $\mathbb E[NN^\top]\preceq\Sigma^2$, $s=\|\Sigma\|_*$. &
+\textbf{(1)}: Matches known rate; formalization and row-profile noise extension. Adds method-specific scheduled-momentum lower bounds, not improved problem-class complexity. &
+\textbf{(1)} requires $r\ge2$, $L\Delta\ge72\varepsilon^2$ and IID sampling. \\
+\midrule
+\textbf{(3)} \citep{ssacMuonRepository,ssacSgdRepository} &
+$\mathcal{O}(1+L\Delta/\varepsilon^2+L\Delta s^2/\varepsilon^4)$.
+Constant-step, momentum-free SGD lower bound: $N\ge c(r-1)L\Delta s^2/\varepsilon^4$ for $L\Delta\ge128\varepsilon^2$. &
+\textbf{(1)}: Comparator scope extends to arbitrary deterministic schedules and fixed momentum; batch coefficient improves fourfold. SGD separation needs $(1-\beta)(r-1)\gtrsim s/\varepsilon+\varepsilon/s$, $s>0$. &
+\textbf{(1)}: At $\beta=0$, SGD certificate is weaker by order $s/\varepsilon$ for $s\gg\varepsilon$. At $\beta=1-1/r$, it loses width growth. \\
+\midrule
+\textbf{(4)} SGD \citep{smcTYZ2026v1}, Thm.~3; diagonal restriction &
+Lower bound only: $N\ge c(rL\Delta/\varepsilon^2+r\|\sigma\|_2^2L\Delta/\varepsilon^4)$.
+Constant step, no momentum, $B=1$; expected minimum gradient norm. &
+\textbf{(1)}: Extends comparator coverage to deterministic schedules, fixed momentum and batching, including normalized SGD. Lower-bound extension, not an upper-complexity improvement over \textbf{(4)}. &
+\textbf{(1)} certifies only uniform-random output; its lower bounds lack a deterministic term and vanish at $s=0$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $r=\min(m,n)$; $\|\cdot\|_*,\|\cdot\|_{\rm op}$: nuclear and spectral norms; $N$: total individual gradient calls, including all batches; $N= B(T+1)$ in \textbf{(1)}. $N$ in the noise model denotes gradient error. $\beta$: EMA momentum; NSGD: Frobenius-normalized SGD; $\ell=1+\log(1+s\sqrt r/\varepsilon)$; $c>0$: universal constant. $\sigma$: coordinate noise profile in \textbf{(4)}. Expectations include oracle and output randomness.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

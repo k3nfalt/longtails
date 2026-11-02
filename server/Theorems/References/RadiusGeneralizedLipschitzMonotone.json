@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone",
+  "searched_at": "2026-11-02T10:43:18.754499+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil 2^{15} \\cdot \\left(1 + \\frac{L0 \\cdot R}{\\varepsilon} + \\left(L1 \\cdot R\\right)^{\\frac{4}{3}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone.spec.Params → ℕ",
+        "value": "fun q => 2 * ⌈2 ^ 15 * (1 + q.L0 * q.R / q.ε + (q.L1 * q.R) ^ (4 / 3))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil 2^{15} \\cdot \\left(1 + \\frac{L0 \\cdot R}{\\varepsilon} + \\left(L1 \\cdot R\\right)^{\\frac{4}{3}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone.spec.Params → ℕ",
+          "value": "fun q => 2 * ⌈2 ^ 15 * (1 + q.L0 * q.R / q.ε + (q.L1 * q.R) ^ (4 / 3))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RadiusGeneralizedMonotone",
+      "namespace": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone",
+      "setup": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RadiusGeneralizedLipschitzMonotone.spec\n  OracleTemplate.WarmAnchoredMonotone.budget",
+      "theorem": "OracleTemplate.WarmAnchoredMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RadiusGeneralizedMonotone",
+      "theorem": "OracleTemplate.WarmAnchoredMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone root finding: a continuous operator F:E→E satisfies ⟨F(x)−F(y),x−y⟩≥0 and has a zero xstar with ‖x0−xstar‖≤R. E is a real inner product space; completeness and finite dimension are not assumed. No objective or gradient representation is required.",
+        "evidence": "LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean: Public; spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact operator evaluation: every query x returns F(x), independently of history and seed. No gradient structure is assumed. The extracted budget counts operator evaluations.",
+        "evidence": "LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Whenever ‖F(x+θ(y−x))‖≤M for every θ∈[0,1], ‖F(x)−F(y)‖≤(L0+L1 M)‖x−y‖. Parameters satisfy L0>0 and L1≥0.",
+        "evidence": "LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean: spec.valid, spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "E,L0,L1,R,x0 are public, with R≥0 and a zero within distance R of x0. The tolerance ε>0 belongs only to Params: algorithm construction does not receive ε, although the execution budget depends on it.",
+        "evidence": "LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean: Public, Params, spec.publicInput; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound holds almost surely under the joint algorithm-seed and oracle-seed law, after execution with the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "other",
+        "details": "The returned point must satisfy the unsquared operator residual bound ‖F(output)‖≤ε. There is no prescribed averaging or iterate-selection requirement.",
+        "evidence": "LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean: spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Monotone root finding is classical, but the operator-norm-dependent segment Lipschitz condition is an unusual generalization of global Lipschitz continuity."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.WarmAnchoredMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RadiusGeneralizedMonotone",
+          "theorem": "OracleTemplate.WarmAnchoredMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Comparison-Based Smooth Convex Minimization}
+We consider minimizing a differentiable convex function $f:\mathbb{R}^n\to\mathbb{R}$, where $n\geq 1$ is an integer. Its gradient is $L$-Lipschitz in the Euclidean norm, with $L>0$, and a given starting point $x^0\in\mathbb{R}^n$ lies within distance $R>0$ of a global minimizer $x^\star$. At a queried pair $(x,y)$, the oracle returns the Boolean value of $f(x)\leq f(y)$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^n$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^n} f(x).
+\]
+Throughout, $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives $n$, $L$, $R$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Convexity]
+For every $x,y\in\mathbb{R}^n$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness]
+The function $f$ is differentiable everywhere on $\mathbb{R}^n$, and its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\mathbb{R}^n.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in\mathbb{R}^n$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^n,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may use any pair $(x,y)\in\mathbb{R}^n\times\mathbb{R}^n$. Comparisons are exact: the reply is true precisely when $f(x)\leq f(y)$, including equality, and false otherwise.
+
+After the allotted comparison calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The minimizer is fixed independently of the algorithm's randomness; all global minimizers have the same objective value.
+\end{document}

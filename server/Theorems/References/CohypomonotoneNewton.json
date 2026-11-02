@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.CohypomonotoneNewton",
+  "searched_at": "2026-11-02T10:42:44.889498+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 100000000000000 \\cdot \\left(\\left(1 + \\rho \\cdot H \\cdot R\\right)^{2} + \\left(1 + \\frac{H \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{2}{5}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\rho \\cdot H \\cdot R + \\frac{H \\cdot R^{2}}{\\varepsilon}\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CohypomonotoneNewton.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈100000000000000 * ((1 + p.ρ * p.H * p.R) ^ 2 + (1 + p.H * p.R ^ 2 / p.ε) ^ (2 / 5)) *\n      (1 + Real.log (2 + p.ρ * p.H * p.R + p.H * p.R ^ 2 / p.ε)) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 100000000000000 \\cdot \\left(\\left(1 + \\rho \\cdot H \\cdot R\\right)^{2} + \\left(1 + \\frac{H \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{2}{5}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\rho \\cdot H \\cdot R + \\frac{H \\cdot R^{2}}{\\varepsilon}\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CohypomonotoneNewton.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈100000000000000 * ((1 + p.ρ * p.H * p.R) ^ 2 + (1 + p.H * p.R ^ 2 / p.ε) ^ (2 / 5)) *\n      (1 + Real.log (2 + p.ρ * p.H * p.R + p.H * p.R ^ 2 / p.ε)) ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CohypomonotoneNewtonAcceleration",
+      "namespace": "LongTails.Setups.CohypomonotoneNewton",
+      "setup": "LongTails.Setups.CohypomonotoneNewton",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CohypomonotoneNewton.spec\n  LongTails.Theorems.CohypomonotoneNewtonAcceleration.budget",
+      "theorem": "LongTails.Theorems.CohypomonotoneNewtonAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CohypomonotoneNewtonAcceleration",
+      "theorem": "LongTails.Theorems.CohypomonotoneNewtonAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained root finding for a differentiable, globally ρ-cohypomonotone operator F:E→E: ⟨F(x)−F(y),x−y⟩≥−ρ‖F(x)−F(y)‖². No objective or saddle representation is assumed.",
+        "evidence": "LongTails/Setups/CohypomonotoneNewton.lean: spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each query returns the exact pair (F(x),DF(x)), including the full Jacobian as a continuous linear map. Replies are independent of history and seed; no oracle error is permitted.",
+        "evidence": "LongTails/Setups/CohypomonotoneNewton.lean: spec.Reply and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space, with its induced norm.",
+        "evidence": "LongTails/Setups/CohypomonotoneNewton.lean: Public.normedE, Public.linearE, Public.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "The Jacobian is globally H-Lipschitz: ‖DF(x)−DF(y)‖≤H‖x−y‖. Global ρ-cohypomonotonicity holds without a smallness restriction on ρ. A root xstar exists with ‖x0−xstar‖≤R. E,H,ρ,R,ε,x0 are public, with H,R,ε>0 and ρ≥0; F and the root are hidden. No global Lipschitz bound on F or Jacobian magnitude is supplied.",
+        "evidence": "LongTails/Setups/CohypomonotoneNewton.lean: Public, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual guarantee holds almost surely over the execution randomness under the fixed supplied oracle budget.",
+        "evidence": "LongTails/Setups/CohypomonotoneNewton.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace"
+      },
+      {
+        "label": "other",
+        "details": "Return one point x with operator residual ‖F(x)‖≤ε, not a squared residual or an objective gap.",
+        "evidence": "LongTails/Setups/CohypomonotoneNewton.lean: spec.Output and spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines unrestricted global cohypomonotonicity with a Lipschitz Jacobian and exact operator-and-Jacobian access, without assuming a globally Lipschitz operator."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CohypomonotoneNewtonAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CohypomonotoneNewtonAcceleration",
+          "theorem": "LongTails.Theorems.CohypomonotoneNewtonAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

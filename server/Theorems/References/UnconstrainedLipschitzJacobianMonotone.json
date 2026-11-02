@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone",
+  "searched_at": "2026-11-02T10:43:54.405773+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "32768 \\cdot \\left(m + 1\\right) \\cdot \\left(\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\operatorname{log2}\\left(m \\cdot \\left(\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1\\right)\\right) + 1\\right)^{2}",
+          "oracle": 0,
+          "type": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone.spec.Params → ℕ",
+          "value": "fun p =>\n  32768 * (p.m + 1) * (⌈(p.L * p.D ^ 2 / (↑p.m * p.ε)) ^ (2 / 5)⌉₊ + 1) *\n    ((p.m * (⌈(p.L * p.D ^ 2 / (↑p.m * p.ε)) ^ (2 / 5)⌉₊ + 1)).log2 + 1) ^ 2"
+        },
+        {
+          "latex": "\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1",
+          "oracle": 1,
+          "type": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈(p.L * p.D ^ 2 / (↑p.m * p.ε)) ^ (2 / 5)⌉₊ + 1"
+        }
+      ],
+      "module": "LongTails.Theorems.LazyAnchoredExtraProximal",
+      "namespace": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone",
+      "setup": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.UnconstrainedLipschitzJacobianMonotone.spec\n  LongTails.Theorems.LazyAnchoredExtraProximal.budget",
+      "theorem": "LongTails.Theorems.LazyAnchoredExtraProximal.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LazyAnchoredExtraProximal",
+      "theorem": "LongTails.Theorems.LazyAnchoredExtraProximal.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone root finding: find an approximate zero of a differentiable operator F:E→E with ⟨F(x)−F(y),x−y⟩≥0. A zero xstar exists within distance D of x0. No scalar objective is assumed.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Two separately counted exact oracles return F(x) and the full Fréchet derivative DF(x). Answers are exact for every history and seed; no oracle error or sampling dependence is present. E, x0, L, D, ε and m are public; F and its zero are hidden.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean: spec.Public, spec.publicInput, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space, with its induced norm.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean: Params.normedE, Params.innerE, Params.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "Globally Lipschitz Jacobian: ‖DF(x)−DF(y)‖≤L‖x−y‖. Parameters satisfy L≥0, D>0, ε>0 and integer m≥1. The known radius bounds distance to one zero; neither a bounded domain nor a bound on ‖DF(x)‖ is imposed.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean: spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound holds almost surely under the joint algorithm and oracle seed law, using fixed separate oracle budgets.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace"
+      },
+      {
+        "label": "other",
+        "details": "Return one point x with unsquared operator residual ‖F(x)‖≤ε.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean: spec.Output, spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "A standard smooth monotone equation problem with Lipschitz Jacobian, exact operator and derivative access, and an operator-residual accuracy criterion."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.LazyAnchoredExtraProximal.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LazyAnchoredExtraProximal",
+          "theorem": "LongTails.Theorems.LazyAnchoredExtraProximal.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

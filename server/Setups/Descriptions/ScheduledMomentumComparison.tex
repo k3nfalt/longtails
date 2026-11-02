@@ -1,0 +1,110 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Muon and Scheduled Momentum Comparisons}
+We consider nonconvex minimization of a differentiable function $f:\mathbb{R}^{m\times n}\to\mathbb{R}$, where $m,n$ are positive integers. The gradient is Lipschitz from the spectral norm to the nuclear norm with constant $L>0$, and a given starting point $x^0$ has gap at most $\Delta\geq0$ above a global lower bound. The oracle returns unbiased stochastic gradients with independent, identically distributed samples and rowwise second moments controlled by $s\geq0$. For $\varepsilon>0$, batched Muon must return $\bar{x}$ with $\mathbb{E}\|\nabla f(\bar{x})\|_*\leq\varepsilon$, where $\|\cdot\|_*$ is the nuclear norm and expectation includes sampling and algorithm randomness. The task also requires worst-case oracle-call comparisons for scheduled SGD and normalized SGD with momentum.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^{m\times n}} f(x).
+\]
+Equip the matrix space with the Frobenius inner product $\langle X,Y\rangle_F=\operatorname{tr}(X^{\mathsf T}Y)$ and norm $\|\cdot\|_F$; gradients are taken with respect to this inner product. Write $\|\cdot\|_{\mathrm{op}}$ for the induced Euclidean operator norm and $\|\cdot\|_*$ for its dual nuclear norm. Set $r=\min\{m,n\}$. The parameters satisfy
+\[
+r\geq2,\qquad L>0,\qquad \Delta,s\geq0,\qquad
+\varepsilon>0,\qquad 72\varepsilon^2\leq L\Delta.
+\]
+The algorithm receives $m,n,L,\Delta,s,\varepsilon$, and $x^0$; the objective and the stochastic oracle model are accessed only through oracle replies.
+
+Our assumptions:
+\begin{assumption}[Spectral smoothness and initial gap]
+The function $f$ is differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_*
+\leq L\|x-y\|_{\mathrm{op}},
+\qquad x,y\in\mathbb{R}^{m\times n}.
+\]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+f(x)\geq f_{\mathrm{low}}\quad\text{for every }x,
+\qquad f(x^0)-f_{\mathrm{low}}\leq\Delta.
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased oracle with a rowwise variance profile]
+Let $\nu$ be a probability measure on a measurable sample space $\Omega$. The oracle is a jointly measurable map
+$g:\mathbb{R}^{m\times n}\times\Omega\to\mathbb{R}^{m\times n}$.
+For each $x$, $g(x,\cdot)$ is Bochner integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+There exist an orthonormal basis $(b_i)_{i=1}^m$ of $\mathbb{R}^m$ and numbers $\sigma_i\geq0$ with $\sum_{i=1}^m\sigma_i\leq s$ such that, for every $x$ and $i$, the vector
+$(g(x,\xi)-\nabla f(x))^{\mathsf T}b_i$ belongs to $L^2(\nu;\mathbb{R}^n)$ and
+\[
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|(g(x,\xi)-\nabla f(x))^{\mathsf T}b_i\|_2^2\bigr]
+\leq\sigma_i^2.
+\]
+At call $k$, a query $x$ receives $g(x,\xi_k)$, where the measurable random variables $(\xi_k)_{k\geq0}$ are independent with common law $\nu$. Algorithm randomness is independent of this sample sequence. Queries may be made anywhere in the matrix space.
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze batched Muon with a constant step size and no momentum. Define $\operatorname{polar}(G)$ to be the minimum-Frobenius-norm element of
+\[
+\mathop{\operatorname{argmax}}_{\|U\|_{\mathrm{op}}\leq1}
+\langle G,U\rangle_F.
+\]
+The algorithm chooses $\eta>0$, an integer batch size $B\geq1$, and an integer $T\geq0$ from its inputs. Starting at the given $x^0$, it queries $B$ times at each $x^t$ and follows
+\[
+\begin{aligned}
+G_t&=\frac1B\sum_{j=0}^{B-1}g(x^t,\xi_{Bt+j}),\\
+x^{t+1}&=x^t-\eta\operatorname{polar}(G_t),
+\qquad 0\leq t\leq T.
+\end{aligned}
+\]
+After $N=B(T+1)$ calls, it returns $\bar{x}=x^J$, where $J$ is a measurable function of algorithm randomness, uniform on $\{0,\ldots,T\}$. The same output is retained after any additional calls. Thus the batch at $x^T$ is counted even though $x^{T+1}$ is not an output candidate. These query and output rules must hold for every realization of algorithm randomness and every possible reply sequence.
+
+For any objective and oracle satisfying the assumptions, the required stationarity criterion is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|_*\bigr]\leq\varepsilon,
+\]
+with $\bar{x}$ measurable and $\|\nabla f(\bar{x})\|_*$ integrable under $P$, the joint law of algorithm randomness and oracle samples.
+
+The task additionally includes two worst-case comparisons at the same parameter values. The comparison methods are SGD with momentum and Frobenius-normalized SGD with momentum, with directions
+\[
+d_{\mathrm{SGD}}(M)=M,\qquad
+ d_{\mathrm{NSGD}}(M)=
+\begin{cases}
+M/\|M\|_F,&M\ne0,\\
+0,&M=0.
+\end{cases}
+\]
+For either direction $d$, fix any $\beta\in[0,1)$, any real-valued schedule $(\eta_t)_{t\geq0}$, and integers $B\geq1$ and $T\geq0$. The comparison recurrence, initialized at $(y^0,M^0)=(x^0,0)$, is
+\[
+\begin{aligned}
+H_t&=\frac1B\sum_{j=0}^{B-1}g(y^t,\xi_{Bt+j}),\\
+M^{t+1}&=\beta M^t+(1-\beta)H_t,\\
+y^{t+1}&=y^t-\eta_t d(M^{t+1}),
+\qquad 0\leq t\leq T.
+\end{aligned}
+\]
+Every batch consists of $B$ queries at $y^t$. After $N=B(T+1)$ calls the output is $\bar{y}=y^J$, with $J$ uniform on $\{0,\ldots,T\}$ and drawn measurably from algorithm randomness independently of the oracle samples; this output is retained after additional calls. The recurrence, queries, and output rule are required for every possible reply sequence and every realization of algorithm randomness.
+
+For every such SGD algorithm, the required comparison asserts the existence of an objective and oracle satisfying the assumptions for which measurable, integrable expected stationarity of $\bar{y}$ at tolerance $\varepsilon$ implies
+\[
+(1-\beta)(r-1)L\Delta s\leq81\varepsilon^3N.
+\]
+For every such normalized SGD algorithm, a possibly different objective and oracle satisfying the assumptions must exist for which the same stationarity criterion implies at least one of
+\[
+\begin{aligned}
+(1-\beta)(r-1)L\Delta s
+&\leq288\varepsilon^3
+\left(2+\log\left(1+\frac{s\sqrt r}{\varepsilon}\right)\right)N,\\
+(1-\beta)^2(r-1)s^2
+&\leq24\varepsilon^2N.
+\end{aligned}
+\]
+These existential comparisons are part of the required task, together with the expected stationarity requirement for batched Muon.
+\end{document}

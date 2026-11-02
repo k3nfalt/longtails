@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.StochasticLipschitzMonotone",
+  "searched_at": "2026-11-02T10:43:28.816668+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{22} \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{2} \\cdot \\left(\\log\\left(2 + \\frac{L \\cdot R}{\\varepsilon}\\right)\\right)^{2}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticLipschitzMonotone.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 22 * (1 + q.L * q.R / q.ε + (q.σ / q.ε) ^ 2 * Real.log (2 + q.L * q.R / q.ε) ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{22} \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{2} \\cdot \\left(\\log\\left(2 + \\frac{L \\cdot R}{\\varepsilon}\\right)\\right)^{2}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticLipschitzMonotone.spec.Params → ℕ",
+          "value": "fun q => ⌈2 ^ 22 * (1 + q.L * q.R / q.ε + (q.σ / q.ε) ^ 2 * Real.log (2 + q.L * q.R / q.ε) ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.InertialMonotoneResidual",
+      "namespace": "LongTails.Setups.StochasticLipschitzMonotone",
+      "setup": "LongTails.Setups.StochasticLipschitzMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticLipschitzMonotone.spec\n  LongTails.Theorems.InertialMonotoneResidual.budget",
+      "theorem": "LongTails.Theorems.InertialMonotoneResidual.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.InertialMonotoneResidual",
+      "theorem": "LongTails.Theorems.InertialMonotoneResidual.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Find a zero of a globally monotone, L-Lipschitz operator F:E→E. A zero x⋆ exists with ‖x0−x⋆‖≤R. No objective or potential representation is required.",
+        "evidence": "LongTails/Setups/StochasticLipschitzMonotone.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Fresh stochastic operator evaluations g(x,ξ), with IID seeds, E[g(x,ξ)]=F(x), and E‖g(x,ξ)−F(x)‖²≤σ². Each evaluation counts as one oracle call; repeated access to a sampled operator is not supplied.",
+        "evidence": "LongTails/Setups/StochasticLipschitzMonotone.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-central-moment bound σ² at every query point, with unbiasedness and joint measurability. No samplewise smoothness or exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMonotone.lean: IsStochasticOperator"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional complete real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/StochasticLipschitzMonotone.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "Seeds are independent and identically distributed. All Params are public, including x0,L,R,σ,ε, with L>0, R≥0, σ≥0, ε>0; F and the sampling law are hidden admissible-instance data.",
+        "evidence": "LongTails/Setups/StochasticLipschitzMonotone.lean: spec.Public, spec.publicInput, spec.valid, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "Expectation is over oracle sampling and any algorithm randomness, under a fixed maximum oracle budget.",
+        "evidence": "LongTails/Setups/StochasticLipschitzMonotone.lean: spec.successful; LongTails/Template.lean: Convergence, execute"
+      },
+      {
+        "label": "other",
+        "details": "The output X must be measurable, its squared operator residual integrable, and E‖F(X)‖²≤ε². This is an operator residual, not necessarily a gradient norm.",
+        "evidence": "LongTails/Setups/StochasticLipschitzMonotone.lean: spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Standard stochastic monotone Lipschitz root-finding with independent unbiased bounded-variance evaluations and an expected squared residual criterion."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.InertialMonotoneResidual.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.InertialMonotoneResidual",
+          "theorem": "LongTails.Theorems.InertialMonotoneResidual.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

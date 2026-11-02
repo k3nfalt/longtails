@@ -1,0 +1,22 @@
+\begin{table}[tp]
+\centering
+\caption{Residual complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RadiusGeneralizedLipschitzMonotone.lean}{RadiusGeneralizedLipschitzMonotone}.}\label{tab:RadiusGeneralizedLipschitzMonotone}
+\parbox{\linewidth}{\footnotesize Let $F:E\to E$ be continuous and monotone on a real inner-product space, with $L_0>0$, $L_1\ge0$, $R\ge0$. For every $x,y,M$, if $\|F(x+\theta(y-x))\|\le M$ for all $\theta\in[0,1]$, then $\|F(x)-F(y)\|\le(L_0+L_1M)\|x-y\|$. A root $x_\star$ satisfies $\|x_0-x_\star\|\le R$. Access is to exact evaluations of $F$; the target is $\|F(x)\|\le\varepsilon$, $\varepsilon>0$. No initial-residual bound is supplied.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RadiusGeneralizedMonotone.lean}{Radius\allowbreak Generalized\allowbreak Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RadiusGeneralizedMonotone.md}{(review)} & $\mathcal{O}\!\left(1+\frac{L_0R}{\varepsilon}+(L_1R)^{4/3}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} EG \citep[Theorem 3.6]{rglmCL2025v1}; past-EG \citep[Corollary 3.3]{rglmGL2026v1}. Unconstrained $\mathbb{R}^d$. & $\mathcal{O}\!\left(1+\left(\frac{L_0R}{\varepsilon}\right)^2+(L_1R)^2\right)$ & \textbf{(1)}: $A^2\to A$, $C^2\to C^{4/3}$; speedup $\Theta((1+A^2+C^2)/(1+A+C^{4/3}))$. Last iterate instead of minimum residual. Scope: arbitrary real inner-product spaces. & \textbf{(1)} needs $R$ in updates in addition to $L_0,L_1$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=L_0R/\varepsilon$, $C=L_1R$; costs count all exact $F$ evaluations, including two per EG step and one new evaluation per past-EG step. $\mathcal{O}$ suppresses universal constants. The guarantee in \textbf{(1)} is deterministic.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

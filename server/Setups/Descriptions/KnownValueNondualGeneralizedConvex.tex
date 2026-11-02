@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Known-Value Generalized Convex Minimization}
+We consider minimizing a continuously differentiable convex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq 1$. The function $f$ is $(L_0,L_1)$-smooth in the Euclidean norm, with $L_0,L_1>0$. Its minimum value $f^\star\in\mathbb{R}$ is known, and a given point $x^0\in\mathbb{R}^d$ lies within coordinate $\ell_1$ distance $R>0$ of a global minimizer. The oracle returns $(f(x),\nabla f(x))$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ satisfying $f(\bar{x})-f^\star\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We write $\|\cdot\|_2$ for the Euclidean norm and $\|v\|_1=\sum_{i=1}^d |v_i|$ for the coordinate $\ell_1$ norm. The algorithm receives $d$, $L_0$, $L_1$, $R$, $\varepsilon$, $f^\star$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Convexity]
+For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+The function $f$ is differentiable everywhere, and $\nabla f$ is continuous. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|_2
+&\leq \left(L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|_2\right)
+\|x-y\|_2,\\
+[x,y]&=\{(1-t)x+ty:t\in[0,1]\}.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Known minimum and initial distance]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^\star)&=f^\star,\\
+\|x^0-x^\star\|_1&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$, with each query returning both the exact function value and the exact gradient. After the allotted oracle calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

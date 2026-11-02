@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Gradient-only quasar optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GradientOnlyGeneralizedQuasar.lean}{GradientOnlyGeneralizedQuasar}.}\label{tab:GradientOnlyGeneralizedQuasar}
+\parbox{\linewidth}{\footnotesize A finite-dimensional real Hilbert space; continuously differentiable $f$ with $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$. An attained minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$, $f(x_0)-f(x_\star)\le\Delta$, and $\gamma(f(x)-f(x_\star))\le\langle\nabla f(x),x-x_\star\rangle$ for all $x$. Here $L_0,R,\Delta,\varepsilon>0$, $L_1\ge0$, $0<\gamma\le1$, $0<\delta<1$. Exact gradients are available; all parameters are public. Target: $P\{f(y_K)-f(x_\star)>\varepsilon\}\le\delta$, with $P$ the algorithm's randomization law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GradientOnlyQuasarHighProbability.lean}{Gradient\allowbreak Only\allowbreak Quasar\allowbreak High\allowbreak Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GradientOnlyQuasarHighProbability.md}{(review)} & $\mathcal{O}\!\left(\frac{h}{\gamma}[1+\sqrt T+L_1R\ell]\right)$ gradients & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{goqWang2023v1}, Cor.~1 & $\mathcal{O}(\gamma^{-1}\sqrt{T/\delta}+\delta^{-1})$ gradients; $L_1=0$. & \textbf{(1)}: at $T\ge1$, confidence saving at least order $\delta^{-1/2}/h$ against this proved bound. Scope: allows $L_1>0$. & \textbf{(1)}: substantially larger numerical constant. \\
+\midrule
+\textbf{(3)} \citep{goqHinder2020}, Thm.~2 & $\mathcal{O}(1+\gamma^{-1}\sqrt T\log_+(\sqrt T/\gamma))$ value and gradient calls; deterministic, $L_1=0$. & \textbf{(1)}: no values or search; fewer calls when $T\ge1$ and $h\ll\log_+(\sqrt T/\gamma)$. Scope: allows $L_1>0$. & \textbf{(1)}: probabilistic instead of deterministic; more calls when $h\gg\log_+(\sqrt T/\gamma)$, $T\ge1$. \\
+\midrule
+\textbf{(4)} GD, \citep{goqJin2020v3}, derived from (12) & $\mathcal{O}(1+T/\gamma)$ gradients; deterministic, $L_1=0$, step $1/(2L_0)$. & \textbf{(1)}: saving $\sqrt T/h$ when $T\ge1$, $h\ll\sqrt T$. Scope: allows $L_1>0$. & \textbf{(1)}: randomized; loses deterministic accuracy; more calls when $h\gg\sqrt T$, $T\ge1$. \\
+\midrule
+\textbf{(5)} \citep{goqKovalev2026v2}, Thm.~11; derived bound & $\mathcal{O}\!\left(\frac{(L_1R)^4}{\gamma^6}a+\left[\frac{(L_1R)^3}{\gamma^2}+\frac{L_0^2R^2}{\gamma^2L_1^2\varepsilon^2\delta^2}\right]b\right)$ gradients after Markov; $L_1R\gtrsim1$. & \textbf{(1)}: logarithmic confidence instead of $\delta^{-2}$; $\varepsilon^{-1/2}$ instead of $\varepsilon^{-2}$ for fixed other parameters. & \textbf{(1)}: requires smoothness and exact gradients; \textbf{(5)} also covers nonsmooth stochastic objectives. \\
+\midrule
+\textbf{(6)} \citep{goqRepository}, Generalized\allowbreak Accelerated\allowbreak Convex & $\mathcal{O}(1+\sqrt T+[1+(L_1R)^{2/3}]\ell)$ gradients; convex, differentiable gradient, $\gamma=1$; almost-sure accuracy. & \textbf{(1)}: scope extends to nonconvex quasar objectives and merely continuous gradients. & \textbf{(1)}: confidence factor $h$; $L_1R$ versus $(L_1R)^{2/3}$ for $L_1R\ge1$; loses almost-sure accuracy. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=L_0R^2/\varepsilon$, $h=1+\log(1/\delta)$, $\ell=1+\log(1+\Delta/\varepsilon)$, $\log_+u=\max\{1,\log u\}$. In \textbf{(5)}, $a=1+\log(1+\gamma\Delta L_1^2/L_0)$ and $b=1+\log(1+L_0/(\gamma L_1^2\varepsilon\delta))$; the gradient-growth parameters are $G_0\asymp L_0/L_1$, $G_1\asymp L_1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Gradient stationarity under a Lipschitz Hessian: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzGradientStationarity.lean}{HessianLipschitzGradientStationarity}.}\label{tab:HessianLipschitzGradientStationarity}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^2$, $\nabla f$ is $L$-Lipschitz, $\nabla^2 f$ is $\rho$-Lipschitz, and $f(x_0)-f(x)\le\Delta$ for every $x$, with $L,\rho,\varepsilon>0$ and $\Delta\ge0$. Exact gradient queries must produce $\|\nabla f(\widehat x)\|\le\varepsilon$ deterministically. The setup restricts our construction to positive-step GD with threshold switching, distance restarts and a stopped-point output.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FractalChebyshevGdStationarity.lean}{Fractal\allowbreak Chebyshev\allowbreak Gd\allowbreak Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FractalChebyshevGdStationarity.md}{(review)} & $\mathcal{O}\!\left(T\kappa^{-1/9}\log(2+\kappa)+\kappa^{1/9}+1\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} GD, step $1/L$ \citep[\S1.2.3]{hlgsNesterov2018} & $\mathcal{O}(1+L\Delta/\varepsilon^2)$ & \textbf{(1)}: Momentum-free leading-term gain $\kappa^{1/9}/\log\kappa$; proved constants require $\kappa\gtrsim2^{145}$, $T\gtrsim\kappa^{1/9}$. Method-specific advance, not improved problem-class complexity. & \textbf{(1)} needs Hessian regularity and $\rho$ knowledge. Larger constants; worse proved budget for $2^{40}\le\kappa<2^{145}$. \\
+\midrule
+\textbf{(3)} Restarted AGD \citep[Theorem 1, \S4.1]{gtoLiLin2023} & $\mathcal{O}\!\left(T\kappa^{-1/4}+\kappa^{1/4}+1\right)$, $\varepsilon\lesssim L^2/\rho$; includes final epoch. & \textbf{(1)}: At $T=\kappa^{1/4}$, $\kappa\gtrsim2^{145}$, costs $\mathcal{O}(\kappa^{5/36}\log\kappa+\kappa^{1/9})$ versus $\mathcal{O}(\kappa^{1/4})$. Upper-bound saving from final-epoch cost; shortening that epoch is unresolved. & \textbf{(1)} has a worse leading term by $\kappa^{5/36}\log\kappa$ when leading terms dominate; same gradient oracle and tuning knowledge. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} GD: gradient descent; AGD: accelerated gradient descent; $\kappa=L^2/(\rho\varepsilon)$; $T=L\Delta/\varepsilon^2$. Costs count exact gradient calls. $\Delta$ bounds the initial objective gap; $\log$ denotes the natural logarithm.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

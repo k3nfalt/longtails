@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.NonsmoothHiddenConvex",
+  "searched_at": "2026-11-02T10:43:25.604214+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10000000000 \\cdot \\left(\\left(1 + \\frac{64 \\cdot LJ \\cdot R}{\\mu}\\right) \\cdot \\left(\\frac{Lc}{\\mu} + \\frac{G^{2} \\cdot Lc^{3} \\cdot R^{2}}{\\mu^{3} \\cdot \\varepsilon^{2}}\\right)\\right) \\cdot \\left(\\log\\left(10000000000 \\cdot \\left(2 + \\left(1 + \\frac{64 \\cdot LJ \\cdot R}{\\mu}\\right) \\cdot \\left(\\frac{Lc}{\\mu} + \\frac{G^{2} \\cdot Lc^{3} \\cdot R^{2}}{\\mu^{3} \\cdot \\varepsilon^{2}}\\right)\\right)\\right)\\right)^{3} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NonsmoothHiddenConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈10000000000 * ((1 + 64 * p.LJ * p.R / p.μ) * (p.Lc / p.μ + p.G ^ 2 * p.Lc ^ 3 * p.R ^ 2 / (p.μ ^ 3 * p.ε ^ 2))) *\n      Real.log\n          (10000000000 *\n            (2 + (1 + 64 * p.LJ * p.R / p.μ) * (p.Lc / p.μ + p.G ^ 2 * p.Lc ^ 3 * p.R ^ 2 / (p.μ ^ 3 * p.ε ^ 2)))) ^\n        3⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10000000000 \\cdot \\left(\\left(1 + \\frac{64 \\cdot LJ \\cdot R}{\\mu}\\right) \\cdot \\left(\\frac{Lc}{\\mu} + \\frac{G^{2} \\cdot Lc^{3} \\cdot R^{2}}{\\mu^{3} \\cdot \\varepsilon^{2}}\\right)\\right) \\cdot \\left(\\log\\left(10000000000 \\cdot \\left(2 + \\left(1 + \\frac{64 \\cdot LJ \\cdot R}{\\mu}\\right) \\cdot \\left(\\frac{Lc}{\\mu} + \\frac{G^{2} \\cdot Lc^{3} \\cdot R^{2}}{\\mu^{3} \\cdot \\varepsilon^{2}}\\right)\\right)\\right)\\right)^{3} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NonsmoothHiddenConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈10000000000 * ((1 + 64 * p.LJ * p.R / p.μ) * (p.Lc / p.μ + p.G ^ 2 * p.Lc ^ 3 * p.R ^ 2 / (p.μ ^ 3 * p.ε ^ 2))) *\n      Real.log\n          (10000000000 *\n            (2 + (1 + 64 * p.LJ * p.R / p.μ) * (p.Lc / p.μ + p.G ^ 2 * p.Lc ^ 3 * p.R ^ 2 / (p.μ ^ 3 * p.ε ^ 2)))) ^\n        3⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.NonsmoothHiddenConvexStochastic",
+      "namespace": "LongTails.Setups.NonsmoothHiddenConvex",
+      "setup": "LongTails.Setups.NonsmoothHiddenConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NonsmoothHiddenConvex.spec OracleTemplate.NonsmoothHidden.budget",
+      "theorem": "OracleTemplate.NonsmoothHidden.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NonsmoothHiddenConvexStochastic",
+      "theorem": "OracleTemplate.NonsmoothHidden.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of F=H∘c permits nonsmooth, nonconvex F, although H is convex and a global minimizer exists.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "Hidden convexity through an unknown differentiable bi-Lipschitz homeomorphism c; the convex reformulation is not available to the algorithm.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: Instance; spec.Public; spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns an IID stochastic pulled subgradient Z(x), with E[Z(x)]=g(x)=J(x)*s for some s∈∂H(c(x)). Only vector replies are available; no function values, transformation evaluations, or Jacobians are supplied.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: IsPulledSubgradient; spec.Query; spec.Reply; spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-moment bound E‖Z(x)‖²≤G², which also bounds centered variance; samples are independent with identical marginals. No exponential-tail or almost-sure boundedness condition is imposed.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "Public parameters satisfy 0<μ≤Lc, LJ≥0, G,R,ε>0. The hidden map satisfies μ‖x−y‖≤‖c(x)−c(y)‖≤Lc‖x−y‖, Dc(x)=J(x), and ‖J(x)−J(y)‖≤LJ‖x−y‖. Localization is supplied by F(0)≤F(y) on ‖y‖=R. F,H,c,J,g remain hidden.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: Params; Instance; spec.publicInput; spec.valid; spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output X with integrable gap F(X)−F(xstar), where xstar is a global minimizer, and E[F(X)−F(xstar)]≤ε.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "Expectation includes algorithm randomness and the IID oracle stream. Oracle cost is a fixed budget, not an expected stopping-time cost.",
+        "evidence": "LongTails/Setups/NonsmoothHiddenConvex.lean: spec.successful; LongTails/Template.lean: Convergence; executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Hidden convexity with an unavailable nonlinear transformation, stochastic pulled-subgradient access, and a sphere-based localization condition constitutes a specialized variant of stochastic optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.NonsmoothHidden.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NonsmoothHiddenConvexStochastic",
+          "theorem": "OracleTemplate.NonsmoothHidden.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

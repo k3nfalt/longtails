@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.CovarianceBoundedConvex",
+  "searched_at": "2026-11-02T10:42:28.387571+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{32} \\cdot \\left(d + \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(16 \\cdot d \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon}\\right)\\right)\\right)^{5} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CovarianceBoundedConvex.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 32 * (↑q.d + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2) * (1 + Real.log (16 * ↑q.d * (1 + q.L * q.R / q.ε))) ^ 5⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{32} \\cdot \\left(d + \\frac{\\sigma^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(16 \\cdot d \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon}\\right)\\right)\\right)^{5} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CovarianceBoundedConvex.spec.Params → ℕ",
+          "value": "fun q => ⌈2 ^ 32 * (↑q.d + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2) * (1 + Real.log (16 * ↑q.d * (1 + q.L * q.R / q.ε))) ^ 5⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CovarianceSoftCutConvex",
+      "namespace": "LongTails.Setups.CovarianceBoundedConvex",
+      "setup": "LongTails.Setups.CovarianceBoundedConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CovarianceBoundedConvex.spec\n  LongTails.Theorems.CovarianceSoftCutConvex.budget",
+      "theorem": "LongTails.Theorems.CovarianceSoftCutConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CovarianceSoftCutConvex",
+      "theorem": "LongTails.Theorems.CovarianceSoftCutConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Globally convex, L-Lipschitz f: R^d → R, potentially nonsmooth, with a global minimizer xstar satisfying ‖xstar‖ ≤ R. Parameters satisfy d > 0, L > 0, R > 0, σ ≥ 0, ε > 0.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Stochastic subgradient oracle: each query x returns g(x,ξ), with E[g(x,ξ)] = v(x) ∈ ∂f(x). Seeds are IID across calls. Only vector replies are available; function values are not supplied. All Params are public; f, v, g and the sampling law are hidden.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: IsCovarianceSubgradient.unbiased, support; spec.Public, publicInput, admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Only second moments are bounded; heavy-tailed noise is permitted, with no exponential-tail or almost-sure bound.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: IsCovarianceSubgradient."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every x,u, E[⟨g(x,ξ)−v(x),u⟩²] ≤ (σ²/d)‖u‖², equivalently Cov(g(x,ξ)) ≼ (σ²/d)I. This implies E‖g(x,ξ)−v(x)‖² ≤ σ²; covariance need not be proportional to I.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: IsCovarianceSubgradient.covariance and variance_integrable."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space R^d with its standard inner product and norm; d is public.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: Space, Params.d and spec.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "A measurable output x must satisfy f(x)−f(xstar) ≤ ε for a global minimizer xstar; no restriction to a particular iterate is imposed.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "Failure probability P(f(output)−f(xstar) > ε) ≤ 1/3, jointly over algorithm and oracle randomness, under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/CovarianceBoundedConvex.lean: spec.successful. LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The convex Lipschitz objective and constant-probability accuracy are standard, but the dimension-normalized directional covariance bound imposes additional noise geometry while allowing heavy tails."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CovarianceSoftCutConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CovarianceSoftCutConvex",
+          "theorem": "LongTails.Theorems.CovarianceSoftCutConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

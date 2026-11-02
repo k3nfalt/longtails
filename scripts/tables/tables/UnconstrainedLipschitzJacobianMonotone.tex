@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/UnconstrainedLipschitzJacobianMonotone.lean}{UnconstrainedLipschitzJacobianMonotone}.}\label{tab:UnconstrainedLipschitzJacobianMonotone}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is differentiable and monotone, with globally $L$-Lipschitz Jacobian and a zero $x_\star$ satisfying $\|x_0-x_\star\|\le D$. Exact value and Jacobian oracles are available; $L\ge0$, $D,\varepsilon>0$, and integer $m\ge1$. The target is $\|F(z)\|\le\varepsilon$ (deterministically for our construction).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LazyAnchoredExtraProximal.lean}{Lazy\allowbreak Anchored\allowbreak Extra\allowbreak Proximal} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LazyAnchoredExtraProximal.md}{(review)} & $\mathcal{O}\bigl((m+m^{3/5}T^{2/5})\ell^2\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} AEP Newton \citep{uljmJiangYoon2026v1}, Thms.~4.4, 4.6; $H=0$, $L>0$ & $\mathcal{O}\bigl(m(1+T^{2/5})[1+\log(1+T)]\bigr)$ & \textbf{(1)}: polynomial cost factor $\min(m,T)^{2/5}$ before logarithms; for $T\ge m$, gain $m^{2/5}/\ell$. & \textbf{(1)}: more value calls; extra logarithm at $m=\mathcal{O}\textbf{(1)}$; needs $D,m$ additionally; lacks composite-inclusion scope. \\
+\midrule
+\textbf{(3)} Derived bound \citep{uljmZhang2026v1}, Thm.~3.1 ($p=2$); ball reduction & $\mathcal{O}\bigl(m(1+T^{2/5})\bigr)$; tangent tolerance $\varepsilon/4$ on $B(x_0,2D)$ gives residual tolerance $\varepsilon$. & \textbf{(1)}: cost gain $m^{2/5}/\ell^2$ when $T\ge m$, if this factor exceeds one. & \textbf{(1)}: logarithmic overhead; does not cover constrained VIs. \\
+\midrule
+\textbf{(4)} LEN \citep{uljmChen2025v2}, Thm.~4.1; convex--concave minimax only & $\mathcal{O}\bigl(m+m^{2/3}(LD^3/\varepsilon_g)^{2/3}\bigr)$ for averaged restricted gap $\varepsilon_g$. & \textbf{(1)}: general monotone scope; last-iterate residual. If $\|z_N-x_\star\|=\mathcal{O}(D)$, setting $\varepsilon=\varepsilon_g/\mathcal{O}(D)$ gives gap cost $\mathcal{O}\bigl((m+m^{3/5}(LD^3/\varepsilon_g)^{2/5})\ell^2\bigr)$. & \textbf{(1)}: gap conversion requires an output-distance bound absent from its statement; conversion is one-way. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LD^2/\varepsilon$, $\ell=1+\log(m+m^{3/5}T^{2/5})$; costs are $\#F+m\,\#DF$, including trials. $DF$ denotes the Jacobian; $m$ is its price and our tuning input. $\varepsilon_g$ denotes restricted saddle-gap accuracy; in \textbf{(4)}, evaluate $\ell$ at the stated residual tolerance. $H$ denotes the composite set-valued operator; $B(x,r)$ is the closed ball.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

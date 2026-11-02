@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.ScheduledMomentumComparison",
+  "searched_at": "2026-11-02T10:43:57.591924+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\frac{16 \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.ScheduledMomentumComparison.spec.Params → ℕ",
+        "value": "fun p => (⌈16 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{16 \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.ScheduledMomentumComparison.spec.Params → ℕ",
+          "value": "fun p => (⌈16 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.MuonWidthSeparation",
+      "namespace": "LongTails.Setups.ScheduledMomentumComparison",
+      "setup": "LongTails.Setups.ScheduledMomentumComparison",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ScheduledMomentumComparison.spec\n  LongTails.Theorems.MuonWidthSeparation.budget",
+      "theorem": "LongTails.Theorems.MuonWidthSeparation.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MuonWidthSeparation",
+      "theorem": "LongTails.Theorems.MuonWidthSeparation.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on real m×n matrices, bounded below by fmin, with f(x0)−fmin≤Δ; convexity is not required.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/ScheduledMomentumComparison.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Jointly measurable unbiased matrix-gradient samples with independent identically distributed seeds; each individual sample counts as one oracle call, including all batch samples.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel; LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "There exists a fixed orthonormal row basis (b_i) and nonnegative σ_i with Σ_i σ_i≤s such that E‖(G(X)−∇f(X))ᵀb_i‖₂²≤σ_i² uniformly in X. The basis and profile are hidden; s is public.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel.row_profile; LongTails/Setups/BatchedSpectralSmooth.lean: Public."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Spectral–nuclear smoothness: ‖∇f(X)−∇f(Y)‖*≤L‖X−Y‖op. Allowed algorithms use fixed-step batched polar directions.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible, spec.allowedAlgorithm, FollowsBatched."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is R^(m×n) with Frobenius inner product; r=min(m,n)≥2.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: MatrixPolar.Space; LongTails/Setups/ScheduledMomentumComparison.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Public parameters are m,n,L,Δ,s,ε,x0, with L>0, Δ≥0, s≥0, ε>0 and 72ε²≤LΔ. Success additionally requires worst-case lower-bound statements for every constant momentum β∈[0,1), deterministic stepsize schedule, and positive fixed batch size.",
+        "evidence": "LongTails/Setups/ScheduledMomentumComparison.lean: Public, spec.publicInput, spec.valid, spec.successful, SgdMomentumLower, NsgdMomentumLower."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output is measurable, its nuclear gradient norm is integrable, and E‖∇f(output)‖*≤ε. The permitted algorithm outputs a uniformly selected iterate among x0,…,xT after B(T+1) sample calls.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.successful, FollowsBatched; LongTails/Setups/ScheduledMomentumComparison.lean: spec.allowedAlgorithm."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over independent algorithm randomness and the IID oracle seed stream; the oracle budget is fixed.",
+        "evidence": "LongTails/Template.lean: Convergence; LongTails/Setups/BatchedSpectralSmooth.lean: spec.successful."
+      },
+      {
+        "label": "other",
+        "details": "Writing N=B(T+1) and r=min(m,n), success also asserts adversarial-instance implications: SGD momentum requires (1−β)(r−1)LΔs≤81ε³N; normalized SGD momentum requires either (1−β)(r−1)LΔs≤288ε³[2+log(1+s√r/ε)]N or (1−β)²(r−1)s²≤24ε²N.",
+        "evidence": "LongTails/Setups/ScheduledMomentumComparison.lean: spec.successful, SgdMomentumLower, NsgdMomentumLower."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Combines spectral–nuclear stationarity and a structured rowwise noise bound with a restricted batched polar algorithm family and universal adversarial momentum lower bounds as part of success."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MuonWidthSeparation.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MuonWidthSeparation",
+          "theorem": "LongTails.Theorems.MuonWidthSeparation.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

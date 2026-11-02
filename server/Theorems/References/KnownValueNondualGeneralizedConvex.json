@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.KnownValueNondualGeneralizedConvex",
+  "searched_at": "2026-11-02T10:42:05.210292+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{36} \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{1}{3}} + \\left(L1 \\cdot R\\right)^{\\frac{2}{3}}\\right) \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right) + \\log\\left(2 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.KnownValueNondualGeneralizedConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 36 * (1 + (p.L0 * p.R ^ 2 / p.ε) ^ 3⁻¹ + (p.L1 * p.R) ^ (2 / 3)) *\n      (1 + Real.log (2 * ↑p.d) + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R)) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{36} \\cdot \\left(1 + \\left(\\frac{L0 \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{1}{3}} + \\left(L1 \\cdot R\\right)^{\\frac{2}{3}}\\right) \\cdot \\left(1 + \\log\\left(2 \\cdot d\\right) + \\log\\left(2 + \\frac{L0 \\cdot R^{2}}{\\varepsilon} + L1 \\cdot R\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.KnownValueNondualGeneralizedConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 36 * (1 + (p.L0 * p.R ^ 2 / p.ε) ^ 3⁻¹ + (p.L1 * p.R) ^ (2 / 3)) *\n      (1 + Real.log (2 * ↑p.d) + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R)) ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.KnownValueNondualGeneralizedRate",
+      "namespace": "LongTails.Setups.KnownValueNondualGeneralizedConvex",
+      "setup": "LongTails.Setups.KnownValueNondualGeneralizedConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.KnownValueNondualGeneralizedConvex.spec\n  LongTails.Theorems.KnownValueNondualGeneralizedRate.budget",
+      "theorem": "LongTails.Theorems.KnownValueNondualGeneralizedRate.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.KnownValueNondualGeneralizedRate",
+      "theorem": "LongTails.Theorems.KnownValueNondualGeneralizedRate.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Globally convex, continuously differentiable f: ℝ^d → ℝ with an attained global minimum; strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query returns the exact full Euclidean gradient, independently of history and seed.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: spec.Reply and spec.admissible oracle equality"
+      },
+      {
+        "label": "function_value",
+        "details": "The same query also returns the exact function value; value and gradient constitute one oracle reply.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: spec.Reply and spec.admissible oracle equality"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y, ‖∇f(x)−∇f(y)‖₂ ≤ (L0 + L1 sup_{z∈[x,y]} ‖∇f(z)‖₂)‖x−y‖₂. L0,L1 are positive and public.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: Public, spec.valid, spec.admissible"
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Some global minimizer satisfies ‖x0−xstar‖₁ ≤ R, whereas smoothness uses Euclidean norms. R>0 is public; queries and output are unrestricted points of ℝ^d.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: spec.Query, spec.Output, spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace ℝ (Fin d), with public positive integer d.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: Public and spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "The exact global minimum value fstar is public, together with x0, d, L0, L1, R and ε. The objective and a minimizing point are hidden.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: Public, spec.publicInput, spec.Instance, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−fstar ≤ ε, with public ε>0.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: spec.valid and spec.successful"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the execution law, within the supplied fixed oracle budget; algorithmic randomization is permitted.",
+        "evidence": "LongTails/Setups/KnownValueNondualGeneralizedConvex.lean: spec.successful; LongTails/Template.lean: Algorithm, executeWithTrace, Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines gradient-dependent Euclidean smoothness with an ℓ₁ distance bound to a global minimizer and public knowledge of the exact optimum value."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.KnownValueNondualGeneralizedRate.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.KnownValueNondualGeneralizedRate",
+          "theorem": "LongTails.Theorems.KnownValueNondualGeneralizedRate.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

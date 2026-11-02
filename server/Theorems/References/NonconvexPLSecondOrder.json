@@ -1,0 +1,123 @@
+{
+  "setup": "LongTails.Setups.NonconvexPLSecondOrder",
+  "searched_at": "2026-11-02T10:43:12.135752+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10000000000 \\cdot \\left(1 + \\frac{L}{\\mu} + \\frac{\\Delta \\cdot \\sqrt{\\rho} \\cdot \\left(\\frac{L}{\\mu}\\right)^{\\frac{3}{4}}}{\\varepsilon^{\\frac{3}{2}}} + \\frac{\\Delta \\cdot \\rho^{2}}{\\mu^{3}}\\right) \\cdot \\left(\\log\\left(2 + \\frac{L}{\\mu} + \\frac{\\rho^{2} \\cdot \\left(\\Delta + D\\right)}{\\mu^{3}} + \\frac{\\rho \\cdot \\varepsilon}{\\mu^{2}} + \\frac{\\mu^{2}}{\\rho \\cdot \\varepsilon}\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NonconvexPLSecondOrder.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈10000000000 * (1 + p.L / p.μ + p.Δ * √p.ρ * (p.L / p.μ) ^ (3 / 4) / p.ε ^ (3 / 2) + p.Δ * p.ρ ^ 2 / p.μ ^ 3) *\n      Real.log (2 + p.L / p.μ + p.ρ ^ 2 * (p.Δ + p.D) / p.μ ^ 3 + p.ρ * p.ε / p.μ ^ 2 + p.μ ^ 2 / (p.ρ * p.ε)) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10000000000 \\cdot \\left(1 + \\frac{L}{\\mu} + \\frac{\\Delta \\cdot \\sqrt{\\rho} \\cdot \\left(\\frac{L}{\\mu}\\right)^{\\frac{3}{4}}}{\\varepsilon^{\\frac{3}{2}}} + \\frac{\\Delta \\cdot \\rho^{2}}{\\mu^{3}}\\right) \\cdot \\left(\\log\\left(2 + \\frac{L}{\\mu} + \\frac{\\rho^{2} \\cdot \\left(\\Delta + D\\right)}{\\mu^{3}} + \\frac{\\rho \\cdot \\varepsilon}{\\mu^{2}} + \\frac{\\mu^{2}}{\\rho \\cdot \\varepsilon}\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NonconvexPLSecondOrder.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈10000000000 * (1 + p.L / p.μ + p.Δ * √p.ρ * (p.L / p.μ) ^ (3 / 4) / p.ε ^ (3 / 2) + p.Δ * p.ρ ^ 2 / p.μ ^ 3) *\n      Real.log (2 + p.L / p.μ + p.ρ ^ 2 * (p.Δ + p.D) / p.μ ^ 3 + p.ρ * p.ε / p.μ ^ 2 + p.μ ^ 2 / (p.ρ * p.ε)) ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.EnvelopeCubicNonconvexPL",
+      "namespace": "LongTails.Setups.NonconvexPLSecondOrder",
+      "setup": "LongTails.Setups.NonconvexPLSecondOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NonconvexPLSecondOrder.spec\n  OracleTemplate.PLMinimax.EnvelopeCubicNonconvexPL.budget",
+      "theorem": "OracleTemplate.PLMinimax.EnvelopeCubicNonconvexPL.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.EnvelopeCubicNonconvexPL",
+      "theorem": "OracleTemplate.PLMinimax.EnvelopeCubicNonconvexPL.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Minimize Φ(x)=max_y f(x,y); neither convexity in x nor concavity in y is required.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: value and spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Uniform one-sided maximization PL condition: 2μ(Φ(x)−f(x,y))≤‖∇_y f(x,y)‖². No PL condition is imposed on Φ or the minimizing variable.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.admissible."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Unconstrained minimax problem with an attained global inner maximum for every x; the output is an outer point x.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.admissible and spec.Output."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "The same query returns the full exact joint gradient, independently of history and seed.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "Each joint query z returns the exact value f(z).",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.Reply and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Exact full Hessian oracle: each query also returns D(∇f)(z). Value, gradient, and Hessian are bundled into one oracle call.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.Query, spec.Reply, and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E and F are finite-dimensional real inner-product spaces; joint queries use the Euclidean product norm.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: Params and Space."
+      },
+      {
+        "label": "other",
+        "details": "The joint gradient is globally L-Lipschitz and its derivative is globally ρ-Lipschitz in operator norm. All parameters and starting points are public: 0<μ≤L, ρ>0, ε>0, Δ,D≥0. Initialization satisfies Φ(x0)−inf_x Φ(x)≤Δ and Φ(x0)−f(x0,y0)≤D.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned x satisfies ‖∇Φ(x)‖≤ε.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Both stationarity inequalities hold jointly almost surely under the output law, within the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "Φ and ∇Φ must be differentiable everywhere. At the returned x, for every v, ⟨v,D(∇Φ)(x)v⟩≥−√(100ρ√(L/μ)(4+L/μ)ε)‖v‖².",
+        "evidence": "LongTails/Setups/NonconvexPLSecondOrder.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup seeks second-order stationarity and global twice differentiability of the primal value function under inner PL geometry without inner concavity, using exact joint second-order information."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.PLMinimax.EnvelopeCubicNonconvexPL.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.EnvelopeCubicNonconvexPL",
+          "theorem": "OracleTemplate.PLMinimax.EnvelopeCubicNonconvexPL.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.HessianLipschitzGradientStationarity",
+  "searched_at": "2026-11-02T10:42:17.235567+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{1000 \\cdot \\log_{2}\\left(2 + \\frac{L^{2}}{\\rho \\cdot \\varepsilon}\\right) \\cdot \\left(\\frac{\\rho \\cdot \\varepsilon}{L^{2}}\\right)^{\\frac{1}{9}} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\left(\\frac{L^{2}}{\\rho \\cdot \\varepsilon}\\right)^{\\frac{1}{9}} + 2 \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HessianLipschitzGradientStationarity.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈1000 * Real.logb 2 (2 + p.L ^ 2 / (p.ρ * p.ε)) * (p.ρ * p.ε / p.L ^ 2) ^ 9⁻¹ * p.L * p.Δ / p.ε ^ 2 +\n        (p.L ^ 2 / (p.ρ * p.ε)) ^ 9⁻¹ +\n      2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{1000 \\cdot \\log_{2}\\left(2 + \\frac{L^{2}}{\\rho \\cdot \\varepsilon}\\right) \\cdot \\left(\\frac{\\rho \\cdot \\varepsilon}{L^{2}}\\right)^{\\frac{1}{9}} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + \\left(\\frac{L^{2}}{\\rho \\cdot \\varepsilon}\\right)^{\\frac{1}{9}} + 2 \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HessianLipschitzGradientStationarity.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈1000 * Real.logb 2 (2 + p.L ^ 2 / (p.ρ * p.ε)) * (p.ρ * p.ε / p.L ^ 2) ^ 9⁻¹ * p.L * p.Δ / p.ε ^ 2 +\n        (p.L ^ 2 / (p.ρ * p.ε)) ^ 9⁻¹ +\n      2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FractalChebyshevGdStationarity",
+      "namespace": "LongTails.Setups.HessianLipschitzGradientStationarity",
+      "setup": "LongTails.Setups.HessianLipschitzGradientStationarity",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HessianLipschitzGradientStationarity.spec\n  OracleTemplate.RestartedScheduleGD.FractalChebyshevGdStationarity.budget",
+      "theorem": "OracleTemplate.RestartedScheduleGD.FractalChebyshevGdStationarity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FractalChebyshevGdStationarity",
+      "theorem": "OracleTemplate.RestartedScheduleGD.FractalChebyshevGdStationarity.result",
+      "references": "- Huan Li and Zhouchen Lin. [Restarted Nonconvex Accelerated Gradient Descent: No More Polylogarithmic Factor in the O(ε⁻⁷⁄⁴) Complexity](https://proceedings.mlr.press/v162/li22o/li22o.pdf). 2022. Complexity: $O(1+\\Delta L^{1/2}\\rho^{1/4}\\varepsilon^{-7/4}+L^{1/2}(\\rho\\varepsilon)^{-1/4})$ exact-gradient calls for restarted AGD to obtain $\\|\\nabla f(x)\\|\\le\\varepsilon$, including the final epoch; comparable in the regime $\\rho\\varepsilon\\lesssim L^2$ and $\\Delta\\sqrt\\rho\\gtrsim\\varepsilon^{3/2}$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a possibly nonconvex C² real-valued function, with f(x₀)−inf f≤Δ. No convexity assumption.",
+        "evidence": "LongTails/Setups/HessianLipschitzGradientStationarity.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each oracle call returns ∇f(x) exactly, for every history and seed; function values and Hessians are not supplied.",
+        "evidence": "LongTails/Setups/HessianLipschitzGradientStationarity.lean: spec.Query, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/HessianLipschitzGradientStationarity.lean: Params.finiteE, Params.innerE"
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz gradient and ρ-Lipschitz Hessian in operator norm; L,ρ,ε>0 and Δ≥0. All parameters, including x₀ and the gap bound Δ, are public. Allowed algorithms use positive gradient-step schedules with restarts and a gradient-norm stopping test.",
+        "evidence": "LongTails/Setups/HessianLipschitzGradientStationarity.lean: spec.admissible, spec.valid, spec.Public, spec.publicInput, spec.allowedAlgorithm"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned point must satisfy ‖∇f(output)‖≤ε, with no squaring or expectation.",
+        "evidence": "LongTails/Setups/HessianLipschitzGradientStationarity.lean: spec.successful"
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every seed realization, not merely almost surely or with high probability; oracle calls are limited by a fixed supplied budget.",
+        "evidence": "LongTails/Setups/HessianLipschitzGradientStationarity.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "First-order stationarity for smooth nonconvex objectives with Lipschitz Hessians and exact gradients is an established optimization benchmark. The setup additionally restricts the permitted algorithm family."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RestartedScheduleGD.FractalChebyshevGdStationarity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FractalChebyshevGdStationarity",
+          "theorem": "OracleTemplate.RestartedScheduleGD.FractalChebyshevGdStationarity.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

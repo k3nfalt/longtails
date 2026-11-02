@@ -1,0 +1,93 @@
+{
+  "setup": "LongTails.Setups.ComparisonSmoothConvex",
+  "searched_at": "2026-11-02T10:42:12.484957+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil 6 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right) \\cdot \\left(3 \\cdot n + 7 \\cdot \\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right)^{2}\\right)\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.ComparisonSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  (⌈6 * √(p.L * p.R ^ 2 / p.ε)⌉₊ + 1) *\n    ((12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) *\n      (3 * p.n + 7 * (12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) ^ 2))"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil 6 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right) \\cdot \\left(3 \\cdot n + 7 \\cdot \\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right)^{2}\\right)\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.ComparisonSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌈6 * √(p.L * p.R ^ 2 / p.ε)⌉₊ + 1) *\n    ((12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) *\n      (3 * p.n + 7 * (12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) ^ 2))"
+        }
+      ],
+      "module": "LongTails.Theorems.ComparisonOrthConvex",
+      "namespace": "LongTails.Setups.ComparisonSmoothConvex",
+      "setup": "LongTails.Setups.ComparisonSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ComparisonSmoothConvex.spec OracleTemplate.ComparisonOrth.budget",
+      "theorem": "OracleTemplate.ComparisonOrth.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ComparisonOrthConvex",
+      "theorem": "OracleTemplate.ComparisonOrth.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function on ℝⁿ with globally L-Lipschitz gradient. A global minimizer x⋆ exists with ‖x₀−x⋆‖≤R.",
+        "evidence": "LongTails/Setups/ComparisonSmoothConvex.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact binary comparison oracle: querying (x,y) returns whether f(x)≤f(y), including true on equality. No function values or gradients are supplied. Replies are fixed independently of history and seeds.",
+        "evidence": "LongTails/Setups/ComparisonSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space ℝⁿ with n≥1. Parameters n,L,R,ε,x₀ are public, with L,R,ε>0; the objective and minimizer are hidden.",
+        "evidence": "LongTails/Setups/ComparisonSmoothConvex.lean: Point, Params, spec.Public, spec.publicInput, spec.valid"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−f(x⋆)≤ε for a global minimizer x⋆.",
+        "evidence": "LongTails/Setups/ComparisonSmoothConvex.lean: spec.successful"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely over the joint algorithm and oracle seed law, within the supplied fixed comparison-query budget.",
+        "evidence": "LongTails/Setups/ComparisonSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth convex objective class is standard, but access is restricted to exact binary comparisons, with an almost-sure guarantee under a fixed query budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ComparisonOrth.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ComparisonOrthConvex",
+          "theorem": "OracleTemplate.ComparisonOrth.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

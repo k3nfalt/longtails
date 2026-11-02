@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Capped participation under average similarity: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CappedHessianSimilarConvex.lean}{CappedHessianSimilarConvex}.}\label{tab:CappedHessianSimilarConvex}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F=m^{-1}\sum_i f_i$ has differentiable convex clients and is $\mu$-strongly convex. For $g_i=\nabla f_i-\nabla F$, assume $m^{-1}\sum_i\|g_i(x)-g_i(y)\|^2\leq\delta^2\|x-y\|^2$. A minimizer $x_\star$ exists with $F(x_0)-F(x_\star)\leq\Delta$. Here $1\leq s\leq m$, $\delta,\Delta\geq0$, $\mu,\varepsilon>0$. Each round contacts at most $s$ clients, returning one gradient or exact proximal point per client. Target: $\int [F(\widehat x(\omega))-F(x_\star)]\,dP(\omega)\leq\varepsilon$, with measurable output and integrable gap.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CappedHessianSimilarAccelerated.lean}{Capped\allowbreak Hessian\allowbreak Similar\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CappedHessianSimilarAccelerated.md}{(review)} & $\mathcal{O}\!\left(\left[1+\frac ms+\left(1+\frac{m^{3/4}}s\right)\sqrt\kappa\right]HQ\right)$ deterministic rounds & & \\
+\midrule[1.2pt]
+\textbf{(2)} AccSVRS \citep{chsLin2023v2}, Thm.~3.6 & $\mathcal{O}((m+m^{3/4}\sqrt\kappa)Q)$ expected rounds; $\kappa\geq1$. & \textbf{(1)}: $m\to m/s$; $\sqrt\kappa$ coefficient gains $\min(s,m^{3/4})$, overcoming $H$ when this factor dominates $H$. Deterministic budget. & \textbf{(1)} requires convex clients and exact proximal steps; \textbf{(2)} permits nonconvex clients and inexact steps. Extra factor $H$; worse at $s=1$. \\
+\midrule
+\textbf{(3)} Derived bound: restarted, batched Acc-S-DANE \citep{chsJiang2024v2}, Thm.~6 & $\mathcal{O}(\frac ms(1+\sqrt\kappa)Q)$ deterministic rounds; $\delta>0$. Restart the convex-client bound using $D^2\leq2\Delta/\mu$; $2\lceil m/s\rceil$ rounds per iteration. & \textbf{(1)}: $\sqrt\kappa$ coefficient gains $\min(m/s,m^{1/4})$ for $s\leq m/2$, before $H$. At $s=m^{3/4},\kappa=m$: $\mathcal{O}(m^{1/2}\log m\,Q)$ versus $\mathcal{O}(m^{3/4}Q)$. & \textbf{(1)} needs exact proximal steps; expected rather than deterministic accuracy. Extra factor $H$; worse at $s=m$. \\
+\midrule
+\textbf{(4)} Catalyst VM-SVRS \citep{chsWang2026v1}, Cor.~15; quadratic, individually $\mu$-strongly convex clients & $\mathcal{O}\!\left(\left[\frac ms+\left(\sqrt{\frac ms}+\frac{m^{3/4}}s\right)\sqrt\kappa\right]\ell(\ell+Q)\right)$ expected rounds; $0<\varepsilon<\Delta$. & \textbf{(1)}: nonquadratic convex clients; no $L_{\max}$ dependence; deterministic budget. On overlap, $\sqrt\kappa$ coefficient gains $\min(\sqrt{m/s},s/m^{1/4})$ for $\sqrt m<s<m$, peaking at $m^{1/8}$. & \textbf{(1)} guarantees expected accuracy; \textbf{(4)} guarantees accuracy surely. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=\delta/\mu$, $H=1+\log(2+m+\kappa)$, $Q=1+\log(2+\Delta/\varepsilon)$; $\ell=1+\log(mL_{\max}/\mu)$, $L_{\max}=\max_i\|\nabla^2 f_i\|$ for quadratics; $D=\|x_0-x_\star\|$. Costs count capped rounds, including full passes and proximal calls; a round uses at most $s$ primitive client calls. $P$ is the algorithm's randomization law.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

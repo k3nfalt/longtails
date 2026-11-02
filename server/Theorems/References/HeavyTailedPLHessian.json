@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedPLHessian",
+  "searched_at": "2026-11-02T10:42:20.940821+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "65 \\cdot \\left(\\left\\lceil 512 \\cdot \\left(\\left(\\frac{L}{\\mu}\\right)^{\\frac{5}{4}} + \\left(2^{\\frac{128}{p} + 27} \\cdot \\sigma^{2} \\cdot \\left(\\frac{1}{\\varepsilon} \\cdot \\frac{1}{\\mu} + \\frac{\\left(\\frac{L}{\\mu}\\right)^{\\frac{5}{2}} \\cdot \\rho^{2}}{\\mu^{4}}\\right)\\right)^{\\frac{p}{2 \\cdot \\left(p - 1\\right)}}\\right) \\cdot \\left(\\log\\left(1 + \\frac{48 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\varepsilon}\\right) + 1\\right) \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedPLHessian.spec.Params → ℕ",
+        "value": "fun q =>\n  65 *\n    (⌈512 *\n            ((q.L / q.μ) ^ (5 / 4) +\n              (2 ^ (128 / q.p + 27) * q.σ ^ 2 * (q.ε⁻¹ * q.μ⁻¹ + (q.L / q.μ) ^ (5 / 2) * q.ρ ^ 2 / q.μ ^ 4)) ^\n                (q.p / (2 * (q.p - 1)))) *\n          (Real.log (1 + 48 * √(q.L / q.μ) * q.Δ / q.ε) + 1)⌉₊ +\n      1)"
+      },
+      "budgets": [
+        {
+          "latex": "65 \\cdot \\left(\\left\\lceil 512 \\cdot \\left(\\left(\\frac{L}{\\mu}\\right)^{\\frac{5}{4}} + \\left(2^{\\frac{128}{p} + 27} \\cdot \\sigma^{2} \\cdot \\left(\\frac{1}{\\varepsilon} \\cdot \\frac{1}{\\mu} + \\frac{\\left(\\frac{L}{\\mu}\\right)^{\\frac{5}{2}} \\cdot \\rho^{2}}{\\mu^{4}}\\right)\\right)^{\\frac{p}{2 \\cdot \\left(p - 1\\right)}}\\right) \\cdot \\left(\\log\\left(1 + \\frac{48 \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\varepsilon}\\right) + 1\\right) \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedPLHessian.spec.Params → ℕ",
+          "value": "fun q =>\n  65 *\n    (⌈512 *\n            ((q.L / q.μ) ^ (5 / 4) +\n              (2 ^ (128 / q.p + 27) * q.σ ^ 2 * (q.ε⁻¹ * q.μ⁻¹ + (q.L / q.μ) ^ (5 / 2) * q.ρ ^ 2 / q.μ ^ 4)) ^\n                (q.p / (2 * (q.p - 1)))) *\n          (Real.log (1 + 48 * √(q.L / q.μ) * q.Δ / q.ε) + 1)⌉₊ +\n      1)"
+        }
+      ],
+      "module": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian",
+      "namespace": "LongTails.Setups.HeavyTailedPLHessian",
+      "setup": "LongTails.Setups.HeavyTailedPLHessian",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedPLHessian.spec\n  LongTails.Theorems.KappaFreeHeavyTailedPLHessian.budget",
+      "theorem": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian",
+      "theorem": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives may be nonconvex; a global minimizer exists. The gradient is globally L-Lipschitz.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.admissible"
+      },
+      {
+        "label": "pl",
+        "details": "Globally, 2μ(f(x)−f*) ≤ ‖∇f(x)‖², with 0 < μ ≤ L and f(x0)−f* ≤ Δ.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.valid and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call returns g(x,ξ) using a fresh IID seed, with E[g(x,ξ)]=∇f(x). Only gradient samples are supplied; no function values or Hessian oracle are available. All Params, including L, μ, ρ, σ, p, Δ, ε and x0, are public; f and the oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.Public, spec.publicInput, spec.Query, spec.Reply and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central moment bound E‖g(x,ξ)−∇f(x)‖^p ≤ σ^p, where 1 < p ≤ 2 and σ ≥ 0. Finite variance is not required when p < 2.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.valid and spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "An arbitrary finite-dimensional real inner-product space with its Borel measurable structure; no dimension bound is specified.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "The gradient is differentiable and its derivative satisfies ‖D∇f(x)−D∇f(y)‖op ≤ ρ‖x−y‖ globally, with ρ ≥ 0. This is Lipschitz continuity of the objective Hessian, with no samplewise smoothness requirement.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable point-valued output X with integrable objective gap and E[f(X)−f*] ≤ ε, where ε > 0. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm randomness and the IID oracle seeds. The supplied budget caps the total number of individual gradient calls deterministically, including batching and initialization.",
+        "evidence": "LongTails/Setups/HeavyTailedPLHessian.lean: spec.successful; LongTails/Template.lean: executeWithTrace and Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines nonconvex global PL geometry, a globally Lipschitz Hessian, and an unbiased gradient oracle with only a bounded p-th central moment, allowing infinite variance. This is a specialized variant of standard smooth stochastic PL optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.KappaFreeHeavyTailedPLHessian.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian",
+          "theorem": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

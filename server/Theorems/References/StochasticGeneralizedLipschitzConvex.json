@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.StochasticGeneralizedLipschitzConvex",
+  "searched_at": "2026-11-02T10:43:46.722321+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{66} \\cdot \\left(\\left(1 + R \\cdot G1\\right)^{3} + \\left(1 + R \\cdot G1\\right)^{2} \\cdot \\frac{R \\cdot G0}{\\varepsilon} + \\left(\\frac{R \\cdot G0}{\\varepsilon}\\right)^{2}\\right) \\cdot \\left(1 + \\log\\left(2 + R \\cdot G1 + \\frac{R \\cdot G0}{\\varepsilon}\\right)\\right)^{3} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticGeneralizedLipschitzConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 66 * ((1 + q.R * q.G1) ^ 3 + (1 + q.R * q.G1) ^ 2 * (q.R * q.G0 / q.ε) + (q.R * q.G0 / q.ε) ^ 2) *\n      (1 + Real.log (2 + q.R * q.G1 + q.R * q.G0 / q.ε)) ^ 3⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{66} \\cdot \\left(\\left(1 + R \\cdot G1\\right)^{3} + \\left(1 + R \\cdot G1\\right)^{2} \\cdot \\frac{R \\cdot G0}{\\varepsilon} + \\left(\\frac{R \\cdot G0}{\\varepsilon}\\right)^{2}\\right) \\cdot \\left(1 + \\log\\left(2 + R \\cdot G1 + \\frac{R \\cdot G0}{\\varepsilon}\\right)\\right)^{3} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticGeneralizedLipschitzConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 66 * ((1 + q.R * q.G1) ^ 3 + (1 + q.R * q.G1) ^ 2 * (q.R * q.G0 / q.ε) + (q.R * q.G0 / q.ε) ^ 2) *\n      (1 + Real.log (2 + q.R * q.G1 + q.R * q.G0 / q.ε)) ^ 3⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex",
+      "namespace": "LongTails.Setups.StochasticGeneralizedLipschitzConvex",
+      "setup": "LongTails.Setups.StochasticGeneralizedLipschitzConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticGeneralizedLipschitzConvex.spec\n  LongTails.Theorems.StochasticGeneralizedLipschitzConvex.budget",
+      "theorem": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex",
+      "theorem": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a continuous convex real-valued function on a second-countable real Hilbert space. A minimizer xstar exists with ‖x0−xstar‖≤R; differentiability is not required.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedLipschitzConvex.lean: Public; spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Stochastic subgradient oracle g(x,ω): its expectation belongs to ∂f(x). Each call uses a fresh IID seed; only the vector reply is available, without function values or the decomposition components.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedLipschitzConvex.lean: IsOracle.subgradient; spec.admissible; spec.Query; spec.Reply. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For each x, g(x,ω)=u(ω)+v(ω) almost surely, with E‖u‖²≤G0² and ‖v‖≤G1(f(x)−fstar) almost surely. Only a second moment is imposed on u, allowing heavy tails; neither component must be centered. This is not a uniform variance bound on the complete oracle.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedLipschitzConvex.lean: IsOracle.decomposition"
+      },
+      {
+        "label": "other",
+        "details": "The oracle magnitude has an objective-gap-dependent decomposition, implying ‖E g(x,ω)‖≤G0+G1(f(x)−fstar). Public information comprises E, x0, R, G0, G1 and ε, with R,G0,ε>0 and G1≥0. The objective, minimizer, sampling law and decomposition are hidden; no smoothness assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedLipschitzConvex.lean: Public; Params; IsOracle.decomposition; spec.publicInput; spec.valid; spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output with f(output)−fstar≤ε on the success event; no particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedLipschitzConvex.lean: spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "Failure probability P(f(output)−fstar>ε)≤1/10, jointly over algorithm randomness and IID oracle seeds, under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedLipschitzConvex.lean: spec.successful. LongTails/Template.lean: Convergence; executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The convex problem uses an unusual stochastic subgradient decomposition combining a bounded-second-moment component with an almost-sure component proportional to the objective gap, allowing unbounded oracle magnitudes without smoothness."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StochasticGeneralizedLipschitzConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex",
+          "theorem": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

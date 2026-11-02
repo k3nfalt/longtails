@@ -1,0 +1,123 @@
+{
+  "setup": "LongTails.Setups.CappedHessianSimilarConvex",
+  "searched_at": "2026-11-02T10:42:22.896497+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{40} \\cdot \\left(1 + \\frac{m}{s} + \\left(1 + \\frac{\\sqrt{m} \\cdot \\sqrt{\\sqrt{m}}}{s}\\right) \\cdot \\sqrt{\\frac{\\delta}{\\mu}}\\right) \\cdot \\left(1 + \\log\\left(2 + m + \\frac{\\delta}{\\mu}\\right)\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CappedHessianSimilarConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 40 * (1 + ↑p.m / ↑p.s + (1 + √↑p.m * √√↑p.m / ↑p.s) * √(p.δ / p.μ)) * (1 + Real.log (2 + ↑p.m + p.δ / p.μ)) *\n      (1 + Real.log (2 + p.Δ / p.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{40} \\cdot \\left(1 + \\frac{m}{s} + \\left(1 + \\frac{\\sqrt{m} \\cdot \\sqrt{\\sqrt{m}}}{s}\\right) \\cdot \\sqrt{\\frac{\\delta}{\\mu}}\\right) \\cdot \\left(1 + \\log\\left(2 + m + \\frac{\\delta}{\\mu}\\right)\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CappedHessianSimilarConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 40 * (1 + ↑p.m / ↑p.s + (1 + √↑p.m * √√↑p.m / ↑p.s) * √(p.δ / p.μ)) * (1 + Real.log (2 + ↑p.m + p.δ / p.μ)) *\n      (1 + Real.log (2 + p.Δ / p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CappedHessianSimilarAccelerated",
+      "namespace": "LongTails.Setups.CappedHessianSimilarConvex",
+      "setup": "LongTails.Setups.CappedHessianSimilarConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CappedHessianSimilarConvex.spec\n  LongTails.Theorems.CappedHessianSimilarAccelerated.budget",
+      "theorem": "LongTails.Theorems.CappedHessianSimilarAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CappedHessianSimilarAccelerated",
+      "theorem": "LongTails.Theorems.CappedHessianSimilarAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Every component f_i is differentiable and convex on the entire space.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Assumptions"
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The objective F is μ-strongly convex, with μ>0; individual components need not be strongly convex.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Assumptions and spec.valid"
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x)=(1/m)∑_i f_i(x), with m≥1.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: objective and Params; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "Exact component gradients at individually chosen points; replies have no stochastic or history-dependent error.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Operation.gradient, reply, spec.admissible"
+      },
+      {
+        "label": "proximal",
+        "details": "Exact component proximal minimizers of f_i(u)+(a/2)‖u−z‖² for any requested a>0.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Operation.prox, reply, Assumptions"
+      },
+      {
+        "label": "other",
+        "details": "One charged query contacts at most s distinct clients, with one gradient or proximal operation per client; 1≤s≤m. All clients, including any designated anchor, consume this cap.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Query.clients, Query.cap, Query.request, spec.valid; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "For all x,y, (1/m)∑_i ‖(∇f_i−∇F)(x)−(∇f_i−∇F)(y)‖²≤δ²‖x−y‖², with δ≥0. No absolute gradient-dissimilarity bound or component smoothness constant is assumed.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: centeredGradient, Assumptions, spec.valid"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "A minimizer x⋆ exists with F(x0)−F(x⋆)≤Δ. All parameters, including m,s,δ,μ,Δ,ε,x0, are public; component functions and proximal maps belong to the hidden instance. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: Params, Instance, Assumptions, spec.Public, spec.publicInput"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return an E-valued measurable output X with integrable gap F(X)−F(x⋆), for a global minimizer x⋆, and gap expectation at most ε>0.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "E[F(X)−F(x⋆)]≤ε under the execution's seed distribution. The extracted budget limits the number of capped oracle queries on every execution, rather than only in expectation.",
+        "evidence": "LongTails/Setups/CappedHessianSimilarConvex.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines average squared gradient similarity without absolute smoothness bounds with exact component proximal access and a strict cap on all client operations per charged query."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CappedHessianSimilarAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CappedHessianSimilarAccelerated",
+          "theorem": "LongTails.Theorems.CappedHessianSimilarAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

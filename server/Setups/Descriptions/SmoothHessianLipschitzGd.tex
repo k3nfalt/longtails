@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Adaptive Gradient Descent with Lipschitz Hessian}
+We consider minimizing a possibly nonconvex, twice continuously differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real inner-product space $E$. The gradient and Hessian are Lipschitz with constants $L>0$ and $\rho\geq0$, respectively. A given starting point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$, where $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. Adaptive gradient descent must return a queried point $\bar{x}$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$, for $\varepsilon>0$, almost surely under $P$, the law of the algorithm's randomness; with no queries it returns $x^0$.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The Hessian $\nabla^2 f(x)$ acts on $E$. The algorithm receives $E$, $x^0$, $L$, $\rho$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and Hessian regularity]
+The function $f$ is twice continuously Fr\'echet differentiable on $E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
+&\leq \rho\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Our formulation is algorithm-specific: we analyze adaptive gradient descent with strictly positive step sizes and an output selected by the smallest observed gradient norm. Queries may be made at any point of $E$. At iteration $k$, the method queries $x^k$, receives $g^k=\nabla f(x^k)$, and updates
+\[
+x^{k+1}=x^k-\eta_k g^k,
+\qquad \eta_k>0.
+\]
+The step size may depend on the algorithm's current information, its randomness, and the current reply. Its step-selection rule must return a strictly positive value for every possible reply.
+
+To specify the output exactly, let $b^k\in E$ be the stored point and $s^k\in\mathbb{R}$ its stored squared gradient norm. Initialize $b^0=x^0$; the initial value $s^0$ is unrestricted. After each reply, set
+\[
+\begin{aligned}
+b^{k+1}&=
+\begin{cases}
+x^k, & k=0\ \text{or}\ \|g^k\|^2\leq s^k,\\
+b^k, & \text{otherwise},
+\end{cases}\\
+s^{k+1}&=
+\begin{cases}
+\|g^k\|^2, & k=0\ \text{or}\ \|g^k\|^2\leq s^k,\\
+s^k, & \text{otherwise}.
+\end{cases}
+\end{aligned}
+\]
+After an allotted number $K\geq0$ of oracle calls, the output is $\bar{x}=b^K$. For $K\geq1$, this is the most recently queried point attaining the smallest gradient norm among $x^0,\ldots,x^{K-1}$. The required accuracy is
+\[
+\|\nabla f(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

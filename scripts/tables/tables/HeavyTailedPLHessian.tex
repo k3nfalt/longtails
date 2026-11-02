@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Heavy-tailed PL optimization with a Lipschitz Hessian (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HeavyTailedPLHessian.lean}{HeavyTailedPLHessian}).}\label{tab:HeavyTailedPLHessian}
+\parbox{\linewidth}{\footnotesize Finite-dimensional real inner-product space; $f$ has an $L$-Lipschitz, differentiable gradient and $\rho$-Lipschitz Hessian, an attained minimum $f_\star$, and $2\mu(f-f_\star)\leq\|\nabla f\|^2$, where $0<\mu\leq L$. Initially $f(x_0)-f_\star\leq\Delta$. IID samples feed a jointly measurable unbiased gradient oracle with integrable centered $p$th moment at most $\sigma^p$, $1<p\leq2$; $\rho,\sigma,\Delta\geq0$. Target: $\int(f(x_{\rm out})-f_\star)\,dP_{\rm out}\leq\varepsilon$, $\varepsilon>0$, where $P_{\rm out}$ includes the IID samples and independent uniform final-window selection.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/KappaFreeHeavyTailedPLHessian.lean}{Kappa\allowbreak Free\allowbreak Heavy\allowbreak Tailed\allowbreak PL\allowbreak Hessian} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/KappaFreeHeavyTailedPLHessian.md}{(review)} & $\mathcal{O}\!\left(\left[\kappa^{5/4}+C_p\left(\frac{\sigma^2}{\mu\varepsilon}+\frac{\kappa^{5/2}\sigma^2\rho^2}{\mu^4}\right)^q\right]\ell\right)$; includes all pilot/clipping calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{htplOu2026v2}, Thm.~4.3 & $\mathcal{O}_p\!\left(\kappa(S+Q)\log(1+\kappa S/\delta)\right)$; last-iterate gap $\leq\varepsilon$ with probability $1-\delta$; $0<\varepsilon<\Delta$. & \textbf{(1)}: statistical $\kappa Q\to Q\ell$ for fixed $p$, $Q\gg\kappa^{1/4}\ell$, $\varepsilon\ll\mu^3\kappa^{1/q-5/2}/\rho^2$. At $p=2$, $\mu=\sigma=\rho=\Delta=1$, $\varepsilon=\kappa^{-3}$: $\mathcal{O}(\kappa^4\log\kappa)\to\mathcal{O}(\kappa^3\log\kappa)$ at fixed confidence. & \textbf{(1)} needs Hessian regularity and $\rho$; adds a $\rho$-term and $\kappa^{5/4}$ initialization. Expected random output replaces high-probability last iterate; excludes constrained mirror-PL and conditional non-IID oracles. \\
+\midrule
+\textbf{(3)} \citep{htplOu2026v2}, Thm.~D.1(i); $d=1$ & $\mathcal{O}_p\!\left((1+Q)\ell\log(1+\ell/\delta)\right)$; probability $1-\delta$, $0<\varepsilon<\Delta$. & \textbf{(1)}: dimension-independent scope; matches the $\kappa$-free statistical power. & \textbf{(1)} adds Hessian regularity, a $\rho$-term and polynomial initialization; loses high-probability accuracy. \\
+\midrule
+\textbf{(4)} \citep{htplOu2026v2}, Thm.~D.1(ii); fixed $d\geq2$ & $\mathcal{O}_{d,p}\!\left(\Lambda[SD_{d-1}(\kappa J)+H_{d-1,2q}Q]\right)$; probability $1-\delta$, $0<\varepsilon<\Delta$. & \textbf{(1)}: dimension-independent constants; removes statistical $\kappa^{(d-1-2q)/2}$ when $d-1>2q$, up to logarithms. For $d-1\leq2q$, statistical power matches. & \textbf{(1)} needs Hessian regularity; adds a $\rho$-term, loses high-probability accuracy, and has worse initialization for $d\leq3$. \\
+\midrule
+\textbf{(5)} R-clipped-SSTM \citep{htplSadiev2023}, Thm.~3.3; strongly convex restriction & $\mathcal{O}_p\!\left(\sqrt\kappa S\log(1+\sqrt\kappa S/\delta)+Q\log(1+QS/\delta)\right)$; probability $1-\delta$. Use $R^2=2\Delta/\mu$. & \textbf{(1)}: scope extends from strong convexity to PL with non-isolated minimizers. & \textbf{(1)} loses accelerated initialization and high-probability accuracy; adds Hessian regularity, $\rho$-cost and a logarithm on $Q$. \textbf{(5)} requires regularity only on $B_{3R}(x_\star)$. \\
+\midrule
+\textbf{(6)} \citep{htplSibling}; $p=2$, bounded kurtosis & $\mathcal{O}\!\left([\kappa^{5/4}+K\kappa^{3/2}\sigma^2\rho^2/\mu^4+\sigma^2/(\mu\varepsilon)]\ell\right)$; expected window-iterate gap. & \textbf{(1)} removes fourth-moment requirement, permits $p<2$ and infinite variance; at $p=2$, improves the Hessian term when $K\gg\kappa$. & \textbf{(1)} worsens the Hessian term when $K\lesssim\kappa$; large $p$-dependent constants grow as $p\downarrow1$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count stochastic-gradient calls. $\kappa=L/\mu$, $q=p/[2(p-1)]$, $Q=(\sigma^2/(\mu\varepsilon))^q$, $C_p=2^{(128/p+27)q}$, $\ell=1+\log(1+\sqrt\kappa\Delta/\varepsilon)$, $S=1+\log_+(\Delta/\varepsilon)$, $\log_+t=\max\{0,\log t\}$, $0<\delta<1/2$, $d=\dim E$. Subscripts on $\mathcal{O}$ allow dependence on those parameters. In \textbf{(4)}, $J=1+\log(1+\kappa)$, $\Lambda=1+\log((S+1)(J+1)(1+\kappa J)^{(d-1)/2}/\delta)$; $D_1(z)=z^{2/3}$, $D_k(z)=z^{k/2}$ for $k\geq2$; $H_{k,r}=J^{r+1}$ if $k<r$, $J^{r+1}[1+\log(1+\kappa J)]^{r+1}$ if $k=r$, and $J^r(\kappa J)^{(k-r)/2}$ if $k>r$. In \textbf{(6)}, $K$ bounds $\int\|g-\nabla f\|^4\leq K\sigma^4$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

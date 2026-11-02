@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Feasible-domain Hessian--gap composite optimization (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FeasibleHessianGapComposite.lean}{FeasibleHessianGapComposite}).}\label{tab:FeasibleHessianGapComposite}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, $F=f+\psi$ with $f,\psi$ convex on convex $Q$, exact gradients and exact $Q$-constrained regularizer prox. A minimizer $x_\star\in Q$ exists, $x_0\in Q$, $\|x_0-x_\star\|\le R$, and $F(x_0)-F(x_\star)\le\Delta$. On $Q$, $\nabla f$ is Fr\'{e}chet differentiable with $\nabla^2f(x)\succeq0$ and $\|\nabla^2f(x)\|\le H_0+H_1(F(x)-F(x_\star))$. Known $H_0,H_1\ge0$ and $R,\Delta,\varepsilon>0$. Target: feasible $\widehat x$ with $F(\widehat x)-F(x_\star)\le\varepsilon$ deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FeasibleGapAccelerated.lean}{Feasible\allowbreak Gap\allowbreak Accelerated} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FeasibleGapAccelerated.md}{(review)} & $\mathcal{O}\!\left((1+R\sqrt{H_0/\varepsilon+H_1})\ell^2 s\right)$ gradient plus prox calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} RCSAG \citep{fhgLobanov2026}, Thm.~9, zero noise & $\mathcal{O}\!\left([s+R\sqrt{H_0/\varepsilon}+R\sqrt{H_1}j]\right.$\newline $\left.{}\cdot[1+\log s]\right)$ gradient calls; auxiliary ball projections are closed form. $Q=\mathbb R^d$, $\psi=0$, $\varepsilon<\Delta$. & \textbf{(1)} Scope: constrained composite objectives; curvature control only at feasible points, without a stationary unconstrained minimizer. & \textbf{(1)} Extra logarithmic cost on the overlap; requires Hessian regularity instead of a first-order local model. \\
+\midrule
+\textbf{(3)} APG \citep{fhgLuMei2023}, Thms.~1--2 & $\mathcal{O}\!\left(\left[1+\sqrt{\frac{(\Delta+R^2/\gamma_0)\max\{1,\gamma_0L_{\widehat S}\}}{\varepsilon}}\right]\right.$\newline $\left.{}\cdot[1+\log_+(\gamma_0L_{\widehat S})]\right)$ gradient, prox and value calls, including backtracking. & \textbf{(1)} No function values; explicit gap-curvature budget instead of an enlarged-ball Lipschitz constant. No established rate comparison in shared parameters. & \textbf{(1)} Needs $H_0,H_1,R,\Delta$ in addition. \textbf{(3)} assumes finite-dimensional proper closed convex functions and locally Lipschitz gradient on $\operatorname{cl}(\operatorname{dom}P)$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(1+R^2(H_0/\varepsilon+H_1))$, $s=1+\log_+(\Delta/\varepsilon)$, $\log_+t=\max\{0,\log t\}$. For $H_0,H_1>0$, $j=\min\{s,1+\log_+(H_1\Delta/H_0)\}$; $j=0$ if $H_1=0$, and $j=s$ if $H_0=0<H_1$. In \textbf{(2)}, fixed confidence and an auxiliary ball of diameter $2R$. In \textbf{(3)}, $P=\psi+\iota_Q$, $\gamma_0>0$ is the initial step, $\alpha_0=1$, fixed backtracking contraction, and $L_{\widehat S}$ is the gradient Lipschitz constant on the enlarged ball intersected with $\operatorname{dom}P$ from Lemma~1.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Lipschitz Monotone Root Finding}
+We consider finding a zero of a continuous monotone operator $F:E\to E$ on a real inner product space $E$. For constants $L_0>0$ and $L_1\geq 0$, its Lipschitz bound along any segment is $L_0+L_1M$ whenever $M$ bounds $\|F\|$ on that segment. A given point $x^0\in E$ is within distance $R\geq 0$ of a zero $x^\star$ of $F$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The root-finding problem is to find $x\in E$ such that
+\[
+F(x)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, $L_0$, $L_1$, $R$, and $x^0$; the tolerance $\varepsilon$ may enter the oracle-call budget but is not an algorithm input.
+
+Our assumptions:
+\begin{assumption}[Continuity and monotonicity]
+The operator $F$ is continuous on $E$ and satisfies
+\[
+\langle F(x)-F(y),x-y\rangle\geq 0,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized Lipschitz bound]
+For every $x,y\in E$ and $M\in\mathbb{R}$ satisfying
+\[
+\|F(x+\theta(y-x))\|\leq M,
+\qquad \theta\in[0,1],
+\]
+we have
+\[
+\|F(x)-F(y)\|\leq (L_0+L_1M)\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance to a zero]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

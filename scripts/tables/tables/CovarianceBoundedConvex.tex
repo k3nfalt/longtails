@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CovarianceBoundedConvex.lean}{CovarianceBoundedConvex}.}\label{tab:CovarianceBoundedConvex}
+\parbox{\linewidth}{\footnotesize Convex, globally $L$-Lipschitz $f:\mathbb{R}^d\to\mathbb{R}$ has a minimizer $x_\star$ with $\|x_\star\|\le R$; $d\ge1$, $L,R,\varepsilon>0$, $\sigma\ge0$. IID samples have law $p$ under probability measure $P$. The jointly measurable oracle is integrable, with $\int g(x,\omega)\,dp=v(x)\in\partial f(x)$, integrable squared noise, and $\int\langle g(x,\omega)-v(x),u\rangle^2\,dp\le\sigma^2\|u\|^2/d$. Target: measurable $\hat x$ with $P\{f(\hat x)-f(x_\star)>\varepsilon\}\le1/3$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CovarianceSoftCutConvex.lean}{Covariance\allowbreak Soft\allowbreak Cut\allowbreak Convex} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CovarianceSoftCutConvex.md}{(review)}
+& $\mathcal{O}((d+\sigma^2R^2/\varepsilon^2)\ell^5)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[Cor.~3, v1]{covMOSZ2025v1}; special case: directional exponential tails
+& $\mathcal{O}((d+\sigma^2R^2/\varepsilon^2)\operatorname{polylog}(d,1+LR/\varepsilon))$
+& \textbf{(1)}: directional second moments replace exponential tails; includes finite-variance noise without third moments. Matches polynomial rate on the exponential-tail subclass.
+& \textbf{(1)}: explicit $\ell^5$ overhead may be larger. \\
+\midrule
+\textbf{(3)} \citep[Cor.~4, v1]{covMOSZ2025v1}; trace-bounded noise
+& $\mathcal{O}((d+d\sigma^2R^2/\varepsilon^2)\operatorname{polylog}(d,1+LR/\varepsilon))$
+& \textbf{(1)}: noise term $\sigma^2R^2/\varepsilon^2$ instead of $d\sigma^2R^2/\varepsilon^2$, up to logarithms; material when $\sigma^2R^2/\varepsilon^2\gtrsim1$ and $d\gg\ell^5$.
+& \textbf{(1)} needs directional covariance bound; trace bound alone is insufficient. Anisotropic covariance $C$ requires $\sigma^2\ge d\|C\|_{\rm op}$. \\
+\midrule
+\textbf{(4)} SGD \citep[\S1, v1]{covMOSZ2025v1}; expected-gap bound plus Markov
+& $\mathcal{O}(1+(L^2+\sigma^2)R^2/\varepsilon^2)$
+& \textbf{(1)}: deterministic term $d\ell^5$ instead of $L^2R^2/\varepsilon^2$; total gain when $(d+\sigma^2R^2/\varepsilon^2)\ell^5\ll L^2R^2/\varepsilon^2$.
+& \textbf{(1)}: noise logarithms, directional covariance restriction, exact centroids; worse when $d\gtrsim L^2R^2/\varepsilon^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(d(1+LR/\varepsilon))$; costs count all stochastic subgradient calls. $\operatorname{polylog}$ denotes the unspecified logarithmic factors in the cited corollaries, at fixed success probability. In \textbf{(2)}, for unit $u$, $p\{|\langle g-v,u\rangle|\ge t\}\le2e^{-t\sqrt d/\sigma}$ (covariance scale at most $2\sigma$). $C$ denotes noise covariance. Exact centroid arithmetic in \textbf{(1)} is uncharged.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
