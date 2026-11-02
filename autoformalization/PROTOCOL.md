@@ -217,7 +217,8 @@ Derived tuning and free execution-count roles are forbidden; put their formulas
 in `tuning`, not Params. A source-prescribed family setting requires justification.
 
 Every tuning entry has exactly name, declaration, expression, uses and proofs.
-Names are unique; declaration belongs to Algorithms. Expressions use `p.field`
+Names are unique; declaration belongs to an Algorithms or Setups module, placed
+where the repository instructions put method definitions. Expressions use `p.field`
 to refer to original Params. `uses` lists exactly these referenced fields, all
 marked public. Expand dependency formulas here rather than hiding them in helpers.
 The implemented Public input may have different field names; its mapping from
@@ -225,7 +226,7 @@ these known parameters must be checked by the reviewer. An empty tuning list is
 permitted only when the method genuinely has no tuning, explained in construction.
 
 Output kind is last, best, random, average or certificate. Both algorithm and
-selector name actual Algorithms definitions (the same declaration may serve both
+selector name actual Algorithms or Setups definitions (the same declaration may serve both
 if its output field directly defines selection). Probability mode is expectation,
 deterministic, almost_sure or high_probability. criterion is a nonempty, inline
 Lean formula. Include regularity/feasibility conjuncts required by the source.

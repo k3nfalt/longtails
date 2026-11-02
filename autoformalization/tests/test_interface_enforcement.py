@@ -250,6 +250,15 @@ class EnforcementTests(unittest.TestCase):
             {"declarations": [r for i in invs.values() for r in i["declarations"]]},
         )
 
+    def test_method_definitions_may_live_in_setups_but_not_proofs(self):
+        plan, graph, _ = fixture()
+        method = next(u for u in plan["units"] if u["id"] == "Alg")
+        method["file"] = "outputs/Setups/Alg.lean"
+        validate_plan(plan, graph)
+        method["file"] = "outputs/Proofs/Alg.lean"
+        with self.assertRaises(WorkflowError):
+            validate_plan(plan, graph)
+
     def test_free_counts_helpers_and_disguises_rejected(self):
         for body in [
             "p.K",

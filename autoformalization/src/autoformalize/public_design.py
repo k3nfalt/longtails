@@ -6,6 +6,7 @@ from .common import fields, require, text
 
 ROLES = {"problem_data", "accuracy", "known_input", "analysis_bound", "family_setting"}
 MODES = {"expectation", "deterministic", "almost_sure", "high_probability"}
+METHOD_CATEGORIES = ("Algorithms", "Setups")
 
 
 def nonempty_list(value, label):
@@ -33,8 +34,11 @@ def validate_design(e, units, reachable, graph):
             label + " must name a planned prerequisite declaration",
         )
         if category:
+            categories = (category,) if isinstance(category, str) else category
             require(
-                "/" + category + "/" in units[declarations[n]]["file"],
+                any(
+                    "/" + c + "/" in units[declarations[n]]["file"] for c in categories
+                ),
                 label + " has wrong module role",
             )
 
@@ -91,7 +95,7 @@ def validate_design(e, units, reachable, graph):
         text(t["name"], "Tuning name")
         require(t["name"] not in seen, "Duplicate tuning name")
         seen.add(t["name"])
-        declaration(t["declaration"], "Tuning definition", "Algorithms")
+        declaration(t["declaration"], "Tuning definition", METHOD_CATEGORIES)
         expression(t, known)
         proofs(t["proofs"])
     o = d["output"]
@@ -104,7 +108,7 @@ def validate_design(e, units, reachable, graph):
     )
     require(o["probability_mode"] in MODES, "Unknown success probability mode")
     for key in ("algorithm", "selector"):
-        declaration(o[key], key, "Algorithms")
+        declaration(o[key], key, METHOD_CATEGORIES)
     text(o["criterion"], "Inline success criterion")
     proofs(o["proofs"])
     criterion_fields = set(
