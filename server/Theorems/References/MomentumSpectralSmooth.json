@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.MomentumSpectralSmooth",
+  "searched_at": "2026-11-03T13:20:14.499521+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\frac{128 \\cdot \\left(1 - \\beta\\right) \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{\\frac{32 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + 16}{1 - \\beta} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.MomentumSpectralSmooth.spec.Params → ℕ",
+        "value": "fun p => (⌈128 * (1 - p.β) * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈(32 * p.L * p.Δ / p.ε ^ 2 + 16) / (1 - p.β)⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{128 \\cdot \\left(1 - \\beta\\right) \\cdot s^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{\\frac{32 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + 16}{1 - \\beta} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.MomentumSpectralSmooth.spec.Params → ℕ",
+          "value": "fun p => (⌈128 * (1 - p.β) * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈(32 * p.L * p.Δ / p.ε ^ 2 + 16) / (1 - p.β)⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.MuonMomentumSeparation",
+      "namespace": "LongTails.Setups.MomentumSpectralSmooth",
+      "setup": "LongTails.Setups.MomentumSpectralSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MomentumSpectralSmooth.spec LongTails.Theorems.MuonMomentumSeparation.budget",
+      "theorem": "LongTails.Theorems.MuonMomentumSeparation.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MuonMomentumSeparation",
+      "theorem": "LongTails.Theorems.MuonMomentumSeparation.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on real m×n matrices; convexity is not required. A global lower bound fmin satisfies f(x0)−fmin≤Δ.",
+        "evidence": "LongTails/Setups/MomentumSpectralSmooth.lean: spec.admissible; LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Unbiased, jointly measurable matrix-valued gradient samples with independent identically distributed seeds across calls. Each sample counts as one oracle call, including all samples in each batch.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "There exist a fixed orthonormal row basis (b_i) and nonnegative σ_i with ∑σ_i≤s such that E‖(g(x,ξ)−∇f(x))ᵀb_i‖₂²≤σ_i² for every x and i. The basis and profile are hidden; only s is public. No exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: GradientModel.row_profile; LongTails/Setups/MomentumSpectralSmooth.lean: Public."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Global smoothness is ‖∇f(x)−∇f(y)‖_*≤L‖x−y‖op, using nuclear and spectral norms. Allowed updates use the minimum-Frobenius-norm support point of the spectral unit ball applied to batched momentum.",
+        "evidence": "LongTails/Setups/BatchedSpectralSmooth.lean: spec.admissible; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: polar; LongTails/Setups/MomentumSpectralSmooth.lean: spec.allowedAlgorithm."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace ℝ (Fin m × Fin n), identified with real m×n matrices.",
+        "evidence": "LongTails/Setups/FiniteVarianceSpectralSmooth.lean: MatrixPolar.Space and matrixEquiv."
+      },
+      {
+        "label": "other",
+        "details": "All of m,n,L,Δ,s,ε,β,x0 are public, with L>0, Δ,s≥0, ε>0 and 0≤β<1. Momentum starts at zero, uses fixed positive step size and positive integer batch size, and the output is a uniformly selected iterate indexed from 0 through T.",
+        "evidence": "LongTails/Setups/MomentumSpectralSmooth.lean: Public, spec.valid, momentumIterate, FollowsMomentum and spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output must be measurable and its nuclear gradient norm integrable, with E‖∇f(output)‖_*≤ε; the norm is not squared.",
+        "evidence": "LongTails/Setups/MomentumSpectralSmooth.lean: spec.successful; LongTails/Setups/BatchedSpectralSmooth.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the product of algorithm randomness and the IID oracle-seed law. The oracle budget is fixed, including B(T+1) sampled gradients for the uniformly selected iterate output.",
+        "evidence": "LongTails/Template.lean: Convergence; LongTails/Setups/MomentumSpectralSmooth.lean: FollowsMomentum."
+      },
+      {
+        "label": "other",
+        "details": "Success additionally requires two worst-case separation statements, for identity and Frobenius-normalized momentum directions. Writing r=min(m,n), when r≥2 and 1024ε²≤LΔ, every permitted constant-step, constant-batch algorithm in either family has an admissible instance where success implies n−r+1≤4N² or (r−1)LΔs²(1−β)³≤2²¹ε⁴N, with N=B(T+1).",
+        "evidence": "LongTails/Setups/MomentumSpectralSmooth.lean: MomentumLower and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines spectral-to-nuclear smoothness, a hidden rowwise variance profile, prescribed batched polar momentum, and expected nuclear-gradient stationarity with two algorithm-family lower-bound statements embedded in success."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MuonMomentumSeparation.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MuonMomentumSeparation",
+          "theorem": "LongTails.Theorems.MuonMomentumSeparation.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

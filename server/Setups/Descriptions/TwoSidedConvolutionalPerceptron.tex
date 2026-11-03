@@ -1,0 +1,80 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Two-Sided Convolutional Perceptron}
+We study strict separation of vectors $b_0,\ldots,b_n\in\mathbb{R}^d$ by a convolutional perceptron with parameters $\theta=((a,c),w)\in\mathbb{R}^2\times\mathbb{R}^d$ and margin $m_i(\theta)=a\langle b_i,w\rangle+c\langle Sb_i,w\rangle$, where $S$ is the cyclic shift by one coordinate. Each vector has a constant background of either sign, bounded above and away from zero in magnitude, plus a bounded centered defect. The scaled differences between defects and their shifts share a unit separator with positive margin. The oracle returns the margin and its parameter derivative for a queried sample. Starting from $((1,0),0)$, cyclic perceptron updates must produce an output $\bar\theta$ with $m_i(\bar\theta)>0$ for every sample and every realization.
+
+Write $d\geq1$ and $n\geq0$ for integers, so there are $n+1$ samples. Inner products and norms on $\mathbb{R}^d$ are Euclidean. With coordinates indexed by $j=0,\ldots,d-1$, define
+\[
+(Su)_j=u_{(j-1)\bmod d},\qquad
+ e=\frac{1}{\sqrt d}(1,\ldots,1),\qquad
+ Tu=\frac{u-Su}{\sqrt2}.
+\]
+The task is to find parameters whose margins are strictly positive simultaneously. The algorithm receives $d,n,g,R,\mu,\kappa$; the data vectors and their geometric decomposition are accessed only through the oracle.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The background bounds $g,R$, contrast $\mu$, and derivative margin $\kappa$ satisfy
+\[
+0<g\leq R,\qquad \mu>0,\qquad \kappa>0.
+\]
+They also obey
+\[
+\kappa\mu
+\left\lceil
+2^{24}\left(\frac{R}{g}\right)^2
+\frac{1+\log(1+g/\mu)}{\kappa^3}
+\right\rceil
+\leq \frac{3R}{2},
+\]
+where $\log$ is the natural logarithm and the ceiling denotes the least integer greater than or equal to its positive argument.
+\end{assumption}
+
+\begin{assumption}[Two-sided background and defect separation]
+There exist scalars $\beta_i\in\mathbb{R}$, defects $u_i\in\mathbb{R}^d$, and a vector $v\in\mathbb{R}^d$ such that $\|v\|=1$ and, for every $i=0,\ldots,n$,
+\[
+\begin{aligned}
+b_i&=\beta_i e+\mu u_i, & g\leq |\beta_i|&\leq R,\\
+\langle e,u_i\rangle&=0, & \|u_i\|&\leq\frac{1}{\sqrt2},\\
+\langle Tu_i,v\rangle&\geq\kappa.
+\end{aligned}
+\]
+\end{assumption}
+
+For a query $(i,\theta)\in\{0,\ldots,n\}\times(\mathbb{R}^2\times\mathbb{R}^d)$, the oracle returns the exact pair $(m_i(\theta),h_i(\theta))$, where
+\[
+\begin{aligned}
+m_i(((a,c),w))
+ &=a\langle b_i,w\rangle+c\langle Sb_i,w\rangle,\\
+h_i(((a,c),w))
+ &=\bigl((\langle b_i,w\rangle,\langle Sb_i,w\rangle),
+          ab_i+cSb_i\bigr).
+\end{aligned}
+\]
+
+Our formulation is algorithm-specific: we analyze the two-sided convolutional perceptron with cyclic sample queries and a fixed step size $\eta>0$. The algorithm chooses $\eta$ from its available inputs and initializes
+\[
+\theta^0=((1,0),0),\qquad i_0=0.
+\]
+At each call $t$, it queries $(i_t,\theta^t)$ and applies
+\[
+\begin{aligned}
+\theta^{t+1}
+ &=\begin{cases}
+ \theta^t+\eta h_{i_t}(\theta^t),&m_{i_t}(\theta^t)\leq0,\\
+ \theta^t,&m_{i_t}(\theta^t)>0,
+ \end{cases}\\
+i_{t+1}&=(i_t+1)\bmod(n+1).
+\end{aligned}
+\]
+Thus the sample index advances even when the parameters remain unchanged. After an allotted number $K\geq0$ of oracle calls, the output is the last iterate $\bar\theta=\theta^K$. The required accuracy is strict separation:
+\[
+m_i(\bar\theta)>0
+\qquad\text{for every }i=0,\ldots,n,
+\]
+for every realization of any algorithm randomness.
+\end{document}

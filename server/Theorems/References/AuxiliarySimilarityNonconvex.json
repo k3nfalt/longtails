@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.AuxiliarySimilarityNonconvex",
+  "searched_at": "2026-11-03T13:19:43.132582+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{2^{19} \\cdot \\Delta \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(\\left\\lceil 6 \\cdot \\sqrt{1 + \\frac{\\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}} \\cdot \\log\\left(8 + \\frac{8 \\cdot \\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil 15 \\cdot \\log\\left(400 \\cdot \\left(1 + \\frac{L + \\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)\\right) \\right\\rceil_{+} + 2\\right) + 6\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.AuxiliarySimilarityNonconvex.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌈2 ^ 19 * p.Δ * √(p.ρ * p.ε) / p.ε ^ 2⌉₊ + 1) *\n    ((⌈6 * √(1 + p.δ / √(p.ρ * p.ε)) * Real.log (8 + 8 * p.δ / √(p.ρ * p.ε))⌉₊ + 1) *\n        (⌈15 * Real.log (400 * (1 + (p.L + p.δ) / √(p.ρ * p.ε)))⌉₊ + 2) +\n      6)"
+        },
+        {
+          "latex": "\\left(\\left\\lceil \\frac{2^{19} \\cdot \\Delta \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(\\left\\lceil 6 \\cdot \\sqrt{1 + \\frac{\\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}} \\cdot \\log\\left(8 + \\frac{8 \\cdot \\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(\\left\\lceil 15 \\cdot \\log\\left(400 \\cdot \\left(1 + \\frac{L + \\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\left(\\frac{L}{\\delta} + 6\\right) \\cdot \\log\\left(2^{110} \\cdot \\left(1 + \\frac{L + \\delta}{\\sqrt{\\rho \\cdot \\varepsilon}}\\right)^{10} \\cdot \\left(1 + \\frac{\\Delta \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\varepsilon^{2}}\\right)\\right) \\right\\rceil_{+} + 3\\right) + 1\\right)\\right)",
+          "oracle": 1,
+          "type": "LongTails.Setups.AuxiliarySimilarityNonconvex.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌈2 ^ 19 * p.Δ * √(p.ρ * p.ε) / p.ε ^ 2⌉₊ + 1) *\n    ((⌈6 * √(1 + p.δ / √(p.ρ * p.ε)) * Real.log (8 + 8 * p.δ / √(p.ρ * p.ε))⌉₊ + 1) *\n      ((⌈15 * Real.log (400 * (1 + (p.L + p.δ) / √(p.ρ * p.ε)))⌉₊ + 1) *\n          (⌈(p.L / p.δ + 6) *\n                Real.log (2 ^ 110 * (1 + (p.L + p.δ) / √(p.ρ * p.ε)) ^ 10 * (1 + p.Δ * √(p.ρ * p.ε) / p.ε ^ 2))⌉₊ +\n            3) +\n        1))"
+        }
+      ],
+      "module": "LongTails.Theorems.AuxiliarySimilarityAcceleration",
+      "namespace": "LongTails.Setups.AuxiliarySimilarityNonconvex",
+      "setup": "LongTails.Setups.AuxiliarySimilarityNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AuxiliarySimilarityNonconvex.spec\n  OracleTemplate.AuxiliarySimilarityAcceleration.budget",
+      "theorem": "OracleTemplate.AuxiliarySimilarityAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AuxiliarySimilarityAcceleration",
+      "theorem": "OracleTemplate.AuxiliarySimilarityAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of f=I.1; neither f nor the auxiliary function h=I.2 is assumed convex. The initial objective gap satisfies f(x0)-inf f ≤ Δ.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Two separately budgeted oracles return exact gradients of f and h at arbitrary queried points. Replies are independent of history and seeds. All parameters, including L, δ, ρ, Δ and ε, are public; the functions are hidden.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.Public, spec.publicInput, spec.Instance, spec.admissible"
+      },
+      {
+        "label": "function_value",
+        "details": "Each gradient query also returns the exact value of its corresponding function.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.Reply and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "The gradient difference ∇f−∇h is globally δ-Lipschitz, with δ>0. Its magnitude is not bounded; this is a similarity condition between two exact oracles, not stochastic or pointwise relative error.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.admissible and spec.valid"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "f is C² with globally ρ-Lipschitz Hessian; h is differentiable with globally L-Lipschitz gradient. Parameters satisfy L≥0, ρ>0, Δ≥0 and ε>0.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.admissible and spec.valid"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a single point x with ‖∇f(x)‖≤ε, using the norm itself, not its square.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.Output and spec.successful"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The gradient-norm guarantee holds almost surely over the joint algorithm and oracle randomness, under fixed separate oracle budgets.",
+        "evidence": "LongTails/Setups/AuxiliarySimilarityNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup augments smooth nonconvex stationarity with a separately queried auxiliary function whose gradient difference is Lipschitz, and measures the two oracle costs separately."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AuxiliarySimilarityAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AuxiliarySimilarityAcceleration",
+          "theorem": "OracleTemplate.AuxiliarySimilarityAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

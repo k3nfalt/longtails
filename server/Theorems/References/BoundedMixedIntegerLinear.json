@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.BoundedMixedIntegerLinear",
+  "searched_at": "2026-11-03T13:19:44.406200+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left(\\prod_{j=0}^{p-1} \\max\\left\\{ hi\\left(j\\right) - lo\\left(j\\right) + 1, 0 \\right\\}\\right) - 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.BoundedMixedIntegerLinear.spec.Params → ℕ",
+        "value": "fun P => 2 * ∏ j, (P.hi j - P.lo j + 1).toNat - 1"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(\\prod_{j=0}^{p-1} \\max\\left\\{ hi\\left(j\\right) - lo\\left(j\\right) + 1, 0 \\right\\}\\right) - 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.BoundedMixedIntegerLinear.spec.Params → ℕ",
+          "value": "fun P => 2 * ∏ j, (P.hi j - P.lo j + 1).toNat - 1"
+        }
+      ],
+      "module": "LongTails.Theorems.LpBranchAndBoundMilp",
+      "namespace": "LongTails.Setups.BoundedMixedIntegerLinear",
+      "setup": "LongTails.Setups.BoundedMixedIntegerLinear",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BoundedMixedIntegerLinear.spec\n  OracleTemplate.BoundedMixedIntegerLinear.budget",
+      "theorem": "OracleTemplate.BoundedMixedIntegerLinear.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LpBranchAndBoundMilp",
+      "theorem": "OracleTemplate.BoundedMixedIntegerLinear.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Mixed-integer linear optimization: minimize c·z+d·y subject to Az+Gy≤b, with z∈ℤ^p, lo≤z≤hi, and y∈ℝ^q. The objective is linear; integrality can make the feasible set nonconvex.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: Params, objective, Solution, MixedFeasible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact LP relaxation optimization oracle. A query supplies integer box endpoints; the oracle returns an exact minimizer over the original linear constraints intersected with both the original and queried boxes, or none precisely when that relaxation is infeasible. Correctness holds for every history and seed; minimizer selection may vary.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: RelaxationFeasible, SolvesRelaxation, IsRelaxationOracle."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Finite dimensions p,q,m∈ℕ, with arbitrary real matrix and objective coefficients.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: Params."
+      },
+      {
+        "label": "other",
+        "details": "All coefficients, dimensions, and integer bounds are public; there is no hidden instance. Integer variables have finite bounds, potentially inconsistent. Continuous variables need not be bounded. Validity requires only a finite lower bound on the objective over the initial LP relaxation; infeasibility is permitted.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: Params; spec.Public, spec.Instance, spec.publicInput, spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Exact global optimality, equivalently zero objective gap when feasible: output some feasible mixed-integer solution whose objective is no larger than that of every feasible solution. No epsilon parameter.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: SolvesMixed, spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "Return none exactly for an infeasible mixed-integer problem; otherwise return a feasible optimal solution.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: SolvesMixed."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every combined algorithm and oracle seed, not merely almost surely or in expectation.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Bounded mixed-integer linear programming with exact LP relaxation solves and an exact optimum-or-infeasibility output is a standard optimization formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.BoundedMixedIntegerLinear.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LpBranchAndBoundMilp",
+          "theorem": "OracleTemplate.BoundedMixedIntegerLinear.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

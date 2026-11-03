@@ -76,14 +76,17 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args.back!).latex.1 ++ "}\\right\\rfloor")
   | ``Nat.log2 => return .ofString ("\\operatorname{log2}\\left(" ++
       (← latexPP args.back!).latex.1 ++ "\\right)")
-  | ``Finset.sum =>
+  | ``Finset.sum | ``Finset.prod =>
     guard (args[args.size - 2]!.getAppFn.constName! == ``Finset.univ)
     let fn ← ensureLam args.back! none
     guard (fn.bindingDomain!.isAppOfArity ``Fin 1)
     let bound ← latexPP fn.bindingDomain!.getAppArgs.back!
     withBindingBodyUnusedName fn fun index body => do
-      return .ofString ("\\left(\\sum_{" ++ symbol index.toString ++ "=0}^{" ++
+      let op := if name == ``Finset.sum then "\\sum" else "\\prod"
+      return .ofString ("\\left(" ++ op ++ "_{" ++ symbol index.toString ++ "=0}^{" ++
         bound.latex.1 ++ "-1} " ++ (← latexPP body).latex.1 ++ "\\right)")
+  | ``Int.toNat => return .ofString ("\\max\\left\\{ " ++
+      (← latexPP args.back!).latex.1 ++ ", 0 \\right\\}")
   | ``Nat.ceil => return .ofString ("\\left\\lceil " ++ (← latexPP args.back!).latex.1 ++ " \\right\\rceil_{+}")
   | ``Nat.floor => return .ofString ("\\left\\lfloor " ++ (← latexPP args.back!).latex.1 ++ " \\right\\rfloor_{+}")
   | ``Nat.clog =>

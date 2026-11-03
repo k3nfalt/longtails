@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Kernel convolutional perceptron: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/KernelConvolutionalPerceptron.lean}{KernelConvolutionalPerceptron}.}\label{tab:KernelConvolutionalPerceptron}
+\parbox{\linewidth}{\footnotesize $N\ge1$ samples $D_i=(\alpha_i/\sqrt2)e+\mu u_i\in\mathbb R^d$, $d>0$, $k\ge2$, $0<g\le|\alpha_i|\le R$, $0<\mu\le R$, $u_i\perp e$, $\|u_i\|\le k^{-1/2}$. A unit $w$ satisfies $\langle w,H_ku_i\rangle\ge\kappa$, $0<\kappa\le1$. Require $\mu^2(R/g)^4\log^2(128kR^2/(\kappa\mu)^2)\le k\kappa^6R^2/10^{13}$. The oracle gives one exact sample margin and gradient. The setup requires cyclic QPA, identity filter and zero readout initialization, positive constant step, and updates only at nonpositive margins. Target: deterministic strict separation $\langle\sum_{j<k}c_jP^jD_i,v\rangle>0$ for every sample at the returned iterate.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/KernelConvolutionalPerceptronAcceleration.lean}{Kernel\allowbreak Convolutional\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/KernelConvolutionalPerceptronAcceleration.md}{(review)} & $\mathcal{O}\!\left(N(R/g)^2\kappa^{-3}\log\frac{kR}{\kappa\mu}\right)$; $\eta=\kappa/(16\sqrt{k/2}R)$. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Fixed high-pass perceptron, derived bound \citep{kcpDerivation} & $\mathcal{O}\!\left(N(1+(k\kappa^2)^{-1})\right)$, same sample oracle; readout-only updates. & \textbf{(1)}: No established improvement in separation complexity. & \textbf{(1)} costs more throughout its admissible regime; \textbf{(2)} has no contrast dependence or small-contrast restriction. \\
+\midrule
+\textbf{(3)} Data recovery and offline LP, derived bound \citep{kcpDerivation} & $\mathcal{O}(N)$ sample calls; offline computation excluded. & \textbf{(1)}: No established improvement in oracle complexity. & \textbf{(1)} pays the extra factor $(R/g)^2\kappa^{-3}\log(kR/(\kappa\mu))$. \\
+\midrule
+\textbf{(4)} Clustered QPA \citep{kcpClustered} & $\mathcal{O}\!\left(N(R/g)^2[1+\log(R/\mu)]\right)$; $k=2$, $\|u_i-u_\star\|\le\kappa/64$. & \textbf{(1)}: Removes the residual cap and $\kappa$-dependent initialization; covers arbitrary kernel sizes and unaligned, negatively correlated, growing-rank residuals. & \textbf{(1)}: Worse $\kappa^{-3}$ dependence and leading constant on the overlap; stricter contrast condition; step still needs $\kappa$. \\
+\midrule
+\textbf{(5)} Noisy QPA \citep[Theorem 5.1]{kcpTyurinV2} & $\mathcal{O}\!\left(\frac{\sqrt d}{\nu}A[1+\log(\sqrt d A/\nu)]\right)$; probability $1-\rho$; $k=N=2$, dataset (5), $0<\nu\le1/10$. & \textbf{(1)}: Method-specific guarantee for $k>2$, arbitrary $N$, identity start without noise, deterministic separation. Classes are incomparable; no rate comparison. & \textbf{(1)} excludes \textbf{(5)}'s pure-reference sample ($\kappa=0$); requires positive residual margin for every sample. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $e=d^{-1/2}\mathbf1$; $P$ is the cyclic shift; $H_k=(1-1/k)^{-1/2}(I-k^{-1}\sum_{j<k}P^j)$; QPA: quadratic perceptron algorithm; LP: linear program. In \textbf{(5)}, $\nu$ is the unnormalized defect amplitude, $\rho\in(0,1)$, $q=\|\theta_0\|^2/|\langle\theta_0,v_{\nu,+}\rangle|^2<\infty$, $v_{\nu,+}$ is the positive defect eigenvector, and $A=(1+\log(q/\rho^3))(1+\log(\sqrt d q/\nu))$; the step and injected noise are tuned as in Theorem 5.1.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,63 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Bounded Mixed-Integer Linear Optimization}
+We consider minimizing a linear objective $f:\mathbb{R}^p\times\mathbb{R}^q\to\mathbb{R}$ over integer variables in $\mathbb{Z}^p$ and continuous variables in $\mathbb{R}^q$, where $p,q\geq0$ are integers. Feasibility is specified by finitely many linear inequalities and finite integer bounds on the integer variables. The continuous relaxation has an objective bounded below on its feasible set. For any queried integer box, the oracle returns an exact optimizer of the corresponding continuous relaxation or reports infeasibility. The goal is an exact mixed-integer optimizer, or a correct infeasibility report, for every realization of any randomness.
+
+Write the objective and feasible set as
+\[
+\begin{aligned}
+f(z,y)&=c^\top z+d^\top y,\\
+\mathcal{F}&=\{(z,y)\in\mathbb{Z}^p\times\mathbb{R}^q:
+Az+Gy\leq b,\ \ell\leq z\leq u\}.
+\end{aligned}
+\]
+The optimization problem is
+\[
+\min_{(z,y)\in\mathcal{F}} f(z,y).
+\]
+Here $m\geq0$ is an integer, $A\in\mathbb{R}^{m\times p}$, $G\in\mathbb{R}^{m\times q}$, $b\in\mathbb{R}^m$, $c\in\mathbb{R}^p$, $d\in\mathbb{R}^q$, and $\ell,u\in\mathbb{Z}^p$. All vector inequalities are componentwise. The algorithm receives all of these dimensions, coefficients, and bounds.
+
+For a queried box $\beta=(a,h)\in\mathbb{Z}^p\times\mathbb{Z}^p$, define its relaxation feasible set by
+\[
+\mathcal{R}_{\beta}
+=\{(z,y)\in\mathbb{R}^p\times\mathbb{R}^q:
+Az+Gy\leq b,\ \ell\leq z\leq u,\ a\leq z\leq h\}.
+\]
+Thus each query imposes its bounds in addition to the original bounds.
+
+Our assumptions:
+\begin{assumption}[Lower bounded relaxation]
+There exists $L\in\mathbb{R}$ such that
+\[
+f(z,y)\geq L
+\qquad\text{for every }(z,y)\in\mathcal{R}_{(\ell,u)}.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact relaxation oracle]
+Queries may be any pair $\beta\in\mathbb{Z}^p\times\mathbb{Z}^p$. The oracle reports infeasibility exactly when $\mathcal{R}_{\beta}$ is empty. Otherwise it returns a point $(z_{\beta},y_{\beta})$ satisfying
+\[
+\begin{aligned}
+(z_{\beta},y_{\beta})&\in\mathcal{R}_{\beta},\\
+f(z_{\beta},y_{\beta})&\leq f(z,y)
+&&\text{for every }(z,y)\in\mathcal{R}_{\beta}.
+\end{aligned}
+\]
+These requirements hold for every reply, including every choice among multiple optimizers.
+\end{assumption}
+
+After the allotted oracle calls, the output is either an infeasibility report or a pair $(\bar{z},\bar{y})\in\mathbb{Z}^p\times\mathbb{R}^q$. An infeasibility report must certify $\mathcal{F}=\varnothing$; a returned pair must satisfy
+\[
+\begin{aligned}
+(\bar{z},\bar{y})&\in\mathcal{F},\\
+f(\bar{z},\bar{y})&\leq f(z,y)
+&&\text{for every }(z,y)\in\mathcal{F}.
+\end{aligned}
+\]
+This exact success requirement holds for every realization of the algorithm's and oracle's randomness.
+\end{document}

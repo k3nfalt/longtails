@@ -1,0 +1,87 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Finite-Scale Convolutional SGD}
+We seek strict separation of $n\geq1$ vectors $b_i\in\mathbb{R}^d$, where $d\geq1$, using parameters $\theta=(a_1,a_2,w)\in\mathbb{R}^2\times\mathbb{R}^d$ and margins $m_i(\theta)=a_1\langle b_i,w\rangle+a_2\langle Sb_i,w\rangle$, where $S$ is the cyclic coordinate shift. The data have bounded, nonzero backgrounds and small centered defects with a common positive derivative margin. The oracle returns $m_i(\theta)$ and its parameter gradient. We analyze SGD with independent uniform sample indices, exhaustive separation scans, and periodic restarts from a scaled initialization. For $\beta\in(0,1)$, the goal is an output $\bar\theta$ with $P\{\min_i m_i(\bar\theta)\leq0\}\leq\beta$, where $P$ is the law of the algorithm's randomness.
+
+Index the data by $i\in\{0,\ldots,n-1\}$ and the coordinates by $j\in\{0,\ldots,d-1\}$. Write $(Sv)_j=v_{j-1\bmod d}$ and $e=d^{-1/2}(1,\ldots,1)$. Inner products and norms on the feature space are Euclidean. The task is to find a parameter vector satisfying
+\[
+\min_{0\leq i<n}m_i(\theta)>0.
+\]
+The algorithm receives $d,n$, background bounds $g,R$, contrast $\mu$, derivative margin $\kappa$, initial coefficients $p_0,q_0$, an initial readout $w^0\in\mathbb{R}^d$, and the sampling source specified below. The failure tolerance $\beta$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Data geometry]
+The parameters satisfy $0<g\leq R$, $\mu>0$, and $0<\kappa\leq1/4$. There exist scalars $c_i$, defects $v_i\in\mathbb{R}^d$, and a vector $u\in\mathbb{R}^d$ such that, for every $i$,
+\[
+\begin{aligned}
+b_i&=\frac{c_i}{\sqrt{2}}e+\mu v_i,
+&g\leq |c_i|&\leq R,\\
+\langle e,v_i\rangle&=0,
+&\|v_i\|&\leq\frac{1}{\sqrt{2}},\\
+\|u\|&=1,
+&\left\langle u,\frac{v_i-Sv_i}{\sqrt{2}}\right\rangle&\geq\kappa.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Finite-scale regime and initialization]
+The given initial coefficients satisfy
+\[
+|p_0|\leq1,\qquad 1\leq q_0\leq\frac32.
+\]
+Define the auxiliary quantities
+\[
+h=\frac{\kappa}{1000R},\qquad
+\delta=(h\mu)^2,\qquad \rho=hg.
+\]
+They satisfy
+\[
+\delta\leq1,\qquad
+\delta\left(\log\frac{24}{\delta}\right)^2
+\leq\frac{\kappa^3\rho^4}{10^{22}n^3}.
+\]
+\end{assumption}
+
+\begin{assumption}[Uniform sampling]
+The given sampling source consists of a probability law $Q$ on a measurable space $\Omega$ and measurable maps $I_t:\Omega\to\{0,\ldots,n-1\}$, $t\geq0$. Under $\omega\sim Q$, the variables $I_t(\omega)$ are mutually independent and each is uniform on $\{0,\ldots,n-1\}$.
+\end{assumption}
+
+At any query $(i,\theta)$, the oracle returns the exact pair $(m_i(\theta),G_i(\theta))$, where
+\[
+G_i(\theta)=
+\bigl(\langle b_i,w\rangle,\langle Sb_i,w\rangle,
+      a_1b_i+a_2Sb_i\bigr).
+\]
+Thus $G_i$ is the coordinate gradient of the margin. Each queried pair counts as one oracle call, including calls used to scan the data or at restart steps.
+
+Our formulation is algorithm-specific: we analyze convolutional SGD with separation scans and periodic restarts. The algorithm chooses a fixed step size $\eta>0$, a scale $s>0$, and a restart period $T\in\{1,2,\ldots\}$ from its available inputs. The auxiliary quantity $h$ above does not prescribe $\eta$. Define
+\[
+\theta^0=
+\left(\frac{s(p_0+q_0)}{\sqrt{2}},
+      \frac{s(p_0-q_0)}{\sqrt{2}},w^0\right).
+\]
+The algorithm starts at $\theta^0$ with training counter $t=0$ and draws its sampling source with law $Q$. Any additional algorithm randomness must preserve this sampling law.
+
+Before each training call, the algorithm queries all indices in order $0,\ldots,n-1$ at its current point $\theta^t$, without changing that point during the scan. If every scanned margin is strictly positive, it freezes the point permanently. Otherwise it queries $(I_t,\theta^t)$ and sets
+\[
+\theta^{t+1}=
+\begin{cases}
+\theta^0,& T\mid(t+1),\\
+\displaystyle\theta^t+
+\frac{\eta}{1+\exp(m_{I_t}(\theta^t))}
+G_{I_t}(\theta^t),&T\nmid(t+1).
+\end{cases}
+\]
+It then increments $t$ and begins a new complete scan. In particular, a restart consumes the sampled oracle call even though its reply is discarded. Each completed scan followed by a training call uses $n+1$ calls. Once frozen, any remaining calls repeat the query at index $n-1$ at the frozen point and leave the point unchanged.
+
+At exhaustion of the allotted oracle calls, including exhaustion during a scan, the output $\bar\theta$ is the current point. The required accuracy is strict separation with failure probability at most $\beta$:
+\[
+P\left\{\min_{0\leq i<n}m_i(\bar\theta)\leq0\right\}
+\leq\beta.
+\]
+\end{document}

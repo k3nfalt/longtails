@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Strict separation under the \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DerivativeConvolutionalPerceptron.lean}{DerivativeConvolutionalPerceptron setup}.}\label{tab:DerivativeConvolutionalPerceptron}
+\parbox{\linewidth}{\footnotesize Signed samples $D_i\in\mathbb R^d$, $d\ge1$, satisfy $D_i=\alpha_i e/\sqrt2+\mu u_i$, $g\le|\alpha_i|\le R$, $\langle e,u_i\rangle=0$, $\|u_i\|\le1/2$. A unit $w$ satisfies $\langle (u_i-Pu_i)/\sqrt2,w\rangle\ge\kappa$ for every sample. Assume $0<g\le R$, $0<\kappa\le1$, and $0<\mu/R\le2^{-400}\kappa^{20}(g/R)^{24}$. One call returns an indexed sample's exact margin and full parameter gradient. Target: $f_i(c,v)>0$ for every $i$, deterministically. Algorithms are unrestricted; \textbf{(1)} constructs cyclic simultaneous updates from $((\sqrt2,0),0)$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DerivativeConvolutionalPerceptronAcceleration.lean}{Derivative\allowbreak Convolutional\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DerivativeConvolutionalPerceptronAcceleration.md}{(review)}
+& $\mathcal{O}\!\left(N\kappa^{-8}(R/g)^{10}[1+\log(R/\mu)]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Reconstruction, derived bound \citep{dcpCompanion}
+& $\mathcal{O}(N)$; recover $D_i$ from the head gradient, then separate offline.
+& \textbf{(1)}: avoids storing samples and offline separation; no established oracle-complexity improvement.
+& \textbf{(1)}: larger bound by $\kappa^{-8}(R/g)^{10}[1+\log(R/\mu)]$ throughout its domain. \\
+\midrule
+\textbf{(3)} Fixed difference-filter perceptron, derived bound \citep{dcpCompanion}
+& $\mathcal{O}(N/\kappa^2)$, including scans; filter $(1,-1)/\sqrt2$, features $\mu(u_i-Pu_i)/\sqrt2$.
+& \textbf{(1)}: new ordinary-start learned-filter trajectory analysis; no established problem-class improvement over \textbf{(3)}.
+& \textbf{(1)}: larger bound by $\kappa^{-6}(R/g)^{10}[1+\log(R/\mu)]$; \textbf{(3)} needs no contrast threshold or background lower bound. \\
+\midrule
+\textbf{(4)} Frozen raw-filter perceptron \citep{dcpCompanion}
+& Lower bound $\Omega(1/\mu)$ on the growing-rank family, for every positive constant step and zero head.
+& \textbf{(1)}: method-specific gain when $N\kappa^{-8}(R/g)^{10}[1+\log(R/\mu)]=o(1/\mu)$. For $N=2m$, fixed geometry and $\mu\asymp(m+1)^{-2}$: $\mathcal{O}(m\log(2m))$ versus $\Omega(m^2)$.
+& \\
+\midrule
+\textbf{(5)} \citep{dcpTyurinV2}, Theorem 5.1
+& $\mathcal{O}\!\left(\frac{\sqrt d}{\nu}A[1+\log(\sqrt d A/\nu)]\right)$ indexed calls; success probability $1-\rho$. Only dataset (5), $0<\nu\le1/10$, nonzero initial correlation, prescribed perturbations.
+& \textbf{(1)}: deterministic ordinary start and arbitrary sample count on a different derivative-separable class. Rates are incomparable; \textbf{(5)} includes a pure-constant sample excluded by \textbf{(1)}.
+& \textbf{(1)} does not cover \textbf{(5)}'s dataset; requires nonzero backgrounds and the stated strong contrast condition. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N=\mathtt{samples}+1$; $g,R,\mu,\kappa$ are the setup's lower, upper, contrast and derivative-margin parameters; $e=d^{-1/2}\mathbf1$; $P$ is the cyclic shift; $f_i(c,v)=c_0\langle D_i,v\rangle+c_1\langle PD_i,v\rangle$. In \textbf{(5)}, $\nu$ is that paper's contrast, $\rho\in(0,1)$ is failure probability, $q=\|\theta_0\|^2/\langle\theta_0,v_{\nu,+}\rangle^2$, and $A=[1+\log(q/\rho^3)][1+\log(\sqrt d q/\nu)]$; $v_{\nu,+}$ is its unit positive contrast eigendirection. In \textbf{(4)}, $m$ indexes the companion note's growing-rank family.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

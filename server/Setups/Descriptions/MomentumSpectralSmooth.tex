@@ -1,0 +1,104 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Muon with Spectral Smoothness}
+We consider a differentiable, possibly nonconvex objective $f:E\to\mathbb{R}$ on the Frobenius space $E=\mathbb{R}^{m\times n}$, where $m,n$ are nonnegative integers. The gradient is Lipschitz from the spectral norm to the nuclear norm, and a given point $x^0\in E$ has a bounded gap to a global lower bound. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with bounded rowwise second moments in a fixed orthonormal basis. For $\varepsilon>0$, Muon must return a random iterate $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|_*\leq\varepsilon$, where $\|\cdot\|_*$ is the nuclear norm and the expectation includes sampling and algorithm randomness. Success additionally requires worst-case implications for two alternative momentum directions.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+Equip $E$ with the Frobenius inner product $\langle X,Y\rangle_F=\operatorname{tr}(X^{\mathsf T}Y)$ and norm $\|\cdot\|_F$. Write $\|X\|_{\mathrm{op}}$ for the induced operator norm of $X:\mathbb{R}^n\to\mathbb{R}^m$ and $\|X\|_*$ for its dual nuclear norm. Gradients are taken with respect to the Frobenius inner product. The algorithm receives $m,n,L,\Delta,s,\varepsilon,\beta,x^0$, with
+\[
+L>0,\qquad \Delta,s\geq0,\qquad
+\varepsilon>0,\qquad 0\leq\beta<1.
+\]
+
+Our assumptions:
+\begin{assumption}[Spectral smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|_*
+\leq L\|x-y\|_{\mathrm{op}},\qquad x,y\in E.
+\]
+There exists $f_{\mathrm{lb}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_{\mathrm{lb}}&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-f_{\mathrm{lb}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent stochastic gradients]
+There are a probability law $\nu$ on a measurable space $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]=\nabla f(x).
+\]
+There exist a fixed orthonormal basis $(b_i)_{i=1}^m$ of $\mathbb{R}^m$ and numbers $\sigma_i\geq0$ with $\sum_{i=1}^m\sigma_i\leq s$ such that, for every $x\in E$ and $i$, the random vector $(g(x,\xi)-\nabla f(x))^{\mathsf T}b_i$ belongs to $L^2(\nu;\mathbb{R}^n)$ and
+\[
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|(g(x,\xi)-\nabla f(x))^{\mathsf T}b_i\|_2^2\bigr]
+\leq\sigma_i^2.
+\]
+At call $k$, the oracle returns $g(x,\xi_k)$ at the queried point $x\in E$. The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and are independent of the algorithm's randomness.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze Muon with a constant step size and batched momentum. Define its polar direction by
+\[
+\begin{aligned}
+\mathcal{S}(M)
+&=\operatorname*{arg\,max}_{\|U\|_{\mathrm{op}}\leq1}
+       \langle M,U\rangle_F,\\
+\operatorname{polar}(M)
+&=\operatorname*{arg\,min}_{U\in\mathcal{S}(M)}\|U\|_F.
+\end{aligned}
+\]
+The minimum-norm selection specifies the direction also for rank-deficient matrices, including $\operatorname{polar}(0)=0$. The algorithm chooses $\eta>0$, an integer $B\geq1$, and an integer $T\geq0$ from its inputs. Starting from the given $x^0$ and $M^0=0$, it uses
+\[
+\begin{aligned}
+G^t&=\frac{1}{B}\sum_{j=0}^{B-1}g(x^t,\xi_{Bt+j}),\\
+M^{t+1}&=\beta M^t+(1-\beta)G^t,\\
+x^{t+1}&=x^t-\eta\operatorname{polar}(M^{t+1}),
+\qquad 0\leq t\leq T.
+\end{aligned}
+\]
+All $B$ queries in batch $t$ are made at $x^t$. A measurable index $J$, drawn from the algorithm's randomness independently of the samples, is uniform on $\{0,\ldots,T\}$. After $N=B(T+1)$ calls, the output is $\bar{x}=x^J$; it remains this same output after any additional calls. These query and output rules must hold for every realization of the algorithm's randomness and every possible reply sequence.
+
+The output must be measurable, its gradient nuclear norm must be integrable, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|_*\bigr]
+\leq\varepsilon,
+\]
+where $P$ is the joint law of the algorithm's randomness and the independent oracle samples.
+
+The task also includes two worst-case requirements, which are part of success rather than additional assumptions on $f$. Set $r=\min\{m,n\}$ and define
+\[
+d_{\mathrm{id}}(M)=M,\qquad
+ d_F(M)=
+ \begin{cases}
+ M/\|M\|_F,&M\ne0,\\
+ 0,&M=0.
+ \end{cases}
+\]
+For each $d\in\{d_{\mathrm{id}},d_F\}$, whenever
+\[
+r\geq2,\qquad 1024\varepsilon^2\leq L\Delta,
+\]
+the following statement is required. For every $\eta>0$, integers $B\geq1$ and $T\geq0$, and every algorithm satisfying the same initialization, batching, uniform-index output, and output persistence rules with update
+\[
+x^{t+1}=x^t-\eta d(M^{t+1}),
+\]
+there exist an objective and a stochastic oracle satisfying the assumptions above with the same inputs such that success after exactly $N=B(T+1)$ calls implies
+\[
+ n-r+1\leq4N^2
+ \quad\text{or}\quad
+ (r-1)L\Delta s^2(1-\beta)^3
+ \leq2^{21}\varepsilon^4N.
+\]
+Here success in this implication means that the resulting output is measurable, its gradient nuclear norm is integrable, and its expected gradient nuclear norm is at most $\varepsilon$ under its joint randomness law. The objective and oracle in each implication may depend on the alternative-direction algorithm and its tuning.
+\end{document}

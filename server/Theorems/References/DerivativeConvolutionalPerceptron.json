@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.DerivativeConvolutionalPerceptron",
+  "searched_at": "2026-11-03T13:20:11.237660+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(samples + 1\\right) \\cdot \\left(\\left\\lceil \\frac{2^{140} \\cdot upper^{10}}{derivativeMargin^{8} \\cdot lower^{10}} \\cdot \\left(1 + \\log\\left(\\frac{upper}{contrast}\\right)\\right) \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.DerivativeConvolutionalPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  (p.samples + 1) *\n    (⌈2 ^ 140 * p.upper ^ 10 / (p.derivativeMargin ^ 8 * p.lower ^ 10) * (1 + Real.log (p.upper / p.contrast))⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(samples + 1\\right) \\cdot \\left(\\left\\lceil \\frac{2^{140} \\cdot upper^{10}}{derivativeMargin^{8} \\cdot lower^{10}} \\cdot \\left(1 + \\log\\left(\\frac{upper}{contrast}\\right)\\right) \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.DerivativeConvolutionalPerceptron.spec.Params → ℕ",
+          "value": "fun p =>\n  (p.samples + 1) *\n    (⌈2 ^ 140 * p.upper ^ 10 / (p.derivativeMargin ^ 8 * p.lower ^ 10) * (1 + Real.log (p.upper / p.contrast))⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.DerivativeConvolutionalPerceptronAcceleration",
+      "namespace": "LongTails.Setups.DerivativeConvolutionalPerceptron",
+      "setup": "LongTails.Setups.DerivativeConvolutionalPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.DerivativeConvolutionalPerceptron.spec\n  OracleTemplate.DerivativeConvolutionalPerceptron.budget",
+      "theorem": "OracleTemplate.DerivativeConvolutionalPerceptron.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DerivativeConvolutionalPerceptronAcceleration",
+      "theorem": "OracleTemplate.DerivativeConvolutionalPerceptron.result",
+      "references": "- A. Novikoff. [On Convergence Proofs for Perceptrons](https://cs.uwaterloo.ca/~y328yu/classics/novikoff.pdf#page=1). 1963 proceedings; presented 1962. Complexity: $O((\\mathrm{samples}+1)(1+\\mathrm{derivativeMargin}^{-2}))$ exact sample margin-and-gradient oracle calls for strict separation by cyclic perceptron, including a final verification pass, applied to features $(D_i-\\operatorname{shift}D_i)/(\\sqrt{2}\\,\\mathrm{contrast})$; the proved perceptron update bound is $O(r^2/\\gamma^2)$ for feature radius $r$ and separating margin $\\gamma$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict feasibility of bilinear inequalities m_i(a,b,w)=a⟨D_i,w⟩+b⟨shift(D_i),w⟩>0 in jointly variable (a,b,w). No optimization objective is specified.",
+        "evidence": "LongTails/Setups/DerivativeConvolutionalPerceptron.lean: Separates; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin, Space."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A chosen sample index and arbitrary parameter vector return that sample's exact bilinear-margin gradient. Replies are identical for every history and oracle seed; there is no noise or sampling restriction.",
+        "evidence": "LongTails/Setups/DerivativeConvolutionalPerceptron.lean: Query, answer, spec.admissible; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: direction."
+      },
+      {
+        "label": "function_value",
+        "details": "Each call also returns the exact margin of the queried sample at the queried parameter vector.",
+        "evidence": "LongTails/Setups/DerivativeConvolutionalPerceptron.lean: answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in Euclidean R^d, d>0; parameters lie in R²×R^d. There are samples+1 hidden feature vectors.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, Space; LongTails/Setups/DerivativeConvolutionalPerceptron.lean: Data, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Public parameters are d,n,g=lower,R=upper,μ=contrast,κ=derivativeMargin, with 0<g≤R, μ>0, 0<κ≤1 and μ/R≤κ^20(g/R)^24/2^400. Hidden samples satisfy D_i=(β_i/√2)axis+μz_i, g≤|β_i|≤R, ⟨axis,z_i⟩=0, ‖z_i‖≤1/2. A hidden unit separator s satisfies ⟨(z_i−shift(z_i))/√2,s⟩≥κ for every i. No initialization or algorithm-family restriction is imposed.",
+        "evidence": "LongTails/Setups/DerivativeConvolutionalPerceptron.lean: Geometry, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Template.lean: Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The single output must have strictly positive bilinear margin on every sample. There is no epsilon tolerance or prescribed positive output margin.",
+        "evidence": "LongTails/Setups/DerivativeConvolutionalPerceptron.lean: Separates, spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every combined algorithm and oracle seed, including seeds of probability zero; the guarantee is pointwise rather than merely almost sure.",
+        "evidence": "LongTails/Setups/DerivativeConvolutionalPerceptron.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines bilinear convolutional separation with a specific constant-background decomposition, derivative-feature margin, and extreme contrast restriction, under an unrestricted exact sample oracle."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.DerivativeConvolutionalPerceptron.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DerivativeConvolutionalPerceptronAcceleration",
+          "theorem": "OracleTemplate.DerivativeConvolutionalPerceptron.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

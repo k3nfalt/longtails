@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.FiniteScaleConvolutionalSgd",
+  "searched_at": "2026-11-03T13:20:01.401931+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{100000000000000 \\cdot count^{3} \\cdot \\left(\\frac{upper}{lower}\\right)^{2}}{derivativeMargin^{3}} \\cdot \\log\\left(\\frac{24000000 \\cdot upper^{2}}{derivativeMargin^{2} \\cdot contrast^{2}}\\right) \\cdot \\left(1 + -\\log\\left(failure\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteScaleConvolutionalSgd.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈100000000000000 * ↑↑p.input.count ^ 3 * (p.input.upper / p.input.lower) ^ 2 / p.input.derivativeMargin ^ 3 *\n        Real.log (24000000 * p.input.upper ^ 2 / (p.input.derivativeMargin ^ 2 * p.input.contrast ^ 2)) *\n      (1 + -Real.log p.failure)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{100000000000000 \\cdot count^{3} \\cdot \\left(\\frac{upper}{lower}\\right)^{2}}{derivativeMargin^{3}} \\cdot \\log\\left(\\frac{24000000 \\cdot upper^{2}}{derivativeMargin^{2} \\cdot contrast^{2}}\\right) \\cdot \\left(1 + -\\log\\left(failure\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteScaleConvolutionalSgd.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈100000000000000 * ↑↑p.input.count ^ 3 * (p.input.upper / p.input.lower) ^ 2 / p.input.derivativeMargin ^ 3 *\n        Real.log (24000000 * p.input.upper ^ 2 / (p.input.derivativeMargin ^ 2 * p.input.contrast ^ 2)) *\n      (1 + -Real.log p.failure)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.FiniteScaleConvolutionalSgd",
+      "namespace": "LongTails.Setups.FiniteScaleConvolutionalSgd",
+      "setup": "LongTails.Setups.FiniteScaleConvolutionalSgd",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteScaleConvolutionalSgd.spec\n  LongTails.Theorems.FiniteScaleConvolutionalSgd.budget",
+      "theorem": "LongTails.Theorems.FiniteScaleConvolutionalSgd.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FiniteScaleConvolutionalSgd",
+      "theorem": "LongTails.Theorems.FiniteScaleConvolutionalSgd.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Separation with bilinear margins m_i(a,b,w)=a⟨x_i,w⟩+b⟨shift(x_i),w⟩ in jointly trained parameters. The corresponding logistic component losses need not be convex.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin, Space; LongTails/Setups/FiniteScaleConvolutionalSgd.lean: Separates, scanUpdate."
+      },
+      {
+        "label": "finite_sum",
+        "details": "There are n=count fixed samples; training updates use uniformly sampled components of the empirical logistic loss.",
+        "evidence": "LongTails/Setups/FiniteScaleConvolutionalSgd.lean: Data, spec.valid, scanUpdate."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i,θ) returns the exact component margin and its parameter gradient. These determine the logistic component gradient −direction/(1+exp(margin)). Answers have no oracle noise or history dependence.",
+        "evidence": "LongTails/Setups/FiniteScaleConvolutionalSgd.lean: answer, spec.admissible; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin, direction."
+      },
+      {
+        "label": "function_value",
+        "details": "The exact queried margin determines its logistic loss and permits checking strict separation. Every scan query counts as an oracle call.",
+        "evidence": "LongTails/Setups/FiniteScaleConvolutionalSgd.lean: answer, scanQuery, scanUpdate; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in Euclidean R^d, d>0; parameters lie in R²×R^d with Euclidean product geometry.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, Space; LongTails/Setups/FiniteScaleConvolutionalSgd.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Write g=lower, R=upper, μ=contrast, κ=derivativeMargin. Hidden data satisfy x_i=(c_i/√2)axis+μz_i, g≤|c_i|≤R, ⟨axis,z_i⟩=0, ‖z_i‖≤1/√2, and a common hidden unit separator v satisfies ⟨v,(z_i−shift(z_i))/√2⟩≥κ. Public parameters obey 0<g≤R, μ>0, 0<κ≤1/4. With h=κ/(1000R), D=(hμ)² and ρ=hg, require D≤1 and D log²(24/D)≤κ³ρ⁴/(10²²n³). Initialization has |initialMean|≤1 and 1≤initialDifference≤3/2, with unrestricted public initialReadout. Training indices are IID uniform; the allowed family uses positive finite initialization scale, periodic restarts, full separation scans, and freezes upon success. Failure probability is not public algorithm input.",
+        "evidence": "LongTails/Setups/FiniteScaleConvolutionalSgd.lean: Public, Params, Geometry, start, family, spec.valid, spec.publicInput; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The returned parameter must satisfy m_i(θ)>0 simultaneously for every sample. No positive numerical margin threshold, objective tolerance, or stationarity tolerance is requested.",
+        "evidence": "LongTails/Setups/FiniteScaleConvolutionalSgd.lean: Separates, spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "For 0<failure<1, the probability that the budget-limited output fails strict separation is at most failure. The fixed budget includes training and scan calls.",
+        "evidence": "LongTails/Setups/FiniteScaleConvolutionalSgd.lean: spec.valid, spec.successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a two-coefficient bilinear convolutional classifier with centered small-contrast defects, a common derivative separator, a restrictive multivariate scale regime, prescribed initialization and restart structure, and simultaneous strict separation under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FiniteScaleConvolutionalSgd.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FiniteScaleConvolutionalSgd",
+          "theorem": "LongTails.Theorems.FiniteScaleConvolutionalSgd.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

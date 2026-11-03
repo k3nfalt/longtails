@@ -16,6 +16,8 @@ structure Public where
 structure Params where
   data : Public
   dimension : ℕ+
+  hi : Fin dimension → ℤ
+  lo : Fin dimension → ℤ
 
 set_option hygiene false in
 run_cmd liftTermElabM do
@@ -109,3 +111,11 @@ run_cmd liftTermElabM do
   let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
   unless result == "\\log_{2}\\left(\\frac{R}{r0}\\right)" do
     throwError "Unexpected logarithm base: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (p : BudgetLatexTests.Params) =>
+    2 * (∏ j, (p.hi j - p.lo j + 1).toNat) - 1)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "2 \\cdot \\left(\\prod_{j=0}^{dimension-1} \\max\\left\\{ hi\\left(j\\right) - lo\\left(j\\right) + 1, 0 \\right\\}\\right) - 1" do
+    throwError "Unexpected finite product budget: {result}"

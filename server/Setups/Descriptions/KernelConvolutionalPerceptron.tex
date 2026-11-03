@@ -1,0 +1,80 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Kernel Convolutional Perceptron}
+We study strict separation of $n+1$ vectors in $\mathbb{R}^d$ by a kernel convolutional perceptron with parameters $(c,w)\in\mathbb{R}^k\times\mathbb{R}^d$, where $d\geq1$, $k\geq2$, and $n\geq0$ are integers. Each vector consists of a nonzero constant background and a small centered defect; normalized high-pass defects share a unit separator with positive margin. The parameters satisfy a quantitative small-contrast condition. The oracle returns a sample's bilinear convolutional margin and its update direction. Starting from the identity filter and zero readout, the method cycles through samples with a fixed positive step size. The goal is strictly positive margins on every sample, for every realization.
+
+Write the data as $b_0,\ldots,b_n\in\mathbb{R}^d$. Inner products and norms on each factor are Euclidean. Let $S$ be the cyclic shift defined by $(Su)_\ell=u_{(\ell-1)\bmod d}$ for $0\leq\ell<d$, and set $a=d^{-1/2}(1,\ldots,1)$. For $c\in\mathbb{R}^k$, $b,w\in\mathbb{R}^d$, define the response and margin by
+\[
+\begin{aligned}
+C_c b&=\sum_{j=0}^{k-1}c_jS^j b,\\
+m_i(c,w)&=\langle C_c b_i,w\rangle.
+\end{aligned}
+\]
+The task is to find parameters for which all these margins are strictly positive. The algorithm receives $d,k,n$ and the scalars $g,R,\mu,\kappa$ specified below; the data are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The integer parameters satisfy $d\geq1$, $k\geq2$, and $n\geq0$. The real parameters satisfy
+\[
+0<g\leq R,\qquad 0<\mu\leq R,\qquad 0<\kappa\leq1,
+\]
+and
+\[
+\mu^2\left(\frac{R}{g}\right)^4
+\left[\log\left(\frac{128kR^2}{(\kappa\mu)^2}\right)\right]^2
+\leq \frac{k\kappa^6R^2}{10^{13}}.
+\]
+\end{assumption}
+
+\begin{assumption}[Background and defect geometry]
+Define the high-pass operator on $\mathbb{R}^d$ by
+\[
+H_k u=\frac{1}{\sqrt{1-1/k}}
+\left(u-\frac{1}{k}\sum_{j=0}^{k-1}S^j u\right).
+\]
+There exist background coefficients $\beta_0,\ldots,\beta_n\in\mathbb{R}$, defects $u_0,\ldots,u_n\in\mathbb{R}^d$, and a separator $v\in\mathbb{R}^d$ with $\|v\|=1$ such that, for every $0\leq i\leq n$,
+\[
+\begin{aligned}
+b_i&=\frac{\beta_i}{\sqrt{2}}a+\mu u_i,\\
+g&\leq|\beta_i|\leq R,\\
+\langle a,u_i\rangle&=0,\qquad \|u_i\|\leq\frac{1}{\sqrt{k}},\\
+\langle v,H_k u_i\rangle&\geq\kappa.
+\end{aligned}
+\]
+\end{assumption}
+
+At a query $(i,(c,w))\in\{0,\ldots,n\}\times(\mathbb{R}^k\times\mathbb{R}^d)$, the oracle returns exactly $(m_i(c,w),G_i(c,w))$, where
+\[
+G_i(c,w)=\left(
+\bigl(\langle S^j b_i,w\rangle\bigr)_{j=0}^{k-1},
+C_c b_i
+\right).
+\]
+
+Our formulation is algorithm-specific: we analyze the kernel convolutional perceptron with cyclic sample selection and simultaneous updates of the filter and readout. The algorithm chooses a fixed step size $\eta>0$ from its inputs and initializes
+\[
+\theta^0=(c^0,w^0)=(e_0,0),\qquad i_0=0,
+\]
+where $e_0=(1,0,\ldots,0)\in\mathbb{R}^k$. At each iteration it queries $(i_t,\theta^t)$ and applies
+\[
+\begin{aligned}
+\theta^{t+1}
+&=\begin{cases}
+\theta^t+\eta G_{i_t}(\theta^t),&m_{i_t}(\theta^t)\leq0,\\
+\theta^t,&m_{i_t}(\theta^t)>0,
+\end{cases}\\
+i_{t+1}&=(i_t+1)\bmod(n+1).
+\end{aligned}
+\]
+The sample cursor advances after every query, including queries that leave the parameters unchanged. After $T$ oracle calls, the output is the current pair $\bar\theta=(\bar c,\bar w)=\theta^T$. Its required accuracy is exact strict separation:
+\[
+m_i(\bar c,\bar w)>0
+\qquad\text{for every }i\in\{0,\ldots,n\},
+\]
+for every realization of any algorithmic randomness.
+\end{document}

@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.KernelConvolutionalPerceptron",
+  "searched_at": "2026-11-03T13:19:47.343891+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(samples + 1\\right) \\cdot \\left\\lceil \\frac{200000 \\cdot \\left(\\frac{upper}{lower}\\right)^{2}}{derivativeMargin^{3}} \\cdot \\log\\left(\\frac{128 \\cdot kernel \\cdot upper^{2}}{\\left(derivativeMargin \\cdot contrast\\right)^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.KernelConvolutionalPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  (p.samples + 1) *\n    ⌈200000 * (p.upper / p.lower) ^ 2 / p.derivativeMargin ^ 3 *\n        Real.log (128 * ↑p.kernel * p.upper ^ 2 / (p.derivativeMargin * p.contrast) ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(samples + 1\\right) \\cdot \\left\\lceil \\frac{200000 \\cdot \\left(\\frac{upper}{lower}\\right)^{2}}{derivativeMargin^{3}} \\cdot \\log\\left(\\frac{128 \\cdot kernel \\cdot upper^{2}}{\\left(derivativeMargin \\cdot contrast\\right)^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.KernelConvolutionalPerceptron.spec.Params → ℕ",
+          "value": "fun p =>\n  (p.samples + 1) *\n    ⌈200000 * (p.upper / p.lower) ^ 2 / p.derivativeMargin ^ 3 *\n        Real.log (128 * ↑p.kernel * p.upper ^ 2 / (p.derivativeMargin * p.contrast) ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.KernelConvolutionalPerceptronAcceleration",
+      "namespace": "LongTails.Setups.KernelConvolutionalPerceptron",
+      "setup": "LongTails.Setups.KernelConvolutionalPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.KernelConvolutionalPerceptron.spec\n  OracleTemplate.KernelConvolutionalPerceptronAcceleration.budget",
+      "theorem": "OracleTemplate.KernelConvolutionalPerceptronAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.KernelConvolutionalPerceptronAcceleration",
+      "theorem": "OracleTemplate.KernelConvolutionalPerceptronAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict separation by a bilinear convolutional model: find (c,v) in R^k × R^d such that <Σ_j c_j S^j D_i,v> > 0 for every sample. These constraints are nonconvex in the jointly trained parameters; no scalar optimization objective is specified.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: response, margin, Separates, spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects one of N=samples+1 samples and a parameter pair; the reply contains the exact gradient of that sample's bilinear margin with respect to both parameter blocks. Replies have no noise or history dependence.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: Query, direction, answer, spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same query returns the exact selected sample margin, alongside its gradient.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: Reply, answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean parameter space R^k × R^d, with d>0 and k≥2. S is the cyclic coordinate shift; k need not equal d.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: Filter, Space, shifted, spec.valid; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, shift."
+      },
+      {
+        "label": "other",
+        "details": "Write g=lower, R=upper, μ=contrast, κ=derivativeMargin. Hidden data admit D_i=(a_i/√2)axis+μu_i, g≤|a_i|≤R, <axis,u_i>=0, ||u_i||≤1/√k, and a common unit separator z with <z,H_k u_i>≥κ, where H_k u=(1−1/k)^(-1/2)(u−k^(-1)Σ_{j=0}^{k−1}S^j u). All scalar parameters and dimensions are public; the decomposition and separator are not supplied.\n0<g≤R, 0<μ≤R, 0<κ≤1, and μ²(R/g)^4 log²(128kR²/(κμ)²)≤kκ⁶R²/10¹³. The allowed family starts at (e_0,0), cycles through all samples, and uses a fixed positive step along the returned gradient exactly when the margin is nonpositive.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: Geometry, highPass, Params, spec.publicInput, spec.admissible.\nLongTails/Setups/KernelConvolutionalPerceptron.lean: spec.valid, identityFilter, family, spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The final output must have strictly positive margin on every one of the samples. There is no epsilon tolerance or prescribed positive output margin.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: Separates, spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every outcome ω, rather than merely almost surely or in expectation, under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/KernelConvolutionalPerceptron.lean: spec.successful; LongTails/Template.lean: Convergence, execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines bilinear convolutional separation with a specific background–defect decomposition, common high-pass separator, stringent contrast regime, and prescribed cyclic update family."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.KernelConvolutionalPerceptronAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.KernelConvolutionalPerceptronAcceleration",
+          "theorem": "OracleTemplate.KernelConvolutionalPerceptronAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
