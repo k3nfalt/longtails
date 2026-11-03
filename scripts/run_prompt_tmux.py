@@ -30,6 +30,7 @@ Examples (from the repository root):
   python3 scripts/run_prompt_tmux.py research --agent omp --openrouter --model openai/gpt-6-astra
   python3 scripts/run_prompt_tmux.py research --agent omp -- --thinking high
   python3 scripts/run_prompt_tmux.py research --agent claude --model opus
+  python3 scripts/run_prompt_tmux.py proposals --codex-home work --keywords "MILP"
 
 Environment:
   Requires a running tmux server and the selected agent on PATH.
@@ -56,6 +57,11 @@ Environment:
     )
     parser.add_argument("--model", help="Model identifier; Codex requires --openrouter")
     parser.add_argument(
+        "--codex-home",
+        metavar="NAME",
+        help="Use ~/.codex_NAME as CODEX_HOME for the window and its child processes",
+    )
+    parser.add_argument(
         "prompt",
         choices=("proposals", "research"),
         help="Generate proposals or investigate a research direction",
@@ -64,6 +70,13 @@ Environment:
     split = argv.index("--") if "--" in argv else len(argv)
     args, runner_args = parser.parse_known_args(argv[:split])
     runner_args += argv[split:]
+    if args.codex_home is not None and (
+        not args.codex_home
+        or not all(c.isalnum() or c in "_-" for c in args.codex_home)
+    ):
+        parser.error(
+            "--codex-home must contain only letters, numbers, underscores or hyphens"
+        )
 
     command = [
         sys.executable,
@@ -115,6 +128,13 @@ Environment:
         "-c",
         str(Path(__file__).resolve().parent.parent),
     ]
+    codex_home = (
+        str(Path.home() / f".codex_{args.codex_home}")
+        if args.codex_home is not None
+        else os.environ.get("CODEX_HOME")
+    )
+    if codex_home:
+        tmux.extend(("-e", f"CODEX_HOME={codex_home}"))
     if args.prompt == "research":
         tmux.extend(
             (
