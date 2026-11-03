@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Auxiliary Similarity}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$, with a differentiable auxiliary function $h:E\to\mathbb{R}$. The objective is twice continuously differentiable with Lipschitz Hessian; both the auxiliary gradient and the gradient difference $\nabla f-\nabla h$ are Lipschitz. A given point $x^0\in E$ has bounded objective gap above the infimum. Two exact oracles return $(f(x),\nabla f(x))$ and $(h(x),\nabla h(x))$ at a query $x\in E$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The parameters satisfy
+\[
+L\geq 0,\qquad \delta>0,\qquad \rho>0,\qquad
+\Delta\geq 0,\qquad \varepsilon>0.
+\]
+The algorithm receives $E$, $x^0$, $L$, $\delta$, $\rho$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Hessian regularity]
+The objective $f$ is twice continuously Fr\'echet differentiable on $E$. Its Hessian, viewed as a linear operator from $E$ to $E$, satisfies
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}
+\leq \rho\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Auxiliary smoothness and similarity]
+The auxiliary function $h$ is Fr\'echet differentiable on $E$. For every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla h(x)-\nabla h(y)\|
+&\leq L\|x-y\|,\\
+\|(\nabla f(x)-\nabla h(x))
+-(\nabla f(y)-\nabla h(y))\|
+&\leq \delta\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given point $x^0$ satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Both oracles accept queries at any point of $E$, and their calls are counted separately. After the allotted calls, the required accuracy is
+\[
+\|\nabla f(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

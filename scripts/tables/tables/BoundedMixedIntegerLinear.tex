@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Exact bounded mixed-integer linear optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BoundedMixedIntegerLinear.lean}{BoundedMixedIntegerLinear}.}\label{tab:BoundedMixedIntegerLinear}
+\parbox{\linewidth}{\footnotesize Minimize $c^\top z+d^\top y$ subject to $Az+Gy\le b$, $z\in\mathbb Z^p$, $y\in\mathbb R^q$, and $\ell\le z\le u$, with real data and integer bounds. The root LP relaxation has objective bounded below. Each exact oracle call solves the relaxation with an additional integer box, returning any optimum or reporting infeasibility. The target is an exact global optimum or a correct infeasibility report for every seed and admissible oracle.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LpBranchAndBoundMilp.lean}{Lp\allowbreak Branch\allowbreak And\allowbreak Bound\allowbreak Milp} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LpBranchAndBoundMilp.md}{(review)} & $\mathcal{O}(N)$ exact LP calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} Branch-and-bound \citep{bmilpCCZ2014} & Exact node-LP oracle & \textbf{(1)}: Formalizes the classical finite-termination guarantee; no established complexity, scope, or output improvement. & \\
+\midrule
+\textbf{(3)} Exhaustive enumeration (derived bound) \citep{bmilpCCZ2014} & $\mathcal{O}(N)$ exact LP calls; one fixed-integer LP per box point & \textbf{(1)}: Matches known rate on the same setup and oracle. & \textbf{(1)}: Worst-case budget approaches twice the enumeration cost as $N\to\infty$; no quantified pruning gain. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N=\prod_{j=1}^{p}(u_j-\ell_j+1)_+$ is the number of integer box points; $(t)_+=\max\{t,0\}$. LP: linear program. Costs count complete exact LP solves, not arithmetic or bit operations.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

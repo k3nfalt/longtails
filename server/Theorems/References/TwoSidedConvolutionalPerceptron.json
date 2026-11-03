@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.TwoSidedConvolutionalPerceptron",
+  "searched_at": "2026-11-03T13:19:50.877970+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(samples + 1\\right) \\cdot \\left\\lceil \\frac{2^{24} \\cdot \\left(\\frac{upper}{lower}\\right)^{2} \\cdot \\left(1 + \\log\\left(1 + \\frac{lower}{contrast}\\right)\\right)}{margin^{3}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.TwoSidedConvolutionalPerceptron.spec.Params → ℕ",
+        "value": "fun p =>\n  (p.samples + 1) * ⌈2 ^ 24 * (p.upper / p.lower) ^ 2 * (1 + Real.log (1 + p.lower / p.contrast)) / p.margin ^ 3⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(samples + 1\\right) \\cdot \\left\\lceil \\frac{2^{24} \\cdot \\left(\\frac{upper}{lower}\\right)^{2} \\cdot \\left(1 + \\log\\left(1 + \\frac{lower}{contrast}\\right)\\right)}{margin^{3}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.TwoSidedConvolutionalPerceptron.spec.Params → ℕ",
+          "value": "fun p =>\n  (p.samples + 1) * ⌈2 ^ 24 * (p.upper / p.lower) ^ 2 * (1 + Real.log (1 + p.lower / p.contrast)) / p.margin ^ 3⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.TwoSidedConvolutionalPerceptronAcceleration",
+      "namespace": "LongTails.Setups.TwoSidedConvolutionalPerceptron",
+      "setup": "LongTails.Setups.TwoSidedConvolutionalPerceptron",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.TwoSidedConvolutionalPerceptron.spec\n  OracleTemplate.TwoSidedConvolutionalPerceptron.budget",
+      "theorem": "OracleTemplate.TwoSidedConvolutionalPerceptron.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.TwoSidedConvolutionalPerceptronAcceleration",
+      "theorem": "OracleTemplate.TwoSidedConvolutionalPerceptron.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Strict separation of N = samples + 1 signed feature vectors by the bilinear margin m_i(c,v) = c₁⟨D_i,v⟩ + c₂⟨shift D_i,v⟩. The constraints are nonconvex in the joint parameters (c,v); no optimization objective is specified.",
+        "evidence": "LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: Separates; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: margin, Space."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i,θ) returns the exact gradient of the individual bilinear margin with respect to θ. Replies are independent of history and oracle seed; there is no oracle error.",
+        "evidence": "LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: answer, spec.admissible; LongTails/Setups/TwoSampleQuadraticPerceptron.lean: direction."
+      },
+      {
+        "label": "function_value",
+        "details": "The same component query also returns the exact scalar margin m_i(θ), with value and gradient counted as one oracle call.",
+        "evidence": "LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: answer; LongTails/Setups/ManySampleConvolutionalPerceptron.lean: Reply."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Features lie in Euclidean ℝ^d, d > 0; parameters lie in ℝ² × ℝ^d. The shift is a cyclic coordinate permutation.",
+        "evidence": "LongTails/Setups/TwoSampleQuadraticPerceptron.lean: Features, Space, shift; LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Write g = lower, R = upper, μ = contrast, κ = margin. Hidden data satisfy D_i = b_i a + μu_i, a = ones/√d, g ≤ |b_i| ≤ R, ⟨a,u_i⟩ = 0, and ‖u_i‖ ≤ 1/√2. A hidden unit vector s satisfies ⟨(u_i − shift u_i)/√2,s⟩ ≥ κ for every i. Background signs may differ. All six Params fields are public. Validity requires 0 < g ≤ R, μ > 0, κ > 0 and κμB ≤ 3R/2, where B = ⌈2²⁴(R/g)²(1 + log(1 + g/μ))/κ³⌉. Allowed algorithms start at ((1,0),0), query components cyclically, and use a fixed positive step size, updating only when the queried margin is nonpositive.",
+        "evidence": "LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: Geometry, derivative, Params, family, spec.publicInput, spec.valid; LongTails/Setups/ManySampleConvolutionalPerceptron.lean: axis."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The final output must satisfy m_i(θ) > 0 for every sample. There is no epsilon tolerance, normalized output-margin requirement, or objective-gap criterion.",
+        "evidence": "LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: Separates, spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every seed outcome, not merely almost surely or in expectation. The supplied budget is the fixed total N B component-oracle calls, including queries that cause no update.",
+        "evidence": "LongTails/Setups/TwoSidedConvolutionalPerceptron.lean: spec.successful, family; LongTails/Template.lean: executeWithTrace, Convergence; supplied extracted result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This separation problem combines signed constant backgrounds, centered defects with a common discrete-derivative separator, a contrast-dependent validity regime, and a prescribed cyclic bilinear update family."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.TwoSidedConvolutionalPerceptron.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.TwoSidedConvolutionalPerceptronAcceleration",
+          "theorem": "OracleTemplate.TwoSidedConvolutionalPerceptron.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

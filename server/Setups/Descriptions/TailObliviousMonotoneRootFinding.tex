@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Tail-Oblivious Monotone Root Finding}
+We seek a zero of a monotone, $L$-Lipschitz operator $F:E\to E$ on a finite-dimensional real inner product space $E$, where $L>0$. A given point $x^0\in E$ lies within distance $R\geq0$ of a zero $x^\star$. The oracle returns an unbiased random vector estimating $F(x)$ at each query $x$, using independent, identically distributed samples, with centered $\alpha$-moment at most $\sigma^\alpha$, where $1<\alpha\leq2$ and $\sigma\geq0$. The algorithm knows only $E$, $x^0$, and $L$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}_{P}\|F(\bar{x})\|^\alpha\leq\varepsilon^\alpha$, where $P$ is the joint law of independent algorithm and oracle randomness.
+
+The root-finding problem is
+\[
+\text{find }x\in E\text{ such that }F(x)=0.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm. The parameters $\alpha$, $\sigma$, $R$, and $\varepsilon$ may enter the oracle-call budget, but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Monotonicity and Lipschitz continuity]
+For all $x,y\in E$,
+\[
+\begin{aligned}
+\langle F(x)-F(y),x-y\rangle&\geq0,\\
+\|F(x)-F(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nearby zero]
+There exists $x^\star\in E$ such that
+\[
+F(x^\star)=0,
+\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Heavy-tailed stochastic oracle]
+Let $\Omega$ be a measurable sample space and $\nu$ a probability measure on $\Omega$. There is a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-F(x)\|^\alpha$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-F(x)\|^\alpha\bigr]
+&\leq\sigma^\alpha.
+\end{aligned}
+\]
+At call $k\geq0$, a query $x_k\in E$ receives $g(x_k,\xi_k)$, where the measurable sample variables $(\xi_k)_{k\geq0}$ are mutually independent and each has law $\nu$. The sample sequence is independent of the algorithm's randomness.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its residual moment $\|F(\bar{x})\|^\alpha$ must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|^\alpha\bigr]
+\leq\varepsilon^\alpha.
+\]
+\end{document}

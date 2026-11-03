@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.TailObliviousMonotoneRootFinding",
+  "searched_at": "2026-11-03T13:19:43.349430+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{20} \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon}\\right) \\cdot \\left(64 \\cdot \\left(\\frac{\\alpha}{\\alpha - 1}\\right)^{2} \\cdot \\left(1 + \\log\\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma}{\\varepsilon}\\right)\\right)\\right)^{2} + 2^{\\frac{20}{\\alpha - 1}} \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(64 \\cdot \\left(\\frac{\\alpha}{\\alpha - 1}\\right)^{2} \\cdot \\left(1 + \\log\\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma}{\\varepsilon}\\right)\\right)\\right)^{\\frac{2 \\cdot \\alpha}{\\alpha - 1}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.TailObliviousMonotoneRootFinding.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 20 * (1 + q.L * q.R / q.ε) *\n        (64 * (q.α / (q.α - 1)) ^ 2 * (1 + Real.log (1 + q.L * q.R / q.ε + q.σ / q.ε))) ^ 2 +\n      2 ^ (20 / (q.α - 1)) * (q.σ / q.ε) ^ (q.α / (q.α - 1)) *\n        (64 * (q.α / (q.α - 1)) ^ 2 * (1 + Real.log (1 + q.L * q.R / q.ε + q.σ / q.ε))) ^ (2 * q.α / (q.α - 1))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{20} \\cdot \\left(1 + \\frac{L \\cdot R}{\\varepsilon}\\right) \\cdot \\left(64 \\cdot \\left(\\frac{\\alpha}{\\alpha - 1}\\right)^{2} \\cdot \\left(1 + \\log\\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma}{\\varepsilon}\\right)\\right)\\right)^{2} + 2^{\\frac{20}{\\alpha - 1}} \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(64 \\cdot \\left(\\frac{\\alpha}{\\alpha - 1}\\right)^{2} \\cdot \\left(1 + \\log\\left(1 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma}{\\varepsilon}\\right)\\right)\\right)^{\\frac{2 \\cdot \\alpha}{\\alpha - 1}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.TailObliviousMonotoneRootFinding.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 20 * (1 + q.L * q.R / q.ε) *\n        (64 * (q.α / (q.α - 1)) ^ 2 * (1 + Real.log (1 + q.L * q.R / q.ε + q.σ / q.ε))) ^ 2 +\n      2 ^ (20 / (q.α - 1)) * (q.σ / q.ε) ^ (q.α / (q.α - 1)) *\n        (64 * (q.α / (q.α - 1)) ^ 2 * (1 + Real.log (1 + q.L * q.R / q.ε + q.σ / q.ε))) ^ (2 * q.α / (q.α - 1))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.TailObliviousRootFinding",
+      "namespace": "LongTails.Setups.TailObliviousMonotoneRootFinding",
+      "setup": "LongTails.Setups.TailObliviousMonotoneRootFinding",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.TailObliviousMonotoneRootFinding.spec\n  LongTails.Theorems.TailObliviousRootFinding.budget",
+      "theorem": "LongTails.Theorems.TailObliviousRootFinding.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.TailObliviousRootFinding",
+      "theorem": "LongTails.Theorems.TailObliviousRootFinding.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone operator root finding: F:E→E is globally L-Lipschitz and monotone, with F(x*)=0 and ‖x0−x*‖≤R. No objective or gradient representation is assumed. L>0 and R≥0.",
+        "evidence": "LongTails/Setups/TailObliviousMonotoneRootFinding.lean: spec.Instance, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Stochastic operator evaluations g(x,ξ) with independent identically distributed fresh seeds, E[g(x,ξ)]=F(x), and uniformly bounded central α-th moment. Each sampled evaluation counts as one oracle call; no sample reuse interface is supplied.",
+        "evidence": "LongTails/Setups/TailObliviousMonotoneRootFinding.lean: HeavyTailedOperator and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "E‖g(x,ξ)−F(x)‖^α≤σ^α for every x, with 1<α≤2 and σ≥0. Variance need not be finite when α<2.",
+        "evidence": "LongTails/Setups/TailObliviousMonotoneRootFinding.lean: HeavyTailedOperator.moment_integrable, HeavyTailedOperator.moment, spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Finite-dimensional real inner-product space with its Borel measurable structure; no dimension bound or bounded feasible domain is imposed.",
+        "evidence": "LongTails/Setups/TailObliviousMonotoneRootFinding.lean: Public."
+      },
+      {
+        "label": "other",
+        "details": "Only E, x0, and L are public. The algorithm cannot depend on α, σ, R, or ε, although the external fixed oracle budget depends on them.",
+        "evidence": "LongTails/Setups/TailObliviousMonotoneRootFinding.lean: Public, Params, spec.publicInput; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "Expectation is over both algorithm randomness and the IID oracle seed sequence, after execution with the supplied fixed oracle budget.",
+        "evidence": "LongTails/Template.lean: Convergence and execute; LongTails/Setups/TailObliviousMonotoneRootFinding.lean: spec.successful."
+      },
+      {
+        "label": "other",
+        "details": "The output X must be measurable, ‖F(X)‖^α integrable, and E‖F(X)‖^α≤ε^α for ε>0. This is an operator residual moment criterion, not an objective gap or variational inequality gap.",
+        "evidence": "LongTails/Setups/TailObliviousMonotoneRootFinding.lean: spec.successful and spec.valid."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Monotone Lipschitz root finding is classical, but this formulation combines potentially infinite-variance noise, an α-th residual moment guarantee, and an algorithm unaware of the moment order, noise scale, initial radius, and target accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.TailObliviousRootFinding.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.TailObliviousRootFinding",
+          "theorem": "LongTails.Theorems.TailObliviousRootFinding.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

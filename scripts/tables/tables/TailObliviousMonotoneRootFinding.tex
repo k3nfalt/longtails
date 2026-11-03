@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Monotone root finding with tail-oblivious updates: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/TailObliviousMonotoneRootFinding.lean}{TailObliviousMonotoneRootFinding}.}\label{tab:TailObliviousMonotoneRootFinding}
+\parbox{\linewidth}{\footnotesize A finite-dimensional real inner-product space; a monotone, globally $L$-Lipschitz operator $F$, $L>0$, with $F(x^\star)=0$ and $\|x_0-x^\star\|\le R$. IID samples have law $p$ and joint law $P$. The jointly measurable oracle $g$ is integrable, $\int g(x,\omega)\,dp=F(x)$, and its integrable central moment satisfies $\int\|g(x,\omega)-F(x)\|^\alpha\,dp\le\sigma^\alpha$, $1<\alpha\le2$, $R,\sigma\ge0$. Target: $\int\|F(Z)\|^\alpha\,dP\le\varepsilon^\alpha$, $\varepsilon>0$, for the constructed method's last completed epoch $Z$. Only $x_0,L$ are public inputs; the stopping budget depends on $\alpha,\sigma,R,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/TailObliviousRootFinding.lean}{Tail\allowbreak Oblivious\allowbreak Root\allowbreak Finding} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/TailObliviousRootFinding.md}{(review)} & $\mathcal{O}\!\left(\begin{aligned}&(1+LR/\varepsilon)b^4\ell^2\\&+2^{20/(\alpha-1)}(\sigma/\varepsilon)^b(64b^2\ell)^{2b}\end{aligned}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} RAIN \citep{tailChenLuoV4}, Thm.~4.2; finite-variance restriction $\alpha=2$ & $\mathcal{O}\!\left(\begin{aligned}&(1+LR/\varepsilon)(1+\log h)\\&+(\sigma/\varepsilon)^2h^3\end{aligned}\right)$ for $\int\|F(Z)\|\,dP\le\varepsilon$. & \textbf{(1)}: Scope extends to infinite variance ($\alpha<2$). Updates need no $\alpha,\sigma,R,\varepsilon$; stopping still does. At $\alpha=2$, matches polynomial rate and strengthens residual to second moment. & \textbf{(1)} at $\alpha=2$: deterministic factor $\ell^2$ instead of $1+\log h$; noise factor $\ell^4$ instead of $h^3$. \\
+\midrule
+\textbf{(3)} Clipped-SEG \citep{tailSadievV2}, Thm.~G.2 & $\mathcal{O}\!\left(\begin{aligned}&1+\frac{LR^2}{\delta}\log\!\left(e+\frac{LR^2}{\delta\beta}\right)\\&+\left(\frac{\sigma R}{\delta}\right)^b\log\!\left(e+\frac{\sigma R}{\delta\beta}\right)\end{aligned}\right)$ for $P\{\operatorname{Gap}_R(\bar x)\le\delta\}\ge1-\beta$. & \textbf{(1)}: No clipping or $\alpha,\sigma,R,\varepsilon$ in updates. Certifies residual instead of restricted gap; rates are not comparable. & \textbf{(1)}: Expectation only; needs global assumptions instead of assumptions on $B_{4R}(x^\star)$. No proved bound on $\|Z-x^\star\|$ converts its residual guarantee to this gap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count individual stochastic operator calls, including all stages and batches. $b=\alpha/(\alpha-1)$; $\ell=1+\log(1+LR/\varepsilon+\sigma/\varepsilon)$; $h=1+\log(1+LR/\varepsilon)$. $\delta>0$ is gap accuracy, $0<\beta<1$ is failure probability, $\bar x$ is the averaged extragradient point, and $\operatorname{Gap}_R(x)=\sup_{\|y-x^\star\|\le R}\langle F(y),x-y\rangle$. 
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

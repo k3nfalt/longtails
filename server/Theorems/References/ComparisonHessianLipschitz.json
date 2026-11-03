@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.ComparisonHessianLipschitz",
+  "searched_at": "2026-11-03T13:18:04.130912+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lfloor \\frac{400 \\cdot \\Delta \\cdot \\sqrt{\\rho}}{\\varepsilon^{\\frac{3}{2}}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left\\lceil 250000 \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right) \\cdot \\sqrt{\\frac{2 \\cdot L}{\\sqrt{\\rho \\cdot \\varepsilon}} + 4} \\cdot \\left(\\log\\left(2 + \\dim_{\\mathbb{R}}\\left(E\\right) + \\frac{L}{\\sqrt{\\rho \\cdot \\varepsilon}} + \\frac{\\sqrt{2 \\cdot L \\cdot \\Delta}}{\\varepsilon}\\right)\\right)^{3} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ComparisonHessianLipschitz.spec.Params → ℕ",
+        "value": "fun p =>\n  (⌊400 * p.Δ * √p.ρ / p.ε ^ (3 / 2)⌋₊ + 1) *\n    ⌈250000 * (↑(Module.finrank ℝ p.E) + 1) * √(2 * p.L / √(p.ρ * p.ε) + 4) *\n        Real.log (2 + ↑(Module.finrank ℝ p.E) + p.L / √(p.ρ * p.ε) + √(2 * p.L * p.Δ) / p.ε) ^ 3⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lfloor \\frac{400 \\cdot \\Delta \\cdot \\sqrt{\\rho}}{\\varepsilon^{\\frac{3}{2}}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left\\lceil 250000 \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right) \\cdot \\sqrt{\\frac{2 \\cdot L}{\\sqrt{\\rho \\cdot \\varepsilon}} + 4} \\cdot \\left(\\log\\left(2 + \\dim_{\\mathbb{R}}\\left(E\\right) + \\frac{L}{\\sqrt{\\rho \\cdot \\varepsilon}} + \\frac{\\sqrt{2 \\cdot L \\cdot \\Delta}}{\\varepsilon}\\right)\\right)^{3} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ComparisonHessianLipschitz.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌊400 * p.Δ * √p.ρ / p.ε ^ (3 / 2)⌋₊ + 1) *\n    ⌈250000 * (↑(Module.finrank ℝ p.E) + 1) * √(2 * p.L / √(p.ρ * p.ε) + 4) *\n        Real.log (2 + ↑(Module.finrank ℝ p.E) + p.L / √(p.ρ * p.ε) + √(2 * p.L * p.Δ) / p.ε) ^ 3⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ComparisonTrustAccelerated",
+      "namespace": "LongTails.Setups.ComparisonHessianLipschitz",
+      "setup": "LongTails.Setups.ComparisonHessianLipschitz",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ComparisonHessianLipschitz.spec\n  OracleTemplate.ComparisonTrustAccelerated.budget",
+      "theorem": "OracleTemplate.ComparisonTrustAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ComparisonTrustAccelerated",
+      "theorem": "OracleTemplate.ComparisonTrustAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of C² functions, permitting nonconvexity, with globally L-Lipschitz gradient, ρ-Lipschitz Hessian in operator norm, and f(x₀)−inf f≤Δ. Parameters satisfy L>0, ρ>0, Δ≥0, ε>0.",
+        "evidence": "LongTails/Setups/ComparisonHessianLipschitz.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact Boolean pairwise comparison oracle: a query (x,y) returns whether f(x)≤f(y), including the specified tie convention. No function values or derivatives are supplied; answers are independent of history and seeds.",
+        "evidence": "LongTails/Setups/ComparisonHessianLipschitz.lean: spec.Query, spec.Reply, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space; the budget depends explicitly on dim E.",
+        "evidence": "LongTails/Setups/ComparisonHessianLipschitz.lean: Params.normedE, Params.innerE, Params.finiteE; supplied extracted budget."
+      },
+      {
+        "label": "other",
+        "details": "All parameters E, x₀, L, ρ, Δ, ε are public; f is hidden. Global Hessian Lipschitz continuity supplements gradient Lipschitz continuity. Output points must be x₀ or endpoints of executed comparison queries.",
+        "evidence": "LongTails/Setups/ComparisonHessianLipschitz.lean: Params, spec.Public, spec.publicInput, spec.Instance, spec.admissible, spec.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output is a finite list containing at least one x with ‖∇f(x)‖≤ε; identification of that member is not required.",
+        "evidence": "LongTails/Setups/ComparisonHessianLipschitz.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success holds for every algorithm and oracle seed, rather than merely almost surely or with high probability. The extracted budget caps all comparison calls.",
+        "evidence": "LongTails/Setups/ComparisonHessianLipschitz.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Uses comparison-only information and requires a queried-point list containing a stationary point for every seed under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ComparisonTrustAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ComparisonTrustAccelerated",
+          "theorem": "OracleTemplate.ComparisonTrustAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

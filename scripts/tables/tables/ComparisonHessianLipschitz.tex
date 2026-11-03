@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison-oracle stationarity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ComparisonHessianLipschitz.lean}{ComparisonHessianLipschitz}.}\label{tab:ComparisonHessianLipschitz}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^2$ has $L$-Lipschitz gradient and $\rho$-Lipschitz Hessian, with $f(x_0)-f(x)\leq\Delta$ for every $x$; $L,\rho,\varepsilon>0$, $\Delta\geq0$. Queries return exact bits $[f(x)\leq f(y)]$. The target is a list containing $x$ with $\|\nabla f(x)\|\leq\varepsilon$ on every run. The setup restricts list entries to $x_0$ or queried points, not to a particular method.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ComparisonTrustAccelerated.lean}{Comparison\allowbreak Trust\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ComparisonTrustAccelerated.md}{(review)} & $\mathcal{O}\!\left((1+\Delta\sqrt\rho\,\varepsilon^{-3/2})\right.$\newline $\left.{}\cdot(n+1)(1+q)\ell^3\right)$ comparisons & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[Thm.~8, v1]{chltWang2026} & $\mathcal{O}\!\left((1+\Delta\sqrt\rho\,\varepsilon^{-3/2})\right.$\newline $\left.{}\cdot n^2\operatorname{polylog}(n,L,\rho,\varepsilon^{-1})\right)$ comparisons; success $2/3$. & \textbf{(1)}: leading cost saves $n/(1+q)$ up to logs when $n\gg(1+q)\ell^3$; deterministic instead of success $2/3$. & \textbf{(1)} loses second-order accuracy $\lambda_{\min}(\nabla^2 f)\geq-\sqrt{\rho\varepsilon}$; polynomial $L^{1/2}$ dependence, worse when $n\lesssim q$. \\
+\midrule
+\textbf{(3)} \citep[Thm.~4, v1]{csZhangLi2024v1} & $\mathcal{O}\!\left((1+L\Delta/\varepsilon^2)n\log(2+n)\right)$ comparisons; selected point succeeds with probability $2/3$. & \textbf{(1)}: leading cost saves $q$ up to logs for $\varepsilon\ll L^2/\rho$. At $L=\rho=\Delta=1$, $n=\varepsilon^{-1/2}$: $\mathcal{O}(\varepsilon^{-9/4}\log^3(1/\varepsilon))$ versus $\mathcal{O}(\varepsilon^{-5/2}\log(1/\varepsilon))$. & \textbf{(1)} needs Lipschitz Hessian and guarantees a containing list, not a selected stationary point. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $n=\dim E$, $q=(L^2/(\rho\varepsilon))^{1/4}$, $\ell=\log(2+n+L/\sqrt{\rho\varepsilon}+\sqrt{L\Delta}/\varepsilon)$. $\operatorname{polylog}$ denotes the logarithmic factors suppressed in the cited bound. Leading-cost comparisons assume $\Delta\sqrt\rho\,\varepsilon^{-3/2}\gtrsim1$; the numerical regime is as $\varepsilon\downarrow0$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

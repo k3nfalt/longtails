@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Derivative Convolutional Perceptron Separation}
+We seek to separate samples $b_0,\ldots,b_n\in\mathbb{R}^d$, where $d\geq1$ and $n\geq0$ are integers, using parameters $\theta=((a_1,a_2),w)\in\mathbb{R}^2\times\mathbb{R}^d$. With $S$ denoting the cyclic coordinate shift, the margin is $m_i(\theta)=a_1\langle b_i,w\rangle+a_2\langle Sb_i,w\rangle$. Each sample comprises a bounded, nonzero constant background and a small centered defect; the normalized cyclic differences of the defects share a unit separator with positive margin. The defect scale satisfies a quantitative smallness condition relative to the background bounds and derivative margin. The oracle returns $m_i(\theta)$ and its parameter derivative at a queried pair $(i,\theta)$. The goal is an output $\bar{\theta}$ with $m_i(\bar{\theta})>0$ for every sample and every realization of algorithm randomness.
+
+Equip the feature space $\mathbb{R}^d$ with its Euclidean inner product and norm. Index coordinates by $j=0,\ldots,d-1$, and write
+\[
+(Sv)_j=v_{(j-1)\bmod d},
+\qquad
+u=\frac{1}{\sqrt d}(1,\ldots,1).
+\]
+The task is strict feasibility of all sample margins in the parameter space $\mathbb{R}^2\times\mathbb{R}^d$. The algorithm receives $d,n,g,R,\mu,\kappa$, where
+\[
+0<g\leq R,\qquad \mu>0,\qquad 0<\kappa\leq1;
+\]
+the samples and their geometric witnesses are accessible only through the oracle.
+
+Our assumptions:
+\begin{assumption}[Background and derivative separation]
+There exist scalars $c_0,\ldots,c_n\in\mathbb{R}$, defects $v_0,\ldots,v_n\in\mathbb{R}^d$, and a common separator $s\in\mathbb{R}^d$ such that $\|s\|=1$ and, for every $i=0,\ldots,n$,
+\[
+\begin{aligned}
+b_i&=\frac{c_i}{\sqrt2}u+\mu v_i,\
+g&\leq |c_i|\leq R,\
+\langle u,v_i\rangle&=0,\qquad \|v_i\|\leq\frac12,\
+\left\langle\frac{v_i-Sv_i}{\sqrt2},s\right\rangle&\geq\kappa.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Contrast scale]
+The contrast and background scales satisfy
+\[
+\frac{\mu}{R}\leq
+\frac{\kappa^{20}}{2^{400}}\left(\frac{g}{R}\right)^{24}.
+\]
+\end{assumption}
+
+At any query $(i,\theta)\in\{0,\ldots,n\}\times(\mathbb{R}^2\times\mathbb{R}^d)$, the oracle returns the exact scalar margin and derivative direction
+\[
+\begin{aligned}
+m_i(\theta)&=a_1\langle b_i,w\rangle
+                 +a_2\langle Sb_i,w\rangle,\
+h_i(\theta)&=\bigl((\langle b_i,w\rangle,\langle Sb_i,w\rangle),
+                    a_1b_i+a_2Sb_i\bigr).
+\end{aligned}
+\]
+Here $h_i(\theta)$ represents the parameter derivative under the Euclidean coordinate pairing. Initialization is chosen by the algorithm. After the allotted oracle calls, its output $\bar{\theta}\in\mathbb{R}^2\times\mathbb{R}^d$ must satisfy
+\[
+m_i(\bar{\theta})>0
+\qquad\text{for every }i=0,\ldots,n,
+\]
+for every realization of its randomness.
+\end{document}

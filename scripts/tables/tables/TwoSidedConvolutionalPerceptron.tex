@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/TwoSidedConvolutionalPerceptron.lean}{TwoSidedConvolutionalPerceptron}.}\label{tab:TwoSidedConvolutionalPerceptron}
+\parbox{\linewidth}{\footnotesize Samples $D_i=\alpha_i e+\mu u_i\in\mathbb R^d$, $d,N\ge1$, $0<g\le|\alpha_i|\le R$, $\mu,\kappa>0$, $u_i\perp e$, $\|u_i\|\le1/\sqrt2$, and a unit $w$ with $\langle (u_i-Pu_i)/\sqrt2,w\rangle\ge\kappa$. The setup requires $\mu\kappa\lceil 2^{24}(R/g)^2[1+\log(1+g/\mu)]/\kappa^3\rceil\le3R/2$. Exact sample margin/gradient queries; the permitted family cyclically updates on nonpositive margins from $((1,0),0)$. Target: $m(D_i;\theta)>0$ for every sample, deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/TwoSidedConvolutionalPerceptronAcceleration.lean}{Two\allowbreak Sided\allowbreak Convolutional\allowbreak Perceptron\allowbreak Acceleration} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/TwoSidedConvolutionalPerceptronAcceleration.md}{(review)} & $\mathcal{O}\!\left(\dfrac{N R^2}{g^2\kappa^3}[1+\log(1+g/\mu)]\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Read-and-solve (elementary derived bound) & $\mathcal{O}(N)$ queries; offline linear feasibility on $(D_i-PD_i)/\sqrt2$. & \textbf{(1)}: No established improvement in problem-class complexity. Analyzes jointly learned filter dynamics; \textbf{(2)} lies outside the permitted family. & \textbf{(1)}: Higher query cost; needs $\kappa,R$ for tuning and $g,\mu$ for stopping; requires small contrast. \textbf{(2)} is parameter-free. \\
+\midrule
+\textbf{(3)} Fixed-filter perceptron, derived bound \citep{tsNovikoff1962} & $\mathcal{O}(N/\kappa^2)$, including cyclic scans; filter $(1,-1)/\sqrt2$, features $\mu r_i$. & \textbf{(1)}: No established improvement in complexity. New analysis of coupled filter/weight dynamics; \textbf{(3)} freezes the filter outside the permitted family. & \textbf{(1)}: Extra $(R/g)^2\kappa^{-1}[1+\log(1+g/\mu)]$ factor in the bound; small-contrast restriction. Same oracle suffices for \textbf{(3)}. \\
+\midrule
+\textbf{(4)} Two-sample QPA \citep{tsTyurinV2}, Theorem 5.1 & $\mathcal{O}\!\left(\dfrac{\sqrt d}{\nu}A[1+\log(\sqrt d A/\nu)]\right)$; probability $1-\rho$; dataset (5), $0<\nu\le1/10$, $h>0$, theorem-tuned Gaussian noise. & \textbf{(1)}: Method-specific analysis for $N$ samples and signed intensities, deterministic identity start. Disjoint classes: \textbf{(4)} has a zero derivative feature; rates not comparable. & \textbf{(1)} does not cover \textbf{(4)}'s dataset or generic perturbed starts; uses margin-tuned step $\kappa/(96R)$ and small contrast. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N$: sample count; $P$: circular shift; $e=\mathbf1/\sqrt d$; $r_i=(u_i-Pu_i)/\sqrt2$; $m(b;(c_1,c_2),v)=c_1\langle b,v\rangle+c_2\langle Pb,v\rangle$. In \textbf{(4)}, $\nu$ is its dataset perturbation, $\rho\in(0,1)$ its failure probability, $h=|\langle\theta_0,v_{\nu,+}\rangle|$, $v_{\nu,+}$ its unit positive-eigenvalue direction, $q=\|\theta_0\|^2/h^2$, and $A=[1+\log(q/\rho^3)][1+\log(\sqrt d q/\nu)]$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

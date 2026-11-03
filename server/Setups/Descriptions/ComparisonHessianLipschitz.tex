@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Comparison-Based Nonconvex Stationarity}
+We consider a twice continuously differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. Its gradient and Hessian are Lipschitz with constants $L>0$ and $\rho>0$, respectively. A given point $x^0\in E$ satisfies $f(x^0)-f(x)\leq\Delta$ for all $x\in E$, where $\Delta\geq0$. The oracle returns the truth value of $f(x)\leq f(y)$ for queried points $x,y\in E$. For $\varepsilon>0$, the goal is a finite output list containing a point with gradient norm at most $\varepsilon$ in every realization; each listed point must be $x^0$ or a queried point.
+
+We seek approximate stationarity for the optimization problem
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The Hessian $\nabla^2 f(x)$ acts from $E$ to $E$. The algorithm receives $E$, $x^0$, $L$, $\rho$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Gradient and Hessian regularity]
+The function $f$ belongs to $C^2(E;\mathbb{R})$. For every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}&\leq\rho\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given point $x^0$ satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Queries may be any pair $(x,y)\in E\times E$. The comparison oracle returns
+\[
+c(x,y)=\mathbf{1}\{f(x)\leq f(y)\},
+\]
+so equality produces a true reply.
+
+We restrict the output to a finite list of previously queried points and the given starting point. Precisely, in any run with $m$ completed queries $(u_k,v_k)$, $1\leq k\leq m$, the output list $\mathcal{X}$ must satisfy
+\[
+x\in\mathcal{X}
+\quad\Longrightarrow\quad
+x\in\{x^0\}\cup\bigcup_{k=1}^{m}\{u_k,v_k\}.
+\]
+This restriction holds for every call budget and every realization, even for arbitrary Boolean oracle replies. With the exact comparison oracle, the required accuracy is
+\[
+\exists x\in\mathcal{X}\;:\;\|\nabla f(x)\|\leq\varepsilon
+\qquad\text{in every realization}.
+\]
+\end{document}

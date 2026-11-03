@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-scale convolutional SGD: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteScaleConvolutionalSgd.lean}{FiniteScaleConvolutionalSgd}.}\label{tab:FiniteScaleConvolutionalSgd}
+\parbox{\linewidth}{\footnotesize Signed data $b_i=\alpha_i e/\sqrt2+\mu u_i\in\mathbb R^d$, $N,d\ge1$, satisfy $0<g\le|\alpha_i|\le R$, $u_i\perp e$, $\|u_i\|\le1/\sqrt2$, and $\langle s,(u_i-Pu_i)/\sqrt2\rangle\ge\kappa$ for a unit $s$, with $0<\kappa\le1/4$, $\mu>0$. Put $\eta=\kappa/(1000R)$, $\delta=(\eta\mu)^2$, $\rho=\eta g$; require $\delta\le1$ and $\delta\log^2(24/\delta)\le\kappa^3\rho^4/(10^{22}N^3)$. The prescribed family jointly trains a two-tap filter and readout by logistic SGD with IID uniform indices, full validation scans, periodic restarts and freezing upon separation. Initial filter coordinates are a positive scale times $(a_0+t_0,a_0-t_0)/\sqrt2$, $|a_0|\le1$, $1\le t_0\le3/2$; the initial readout is arbitrary. Target: all signed margins positive with probability at least $1-q$, $0<q<1$. One oracle call returns one sample's exact margin and parameter gradient.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteScaleConvolutionalSgd.lean}{Finite\allowbreak Scale\allowbreak Convolutional\allowbreak Sgd} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteScaleConvolutionalSgd.md}{(review)} & $\mathcal{O}\!\left(N^3(R/g)^2\kappa^{-3}\ell(1+\log(1/q))\right)$, including scans and restarts. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Fixed-filter perceptron, derived bound \citep{fscNovikoff1963} & $\mathcal{O}\!\left(N(1+\kappa^{-2})\right)$; deterministic. Fix $h=(1,-1)/\sqrt2$ and scan cyclically. & \textbf{(1)}: No established improvement in separation complexity. & \textbf{(1)}: Worse polynomial dependence on $N,R/g,\kappa^{-1}$; probabilistic guarantee; requires small contrast, nonzero backgrounds and large tuned initialization. \\
+\midrule
+\textbf{(3)} Cached feasibility, derived bound \citep{fscNovikoff1963} & $\mathcal{O}(N)$ calls at $h=(1,0),v=0$ recover all data; solve difference-feature feasibility offline, deterministically. & \textbf{(1)}: No established improvement in oracle complexity. & \textbf{(1)}: More calls and only high-probability separation. \textbf{(3)} counts no offline computation and does not train by SGD. \\
+\midrule
+\textbf{(4)} Raw-input perceptron, derived bound \citep{fscNovikoff1963} & $\mathcal{O}\!\left(N(1+R^2/(\mu^2\kappa^2))\right)$; deterministic on the common class, using raw margin $\mu\kappa/\sqrt2$ and norm bound $R$. & \textbf{(1)}: Contrast dependence $\ell$ instead of $\mu^{-2}$. At fixed $N,R,g,\kappa,q$, sufficiently small admissible $\mu$ improves this upper bound; no lower bound for linear methods. & \textbf{(1)}: Loses deterministic separation; needs small contrast and tuned initialization. \\
+\midrule
+\textbf{(5)} \citep[Thm.~2.1]{fscTyurin2026v2} & No finite separation-call bound: full-batch GD tends to quadratic-perceptron dynamics as initialization norm tends to infinity. & \textbf{(1)}: Finite-time, high-probability analysis of actual joint logistic SGD with finite initialization on the stated class. & \textbf{(1)}: Requires derivative separability, nonzero backgrounds and severe small contrast. \textbf{(5)} is a dynamics correspondence, not a competing rate. \\
+\midrule
+\textbf{(6)} \citep[Thm.~5.1]{fscTyurin2026v2} & $\mathcal{O}\!\left((\sqrt d/\nu)A[1+\log((\sqrt d/\nu)A)]\right)$ noisy quadratic-perceptron steps; two fixed samples, $0<\nu\le0.1$, tuned noise, nonzero initial signal. & \textbf{(1)}: Handles arbitrary $N$ and conflicting derivative directions with actual logistic SGD, rather than a two-sample surrogate. Rates are not comparable. & \textbf{(1)} excludes \textbf{(6)}'s pure constant reference sample; the dataset classes are not nested. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $e$ is the unit constant vector; $P$ is cyclic shift; $g,R$ bound background magnitudes; $\mu$ is contrast; $\kappa$ is derivative-feature margin; $q$ is failure probability; $\ell=1+\log_+(R/(\kappa\mu))$, $\log_+x=\max\{0,\log x\}$. In \textbf{(6)}, signed samples are $\mathbf1$ and $-(\mathbf1+\nu e_1)$; $\nu$ is that paper's contrast, $C=\|\theta_0\|^2/|\langle\theta_0,v_{\nu,+}\rangle|^2$, and $A=(1+\log(C/q^3))(1+\log(\sqrt d\,C/\nu))$; $v_{\nu,+}$ is its positive signal eigenvector. Each step checks at most two sample margins/gradients.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
