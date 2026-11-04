@@ -1,7 +1,7 @@
 <h1 align="center"><img src="server/wordmark.svg" width="227" height="60" align="middle" alt="LongTails"> <img src="server/logo.png" width="100" height="100" align="middle" alt="LongTails logo"></h1>
 
 <h3 align="center">Discovering new results in mathematical optimization.<br>
-More than 25 new results so far—and more to come.</h3>
+More than 75 new results so far—and more to come.</h3>
 
 <p align="center"><a href="https://k3nfalt.github.io/longtails/"><strong>Explore the results on our website →</strong></a></p>
 
@@ -77,7 +77,7 @@ theorem result : Convergence spec budget ...
 
 ## Our Achievements
 
-Using LongTails, we have already discovered **more than 25 new complexity bounds** across different areas of optimization, covering both existing and new setups.
+Using LongTails, we have already discovered **more than 75 new complexity bounds** across different areas of optimization, covering both existing and new setups.
 
 **One example: $(L_0,L_1)$-smooth optimization.** Assume that $\lVert\nabla^2 f(x)\rVert\le L_0+L_1\lVert\nabla f(x)\rVert$ (a recent popular assumption in optimization). We establish a new accelerated, gradient-only guarantee for convex functions, with improved dependence on $L_1$ and the initial distance bound $R$. For simplicity, we hide logarithmic factors using $\widetilde O$ notation.
 
