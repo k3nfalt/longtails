@@ -63,7 +63,7 @@ The Researcher must not write the Reviewer’s assessment or approve its own wor
 
 3. Git workflow and authentication
 
-Delivery is local unless additional PR delivery instructions are supplied. For local delivery, use the current local HEAD as the recorded starting base for both agents; do not fetch or require a remote branch. No GitHub operation or bot credentials are required. If reading GitHub is necessary, use the user's configured authentication.
+Delivery is local unless additional PR delivery instructions are supplied. Record the current local `main` commit with `git rev-parse refs/heads/main` and use that starting base for both agents. Do not fetch or pull; use local `main` even if it is behind remote `origin/main`. For local delivery, no remote branch, GitHub operation, or bot credentials are required. If reading GitHub is necessary, use the user's configured authentication.
 
 Create a separate Git worktree and unique working branch for each agent. Use unique paths and branch names so other Codex sessions can work concurrently. Do not overwrite existing work, reuse another session’s worktree, or change its branches. Preserve existing user changes.
 

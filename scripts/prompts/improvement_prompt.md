@@ -44,7 +44,7 @@ The Researcher must not write the Reviewer’s assessment or approve its own wor
 
 3. Git workflow
 
-Read and follow section 3 (Git workflow and authentication) of `scripts/prompts/research_pr_delivery.md`. Use separate worktrees based on freshly fetched `origin/main` and deliver the approved improvement on a unique `agent/<unique-task-name>` branch with exactly one research commit. Keep the recorded starting base even if `origin/main` advances; being behind alone does not require rebasing or repeating validation. Never push or merge into `main`.
+Read and follow section 3 (Git workflow and authentication) of `scripts/prompts/research_pr_delivery.md`. Use separate worktrees based on the recorded current local `main` commit, without fetching or pulling, even if it is behind remote `origin/main`, and deliver the approved improvement on a unique `agent/<unique-task-name>` branch with exactly one research commit. Keep the recorded starting base even if `origin/main` advances; being behind alone does not require rebasing or repeating validation. Never push or merge into `main`.
 
 4. Researcher
 
