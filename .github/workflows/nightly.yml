@@ -30,12 +30,17 @@ jobs:
           fetch-depth: 0
 
       - name: Tag verified commit
+        id: nightly
         shell: bash
         run: |
           tag="nightly-$(date -u +%Y-%m-%d)"
           existing=$(git tag --points-at "$GITHUB_SHA" --list 'nightly-*')
-          if [[ -n "$existing" ]] || git show-ref --verify --quiet "refs/tags/$tag"; then
-            echo "A nightly tag already exists for this commit or UTC date; skipping."
+          if [[ -n "$existing" ]]; then
+            echo "tag=$(echo "$existing" | sort | tail -n 1)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            echo "A nightly tag already exists for another commit on this UTC date; skipping."
             exit 0
           fi
           cat > "$RUNNER_TEMP/nightly-tag.txt" <<EOF
@@ -55,3 +60,41 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git tag -a "$tag" "$GITHUB_SHA" -F "$RUNNER_TEMP/nightly-tag.txt"
           git push origin "refs/tags/$tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Download verified Lean build
+        if: steps.nightly.outputs.tag != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: lean-build-Linux-X64-${{ github.sha }}
+          path: ${{ runner.temp }}/nightly-build
+
+      - name: Publish anonymous build download
+        if: steps.nightly.outputs.tag != ''
+        uses: actions/github-script@v7
+        env:
+          NIGHTLY_TAG: ${{ steps.nightly.outputs.tag }}
+        with:
+          script: |
+            const fs = require('fs');
+            const repo = context.repo;
+            const tag = process.env.NIGHTLY_TAG;
+            let release;
+            try {
+              release = (await github.rest.repos.getReleaseByTag({...repo, tag})).data;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              release = (await github.rest.repos.createRelease({
+                ...repo, tag_name: tag, name: tag, prerelease: true,
+                make_latest: 'false',
+                body: `Verified Lean build for ${context.sha}.`,
+              })).data;
+            }
+            const name = `lean-build-Linux-X64-${context.sha}.tar.gz`;
+            if (!release.assets.some(asset => asset.name === name)) {
+              await github.rest.repos.uploadReleaseAsset({
+                ...repo, release_id: release.id, name,
+                data: fs.readFileSync(`${process.env.RUNNER_TEMP}/nightly-build/lean-build.tar.gz`),
+                headers: {'content-type': 'application/gzip'},
+              });
+            }

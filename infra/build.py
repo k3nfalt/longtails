@@ -3,10 +3,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+from build_cache import restore_cache
+
 
 def main():
     root = Path(__file__).resolve().parents[1]
     args = sys.argv[1:]
+    use_cache = "--cache" in args
+    args = [arg for arg in args if arg != "--cache"]
     lock_path = subprocess.check_output(
         ["git", "rev-parse", "--git-path", "longtails-build.lock"],
         cwd=root,
@@ -23,6 +27,8 @@ def main():
             )
 
         run(["lake", "exe", "cache", "get"])
+        if use_cache:
+            restore_cache(root)
         if run(["lake", "exe", "mk_all", "--lib", "LongTails"], check=False).returncode:
             run(["lake", "exe", "mk_all", "--lib", "LongTails", "--check"])
         run(["lake", "build", *args])
