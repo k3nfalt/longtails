@@ -8,7 +8,7 @@ import subprocess
 import tarfile
 import tempfile
 import urllib.request
-from pathlib import Path, PurePosixPath
+from pathlib import PurePosixPath
 from urllib.parse import quote
 
 REPOSITORY = "k3nfalt/longtails"
@@ -35,7 +35,7 @@ def compatible(root, commit):
     )
 
 
-def unpack_cache(archive, root, staging):
+def unpack_cache(archive, root):
     build = root / ".lake/build"
     if (
         (root / ".lake").is_symlink()
@@ -67,14 +67,13 @@ def unpack_cache(archive, root, staging):
         for member in members:
             if member.name in CONFIG or member.isdir():
                 continue
-            target = staging / member.name
+            target = root / member.name
             target.parent.mkdir(parents=True, exist_ok=True)
+            target.unlink(missing_ok=True)
             with tar.extractfile(member) as source, target.open("wb") as dest:
                 shutil.copyfileobj(source, dest)
             target.chmod(member.mode & 0o777)
             os.utime(target, (member.mtime, member.mtime))
-
-    shutil.copytree(staging / ".lake/build", build, dirs_exist_ok=True)
 
 
 def find_cache(root):
@@ -113,12 +112,14 @@ def restore_cache(root):
             f"https://github.com/{REPOSITORY}/releases/download/"
             f"{quote(tag, safe='')}/{name}"
         )
-        with tempfile.TemporaryDirectory(prefix="longtails-cache-") as temp:
-            staging = Path(temp)
-            archive = staging / "build.tar.gz"
-            with open_url(url) as response, archive.open("wb") as dest:
-                shutil.copyfileobj(response, dest)
-            unpack_cache(archive, root, staging)
+        (root / ".lake").mkdir(exist_ok=True)
+        with tempfile.NamedTemporaryFile(
+            prefix="cache-", suffix=".tar.gz", dir=root / ".lake"
+        ) as archive:
+            with open_url(url) as response:
+                shutil.copyfileobj(response, archive)
+            archive.flush()
+            unpack_cache(archive.name, root)
         print(f"Restored nightly cache from {tag}.", flush=True)
     except (
         OSError,
