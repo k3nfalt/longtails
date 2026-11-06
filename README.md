@@ -106,7 +106,7 @@ Explore more [setups](LongTails/Setups/) and [complexity bounds](LongTails/Theor
 
 ## How to Use It?
 
-**Install the prerequisites.** Install Elan and Python 3 ([REQUIREMENTS.md](REQUIREMENTS.md)). Clone the repository. Run `./build.sh` from its root (It downloads the Mathlib cache, plus roughly 30 minutes to an hour for the full build). For local use, it is sufficient to build just the theorem you need: `./build.sh LongTails.Theorems.YourTheorem`. This is much faster, about 2–3 minutes for the tutorial theorem after the cache download.
+**Install the prerequisites.** Install Elan and Python 3 ([REQUIREMENTS.md](REQUIREMENTS.md)). Clone the repository. Run `./build.sh` from its root. Right now, it takes a lot of time due to the large number of results. So, for local use, it is sufficient to build just the theorem you need: `./build.sh LongTails.Theorems.YourTheorem`. This is much faster, about 2–3 minutes for the tutorial theorem after the cache download. Another option on Linux x64 is to use `./build.sh --cache` to download the newest compatible verified nightly build and rebuild only what changed.
 
 **Choose a setup and start researching.** Explore the existing [setups](LongTails/Setups/) or ask an agent to formalize a new **Setup**. Check that its assumptions, oracle model, and accuracy criterion match your intended problem, then ask your agent to design a method and prove a new **Complexity** bound. Finally, run `python3 run_comparator.py YourTheorem.lean` to independently audit the theorem and its **Complexity** bound against the **Setup**.
 
