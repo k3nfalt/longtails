@@ -1,0 +1,77 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Higher-Order Smooth Bilevel Optimization}
+We consider minimizing $F(x)=f(x,y^\star(x))$ over a finite-dimensional real inner product space $X$, where $y^\star(x)$ minimizes $g(x,\cdot)$ over another such space $Y$. The functions $f,g:X\times Y\to\mathbb{R}$ are respectively twice and three times continuously differentiable, with bounded first derivative of $f$, Lipschitz derivatives through these orders, and uniform strong convexity of the lower problem. Given initial points have bounded outer objective gap and lower gradient residual. The oracle returns both function values and first derivatives. For $\varepsilon>0$, the goal is an output $\bar{x}$ where $F$ is differentiable and $\|\nabla F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+Write
+\[
+\begin{aligned}
+y^\star(x)&=\operatorname*{arg\,min}_{y\in Y}g(x,y),\\
+F(x)&=f(x,y^\star(x)).
+\end{aligned}
+\]
+The lower minimizer exists and is unique by the assumptions below. The bilevel problem is
+\[
+\min_{x\in X} F(x).
+\]
+On $X$ and $Y$, norms are induced by their inner products. On $Z=X\times Y$, we use the product norm
+\[
+\|(x,y)\|_Z=\max\{\|x\|,\|y\|\}.
+\]
+For a scalar function $h$ on $Z$, write $\mathrm{d}h$ for its first derivative and $\nabla^2 h$, $\nabla^3 h$ for its second and third derivatives, viewed as bilinear and trilinear forms on $Z$. Their norms $\|\cdot\|_{\mathrm{op}}$ are the induced operator norms for this product norm. Gradients on $X$ and $Y$ use the respective inner products.
+
+The algorithm receives $X$, $Y$, initial points $x^0\in X$, $y^0\in Y$, and all parameters $L,\mu,\Delta,G,\varepsilon$, whose ranges are
+\[
+0<\mu\leq L,\qquad \Delta>0,\qquad G\geq0,\qquad \varepsilon>0.
+\]
+
+Our assumptions:
+\begin{assumption}[Higher-order regularity]
+The functions satisfy $f\in C^2(Z;\mathbb{R})$ and $g\in C^3(Z;\mathbb{R})$. For every $z,w\in Z$,
+\[
+\begin{aligned}
+\|\mathrm{d}f(z)\|_{\mathrm{op}}&\leq L,\\
+\|\mathrm{d}f(z)-\mathrm{d}f(w)\|_{\mathrm{op}}&\leq L\|z-w\|_Z,\\
+\|\nabla^2 f(z)-\nabla^2 f(w)\|_{\mathrm{op}}&\leq L\|z-w\|_Z,\\
+\|\mathrm{d}g(z)-\mathrm{d}g(w)\|_{\mathrm{op}}&\leq L\|z-w\|_Z,\\
+\|\nabla^2 g(z)-\nabla^2 g(w)\|_{\mathrm{op}}&\leq L\|z-w\|_Z,\\
+\|\nabla^3 g(z)-\nabla^3 g(w)\|_{\mathrm{op}}&\leq L\|z-w\|_Z.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Lower-level strong convexity]
+For every $x\in X$ and $y,v\in Y$,
+\[
+g(x,v)\geq g(x,y)
++\langle\nabla_y g(x,y),v-y\rangle
++\frac{\mu}{2}\|v-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+The given initial points satisfy
+\[
+\begin{aligned}
+F(x^0)-F(x)&\leq\Delta &&\text{for every }x\in X,\\
+\|\nabla_y g(x^0,y^0)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any $z\in Z$. A single oracle call returns the exact tuple
+\[
+\bigl(f(z),g(z),\mathrm{d}f(z),\mathrm{d}g(z)\bigr).
+\]
+After the allotted oracle calls, the output $\bar{x}\in X$ must satisfy
+\[
+F\text{ is differentiable at }\bar{x},
+\qquad \|\nabla F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

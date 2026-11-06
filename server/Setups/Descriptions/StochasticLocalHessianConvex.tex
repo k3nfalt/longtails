@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Convex Local Hessian Regularity}
+We consider minimizing a twice continuously differentiable convex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d$ is a nonnegative integer. Its Hessian is locally Lipschitz with a bound depending on the gradient norm. A given point $x^0$ has bounded distance and objective gap to a global minimizer $x^\star$. Two oracles return unbiased stochastic gradients with bounded variance using independent identically distributed samples, and deterministic uniformly accurate Hessian approximations. For $\varepsilon>0$ and $\beta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $P\{f(\bar{x})-f(x^\star)>\varepsilon\}\leq\beta$, where $P$ is the joint law of oracle and algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm $\|\cdot\|$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$ on linear maps from $\mathbb{R}^d$ to itself. The parameters satisfy
+\[
+\begin{aligned}
+M_0,M_1,\delta,\sigma&\geq 0, & \rho,R,\Delta,\varepsilon&>0,\\
+\beta&\in(0,1).
+\end{aligned}
+\]
+The algorithm receives $d$, the measurable sample space $\Omega$, $x^0\in\mathbb{R}^d$, and all the parameters $M_0,M_1,\rho,\delta,\sigma,R,\Delta,\varepsilon,\beta$.
+
+Our assumptions:
+\begin{assumption}[Convexity and initialization]
+The function $f$ belongs to $C^2(\mathbb{R}^d)$ and satisfies, for every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
+\]
+There is a global minimizer $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Local Hessian regularity]
+For every $x,y\in\mathbb{R}^d$ with $\|y-x\|\leq\rho$,
+\[
+\|\nabla^2 f(y)-\nabla^2 f(x)\|_{\mathrm{op}}
+\leq \bigl(M_0+M_1\|\nabla f(x)\|\bigr)\|y-x\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients and approximate Hessians]
+There are a probability measure $\nu$ on $\Omega$, a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$, and a measurable map $H$ taking each point in $\mathbb{R}^d$ to a linear operator on $\mathbb{R}^d$. For every $x\in\mathbb{R}^d$, the random vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable under $\xi\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2,\\
+\|H(x)-\nabla^2 f(x)\|_{\mathrm{op}}&\leq\delta.
+\end{aligned}
+\]
+The sample sequence $(\xi_k)_{k\geq0}$ consists of measurable, mutually independent random variables with common law $\nu$, and is independent of the algorithm's randomness. At the $k$th oracle call, a gradient query at $x$ returns $g(x,\xi_k)$, while a Hessian query at $x$ returns the deterministic operator $H(x)$.
+\end{assumption}
+
+Queries to either oracle may be made at any point of $\mathbb{R}^d$. Gradient calls and Hessian calls have separately counted budgets. After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable and satisfy
+\[
+P\bigl\{f(\bar{x})-f(x^\star)>\varepsilon\bigr\}\leq\beta.
+\]
+\end{document}

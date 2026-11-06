@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SelfConcordantBFGS.lean}{SelfConcordantBFGS}.}\label{tab:SelfConcordantBFGS}
+\parbox{\linewidth}{\footnotesize On an open convex $D\subseteq\mathbb R^d$, $f$ has three derivatives, positive-definite Hessian, closed sublevel sets, and a minimizer $x_\star\in D$, with $|D^3f(x)[h,v,v]|\leq2\sqrt{D^2f(x)[h,h]}D^2f(x)[v,v]$. Assume $x_0\in D$, $B_0\succ0$, initial gap at most $\Delta$, mismatch at most $\Phi_0$, and $0<c_1<c_2<1$. The setup requires unmodified BFGS; each oracle call returns an admissible weak-Wolfe step and exact gradient. Target: $f(x_T)-f(x_\star)\leq\varepsilon$ for every admissible oracle realization.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SelfConcordantBFGS.lean}{Self\allowbreak{}Concordant\allowbreak{}BFGS} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SelfConcordantBFGS.md}{(review)} &
+$\mathcal{O}\!\left(\begin{aligned}&\frac{(d+1)(\Delta+1)^2}{c_1^3m^2}\\&+\frac{(d+1)^2(\Delta+1)}{c_1m^4}\\&+\frac{\Phi_0}{m^2}+\frac{\log(2+1/\varepsilon)}m\end{aligned}\right)$ Wolfe calls, including initialization. & & \\
+\midrule[1.2pt]
+\textbf{(2)} BFGS \citep{scbJinMokhtari2025v2}, Thms.~3.1, 3.3, 4.3; App.~D &
+$\mathcal{O}\!\left(1+\min\!\left\{\begin{aligned}&\Psi(\bar B)+(1+D_0)^2\ell,\\&\Omega+\ell,\\&\Omega+\frac{\ell}{\log(2+\ell/\Omega)}\end{aligned}\right\}\right)$ Wolfe calls; fixed $c_1,c_2$, $c_1<1/2$. Restricted to strongly self-concordant objectives on $\mathbb R^d$. &
+\textbf{(1)}: Scope extends to standard self-concordance, including barriers. For $B_0=aH_\star$, $a\gg1$, mismatch dependence becomes $d\log a$ instead of linear in $a$ (other parameters fixed). Allows $c_1\geq1/2$.\par For $B_0\approx H_\star$, $1\leq d\ll\Delta$, $\log(1/\varepsilon)\lesssim d\Delta^2$: $\mathcal{O}(d\Delta^2)$ versus the $\mathcal{O}(\Delta^3+\log(1/\varepsilon))$ bound (93); not dominance over the displayed minimum. &
+\textbf{(1)}: No superlinear phase; extra $d^2(1+\Delta)$ can hurt when $d\gtrsim\Delta$. Larger constants. Internal line-search evaluations unbounded here; \textbf{(2)} bounds them. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $m=\min\{c_1,1-c_2\}$; $\Delta\geq f(x_0)-f(x_\star)$; $\Phi_0\geq2\log\det(B_0+H_0)-\log\det B_0-\log\det H_0-2d\log2$, $H_0=\nabla^2f(x_0)$. For \textbf{(2)}, normalize an $M$-strongly self-concordant objective by $M^2/4$, including its gap and accuracy. $D_0=2\omega^{-1}(\Delta)$, $\omega(s)=s-\log(1+s)$; $H_\star=\nabla^2f(x_\star)$, $\widetilde B=H_\star^{-1/2}B_0H_\star^{-1/2}$, $\bar B=\widetilde B/(1+D_0)$, $\Psi(A)=\operatorname{tr}A-d-\log\det A$, $\Omega=\Psi(\widetilde B)+[\Psi(\bar B)+(1+D_0)^2]D_0$, $\ell=1+\log_+(\Delta/\varepsilon)$, $\log_+s=\max\{0,\log s\}$. Quotients at $\Omega=0$ use their limiting value.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

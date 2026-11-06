@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticConstrainedQuasar.lean}{StochasticConstrainedQuasar}.}\label{tab:StochasticConstrainedQuasar}
+\parbox{\linewidth}{\footnotesize A finite-dimensional real Hilbert space; compact convex $X$ of diameter at most $D>0$, with $x_0,x^\star\in X$ and $x^\star\in\arg\min_X f$. The differentiable objective has $L$-Lipschitz gradient on $X$, $L>0$, and $\gamma(f(x)-f(x^\star))\le\langle\nabla f(x),x-x^\star\rangle$ for $x\in X$, $0<\gamma\le1$. Access: exact projection and jointly measurable IID stochastic gradients, with $\int g(x,\omega)\,dp=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp\le\sigma^2$. Target: $P\{\widehat x\in X,\ f(\widehat x)-f(x^\star)\le\varepsilon\}\ge1-\delta$, $\varepsilon>0$, $0<\delta<1$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticConstrainedQuasarHighProbability.lean}{Stochastic\allowbreak Constrained\allowbreak Quasar\allowbreak High\allowbreak Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticConstrainedQuasarHighProbability.md}{(review)} & $\mathcal{O}\!\left(h\ell^2\left[1+\frac{\sqrt{LD^2/\varepsilon}}{\gamma}+\frac{\sigma^2D^2}{\gamma^2\varepsilon^2}\right]\right)$ gradient-plus-projection calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{scqMartinez2026}, Thm.~5 & $\mathcal{O}\!\left(\ell^2[1+\gamma^{-1}\sqrt{LD^2/\varepsilon}]\right)$ value, gradient and projection calls; deterministic, $\sigma=0$. & \textbf{(1)}: Scope: finite-variance stochastic gradients. Oracle: removes function values. Matches deterministic polynomial rate at $\sigma=0$. & \textbf{(1)}: At $\sigma=0$, pays $h$ and gives probability $1-\delta$ rather than certainty. \\
+\midrule
+\textbf{(3)} QASGD \citep{scqFu2023}, Cor.~3.3 & $\mathcal{O}\!\left([1+R\sqrt{L/\varepsilon}+\frac{\sigma^2R^2}{\gamma^2\varepsilon^2}]\ell_R(\varepsilon)\right)$ component value/gradient calls; expected gap. Unconstrained; $L$-smooth components, bounded gradient second moment. & \textbf{(1)}: Scope: constrained boundary minimizers; variance instead of gradient-second-moment bound. Oracle: no component values. High-confidence guarantee. & \textbf{(1)}: Needs compact $X$, known $D$; $D$ replaces $R$, potentially costly for $R\ll D$. \\
+\midrule
+\textbf{(4)} Derived bound: \citep{scqFu2023}, Cor.~3.3 + Markov & $\mathcal{O}\!\left([1+R\sqrt{L/(\varepsilon\delta)}+\frac{\sigma^2R^2}{\gamma^2\varepsilon^2\delta^2}]\ell_R(\varepsilon\delta)\right)$ component value/gradient calls; confidence $1-\delta$. Restrictions of \textbf{(3)}. & \textbf{(1)}: On overlap with $R\asymp D$, noise-term confidence dependence becomes $h\ell^2$ instead of $\delta^{-2}\ell_R(\varepsilon\delta)$; improves when the latter dominates. & \textbf{(1)}: Requires a known compact feasible set containing a global minimizer; $D$ may greatly exceed $R$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $h=1+\log(1/\delta)$; $\ell=1+\log(2+LD^2/(\gamma^2\varepsilon))$; $\ell_R(a)=1+\log(1+LR^2/(\gamma a))$; $R$ bounds initial distance to a global minimizer. In \textbf{(3)}, \textbf{(4)}, $\sigma^2$ bounds the stochastic gradient's second moment. $p$ is the sample law and $P$ the IID sequence law. Costs include search and inner-solve calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

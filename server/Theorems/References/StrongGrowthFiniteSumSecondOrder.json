@@ -1,0 +1,118 @@
+{
+  "setup": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder",
+  "searched_at": "2026-11-06T09:02:38.023296+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10^{20} \\cdot \\kappa \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right) \\right\\rceil_{+} \\cdot \\left(\\operatorname{Nat.log}_{2}\\left(3 \\cdot \\left(\\left\\lceil \\frac{16000 \\cdot \\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 1\\right)\\right) + 1\\right) \\cdot \\left(\\left\\lceil \\frac{16000 \\cdot \\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈10 ^ 20 * p.κ * (↑(Module.finrank ℝ p.E) + 1)⌉₊ * (Nat.log 2 (3 * (⌈16000 * √p.ρ * p.Δ / (p.ε * √p.ε)⌉₊ + 1)) + 1) *\n    (⌈16000 * √p.ρ * p.Δ / (p.ε * √p.ε)⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10^{20} \\cdot \\kappa \\cdot \\left(\\dim_{\\mathbb{R}}\\left(E\\right) + 1\\right) \\right\\rceil_{+} \\cdot \\left(\\operatorname{Nat.log}_{2}\\left(3 \\cdot \\left(\\left\\lceil \\frac{16000 \\cdot \\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 1\\right)\\right) + 1\\right) \\cdot \\left(\\left\\lceil \\frac{16000 \\cdot \\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈10 ^ 20 * p.κ * (↑(Module.finrank ℝ p.E) + 1)⌉₊ * (Nat.log 2 (3 * (⌈16000 * √p.ρ * p.Δ / (p.ε * √p.ε)⌉₊ + 1)) + 1) *\n    (⌈16000 * √p.ρ * p.Δ / (p.ε * √p.ε)⌉₊ + 1)"
+        }
+      ],
+      "module": "LongTails.Theorems.CoupledCubicStrongGrowth",
+      "namespace": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder",
+      "setup": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StrongGrowthFiniteSumSecondOrder.spec\n  LongTails.Theorems.CoupledCubicStrongGrowth.budget",
+      "theorem": "LongTails.Theorems.CoupledCubicStrongGrowth.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CoupledCubicStrongGrowth",
+      "theorem": "LongTails.Theorems.CoupledCubicStrongGrowth.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of F(x)=n⁻¹∑ᵢfᵢ(x), with C² components and F(x₀)−inf F≤Δ. Convexity is not required.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.admissible; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      },
+      {
+        "label": "finite_sum",
+        "details": "There are n≥1 hidden component functions. All parameters E, n, x₀, κ, ρ, Δ, ε are public; κ≥1, ρ>0, Δ≥0, ε>0.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: Params, spec.Instance, spec.Public, spec.publicInput, spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query chooses an index i and point x and returns the exact component gradient ∇fᵢ(x), jointly with its Hessian. Answers have no oracle noise or history dependence.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.Query, spec.Reply, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Exact full component Hessian ∇²fᵢ(x) is returned as a continuous linear operator in the same oracle call as the gradient; function values are not returned.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.Reply, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "Global strong growth: n⁻¹∑ᵢ‖∇fᵢ(x)‖²≤κ‖∇F(x)‖² for every x. Uniform component sampling therefore has gradient variance at most (κ−1)‖∇F(x)‖².",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: Params.normedE, Params.innerE, Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "Mean-square Hessian Lipschitz condition in operator norm: n⁻¹∑ᵢ‖∇²fᵢ(x)−∇²fᵢ(y)‖²≤ρ²‖x−y‖². No global gradient Lipschitz constant or uniform Hessian variance bound is supplied.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned point x must satisfy ‖∇F(x)‖≤ε.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "Both stationarity conditions hold jointly on a measurable event with probability at least 2/3, within a fixed oracle budget.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "The same returned point must satisfy ⟨v,∇²F(x)v⟩≥−√(ρε)‖v‖² for every v.",
+        "evidence": "LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Second-order stationarity is a standard target, but global component-gradient strong growth combined with mean-square Hessian Lipschitz continuity and a joint component gradient–Hessian oracle is a specialized formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CoupledCubicStrongGrowth.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CoupledCubicStrongGrowth",
+          "theorem": "LongTails.Theorems.CoupledCubicStrongGrowth.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

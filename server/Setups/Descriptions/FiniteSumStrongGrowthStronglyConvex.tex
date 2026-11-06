@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strong Growth Finite-Sum Minimization}
+We minimize $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a finite-dimensional real inner product space $E$, where $n\geq1$ is an integer. Each component $f_i:E\to\mathbb{R}$ is convex with $L$-Lipschitz gradient, and $F$ is $\mu$-strongly convex, with $L,\mu>0$. Strong growth requires $n^{-1}\sum_{i=1}^n\|\nabla f_i(x)\|^2\leq\rho\|\nabla F(x)\|^2$ for all $x\in E$, where $\rho\geq1$. A given point $x^0\in E$ is within distance $R\geq0$ of a minimizer $x^\star$. The oracle returns $\nabla f_i(x)$ at a queried pair $(i,x)$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable objective gap satisfying $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, which is equipped with a measurable structure. The algorithm receives $E$, $n$, $L$, $\mu$, $\rho$, $R$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Component convexity and smoothness]
+Each $f_i$ is Fr\'echet differentiable everywhere. For every $i\in\{1,\ldots,n\}$, $x,y\in E$, and $t\in[0,1]$,
+\[
+\begin{aligned}
+f_i((1-t)x+ty)&\leq (1-t)f_i(x)+t f_i(y),\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Strong convexity]
+For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+F((1-t)x+ty)
+&\leq (1-t)F(x)+tF(y)\\
+&\phantom{{}\leq{}}-\frac{\mu}{2}t(1-t)\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Strong growth]
+The component gradients satisfy
+\[
+\frac{1}{n}\sum_{i=1}^n\|\nabla f_i(x)\|^2
+\leq \rho\|\nabla F(x)\|^2,
+\qquad x\in E,
+\]
+where $\nabla F(x)=n^{-1}\sum_{i=1}^n\nabla f_i(x)$.
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may select any component index $i\in\{1,\ldots,n\}$ and any point $x\in E$; each reply is the exact component gradient. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{P}\!\left[\left|F(\bar{x})-F(x^\star)\right|\right]&<\infty,\\
+\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]&\leq\varepsilon.
+\end{aligned}
+\]
+\end{document}

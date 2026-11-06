@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.OptimumGapGroupDro",
+  "searched_at": "2026-11-06T09:01:09.699106+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 512 \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(\\log\\left(\\frac{128 \\cdot K \\cdot \\left(d + 1\\right)}{\\varepsilon \\cdot \\delta}\\right) + d \\cdot \\log\\left(8 + \\frac{4096 \\cdot R \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(1 + G\\right)}{\\varepsilon}\\right)\\right) \\cdot \\left(\\sum_{i=0}^{K-1} \\frac{1}{\\left(\\max\\left\\{ gaps\\left(i\\right), \\varepsilon \\right\\}\\right)^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.OptimumGapGroupDro.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈512 * (↑p.data.d + 1) ^ 2 *\n        (Real.log (128 * ↑p.data.K * (↑p.data.d + 1) / (p.data.ε * p.data.δ)) +\n          ↑p.data.d * Real.log (8 + 4096 * p.data.R * (↑p.data.d + 1) ^ 2 * (1 + p.data.G) / p.data.ε)) *\n      ∑ i, (max (p.gaps i) p.data.ε ^ 2)⁻¹⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 512 \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(\\log\\left(\\frac{128 \\cdot K \\cdot \\left(d + 1\\right)}{\\varepsilon \\cdot \\delta}\\right) + d \\cdot \\log\\left(8 + \\frac{4096 \\cdot R \\cdot \\left(d + 1\\right)^{2} \\cdot \\left(1 + G\\right)}{\\varepsilon}\\right)\\right) \\cdot \\left(\\sum_{i=0}^{K-1} \\frac{1}{\\left(\\max\\left\\{ gaps\\left(i\\right), \\varepsilon \\right\\}\\right)^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.OptimumGapGroupDro.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈512 * (↑p.data.d + 1) ^ 2 *\n        (Real.log (128 * ↑p.data.K * (↑p.data.d + 1) / (p.data.ε * p.data.δ)) +\n          ↑p.data.d * Real.log (8 + 4096 * p.data.R * (↑p.data.d + 1) ^ 2 * (1 + p.data.G) / p.data.ε)) *\n      ∑ i, (max (p.gaps i) p.data.ε ^ 2)⁻¹⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SparseCertificateGroupDro",
+      "namespace": "LongTails.Setups.OptimumGapGroupDro",
+      "setup": "LongTails.Setups.OptimumGapGroupDro",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.OptimumGapGroupDro.spec LongTails.Theorems.SparseCertificateGroupDro.budget",
+      "theorem": "LongTails.Theorems.SparseCertificateGroupDro.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SparseCertificateGroupDro",
+      "theorem": "LongTails.Theorems.SparseCertificateGroupDro.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(x)=max_i E[loss(x,Z_i)] over a nonempty compact convex domain in R^d. Each sample loss is convex, G-Lipschitz, and valued in [0,1].",
+        "evidence": "LongTails/Setups/OptimumGapGroupDro.lean: risk, objective, spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "A query selects a group i and returns one fresh sample Z_i. The loss function is public, so samples can be reused for loss evaluations. Samples are independent across groups and across reservoir rows. Cost counts individual sample replies, not gradient or loss evaluations.",
+        "evidence": "LongTails/Setups/OptimumGapGroupDro.lean: Public.loss, reservoirOracle, spec.Query, spec.Reply, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space R^d; the domain lies within radius R of its public feasible point x0, with R≥0.",
+        "evidence": "LongTails/Setups/OptimumGapGroupDro.lean: Space, Public, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Hidden gap bounds g_i∈[0,1] satisfy g_i≤F(x*)−risk_i(x*) simultaneously at some minimizer x*. They need not hold away from that minimizer. The sample budget depends on sum_i max(g_i,ε)^(-2). The algorithm receives the public domain, loss, d, K, x0, R, G, ε and δ, but not the gaps or distributions. K≥1, G≥0; no differentiability or smoothness is assumed.",
+        "evidence": "LongTails/Setups/OptimumGapGroupDro.lean: Params.gaps, Public, spec.publicInput, spec.valid, spec.admissible; supplied extracted budget; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The measurable output lies in the domain for every outcome and satisfies F(output)−min_domain F≤ε, with 0<ε≤1, on the success event.",
+        "evidence": "LongTails/Setups/OptimumGapGroupDro.lean: spec.successful, spec.valid."
+      },
+      {
+        "label": "high_probability",
+        "details": "Failure probability is at most δ, where 0<δ≤1/4, over algorithm and oracle randomness under the supplied fixed sample budget.",
+        "evidence": "LongTails/Setups/OptimumGapGroupDro.lean: spec.successful, spec.valid; LongTails/Template.lean: Convergence, execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The underlying convex group DRO formulation and sampling oracle are standard, but the instance-sensitive setup uses hidden group-risk gaps at a single common optimizer, without requiring uniform separation throughout the domain."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SparseCertificateGroupDro.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SparseCertificateGroupDro",
+          "theorem": "LongTails.Theorems.SparseCertificateGroupDro.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

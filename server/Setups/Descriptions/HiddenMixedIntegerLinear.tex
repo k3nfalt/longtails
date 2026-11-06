@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Hidden Mixed-Integer Linear Optimization}
+We consider linear optimization over $\mathbb{Z}^p\times\mathbb{R}^q$, where $p,q$ are nonnegative integers, with known objective coefficients and finite integer bounds but hidden linear inequality constraints. Either the continuous relaxation is infeasible, or hidden nonnegative constraint multipliers cancel the continuous-variable coefficients in the Lagrangian. Given an integer box, the oracle returns an exact optimizer of the continuous relaxation restricted to that box and the original bounds, or reports infeasibility. The goal is to return an exact mixed-integer global optimizer, or correctly report infeasibility, for every realization of any algorithm and oracle randomness.
+
+Write the objective as $f(z,y)=c^\top z+d^\top y$, where $c\in\mathbb{R}^p$ and $d\in\mathbb{R}^q$. The problem is
+\[
+\min_{(z,y)\in\mathcal{F}} f(z,y),
+\qquad
+\mathcal{F}=\bigl\{(z,y)\in\mathbb{Z}^p\times\mathbb{R}^q:
+Az+Gy\leq b,\ \ell\leq z\leq u\bigr\}.
+\]
+Here $m\geq0$ is an integer, $A\in\mathbb{R}^{m\times p}$, $G\in\mathbb{R}^{m\times q}$, $b\in\mathbb{R}^m$, and $\ell,u\in\mathbb{Z}^p$. All vector inequalities are componentwise. The algorithm receives only $p,q,c,d,\ell,u$; the hidden data $m,A,G,b$ and multiplier vector $\lambda\in\mathbb{R}^m$ may enter the oracle-call budget but are not algorithm inputs.
+
+For any query box $\beta=(a,h)\in\mathbb{Z}^p\times\mathbb{Z}^p$, define
+\[
+\mathcal{R}_{\beta}
+=\bigl\{(z,y)\in\mathbb{R}^p\times\mathbb{R}^q:
+Az+Gy\leq b,\ \ell\leq z\leq u,\ a\leq z\leq h\bigr\}.
+\]
+In particular, $\mathcal{R}_{(\ell,u)}$ is the full continuous relaxation. Query endpoints need not lie within the original bounds or be ordered; the intersection above determines feasibility.
+
+Our assumptions:
+\begin{assumption}[Hidden multiplier certificate]
+The hidden parameters satisfy the disjunction
+\[
+\bigl(\lambda\geq0\ \text{ and }\ d+G^\top\lambda=0\bigr)
+\quad\text{or}\quad
+\mathcal{R}_{(\ell,u)}=\varnothing.
+\]
+\end{assumption}
+
+\begin{assumption}[Exact relaxation oracle]
+For every query box $\beta$, the oracle reports infeasibility exactly when $\mathcal{R}_{\beta}=\varnothing$. Otherwise it returns a point $(z_{\beta},y_{\beta})$ satisfying
+\[
+\begin{aligned}
+(z_{\beta},y_{\beta})&\in\mathcal{R}_{\beta},\\
+f(z_{\beta},y_{\beta})&\leq f(z,y)
+&&\text{for every }(z,y)\in\mathcal{R}_{\beta}.
+\end{aligned}
+\]
+These requirements hold for every query history and every realization of oracle randomness; the choice among optimizers may depend on both. Algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+After the allotted oracle calls, the output is either an infeasibility report or a pair $(\bar z,\bar y)\in\mathbb{Z}^p\times\mathbb{R}^q$. An infeasibility report must satisfy $\mathcal{F}=\varnothing$; a returned pair must satisfy
+\[
+\begin{aligned}
+(\bar z,\bar y)&\in\mathcal{F},\\
+f(\bar z,\bar y)&\leq f(z,y)
+&&\text{for every }(z,y)\in\mathcal{F}.
+\end{aligned}
+\]
+The corresponding requirement must hold for every realization of algorithm and oracle randomness.
+\end{document}

@@ -1,0 +1,34 @@
+\begin{table}[tp]
+\centering
+\caption{Group DRO with gaps at a minimizer: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/OptimumGapGroupDro.lean}{OptimumGapGroupDro}.}\label{tab:OptimumGapGroupDro}
+\parbox{\linewidth}{\footnotesize Compact convex $Q\subset\mathbb R^d$, $x_0\in Q$, $\|x-x_0\|\le R$, $R,G\ge0$; jointly measurable sample losses are convex, $G$-Lipschitz and $[0,1]$-valued on $Q$. Each call returns one fresh sample from a chosen group, with independence across groups and draws; stored samples may be reused. For $K\ge1$, $0<\varepsilon\le1$, $0<\delta\le1/4$, the target is $Y\in Q$ with $\Pr\{F(Y)-F(x^\star)>\varepsilon\}\le\delta$. At some minimizer $x^\star$, $0\le g_i\le\Delta_i:=F(x^\star)-f_i(x^\star)$. Gaps and $x^\star$ are not algorithm inputs; the setup imposes no method restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SparseCertificateGroupDro.lean}{Sparse\allowbreak Certificate\allowbreak Group\allowbreak Dro} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SparseCertificateGroupDro.md}{(review)}
+& $\mathcal{O}\!\left((d+1)^2 L\sum_{i=1}^K\max(g_i,\varepsilon)^{-2}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} SB-GDRO-A \citep[Thm.~4.1]{ogNguyen2025v2}
+& $\mathcal{O}\!\left(\left[\frac{Kd\log_+(GRK/\delta)}{(\lambda^*)^2}\right.\right.$\newline
+$\left.\left.{}+\frac{(R^2G^2+\beta_{\lambda^*})\log(K/\delta)}{\varepsilon^2}\right]\log_+(1/\varepsilon)\right)$
+& \textbf{(1)}: Optimum-only gaps replace all-point sparsity for savings. For $d=2$, fixed $RG$, two active groups, remaining gaps $\Delta>\varepsilon$, and $\beta_\lambda\ge K-1$: $\mathcal{O}((\varepsilon^{-2}+K\Delta^{-2})\log(K/(\varepsilon\delta)))$ instead of $\mathcal{O}(K\varepsilon^{-2}\log(K/\delta)\log_+(1/\varepsilon))$. No $R^2G^2/\varepsilon^2$ term.
+& \textbf{(1)}: Polynomial dimension overhead, up to order $(d+1)^3$ ignoring logarithms. \\
+\midrule
+\textbf{(3)} SB-GDRO-SA \citep[Thm.~4.2]{ogNguyen2025v2}
+& $\mathcal{O}\!\left(\frac{R^2G^2+\max\{\log K,\beta_{\lambda^*}\}}{\varepsilon^2}\right.$\newline
+$\left.{}\cdot\log(K/\delta)\log_+(1/\varepsilon)\right)$\newline
+$K>1$, $\varepsilon\sqrt{C/\log K}<\lambda^*$.
+& \textbf{(1)}: Optimum-only savings; lower cost when $(d+1)^2L\sum_i\max(g_i,\varepsilon)^{-2}\ll(R^2G^2+\max\{\log K,\beta_{\lambda^*}\})/\varepsilon^2$, within \textbf{(3)}'s admissible regime. Removes polynomial $RG$ dependence.
+& \textbf{(1)} loses dimension-free sample complexity and polynomial runtime. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $f_i(x)=\mathbb E[\ell(x,Z_i)]$, $F(x)=\max_i f_i(x)$; $\Pr$ is the execution law. $L=\log(K(d+1)/(\varepsilon\delta))+d\log(2+R(d+1)^2(1+G)/\varepsilon)$; $\log_+t=1+\max\{0,\log t\}$. $\beta_\lambda$ is the maximum over $x\in Q$ of the smallest nonempty group set whose risks all exceed every excluded risk by at least $\lambda$. $C=Kd\log(GRK/\delta)/\log(K/\delta)$ and $\lambda^*\in(0,1]$ minimizes $C/\lambda^2+\beta_\lambda/\varepsilon^2$ in the cited parameter range. Costs count group samples, including adaptation. Taking $g_i=\Delta_i$ gives the sharpest bound.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

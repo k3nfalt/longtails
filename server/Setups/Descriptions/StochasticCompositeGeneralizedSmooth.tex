@@ -1,0 +1,85 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Composite Convex Minimization}
+We consider minimizing $F=f+\psi$ over a measurable convex set $Q$ in a separable real Hilbert space $E$. The function $f:E\to\mathbb{R}$ is convex and continuously differentiable, and $f$ is $(L_0,L_1)$-smooth with $L_0>0$ and $L_1\geq0$; $\psi:E\to\mathbb{R}$ is measurable and convex on $Q$. A given feasible point $x^0$ has bounded distance and objective gap to a minimizer $x^\star$. The oracle returns unbiased stochastic gradients with independent samples and bounded noise moments of order $\alpha\in(1,2]$, or exact proximal points. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $\bar{x}\in Q$ and $F(\bar{x})-F(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+Write $F(x)=f(x)+\psi(x)$. The optimization problem is
+\[
+\min_{x\in Q} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$, which carries its Borel sigma-algebra. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, $x^0$, $L_0$, $L_1$, $R$, $\Delta$, $\sigma$, $\alpha$, $\varepsilon$, and $\delta$; the parameter $G$ may enter only the oracle-call budget. Their ranges are
+\[
+\begin{aligned}
+&L_0>0,\quad L_1\geq0,\quad R>0,\quad \Delta>0,\quad G\geq0,\\
+&\sigma\geq0,\quad 1<\alpha\leq2,\quad \varepsilon>0,\quad 0<\delta<1.
+\end{aligned}
+\]
+Our assumptions:
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is convex and Fr\'echet differentiable on $E$, with continuous gradient. For every $x,y\in E$ and $M\in\mathbb{R}$,
+\[
+\begin{gathered}
+\bigl\|\nabla f(x+\theta(y-x))\bigr\|\leq M
+\quad\text{for all }\theta\in[0,1]\\
+\Longrightarrow\quad
+\|\nabla f(x)-\nabla f(y)\|
+\leq (L_0+L_1M)\|x-y\|.
+\end{gathered}
+\]
+The set $Q$ is convex and Borel measurable, and $\psi$ is measurable on $E$ and convex on $Q$.
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+The given point $x^0$ belongs to $Q$. There exists $x^\star\in Q$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+\|x^0-x^\star\|&\leq R,\\
+F(x^0)-F(x^\star)&\leq\Delta,\\
+\|\nabla f(x^\star)\|&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Exact proximal access]
+There is a map $p:\mathbb{R}\times E\times E\to E$ such that, for every $a>0$ and $z,v\in E$,
+\[
+p(a,z,v)\in\operatorname*{arg\,min}_{u\in Q}
+\left\{\frac{\|u-z\|^2}{2a}
++\langle v,u-z\rangle+\psi(u)\right\}.
+\]
+The map on $\mathbb{R}\times E\times E$ given by
+\[
+(a,z,v)\longmapsto
+\begin{cases}
+p(a,z,v),&a>0,\\
+0,&a\leq0
+\end{cases}
+\]
+is measurable. A proximal query $(a,z,v)$ returns $p(a,z,v)$, with the stated minimization property for positive $a$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients and sampling]
+There is a probability measure $\mu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-\nabla f(x)\|^\alpha$ is integrable under $\mu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\mu}
+[\|g(x,\xi)-\nabla f(x)\|^\alpha]&\leq\sigma^\alpha.
+\end{aligned}
+\]
+The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\mu$ under their joint probability law. They are independent of the algorithm's randomness. At oracle call $k$, a gradient query at any $x\in E$ returns $g(x,\xi_k)$; a proximal query returns the exact point specified above.
+\end{assumption}
+
+Gradient and proximal queries share a single total call budget, with each query counting as one call. After the allotted calls, the output $\bar{x}\in E$ must be measurable and satisfy
+\[
+P\bigl\{\bar{x}\notin Q\ \text{or}\ F(\bar{x})-F(x^\star)>\varepsilon\bigr\}
+\leq\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

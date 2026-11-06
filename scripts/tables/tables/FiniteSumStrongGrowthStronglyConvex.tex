@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Strong-growth finite sums: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean}{FiniteSumStrongGrowthStronglyConvex}.}\label{tab:FiniteSumStrongGrowthStronglyConvex}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, each $f_i$ is convex and $L$-smooth, and $f$ is $\mu$-strongly convex. Globally, $n^{-1}\sum_i\|\nabla f_i(x)\|^2\le\rho\|\nabla f(x)\|^2$, with $L,\mu,\varepsilon>0$, $\rho\ge1$. A minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$, $R\ge0$. Exact component-gradient access; target $\mathbb E[f(X)-f(x^\star)]\le\varepsilon$. }\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StrongGrowthFiniteSumAcceleration.lean}{Strong\allowbreak Growth\allowbreak Finite\allowbreak Sum\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StrongGrowthFiniteSumAcceleration.md}{(review)} & $\mathcal{O}((m+\sqrt{m\kappa})\log(2+\kappa)\ell)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Restarted Katyusha, derived bound \citep[Thm.~4.1]{AllenZhu2018KatyushaComposite} & $\mathcal{O}((n+\sqrt{n\kappa})\ell)$ & \textbf{(1)}: replaces $n$ by $\min\{n,\rho\}$, paying $\log(2+\kappa)$. For $\rho\le n\le\kappa$, gain $\asymp\sqrt{n/\rho}/\log(2+\kappa)$ when $n\gg\rho\log^2(2+\kappa)$. & \textbf{(1)} requires global strong growth; loses $\log(2+\kappa)$ when $\rho\ge n$. \\
+\midrule
+\textbf{(3)} SNAG \citep[Thm.~3]{fsgHermant2026v3} & $\mathcal{O}(\rho\sqrt{L_f/\mu}\,\ell)$ & \textbf{(1)}: for $\rho\le\min\{n,\kappa\}$, gain $\asymp\sqrt{\rho L_f/L}/\log(2+\kappa)$ if $\rho L_f/L\gg\log^2(2+\kappa)$. At $n=\kappa=q^3$, $\rho=q$, $L_f\asymp L$: $\mathcal{O}(q^2\log q\,\ell)$ versus $\mathcal{O}(q^{5/2}\ell)$. & \textbf{(1)} needs convex, smooth components and a finite sum; loses when $L_f\lesssim L\log^2(2+\kappa)/\rho$ in that regime. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $m=\min\{n,\rho\}$, $\ell=\log(2+LR^2/\varepsilon)$; $L_f\le L$ is mean smoothness. Costs count all component-gradient calls, including batches and inner solves; expectation is over algorithmic sampling. $\asymp$ denotes equality up to universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Exact hidden mixed-integer linear optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HiddenMixedIntegerLinear.lean}{HiddenMixedIntegerLinear}.}\label{tab:HiddenMixedIntegerLinear}
+\parbox{\linewidth}{\footnotesize Minimize $c^\top z+d^\top y$ subject to $Az+Gy\le b$, $\ell\le z\le u$, $z\in\mathbb Z^p$, $y\in\mathbb R^q$, with real data and integer bounds. Only $p,q,c,d,\ell,u$ are public. Either the root LP is infeasible or a hidden $\lambda\ge0$ satisfies $d+G^\top\lambda=0$. Each box-LP call returns an exact optimizer or reports infeasibility, with arbitrary optimal-solution choices. The target is an exact mixed-integer optimum or a correct infeasibility report for every execution.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BestBoundHiddenMilp.lean}{Best\allowbreak Bound\allowbreak Hidden\allowbreak Milp} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BestBoundHiddenMilp.md}{(review)} & $\mathcal{O}\!\left(\min\{N,1+p|\mathcal G_\lambda|\}\right)$ box-LP calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} Best-bound B\&B \citep[Theorem 3]{hmiDDM2021v4} & $\mathcal{O}(1+p|\mathcal G_{\lambda^*}|)$ LP calls. Special case: pure binary IP, $q=0$, $[\ell,u]=[0,1]^p$; optimal root dual $\lambda^*$. & \textbf{(1)}: Scope extends to bounded integers and continuous variables, with range-free factor $p$ and any feasible $\lambda$. Matches the binary rate at $\lambda=\lambda^*$. & \textbf{(1)}: Good-point term has twice the leading constant on the binary overlap. \\
+\midrule
+\textbf{(3)} Classical finite-tree bound \citep{hmiRepositoryLp} & $\mathcal{O}(N)$ box-LP calls (full setup; bounded-below root LP). & \textbf{(1)}: Gap-dependent saving when $p|\mathcal G_\lambda|=o(N)$; retains the finite-tree cap. Hidden constraints suffice. & \\
+\midrule
+\textbf{(4)} Enumeration, derived bound \citep{hmiRepositoryLp} & $\mathcal{O}(N)$ box-LP calls, one degenerate box per integer point (full setup). & \textbf{(1)}: Fewer calls if $1+4p|\mathcal G_\lambda|<N$. Binary example: $|\mathcal G_\lambda|\le p^3$ gives $\mathcal{O}(p^4)$ versus $\mathcal{O}(2^p)$; at $p=60$, about $5\cdot10^7$ versus $2^{60}$. & \textbf{(1)}: Up to twice the call bound when $|\mathcal G_\lambda|\approx N$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} LP: linear program; IP: integer program; B\&B: branch-and-bound. $N=\prod_{j=1}^p\max\{u_j-\ell_j+1,0\}$; $\mathrm{OPT}$ is the mixed-integer optimal value, with $\mathrm{OPT}=+\infty$ for infeasibility; $\mathcal G_\lambda=\{z\in\mathbb Z^p\cap[\ell,u]:(c+A^\top\lambda)^\top z-\lambda^\top b\le\mathrm{OPT}\}$. $\lambda^*$ denotes an optimal root-LP dual multiplier. Costs count LP solves, not arithmetic operations.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

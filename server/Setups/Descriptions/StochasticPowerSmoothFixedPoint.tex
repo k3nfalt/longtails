@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Power-Smooth Fixed Points}
+We seek a fixed point of a nonexpansive map $T:E\to E$ on a separable real Banach space $E$ whose norm is power-smooth with exponent $s\in(1,2]$ and constant $K\geq1$. A given point $x^0\in E$ lies within distance $D>0$ of a fixed point $x^\star$. At any query $x\in E$, the oracle returns an unbiased estimate of $T(x)$ using an independent sample, with error $s$th moment at most $\sigma^s$, where $\sigma\geq0$; this permits heavy-tailed noise. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable residual satisfying $\mathbb{E}_{P}\|\bar{x}-T(\bar{x})\|\leq\varepsilon$, where $P$ is the joint law of algorithm and oracle randomness.
+
+The fixed-point problem is to find $x\in E$ such that
+\[
+T(x)=x.
+\]
+Equip $E$ with its Borel sigma-algebra, and let $\Xi$ be the measurable sample space. The algorithm receives $E$, $\Xi$, $x^0$, $s$, $K$, $D$, $\sigma$, and $\varepsilon$; it accesses $T$ through the stochastic oracle described below.
+
+Our assumptions:
+\begin{assumption}[Power-smooth norm]
+There exists a map $j:E\to E^*$, where $E^*$ is the continuous real dual of $E$, such that
+\[
+\|x+y\|^s\leq\|x\|^s+s\,j(x)(y)+K\|y\|^s,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Nonexpansiveness and initial distance]
+The map $T$ satisfies
+\[
+\|T(x)-T(y)\|\leq\|x-y\|,
+\qquad x,y\in E.
+\]
+There exists $x^\star\in E$ such that
+\[
+T(x^\star)=x^\star,
+\qquad \|x^0-x^\star\|\leq D.
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased oracle with bounded moment]
+Let $\nu$ be a probability measure on $\Xi$, and let $G:\Xi\times E\to E$ be jointly measurable. For every $x\in E$, the random vector $G(\xi,x)$ is Bochner integrable under $\xi\sim\nu$, the scalar $\|G(\xi,x)-T(x)\|^s$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[G(\xi,x)]&=T(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|G(\xi,x)-T(x)\|^s\bigr]&\leq\sigma^s.
+\end{aligned}
+\]
+At call $k\in\{0,1,\ldots\}$, a query $x\in E$ receives $G(\xi_k,x)$. The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and the entire sample sequence is independent of the algorithm's randomness.
+\end{assumption}
+
+Queries may be made anywhere in $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its residual $\|\bar{x}-T(\bar{x})\|$ must be integrable under $P$, and the accuracy requirement is
+\[
+\mathbb{E}_{P}\bigl[\|\bar{x}-T(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,118 @@
+{
+  "setup": "LongTails.Setups.StochasticThirdDerivativeConvex",
+  "searched_at": "2026-11-06T09:02:38.739913+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{100} \\cdot \\left(1 + \\sqrt{\\frac{\\sigma h \\cdot R^{2}}{\\varepsilon}} + \\left(\\frac{L_3 \\cdot R^{4}}{\\varepsilon}\\right)^{\\frac{1}{5}} + \\frac{\\sigma g^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta}{\\varepsilon} + \\frac{\\sigma h \\cdot R^{2}}{\\varepsilon} + \\frac{L_3 \\cdot R^{4}}{\\varepsilon}\\right)\\right)^{4} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticThirdDerivativeConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 100 * (1 + √(p.σh * p.R ^ 2 / p.ε) + (p.L₃ * p.R ^ 4 / p.ε) ^ 5⁻¹ + p.σg ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n      (1 + Real.log (2 + p.Δ / p.ε + p.σh * p.R ^ 2 / p.ε + p.L₃ * p.R ^ 4 / p.ε)) ^ 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{100} \\cdot \\left(1 + \\sqrt{\\frac{\\sigma h \\cdot R^{2}}{\\varepsilon}} + \\left(\\frac{L_3 \\cdot R^{4}}{\\varepsilon}\\right)^{\\frac{1}{5}} + \\frac{\\sigma g^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta}{\\varepsilon} + \\frac{\\sigma h \\cdot R^{2}}{\\varepsilon} + \\frac{L_3 \\cdot R^{4}}{\\varepsilon}\\right)\\right)^{4} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticThirdDerivativeConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 100 * (1 + √(p.σh * p.R ^ 2 / p.ε) + (p.L₃ * p.R ^ 4 / p.ε) ^ 5⁻¹ + p.σg ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n      (1 + Real.log (2 + p.Δ / p.ε + p.σh * p.R ^ 2 / p.ε + p.L₃ * p.R ^ 4 / p.ε)) ^ 4⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SymmetricThirdOrder",
+      "namespace": "LongTails.Setups.StochasticThirdDerivativeConvex",
+      "setup": "LongTails.Setups.StochasticThirdDerivativeConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticThirdDerivativeConvex.spec\n  LongTails.Theorems.SymmetricThirdOrder.budget",
+      "theorem": "LongTails.Theorems.SymmetricThirdOrder.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SymmetricThirdOrder",
+      "theorem": "LongTails.Theorems.SymmetricThirdOrder.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Globally convex C³ objective on ℝᵈ with a global minimizer x*, ‖x0−x*‖≤R and f(x0)−f(x*)≤Δ.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.admissible; LongTails/Setups/HessianAdaptiveStochasticConvex.lean: Point"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query returns an unbiased gradient estimate with E‖g(x,ω)−∇f(x)‖²≤σg².",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient"
+      },
+      {
+        "label": "other",
+        "details": "The same query also returns a Hessian estimate H with E‖H(x,ω)−∇²f(x)‖op²≤σh². No Hessian unbiasedness, symmetry, or positive semidefiniteness is required. No function values or third derivatives are supplied.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.Reply and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Gradient variance and Hessian mean-square error are uniformly bounded. Oracle seeds are IID across calls; gradient and Hessian errors within a call may be dependent.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      },
+      {
+        "label": "biased_oracle",
+        "details": "Hessian estimates may be biased; the mean-square error bound is relative to the true Hessian.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space ℝᵈ with operator norms on derivatives.",
+        "evidence": "LongTails/Setups/HessianAdaptiveStochasticConvex.lean: Point; LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "The third derivative is globally L₃-Lipschitz. Public information is d,x0,L₃,R,Δ,ε,σg,σh, with L₃,R,Δ,ε>0 and σg,σh≥0. The objective, minimizer, and sampling distribution are hidden. No bounds on gradient or Hessian Lipschitz constants are supplied.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: Public, Params, spec.valid, spec.admissible; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "f(output)−f(x*)≤ε.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.successful"
+      },
+      {
+        "label": "feasibility",
+        "details": "The output is measurable and satisfies ‖output−x0‖≤R for every outcome.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "The objective-gap guarantee holds with probability at least 2/3 under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/StochasticThirdDerivativeConvex.lean: spec.successful; LongTails/Template.lean: executeWithTrace and Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Combines third-derivative Lipschitz smoothness with access only to stochastic gradients and potentially biased, nonsymmetric Hessian estimates, plus an unconditional output-ball requirement."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SymmetricThirdOrder.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SymmetricThirdOrder",
+          "theorem": "LongTails.Theorems.SymmetricThirdOrder.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

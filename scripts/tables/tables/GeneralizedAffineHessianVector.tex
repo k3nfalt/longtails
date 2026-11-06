@@ -50,6 +50,36 @@ $\begin{aligned}[t]
 $\mathcal{O}(\varepsilon^{-\max\{b,2+b/q\}})$.
 & \textbf{(1)}: removes Lipschitz-Hessian regularity, weakens operator-norm moments to directional HVP moments, and permits generalized curvature and affine noise. Matches the leading accuracy exponent on the overlap.
 & \textbf{(1)}: extra logarithms and $(1+\sigma_g/R)^b$ factors in shared stochastic terms. \\
+\midrule
+\textbf{(6)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HystereticAffineHessianTransport.lean}{Hysteretic\allowbreak Affine\allowbreak Hessian\allowbreak Transport} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HystereticAffineHessianTransport.md}{(review)}
+& $\begin{aligned}[t]
+\mathcal{O}\!\bigl(D_{p,q}\lambda[&U^b+\Delta J\varepsilon^{-2}\\
+&\cdot(U^{b/q}+(1+\alpha_g)^2U^{b-2})]\bigr).
+\end{aligned}$
+Here $U=1+\alpha_g+\sigma_g/\varepsilon$, $J=L_0+\sigma_h+(L_1+\alpha_h)(\varepsilon+\sigma_g/(1+\alpha_g))$, $D_{p,q}=2^{32b+16q/(q-1)}(b+1)$, $\lambda=1+\log(2+U+\Delta J/\varepsilon^2+(R+\sigma_g)/\varepsilon)$.
+& & \\
+\midrule[1.2pt]
+\textbf{(7)} RanSOM-E \citep{gahChaytiFakhouri2026v3}, Theorem B.24, Remark B.26; derived accuracy exponents
+& $\mathcal{O}(\varepsilon^{-(b+1)})$ for $q>p$, $\Delta,L_1,\sigma_g>0$, remaining parameters fixed; $\mathcal{O}(\varepsilon^{-(2+b/q)})$ for $q\le p$. Includes batches and initialization.
+& \textbf{(6)}: $\mathcal{O}(\varepsilon^{-m}\lambda)$ for $q>p$, $m=\max\{b,2+b/q\}<b+1$. At $p=3/2,q=2$: $\varepsilon^{-7/2}\lambda$ instead of $\varepsilon^{-4}$. Matches exponent for $q\le p$.
+\newline Relative to \textbf{(1)}: linear $\Delta$ up to logs; $\lambda$ replaces $\ell^{b+1}$. For $\Delta=\varepsilon^{-a}$, $a>0$, fixed positive other parameters, exponents $(1+a)m\to a+m$.
+& \textbf{(6)}: extra logarithm and large $D_{p,q}$; Euclidean scope versus general norms. \\
+\midrule
+\textbf{(8)} RanSOM \citep{gahChaytiFakhouri2026v3}, Corollary 4.8 / B.27; $L_1=\alpha_g=\alpha_h=0$
+& $\begin{aligned}[t]\mathcal{O}\!\bigl(1+&(\sigma_g/\varepsilon)^b\\
++{}&\Delta(L_0+\sigma_h)\varepsilon^{-2}\\
+&\cdot[1+(\sigma_g/\varepsilon)^{b/q}]\bigr).
+\end{aligned}$
+& \textbf{(6)}: Scope extends to generalized curvature and affine noise.
+& \textbf{(6)}: extra log. If $b(1-1/q)>2$, $\Delta L_0\ge\sigma_g^2$, $\sigma_g\ge\varepsilon$, additional polynomial factor up to $\min\{\Delta L_0/\sigma_g^2,(\sigma_g/\varepsilon)^{b-2-b/q}\}$ (e.g. $p<4/3,q=2$). \\
+\midrule
+\textbf{(9)} RanSOM-E \citep{gahChaytiFakhouri2026v3}, Remark B.26; $\sigma_g=0$, derived bound
+& $\begin{aligned}[t]\mathcal{O}\!\bigl((1+\alpha_g)^b[1
+&+\Delta(L_0+\sigma_h)/\varepsilon^2\\
+&+\Delta(L_1+\alpha_h)/\varepsilon]\bigr).
+\end{aligned}$
+& \textbf{(6)}: matches polynomial accuracy dependence. Relative to \textbf{(1)}, removes accuracy-dependent localization overhead when $\alpha_g>0$.
+& \textbf{(6)}: retains logarithm, $D_{p,q}$, and potentially larger $\alpha_g$ dependence through $(1+\alpha_g)^{b/q}$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex",
+  "searched_at": "2026-11-06T09:00:47.062015+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 64 \\cdot \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + 32768 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(2 + L1 \\cdot R\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex.spec.Params → ℕ",
+        "value": "fun q => ⌈64 * √(q.L0 * q.R ^ 2 / q.ε) + 32768 * (1 + q.L1 * q.R) * Real.log (2 + q.L1 * q.R)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 64 \\cdot \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + 32768 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(2 + L1 \\cdot R\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex.spec.Params → ℕ",
+          "value": "fun q => ⌈64 * √(q.L0 * q.R ^ 2 / q.ε) + 32768 * (1 + q.L1 * q.R) * Real.log (2 + q.L1 * q.R)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.RadiusFreeGeneralizedAccelerated",
+      "namespace": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex",
+      "setup": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex.spec\n  OracleTemplate.RadiusFreeSherpa.budget",
+      "theorem": "OracleTemplate.RadiusFreeSherpa.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RadiusFreeGeneralizedAccelerated",
+      "theorem": "OracleTemplate.RadiusFreeSherpa.result",
+      "references": "- Mikhail Rudomanov, Ivan Fomin, Alexander V. Gasnikov, and Fedor S. Stonyakin. [Descending Everest with First-Order Oracles: Oracle Complexity of Convex Optimization under $(L_0,L_1)$-Smoothness](https://arxiv.org/html/2610.21461v1). 2026 (preprint v1, October 15). Complexity: $O(\\sqrt{L_0R^2/\\varepsilon}+(1+L_1R)\\log(2+L_1R))$ exact-gradient oracle calls, including initialization and line searches, for objective gap at most $\\varepsilon$; SHERPA followed by CRUISE.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex minimization of f:E→ℝ, with an attained minimum and some minimizer xstar satisfying ‖x0−xstar‖≤R.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns precisely ∇f(x), for every history and seed. No function values or noisy gradient information are supplied.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible (HasGradientAt)"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is differentiable everywhere and ‖D(∇f)(x)‖≤L0+L1‖∇f(x)‖. L0,L1,R,ε are strictly positive.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible, spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "E is an arbitrary complete real inner-product space. Public information consists of E,L0,L1,x0; R and ε are hidden from the algorithm constructor and enter only the external oracle budget. No initial objective-gap bound is supplied.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: Public, Params, spec.publicInput; LongTails/Template.lean: Convergence, execute"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point must satisfy f(output)−f(xstar)≤ε for a global minimizer xstar.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.successful"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap inequality holds almost surely under the joint algorithm and oracle seed law, within the fixed supplied gradient-call budget.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Convex exact-gradient optimization with gradient-dependent curvature, arbitrary Hilbert-space geometry, and an algorithm that is not given the radius or target accuracy is a meaningful variant of the classical smooth convex benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RadiusFreeSherpa.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RadiusFreeGeneralizedAccelerated",
+          "theorem": "OracleTemplate.RadiusFreeSherpa.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

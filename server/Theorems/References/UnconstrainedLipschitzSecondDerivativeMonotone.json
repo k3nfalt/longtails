@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone",
+  "searched_at": "2026-11-06T09:02:40.441306+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{21} \\cdot \\left(1 + \\left(\\frac{L \\cdot D^{3}}{\\varepsilon}\\right)^{\\frac{1}{4}}\\right) \\cdot \\left(\\log\\left(2 + \\frac{H_0 \\cdot D}{\\varepsilon} + \\frac{L \\cdot D^{3}}{\\varepsilon}\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈2 ^ 21 * (1 + (p.L * p.D ^ 3 / p.ε) ^ 4⁻¹) * Real.log (2 + p.H₀ * p.D / p.ε + p.L * p.D ^ 3 / p.ε) ^ 2⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{21} \\cdot \\left(1 + \\left(\\frac{L \\cdot D^{3}}{\\varepsilon}\\right)^{\\frac{1}{4}}\\right) \\cdot \\left(\\log\\left(2 + \\frac{H_0 \\cdot D}{\\varepsilon} + \\frac{L \\cdot D^{3}}{\\varepsilon}\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈2 ^ 21 * (1 + (p.L * p.D ^ 3 / p.ε) ^ 4⁻¹) * Real.log (2 + p.H₀ * p.D / p.ε + p.L * p.D ^ 3 / p.ε) ^ 2⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HomotopyNewtonMonotone",
+      "namespace": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone",
+      "setup": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone.spec\n  LongTails.Theorems.HomotopyNewtonMonotone.budget",
+      "theorem": "LongTails.Theorems.HomotopyNewtonMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HomotopyNewtonMonotone",
+      "theorem": "LongTails.Theorems.HomotopyNewtonMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained zero-finding for a monotone operator F:E→E: ⟨F(x)−F(y),x−y⟩≥0. A zero xstar exists with ‖x0−xstar‖≤D. No scalar objective or potential structure is assumed.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean: spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Two exact oracles return F(x) and the full Fréchet derivative DF(x), respectively, at arbitrary queried points. Replies are independent of history and seeds. No second-derivative oracle is supplied. Each oracle has a separate fixed call budget.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean: spec.numOracles, spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: executeWithTrace and Convergence"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is an arbitrary finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean: Params.normedE, Params.innerE, Params.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "F is C² and ‖D²F(x)−D²F(y)‖≤L‖x−y‖ globally; ‖DF(x0)‖≤H₀. Public information includes E, x0, L>0, D>0, H₀≥0 and ε>0. F and a witnessing zero are hidden; neither global Lipschitz continuity of F nor of DF is assumed.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound holds almost surely under the joint algorithm-seed and oracle-seed law; deterministic output is not required.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "other",
+        "details": "The returned point x must satisfy the unsquared operator residual bound ‖F(x)‖≤ε.",
+        "evidence": "LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean: spec.Output and spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth monotone equation solving with exact operator and Jacobian information and a residual-norm target is an established formulation. This setup specifies higher smoothness, a known initial distance bound and an initial Jacobian bound."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HomotopyNewtonMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HomotopyNewtonMonotone",
+          "theorem": "LongTails.Theorems.HomotopyNewtonMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

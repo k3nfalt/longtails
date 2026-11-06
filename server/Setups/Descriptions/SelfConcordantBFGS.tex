@@ -1,0 +1,88 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Self-Concordant Minimization with BFGS}
+We consider minimizing $f:\mathbb{R}^d\to\mathbb{R}$ over an open convex set $D\subseteq\mathbb{R}^d$, where $d\geq0$ is an integer. On $D$, the function is self-concordant with positive definite Hessian, has closed sublevel sets, and attains its minimum at $x^\star\in D$. BFGS starts from a given $x^0\in D$ and positive definite matrix $B^0$, with bounded initial objective gap and Hessian mismatch. The oracle returns a feasible Armijo--Wolfe step and its endpoint gradient. For $\varepsilon>0$, the goal is a last iterate $\bar{x}\in D$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in D} f(x).
+\]
+We use the coordinate space $\mathbb{R}^d$ with its supremum norm and the pairing $u^\top v=\sum_{i=1}^d u_i v_i$. The gradient denotes the coordinate representation of the derivative, so $\mathrm{d}f(x)[v]=\nabla f(x)^\top v$. Write $H(x)=\nabla^2 f(x)$ for the Hessian matrix. The algorithm receives only $d$, $x^0$, and $B^0$; the parameters $0<c_1<c_2<1$, $\Delta\geq0$, $\Phi_0\geq0$, and $\varepsilon>0$ may enter the call budget, with $c_1,c_2$ also specifying the oracle conditions.
+
+Our assumptions:
+\begin{assumption}[Domain and self-concordance]
+The set $D$ is open and convex. The function $f$ is three times Fr\'echet differentiable on $D$. For every $x\in D$, every nonzero $v\in\mathbb{R}^d$, and every $h\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+v^\top H(x)v&>0,\\
+\bigl|\nabla^3 f(x)[h,v,v]\bigr|
+&\leq 2\sqrt{h^\top H(x)h}\,v^\top H(x)v.
+\end{aligned}
+\]
+For every $a\in\mathbb{R}$, the set $\{x\in D:f(x)\leq a\}$ is closed in $\mathbb{R}^d$.
+\end{assumption}
+
+\begin{assumption}[Minimizer and initialization]
+The given point satisfies $x^0\in D$, and $B^0\in\mathbb{R}^{d\times d}$ is symmetric positive definite. There exists $x^\star\in D$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for all }x\in D,\\
+f(x^0)-\Delta&\leq f(x) &&\text{for all }x\in D.
+\end{aligned}
+\]
+For positive definite matrices $B,H$, define
+\[
+\Psi(B,H)=2\log\det(B+H)-\log\det B
+-\log\det H-2d\log 2.
+\]
+The initial Hessian mismatch satisfies
+\[
+\Psi(B^0,H(x^0))\leq\Phi_0.
+\]
+\end{assumption}
+
+\begin{assumption}[Armijo--Wolfe oracle]
+A query consists of a point $x\in D$ and a direction $v\in\mathbb{R}^d$ satisfying $\nabla f(x)^\top v\leq0$. The reply $(\alpha,g^+)\in\mathbb{R}\times\mathbb{R}^d$ satisfies
+\[
+x+\alpha v\in D,
+\qquad g^+=\nabla f(x+\alpha v).
+\]
+If $\nabla f(x)^\top v<0$, it also satisfies
+\[
+\begin{aligned}
+\alpha&>0,\\
+f(x+\alpha v)&\leq f(x)+c_1\alpha\nabla f(x)^\top v,\\
+c_2\nabla f(x)^\top v&\leq (g^+)^\top v.
+\end{aligned}
+\]
+These conditions hold for every query history and every realization of the oracle randomness. Replies may depend on that history, and randomness across calls may be dependent. For a direction with zero directional derivative, only endpoint feasibility and the exact endpoint gradient are required.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze BFGS with the given initial matrix $B^0$. The first oracle call queries $(x^0,0)$ to obtain $g^0=\nabla f(x^0)$, leaving $x^0$ and $B^0$ unchanged. Thereafter, for $k\geq0$, the method queries $(x^k,v^k)$ and receives $(\alpha_k,g^{k+1})$, with
+\[
+\begin{aligned}
+v^k&=-(B^k)^{-1}g^k,\\
+s^k&=\alpha_k v^k, & x^{k+1}&=x^k+s^k,\\
+y^k&=g^{k+1}-g^k.
+\end{aligned}
+\]
+The Hessian approximation is updated by
+\[
+B^{k+1}=B^k
+-\frac{(B^k s^k)(B^k s^k)^\top}{(s^k)^\top B^k s^k}
++\frac{y^k(y^k)^\top}{(y^k)^\top s^k}.
+\]
+Each scalar reciprocal in this formula is defined to be zero when its denominator is zero; the matrix inverse is likewise defined to be the zero matrix when singular. Thus the recurrence also specifies the update at a stationary point.
+
+Each oracle call returns the step and endpoint gradient together. After $N\geq1$ calls, including the initialization call, the output is the last iterate $\bar{x}=x^{N-1}$; with zero calls it is $\bar{x}=x^0$. The required accuracy is
+\[
+\bar{x}\in D,
+\qquad f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

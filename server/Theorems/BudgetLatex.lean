@@ -85,10 +85,18 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       let op := if name == ``Finset.sum then "\\sum" else "\\prod"
       return .ofString ("\\left(" ++ op ++ "_{" ++ symbol index.toString ++ "=0}^{" ++
         bound.latex.1 ++ "-1} " ++ (← latexPP body).latex.1 ++ "\\right)")
+  | ``Finset.card => return .ofString ("\\left|" ++
+      (← latexPP args.back!).latex.1 ++ "\\right|")
+  | `LongTails.Setups.HiddenMixedIntegerLinear.goodPoints =>
+    return .ofString ("\\operatorname{goodPoints}\\left(" ++
+      (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``Int.toNat => return .ofString ("\\max\\left\\{ " ++
       (← latexPP args.back!).latex.1 ++ ", 0 \\right\\}")
   | ``Nat.ceil => return .ofString ("\\left\\lceil " ++ (← latexPP args.back!).latex.1 ++ " \\right\\rceil_{+}")
   | ``Nat.floor => return .ofString ("\\left\\lfloor " ++ (← latexPP args.back!).latex.1 ++ " \\right\\rfloor_{+}")
+  | ``Nat.log =>
+    return .ofString ("\\operatorname{Nat.log}_{" ++ (← latexPP args[0]!).latex.1 ++
+      "}\\left(" ++ (← latexPP args[1]!).latex.1 ++ "\\right)")
   | ``Nat.clog =>
     return .ofString ("\\operatorname{clog}_{" ++ (← latexPP args[0]!).latex.1 ++
       "}\\left(" ++ (← latexPP args[1]!).latex.1 ++ "\\right)")

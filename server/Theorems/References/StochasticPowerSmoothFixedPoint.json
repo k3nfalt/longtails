@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.StochasticPowerSmoothFixedPoint",
+  "searched_at": "2026-11-06T09:02:35.045128+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 512 \\cdot \\left(1 + \\frac{D}{\\varepsilon} + \\left(65536 \\cdot K \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{exponent}\\right)^{\\frac{1}{exponent - 1}}\\right) \\cdot \\left(3 + \\log_{2}\\left(1 + \\frac{16 \\cdot D}{\\varepsilon}\\right)\\right)^{2 + \\frac{exponent}{exponent - 1}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticPowerSmoothFixedPoint.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈512 * (1 + q.D / q.ε + (65536 * q.K * (q.σ / q.ε) ^ q.exponent) ^ (q.exponent - 1)⁻¹) *\n      (3 + Real.logb 2 (1 + 16 * q.D / q.ε)) ^ (2 + q.exponent / (q.exponent - 1))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 512 \\cdot \\left(1 + \\frac{D}{\\varepsilon} + \\left(65536 \\cdot K \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{exponent}\\right)^{\\frac{1}{exponent - 1}}\\right) \\cdot \\left(3 + \\log_{2}\\left(1 + \\frac{16 \\cdot D}{\\varepsilon}\\right)\\right)^{2 + \\frac{exponent}{exponent - 1}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticPowerSmoothFixedPoint.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈512 * (1 + q.D / q.ε + (65536 * q.K * (q.σ / q.ε) ^ q.exponent) ^ (q.exponent - 1)⁻¹) *\n      (3 + Real.logb 2 (1 + 16 * q.D / q.ε)) ^ (2 + q.exponent / (q.exponent - 1))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.PowerSmoothAnchoring",
+      "namespace": "LongTails.Setups.StochasticPowerSmoothFixedPoint",
+      "setup": "LongTails.Setups.StochasticPowerSmoothFixedPoint",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticPowerSmoothFixedPoint.spec\n  LongTails.Theorems.PowerSmoothAnchoring.budget",
+      "theorem": "LongTails.Theorems.PowerSmoothAnchoring.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PowerSmoothAnchoring",
+      "theorem": "LongTails.Theorems.PowerSmoothAnchoring.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Approximate fixed-point computation for a nonexpansive map T:E→E. A fixed point x* exists with ‖x0−x*‖≤D. No objective function or optimization convexity assumption is specified.",
+        "evidence": "LongTails/Setups/StochasticPowerSmoothFixedPoint.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Single-point stochastic operator evaluation: a query x returns sample(ξ,x), with independent identically distributed fresh seeds and E[sample(ξ,x)]=T(x). Each sampled evaluation counts as one oracle call. The map and sampling law are hidden; Params, including s=exponent, K, D, σ, ε and x0, are public.",
+        "evidence": "LongTails/Setups/StochasticPowerSmoothFixedPoint.lean: spec.Public, spec.publicInput, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central moment bound E‖sample(ξ,x)−T(x)‖^s≤σ^s for every x, where 1<s≤2 and σ≥0. For s<2, finite variance is not required. Samples are jointly measurable and Bochner integrable.",
+        "evidence": "LongTails/Setups/StochasticPowerSmoothFixedPoint.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "E is a real, complete, second-countable normed space with its Borel measurable structure. For K≥1 there exists j:E→E* satisfying ‖x+y‖^s≤‖x‖^s+s j(x)(y)+K‖y‖^s for all x,y. Neither finite dimensionality nor an inner-product norm is required.",
+        "evidence": "LongTails/Setups/StochasticFixedPointSmoothBanach.lean: Params; LongTails/Setups/StochasticPowerSmoothFixedPoint.lean: PowerSmooth, spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The residual guarantee is in expectation over algorithm randomness and the IID oracle stream, with ε>0 and a fixed upper budget on sampled operator evaluations.",
+        "evidence": "LongTails/Setups/StochasticPowerSmoothFixedPoint.lean: spec.successful and spec.valid; LongTails/Template.lean: Convergence and executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "The output X∈E must be measurable, its fixed-point residual must be integrable, and E‖X−T(X)‖≤ε. The criterion uses the first power of the norm, not squared residual or distance to a fixed point.",
+        "evidence": "LongTails/Setups/StochasticPowerSmoothFixedPoint.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This stochastic fixed-point formulation couples a potentially infinite-dimensional power-smooth Banach geometry with only a matching s-th noise moment, allowing infinite variance when s<2."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PowerSmoothAnchoring.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PowerSmoothAnchoring",
+          "theorem": "LongTails.Theorems.PowerSmoothAnchoring.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

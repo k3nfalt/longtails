@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.FiniteSumThirdSmoothConvex",
+  "searched_at": "2026-11-06T09:01:13.485464+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "274877906944 \\cdot \\left(n + \\left\\lceil \\left(\\frac{n^{4} \\cdot L \\cdot R^{4}}{\\varepsilon}\\right)^{\\frac{1}{5}} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\log\\left(2 + n + \\frac{G \\cdot R}{\\varepsilon} + \\frac{H \\cdot R^{2}}{\\varepsilon} + \\frac{L \\cdot R^{4}}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)^{2}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteSumThirdSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  274877906944 * (p.n + ⌈(↑p.n ^ 4 * p.L * p.R ^ 4 / p.ε) ^ 5⁻¹⌉₊) *\n    (1 + ⌈Real.log (2 + ↑p.n + p.G * p.R / p.ε + p.H * p.R ^ 2 / p.ε + p.L * p.R ^ 4 / p.ε)⌉₊) ^ 2"
+      },
+      "budgets": [
+        {
+          "latex": "274877906944 \\cdot \\left(n + \\left\\lceil \\left(\\frac{n^{4} \\cdot L \\cdot R^{4}}{\\varepsilon}\\right)^{\\frac{1}{5}} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\log\\left(2 + n + \\frac{G \\cdot R}{\\varepsilon} + \\frac{H \\cdot R^{2}}{\\varepsilon} + \\frac{L \\cdot R^{4}}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)^{2}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteSumThirdSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  274877906944 * (p.n + ⌈(↑p.n ^ 4 * p.L * p.R ^ 4 / p.ε) ^ 5⁻¹⌉₊) *\n    (1 + ⌈Real.log (2 + ↑p.n + p.G * p.R / p.ε + p.H * p.R ^ 2 / p.ε + p.L * p.R ^ 4 / p.ε)⌉₊) ^ 2"
+        }
+      ],
+      "module": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth",
+      "namespace": "LongTails.Setups.FiniteSumThirdSmoothConvex",
+      "setup": "LongTails.Setups.FiniteSumThirdSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumThirdSmoothConvex.spec\n  LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth.budget",
+      "theorem": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth",
+      "theorem": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of convex components and their average, with an attained global minimum.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: spec.admissible"
+      },
+      {
+        "label": "finite_sum",
+        "details": "Objective f(x) = (1/n) Σ_i f_i(x), with n ≥ 1.",
+        "evidence": "LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective; LongTails/Setups/FiniteSumThirdSmoothConvex.lean: Params.nonzero"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i,x) returns the exact component gradient together with its Hessian. Replies do not depend on history or oracle randomness.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "Exact component Hessian oracle, bundled with the gradient in one counted call. Function values and third derivatives are not returned.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "Each component is C³ with globally L-Lipschitz third derivative in operator norm. Public parameters satisfy L,G,H ≥ 0 and R,ε > 0. A hidden minimizer xstar satisfies ‖x0−xstar‖ ≤ R; the average objective satisfies ‖∇f(x0)‖ ≤ G and ‖∇²f(x0)‖ ≤ H. No global gradient or Hessian Lipschitz bound is imposed. All Params are public; components and xstar are hidden.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: Params, Problem, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output x with f(x)−f(xstar) ≤ ε on the success event.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "Success probability at least 2/3 under the joint algorithm and oracle seed law, within the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/FiniteSumThirdSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established higher-order smooth convex finite-sum formulation with exact component second-order information, a radius bound, and constant-probability objective accuracy. The initial derivative bounds explicitly parameterize the available information."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth",
+          "theorem": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

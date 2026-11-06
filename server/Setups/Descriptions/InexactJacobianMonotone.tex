@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Monotone Equations with Inexact Jacobians}
+We consider finding a zero of a differentiable monotone map $F:E\to E$ on a finite-dimensional real inner product space $E$. Its Jacobian is $M$-Lipschitz in operator norm, with $M>0$, and a given point $x^0\in E$ lies within distance $R>0$ of a zero. At a query $x\in E$, the oracle returns $F(x)$ and a linear approximation to its Jacobian with operator-norm error at most $\delta\geq0$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the joint law of algorithm and oracle randomness.
+
+The equation to solve is
+\[
+F(x)=0,\qquad x\in E.
+\]
+Write $J_F(x):E\to E$ for the Fr\'echet derivative of $F$ at $x$. The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $x^0$, $M$, $\delta$, $R$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Monotonicity and Jacobian regularity]
+The map $F$ is Fr\'echet differentiable everywhere, and for every $x,y\in E$,
+\[
+\begin{aligned}
+\langle F(x)-F(y),x-y\rangle&\geq0,\\
+\|J_F(x)-J_F(y)\|_{\mathrm{op}}&\leq M\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nearby zero]
+There exists $x^\star\in E$ such that
+\[
+F(x^\star)=0,\qquad \|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+\begin{assumption}[Inexact Jacobian oracle]
+Queries may be made at any $x\in E$. Each oracle call returns a pair $(v,A)$, where $v\in E$ and $A:E\to E$ is linear, satisfying
+\[
+v=F(x),\qquad \|A-J_F(x)\|_{\mathrm{op}}\leq\delta.
+\]
+These conditions hold for every query history and every realization of the oracle randomness. The approximate Jacobian may depend on both. Algorithm randomness is independent of oracle randomness.
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

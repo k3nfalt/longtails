@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Finite-Sum Convex Third-Order Smoothness}
+We consider minimizing $f(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on a finite-dimensional real inner-product space $E$, where $n\geq1$ is an integer. Each component $f_i:E\to\mathbb{R}$ is convex and three times continuously differentiable, with $L$-Lipschitz third derivative, where $L\geq0$. A given point $x^0\in E$ lies within distance $R>0$ of a minimizer $x^\star$; its objective gradient and Hessian have norms bounded by $G,H\geq0$, respectively. A query $(i,x)$ returns $(\nabla f_i(x),\nabla^2 f_i(x))$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $P\{f(\bar{x})-f(x^\star)\leq\varepsilon\}\geq2/3$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. Derivative norms $\|\cdot\|_{\mathrm{op}}$ are the induced operator norms: the Hessian acts from $E$ to $E$, and the third derivative is a trilinear form on $E$. The algorithm receives $E,n,L,R,\varepsilon,G,H$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Component convexity and regularity]
+For every $i\in\{1,\ldots,n\}$, the function $f_i$ belongs to $C^3(E;\mathbb{R})$, and for all $x,y\in E$ and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq(1-t)f_i(x)+t f_i(y).
+\]
+Its third derivative satisfies
+\[
+\|\nabla^3 f_i(x)-\nabla^3 f_i(y)\|_{\mathrm{op}}
+\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial bounds]
+The instance specifies a point $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+\|\nabla f(x^0)\|&\leq G,\\
+\|\nabla^2 f(x^0)\|_{\mathrm{op}}&\leq H.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle accepts any component index $i\in\{1,\ldots,n\}$ and any point $x\in E$, returning the exact component gradient and Hessian together in one call. After the allotted calls, the output $\bar{x}$ must be measurable with respect to the Borel sets of $E$ and satisfy
+\[
+P\bigl\{f(\bar{x})-f(x^\star)\leq\varepsilon\bigr\}
+\geq \frac{2}{3}.
+\]
+\end{document}

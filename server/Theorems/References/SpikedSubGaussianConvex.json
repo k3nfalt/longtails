@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.SpikedSubGaussianConvex",
+  "searched_at": "2026-11-06T09:02:30.936137+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{51} \\cdot \\left(m + 1 + \\frac{\\left(vTop + m \\cdot vRest\\right) \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(16 \\cdot \\left(m + 1\\right) \\cdot \\left(1 + \\frac{G \\cdot R}{\\varepsilon}\\right)\\right)\\right)^{5} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SpikedSubGaussianConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 51 * (↑q.m + 1 + (q.vTop + ↑q.m * q.vRest) * q.R ^ 2 / q.ε ^ 2) *\n      (1 + Real.log (16 * (↑q.m + 1) * (1 + q.G * q.R / q.ε))) ^ 5⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{51} \\cdot \\left(m + 1 + \\frac{\\left(vTop + m \\cdot vRest\\right) \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\log\\left(16 \\cdot \\left(m + 1\\right) \\cdot \\left(1 + \\frac{G \\cdot R}{\\varepsilon}\\right)\\right)\\right)^{5} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SpikedSubGaussianConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 51 * (↑q.m + 1 + (q.vTop + ↑q.m * q.vRest) * q.R ^ 2 / q.ε ^ 2) *\n      (1 + Real.log (16 * (↑q.m + 1) * (1 + q.G * q.R / q.ε))) ^ 5⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex",
+      "namespace": "LongTails.Setups.SpikedSubGaussianConvex",
+      "setup": "LongTails.Setups.SpikedSubGaussianConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SpikedSubGaussianConvex.spec\n  LongTails.Theorems.SpikedSubGaussianSoftCutConvex.budget",
+      "theorem": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex",
+      "theorem": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Globally convex, G-Lipschitz functions on R^(m+1), with a global minimizer x* satisfying ||x*|| ≤ R. No differentiability or strong convexity is required.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Stochastic subgradient oracle: each query x returns g(x,ω), with E[g(x,ω)] = v(x) ∈ ∂f(x). Seeds are IID; function values are not supplied.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: IsSubGaussianSubgradient.unbiased, support; spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The centered oracle has E||g(x,ω)-v(x)||² ≤ vTop + m vRest, implied by its directional exponential bounds.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: varianceProxy; IsSubGaussianSubgradient.exponential_bound"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry in dimension m+1, including m=0.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: Params.m; Space"
+      },
+      {
+        "label": "other",
+        "details": "Known anisotropic sub-Gaussian proxy Σ = diag(vTop,vRest,…,vRest): E exp(t〈g-v,u〉) ≤ exp(t²〈u,Σu〉/2) for every x,u,t. Public parameters satisfy G,R,ε>0 and 0≤vRest≤vTop; the distinguished direction is coordinate 0. The objective, subgradient selection, and sampling law are hidden.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: varianceProxy; IsSubGaussianSubgradient; spec.Public, publicInput, valid, admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "A measurable output x must satisfy f(x)-min f ≤ ε; no particular iterate or output construction is required.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "Failure probability P(f(output)-min f > ε) ≤ 1/3, under the joint algorithm and oracle randomness, with a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/SpikedSubGaussianConvex.lean: spec.successful. LongTails/Template.lean: Convergence; executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The convex Lipschitz stochastic subgradient formulation is classical, but the specified public spiked directional sub-Gaussian proxy is a specialized anisotropic noise assumption."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SpikedSubGaussianSoftCutConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex",
+          "theorem": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

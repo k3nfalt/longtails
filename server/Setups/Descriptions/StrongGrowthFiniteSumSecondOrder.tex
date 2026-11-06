@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strong-Growth Second-Order Finite-Sum Optimization}
+We consider minimizing $F=n^{-1}\sum_{i=1}^n f_i$ on a finite-dimensional real inner product space $E$, with $n\geq1$ components $f_i:E\to\mathbb{R}$. The twice continuously differentiable components satisfy strong growth and a mean-square Hessian Lipschitz bound with constant $\rho>0$. The objective may be nonconvex, and a given point $x^0\in E$ has bounded objective gap. The oracle returns $(\nabla f_i(x),\nabla^2 f_i(x))$ at a queried index $i$ and point $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying both $\|\nabla F(\bar{x})\|\leq\varepsilon$ and $\langle v,\nabla^2F(\bar{x})v\rangle\geq-\sqrt{\rho\varepsilon}\|v\|^2$ for every $v\in E$, with probability at least $2/3$ under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} F(x),
+\qquad
+F(x)=\frac{1}{n}\sum_{i=1}^n f_i(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. Hessians are linear operators from $E$ to $E$. The algorithm receives $E$, $n$, $x^0$, and the parameters
+\[
+\kappa\geq1,\qquad \rho>0,\qquad
+\Delta\geq0,\qquad \varepsilon>0.
+\]
+
+Our assumptions:
+\begin{assumption}[Second-order regularity]
+Each component $f_i$ is twice continuously differentiable. For every $x,y\in E$,
+\[
+\frac{1}{n}\sum_{i=1}^n
+\|\nabla^2 f_i(x)-\nabla^2 f_i(y)\|_{\mathrm{op}}^2
+\leq \rho^2\|x-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Strong growth]
+For every $x\in E$,
+\[
+\frac{1}{n}\sum_{i=1}^n\|\nabla f_i(x)\|^2
+\leq\kappa\|\nabla F(x)\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given point $x^0$ satisfies
+\[
+F(x^0)-F(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+Queries may use any index $i\in\{1,\ldots,n\}$ and any point $x\in E$. Each oracle call returns the exact component gradient and Hessian together; this pair counts as one call.
+
+After the allotted oracle calls, the required simultaneous accuracy criterion is
+\[
+P\!\left(
+\left\{
+\begin{aligned}
+&\|\nabla F(\bar{x})\|\leq\varepsilon,\\
+&\langle v,\nabla^2F(\bar{x})v\rangle
+\geq-\sqrt{\rho\varepsilon}\|v\|^2
+\quad\text{for every }v\in E
+\end{aligned}
+\right\}
+\right)\geq\frac{2}{3}.
+\]
+The event displayed here must be measurable under $P$.
+\end{document}

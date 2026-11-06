@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-sum optimization on an $\ell_1$ ball: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumNondualSmoothConvex.lean}{FiniteSumNondualSmoothConvex}.}\label{tab:FiniteSumNondualSmoothConvex}
+\parbox{\linewidth}{\footnotesize $F=n^{-1}\sum_{i=1}^n f_i$ on $Q=\{x\in\mathbb R^d:\|x\|_1\le R\}$, with $d,n\ge1$ and $L,R,\varepsilon>0$. Each $f_i$ is globally convex, differentiable, and has an $L$-Lipschitz Euclidean gradient. Queries return exact component gradients at feasible points. Target: measurable $\hat x\in Q$ with integrable gap and $\int [F(\hat x(\omega))-F(x^\star)]\,dP(\omega)\le\varepsilon$, where $x^\star\in\arg\min_Q F$ and $P$ is the execution law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteSumNondualConvex.lean}{Finite\allowbreak Sum\allowbreak Nondual\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteSumNondualConvex.md}{(review)} & $\mathcal{O}((n+n^{2/3}T^{1/3})\ell^4)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Varag \citep{fsndLan2019v3}, Thm.~1; projected full-gradient initialization & $\mathcal{O}(n\log(2n)+\sqrt{nT})$; includes $n$ initialization calls & \textbf{(1)}: gain factor $(T/n)^{1/6}/\ell^4$ when $T\gg n\ell^{24}$. At $T=n^4$: $\mathcal{O}(n^2\ell^4)$ versus $\mathcal{O}(n^{5/2})$. & \textbf{(1)}: extra logarithmic cost for $T\lesssim n$; exact selectors and cut-emptiness tests have no efficient implementation guarantee, unlike \textbf{(2)}. \\
+\midrule
+\textbf{(3)} SP-Prox \citep{fsndLoginov2026v1}, Prop.~E.8, applied to $F$ & $\mathcal{O}\!\left(n\left[1+(T\log(2d))^{1/3}\log^{7/3}(2+T\log(2d))\right]\right)$ & \textbf{(1)}: leading $n$ dependence improves by $n^{1/3}$ up to logarithms; total-cost gain when $T\ge n$ and $n\gg\ell^{12}$. & \textbf{(1)} guarantees expectation only; \textbf{(3)} is deterministic. Extra logarithms can hurt when $n$ is polylogarithmic. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $\ell=\log(2+d+n+T)$. Costs count component-gradient calls; one gradient of $F$ costs $n$ calls. $P$ denotes the probability law of algorithmic and oracle seeds.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

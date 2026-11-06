@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.SelfConcordantBFGS",
+  "searched_at": "2026-11-06T09:01:00.624321+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{21} \\cdot \\left(d + 1\\right) \\cdot \\left(\\Delta + 1\\right) \\cdot \\left(\\frac{\\Delta + 1}{c1^{3} \\cdot \\left(\\min\\left\\{ c1, 1 - c2 \\right\\}\\right)^{2}} + \\frac{d + 1}{c1 \\cdot \\left(\\min\\left\\{ c1, 1 - c2 \\right\\}\\right)^{4}}\\right) + \\frac{10 \\cdot \\Phi 0}{\\left(\\min\\left\\{ c1, 1 - c2 \\right\\}\\right)^{2}} + \\frac{4 \\cdot \\log\\left(64 + \\frac{2}{\\varepsilon}\\right)}{\\min\\left\\{ c1, 1 - c2 \\right\\}} \\right\\rceil_{+} + 2",
+        "oracle": 0,
+        "type": "LongTails.Setups.SelfConcordantBFGS.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 21 * (↑q.d + 1) * (q.Δ + 1) *\n            ((q.Δ + 1) / (q.c1 ^ 3 * min q.c1 (1 - q.c2) ^ 2) + (↑q.d + 1) / (q.c1 * min q.c1 (1 - q.c2) ^ 4)) +\n          10 * q.Φ0 / min q.c1 (1 - q.c2) ^ 2 +\n        4 * Real.log (64 + 2 / q.ε) / min q.c1 (1 - q.c2)⌉₊ +\n    2"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{21} \\cdot \\left(d + 1\\right) \\cdot \\left(\\Delta + 1\\right) \\cdot \\left(\\frac{\\Delta + 1}{c1^{3} \\cdot \\left(\\min\\left\\{ c1, 1 - c2 \\right\\}\\right)^{2}} + \\frac{d + 1}{c1 \\cdot \\left(\\min\\left\\{ c1, 1 - c2 \\right\\}\\right)^{4}}\\right) + \\frac{10 \\cdot \\Phi 0}{\\left(\\min\\left\\{ c1, 1 - c2 \\right\\}\\right)^{2}} + \\frac{4 \\cdot \\log\\left(64 + \\frac{2}{\\varepsilon}\\right)}{\\min\\left\\{ c1, 1 - c2 \\right\\}} \\right\\rceil_{+} + 2",
+          "oracle": 0,
+          "type": "LongTails.Setups.SelfConcordantBFGS.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 21 * (↑q.d + 1) * (q.Δ + 1) *\n            ((q.Δ + 1) / (q.c1 ^ 3 * min q.c1 (1 - q.c2) ^ 2) + (↑q.d + 1) / (q.c1 * min q.c1 (1 - q.c2) ^ 4)) +\n          10 * q.Φ0 / min q.c1 (1 - q.c2) ^ 2 +\n        4 * Real.log (64 + 2 / q.ε) / min q.c1 (1 - q.c2)⌉₊ +\n    2"
+        }
+      ],
+      "module": "LongTails.Theorems.SelfConcordantBFGS",
+      "namespace": "LongTails.Setups.SelfConcordantBFGS",
+      "setup": "LongTails.Setups.SelfConcordantBFGS",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SelfConcordantBFGS.spec LongTails.Theorems.SelfConcordantBFGS.budget",
+      "theorem": "LongTails.Theorems.SelfConcordantBFGS.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SelfConcordantBFGS",
+      "theorem": "LongTails.Theorems.SelfConcordantBFGS.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Strictly convex minimization on an open convex domain D ⊆ ℝ^d, with positive-definite Hessian everywhere and an attained minimum. No uniform strong-convexity constant is assumed.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: SelfConcordantOn; spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Returns the exact gradient at x + αv, including the initial gradient through a zero-direction query.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: spec.admissible; bfgs.query"
+      },
+      {
+        "label": "other",
+        "details": "Bundled Armijo–weak-Wolfe line-search oracle: for every strict descent direction it returns α > 0 and the endpoint gradient, preserving membership in D and satisfying the two line-search inequalities with 0 < c1 < c2 < 1. Each entire reply costs one call; internal function or gradient evaluations are not counted separately. Replies may depend on history and correlated random seeds, but every reply must satisfy these exact conditions.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: spec.valid, spec.admissible; LongTails/Template.lean: Oracle, executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Standard self-concordance: |D³f(x)[h,v,v]| ≤ 2√(D²f(x)[h,h])D²f(x)[v,v]. Three derivatives exist, the Hessian is positive definite, and every domain-restricted sublevel set is closed in the ambient space. No global gradient or Hessian Lipschitz bound is imposed.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: SelfConcordantOn"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝ^d, represented by Fin d → ℝ.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: Vec; Public"
+      },
+      {
+        "label": "other",
+        "details": "Public information consists only of d, x0, and positive-definite B0. Hidden analysis parameters satisfy Δ ≥ f(x0) − min_D f, Φ0 ≥ 2 log det(B0 + H0) − log det B0 − log det H0 − 2d log 2, and ε > 0, where H0 = ∇²f(x0). The line-search constants c1,c2 are also absent from Public.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: Public, Params, mismatch, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The final output must belong to D and satisfy f(output) − f(xstar) ≤ ε for a global minimizer xstar ∈ D.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: spec.successful"
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the final-output objective-gap bound hold almost surely under the execution law, after the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/SelfConcordantBFGS.lean: spec.successful; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The objective class and line-search conditions are classical, but the complexity model packages an entire admissible line search and endpoint gradient into one oracle call, with a specific log-determinant initialization bound."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SelfConcordantBFGS.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SelfConcordantBFGS",
+          "theorem": "LongTails.Theorems.SelfConcordantBFGS.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

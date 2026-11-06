@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex",
+  "searched_at": "2026-11-06T09:01:41.599451+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "108 \\cdot \\left(\\min\\left\\{ n, \\left\\lceil 128 \\cdot \\rho \\right\\rceil_{+} \\right\\} + \\left\\lceil \\sqrt{\\frac{\\min\\left\\{ n, \\left\\lceil 128 \\cdot \\rho \\right\\rceil_{+} \\right\\} \\cdot L}{\\mu}} \\right\\rceil_{+}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil 7168 \\cdot \\left(1 + \\frac{L}{\\mu}\\right) \\right\\rceil_{+}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  108 * (min p.n ⌈128 * p.ρ⌉₊ + ⌈√(min ↑p.n ↑⌈128 * p.ρ⌉₊ * p.L / p.μ)⌉₊) * Nat.clog 2 ⌈7168 * (1 + p.L / p.μ)⌉₊ *\n    Nat.clog 2 ⌈p.L * p.R ^ 2 / p.ε⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "108 \\cdot \\left(\\min\\left\\{ n, \\left\\lceil 128 \\cdot \\rho \\right\\rceil_{+} \\right\\} + \\left\\lceil \\sqrt{\\frac{\\min\\left\\{ n, \\left\\lceil 128 \\cdot \\rho \\right\\rceil_{+} \\right\\} \\cdot L}{\\mu}} \\right\\rceil_{+}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil 7168 \\cdot \\left(1 + \\frac{L}{\\mu}\\right) \\right\\rceil_{+}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  108 * (min p.n ⌈128 * p.ρ⌉₊ + ⌈√(min ↑p.n ↑⌈128 * p.ρ⌉₊ * p.L / p.μ)⌉₊) * Nat.clog 2 ⌈7168 * (1 + p.L / p.μ)⌉₊ *\n    Nat.clog 2 ⌈p.L * p.R ^ 2 / p.ε⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration",
+      "namespace": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex",
+      "setup": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumStrongGrowthStronglyConvex.spec\n  LongTails.Theorems.StrongGrowthFiniteSumAcceleration.budget",
+      "theorem": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration",
+      "theorem": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Each component f_i is convex on the entire ambient space and has an L-Lipschitz gradient, with L>0.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: spec.admissible and spec.valid."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The average objective F is μ-strongly convex, with μ>0, and has a minimizer x* satisfying ‖x0−x*‖≤R.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x)=(1/n)Σ_i f_i(x), with n≥1.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: Params.nonzero and objective; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects an index i and point x and returns exactly ∇f_i(x). Each such query counts as one oracle call; replies do not depend on oracle randomness or history. All Params are public, including n,L,μ,ρ,R,ε,x0; component functions are hidden.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: spec.Public, spec.Instance, spec.Query, spec.publicInput and spec.admissible; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is a finite-dimensional real inner-product space.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: Params.innerE and Params.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "Global strong growth: (1/n)Σ_i ‖∇f_i(x)‖²≤ρ‖∇F(x)‖² for every x, with ρ≥1. In particular, all component gradients vanish at the objective minimizer.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output X must be measurable, its objective gap integrable, and its expected gap at most ε>0 relative to a global minimizer.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "E[F(X)−F(x*)]≤ε under the joint algorithm and oracle seed law, with a fixed component-gradient call budget.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthStronglyConvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The finite-sum smooth strongly convex formulation is augmented by a global strong-growth restriction that forces common component stationarity at the minimizer."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StrongGrowthFiniteSumAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration",
+          "theorem": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -29,6 +29,31 @@ Every $0\le\alpha<1$.
 Requires $\alpha\le e^{-8(1+\sqrt\ell)}/100$.
 & \textbf{(1)}: Scope extends to $e^{-8(1+\sqrt\ell)}/100<\alpha\le\alpha_\star$ when nonempty. On overlap, smaller stated budget for $\log T\lesssim1.8\cdot10^7$.
 & \textbf{(1)} has exponent $5/8$ instead of $1/2+o(1)$; larger budget on overlap for $\log T\gtrsim1.8\cdot10^7$. \\
+\midrule
+\textbf{(5)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NearAcceleratedPolylogPrecisionRelativeErrorConvex.lean}{Near\allowbreak Accelerated\allowbreak Polylog\allowbreak Precision\allowbreak Relative\allowbreak Error\allowbreak Convex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NearAcceleratedPolylogPrecisionRelativeErrorConvex.md}{(review)}
+& $\mathcal{O}\!\left(s^{16}(1+\log(33s))(2+T)^{1/2+q}\right)$\newline
+$s=1+\ell$, $q=\dfrac{\log(16384(1+\log(33s)))}{32\log(32s)}$.\newline
+$N$ denotes its explicit public budget; $q<0.089$, $q\to0$. & & \\
+\midrule[1.2pt]
+\textbf{(6)} Regularized acceleration \citep[Theorem~7.2]{pgVasinGasnikov2026v1}; Euclidean space
+& $\mathcal{O}((\sqrt T+\alpha T)(1+\log T))$; $T>1$, $0\le\alpha\le1/3$, optimally tuned exponent.
+& \textbf{(5)}: At $\alpha=\alpha_\star$, $T^{1-o(1)}\to T^{1/2+o(1)}$; smaller explicit budget for $\log T\gtrsim606$. Updates need no $\alpha$.
+& \textbf{(5)} requires $\alpha\le\alpha_\star$; much larger constant (about $7\cdot10^{28}$). Larger budget below that crossover; smaller $\alpha$ delays it. \\
+\midrule
+\textbf{(7)} Damped acceleration \citep{srscDampedRepository}
+& $\mathcal{O}\!\left(1+\sqrt{\frac{T}{1-\alpha}}+\frac{\alpha^2T}{1-\alpha}\right)$; $0\le\alpha<1$.
+& \textbf{(5)}: At $\alpha=\alpha_\star$, $T/\log^{24}T\to T^{1/2+o(1)}$; smaller explicit budget for $\log T\gtrsim935$. Updates need no $\alpha$.
+& \textbf{(5)} requires $\alpha\le\alpha_\star$; larger constants and worse cost when $\alpha\lesssim\sqrt{N/T}$. \\
+\midrule
+\textbf{(8)} Recursive envelopes \citep{srscRecursiveRepository}
+& $\mathcal{O}\!\left(\sqrt{2+T}(32+\ell)^{32(1+\sqrt\ell)}\right)$; requires $\alpha\le e^{-8(1+\sqrt\ell)}/100$.
+& \textbf{(5)}: Scope extends to relative errors between this threshold and $\alpha_\star$, when nonempty. On overlap, smaller explicit budget for $\log T\lesssim1.7\cdot10^9$.
+& \textbf{(5)} is asymptotically worse on the overlap; crossover near $\log T=1.7\cdot10^9$. \\
+\midrule
+\textbf{(9)} Same-setup predecessor \citep{srscPolylogPredecessor}; guarantee of \textbf{(1)}
+& $\mathcal{O}((2+T)^{5/8}(1+\ell)^{20})$.
+& \textbf{(5)}: Uniformly smaller explicit budget; exponent $5/8\to1/2+q<0.589$. At $\log T=100$, $\log_{10}N$ falls from $98.5$ to $85.6$.
+& \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

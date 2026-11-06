@@ -1,0 +1,47 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Finite-Sum Minimization on an $\ell_1$ Ball}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ over $C=\{x\in\mathbb{R}^d:\|x\|_1\leq R\}$, where $d,n$ are positive integers and $R>0$. Each component $f_i:\mathbb{R}^d\to\mathbb{R}$ is convex and differentiable, with an $L$-Lipschitz gradient in the Euclidean norm, where $L>0$. The oracle returns $\nabla f_i(x)$ at a queried component $i$ and feasible point $x\in C$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in C$ with integrable objective gap satisfying $\mathbb{E}_{P}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $x^\star$ minimizes $F$ on $C$ and $P$ is the law of the algorithm's randomness.
+
+The constraint uses $\|x\|_1=\sum_{j=1}^d|x_j|$, while $\|\cdot\|_2$ denotes the Euclidean norm. The optimization problem is
+\[
+\min_{x\in C} F(x).
+\]
+The algorithm receives $d,n,L,R$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Component convexity]
+For every $i\in\{1,\ldots,n\}$, every $x,y\in\mathbb{R}^d$, and every $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq (1-t)f_i(x)+t f_i(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Component smoothness]
+Each $f_i$ is differentiable everywhere on $\mathbb{R}^d$, and
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|_2
+\leq L\|x-y\|_2,
+\qquad x,y\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+Oracle queries consist of a chosen index $i\in\{1,\ldots,n\}$ and a point $x\in C$. The smoothness and convexity conditions hold on the entire ambient space, although queries are restricted to $C$.
+
+Continuity of $F$ and compactness of $C$ ensure that a constrained minimizer exists. Fix $x^\star\in C$ satisfying
+\[
+F(x^\star)\leq F(x)\qquad\text{for every }x\in C.
+\]
+After the allotted oracle calls, the output must be a measurable $C$-valued random variable. Its objective gap must satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{P}\bigl[|F(\bar{x})-F(x^\star)|\bigr]&<\infty,\\
+\mathbb{E}_{P}\bigl[F(\bar{x})-F(x^\star)\bigr]&\leq\varepsilon.
+\end{aligned}
+\]
+\end{document}

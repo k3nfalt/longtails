@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HessianStableSkewMonotone",
+  "searched_at": "2026-11-06T09:01:03.926060+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{17} \\cdot \\left(1 + \\left(M \\cdot D\\right)^{\\frac{2}{3}}\\right) \\cdot \\left(\\log\\left(3 + M \\cdot D + \\frac{M \\cdot \\Lambda \\cdot \\left(D + \\frac{1}{M}\\right)^{2}}{\\varepsilon}\\right)\\right)^{3} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HessianStableSkewMonotone.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 17 * (1 + (p.pub.M * p.pub.D) ^ (2 / 3)) *\n      Real.log (3 + p.pub.M * p.pub.D + p.pub.M * p.Λ * (p.pub.D + p.pub.M⁻¹) ^ 2 / p.pub.ε) ^ 3⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{17} \\cdot \\left(1 + \\left(M \\cdot D\\right)^{\\frac{2}{3}}\\right) \\cdot \\left(\\log\\left(3 + M \\cdot D + \\frac{M \\cdot \\Lambda \\cdot \\left(D + \\frac{1}{M}\\right)^{2}}{\\varepsilon}\\right)\\right)^{3} \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.HessianStableSkewMonotone.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 17 * (1 + (p.pub.M * p.pub.D) ^ (2 / 3)) *\n      Real.log (3 + p.pub.M * p.pub.D + p.pub.M * p.Λ * (p.pub.D + p.pub.M⁻¹) ^ 2 / p.pub.ε) ^ 3⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HessianStableSkewNewton",
+      "namespace": "LongTails.Setups.HessianStableSkewMonotone",
+      "setup": "LongTails.Setups.HessianStableSkewMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HessianStableSkewMonotone.spec\n  LongTails.Theorems.HessianStableSkewNewton.budget",
+      "theorem": "LongTails.Theorems.HessianStableSkewNewton.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HessianStableSkewNewton",
+      "theorem": "LongTails.Theorems.HessianStableSkewNewton.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Find a zero of a differentiable monotone operator F:E→E. Its Jacobian is H(x)+S, where S is fixed skew-adjoint and H(x) is self-adjoint positive semidefinite. No scalar objective or saddle representation is supplied.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Two exact oracles return F(x) and the full Jacobian DF(x), respectively. Answers are independent of history and seed. Each oracle has a separate fixed call budget.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: spec.numOracles, spec.Reply, spec.admissible; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For H(x)=DF(x)−S, 0≼H(y)≼exp(M‖y−x‖)H(x) for all x,y. The fixed skew-adjoint part S is unrestricted. Also ‖DF(x)‖≤Λ within distance 3D+1/(4M) of a root xstar.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space, with its induced norm.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: Public.normedE, Public.innerE, Public.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "A root xstar exists with ‖x0−xstar‖≤D. The space, x0, M>0, D>0 and ε>0 are public; Λ≥0 is hidden. Neither S nor xstar is supplied to the algorithm.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: Public, Params, spec.publicInput, spec.valid, spec.admissible; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound holds almost surely under the joint algorithm and oracle seed distribution; deterministic output is not required.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "other",
+        "details": "Return one point x with unsquared operator residual ‖F(x)‖≤ε.",
+        "evidence": "LongTails/Setups/HessianStableSkewMonotone.lean: spec.Output, spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The monotone root problem imposes multiplicative stability on the positive semidefinite Jacobian component while allowing an unrestricted fixed skew component, with a hidden local Jacobian bound and an almost-sure residual criterion."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HessianStableSkewNewton.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HessianStableSkewNewton",
+          "theorem": "LongTails.Theorems.HessianStableSkewNewton.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

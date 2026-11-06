@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.FiniteSumNondualSmoothConvex",
+  "searched_at": "2026-11-06T09:01:05.529392+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "1099511627776 \\cdot n \\cdot \\left(1 + \\left\\lceil \\left(\\frac{L \\cdot R^{2}}{n \\cdot \\varepsilon}\\right)^{\\frac{1}{3}} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\operatorname{Nat.log}_{2}\\left(2 + d + n + \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right)^{4}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteSumNondualSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  1099511627776 * p.n * (1 + ⌈(p.L * p.R ^ 2 / (↑p.n * p.ε)) ^ 3⁻¹⌉₊) *\n    (1 + Nat.log 2 (2 + p.d + p.n + ⌈p.L * p.R ^ 2 / p.ε⌉₊)) ^ 4"
+      },
+      "budgets": [
+        {
+          "latex": "1099511627776 \\cdot n \\cdot \\left(1 + \\left\\lceil \\left(\\frac{L \\cdot R^{2}}{n \\cdot \\varepsilon}\\right)^{\\frac{1}{3}} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\operatorname{Nat.log}_{2}\\left(2 + d + n + \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right)^{4}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteSumNondualSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  1099511627776 * p.n * (1 + ⌈(p.L * p.R ^ 2 / (↑p.n * p.ε)) ^ 3⁻¹⌉₊) *\n    (1 + Nat.log 2 (2 + p.d + p.n + ⌈p.L * p.R ^ 2 / p.ε⌉₊)) ^ 4"
+        }
+      ],
+      "module": "LongTails.Theorems.FiniteSumNondualConvex",
+      "namespace": "LongTails.Setups.FiniteSumNondualSmoothConvex",
+      "setup": "LongTails.Setups.FiniteSumNondualSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumNondualSmoothConvex.spec\n  LongTails.Theorems.FiniteSumNondualConvex.budget",
+      "theorem": "LongTails.Theorems.FiniteSumNondualConvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FiniteSumNondualConvex",
+      "theorem": "LongTails.Theorems.FiniteSumNondualConvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a convex objective over the closed ℓ₁ ball of radius R; every component is globally convex and has globally L-Lipschitz Euclidean gradient.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: domain and spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is F(x)=(1/n)∑ᵢ fᵢ(x), with n>0.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: objective and spec.Instance; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects an index i and feasible point x and returns exactly ∇fᵢ(x). No component values are supplied; replies are independent of history and oracle seed.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: spec.Query, spec.Reply, and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Queries and outputs must satisfy ∥x∥₁≤R, while component gradient smoothness is measured in the Euclidean norm.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: domain, Feasible, and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝᵈ with Euclidean norm, d>0.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: Point and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d,n,L,R,ε are public and strictly positive. The component functions are hidden. No gradient magnitude or initial objective-gap bound is assumed.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: Params, spec.Public, spec.publicInput, spec.valid, and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "A measurable feasible output X must have integrable objective gap F(X)−F(x⋆) for a constrained minimizer x⋆.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[F(X)−F(x⋆)]≤ε under the joint algorithm and oracle randomness, with a fixed component-gradient query budget.",
+        "evidence": "LongTails/Setups/FiniteSumNondualSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth convex finite-sum minimization over a known ℓ₁ ball with exact component-gradient access and expected objective accuracy is an established constrained optimization formulation; its constraint geometry differs from its Euclidean smoothness geometry."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FiniteSumNondualConvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FiniteSumNondualConvex",
+          "theorem": "LongTails.Theorems.FiniteSumNondualConvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

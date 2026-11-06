@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/InexactJacobianMonotone.lean}{InexactJacobianMonotone}.}\label{tab:InexactJacobianMonotone}
+\parbox{\linewidth}{\footnotesize $F:E\to E$ is differentiable and monotone on a finite-dimensional real inner-product space, with $\|DF(x)-DF(y)\|\le M\|x-y\|$ and a root $x^\star$ satisfying $\|x_0-x^\star\|\le R$. Each call returns exact $F(x)$ and $J$ satisfying $\|J-DF(x)\|\le\delta$, allowing history-dependent adversarial errors. Here $M,R,\varepsilon>0$, $\delta\ge0$. The target is $\|F(\mathrm{output})\|\le\varepsilon$ almost surely; \textbf{(1)} guarantees it pathwise and uses known $M,\delta,R,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/OptimalInexactJacobianMonotone.lean}{Optimal\allowbreak Inexact\allowbreak Jacobian\allowbreak Monotone} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/OptimalInexactJacobianMonotone.md}{(review)} & $\mathcal{O}(1+(MR^2/\varepsilon)^{2/5}+\delta R/\varepsilon)$ combined calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{uljmJiangYoon2026v1}, Thms.~4.4, 4.6 & $\mathcal{O}\!\left((1+(MR^2/\varepsilon)^{2/5})\right.$\newline $\left.{}\cdot(1+\log(1+MR^2/\varepsilon))\right)$ exact second-order calls, including trials; $\delta=0$. & \textbf{(1)}: removes a logarithmic factor for $\delta=0$, $MR^2/\varepsilon\gg1$. Scope: permits $\delta>0$, adding $\delta R/\varepsilon$. & \textbf{(1)} covers equations only; \textbf{(2)} also covers composite inclusions with tangent residual. \\
+\midrule
+\textbf{(3)} \citep{uljmZhang2026v1}, Thm.~3.1 ($p=2$) & $\mathcal{O}(1+(MR^2/\varepsilon)^{2/5})$ exact second-order calls; compact convex $X$, tangent residual $\le\varepsilon$, $\delta=0$. & \textbf{(1)}: full-space residual with inexact Jacobians. Rates not comparable: compact-domain tangent residual does not establish the full-space target. & \textbf{(1)} does not cover constrained VIs. \\
+\midrule
+\textbf{(4)} VIJI \citep{ijmAgafonov2024v2}, Thm.~3.2 & $\mathcal{O}(1+(MD^3/\varepsilon)^{2/3}+\delta D^2/\varepsilon)$ combined calls; bounded closed convex $X$, Minty gap $\le\varepsilon$. Model subproblems require additional computation. & \textbf{(1)}: unbounded-domain, last-iterate norm residual instead of averaged Minty gap. Rates not comparable: different criteria and diameter versus root distance. & \textbf{(1)} does not cover constrained VIs or provide quasi-Newton instantiations. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $DF$: Jacobian; $M$: Jacobian Lipschitz constant; $\delta$: Jacobian error bound; $R$: initial distance bound (to a VI solution in \textbf{(3)}); $D=\operatorname{diam}(X)$; VI: variational inequality. Tangent residual: $\operatorname{dist}(0,F(x)+N_X(x))$, with $N_X$ the normal cone. Minty gap: $\sup_{z\in X}\langle F(z),x-z\rangle$. Combined call: one $F$-value and one Jacobian approximation; arithmetic and model solves are not oracle calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
