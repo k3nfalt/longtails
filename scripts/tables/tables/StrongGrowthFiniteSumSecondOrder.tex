@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StrongGrowthFiniteSumSecondOrder.lean}{StrongGrowthFiniteSumSecondOrder}.}\label{tab:StrongGrowthFiniteSumSecondOrder}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, $f_i\in C^2$, $\kappa\ge1$, $\rho,\varepsilon>0$, and $F(x_0)-F(x)\le\Delta$ for every $x$. Assume $n^{-1}\sum_i\|\nabla f_i(x)\|^2\le\kappa\|\nabla F(x)\|^2$ and $n^{-1}\sum_i\|\nabla^2f_i(x)-\nabla^2f_i(y)\|^2\le\rho^2\|x-y\|^2$. One paired call returns a component gradient and full Hessian. Target: $\Pr(\|\nabla F(X)\|\le\varepsilon,\ \nabla^2F(X)\succeq-\sqrt{\rho\varepsilon}I)\ge2/3$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CoupledCubicStrongGrowth.lean}{Coupled\allowbreak Cubic\allowbreak Strong\allowbreak Growth} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CoupledCubicStrongGrowth.md}{(review)} & $\mathcal{O}\!\left(\kappa(d+1)T(1+\log T)\right)$ paired calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} Full-batch cubic regularization, \citep{sgShen2019}, Table 1 & $\mathcal{O}(nT)$ paired calls; deterministic & \textbf{(1)}: removes $n$; asymptotic factor $n/[\kappa(d+1)(1+\log T)]$ when this ratio diverges. & \textbf{(1)}: adds strong growth and RMS Hessian regularity; probability $2/3$ instead of certainty. Worse outside the gain regime; very large leading constant. \\
+\midrule
+\textbf{(3)} STR2 \citep{sgShen2019}, Cor.~5.1, Estimator 6 & $\mathcal{O}\!\left(n+T[n^{3/4}(1+\log T)+\sqrt n\log(e(d+1)T)]\right)$ paired calls, confidence $2/3$. Special case: component $L_1$-smoothness and uniform $\rho$-Hessian Lipschitzness. & \textbf{(1)}: removes $L_1$; uniform Hessian regularity becomes RMS. On overlap, fixed $\kappa,\rho,\Delta$, $n=\varepsilon^{-1}$, $d=\varepsilon^{-1/4}$: $\mathcal{O}(\varepsilon^{-7/4}\log(1/\varepsilon))$ versus $\mathcal{O}(\varepsilon^{-9/4}\log(1/\varepsilon))$. & \textbf{(1)}: adds strong growth; linear dimension cost can lose when $\kappa d\gtrsim n^{3/4}$. Fixed confidence instead of adjustable $1-\delta$. \\
+\midrule
+\textbf{(4)} PSGD \citep{sgRoy2020}, Thm.~3.1(a) & Gradient-only oracle; half the iterates satisfy second-order accuracy with probability $1-\delta$. Special case: population gradient smoothness and relative sub-Gaussian gradient tails. & \textbf{(1)}: selected certified output instead of an unselected collection; drops population gradient smoothness and relative sub-Gaussian tails. & \textbf{(1)}: requires component Hessians and RMS Hessian regularity; fixed confidence instead of adjustable $1-\delta$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d=\dim E$; $T=1+\sqrt\rho\,\Delta/\varepsilon^{3/2}$; $\Delta\ge0$ is an initial objective-gap bound. Hessian norms are operator norms. $L_1$ is the component gradient-Lipschitz constant; $\delta$ is failure probability. Paired-call bounds count all component evaluations, including refreshes and sampled batches.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

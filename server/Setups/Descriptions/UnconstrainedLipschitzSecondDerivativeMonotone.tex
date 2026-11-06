@@ -1,0 +1,50 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Monotone Roots with Lipschitz Second Derivatives}
+We consider finding a zero of a twice continuously differentiable monotone map $F:E\to E$ on a finite-dimensional real inner product space $E$. Its second derivative is $L$-Lipschitz, where $L>0$. A given point $x^0\in E$ satisfies $\|F'(x^0)\|_{\mathrm{op}}\leq H_0$, where $H_0\geq0$, and lies within distance $D>0$ of a zero $x^\star$. Here primes denote Fr\'echet derivatives and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. Two oracles return $F(x)$ and $F'(x)$, respectively. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The root-finding problem is to find $x\in E$ such that
+\[
+F(x)=0.
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The derivative $F'(x)$ is a linear map from $E$ to $E$, and $F''(x)$ is a bilinear map from $E\times E$ to $E$; their norms are the induced operator norms. The algorithm receives $E$, $x^0$, $L$, $D$, $H_0$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Monotonicity]
+For every $x,y\in E$,
+\[
+\langle F(x)-F(y),x-y\rangle\geq0.
+\]
+\end{assumption}
+
+\begin{assumption}[Lipschitz second derivative]
+The map $F$ is twice continuously Fr\'echet differentiable on $E$, and
+\[
+\|F''(x)-F''(y)\|_{\mathrm{op}}
+\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^0-x^\star\|&\leq D,\\
+\|F'(x^0)\|_{\mathrm{op}}&\leq H_0.
+\end{aligned}
+\]
+\end{assumption}
+
+Both oracles are exact and may be queried at any point of $E$. Calls to the value oracle and the derivative oracle are counted separately. After the allotted calls, the output must satisfy the residual criterion
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

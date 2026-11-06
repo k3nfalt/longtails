@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Radius-only generalized-smooth convex optimization (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean}{RadiusOnlyGeneralizedSmoothConvex}).}\label{tab:RadiusOnlyGeneralizedSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex $f$ on a real Hilbert space has a differentiable gradient satisfying $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ and a minimizer $x_\star$ with $\|x_0-x_\star\|\le R$; $L_0,L_1,R,\varepsilon>0$. Exact gradient access; target $f(\hat x)-f(x_\star)\le\varepsilon$ almost surely. The constructed method receives $x_0,L_0,L_1$, but neither $R$ nor $\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RadiusFreeGeneralizedAccelerated.lean}{Radius\allowbreak Free\allowbreak Generalized\allowbreak Accelerated} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RadiusFreeGeneralizedAccelerated.md}{(review)} & $\mathcal{O}\!\left(\sqrt{L_0R^2/\varepsilon}+(1+q)\log(2+q)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} SHERPA+CRUISE \citep{radiusEverestV1}, Thm.~3.7 & $\mathcal{O}\!\left(\sqrt{L_0R^2/\varepsilon}+(1+q)\log(2+q)\right)$ & \textbf{(1)}: Matches known rate; needs neither $R$ nor $\varepsilon$, valid at every budget beyond threshold. Doubling may recover this adaptivity. & \textbf{(1)}: Larger proved numerical constants. \\
+\midrule
+\textbf{(3)} \citep{radiusTyurinV2}, Thm.~4.3; finite-dimensional restriction; $\bar R\ge R$, $\Gamma_0\ge2\Delta/\|x_0-x_\star\|^2$ & $\mathcal{O}\!\left(1+\sqrt{L_0R^2/\varepsilon}\right.$\newline $\left.{}+L_1\bar R\log_+\!\min\!\left\{\frac{L_1^2\bar R^2\Gamma_0}{L_0},\frac{\Gamma_0R^2}{\varepsilon}\right\}\right.$\newline $\left.{}+\log_+(\Gamma_0/L_0)\right)$ & \textbf{(1)}: No $\bar R,\Gamma_0$ inputs. For $q\gg1$, $\bar R=R$, $\Gamma_0\asymp\Delta/R^2$, $\Delta\asymp L_0e^q/L_1^2$: $\mathcal{O}(\sqrt{L_0R^2/\varepsilon}+q\log q)$ versus $\mathcal{O}(\sqrt{L_0R^2/\varepsilon}+q^2)$ when $q^2\gtrsim\sqrt{L_0R^2/\varepsilon}$. &  \\
+\midrule
+\textbf{(4)} Backtracking accelerated \citep{radiusRepository} & $\mathcal{O}\!\left(\sqrt{L_0R^2/\varepsilon}\right.$\newline $\left.{}+(1+q)\log\!\left[2+(1+q)^2\left(1+a^{-1}+a+\frac{L_1^2\Delta}{L_0}(1+a)\right)\right]\right)$ & \textbf{(1)}: Removes gap dependence. For $a\asymp1$, $\Delta\asymp L_0e^q/L_1^2$, $q\gg1$, replaces $q^2$ by $q\log q$; material when $q^2\gtrsim\sqrt{L_0R^2/\varepsilon}$. & \textbf{(1)} needs $L_0,L_1$; \textbf{(4)} does not. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=L_1R$; $\Delta=f(x_0)-f(x_\star)$ (or an upper bound); $a=L_0h_0$, with initial trial step $h_0>0$; $\log_+t=\max\{0,\log t\}$. $\bar R$ is a supplied radius bound and $\Gamma_0>0$ an initial curvature parameter. Costs count all gradient calls, including probes and trials.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

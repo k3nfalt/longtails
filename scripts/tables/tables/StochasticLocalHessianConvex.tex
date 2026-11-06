@@ -1,0 +1,44 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticLocalHessianConvex.lean}{StochasticLocalHessianConvex}.}\label{tab:StochasticLocalHessianConvex}
+\parbox{\linewidth}{\footnotesize Convex $f\in C^2(\mathbb R^d)$ has a minimizer $x_\star$, $\|x_0-x_\star\|\le R$, and $f(x_0)-f(x_\star)\le\Delta$. For $\|y-x\|\le\rho$, $\|\nabla^2f(y)-\nabla^2f(x)\|\le(M_0+M_1\|\nabla f(x)\|)\|y-x\|$. IID samples have law $p_0$ under $P$; jointly measurable $g$ has integrable unbiased gradients $\int g(x,\omega)\,dp_0=\nabla f(x)$ and integrable squared error with integral at most $\sigma^2$. Measurable deterministic $H$ satisfies $\|H(x)-\nabla^2f(x)\|\le\delta$. Here $M_0,M_1,\delta,\sigma\ge0$, $R,\Delta,\rho,\varepsilon>0$, and $0<\beta<1$. Target: measurable output with $P\{f(\mathrm{out})-f(x_\star)>\varepsilon\}\le\beta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticLocalHessianAccelerated.lean}{Stochastic\allowbreak Local\allowbreak Hessian\allowbreak Accelerated} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticLocalHessianAccelerated.md}{(review)} &
+$G:\ \mathcal{O}((B+C+D+S)\ell^3)$;\newline $H:\ \mathcal{O}((B+C+D)\ell^3)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{slhcContractingV2}, Thm.~5.1. Derived bound; $M_1=0$ &
+$G:\ \mathcal{O}(1+S/\beta^2+D/\sqrt\beta+C/\beta^{2/7})$;\newline $H$: omit $S/\beta^2$. Ball restriction, symmetrization/PSD shift, batching and Markov. &
+\textbf{(1)}: Scope extends to $M_1>0$. For $M_1=0$, $\rho=R$, noise-dominated costs improve from $\mathcal{O}(S\beta^{-2})$ to $\mathcal{O}(S\ell^3)$ when $\beta^{-2}\gg\ell^3$. &
+\textbf{(1)}: $\ell^3$ overhead at fixed confidence; larger leading constant. Requires deterministic Hessians and $\Delta,\beta$; lacks expected-gap guarantee. \\
+\midrule
+\textbf{(3)} \citep{slhcLocalV1}, Thm.~4.1, Cor.~F.6; $\sigma=0$ &
+$H:\ \mathcal{O}(BJ+C+D)$;\newline $G:\ \mathcal{O}(BJ+C+D+\log_+(\bar\tau_0/\eta_0)+BQJ^{2/3})$. Includes backtracking. &
+\textbf{(1)}: Scope extends exact gradients to unbiased finite-variance gradients under local gradient-dependent Hessian variation. &
+\textbf{(1)}: Requires all setup parameters; \textbf{(3)} is parameter-free. Extra $\ell^3$ on polynomial Hessian terms; only probabilistic accuracy. \\
+\midrule
+\textbf{(4)} \citep{slhcInexactV3}, Thm.~3.2. Derived bound; $M_1=0$ &
+$G:\ \mathcal{O}(1+S/\beta^2+D/\sqrt\beta+(M_0R^3/(\beta\varepsilon))^{1/3})$;\newline $H$: omit $S/\beta^2$. Batching and Markov. &
+\textbf{(1)}: Scope extends to $M_1>0$. On $M_1=0$, curvature exponent $2/7$ replaces $1/3$, up to $\ell^3$; confidence dependence becomes logarithmic. &
+\textbf{(1)}: Deterministic Hessians; needs $\Delta,\beta$; lacks expected-gap guarantee. Noise term pays $\ell^3$ at fixed confidence; larger leading constant. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $G,H$: gradient and Hessian calls, including batches.
+$B=1+(M_1R^2)^{1/3}+(R/\rho)^{2/3}$, $C=(M_0R^3/\varepsilon)^{2/7}$, $D=\sqrt{\delta R^2/\varepsilon}$, $S=\sigma^2R^2/\varepsilon^2$.
+$\ell=\log(2+\Delta/\varepsilon+\delta R^2/\varepsilon+M_0R^3/\varepsilon+M_1R^2+(R/\rho)^2+\beta^{-1}+S)$.
+For \textbf{(3)}, $\eta_0>0$ is the initial regularization guess, $g_0=\|\nabla f(x_0)\|$, $\bar\tau_0=\max\{4\delta,2\sqrt{(M_0+M_1g_0)g_0},2g_0/\rho\}$,
+$J=1+\log_+(\max\{\eta_0,\bar\tau_0\}R^2/\varepsilon)$,
+$r_0=\min\{\rho/2,1/(6\sqrt{M_1})\}$,
+$\bar g=\max_{\|x-x_\star\|\le(1+2/\sqrt3)R}\|\nabla f(x)\|$,
+$Q=\log_+((\delta+\bar g/r_0)/(\delta+M_0r_0))$.
+$\log_+t=\max\{0,\log t\}$, $\log_+0=0$, and $1/0=+\infty$ in $r_0$; the displayed bound is vacuous if $Q=+\infty$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Monotone equations with Lipschitz second derivative: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/UnconstrainedLipschitzSecondDerivativeMonotone.lean}{UnconstrainedLipschitzSecondDerivativeMonotone}.}\label{tab:UnconstrainedLipschitzSecondDerivativeMonotone}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F:E\to E$ is $C^2$ and monotone, $D^2F$ is globally $L$-Lipschitz, $\|DF(x_0)\|\le H_0$, and some zero $x^\star$ satisfies $\|x_0-x^\star\|\le D$. Here $L,D,\varepsilon>0$ and $H_0\ge0$. Exact $F,DF$ queries are available; the target is $\|F(x)\|\le\varepsilon$, almost surely. Result \textbf{(1)} is deterministic and uses known $L,D,H_0,\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HomotopyNewtonMonotone.lean}{Homotopy\allowbreak Newton\allowbreak Monotone} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HomotopyNewtonMonotone.md}{(review)} & $\mathcal{O}\!\left((1+(LD^3/\varepsilon)^{1/4})\ell^2\right)$ total $F,DF$ calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} AEP tensor \citep{hssJiangYoon2026v1}, Thms.~5.2--5.3, $p=3$ & $\mathcal{O}\!\left((1+(LD^3/\varepsilon)^{1/4})\right.$\newline $\left.{}\cdot[1+\log(1+LD^3/\varepsilon)]\right)$ total $F,DF,D^2F$ calls, including trials. & \textbf{(1)}: Removes $D^2F$ queries with dimension-free cost; matches the polynomial residual rate. & \textbf{(1)}: Extra logarithmic overhead and $H_0$ knowledge; larger proved constant. Unconstrained only; \textbf{(2)} also covers composite inclusions. \\
+\midrule
+\textbf{(3)} AEP Newton \citep{hssJiangYoon2026v1}, Thms.~4.4, 4.6 & $\mathcal{O}\!\left((1+(L_2D^2/\varepsilon)^{2/5})\right.$\newline $\left.{}\cdot[1+\log(1+L_2D^2/\varepsilon)]\right)$ total $F,DF$ calls, including trials; requires globally $L_2$-Lipschitz $DF$. & \textbf{(1)}: On the overlap, fixed positive $L,L_2,D,H_0$ and $\varepsilon\to0$: $\mathcal{O}(\varepsilon^{-1/4}\log^2(1/\varepsilon))$ versus $\mathcal{O}(\varepsilon^{-2/5}\log(1/\varepsilon))$. Scope: allows non-Lipschitz $DF$. & \textbf{(1)}: Needs Lipschitz $D^2F$ and known $L,H_0$; classes incomparable. Can lose when $L_2$ is small. Unconstrained only. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $DF,D^2F$: Jacobian and second derivative; $\ell=1+\log(1+H_0D/\varepsilon+LD^3/\varepsilon)$. $L_2$: global Jacobian Lipschitz constant. AEP: anchored extra-proximal. Costs count primitive derivative/value calls; linear algebra and model-subproblem solves are uncharged.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

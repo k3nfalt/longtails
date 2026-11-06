@@ -1,0 +1,49 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Hessian-Stable Skew Monotone Equations}
+We seek a zero of a differentiable map $F:E\to E$ on a finite-dimensional real inner product space $E$. Its Jacobian has a constant skew-adjoint part and a positive semidefinite symmetric part with exponential stability parameter $M>0$. A given point $x^0\in E$ lies within distance $D>0$ of a zero $x^\star$, around which the Jacobian satisfies a local bound with hidden constant $\Lambda\geq0$. Two exact oracles return $F(x)$ and its Jacobian $J(x)=DF(x)$. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with $\|F(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The underlying equation is
+\[
+F(x)=0,\qquad x\in E.
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product and $\|\cdot\|$ for its induced norm; $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $E$, $x^0$, $M$, $D$, and $\varepsilon$; $\Lambda$ may enter the oracle-call budgets but is not an algorithm input.
+
+Our assumptions:
+\begin{assumption}[Skew decomposition and multiplicative stability]
+The map $F$ is Fr\'echet differentiable everywhere on $E$. There exists a fixed linear operator $S:E\to E$ such that, with $H(x)=J(x)-S$, for every $x,y,u,v\in E$,
+\[
+\begin{aligned}
+\langle Sv,v\rangle&=0,\\
+\langle H(x)u,v\rangle&=\langle u,H(x)v\rangle,\\
+\langle H(x)v,v\rangle&\geq0,\\
+\langle H(y)v,v\rangle
+&\leq e^{M\|y-x\|}\langle H(x)v,v\rangle.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nearby zero and local Jacobian bound]
+There exists $x^\star\in E$ such that
+\[
+F(x^\star)=0,\qquad \|x^0-x^\star\|\leq D.
+\]
+Around this same zero, the full Jacobian satisfies
+\[
+\|J(x)\|_{\mathrm{op}}\leq\Lambda
+\qquad\text{whenever}\qquad
+\|x-x^\star\|\leq 3D+\frac{1}{4M}.
+\]
+\end{assumption}
+
+Queries to either oracle may be made at any point of $E$. A value-oracle call returns $F(x)$, and a Jacobian-oracle call returns the full linear operator $J(x):E\to E$; the two types of calls are counted separately. After the allotted calls, the required residual accuracy is
+\[
+\|F(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

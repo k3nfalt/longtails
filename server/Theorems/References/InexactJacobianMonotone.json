@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.InexactJacobianMonotone",
+  "searched_at": "2026-11-06T09:00:46.846099+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 4194304 \\cdot \\left(1 + \\left(\\frac{M \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{2}{5}} + \\frac{\\delta \\cdot R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.InexactJacobianMonotone.spec.Params → ℕ",
+        "value": "fun p => ⌈4194304 * (1 + (p.M * p.R ^ 2 / p.ε) ^ (2 / 5) + p.δ * p.R / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 4194304 \\cdot \\left(1 + \\left(\\frac{M \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{2}{5}} + \\frac{\\delta \\cdot R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.InexactJacobianMonotone.spec.Params → ℕ",
+          "value": "fun p => ⌈4194304 * (1 + (p.M * p.R ^ 2 / p.ε) ^ (2 / 5) + p.δ * p.R / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.OptimalInexactJacobianMonotone",
+      "namespace": "LongTails.Setups.InexactJacobianMonotone",
+      "setup": "LongTails.Setups.InexactJacobianMonotone",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.InexactJacobianMonotone.spec\n  LongTails.Theorems.OptimalInexactJacobianMonotone.budget",
+      "theorem": "LongTails.Theorems.OptimalInexactJacobianMonotone.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.OptimalInexactJacobianMonotone",
+      "theorem": "LongTails.Theorems.OptimalInexactJacobianMonotone.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone root finding: differentiable F:E→E satisfies ⟨F(x)−F(y),x−y⟩≥0 and has a zero xstar with ‖x0−xstar‖≤R. No scalar objective is specified.",
+        "evidence": "LongTails/Setups/InexactJacobianMonotone.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each call at x returns exact F(x) and a linear map J with ‖J−DF(x)‖≤δ in operator norm. Errors may depend arbitrarily on history and oracle seeds; no independence or unbiasedness is required.",
+        "evidence": "LongTails/Setups/InexactJacobianMonotone.lean: spec.Reply and spec.admissible; LongTails/Template.lean: Oracle.answer"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space; the budget has no dimension dependence.",
+        "evidence": "LongTails/Setups/InexactJacobianMonotone.lean: Params.finiteE and Params.innerE"
+      },
+      {
+        "label": "other",
+        "details": "Globally Lipschitz Jacobian: ‖DF(x)−DF(y)‖≤M‖x−y‖. Public information includes E, x0, M>0, δ≥0, R>0 and ε>0; F and its zero are hidden. Jacobian errors have a uniform absolute bound for every query, history and seed.",
+        "evidence": "LongTails/Setups/InexactJacobianMonotone.lean: Params, spec.publicInput, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "almost_sure",
+        "details": "The residual bound holds almost surely under the joint algorithm-seed and oracle-seed law.",
+        "evidence": "LongTails/Setups/InexactJacobianMonotone.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "other",
+        "details": "Return a single point x with operator residual ‖F(x)‖≤ε, using a fixed budget O(1+(MR²/ε)^(2/5)+δR/ε) of joint operator/Jacobian calls.",
+        "evidence": "LongTails/Setups/InexactJacobianMonotone.lean: spec.successful; supplied extracted result budget; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Monotone root finding with Lipschitz Jacobian is established, but exact operator values paired with arbitrary uniformly bounded Jacobian errors and an almost-sure residual guarantee define a specialized oracle formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.OptimalInexactJacobianMonotone.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.OptimalInexactJacobianMonotone",
+          "theorem": "LongTails.Theorems.OptimalInexactJacobianMonotone.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "setup": "LongTails.Setups.StochasticConstrainedQuasar",
+  "searched_at": "2026-11-06T09:02:30.195058+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{96} \\cdot \\left(2 + \\left\\lceil 8 \\cdot \\log\\left(\\frac{8}{\\delta}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil 2 + \\frac{L \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon} \\right\\rceil_{+}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{\\sqrt{\\frac{L \\cdot D^{2}}{\\varepsilon}}}{\\gamma} + \\frac{\\sigma^{2} \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticConstrainedQuasar.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 96 * (2 + ↑⌈8 * Real.log (8 / q.δ)⌉₊) * (1 + ↑(Nat.clog 2 ⌈2 + q.L * q.D ^ 2 / (q.γ ^ 2 * q.ε)⌉₊)) ^ 2 *\n      (1 + √(q.L * q.D ^ 2 / q.ε) / q.γ + q.σ ^ 2 * q.D ^ 2 / (q.γ ^ 2 * q.ε ^ 2))⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{96} \\cdot \\left(2 + \\left\\lceil 8 \\cdot \\log\\left(\\frac{8}{\\delta}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil 2 + \\frac{L \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon} \\right\\rceil_{+}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{\\sqrt{\\frac{L \\cdot D^{2}}{\\varepsilon}}}{\\gamma} + \\frac{\\sigma^{2} \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.StochasticConstrainedQuasar.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 96 * (2 + ↑⌈8 * Real.log (8 / q.δ)⌉₊) * (1 + ↑(Nat.clog 2 ⌈2 + q.L * q.D ^ 2 / (q.γ ^ 2 * q.ε)⌉₊)) ^ 2 *\n      (1 + √(q.L * q.D ^ 2 / q.ε) / q.γ + q.σ ^ 2 * q.D ^ 2 / (q.γ ^ 2 * q.ε ^ 2))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticConstrainedQuasarHighProbability",
+      "namespace": "LongTails.Setups.StochasticConstrainedQuasar",
+      "setup": "LongTails.Setups.StochasticConstrainedQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticConstrainedQuasar.spec OracleTemplate.StochasticQuasar.budget",
+      "theorem": "OracleTemplate.StochasticQuasar.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticConstrainedQuasarHighProbability",
+      "theorem": "OracleTemplate.StochasticQuasar.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Objectives may be nonconvex; only quasar-convexity and L-Lipschitz gradients on X are required.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "On X, γ(f(x)−f(xstar)) ≤ ⟨∇f(x),x−xstar⟩, where 0<γ≤1 and xstar minimizes f over X.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Oracle 0 returns g(x,ω), with IID seeds, E[g(x,ω)]=∇f(x) and E‖g(x,ω)−∇f(x)‖²≤σ² for x∈X. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible, oracle answer and moment conditions; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "proximal",
+        "details": "Oracle 1 returns the exact Euclidean projection onto X, characterized by ⟨z−proj(z),w−proj(z)⟩≤0 for every w∈X. Projection calls have a separate fixed budget.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "σ≥0 bounds the centered second moment uniformly on X. No exponential-tail or almost-sure noise bound is assumed; finite-variance heavy-tailed noise is permitted.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real Hilbert space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: Params; LongTails/Setups/SmoothAndConvex.lean: Public."
+      },
+      {
+        "label": "other",
+        "details": "X is compact and convex, has diameter at most D>0, and contains x0 and xstar. Smoothness is required only on X; ∇f(xstar)=0 is not required. L,D,γ,σ,ε,δ and x0 are public; f,X,xstar and the sampling law are hidden.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: Params, Instance, spec.publicInput, spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The measurable output must satisfy f(output)−f(xstar)≤ε, with ε>0.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "feasibility",
+        "details": "Output membership in X is required jointly with the objective-gap guarantee.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "The probability of failing either feasibility or ε objective accuracy is at most δ∈(0,1), under the joint algorithm and oracle randomness, with fixed per-oracle budgets.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Combines constrained quasar-convex optimization with projection access and high-probability objective accuracy under only finite-variance stochastic gradients."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StochasticQuasar.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticConstrainedQuasarHighProbability",
+          "theorem": "OracleTemplate.StochasticQuasar.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

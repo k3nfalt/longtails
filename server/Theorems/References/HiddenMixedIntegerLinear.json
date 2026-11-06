@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.HiddenMixedIntegerLinear",
+  "searched_at": "2026-11-06T09:01:17.744317+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\min\\left\\{ 2 \\cdot \\left(\\prod_{j=0}^{p-1} \\max\\left\\{ hi\\left(j\\right) - lo\\left(j\\right) + 1, 0 \\right\\}\\right) - 1, 1 + 4 \\cdot p \\cdot \\left|\\operatorname{goodPoints}\\left(P\\right)\\right| \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HiddenMixedIntegerLinear.spec.Params → ℕ",
+        "value": "fun P =>\n  min (2 * ∏ j, (P.hi j - P.lo j + 1).toNat - 1)\n    (1 + 4 * P.p * (LongTails.Setups.HiddenMixedIntegerLinear.goodPoints P).card)"
+      },
+      "budgets": [
+        {
+          "latex": "\\min\\left\\{ 2 \\cdot \\left(\\prod_{j=0}^{p-1} \\max\\left\\{ hi\\left(j\\right) - lo\\left(j\\right) + 1, 0 \\right\\}\\right) - 1, 1 + 4 \\cdot p \\cdot \\left|\\operatorname{goodPoints}\\left(P\\right)\\right| \\right\\}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HiddenMixedIntegerLinear.spec.Params → ℕ",
+          "value": "fun P =>\n  min (2 * ∏ j, (P.hi j - P.lo j + 1).toNat - 1)\n    (1 + 4 * P.p * (LongTails.Setups.HiddenMixedIntegerLinear.goodPoints P).card)"
+        }
+      ],
+      "module": "LongTails.Theorems.BestBoundHiddenMilp",
+      "namespace": "LongTails.Setups.HiddenMixedIntegerLinear",
+      "setup": "LongTails.Setups.HiddenMixedIntegerLinear",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HiddenMixedIntegerLinear.spec OracleTemplate.HiddenMixedIntegerLinear.budget",
+      "theorem": "OracleTemplate.HiddenMixedIntegerLinear.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BestBoundHiddenMilp",
+      "theorem": "OracleTemplate.HiddenMixedIntegerLinear.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Bounded mixed-integer linear optimization: minimize cᵀz+dᵀy subject to Az+Gy≤b, z∈ℤᵖ, lo≤z≤hi, and y∈ℝᑫ. The objective is linear; integrality makes the feasible domain generally nonconvex.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: objective, MixedFeasible, RowFeasible; LongTails/Setups/HiddenMixedIntegerLinear.lean: data."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact box-restricted LP optimization oracle. A query supplies integer lower and upper bounds; the reply is an optimal continuous relaxation point or none certifying infeasibility. Correctness holds for every history and seed; arbitrary optimal-point selection is permitted. Each complete LP query counts as one oracle call.",
+        "evidence": "LongTails/Setups/HiddenMixedIntegerLinear.lean: spec.Query, spec.Reply, spec.admissible; LongTails/Setups/BoundedMixedIntegerLinear.lean: IsRelaxationOracle, SolvesRelaxation, RelaxationFeasible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Integer variables lie in ℤᵖ and continuous variables in ℝᑫ, with finitely many linear inequalities. Integer coordinates have public finite bounds; continuous coordinates need not be bounded.",
+        "evidence": "LongTails/Setups/HiddenMixedIntegerLinear.lean: Public, Params, Solution; LongTails/Setups/BoundedMixedIntegerLinear.lean: MixedFeasible."
+      },
+      {
+        "label": "other",
+        "details": "Only p, q, c, d, lo, hi are public. The constraint count m, matrices A and G, right-hand side b, and certificate λ are hidden. Validity requires either λ≥0 and d+λᵀG=0, or infeasibility of the initial continuous relaxation. The extracted budget depends on the hidden cardinality of goodPoints, whose Lagrangian values are lower bounds on every mixed-feasible objective value.",
+        "evidence": "LongTails/Setups/HiddenMixedIntegerLinear.lean: Public, Params, spec.publicInput, spec.valid, lagrangian, goodPoints; supplied OracleTemplate.HiddenMixedIntegerLinear.result budget."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Exact global optimality: a returned solution must be mixed-feasible and have objective no larger than every mixed-feasible solution. No positive epsilon tolerance is present.",
+        "evidence": "LongTails/Setups/HiddenMixedIntegerLinear.lean: spec.successful; LongTails/Setups/BoundedMixedIntegerLinear.lean: SolvesMixed."
+      },
+      {
+        "label": "feasibility",
+        "details": "Return an exact feasible optimizer, or none only when no mixed-feasible solution exists.",
+        "evidence": "LongTails/Setups/BoundedMixedIntegerLinear.lean: SolvesMixed; LongTails/Setups/HiddenMixedIntegerLinear.lean: spec.Output."
+      },
+      {
+        "label": "deterministic",
+        "details": "Success is required for every outcome ω, including every algorithm and oracle seed, rather than merely in expectation or almost surely.",
+        "evidence": "LongTails/Setups/HiddenMixedIntegerLinear.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The underlying optimization problem is standard MILP, but hidden constraints accessed exclusively through an exact box-relaxation oracle, together with a hidden-certificate-dependent call budget, create an unusual information and complexity model."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HiddenMixedIntegerLinear.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BestBoundHiddenMilp",
+          "theorem": "OracleTemplate.HiddenMixedIntegerLinear.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

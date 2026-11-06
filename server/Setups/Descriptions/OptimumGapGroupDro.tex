@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Group DRO with Optimum Gaps}
+We minimize the worst-group risk $F(x)=\max_{1\leq i\leq K}\mathbb{E}_{Z\sim\nu_i}[\ell(x,Z)]$ over a compact convex set $X\subseteq\mathbb{R}^d$, where $K\geq1$ is the number of groups, $\nu_i$ is group $i$'s sample law, and $\ell$ is a jointly measurable, bounded, convex, Lipschitz loss on $X$. Hidden lower bounds describe group-risk gaps at a common minimizer. The oracle returns a fresh sample from a queried group, with independent sample streams across groups. For accuracy $\varepsilon>0$ and failure probability $\delta>0$, the goal is a measurable output $\bar{x}$ always in $X$ with $F(\bar{x})-\min_{x\in X}F(x)\leq\varepsilon$ with probability at least $1-\delta$.
+
+Let $d\geq0$ be an integer, let $\mathcal{Z}$ be a measurable sample space, and let $\ell:\mathbb{R}^d\times\mathcal{Z}\to\mathbb{R}$ denote the loss. The norm $\|\cdot\|$ is Euclidean. An unknown probability measure $\nu$ on $\mathcal{Z}^K$ has coordinate marginals $\nu_1,\ldots,\nu_K$. Define the group risks and objective by
+\[
+\begin{aligned}
+f_i(x)&=\mathbb{E}_{Z\sim\nu_i}[\ell(x,Z)],\
+F(x)&=\max_{1\leq i\leq K}f_i(x),
+\end{aligned}
+\]
+and consider the problem
+\[
+\min_{x\in X} F(x).
+\]
+The algorithm receives $d$, $K$, $\mathcal{Z}$, $X$, a given point $x^0$, the loss $\ell$, and parameters $R,G,\varepsilon,\delta$ satisfying
+\[
+R\geq0,\qquad G\geq0,\qquad
+0<\varepsilon\leq1,\qquad 0<\delta\leq\tfrac14.
+\]
+The group laws are accessible through sampling; the gap parameters $\gamma_1,\ldots,\gamma_K$ are not algorithm inputs and may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Feasible set and loss]
+The set $X$ is compact and convex, $x^0\in X$, and
+\[
+\|x-x^0\|\leq R\qquad\text{for every }x\in X.
+\]
+The loss $\ell$ is jointly measurable. For every $z\in\mathcal{Z}$, $x,y\in X$, and $t\in[0,1]$,
+\[
+\begin{aligned}
+0&\leq\ell(x,z)\leq1,\\
+\ell((1-t)x+ty,z)&\leq(1-t)\ell(x,z)+t\ell(y,z),\\
+|\ell(x,z)-\ell(y,z)|&\leq G\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent group reservoirs]
+The coordinate maps on $\mathcal{Z}^K$ are mutually independent under $\nu$. There is a probability law $Q$ on reservoirs $(Z_n)_{n\geq0}\in(\mathcal{Z}^K)^{\mathbb{N}}$ such that the row variables $Z_n$ are measurable, mutually independent, and each has law $\nu$. Writing $Z_n=(Z_{n,1},\ldots,Z_{n,K})$, a query to group $i$ returns $Z_{m,i}$, where $m$ is the number of previous queries to that group. The algorithm's randomness is independent of the reservoir.
+\end{assumption}
+
+\begin{assumption}[Optimum gaps]
+The parameters satisfy $0\leq\gamma_i\leq1$ for every group $i$. There exists a common point $x^\star\in X$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in X,\\
+\gamma_i&\leq F(x^\star)-f_i(x^\star)
+&&\text{for }i=1,\ldots,K.
+\end{aligned}
+\]
+\end{assumption}
+
+Each oracle call selects one group and returns one sample in $\mathcal{Z}$; the budget counts the total number of such calls across all groups. After these calls, the output $\bar{x}$ must be measurable and belong to $X$ for every realization. Its required accuracy is
+\[
+P\bigl(F(\bar{x})-F(x^\star)>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the independent reservoir with law $Q$.
+\end{document}

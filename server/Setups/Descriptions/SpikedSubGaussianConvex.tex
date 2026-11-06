@@ -1,0 +1,68 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Spiked Noise}
+We consider minimizing a convex, $G$-Lipschitz function $f:E\to\mathbb{R}$ on $E=\mathbb{R}^{m+1}$, where $m\geq0$ is an integer and $G>0$. A global minimizer $x^\star$ satisfies $\|x^\star\|\leq R$, where $R>0$. The oracle returns an unbiased subgradient estimate with independent, identically distributed samples and centered sub-Gaussian noise: its variance proxy is $v_{\mathrm{top}}$ along the first coordinate and $v_{\mathrm{rest}}$ in orthogonal directions, where $0\leq v_{\mathrm{rest}}\leq v_{\mathrm{top}}$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $2/3$ over the algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+We use the Euclidean inner product and norm, and index coordinates by $0,\ldots,m$. The algorithm receives $m$, the measurable sample space $\Omega$, and $G,R,v_{\mathrm{top}},v_{\mathrm{rest}},\varepsilon$; the objective and oracle distribution are accessible only through oracle replies.
+
+Our assumptions:
+\begin{assumption}[Convexity and Lipschitz continuity]
+For every $x,y\in E$ and $s\in[0,1]$,
+\[
+\begin{aligned}
+f((1-s)x+sy)&\leq(1-s)f(x)+sf(y),\\
+|f(x)-f(y)|&\leq G\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Bounded minimizer]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Spiked sub-Gaussian subgradient oracle]
+There are a probability measure $p$ on $\Omega$, a map $v:E\to E$, and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the map $g(x,\cdot)$ is Bochner integrable under $p$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=v(x),\\
+\langle v(x),y-x\rangle&\leq f(y)-f(x)
+\qquad (y\in E).
+\end{aligned}
+\]
+Define the directional variance proxy by
+\[
+V(u)=v_{\mathrm{rest}}\|u\|^2
+ +(v_{\mathrm{top}}-v_{\mathrm{rest}})u_0^2,
+\qquad u\in E.
+\]
+For every $x,u\in E$ and $t\in\mathbb{R}$, the random variable $\exp(t\langle g(x,\xi)-v(x),u\rangle)$ is integrable under $\xi\sim p$ and satisfies
+\[
+\mathbb{E}_{\xi\sim p}\!\left[
+\exp\bigl(t\langle g(x,\xi)-v(x),u\rangle\bigr)
+\right]
+\leq \exp\left(\frac{t^2V(u)}{2}\right).
+\]
+The sample sequence $(\xi_k)_{k\geq0}$ has a probability law $Q$ on $\Omega^{\mathbb{N}}$ under which its coordinate maps are measurable, mutually independent, and each has distribution $p$. At call $k$, a query $x\in E$ receives $g(x,\xi_k)$. The algorithm's randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made anywhere in $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\frac13,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle sample sequence.
+\end{document}

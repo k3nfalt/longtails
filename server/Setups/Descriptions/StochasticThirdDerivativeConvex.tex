@@ -1,0 +1,76 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Convex Third-Order Regularity}
+We consider minimizing a convex, three-times continuously differentiable function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer, with $L_3$-Lipschitz third derivative, $L_3>0$. A given point $x^0$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$ and $R,\Delta>0$. Each oracle call returns gradient and Hessian estimates using a shared sample, independently across calls. The gradient estimate is unbiased; their mean squared errors are bounded by $\sigma_g^2$ and $\sigma_h^2$, respectively, where $\sigma_g,\sigma_h\geq0$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ within distance $R$ of $x^0$ for every realization, with $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $2/3$.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm $\|\cdot\|$ and its induced operator and multilinear norms $\|\cdot\|_{\mathrm{op}}$. The algorithm receives $d,x^0,L_3,R,\Delta,\varepsilon,\sigma_g,\sigma_h$.
+
+Our assumptions:
+\begin{assumption}[Convexity and third-derivative regularity]
+The function $f$ belongs to $C^3(\mathbb{R}^d;\mathbb{R})$. For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+t f(y),\\
+\|\nabla^3 f(x)-\nabla^3 f(y)\|_{\mathrm{op}}
+&\leq L_3\|x-y\|.
+\end{aligned}
+\]
+Here $\nabla^3 f(x)$ is the trilinear third derivative; equivalently, its norm is that of the second derivative of the gradient, viewed as a bilinear map into $\mathbb{R}^d$.
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial bounds]
+There is a fixed $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Paired stochastic oracle]
+Let $\Omega$ be a measurable sample space with probability measure $\nu$. There are jointly measurable maps
+\[
+\begin{aligned}
+g &: \mathbb{R}^d\times\Omega\to\mathbb{R}^d,\\
+H &: \mathbb{R}^d\times\Omega\to\mathcal{L}(\mathbb{R}^d,\mathbb{R}^d),
+\end{aligned}
+\]
+where $\mathcal{L}(\mathbb{R}^d,\mathbb{R}^d)$ denotes the space of linear operators. For each fixed $x\in\mathbb{R}^d$, the random vector $g(x,\xi)$ is Bochner integrable for $\xi\sim\nu$, and both squared errors below are integrable. They satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
+&\leq\sigma_g^2,\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|H(x,\xi)-\nabla^2 f(x)\|_{\mathrm{op}}^2\bigr]
+&\leq\sigma_h^2.
+\end{aligned}
+\]
+The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and are independent of the algorithm's randomness. At call $k$, a query $x\in\mathbb{R}^d$ returns the pair
+\[
+\bigl(g(x,\xi_k),H(x,\xi_k)\bigr).
+\]
+Both components use the same sample, and the pair counts as one oracle call.
+\end{assumption}
+
+Queries may be made anywhere in $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\|\bar{x}-x^0\|\leq R
+\qquad\text{for every realization},
+\]
+and the accuracy requirement is
+\[
+P\bigl(f(\bar{x})-f(x^\star)\leq\varepsilon\bigr)\geq\frac{2}{3},
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

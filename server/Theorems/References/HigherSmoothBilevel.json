@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.HigherSmoothBilevel",
+  "searched_at": "2026-11-06T09:01:06.734116+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{40} \\cdot \\left(\\frac{L \\cdot \\left(\\frac{L}{\\mu}\\right)^{3}}{\\varepsilon}\\right)^{\\frac{1}{4}} \\cdot \\left(1 + \\Delta \\cdot \\sqrt{\\frac{L \\cdot \\left(\\frac{L}{\\mu}\\right)^{4}}{\\varepsilon^{3}}}\\right) \\cdot \\log\\left(2 \\cdot \\frac{L}{\\mu} \\cdot \\left(1 + \\frac{L}{\\varepsilon}\\right) \\cdot \\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\cdot \\left(1 + \\frac{G}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HigherSmoothBilevel.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ 40 * (p.L * (p.L / p.μ) ^ 3 / p.ε) ^ 4⁻¹ * (1 + p.Δ * √(p.L * (p.L / p.μ) ^ 4 / p.ε ^ 3)) *\n      Real.log (2 * (p.L / p.μ) * (1 + p.L / p.ε) * (1 + p.Δ / p.ε) * (1 + p.G / p.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{40} \\cdot \\left(\\frac{L \\cdot \\left(\\frac{L}{\\mu}\\right)^{3}}{\\varepsilon}\\right)^{\\frac{1}{4}} \\cdot \\left(1 + \\Delta \\cdot \\sqrt{\\frac{L \\cdot \\left(\\frac{L}{\\mu}\\right)^{4}}{\\varepsilon^{3}}}\\right) \\cdot \\log\\left(2 \\cdot \\frac{L}{\\mu} \\cdot \\left(1 + \\frac{L}{\\varepsilon}\\right) \\cdot \\left(1 + \\frac{\\Delta}{\\varepsilon}\\right) \\cdot \\left(1 + \\frac{G}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HigherSmoothBilevel.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ 40 * (p.L * (p.L / p.μ) ^ 3 / p.ε) ^ 4⁻¹ * (1 + p.Δ * √(p.L * (p.L / p.μ) ^ 4 / p.ε ^ 3)) *\n      Real.log (2 * (p.L / p.μ) * (1 + p.L / p.ε) * (1 + p.Δ / p.ε) * (1 + p.G / p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.BilevelFirstOrderCurvature",
+      "namespace": "LongTails.Setups.HigherSmoothBilevel",
+      "setup": "LongTails.Setups.HigherSmoothBilevel",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HigherSmoothBilevel.spec OracleTemplate.BilevelFirstOrderCurvature.budget",
+      "theorem": "OracleTemplate.BilevelFirstOrderCurvature.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BilevelFirstOrderCurvature",
+      "theorem": "OracleTemplate.BilevelFirstOrderCurvature.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "strongly_convex",
+        "details": "Only the lower-level function g(x,·) is required to be μ-strongly convex for every x.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: spec.admissible strong-convexity inequality."
+      },
+      {
+        "label": "nonconvex",
+        "details": "The unconstrained hyper-objective Φ(x)=f(x,argmin_y g(x,y)) may be nonconvex.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: hyperObjective; spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Nonconvex–strongly-convex bilevel optimization.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: lowerSolution; hyperObjective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query (x,y) returns the exact full derivatives of both f and g; replies have no noise or history dependence. Higher derivatives are not supplied.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: Reply; firstOrderReply; spec.admissible oracle equality."
+      },
+      {
+        "label": "function_value",
+        "details": "The same query also returns both exact function values f(x,y) and g(x,y).",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: firstOrderReply."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "X and Y are finite-dimensional real inner-product spaces.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: Params.finiteX; Params.finiteY; Params.innerX; Params.innerY."
+      },
+      {
+        "label": "other",
+        "details": "Globally, f is C² with bounded derivative ‖Df‖≤L and L-Lipschitz first and second derivatives; g is C³ with L-Lipschitz first, second, and third derivatives. Public parameters satisfy 0<μ≤L, Δ>0, G≥0, ε>0. Initialization satisfies Φ(x0)−inf Φ≤Δ and ‖∇_y g(x0,y0)‖≤G. All Params are public; f and g are hidden instance functions.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: Params; Instance; spec.Public; spec.publicInput; spec.valid; spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Output x∈X must be a differentiability point of Φ and satisfy ‖∇Φ(x)‖≤ε, without squaring the norm.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: spec.Output; spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The output criterion holds almost surely over the joint algorithm and oracle seed law, within the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/HigherSmoothBilevel.lean: spec.successful; LongTails/Template.lean: Convergence; executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established unconstrained nonconvex–strongly-convex bilevel formulation with exact first-order access and higher-order smoothness assumptions for accelerated stationarity guarantees."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.BilevelFirstOrderCurvature.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BilevelFirstOrderCurvature",
+          "theorem": "OracleTemplate.BilevelFirstOrderCurvature.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

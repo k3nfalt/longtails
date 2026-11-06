@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Finite-sum optimization with Lipschitz third derivatives: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumThirdSmoothConvex.lean}{FiniteSumThirdSmoothConvex}.}\label{tab:FiniteSumThirdSmoothConvex}
+\parbox{\linewidth}{\footnotesize $f=n^{-1}\sum_{i=1}^n f_i$ on a finite-dimensional real inner-product space with its Borel measurable structure; $n\ge1$. Each $f_i$ is convex, $C^3$, with $L$-Lipschitz third derivative. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$, $\|\nabla f(x_0)\|\le G$, $\|\nabla^2f(x_0)\|\le H$; $L,G,H\ge0$, $R,\varepsilon>0$. Exact component queries return $(\nabla f_i,\nabla^2 f_i)$. Target: $\Pr\{f(\hat x)-f(x_\star)\le\varepsilon\}\ge2/3$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HessianOnlyFiniteSumThirdSmooth.lean}{Hessian\allowbreak Only\allowbreak Finite\allowbreak Sum\allowbreak Third\allowbreak Smooth} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HessianOnlyFiniteSumThirdSmooth.md}{(review)} & $\mathcal{O}((n+n^{4/5}U^{1/5})\ell^2)$ component calls; fixed budget. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Full-mean hyperfast \citep{fstKamzolov2020v3}, Thm.~2 & $\mathcal{O}(n(1+U^{1/5})\Lambda\ell_{\rm it})$ component calls; deterministic accuracy. $\Lambda$ denotes unspecified logarithmic overhead. & \textbf{(1)}: Polynomial-factor gain $n^{1/5}$ for $U\ge n$, $U^{1/5}$ for $1\le U\le n$, modulo logarithms. Scope: $G,H$ needed only at $x_0$, not along iterates. & \textbf{(1)} requires convex components; \textbf{(2)} needs only convex mean. Success $2/3$ instead of deterministic accuracy; additive $n\ell^2$ cost. \\
+\midrule
+\textbf{(3)} A-TLN \citep{fstZhang2026v1}, Thm.~5.1; overlap: $L_2$-Lipschitz component Hessians & $\mathcal{O}((n+n^{5/7}V^{2/7})(1+\log n)^2)$ expected component calls; almost-sure accuracy. Constant-factor truncation gives the shared target. & \textbf{(1)}: Smaller polynomial iterative term if $n^3U^7<V^{10}$. For $L=L_2=R=1$, $\varepsilon=n^{-2}$, $G,H=n^{\mathcal{O}(1)}$: $\mathcal{O}(n^{6/5}\log^2 n)$ versus $\mathcal{O}(n^{9/7}\log^2 n)$. Scope: includes quartics without globally Lipschitz Hessians. & \textbf{(1)} needs $C^3$ and Lipschitz third derivatives, plus $G,H$; classes incomparable. On overlap, larger polynomial term when $n^3U^7>V^{10}$; only $2/3$ success. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $U=LR^4/\varepsilon$, $V=L_2R^3/\varepsilon$, $\ell=1+\log(2+n+GR/\varepsilon+HR^2/\varepsilon+LR^4/\varepsilon)$. $L_2$: global component Hessian Lipschitz constant. $\ell_{\rm it}=1+\log_+((G_{\rm it}+H_{\rm it})/\varepsilon)$; $G_{\rm it},H_{\rm it}$ bound mean gradients and Hessians along the iterates of \textbf{(2)}. $\log_+t=\max\{0,\log t\}$. $\Lambda$: logarithmic factors suppressed in \textbf{(2)}'s stated bound. One full-mean call costs $n$ component calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
