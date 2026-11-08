@@ -2,6 +2,7 @@ import LongTails.Setups.BirchSgd
 import LongTails.Proofs.RingmasterStochastic
 import LongTails.Proofs.SgdExecution
 import LongTails.Proofs.RennalaConvergence
+import LongTails.Proofs.BirchTraceDescent
 import Mathlib.Algebra.Order.Chebyshev
 import Mathlib.Tactic
 
@@ -1231,98 +1232,160 @@ theorem assembly (K : ℕ) (L σ ε R γ Δ : ℝ) (hL : 0 < L) (hε : 0 < ε) (
     (hzero : R = 0 → ∀ k, a k = b k)
     (hK : 4 * (R + 1) * L * Δ / ε + 8 * σ ^ 2 * L * Δ / ε ^ 2 ≤ K) :
     ∑ k ∈ Finset.range K, a k ≤ K * ε := by
-  have hcard : ∀ k, ((I k).card : ℝ) ≤ R := by
-    intro k
+  classical
+  let l := L * γ
+  let r := L * γ * R
+  let u := (1 + r) * (1 + 2 * r)
+  let β := 1 - l - 2 * r ^ 2
+  let t := β / u
+  let j := (1 + r) / r
+  let W := 1 + t * j
+  let E := fun k => L ^ 2 * D k
+  let C := fun k i => if i ∈ I k then 2 * l ^ 2 * R else 0
+  have hl0 : 0 ≤ l := by dsimp [l]; positivity
+  have hr0 : 0 ≤ r := by dsimp [r]; positivity
+  have hβ : 0 ≤ β := by dsimp [β]; nlinarith
+  have hu : 0 < u := by dsimp [u]; positivity
+  have ht : 0 ≤ t := div_nonneg hβ hu.le
+  have hj : 0 ≤ j := by dsimp [j]; positivity
+  have hW : 0 ≤ W := by dsimp [W]; positivity
+  have htu : t * u = β := div_mul_cancel₀ β hu.ne'
+  have hcard (k : ℕ) : ((I k).card : ℝ) ≤ R := by
     have h := Finset.card_le_card (hI k)
     rw [Nat.card_Ico] at h
     have h' : ((I k).card : ℝ) ≤ ((k - p k : ℕ) : ℝ) := by exact_mod_cast h
     rw [Nat.cast_sub (hpk k)] at h'
     linarith [hpR k]
-  have hDk' : ∀ k, D k ≤ 2 * γ ^ 2 * R * ((∑ i ∈ I k, b i) + σ ^ 2) := by
-    intro k
-    refine (hDk k).trans ?_
-    have hnn : 0 ≤ (∑ i ∈ I k, b i) + σ ^ 2 :=
+  have hcol (i : ℕ) (hi : i ∈ Finset.range K) :
+      ∑ k ∈ Finset.range K, C k i ≤ 2 * r ^ 2 := by
+    let d := fun n : ℕ => if n = i then (1 : ℝ) else 0
+    have hd : ∑ k ∈ Finset.range K, d k = 1 := by simp [d, hi]
+    have h := window_sum K R hR p I hI hpR d (fun n => by dsimp [d]; positivity)
+    rw [hd, mul_one] at h
+    have he : (∑ k ∈ Finset.range K, C k i) =
+        (2 * l ^ 2 * R) * ∑ k ∈ Finset.range K, ∑ n ∈ I k, d n := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro k _
+      simp [C, d, mul_ite]
+    rw [he]
+    have hh := mul_le_mul_of_nonneg_left h (by positivity : 0 ≤ 2 * l ^ 2 * R)
+    dsimp only [r, l] at hh ⊢
+    nlinarith only [hh]
+  have hjr : j * r = if r = 0 then 0 else 1 + r := by
+    by_cases hz : r = 0
+    · simp [j, hz]
+    · simp [j, hz]
+  have hjr2 : j * (2 * r ^ 2) = 2 * r * (1 + r) := by
+    calc
+      _ = 2 * r * (j * r) := by ring
+      _ = _ := by rw [hjr]; split <;> simp_all
+  have hcap (i : ℕ) (hi : i ∈ Finset.range K) :
+      ∑ k ∈ Finset.range K, W * C k i ≤ (1 - l) - t * (1 + r) := by
+    rw [← Finset.mul_sum]
+    have h := mul_le_mul_of_nonneg_left (hcol i hi) hW
+    have he : W * (2 * r ^ 2) + t * (1 + r) = 2 * r ^ 2 + t * u := by
+      dsimp only [W, u]
+      calc
+        _ = 2 * r ^ 2 + t * (j * (2 * r ^ 2)) + t * (1 + r) := by ring
+        _ = _ := by rw [hjr2]; ring
+    rw [htu] at he
+    dsimp only [β] at he
+    linarith
+  have herror (k : ℕ) (hk : k ∈ Finset.range K) :
+      E k ≤ (∑ i ∈ Finset.range K, C k i * b i) + 2 * l * r * σ ^ 2 := by
+    have hsub : I k ⊆ Finset.range K := fun i hi =>
+      Finset.mem_range.mpr ((Finset.mem_Ico.mp (hI k hi)).2.trans (Finset.mem_range.mp hk))
+    have hsum : (∑ i ∈ Finset.range K, C k i * b i) =
+        (2 * l ^ 2 * R) * ∑ i ∈ I k, b i := by
+      rw [Finset.mul_sum, ← Finset.sum_subset hsub (f := fun i => C k i * b i)]
+      · exact Finset.sum_congr rfl (fun i hi => by simp [C, hi])
+      · intro i _ hi
+        simp [C, hi]
+    have hs0 : 0 ≤ (∑ i ∈ I k, b i) + σ ^ 2 :=
       add_nonneg (Finset.sum_nonneg (fun i _ => hb0 i)) (sq_nonneg σ)
-    have h1 := mul_le_mul_of_nonneg_right (hcard k) hnn
-    have h2 := mul_le_mul_of_nonneg_left h1 (by positivity : (0 : ℝ) ≤ 2 * γ ^ 2)
-    linarith
-  have hwin := window_sum K R hR p I hI hpR b hb0
-  set A := ∑ k ∈ Finset.range K, a k with hAdef
-  set B := ∑ k ∈ Finset.range K, b k with hBdef
-  set Ds := ∑ k ∈ Finset.range K, D k with hDsdef
-  have hE1 : γ / 2 * A + γ / 2 * (1 - L * γ) * B ≤ Δ + γ * L ^ 2 / 2 * Ds +
-      K * (γ ^ 2 * L / 2 * σ ^ 2) := by
-    have hs : ∀ k ∈ Finset.range K, F (k + 1) - F k ≤ -(γ / 2) * a k +
-        (-(γ / 2 * (1 - L * γ))) * b k + γ * L ^ 2 / 2 * D k + γ ^ 2 * L / 2 * σ ^ 2 :=
-      fun k _ => by linarith [hstep k]
-    have hsum := Finset.sum_le_sum hs
-    rw [Finset.sum_range_sub] at hsum
-    simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_const, Finset.card_range,
-      nsmul_eq_mul] at hsum
-    linarith
-  have hE2 : Ds ≤ 2 * γ ^ 2 * R * (R * B + K * σ ^ 2) := by
-    have hs : ∀ k ∈ Finset.range K, D k ≤ 2 * γ ^ 2 * R * ((∑ i ∈ I k, b i) + σ ^ 2) :=
-      fun k _ => hDk' k
-    have hsum := Finset.sum_le_sum hs
-    rw [← Finset.mul_sum, Finset.sum_add_distrib, Finset.sum_const, Finset.card_range,
-      nsmul_eq_mul] at hsum
-    have h2 := mul_le_mul_of_nonneg_left hwin (by positivity : (0 : ℝ) ≤ 2 * γ ^ 2 * R)
-    nlinarith
-  have hq0 : 0 ≤ L * γ * σ ^ 2 / ε := by positivity
-  have hq' : L * γ * σ ^ 2 / ε ≤ 1 / 4 := by rw [div_le_iff₀ hε]; linarith
-  have hqε : K * ε * (L * γ * σ ^ 2 / ε) = K * (L * γ * σ ^ 2) := by field_simp
-  have hcase' : L * γ = 1 / 2 ∨ L * γ * R = 1 / 2 ∨ L * γ * σ ^ 2 / ε = 1 / 4 := by
-    rcases hcase with h | h | h
-    · exact Or.inl h
-    · exact Or.inr (Or.inl h)
-    · right; right; rw [h]; field_simp
-  have hE3 : A ≤ (1 + L * γ * R) * (1 + 2 * (L * γ * R)) * B +
-      2 * (1 + L * γ * R) * (K * ε) * (L * γ * σ ^ 2 / ε) := by
-    rw [mul_assoc (2 * (1 + L * γ * R)) (K * ε), hqε]
-    by_cases hR0 : R = 0
-    · have hAB : A = B := Finset.sum_congr rfl (fun k _ => hzero hR0 k)
-      rw [hR0, hAB]
-      have : 0 ≤ (K : ℝ) * (L * γ * σ ^ 2) := by positivity
-      nlinarith
-    · have hRp : 0 < R := lt_of_le_of_ne hR (Ne.symm hR0)
-      have hρp : 0 < L * γ * R := by positivity
-      have hs : ∀ k ∈ Finset.range K, L * γ * R * a k ≤
-          L * γ * R * (1 + L * γ * R) * b k + (1 + L * γ * R) * L ^ 2 * D k :=
-        fun k _ => hyoung k
-      have hsum := Finset.sum_le_sum hs
-      rw [← Finset.mul_sum, Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
-        at hsum
-      have hE2' := mul_le_mul_of_nonneg_left hE2
-        (by positivity : (0 : ℝ) ≤ (1 + L * γ * R) * L ^ 2)
-      have hkey : L * γ * R * A ≤ L * γ * R * ((1 + L * γ * R) * (1 + 2 * (L * γ * R)) * B +
-          2 * (1 + L * γ * R) * (K * (L * γ * σ ^ 2))) := by
-        have e1 : (1 + L * γ * R) * L ^ 2 * (2 * γ ^ 2 * R * (R * B + K * σ ^ 2)) =
-            L * γ * R * (2 * (1 + L * γ * R) * (L * γ * R) * B +
-              2 * (1 + L * γ * R) * (K * (L * γ * σ ^ 2))) := by ring
-        nlinarith
-      exact le_of_mul_le_mul_left hkey hρp
-  have hA1 : A + (1 - L * γ - 2 * (L * γ * R) ^ 2) * B ≤
-      2 * Δ / γ + K * ε * (L * γ * σ ^ 2 / ε) * (1 + 2 * (L * γ * R)) := by
-    rw [hqε]
-    have hE2' := mul_le_mul_of_nonneg_left hE2 (by positivity : (0 : ℝ) ≤ γ * L ^ 2 / 2)
-    have e1 : γ * L ^ 2 / 2 * (2 * γ ^ 2 * R * (R * B + K * σ ^ 2)) =
-        γ / 2 * (2 * (L * γ * R) ^ 2 * B + 2 * (L * γ * R) * (K * (L * γ * σ ^ 2))) := by ring
-    have e2 : γ / 2 * (2 * Δ / γ) = Δ := by field_simp
-    have e3 : K * (γ ^ 2 * L / 2 * σ ^ 2) = γ / 2 * (K * (L * γ * σ ^ 2)) := by ring
-    have hmain : γ / 2 * (A + (1 - L * γ - 2 * (L * γ * R) ^ 2) * B) ≤
-        γ / 2 * (2 * Δ / γ + K * (L * γ * σ ^ 2) * (1 + 2 * (L * γ * R))) := by
-      rw [mul_add (γ / 2) (2 * Δ / γ), e2]
-      nlinarith
-    exact le_of_mul_le_mul_left hmain (by positivity)
-  have hY : 2 * Δ / γ * (2 * (L * γ * R) + 2 * (L * γ) + 4 * (L * γ * σ ^ 2 / ε)) ≤ K * ε := by
-    have e : 2 * Δ / γ * (2 * (L * γ * R) + 2 * (L * γ) + 4 * (L * γ * σ ^ 2 / ε)) =
+    have h := mul_le_mul_of_nonneg_left (hcard k)
+      (mul_nonneg (by positivity : 0 ≤ 2 * γ ^ 2) hs0)
+    have hd : D k ≤ 2 * γ ^ 2 * R * ((∑ i ∈ I k, b i) + σ ^ 2) :=
+      (hDk k).trans (by linarith only [h])
+    have hh := mul_le_mul_of_nonneg_left hd (sq_nonneg L)
+    rw [hsum]
+    dsimp only [E, l, r]
+    nlinarith only [hh]
+  have hcompare (k : ℕ) : a k ≤ (1 + r) * b k + j * E k := by
+    by_cases hz : r = 0
+    · have hRz : R = 0 := by
+        by_contra h
+        have hr : 0 < r := mul_pos (mul_pos hL hγ0) (lt_of_le_of_ne hR (Ne.symm h))
+        linarith
+      simp [j, hz, hzero hRz k]
+    · apply le_of_mul_le_mul_left _ (lt_of_le_of_ne hr0 (Ne.symm hz))
+      rw [mul_add, ← mul_assoc r j, mul_comm r j, hjr, ite_eq_right hz]
+      dsimp only [r, E]
+      nlinarith only [hyoung k]
+  have hfilter (k : ℕ) (hk : k < K) :
+      (Finset.range K).filter (fun i => id i = k) = {k} := by
+    ext i
+    simp only [Finset.mem_filter, Finset.mem_range, id_eq, Finset.mem_singleton]
+    exact ⟨And.right, fun h => ⟨h ▸ hk, h⟩⟩
+  have h := LongTails.Proofs.BirchTraceDescent.convergence (Finset.range K) K id F a
+    (fun _ => 1) (fun _ => t) (fun _ => l * σ ^ 2) b E
+    (fun _ => 1 - l) (fun _ => 1) (fun _ => 1 + r) (fun _ => j)
+    (fun _ => 2 * l * r * σ ^ 2) C (γ / 2) Δ (1 + t) (by positivity)
+    (fun _ hi => Finset.mem_range.mp hi) (fun i _ => hb0 i) (fun _ _ => ht)
+    (fun _ _ => le_rfl) (fun _ _ => hW) hcap hFK
+    (fun k hk => by
+      rw [hfilter k hk, Finset.sum_singleton]
+      simp only [one_mul]
+      dsimp only [E, l]
+      nlinarith only [hstep k])
+    (fun k hk => by rw [hfilter k hk, Finset.sum_singleton]; exact hcompare k)
+    herror
+  change (1 + t) * _ ≤ Δ / (γ / 2) + (∑ _ ∈ Finset.range K, l * σ ^ 2) +
+    ∑ _ ∈ Finset.range K, W * (2 * l * r * σ ^ 2) at h
+  simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul] at h
+  let q₀ := l * σ ^ 2 / ε
+  have hq0 : 0 ≤ q₀ := by dsimp [q₀]; positivity
+  have hq' : q₀ ≤ 1 / 4 := (div_le_iff₀ hε).2 (by nlinarith only [hq])
+  have hcase' : l = 1 / 2 ∨ r = 1 / 2 ∨ q₀ = 1 / 4 := by
+    rcases hcase with he | he | he
+    · exact Or.inl he
+    · exact Or.inr (Or.inl he)
+    · exact Or.inr (Or.inr ((div_eq_iff hε.ne').2 (by dsimp only [l]; linarith)))
+  have hpoly := poly_case l r q₀ hl0 hlam1 hr0 hrho1 hq0 hq' hcase'
+  let S := 2 * r + 2 * l + 4 * q₀
+  have hS : 0 < S := by
+    rcases hcase' with he | he | he <;> dsimp only [S] <;> linarith
+  have hnoise : u * (1 + 2 * r * W) ≤ u * (1 + 2 * r) + 2 * β * (1 + r) := by
+    have he : u * (1 + 2 * r * W) = u * (1 + 2 * r) + 2 * β * (j * r) := by
+      dsimp only [W]
+      linear_combination (2 * j * r) * htu
+    rw [he, hjr]
+    split <;> nlinarith only [mul_nonneg hβ (show 0 ≤ 1 + r by positivity)]
+  have hqeq : ε * q₀ = l * σ ^ 2 := by dsimp [q₀]; field_simp
+  have hsum : (u + β) * (∑ k ∈ Finset.range K, a k) ≤
+      u * (2 * Δ / γ) + (K * ε) * (u * q₀ * (1 + 2 * r) + 2 * β * q₀ * (1 + r)) := by
+    have he : u * (1 + t) = u + β := by linear_combination htu
+    have hg : Δ / (γ / 2) = 2 * Δ / γ := by ring
+    have hh := mul_le_mul_of_nonneg_left h hu.le
+    have hw : 2 * l * r * σ ^ 2 = 2 * r * (ε * q₀) := by rw [hqeq]; ring
+    rw [← mul_assoc u, he, hg, hw, ← hqeq] at hh
+    have hn := mul_le_mul_of_nonneg_left hnoise (by positivity : 0 ≤ (K : ℝ) * ε * q₀)
+    linarith only [hh, hn]
+  have hbudget : (2 * Δ / γ) * S ≤ K * ε := by
+    have he : (2 * Δ / γ) * S =
         ε * (4 * (R + 1) * L * Δ / ε + 8 * σ ^ 2 * L * Δ / ε ^ 2) := by
+      dsimp [S, q₀, l, r]
       field_simp
       ring
-    rw [e, mul_comm (K : ℝ) ε]
+    rw [he, mul_comm (K : ℝ) ε]
     exact mul_le_mul_of_nonneg_left hK hε.le
-  exact final_combination A B (2 * Δ / γ) (K * ε) (L * γ) (L * γ * R) (L * γ * σ ^ 2 / ε)
-    (by positivity) hlam1 (by positivity) hrho1 hq0 hq' hcase' (by positivity) hA1 hE3 hY
+  change u + S * (u * q₀ * (1 + 2 * r) + 2 * β * q₀ * (1 + r)) ≤ S * (u + β) at hpoly
+  have hh := mul_le_mul_of_nonneg_left hsum hS.le
+  have hb := mul_le_mul_of_nonneg_left hbudget hu.le
+  have hpoly' := mul_le_mul_of_nonneg_left hpoly (by positivity : 0 ≤ (K : ℝ) * ε)
+  apply le_of_mul_le_mul_left _ (mul_pos hS (add_pos_of_pos_of_nonneg hu hβ))
+  linarith only [hh, hb, hpoly']
 
 theorem main_theorem {d : ℕ} {Ω : Type} [MeasurableSpace Ω] (f : Point d → ℝ)
     (L σ ε R lower : ℝ) (x0 : Point d) (T : Tree) (m : ℕ → ℕ)
