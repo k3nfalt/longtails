@@ -59,7 +59,9 @@ Tran-Dinh's row is related prior work, not a direct competitor. There the set-va
 
 The motivating open question comes from AKW Remark 4.2, which is unchanged in v3. After stating Chen–Luo's unconstrained Õ(ε⁻²), AKW list as open "a similar complexity improvement in our constrained setup with a wider range for ρ". This theorem gives that improvement, with explicit dependence on τ.
 
-Inside the library, the setup and the earlier theorem required 2ρL < 1. On that range their bound blows up as (1 − 2ρL)⁻⁸. The new range is ρL ∈ [1/2, 1), and on the old range the τ powers improve. These are the only gains relative to the library.
+Inside the library, the stochastic setup and its earlier theorem required 2ρL < 1. On that range their bound blows up as (1 − 2ρL)⁻⁸. The new range is ρL ∈ [1/2, 1), and on the old range the τ powers improve. These are the only gains relative to the library's stochastic results.
+
+The library already covers the full range ρL < 1 in the **deterministic** case. [`MultiStepAnchoredCohypomonotone`](MultiStepAnchoredCohypomonotone.lean), on the setup [`CohypomonotoneInclusion`](../Setups/CohypomonotoneInclusion.lean), uses exact evaluations of F on the same class of operators. It works in any real inner-product space and guarantees ‖F(u) + ξ‖ ≤ ε with ξ ∈ H(u) almost surely, using O(1 + (LR/(τ²ε) + 1/τ)·log(e/τ)) calls. The present theorem is its stochastic counterpart. With σ = 0 it is **worse** than that result: Õ(LR/(τ³ε)) loses a factor 1/τ and carries the Λ⁷ polylogarithm. Its value lies only in the noisy regime σ > 0. A plug-in alternative would batch the oracle inside the deterministic method. That method's inner error must shrink with the current residual, which ends at order ε. Batching therefore suggests about σ²/ε² samples per evaluation over about LR/ε evaluations, roughly σ²LR/ε³ in total. This estimate is heuristic and not formalized.
 
 ### What is *not* claimed
 
