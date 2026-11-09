@@ -1,0 +1,33 @@
+# Novelty assessment — FullRangeCohypomonotoneMlmc
+
+**Guarantee.** [`result`](../../LongTails/Theorems/FullRangeCohypomonotoneMlmc.lean) proves that, for a stochastic composite inclusion `0 ∈ F(x)+G(x)` with `F` `L`-Lipschitz (possibly nonmonotone), `G` maximal monotone via an exact resolvent, and `F+G` `ρ`-cohypomonotone over the **full range `ρL<1`**, the [tuned algorithm](../../LongTails/Algorithms/FullRangeTuned.lean) (MLMC-debiased resolvent + recursive anchoring) outputs `(x̄,u)` with `u∈G(x̄)` for every seed and `E‖F(x̄)+u‖ ≤ ε`, within a **deterministic** oracle budget. Setup: [`FullRangeCohypomonotoneInclusion`](../../LongTails/Setups/FullRangeCohypomonotoneInclusion.lean).
+
+**Simplified budget** (from `FullRangeBudget.totalCalls_le`, universal constants dropped, `τ := 1−ρL`):
+
+  N = Õ( 1/τ² + L·R/(τ³·ε) + σ²/(τ²·ε²) ),  Õ hides `(1 + log(2 + LR/ε + σ²/ε²) + log(2/τ))⁷`.
+
+`L` = Lipschitz constant of `F`; `ρ` = cohypomonotonicity of `F+G`; `τ=1−ρL∈(0,1]`; `R` ≥ `‖x₀−x*‖`; `σ²` = oracle variance bound; `ε` = target expected residual. Both F-samples and resolvent calls are counted; the bound is dimension-free and holds for every seed.
+
+## Comparison table
+
+| Previous result (source, theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Alacaoglu–Kim–Wright, [arXiv 2402.05071](https://arxiv.org/abs/2402.05071) (ICML 2024), **Cor. 4.1** — same constrained composite class, same range `ρ<1/L` | Õ(ε⁻⁴) (dominant stochastic term; exact `L,R,σ,τ` constants not extracted) → Õ(σ²/(τ²ε²) + LR/(τ³ε)) | **ε⁻⁴ → ε⁻²**: the `σ²/ε²` term replaces the `ε⁻⁴` term, a ≈`ε⁻²` speedup for any `σ>0` as `ε→0`. Resolves the open question in AKW Remark 4.2 | None (identical constrained composite cohypomonotone class and range) | This budget is deterministic; AKW's MLMC bound is in expectation | AKW's precise `τ`-power not pinned, so `τ`-dependence near `ρL→1` is not directly compared |
+| Chen–Luo, [arXiv 2208.05925](https://arxiv.org/abs/2208.05925) (JMLR 2024), **Thm 5.4** (RAIN++) — *special-case baseline:* **unconstrained** `G=0`, `ρ≤1/(2L)` | Õ(σ²/ε² + LR/ε) → Õ(σ²/(τ²ε²) + LR/(τ³ε)) | None: same `ε⁻²` rate on the unconstrained overlap (`τ=Θ(1)` there). Gain is scope, not rate | `G=0` → **maximal-monotone `G`** (composite); `ρ<1/(2L)` → `ρ<1/L` (full range) | None (both expected residual); this adds a deterministic budget | Adds an exact resolvent-of-`G` oracle; extra `τ`-powers. On the shared unconstrained setup Chen–Luo is at least as good |
+| Repo [`RegularizedProxExtragradientCohypomonotone`](../../LongTails/Theorems/RegularizedProxExtragradientCohypomonotone.lean) — composite, `ρL<1/2`, `τ'=1−2ρL` | Õ(τ'⁻⁸(LR/ε + σ²/ε²)) → Õ(LR/(τ³ε) + σ²/(τ²ε²)), `τ=1−ρL` | None on `ε`-rate (both `ε⁻²`); **range doubled** `ρL<1/2`→`ρL<1`; condition powers `τ'⁻⁸`→`τ⁻³,τ⁻²` (strict gain as `ρL→½⁻`) | **half range `ρL<1/2` → full range `ρL<1`**: covers composite instances with `ρL∈[1/2,1)` | None (same expected residual, same deterministic budget) | Different algorithm; `Λ⁷` polylog vs `Λ⁴`; at `σ=0` it is worse than the full-range deterministic result below |
+
+**Proof ancestry / standard-reduction check.** The mechanism is entirely known — MLMC debiasing and recursive anchoring are Chen–Luo's RAIN++; the outer loop reuses the library's `SmoothBanach` anchoring pipeline. The new work is the composite full-range assembly with a fixed budget. The result does **not** follow by rescaling the repo's `RegularizedProxExtragradient` (whose analysis fundamentally needs `2ρL<1`), and the note's own conjecture that a RAIN++ envelope-parameter change plus an inner prox for `G` covers this case is **unverified** — AKW Remark 4.2 flags exactly this extension as open. Related: Tran-Dinh [arXiv 2504.13046](https://arxiv.org/abs/2504.13046) §4.5 (co-coercive-in-mean-square `F`, different class, `E‖G_λx‖²≤ε²`, ≈`ε⁻³`) and arXiv 2603.15576 (`ε⁻¹⁰ᐟ³`, stronger oracle) are not directly comparable. With `σ=0`, the repo's [`MultiStepAnchoredCohypomonotone`](../../LongTails/Theorems/MultiStepAnchoredCohypomonotone.lean) (full-range, deterministic, `O(LR/(τ²ε)·log(e/τ))`) **beats** this result, so the gain is confined to `σ>0`.
+
+**Search coverage.** Searched arXiv / ICML / ICLR / NeurIPS / JMLR to 2026-11-09 (UTC). Verified AKW Cor. 4.1 (`ε⁻⁴`, `ρ<1/L`, constrained) and Remark 4.2 (open question), and Chen–Luo Thm 5.4 (`ε⁻²`, unconstrained, `ρ≤1/(2L)`, MLMC) from the HTML sources; arXiv 2609.35631 (Sep 2026) is monotone-only and states stochastic negative-comonotone guarantees are unknown. Not independently verified at theorem-statement level: AKW's exact `τ,σ` constants and Tran-Dinh 2504.13046's precise co-coercivity hypothesis (PDFs poorly extractable). No mismatch found between the companion note and the Lean statement; the note is candid about its limits.
+
+## Conclusion
+
+**Yes — in the stochastic constrained/composite regime this is a genuine oracle-complexity gain: Õ(ε⁻²) over the full range `ρL<1`, where the strongest verified prior guarantee for that exact class was AKW's Õ(ε⁻⁴).**
+
+The decisive comparison is AKW Corollary 4.1: same constrained composite cohypomonotone class, same range `ρ<1/L`, same expected-last-iterate residual criterion, but `Õ(ε⁻⁴)` versus this result's `Õ(σ²/(τ²ε²)+LR/(τ³ε))`. For any `σ>0` and small `ε` the stochastic term drops from `ε⁻⁴` to `ε⁻²`, directly answering the open question AKW pose in Remark 4.2. No verified competitor supplies `Õ(ε⁻²)` for constrained cohypomonotone inclusions at any range; the repo's own `RegularizedProxExtragradient` reached it only for `ρL<1/2` and explicitly left `ρ∈[1/(2L),1/L)` open — the precise gap closed here. The motivating instance family (one-sided Huber min–max with `ρL∈[1/2,1)`) is checked to lie strictly outside the old `2ρL<1` range.
+
+Where it loses: the mechanism (MLMC + anchoring) is entirely inherited, not new; the `τ⁻³,τ⁻²` powers and `2⁷⁹·Λ⁷` constants are loose and unproven-tight; and at `σ=0` the existing full-range deterministic method is strictly better, so the advantage lives only in the noisy regime. The priority rests on AKW's and the repo's standing "open" status plus the absence of any found competitor, not on a proof that no short RAIN++ reduction exists — the note itself conjectures one.
+
+What can be claimed: the first verified `Õ(ε⁻²)` stochastic guarantee for composite cohypomonotone inclusions over the entire range `ρL<1`, extending both Chen–Luo (unconstrained) and the repo's half-range result, via a known-mechanism assembly.
+
+**Verdict: SUBSTANTIVE NOVELTY SUPPORTED** — **Confidence: medium.**
