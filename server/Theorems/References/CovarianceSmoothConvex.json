@@ -1,0 +1,98 @@
+{
+  "setup": "LongTails.Setups.CovarianceSmoothConvex",
+  "searched_at": "2026-11-10T09:05:23.969287+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{40} \\cdot \\left(\\left(\\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right)}{\\delta^{2}}\\right)\\right)^{2} + \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\cdot \\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right)}{\\delta^{2}}\\right) + \\frac{R^{2} \\cdot \\left(\\sigma^{2} + s^{2} \\cdot \\log\\left(\\frac{3}{\\delta}\\right)\\right)}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.CovarianceSmoothConvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 40 *\n      (Real.log (2 ^ 56 * (1 + q.L * q.R ^ 2 / q.ε + q.R ^ 2 * q.σ ^ 2 / q.ε ^ 2) / q.δ ^ 2) ^ 2 +\n          √(q.L * q.R ^ 2 / q.ε) *\n            Real.log (2 ^ 56 * (1 + q.L * q.R ^ 2 / q.ε + q.R ^ 2 * q.σ ^ 2 / q.ε ^ 2) / q.δ ^ 2) +\n        q.R ^ 2 * (q.σ ^ 2 + q.s ^ 2 * Real.log (3 / q.δ)) / q.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{40} \\cdot \\left(\\left(\\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right)}{\\delta^{2}}\\right)\\right)^{2} + \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\cdot \\log\\left(\\frac{2^{56} \\cdot \\left(1 + \\frac{L \\cdot R^{2}}{\\varepsilon} + \\frac{R^{2} \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right)}{\\delta^{2}}\\right) + \\frac{R^{2} \\cdot \\left(\\sigma^{2} + s^{2} \\cdot \\log\\left(\\frac{3}{\\delta}\\right)\\right)}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.CovarianceSmoothConvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 40 *\n      (Real.log (2 ^ 56 * (1 + q.L * q.R ^ 2 / q.ε + q.R ^ 2 * q.σ ^ 2 / q.ε ^ 2) / q.δ ^ 2) ^ 2 +\n          √(q.L * q.R ^ 2 / q.ε) *\n            Real.log (2 ^ 56 * (1 + q.L * q.R ^ 2 / q.ε + q.R ^ 2 * q.σ ^ 2 / q.ε ^ 2) / q.δ ^ 2) +\n        q.R ^ 2 * (q.σ ^ 2 + q.s ^ 2 * Real.log (3 / q.δ)) / q.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CovarianceAcceleratedHighProbability",
+      "namespace": "LongTails.Setups.CovarianceSmoothConvex",
+      "setup": "LongTails.Setups.CovarianceSmoothConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CovarianceSmoothConvex.spec\n  LongTails.Theorems.CovarianceAcceleratedHighProbability.budget",
+      "theorem": "LongTails.Theorems.CovarianceAcceleratedHighProbability.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CovarianceAcceleratedHighProbability",
+      "theorem": "LongTails.Theorems.CovarianceAcceleratedHighProbability.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex differentiable f:E→ℝ with globally L-Lipschitz gradient, L>0. A global minimizer x⋆ exists with ‖x0−x⋆‖≤R, R≥0; strong convexity is not required.",
+        "evidence": "LongTails/Setups/CovarianceSmoothConvex.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using a fresh IID seed. The oracle is jointly measurable and unbiased: E[g(x,ξ)]=∇f(x). Only gradient replies are supplied. All parameters, including L,R,σ,s,ε,δ,x0, are public; f and the oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/CovarianceSmoothConvex.lean: spec.Public, spec.publicInput, spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniformly in x, E‖g(x,ξ)−∇f(x)‖²≤σ², and uniformly in x,v, E⟨v,g(x,ξ)−∇f(x)⟩²≤s²‖v‖², with 0≤s≤σ. Total variance and directional covariance bounds are supplied separately; no exponential-tail condition is imposed.",
+        "evidence": "LongTails/Setups/CovarianceSmoothConvex.lean: IsCovarianceGradient.covariance and spec.valid; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance_integrable and variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real complete inner-product space with its Borel measurable structure. No dimension bound is specified.",
+        "evidence": "LongTails/Setups/CovarianceSmoothConvex.lean: Params.finiteDimensionalE; LongTails/Setups/StochasticSmoothAndConvex.lean: Params."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable E-valued output X satisfying f(X)−f(x⋆)≤ε, ε>0, on the success event; no particular iterate is required.",
+        "evidence": "LongTails/Setups/CovarianceSmoothConvex.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "high_probability",
+        "details": "P(f(X)−f(x⋆)>ε)≤δ for 0<δ<1, under the joint algorithm and oracle randomness, within a fixed budget counting every stochastic-gradient reply.",
+        "evidence": "LongTails/Setups/CovarianceSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace and _run."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth convex stochastic optimization formulation distinguishes a total second-moment bound from a potentially smaller directional covariance bound under IID finite-variance noise, with a high-probability objective-gap requirement."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CovarianceAcceleratedHighProbability.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CovarianceAcceleratedHighProbability",
+          "theorem": "LongTails.Theorems.CovarianceAcceleratedHighProbability.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.ChiSquareConstrainedDro",
+  "searched_at": "2026-11-10T09:14:42.178918+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{8 \\cdot \\sqrt{1 + 2 \\cdot \\rho} \\cdot \\left(B + \\frac{B}{\\sqrt{\\rho}}\\right)}{\\varepsilon} \\right\\rceil_{+}\\right) + 2\\right)^{2} \\cdot \\left(\\left\\lceil \\frac{2^{16} \\cdot \\left(1 + 2 \\cdot \\rho\\right) \\cdot \\left(G^{2} \\cdot R^{2} + B^{2} \\cdot \\left(1 + \\frac{1}{\\rho}\\right)\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} + 144\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.ChiSquareConstrainedDro.spec.Params → ℕ",
+        "value": "fun q =>\n  (Nat.clog 2 ⌈8 * √(1 + 2 * q.ρ) * (q.B + q.B / √q.ρ) / q.ε⌉₊ + 2) ^ 2 *\n    (⌈2 ^ 16 * (1 + 2 * q.ρ) * (q.G ^ 2 * q.R ^ 2 + q.B ^ 2 * (1 + q.ρ⁻¹)) / q.ε ^ 2⌉₊ + 144)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{8 \\cdot \\sqrt{1 + 2 \\cdot \\rho} \\cdot \\left(B + \\frac{B}{\\sqrt{\\rho}}\\right)}{\\varepsilon} \\right\\rceil_{+}\\right) + 2\\right)^{2} \\cdot \\left(\\left\\lceil \\frac{2^{16} \\cdot \\left(1 + 2 \\cdot \\rho\\right) \\cdot \\left(G^{2} \\cdot R^{2} + B^{2} \\cdot \\left(1 + \\frac{1}{\\rho}\\right)\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} + 144\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.ChiSquareConstrainedDro.spec.Params → ℕ",
+          "value": "fun q =>\n  (Nat.clog 2 ⌈8 * √(1 + 2 * q.ρ) * (q.B + q.B / √q.ρ) / q.ε⌉₊ + 2) ^ 2 *\n    (⌈2 ^ 16 * (1 + 2 * q.ρ) * (q.G ^ 2 * q.R ^ 2 + q.B ^ 2 * (1 + q.ρ⁻¹)) / q.ε ^ 2⌉₊ + 144)"
+        }
+      ],
+      "module": "LongTails.Theorems.ChiSquareBracketedDro",
+      "namespace": "LongTails.Setups.ChiSquareConstrainedDro",
+      "setup": "LongTails.Setups.ChiSquareConstrainedDro",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ChiSquareConstrainedDro.spec OracleTemplate.ChiSquareBracketedDro.budget",
+      "theorem": "OracleTemplate.ChiSquareBracketedDro.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ChiSquareBracketedDro",
+      "theorem": "OracleTemplate.ChiSquareBracketedDro.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize the convex robust objective F(x)=sup_w E[w(ξ)loss(x,ξ)] over a closed convex domain. Feasible densities satisfy w≥0, E[w]=1, w∈L², and E[(w−1)²]/2≤ρ.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: IsFeasibleDensity, objective, spec.admissible convex-domain and sample-subgradient inequalities."
+      },
+      {
+        "label": "other",
+        "details": "Population distributionally robust optimization with a χ²-divergence constraint of public radius ρ>0.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: IsFeasibleDensity and objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call uses a fresh IID sample ξ and returns a sample-loss subgradient at the projected query. It is not stipulated to be an unbiased subgradient of the robust objective.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: sampleOracle and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "function_value",
+        "details": "The same call returns loss(projection(y),ξ), jointly with its sample subgradient.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: sampleOracle.answer."
+      },
+      {
+        "label": "other",
+        "details": "Each oracle reply also returns the exact metric projection of the query onto the hidden domain. Projection is bundled into the counted oracle call.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: sampleOracle.answer and spec.admissible projection variational inequality; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Sample subgradients satisfy ‖sub(x,ξ)‖≤G pointwise, hence have second moment at most G². Losses satisfy 0≤loss(x,ξ)≤B pointwise.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: spec.admissible loss and subgradient bounds."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is a complete real Hilbert space with second-countable Borel topology. A robust minimizer x* exists with ‖x0−x*‖≤R; the domain need not be bounded. Public information comprises the spaces, ρ,G,B,R,ε,x0, with ρ,G,B,ε>0 and R≥0. The loss, subgradient map, sampling law, and domain are hidden instance data.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: Params, Instance, spec.Public, spec.publicInput, spec.valid, and spec.admissible minimizer condition."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable output lying in the domain for every outcome, with integrable robust objective gap F(output)−F(x*) and expectation at most ε.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over algorithm randomness and the IID oracle stream, under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/ChiSquareConstrainedDro.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace; supplied extracted result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "χ²-constrained population DRO with bounded convex sample losses, IID sampling, and expected objective-gap accuracy is an established optimization formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.ChiSquareBracketedDro.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ChiSquareBracketedDro",
+          "theorem": "OracleTemplate.ChiSquareBracketedDro.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

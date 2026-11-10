@@ -21,6 +21,24 @@
 & $\mathcal{O}\!\left(1+\min\{T,Tq^{1/4}+\sqrt T\}\right)$\par For $\Delta>0$, retune with $\rho'=\max\{\rho,\varepsilon^3/\Delta^2\}$; rescale accuracy; AGD requires $\rho\,{}^{\prime}\varepsilon/82\leq L^2/16$; otherwise use GD.
 & \textbf{(1)}: No established improvement in problem-class complexity. Momentum-free GD analysis; \textbf{(3)} permits momentum and thus lies outside the prescribed GD family.
 & \textbf{(1)}: Slower leading term by $q^{-9/44}$ for $0<q\leq1$; at $\rho=0$, $T^{4/5}$ versus $T^{1/2}$. \\
+\midrule
+\textbf{(4)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RecoveryFractalGdStationarity.lean}{Recovery\allowbreak Fractal\allowbreak Gd\allowbreak Stationarity} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RecoveryFractalGdStationarity.md}{(review)}
+& $\mathcal{O}\!\left(\begin{gathered}\ell^{4/3}\bigl(1+Tq^{1/6}+\sqrt T\\ {}+T^{15/17}q^{2/17}\bigr)\end{gathered}\right)$ gradient calls, including aborted trials and recovery; $\ell=\log(2+T)$. & & \\
+\midrule
+\textbf{(5)} Restarted AGD \citep[Thm.~1, v4]{shlgLiLinV4}; derived bound
+& $\mathcal{O}\!\left(1+\min\{T,Tq^{1/4}+\sqrt T\}\right)$. For $\Delta>0$, use $\rho'=\max\{\rho,\varepsilon^3/\Delta^2\}$, tolerance $\varepsilon/82$, and GD if $\rho'\varepsilon/82>L^2/16$.
+& \textbf{(4)}: No established improvement in problem-class complexity; provides a momentum-free GD guarantee outside \textbf{(5)}'s method family.
+& \textbf{(4)}: Leading term worse by $q^{-1/12}\ell^{4/3}$ for $0<q\le1$; adds mixed term. For $q>1$, worse than GD. \\
+\midrule
+\textbf{(6)} Fractal Chebyshev GD \citep{recoveryFractalRepository}; $\rho>0$, different restart family
+& $\mathcal{O}\!\left(1+Tq^{1/9}\log(2+q^{-1})+q^{-1/9}\right)$ gradient calls.
+& \textbf{(4)}: Method-specific exponent $17/9\to11/6$ at fixed positive $L,\rho,\Delta$. Leading-term ratio $q^{1/18}\ell^{4/3}/\log(2+q^{-1})$; gain requires $q\ll1$, $T\ge q^{-5/12}$ and sufficiently small ratio.
+& \textbf{(4)} needs $\Delta$ in updates; adds $\sqrt T$ and mixed terms. Larger constants: explicit-budget gain only around $q^{-1}>2^{220}$. \\
+\midrule
+\textbf{(7)} GD, step $1/L$ \citep[\S1.2.3]{hlgsNesterov2018}
+& $\mathcal{O}(1+T)$ gradient calls.
+& \textbf{(4)}: For $q\ll1$, $T\ge q^{-5/12}$, cost $\mathcal{O}(\ell^{4/3}Tq^{1/6})$ versus $\mathcal{O}(T)$; gain requires $\ell^{4/3}q^{1/6}\ll1$. Fixed positive $L,\rho,\Delta$: $\varepsilon^{-11/6}$ up to logs instead of $\varepsilon^{-2}$.
+& \textbf{(4)} needs Lipschitz Hessian and $\rho,\Delta$ in updates. Much larger constants: explicit-budget gain needs roughly $q^{-1}\gtrsim2^{170}$. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

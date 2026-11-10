@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SmoothFiniteMaximum.lean}{SmoothFiniteMaximum}.}\label{tab:SmoothFiniteMaximum}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, minimize $F(x)=\max_{i\le m}f_i(x)$ over $B=\overline B(x_0,R)$, with $m\ge2$. Each $f_i$ is convex and differentiable on $B$, with $\|\nabla f_i\|\le G$ and $L$-Lipschitz gradient there; a constrained minimizer $x_\star\in B$ exists. Here $G,R,\varepsilon>0$, $L\ge0$, and $0<\delta<1$. One exact component query returns $(f_i(x),\nabla f_i(x))$. The target is a measurable feasible output $\widehat x$ with $\Pr\{F(\widehat x)-F(x_\star)\le\varepsilon\}\ge1-\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AffineSoftmaxFiniteMaximum.lean}{Affine\allowbreak Softmax\allowbreak Finite\allowbreak Maximum} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AffineSoftmaxFiniteMaximum.md}{(review)}
+& $\begin{aligned}\mathcal{O}\bigl(h\ell^7[&m+mt^{1/3}+m^{3/4}t^{1/2}\\&+m^{6/7}(st)^{2/7}+s]\bigr)\end{aligned}$; deterministic query cap.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Accelerated linearization \citep{sfmCarmon2021v1}, App.~A.3
+& $\mathcal{O}\bigl(m(1+\sqrt t)\bigr)$; deterministic accuracy.
+& \textbf{(1)}: Rate, normalized regime: polynomial saving for $m\gg\varepsilon^{-1/2}$. At $m=\varepsilon^{-3/2}$, $\mathcal{O}(\varepsilon^{-2})$ becomes $\mathcal{O}(h\ell^7\varepsilon^{-13/7})$.
+& \textbf{(1)}: Worse for $m\ll\varepsilon^{-1/2}$ in the normalized regime; randomized, with $h\ell^7$ overhead and a much larger universal constant. \\
+\midrule
+\textbf{(3)} \citep{sfmCarmon2023v1}, Thm.~8.1, ball case; confidence amplification
+& $\mathcal{O}\bigl(h[mt^{1/3}+s^2]\operatorname{polylog}(2+m+s+t)\bigr)$, for $0<\varepsilon\le\min\{LR^2,G^2/L\}$. Includes repetitions and $\mathcal{O}(mh)$ scoring queries.
+& \textbf{(1)}: Rate, normalized regime: polynomial saving for $m\ll\varepsilon^{-5/3}$ within the stated accuracy range; matches polynomial order for $m\gtrsim\varepsilon^{-5/3}$. Drops the accuracy restriction.
+& \textbf{(1)}: Larger polylogarithms and universal constant; query guarantee only, versus runtime bounds and an additional simplex setting. \\
+\midrule
+\textbf{(4)} \citep{sfmCarmon2021v1}, Thm.~2; unconstrained, globally convex, $G$-Lipschitz, $L$-smooth components; global minimizer within $R$ of $x_0$
+& $\begin{aligned}\mathcal{O}\bigl(hk^3[&m\{1+(s\log m)^{2/3}\}\\&+\sqrt m(s\sqrt{\log m}+\sqrt t)]\bigr)\end{aligned}$; includes confidence amplification and scoring.
+& \textbf{(1)}: On common global-minimizer instances, polynomial saving for every $m=\varepsilon^{-\alpha}$, $\alpha>0$, in the normalized regime. Scope: local ball assumptions suffice; classes overlap, without nesting.
+& \textbf{(1)}: Can lose when $L\gg G^2/\varepsilon$. For $G=R=1$, $L=\varepsilon^{-2}$: contains $m\varepsilon^{-1}$ versus $m\varepsilon^{-2/3}+\sqrt m\varepsilon^{-3/2}$, ignoring logarithms. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $s=GR/\varepsilon$, $t=LR^2/\varepsilon$, $h=1+\log(1/\delta)$, $\ell=\log(2+m+s+t)$, $k=1+\log(1+s\log m)$. $\operatorname{polylog}(u)$ denotes the source's unspecified polynomial in $1+\log u$. Normalized regime: $G=L=R=1$, $\varepsilon\downarrow0$; polynomial comparisons ignore logarithmic factors and use fixed confidence.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WassersteinSmoothComposite.lean}{WassersteinSmoothComposite}.}\label{tab:WassersteinSmoothComposite}
+\parbox{\linewidth}{\footnotesize Minimize $G(\mu)=\int V\,d\mu+H(\mu)$ over $Q\subset\mathcal P_2(\mathbb R^d)$ consisting of absolutely continuous measures. The potential $V$ is convex with $L$-Lipschitz gradient, $L>0$; $Q,H$ are convex along generalized geodesics at every base. A minimizer $\mu_\star\in Q$ exists, $\mu_0\in Q$, and $W_2(\mu_0,\mu_\star)\le R$. Exact forward pushforward, constrained JKO steps of $H$, and optimal transport maps are supplied. Target: feasible output $\mu$ with $G(\mu)-G(\mu_\star)\le\varepsilon$, $\varepsilon>0$, almost surely (the constructed result holds for every seed).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/WassersteinAcceleratedProximal.lean}{Wasserstein\allowbreak Accelerated\allowbreak Proximal} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/WassersteinAcceleratedProximal.md}{(review)} & $\mathcal{O}(1+R\sqrt{L/\varepsilon})$ total forward, JKO($H$), and OT-map calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Proximal gradient \citep{wscSalim2021v3}, Cor.~10 & $\mathcal{O}(1+LR^2/\varepsilon)$ total forward and JKO($H$) calls; $\gamma=\Theta(1/L)<1/L$ in the proximal-existence range; lower semicontinuous $H+\iota_Q$. & \textbf{(1)}: Rate improves from $\mathcal{O}(1+T)$ to $\mathcal{O}(1+\sqrt T)$; unit-cost savings for large $T$ (reported crossover $T\gtrsim36$). Lower semicontinuity replaced by supplied minimizers. & \textbf{(1)} adds an exact OT-map solve per iteration. \\
+\midrule
+\textbf{(3)} Wasserstein FISTA \citep{wscUshiyama2026v1}, Thm.~8 ($m=0$) & $\mathcal{O}(1+R\sqrt{L/\varepsilon})$ total lifted-gradient and fixed-reference cone-prox calls; lower semicontinuous regularizer and closed convex lifted feasible set. & \textbf{(1)} matches the accelerated order on the common potential-energy setup, via a new ordinary-JKO forward--backward analysis. JKO plus inter-iterate OT replaces cone prox; no oracle ordering established. & \textbf{(1)} covers potential energies only; requires generalized-geodesic convexity at every base rather than one fixed reference; worse leading constant. \\
+\midrule
+\textbf{(4)} Accelerated JKO \citep{wscChangUndated}, Thm.~8 & $\mathcal{O}(1+R/\sqrt{\gamma\varepsilon})$ whole-$G$ JKO and OT-map calls; arbitrary $\gamma>0$; lower semicontinuous, generalized-geodesically convex $G$ with absolutely continuous domain. & \textbf{(1)} uses split forward and JKO($H$) operations instead of whole-$G$ proximal access. Costs are not comparable: \textbf{(4)} allows arbitrarily large $\gamma$. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\mathcal P_2$: probability measures with finite second moment; $W_2$: quadratic Wasserstein distance; $R\ge0$: initial-distance bound; $T=LR^2/\varepsilon$; OT: optimal transport; JKO($H$): exact minimization of $H(\rho)+W_2^2(b,\rho)/(2h)$ over $\rho\in Q$; $\iota_Q$: indicator of $Q$; cone prox: proximal operation over optimal maps from a fixed measure in $L^2$; $\gamma$: prior method's proximal step. Each oracle operation counts as one call.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

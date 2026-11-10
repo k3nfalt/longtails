@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConstrainedMinimaxSecondOrder.lean}{ConstrainedMinimaxSecondOrder}.}\label{tab:ConstrainedMinimaxSecondOrder}
+\parbox{\linewidth}{\footnotesize Finite-dimensional real inner-product spaces $E,F$; nonempty closed convex $Y\subseteq F$, possibly unbounded. On all of $E\times F$, $\nabla f$ is differentiable and $L$-Lipschitz, $\nabla^2 f$ is $\rho$-Lipschitz, and $f(x,\cdot)$ is $\mu$-strongly concave. Assume $0<\mu\le L$, $\rho,\varepsilon>0$, $\Delta,B\ge0$, $y_0\in Y$, $\Phi(x_0)-\inf_x\Phi(x)\le\Delta$, and $\|\nabla f(x_0,y_0)\|\le B$, where $\Phi(x)=\max_{y\in Y}f(x,y)$. Exact queries return $(f,\nabla f,\nabla^2 f)$. Target: $\Phi$ differentiable and $\|\nabla\Phi(\hat x)\|\le\varepsilon$ for every seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConstrainedMinimaxCubic.lean}{Constrained\allowbreak Minimax\allowbreak Cubic} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConstrainedMinimaxCubic.md}{(review)} &
+$\begin{aligned}\mathcal{O}\bigl(&\kappa\log(1+\rho B/\mu^2)\\&+[1+A(1+\sqrt r)\\&\quad+\sqrt{\rho\varepsilon}/\mu]\ell\bigr)\end{aligned}$ bundled calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Minimax-PPA \citep[Theorem 20]{cmsLin2020} &
+$\mathcal{O}\!\left((1+\sqrt\kappa L\Delta/\varepsilon^2)\ell_D^2\right)$ gradient calls; bounded $Y$, diameter $D_y$; success probability $2/3$. &
+\textbf{(1)}: Scope: unbounded closed convex $Y$. On bounded $Y$, leading accuracy exponent $\varepsilon^{-3/2}$ instead of $\varepsilon^{-2}$ when $r<1$; deterministic accuracy. &
+\textbf{(1)} needs full Hessians, ambient Hessian Lipschitzness and $B$; pays $\kappa\log(1+\rho B/\mu^2)$ startup. \\
+\midrule
+\textbf{(3)} \citep[Theorem 4.1, v2]{cmsZhang2026v2} &
+$\begin{aligned}\widetilde{\mathcal{O}}\bigl(&1+\min\{\sqrt\kappa,(\rho D_0/\mu)^{2/7}\}\\&+\min\{A(1+r^{1/7}),\\&\quad L\Delta\varepsilon^{-2}(1+r^{2/7}),\\&\quad\sqrt\kappa L\Delta\varepsilon^{-2}\}\bigr)\end{aligned}$ bundled calls; $Y=F$. &
+\textbf{(1)}: Scope: closed convex dual constraints, including changing active constraints. Matches leading $A$ for $Y=F$, $r\le1$, up to logarithms. &
+\textbf{(1)} has $\kappa$ rather than at most $\sqrt\kappa$ startup dependence; for $r>1$, tracking $A\sqrt r$ versus regime-adaptive branches. \\
+\midrule
+\textbf{(4)} ECRN \citep[Theorem 11, v1]{cmsZhou2026v1} &
+$\widetilde{\mathcal{O}}(1+A)$ gradient/Hessian evaluations; $Y=F$, $\varepsilon\le L^2/[\rho(4+\kappa)^{3/2}]$; $(\varepsilon,\sqrt{\rho(4+\kappa)^{3/2}\varepsilon})$-SOSP. &
+\textbf{(1)}: Scope: closed convex dual constraints. Matches leading $A$ on the unconstrained overlap in the stated accuracy range, up to logarithms. &
+\textbf{(1)} guarantees only first-order stationarity; retains explicit initialization and tracking costs. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $r=\rho\varepsilon/(\sqrt L\mu^{3/2})$, $A=\Delta\sqrt\rho\,\kappa^{3/4}\varepsilon^{-3/2}$, $\ell=1+\log(1+L\mu/(\rho\varepsilon))$, $\ell_D=1+\log_+(\kappa L(\widetilde D_x^2+D_y^2)/\varepsilon)$; $\log_+t=\max\{0,\log t\}$. $\widetilde D_x$ is the distance from $x_0$ to the minimizer of $f(x,y_0)+L\|x-x_0\|^2$. $D_0=R_y+\kappa\sqrt{\Delta/L}$, with $R_y=B/\mu$ a valid bound on $\|y_0-y^*(x_0)\|$ when $Y=F$. $\widetilde{\mathcal{O}}$ suppresses the cited results' logarithmic factors; SOSP additionally requires $\nabla^2\Phi(\hat x)\succeq-\eta I$ for the displayed second tolerance $\eta$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

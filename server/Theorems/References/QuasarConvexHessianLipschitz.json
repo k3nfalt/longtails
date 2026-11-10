@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.QuasarConvexHessianLipschitz",
+  "searched_at": "2026-11-10T09:11:27.152721+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon}\\right)^{\\frac{3}{8}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{log2}\\left(\\left\\lceil \\frac{27 \\cdot \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon} + 1\\right)^{2} \\cdot \\left(\\frac{L_0}{H \\cdot R} + 32768\\right)}{\\gamma^{2}} \\right\\rceil_{+}\\right) + 3\\right) + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.QuasarConvexHessianLipschitz.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε)) ^ (3 / 8)⌉₊ *\n      (⌈27 * (8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε) + 1) ^ 2 * (p.L₀ / (p.H * p.R) + 32768) / p.γ ^ 2⌉₊.log2 + 3) +\n    1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon}\\right)^{\\frac{3}{8}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{log2}\\left(\\left\\lceil \\frac{27 \\cdot \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon} + 1\\right)^{2} \\cdot \\left(\\frac{L_0}{H \\cdot R} + 32768\\right)}{\\gamma^{2}} \\right\\rceil_{+}\\right) + 3\\right) + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.QuasarConvexHessianLipschitz.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈(8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε)) ^ (3 / 8)⌉₊ *\n      (⌈27 * (8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε) + 1) ^ 2 * (p.L₀ / (p.H * p.R) + 32768) / p.γ ^ 2⌉₊.log2 + 3) +\n    1"
+        }
+      ],
+      "module": "LongTails.Theorems.QuasarAcceleratedCubicNewton",
+      "namespace": "LongTails.Setups.QuasarConvexHessianLipschitz",
+      "setup": "LongTails.Setups.QuasarConvexHessianLipschitz",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.QuasarConvexHessianLipschitz.spec\n  LongTails.Theorems.QuasarAcceleratedCubicNewton.budget",
+      "theorem": "LongTails.Theorems.QuasarAcceleratedCubicNewton.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.QuasarAcceleratedCubicNewton",
+      "theorem": "LongTails.Theorems.QuasarAcceleratedCubicNewton.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Quasar convexity permits nonconvex objectives; convexity is not required.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: QuasarConvexAt; spec.admissible"
+      },
+      {
+        "label": "quasar",
+        "details": "Unconstrained minimization with a global minimizer x⋆ satisfying γ(f(x)−f(x⋆)) ≤ ⟨∇f(x),x−x⋆⟩ for every x, where 0<γ≤1.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: QuasarConvexAt; spec.admissible; spec.valid"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "The joint oracle returns ∇f(x) exactly for every history and seed; there is no oracle error or dependence affecting replies.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: spec.admissible"
+      },
+      {
+        "label": "function_value",
+        "details": "Each query at x returns the exact value f(x), together with its gradient and Hessian, in one joint oracle call.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: spec.Reply; spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "Exact full Hessian oracle: the joint reply includes D(∇f)(x) as a continuous linear operator.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: spec.Reply; spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: Params.normedE; Params.innerE; Params.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "f is C² with globally H-Lipschitz Hessian in operator norm, H>0, and ‖∇²f(x₀)‖≤L₀ with L₀≥0. A hidden minimizer x⋆ satisfies ‖x₀−x⋆‖≤R, R>0. E, x₀, H, γ, R, L₀ and ε>0 are public; no global gradient Lipschitz constant or bounded level set is assumed.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: Params; spec.Public; spec.publicInput; spec.valid; spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x with f(x)−f(x⋆)≤ε for a global minimizer x⋆.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: spec.successful"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law, with a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/QuasarConvexHessianLipschitz.lean: spec.successful; LongTails/Template.lean: Convergence; executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A meaningful quasar-convex variant using Hessian Lipschitz continuity and an initial Hessian bound, without global gradient smoothness or bounded level sets."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.QuasarAcceleratedCubicNewton.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.QuasarAcceleratedCubicNewton",
+          "theorem": "LongTails.Theorems.QuasarAcceleratedCubicNewton.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

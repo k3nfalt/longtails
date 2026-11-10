@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.StochasticSurjectiveInequalities",
+  "searched_at": "2026-11-10T08:58:08.032694+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 69 + \\frac{2^{29} \\cdot m^{2} \\cdot H^{10} \\cdot \\Delta + 2^{44} \\cdot m^{4} \\cdot H^{18} \\cdot \\sigma^{2}}{\\varepsilon^{2}} + \\frac{2^{48} \\cdot m^{4} \\cdot H^{19} \\cdot \\Delta \\cdot \\sigma}{\\varepsilon^{3}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticSurjectiveInequalities.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈69 + (2 ^ 29 * ↑p.m ^ 2 * p.H ^ 10 * p.Δ + 2 ^ 44 * ↑p.m ^ 4 * p.H ^ 18 * p.σ ^ 2) / p.ε ^ 2 +\n      2 ^ 48 * ↑p.m ^ 4 * p.H ^ 19 * p.Δ * p.σ / p.ε ^ 3⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 69 + \\frac{2^{29} \\cdot m^{2} \\cdot H^{10} \\cdot \\Delta + 2^{44} \\cdot m^{4} \\cdot H^{18} \\cdot \\sigma^{2}}{\\varepsilon^{2}} + \\frac{2^{48} \\cdot m^{4} \\cdot H^{19} \\cdot \\Delta \\cdot \\sigma}{\\varepsilon^{3}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticSurjectiveInequalities.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈69 + (2 ^ 29 * ↑p.m ^ 2 * p.H ^ 10 * p.Δ + 2 ^ 44 * ↑p.m ^ 4 * p.H ^ 18 * p.σ ^ 2) / p.ε ^ 2 +\n      2 ^ 48 * ↑p.m ^ 4 * p.H ^ 19 * p.Δ * p.σ / p.ε ^ 3⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.SurjectiveStochasticInequalityKkt",
+      "namespace": "LongTails.Setups.StochasticSurjectiveInequalities",
+      "setup": "LongTails.Setups.StochasticSurjectiveInequalities",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticSurjectiveInequalities.spec\n  LongTails.Theorems.SurjectiveStochasticInequalityKkt.budget",
+      "theorem": "LongTails.Theorems.SurjectiveStochasticInequalityKkt.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SurjectiveStochasticInequalityKkt",
+      "theorem": "LongTails.Theorems.SurjectiveStochasticInequalityKkt.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Minimize a differentiable, possibly nonconvex objective f over c(x) ≤ 0; the differentiable constraint components may also be nonconvex.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Problem, Regularity, accurate."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Unbiased estimates of ∇f(x) and the full constraint Jacobian J(x). Each oracle call evaluates both requested points using the same sample; samples across calls are IID.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: OracleConditions.gradientMean, jacobianMean; spec.Query, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "function_value",
+        "details": "Unbiased stochastic values of the entire constraint vector c at both requested points, jointly with the gradient and Jacobian estimates. Objective values are not supplied.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Primitive, OracleConditions.valueMean, spec.Reply, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The sum of expected squared errors of the objective gradient, constraint values, and Jacobian is uniformly at most σ². No exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: OracleConditions.variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space; constraints lie in Euclidean m-space.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Params.finiteE, Constraint."
+      },
+      {
+        "label": "other",
+        "details": "Globally, ‖∇f(x)‖ and ‖J(x)‖ ≤ H, and both maps are H-Lipschitz. Uniform surjectivity requires ‖ℓ‖ ≤ H‖J(x)ᵀℓ‖ for every x and ℓ. The joint stochastic gradient/value/Jacobian map satisfies mean-square H-Lipschitz continuity under shared samples. The penalty f(x)+4H(H+1)∑ᵢ[cᵢ(x)]₊ has initial gap at most Δ. All Params are public, including x0, m, H, σ, Δ, ε; f, c, J and the sampling law are hidden. Validity requires m>0, H≥1, σ,Δ≥0 and 0<ε≤1.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Regularity, penalty, OracleConditions.meanSquaredSmooth, spec.Public, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The same output must satisfy ‖[c(x)]₊‖₂≤ε.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: accurate."
+      },
+      {
+        "label": "high_probability",
+        "details": "The output is measurable and all accuracy conditions hold jointly with probability at least 3/4 under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: spec.successful; LongTails/Template.lean: executeWithTrace, Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Output a primal-dual pair (x,ℓ) with ℓ≥0, Lagrangian stationarity ‖∇f(x)+J(x)ᵀℓ‖≤ε and absolute complementarity ∑ᵢ|ℓᵢcᵢ(x)|≤ε.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: accurate, spec.Output."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The stochastic nonlinear-programming formulation combines global uniform Jacobian surjectivity, jointly mean-square smooth paired evaluations, a penalty-gap initialization bound, and simultaneous probabilistic stationarity, feasibility, and absolute complementarity requirements."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SurjectiveStochasticInequalityKkt.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SurjectiveStochasticInequalityKkt",
+          "theorem": "LongTails.Theorems.SurjectiveStochasticInequalityKkt.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

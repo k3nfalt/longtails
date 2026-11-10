@@ -1,0 +1,110 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Surjective Inequality Constraints}
+We study minimizing a differentiable function $f:E\to\mathbb{R}$ subject to differentiable inequalities $c_i(x)\leq0$, $i=1,\ldots,m$, on a finite-dimensional real inner-product space $E$. Objective and constraint gradients are bounded and Lipschitz, the constraint derivative is uniformly surjective, and a given point has bounded initial penalty gap. Each oracle call returns unbiased stochastic objective gradients, constraint values, and constraint gradients at two points using one shared sample; successive samples are independent, with bounded variance and mean-square Lipschitz dependence on the points. For $\varepsilon>0$, the goal is a measurable pair $(\bar{x},\bar{\lambda})\in E\times\mathbb{R}^m$ satisfying $\bar{\lambda}\geq0$, $\|\nabla f(\bar{x})+\sum_i\bar{\lambda}_i\nabla c_i(\bar{x})\|\leq\varepsilon$, $\|(\max\{c_i(\bar{x}),0\})_{i=1}^m\|_2\leq\varepsilon$, and $\sum_i|\bar{\lambda}_ic_i(\bar{x})|\leq\varepsilon$ simultaneously with probability at least $3/4$.
+
+The optimization problem is
+\[
+\min_{x\in E:\ c_i(x)\leq0,\ i=1,\ldots,m} f(x).
+\]
+Write $c=(c_1,\ldots,c_m):E\to\mathbb{R}^m$ and
+\[
+J(x)=(\nabla c_i(x))_{i=1}^m\in E^m,
+\qquad
+J(x)^\top\lambda=\sum_{i=1}^m\lambda_i\nabla c_i(x).
+\]
+We use the inner-product norm on $E$, the Euclidean norm on $\mathbb{R}^m$, and the product norm $\|A\|^2=\sum_{i=1}^m\|A_i\|^2$ on $E^m$. In particular, all norms of $J$ below are product norms. Fix
+\[
+m\in\mathbb{N},\quad m\geq1,\qquad H\geq1,\qquad
+\sigma\geq0,\quad \Delta\geq0,\quad 0<\varepsilon\leq1,
+\]
+and a given point $x^0\in E$. The algorithm receives $E$, the measurable sample space $\Omega$, and $m,H,\sigma,\Delta,\varepsilon,x^0$.
+
+Our assumptions:
+\begin{assumption}[Regularity and surjectivity]
+The functions $f$ and $c_i$, $i=1,\ldots,m$, are differentiable everywhere. For every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)\|&\leq H,& \|J(x)\|&\leq H,\\
+\|\nabla f(x)-\nabla f(y)\|&\leq H\|x-y\|,\\
+\|J(x)-J(y)\|&\leq H\|x-y\|.
+\end{aligned}
+\]
+Moreover, for every $x\in E$ and $\lambda\in\mathbb{R}^m$,
+\[
+\|\lambda\|_2\leq H\|J(x)^\top\lambda\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial penalty gap]
+Define the penalty function
+\[
+\Phi(x)=f(x)+4H(H+1)\sum_{i=1}^m\max\{c_i(x),0\}.
+\]
+The given point satisfies
+\[
+\Phi(x^0)-\Phi(x)\leq\Delta
+\qquad\text{for every }x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic primitive estimates]
+There is a probability measure $\nu$ on $\Omega$ and jointly measurable maps
+\[
+\begin{aligned}
+g&:E\times\Omega\to E,\\
+v&:E\times\Omega\to\mathbb{R}^m,\\
+D&:E\times\Omega\to E^m.
+\end{aligned}
+\]
+For each $x\in E$, these maps are Bochner integrable in their sample argument and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}[v(x,\xi)]&=c(x),\\
+\mathbb{E}_{\xi\sim\nu}[D(x,\xi)]&=J(x).
+\end{aligned}
+\]
+For every $x,y\in E$, the nonnegative random variables inside the following expectations are integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\bigl[
+&\|g(x,\xi)-\nabla f(x)\|^2
++\|v(x,\xi)-c(x)\|_2^2\\
+&+\|D(x,\xi)-J(x)\|^2\bigr]
+\leq\sigma^2,
+\end{aligned}
+\]
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\bigl[
+&\|g(x,\xi)-g(y,\xi)\|^2
++\|v(x,\xi)-v(y,\xi)\|_2^2\\
+&+\|D(x,\xi)-D(y,\xi)\|^2\bigr]
+\leq H^2\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+A query is any pair $(x,y)\in E\times E$. At call $k$, the oracle returns
+\[
+\bigl((g(x,\xi_k),v(x,\xi_k),D(x,\xi_k)),
+      (g(y,\xi_k),v(y,\xi_k),D(y,\xi_k))\bigr).
+\]
+The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common law $\nu$, and are independent of the algorithm's randomness. Thus both points in one query share a sample, and each paired reply counts as one oracle call.
+
+After the allotted calls, the output $(\bar{x},\bar{\lambda})$ must be measurable. Under $P$, the joint law of the algorithm's randomness and the sample sequence, the following conditions must hold simultaneously with probability at least $3/4$:
+\[
+\begin{aligned}
+\bar{\lambda}_i&\geq0 &&(i=1,\ldots,m),\\
+\|\nabla f(\bar{x})+J(\bar{x})^\top\bar{\lambda}\|&\leq\varepsilon,\\
+\bigl\|(\max\{c_i(\bar{x}),0\})_{i=1}^m\bigr\|_2&\leq\varepsilon,\\
+\sum_{i=1}^m|\bar{\lambda}_i c_i(\bar{x})|&\leq\varepsilon.
+\end{aligned}
+\]
+\end{document}

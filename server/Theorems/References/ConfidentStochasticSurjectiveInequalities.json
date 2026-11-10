@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities",
+  "searched_at": "2026-11-10T09:01:54.717826+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(2 \\cdot \\log\\left(\\frac{2}{\\delta}\\right) + 2\\right) \\cdot \\left(70 + \\frac{2^{29} \\cdot m^{2} \\cdot H^{10} \\cdot \\Delta + 2^{44} \\cdot m^{4} \\cdot H^{18} \\cdot \\sigma^{2}}{\\varepsilon^{2}} + \\frac{2^{48} \\cdot m^{4} \\cdot H^{19} \\cdot \\Delta \\cdot \\sigma}{\\varepsilon^{3}} + \\left(8 \\cdot \\log\\left(\\frac{2}{\\delta}\\right) + 2\\right) \\cdot \\left(2 + \\frac{2^{40} \\cdot m^{4} \\cdot H^{18} \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈(2 * Real.log (2 / p.δ) + 2) *\n      (70 +\n            (2 ^ 29 * ↑p.problem.m ^ 2 * p.problem.H ^ 10 * p.problem.Δ +\n                2 ^ 44 * ↑p.problem.m ^ 4 * p.problem.H ^ 18 * p.problem.σ ^ 2) /\n              p.problem.ε ^ 2 +\n          2 ^ 48 * ↑p.problem.m ^ 4 * p.problem.H ^ 19 * p.problem.Δ * p.problem.σ / p.problem.ε ^ 3 +\n        (8 * Real.log (2 / p.δ) + 2) *\n          (2 + 2 ^ 40 * ↑p.problem.m ^ 4 * p.problem.H ^ 18 * p.problem.σ ^ 2 / p.problem.ε ^ 2))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(2 \\cdot \\log\\left(\\frac{2}{\\delta}\\right) + 2\\right) \\cdot \\left(70 + \\frac{2^{29} \\cdot m^{2} \\cdot H^{10} \\cdot \\Delta + 2^{44} \\cdot m^{4} \\cdot H^{18} \\cdot \\sigma^{2}}{\\varepsilon^{2}} + \\frac{2^{48} \\cdot m^{4} \\cdot H^{19} \\cdot \\Delta \\cdot \\sigma}{\\varepsilon^{3}} + \\left(8 \\cdot \\log\\left(\\frac{2}{\\delta}\\right) + 2\\right) \\cdot \\left(2 + \\frac{2^{40} \\cdot m^{4} \\cdot H^{18} \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈(2 * Real.log (2 / p.δ) + 2) *\n      (70 +\n            (2 ^ 29 * ↑p.problem.m ^ 2 * p.problem.H ^ 10 * p.problem.Δ +\n                2 ^ 44 * ↑p.problem.m ^ 4 * p.problem.H ^ 18 * p.problem.σ ^ 2) /\n              p.problem.ε ^ 2 +\n          2 ^ 48 * ↑p.problem.m ^ 4 * p.problem.H ^ 19 * p.problem.Δ * p.problem.σ / p.problem.ε ^ 3 +\n        (8 * Real.log (2 / p.δ) + 2) *\n          (2 + 2 ^ 40 * ↑p.problem.m ^ 4 * p.problem.H ^ 18 * p.problem.σ ^ 2 / p.problem.ε ^ 2))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt",
+      "namespace": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities",
+      "setup": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ConfidentStochasticSurjectiveInequalities.spec\n  LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt.budget",
+      "theorem": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt",
+      "theorem": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Minimize differentiable f(x) subject to m nonlinear inequalities c_i(x)≤0 in a finite-dimensional real inner-product space. Neither f nor the constraints must be convex.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Problem, Regularity, accurate."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call queries two points x,y and returns objective-gradient, constraint-value, and constraint-Jacobian estimates at both points using the same sample. Samples across calls are IID. All three estimates are unbiased; objective values are not supplied.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Primitive, OracleConditions.gradientMean/valueMean/jacobianMean, spec.Query/Reply/admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "function_value",
+        "details": "The oracle supplies noisy values of the entire constraint vector at each queried point, jointly with derivative estimates.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Primitive, OracleConditions.valueMean, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniformly in x, the sum of expected squared errors of the objective gradient, constraint values, and constraint Jacobian is at most σ². No exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: OracleConditions.varianceIntegrable/variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure; constraints lie in R^m.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Params.finiteE/innerE/borelE, Constraint."
+      },
+      {
+        "label": "other",
+        "details": "For all x and multipliers ℓ, ‖ℓ‖≤H‖J(x)^Tℓ‖. Objective gradients and Jacobians have norm at most H and are H-Lipschitz. The same-sample sum of squared differences of all three oracle outputs has expectation at most H²‖x−y‖². The penalty F(x)=f(x)+4H(H+1)Σ_i max(c_i(x),0) satisfies F(x0)−F(x)≤Δ for every x. Public parameters include E, Ω, m, H, σ, Δ, ε, x0, δ; f,c,J and the sampling law are hidden. Restrictions: m>0, H≥1, σ,Δ≥0, 0<ε≤1, 0<δ<1.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: Regularity, OracleConditions.meanSquaredSmooth, penalty, spec.Public/Instance/valid/admissible; LongTails/Setups/ConfidentStochasticSurjectiveInequalities.lean: Params, spec.Public/publicInput/valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The Euclidean norm of the positive part of c(x) must satisfy ‖[c(x)]_+‖₂≤ε at the returned point.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: accurate."
+      },
+      {
+        "label": "high_probability",
+        "details": "All accuracy conditions must hold simultaneously with probability at least 1−δ under the joint algorithm and oracle randomness, using a fixed cap on paired oracle calls.",
+        "evidence": "LongTails/Setups/ConfidentStochasticSurjectiveInequalities.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "Return a measurable pair (x,λ) with λ_i≥0, ‖∇f(x)+J(x)^Tλ‖≤ε, and Σ_i|λ_i c_i(x)|≤ε, jointly with the feasibility requirement.",
+        "evidence": "LongTails/Setups/StochasticSurjectiveInequalities.lean: accurate; LongTails/Setups/ConfidentStochasticSurjectiveInequalities.lean: spec.Output/successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The nonlinear stochastic inequality formulation combines global uniform Jacobian surjectivity, bounded derivatives, jointly mean-square smooth paired oracle outputs, and a simultaneous high-probability primal-dual KKT guarantee."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt",
+          "theorem": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

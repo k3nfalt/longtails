@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Covariance-Controlled Smooth Convex Minimization}
+We minimize a differentiable convex function $f:E\to\mathbb{R}$ on a finite-dimensional real Hilbert space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and a given point $x^0\in E$ is within distance $R\geq0$ of a minimizer $x^\star$. At $x$, the oracle returns an unbiased gradient estimate $g(x,\xi)$ using independent samples $\xi$ from a probability law $p$. The noise has second moment bounded by $\sigma^2$ and covariance bounded by $s^2$ times the identity, where $0\leq s\leq\sigma$. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in E$ with $P\{f(\bar{x})-f(x^\star)>\varepsilon\}\leq\delta$, where $P$ is the law of all algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $\langle\cdot,\cdot\rangle$ for the inner product on $E$ and $\|\cdot\|$ for its induced norm. The algorithm receives $E$, the measurable sample space $\Omega$, $x^0$, $L$, $R$, $\sigma$, $s$, $\varepsilon$, and $\delta$.
+
+Our assumptions:
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$. For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient and covariance]
+There are a probability measure $p$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the random vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable under $\xi\sim p$. For every $x,v\in E$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\!\left[\|g(x,\xi)-\nabla f(x)\|^2\right]&\leq\sigma^2,\\
+\mathbb{E}_{\xi\sim p}\!\left[\langle v,g(x,\xi)-\nabla f(x)\rangle^2\right]&\leq s^2\|v\|^2.
+\end{aligned}
+\]
+At call $k=0,1,\ldots$, a query $x\in E$ receives the reply $g(x,\xi_k)$. The sample variables $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $p$. The algorithm's randomness is independent of the entire sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+P\bigl\{f(\bar{x})-f(x^\star)>\varepsilon\bigr\}\leq\delta.
+\]
+\end{document}

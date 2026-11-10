@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/QuasarConvexHessianLipschitz.lean}{QuasarConvexHessianLipschitz}.}\label{tab:QuasarConvexHessianLipschitz}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^2$ has $H$-Lipschitz Hessian and a global minimizer $x_\star$ satisfying $\gamma(f(x)-f(x_\star))\leq\langle\nabla f(x),x-x_\star\rangle$ for every $x$. Assume $H,R,\varepsilon>0$, $0<\gamma\leq1$, $\|x_0-x_\star\|\leq R$, and $\|\nabla^2 f(x_0)\|\leq L_0$ with $L_0\geq0$. Exact queries return $(f,\nabla f,\nabla^2 f)$. Result \textbf{(1)} uses known $H,\gamma,R,L_0,\varepsilon$ and constructs an accelerated cubic Newton output $\widehat x$ with deterministic accuracy $f(\widehat x)-f(x_\star)\leq\varepsilon$; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/QuasarAcceleratedCubicNewton.lean}{Quasar\allowbreak Accelerated\allowbreak Cubic\allowbreak Newton} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/QuasarAcceleratedCubicNewton.md}{(review)} & $\mathcal{O}\bigl((1+\gamma^{-3/2}T^{3/8})\ell\bigr)$ triple calls, including coupling-search queries. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Cubic Newton \citep{qchNP2006}, Thm.~4 & $\mathcal{O}\bigl(1+(HD^3/\varepsilon)^{1/2}\bigr)$ triple calls. Star-convex ($\gamma=1$); bounded convex neighborhood of the initial sublevel set, diameter $D$. & \textbf{(1)}: for $D\asymp R$, $T^{3/8}\ell$ instead of $T^{1/2}$ as $T\to\infty$. Scope: removes bounded-sublevel-set requirement and allows $\gamma<1$. & \textbf{(1)} needs $\gamma,L_0$ and a fixed horizon; much worse constants. Reported crossover only around $T\gtrsim10^{37}$ for $\gamma=1,D=R$. \\
+\midrule
+\textbf{(3)} \citep{qchHSS2020}, Thm.~2 & $\mathcal{O}\bigl((1+\gamma^{-1}R\sqrt{L/\varepsilon})\ell_L\bigr)$ function/gradient calls, including search. Special case: globally $L$-smooth. & \textbf{(1)} removes global $L$-smoothness. On the overlap, fewer raw calls for sufficiently small $\varepsilon$ (crossover $\varepsilon\approx\gamma^4L^4/(H^3R)$, ignoring logarithms); different oracle costs. & \textbf{(1)} requires Hessians and $H$; leading $\gamma^{-3/2}$ instead of $\gamma^{-1}$. \\
+\midrule
+\textbf{(4)} \citep{qchLV2016v2}, Thm.~2.5 & $\mathcal{O}\!\left(\operatorname{poly}\!\left(\begin{gathered}n,\delta^{-1},\log_+(1/\varepsilon),\\ \log_+(1/F),\log_+R,\log_+B\end{gathered}\right)\right)$ weak sampling value calls. Star-convex; $|f|\leq B$ within $10nR$ of $x_0$. Returns a Gaussian with $(1-\delta)$ good mass, with probability $1-F$. & \textbf{(1)}: dimension-free cost; deterministic point accuracy instead of a randomized Gaussian-region guarantee; also covers $\gamma<1$. Rates and outputs are not directly comparable. & \textbf{(1)} needs smoothness and Hessians; polynomial rather than polylogarithmic accuracy dependence at fixed dimension. \\
+\midrule
+\textbf{(5)} Accelerated cubic Newton \citep{qchNesterov2005}, Thm.~2 & $\mathcal{O}\bigl(1+T^{1/3}\bigr)$ triple calls. Special case: convex ($\gamma=1$); cited 2005 preprint. & \textbf{(1)} extends scope from convexity to $\gamma$-quasar-convexity. & \textbf{(1)} is slower on the convex overlap: $T^{3/8}\ell$ instead of $T^{1/3}$ for $T\gg1$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=HR^3/\varepsilon$; $\ell=\log(2+T+L_0/(HR)+\gamma^{-1})$; $\ell_L=1+\log(1+\gamma^{-1}R\sqrt{L/\varepsilon})$; $\log_+a=1+\max\{0,\log a\}$. $D$ is the neighborhood diameter in \textbf{(2)}; $L$ is the global gradient Lipschitz constant in \textbf{(3)}; $n=\dim E$, $\delta,F\in(0,1)$ are mass-error and failure tolerances, and $B>0$ is the local absolute-value bound in \textbf{(4)}. Triple calls return $(f,\nabla f,\nabla^2f)$; weak sampling value calls evaluate at Gaussian-sampled points. $\operatorname{poly}$ denotes an unspecified fixed polynomial.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

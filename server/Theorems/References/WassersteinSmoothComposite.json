@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.WassersteinSmoothComposite",
+  "searched_at": "2026-11-10T09:05:34.616157+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 + 3 \\cdot \\left\\lceil 2 \\cdot R \\cdot \\sqrt{\\frac{L}{\\varepsilon}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.WassersteinSmoothComposite.spec.Params → ℕ",
+        "value": "fun p => 2 + 3 * ⌈2 * p.R * √(p.L / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 + 3 \\cdot \\left\\lceil 2 \\cdot R \\cdot \\sqrt{\\frac{L}{\\varepsilon}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.WassersteinSmoothComposite.spec.Params → ℕ",
+          "value": "fun p => 2 + 3 * ⌈2 * p.R * √(p.L / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.WassersteinAcceleratedProximal",
+      "namespace": "LongTails.Setups.WassersteinSmoothComposite",
+      "setup": "LongTails.Setups.WassersteinSmoothComposite",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.WassersteinSmoothComposite.spec\n  LongTails.Theorems.WassersteinAcceleratedProximal.budget",
+      "theorem": "LongTails.Theorems.WassersteinAcceleratedProximal.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.WassersteinAcceleratedProximal",
+      "theorem": "LongTails.Theorems.WassersteinAcceleratedProximal.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Wasserstein convex optimization: V is convex with L-Lipschitz gradient; H and its feasible domain Q are convex along generalized geodesics. A feasible global minimizer exists.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: Admissible.convex, smooth, generalizedConvex, minimizerFeasible, minimal; GeneralizedGeodesicConvex."
+      },
+      {
+        "label": "composite",
+        "details": "Minimize F(μ)=∫V dμ+H(μ) over μ∈Q, with smooth potential energy and a potentially nonsmooth proximal term.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: objective, Instance, CorrectReply.proximal."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "For h>0, return an exact minimizer over Q of H(u)+W₂²(b,u)/(2h), as an entire distribution.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: Query.proximal; CorrectReply proximal branch."
+      },
+      {
+        "label": "other",
+        "details": "Exact distribution-valued forward oracle returns (Id−h∇V)#μ; an exact optimal-transport-map oracle is available from feasible μ to any ν. These are whole-distribution operations, rather than pointwise gradient or sampling calls. All three query types share one fixed total call budget. Replies satisfy their specifications for every history and seed; no oracle-error model is imposed.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: Query, CorrectReply, Admissible.replies, spec; LongTails/Template.lean: executeWithTrace, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Optimization takes place in P₂(ℝᵈ) with quadratic Wasserstein distance. Every feasible measure is absolutely continuous. Generalized-geodesic convexity is required for every base distribution, with optimal joint plans and feasible interpolants.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: Distribution, squaredDistance, OptimalJointPlan, GeneralizedGeodesicConvex, Admissible.regular."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The underlying particle space is ℝᵈ for public d∈ℕ; the optimization variable is a probability distribution.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: Space, Public.d, Distribution."
+      },
+      {
+        "label": "other",
+        "details": "Public information consists of d, L>0, R≥0, ε>0, and a feasible initial distribution with W₂²(initial,minimizer)≤R². Q, H, V, its gradient, and the minimizer belong to the hidden instance. No lower semicontinuity or closedness assumption is stated; exact proximal solutions are supplied by the admissible oracle.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: Public, Params, Instance, Admissible.initialFeasible, initialDistance, replies; spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must belong to Q and satisfy F(output)−F(minimizer)≤ε.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: spec.successful, objective."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound hold almost surely under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/WassersteinSmoothComposite.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Established Wasserstein composite convex optimization with a smooth potential, generalized-geodesically convex regularization, and idealized exact forward, proximal, and optimal-transport operations."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.WassersteinAcceleratedProximal.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.WassersteinAcceleratedProximal",
+          "theorem": "LongTails.Theorems.WassersteinAcceleratedProximal.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CovarianceSmoothConvex.lean}{CovarianceSmoothConvex}.}\label{tab:CovarianceSmoothConvex}
+\parbox{\linewidth}{\footnotesize Convex differentiable $f$ on a finite-dimensional real Hilbert space, with $L$-Lipschitz gradient and an unconstrained minimizer $x_\star$ satisfying $\|x_0-x_\star\|\le R$. Fresh IID samples supply a jointly measurable, integrable unbiased gradient $g(x,\xi)$; its squared centered norm is integrable, with $\mathbb E\|g-\nabla f\|^2\le\sigma^2$ and $\mathbb E\langle v,g-\nabla f\rangle^2\le s^2\|v\|^2$ for every $x,v$. Here $L,\varepsilon>0$, $R\ge0$, $0\le s\le\sigma$, $0<\delta<1$; parameters are supplied. Target: measurable $\hat x$ with $P\{f(\hat x)-f(x_\star)>\varepsilon\}\le\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CovarianceAcceleratedHighProbability.lean}{Covariance\allowbreak Accelerated\allowbreak High\allowbreak Probability} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CovarianceAcceleratedHighProbability.md}{(review)} &
+$\mathcal{O}\!\left(\begin{gathered}\ell_X^2+\sqrt{LR^2/\varepsilon}\,\ell_X\\{}+R^2(\sigma^2+s^2\ell)/\varepsilon^2\end{gathered}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Clipped accelerated SMD \citep{cscNguyen2023v2}, Thm.~4.1, $p=2$ &
+$\mathcal{O}\!\left(1+\ell\left[\sqrt{LR^2/\varepsilon}+R^2\sigma^2/\varepsilon^2\right]\right)$ &
+\textbf{(1)}: Statistical cost $\sigma^2\ell\to\sigma^2+s^2\ell$; up to $\ell$ gain when noise dominates and $s^2\ell\ll\sigma^2$. For $L=R=1$, $\sigma=d^{-1}$, $s=d^{-3/2}$, $\delta=e^{-d}$, $\varepsilon=d^{-4}$: $\mathcal{O}(d^6)$ versus $\mathcal{O}(d^7)$. &
+\textbf{(1)}: Deterministic logarithm $\ell_X$ instead of $\ell$, plus $\ell_X^2$ overhead; needs $s$ additionally. Exponential grid and exact Gaussian integration make implementation impractical. \\
+\midrule
+\textbf{(3)} Derived bound \citep{cscZhang2026v2}, Thm.~2.2, $p=2$, on $B(x_0,R)$ &
+$\mathcal{O}\!\left(\begin{gathered}1+L^2R^4/\varepsilon^2+LR^2\ell/\varepsilon\\{}+R^2(\sigma^2+s^2\ell)/\varepsilon^2\end{gathered}\right)$\newline $0<\delta<1/10$, $0<s\le\sigma$; Lipschitz bound $G=2LR$. &
+\textbf{(1)}: Matches statistical term; deterministic $(LR^2/\varepsilon)^2\to\sqrt{LR^2/\varepsilon}\,\ell_X+\ell_X^2$. Polynomial total gain is possible when $L^2R^2\gtrsim\sigma^2+s^2\ell$. For $L=R=1$, $\sigma=d^{-1}$, $s=d^{-3/2}$, $\delta=e^{-d}$, $\varepsilon=d^{-4}$: $\mathcal{O}(d^6)$ versus $\mathcal{O}(d^8)$. &
+\textbf{(1)}: Requires smoothness and second moments; does not cover nonsmooth objectives or moment orders $1<p<2$. \\
+\midrule
+\textbf{(4)} Clipped SGD \citep{cscDas2024v1}, Thm.~3 &
+$\mathcal{O}\!\left(\begin{gathered}1+LR^2/\varepsilon\\{}+R^2[\sigma^2+s(\sigma+LR)h_\varepsilon]/\varepsilon^2\end{gathered}\right)$\newline As $\varepsilon\downarrow0$ with other parameters fixed, $s>0$, $0<\delta<1/2$; horizon $N\ge\log\log d$. Requires fixed $\Sigma(x)\preceq\Sigma$, $\operatorname{tr}\Sigma\le\sigma^2$, $\|\Sigma\|\le s^2$. &
+\textbf{(1)}: Scope: pointwise variance bounds suffice without a common covariance envelope. On the overlap, acceleration and confidence coefficient $s^2$ replace $s(\sigma+LR)$; removes mixed $sLR$ term. &
+\textbf{(1)}: Computationally impractical, versus a streaming clipped-gradient implementation. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} Costs count all raw stochastic-gradient calls. $\ell=1+\log(1/\delta)$, $X=1+LR^2/\varepsilon+R^2\sigma^2/\varepsilon^2$, $\ell_X=1+\log(X/\delta)$, $h_\varepsilon=1+\log((1+\log X)/\delta)$; $d=\dim E$. $\Sigma(x)$ denotes noise covariance. In \textbf{(4)}, the asymptotic bound absorbs lower-order terms at fixed remaining parameters; it is not uniform in them.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
