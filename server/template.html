@@ -28,13 +28,14 @@
     .filter-bar{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.filter-search{flex:1;min-width:180px}
     .sort-note{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.evaluation-note{margin-left:auto;text-align:right}
     .filter-bar input{height:40px;min-height:40px;font-size:14px;line-height:20px}
-    .empty-results{color:var(--muted);padding:12px 0 36px}.layout{padding-bottom:48px}
+    .pagination{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin:16px 0}.pagination button{font:inherit;padding:8px 16px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}.pagination button:disabled{opacity:.45;cursor:default}
+    .empty-results{color:var(--muted);padding:12px 0 36px}.layout{padding-bottom:0}
     article{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:36px;overflow:hidden;scroll-margin-top:24px;box-shadow:0 2px 8px #0000000a}
     .card-body{padding:48px 72px}
 
     .card-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid #ddd}
     .card-top h1,.card-top h2{flex:1;min-width:0}
-    #setups article{margin-bottom:20px}#setups .card-body{padding:24px 32px}#setups .card-top{margin-bottom:16px;padding-bottom:10px}
+    #setups article{margin-bottom:20px}#setups article:last-child{margin-bottom:0}#setups .card-body{padding:24px 32px}#setups .card-top{margin-bottom:16px;padding-bottom:10px}
     #setups .description-title{justify-content:flex-start;margin-bottom:12px}#setups .description-title>h2{text-align:left;font-size:22px}
     #setups .description{font-size:17px}#setups .description p{text-align:left;hyphens:none}
     #setups .budgets{margin-top:16px;padding-top:16px}#setups .budgets h3{margin-bottom:10px}#setups .entry-link{margin-top:12px}
@@ -113,11 +114,12 @@
         <small class="evaluation-note">*Codex/Claude Code evaluation. See the reviews.</small>
       </div>
     </form>
+    <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
     <div class="layout"><section id="setups" aria-label="Setup collection"></section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
+    <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
     </div>
     <section class="framework detail" id="framework" hidden><a class="back" href="#">← All setups</a><div class="eyebrow">Shared definitions</div><h2>The oracle framework</h2><p>Every setup uses the same definitions of an algorithm, an oracle, and convergence.</p><div id="framework-source"></div></section>
   </main>
-  <footer><div class="shell">Source: LongTails/Setups · Descriptions summarize the specifications; the Lean source gives the full assumptions. Listing a setup does not assert a convergence result.</div></footer>
   <script id="catalog-data" type="application/json">__CATALOG_DATA__</script>
   <script>
     const Fuse = (() => {
@@ -319,11 +321,12 @@
       const text = htmlText(setup.theorems.map(theorem => theorem.formulaHtml || '').join(''));
       return [setup.id, text.replace(/\s/g, '').length || Infinity];
     }));
-    const cards = [...data.setups].sort((a, b) =>
+    const sortedSetups = [...data.setups].sort((a, b) =>
       (b.contribution ?? -1) - (a.contribution ?? -1) ||
       formulaLengths.get(a.id) - formulaLengths.get(b.id) ||
-      a.title.localeCompare(b.title)).map(setup => {
-      setup.searchText = searchText(setup).replace(/_/g, ' ').toLowerCase();
+      a.title.localeCompare(b.title));
+    for (const setup of sortedSetups) setup.searchText = searchText(setup).replace(/_/g, ' ').toLowerCase();
+    function setupCard(setup) {
       const card = make('article');card.id = setup.id;
       const body = make('div', undefined, 'card-body');
       const top = make('div', undefined, 'card-top');
@@ -335,9 +338,8 @@
       top.append(heading);body.append(top, descriptionView(setup.descriptionHtml, true));
       body.append(budgetsView(setup));
       card.append(body);
-      document.getElementById('setups').append(card);
       return {setup, card};
-    });
+    }
     document.getElementById('framework-source').append(sourceView('LongTails/Template.lean', data.template));
     function htmlText(html) {
       const body = new DOMParser().parseFromString(html, 'text/html').body;
@@ -409,27 +411,47 @@
       }
     }
     let filterTimer;
+    let currentPage = 0;
+    let cards = [];
+    const pageSize = 25;
+    function filteredSetups() {
+      const matches = matchingSetups(document.getElementById('filter-search').value);
+      return sortedSetups.filter(setup => matches.has(setup));
+    }
     function applyFilters() {
       clearTimeout(filterTimer);
       clearSearchHighlights();
-      let visible = 0;
       const query = document.getElementById('filter-search').value;
-      const matches = matchingSetups(query);
-      for (const {setup, card} of cards) {
-        card.hidden = !matches.has(setup);
-        if (!card.hidden) {
-          visible++;
-          if (query.trim()) {
-            pendingHighlights.set(card, {setup, query});
-            highlightObserver.observe(card);
-          }
+      const matches = filteredSetups();
+      const pageCount = Math.max(1, Math.ceil(matches.length / pageSize));
+      currentPage = Math.min(currentPage, pageCount - 1);
+      cards = matches.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map(setupCard);
+      document.getElementById('setups').replaceChildren(...cards.map(({card}) => card));
+      if (query.trim()) {
+        for (const {setup, card} of cards) {
+          pendingHighlights.set(card, {setup, query});
+          highlightObserver.observe(card);
         }
       }
-      document.getElementById('count').textContent = `${visible} of ${data.setups.length} setups`;
-      document.getElementById('empty-results').hidden = visible > 0;
+      document.getElementById('count').textContent = `${matches.length} of ${data.setups.length} setups`;
+      document.getElementById('empty-results').hidden = matches.length > 0;
+      document.querySelectorAll('.page-status').forEach(label => {
+        label.textContent = `Page ${currentPage + 1} of ${pageCount}`;
+      });
+      document.querySelectorAll('[data-page-step]').forEach(button => {
+        button.disabled = Number(button.dataset.pageStep) < 0 ? currentPage === 0 : currentPage === pageCount - 1;
+      });
     }
+    document.querySelectorAll('[data-page-step]').forEach(button => {
+      button.addEventListener('click', () => {
+        currentPage += Number(button.dataset.pageStep);
+        applyFilters();
+        document.getElementById('filters').scrollIntoView();
+      });
+    });
     const filters = document.getElementById('filters');
     filters.addEventListener('input', event => {
+      currentPage = 0;
       clearTimeout(filterTimer);
       clearSearchHighlights();
       if (event.target.id === 'filter-search' && event.target.value.trim()) {
@@ -444,24 +466,30 @@
       if (!card || !event.target.open) return;
       queueMicrotask(() => {
         highlightIndexes.delete(card);
-        if (document.getElementById('filter-search').value.trim()) applyFilters();
+        const query = document.getElementById('filter-search').value;
+        const entry = cards.find(entry => entry.card === card);
+        if (query.trim() && entry) highlightMatches(card, entry.setup, query);
       });
     }, true);
-    applyFilters();
     function route() {
       const [id, section] = location.hash.slice(1).split('/');
       document.getElementById('catalog').hidden = id === 'framework';
       document.getElementById('framework').hidden = id !== 'framework';
-      const entry = cards.find(({setup}) => setup.id === id);
-      if (entry) {
-        if (entry.card.hidden) {
+      const setup = sortedSetups.find(setup => setup.id === id);
+      if (setup) {
+        let matches = filteredSetups();
+        if (!matches.includes(setup)) {
           document.getElementById('filter-search').value = '';
-          applyFilters();
+          matches = sortedSetups;
         }
+        currentPage = Math.floor(matches.indexOf(setup) / pageSize);
+        applyFilters();
+        const entry = cards.find(entry => entry.setup === setup);
         const comparison = section === 'comparison' && entry.card.querySelector('.comparison');
         if (comparison) comparison.open = true;
         (comparison || entry.card).scrollIntoView();
       } else {
+        applyFilters();
         window.scrollTo(0, 0);
       }
     }
