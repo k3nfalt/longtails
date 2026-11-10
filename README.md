@@ -148,15 +148,6 @@ K = 1 + \left\lceil\frac{4L\Delta}{\varepsilon^2}+\frac{8L\Delta\sigma^2}{\varep
    ```
    If the build and audit pass, the **Complexity** bound is verified against the formal **Setup**. The audit ends with this message, shown in green in the terminal: "Checked 1 convergence results and their budgets. The solutions are okay!"
 
-4. **View the setup locally (optional).** Install the [server requirements](server/README.md), then run:
-
-   ```sh
-   python3 -m server.build
-   python3 server/serve.py
-   ```
-
-   Open <http://127.0.0.1:8000/> and find **StochasticSmoothNonconvex** to inspect its Lean source and **Complexity** bound. The build does not run Codex; descriptions and references appear only if they have already been generated.
-
 Once you're done experimenting, you can remove the copied files with `git clean -f -- LongTails/`, provided you haven't staged or committed them. Preview the list first with `git clean -n -- LongTails/`: this also removes any other untracked files under `LongTails/`. The next `./build.sh` or `./lint.sh` run regenerates `LongTails.lean` after cleanup.
 
 ## Citation
