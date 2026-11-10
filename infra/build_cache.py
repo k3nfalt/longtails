@@ -35,7 +35,9 @@ def download_cache(response, archive):
             if now - last_update >= 1 or downloaded == total:
                 progress = f"{downloaded / 1024**2:.1f} MiB"
                 if total:
-                    progress += f" / {total / 1024**2:.1f} MiB ({downloaded / total:.0%})"
+                    progress += (
+                        f" / {total / 1024**2:.1f} MiB ({downloaded / total:.0%})"
+                    )
                 print(
                     f"↓ Downloading cache: {progress}",
                     end="\r" if terminal else "\n",
