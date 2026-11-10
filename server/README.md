@@ -2,6 +2,7 @@
 
 - Python 3.
 - Pandoc for generating HTML with [build.py](build.py).
+- Node.js and npm for rendering MathJax during the build. Install the pinned dependencies with `npm ci --prefix server`.
 - The [Lean project requirements](../REQUIREMENTS.md#lean-project) when extracting theorem descriptions from Lean sources.
 
 Serving the generated page with [serve.py](serve.py) requires only Python.
@@ -13,6 +14,10 @@ From the repository root, run:
 ```sh
 python3 -m server.build
 ```
+
+To rebuild using existing metadata and descriptions without Lean extraction or
+content generation, run `python3 -m server.build --render-only`. Both modes
+render equations and embed their fonts into the page; visitors do not run MathJax.
 
 This extracts Lean theorem metadata and renders the website without running Codex.
 Existing setup descriptions and reference reports are reused. Missing setup

@@ -421,7 +421,16 @@ def render(
             encoding="utf-8"
         ),
     }
-    payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
+    rendered = json.loads(
+        subprocess.run(
+            ["node", str(ROOT / "render_math.cjs")],
+            input=json.dumps(data, ensure_ascii=False),
+            text=True,
+            stdout=subprocess.PIPE,
+            check=True,
+        ).stdout
+    )
+    payload = json.dumps(rendered["data"], ensure_ascii=False).replace("<", "\\u003c")
     return (
         (ROOT / "template.html")
         .read_text(encoding="utf-8")
@@ -432,6 +441,7 @@ def render(
             (ROOT / "vendor/fuse-7.5.0.min.cjs").read_text(encoding="utf-8"),
         )
         .replace("__FONT_FACES__", font_css())
+        .replace("__MATH_CSS__", rendered["css"])
         .replace(
             "__LOGO_DATA__",
             base64.b64encode((ROOT / "logo.png").read_bytes()).decode("ascii"),

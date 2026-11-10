@@ -8,6 +8,7 @@
   <link rel="icon" type="image/png" href="data:image/png;base64,__ICON_DATA__">
   <style>
     __FONT_FACES__
+    __MATH_CSS__
     :root{color-scheme:light;--paper:#eeeeee;--ink:#111111;--muted:#637083;--line:#e3e7ed;--accent:#3157a3;--serif:"TeX Gyre Termes",serif;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
     *{box-sizing:border-box}
     body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
@@ -89,8 +90,6 @@
     @page{size:A4;margin:20mm}
     @media print{body{background:white}.shell{max-width:none;padding:0}article{box-shadow:none;border:0}.card-body{padding:0}.description{font-size:10pt;line-height:1.1}.budget-formula{overflow:visible}footer,.entry-link,.back{display:none}}
   </style>
-  <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
   <div class="masthead">
@@ -186,15 +185,6 @@
       }
       container.append(svg);
     }
-    function typesetMath(element) {
-      if (!window.MathJax?.typesetPromise) return;
-      MathJax.startup.promise = MathJax.startup.promise
-        .then(() => MathJax.typesetPromise([element]))
-        .catch(error => console.error('Math rendering failed:', error));
-    }
-    document.addEventListener('toggle', event => {
-      if (event.target.open) typesetMath(event.target);
-    }, true);
     function descriptionView(html, compact = false) {
       const container = make('div', undefined, 'description');
       container.innerHTML = html;
@@ -287,7 +277,6 @@
         comparison.addEventListener('toggle', () => {
           if (comparison.open && !content.hasChildNodes()) {
             content.innerHTML = setup.comparisonHtml || '';
-            typesetMath(content);
           }
         });
         content.addEventListener('click', event => {
@@ -320,10 +309,8 @@
       return link;
     }
     const formulaLengths = new Map(data.setups.map(setup => {
-      const formulas = make('div');
-      formulas.innerHTML = setup.theorems.map(theorem => theorem.formulaHtml || '').join('');
-      formulas.querySelectorAll('annotation, annotation-xml').forEach(node => node.remove());
-      return [setup.id, formulas.textContent.replace(/\s/g, '').length || Infinity];
+      const text = htmlText(setup.theorems.map(theorem => theorem.formulaHtml || '').join(''));
+      return [setup.id, text.replace(/\s/g, '').length || Infinity];
     }));
     const cards = [...data.setups].sort((a, b) =>
       (b.contribution ?? -1) - (a.contribution ?? -1) ||
@@ -345,10 +332,16 @@
       return {setup, card};
     });
     document.getElementById('framework-source').append(sourceView('LongTails/Template.lean', data.template));
+    function htmlText(html) {
+      const body = new DOMParser().parseFromString(html, 'text/html').body;
+      body.querySelectorAll('.math[data-tex]').forEach(node => node.replaceWith(node.dataset.tex));
+      body.querySelectorAll('annotation, annotation-xml').forEach(node => node.remove());
+      return body.textContent;
+    }
     function searchText(value, key = '') {
       if (value == null) return '';
       if (typeof value === 'object') return Object.entries(value).map(([key, item]) => searchText(item, key)).join(' ');
-      if (key.endsWith('Html')) return new DOMParser().parseFromString(value, 'text/html').body.textContent;
+      if (key.endsWith('Html')) return htmlText(value);
       if (key === 'label' || key === 'status') return value + ' ' + catalogLabel(value);
       return String(value);
     }
@@ -389,7 +382,6 @@
         const table = card.querySelector('.comparison-scroll');
         if (table && !table.hasChildNodes()) {
           table.innerHTML = setup.comparisonHtml || '';
-          typesetMath(table);
         }
         const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
         const texts = [];
