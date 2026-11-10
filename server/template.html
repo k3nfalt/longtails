@@ -194,9 +194,6 @@
       }
       const toggle = make('details', undefined, 'description-toggle');toggle.open = !compact;
       const summary = make('summary', compact ? 'Expand description' : 'Collapse description');
-      toggle.addEventListener('toggle', () => {
-        summary.textContent = toggle.open ? 'Collapse description' : 'Expand description';
-      });
       const section = make('div', undefined, 'description-section');
       const title = container.querySelector('h1, h2, h3');
       const heading = make('div', undefined, 'description-title');
@@ -209,7 +206,17 @@
         section.append(preview);
       }
       if (!container.children.length) return section;
-      toggle.append(summary, container);
+      const detailsHtml = container.innerHTML;
+      toggle.append(summary);
+      if (!compact) toggle.append(container);
+      else container.replaceChildren();
+      toggle.addEventListener('toggle', () => {
+        summary.textContent = toggle.open ? 'Collapse description' : 'Expand description';
+        if (toggle.open && !container.parentNode) {
+          container.innerHTML = detailsHtml;
+          toggle.append(container);
+        }
+      });
       section.append(toggle);
       return section;
     }
@@ -379,10 +386,6 @@
     }
     function highlightMatches(card, setup, query) {
       if (!highlightIndexes.has(card)) {
-        const table = card.querySelector('.comparison-scroll');
-        if (table && !table.hasChildNodes()) {
-          table.innerHTML = setup.comparisonHtml || '';
-        }
         const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
         const texts = [];
         while (walker.nextNode()) {
@@ -436,6 +439,14 @@
       }
     });
     filters.addEventListener('submit', event => event.preventDefault());
+    document.addEventListener('toggle', event => {
+      const card = event.target.closest('article');
+      if (!card || !event.target.open) return;
+      queueMicrotask(() => {
+        highlightIndexes.delete(card);
+        if (document.getElementById('filter-search').value.trim()) applyFilters();
+      });
+    }, true);
     applyFilters();
     function route() {
       const [id, section] = location.hash.slice(1).split('/');
