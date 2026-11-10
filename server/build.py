@@ -311,6 +311,7 @@ def render(
     jobs=1,
     model=None,
     *,
+    render_only=False,
     generate_descriptions=False,
     reviews_dir=None,
     tables_dir=None,
@@ -334,7 +335,9 @@ def render(
         ("server.Theorems.create_theorem_description", False),
         ("server.Theorems.create_references", True),
     ):
-        if supports_model and not (generate_descriptions or regenerate_all):
+        if render_only or (
+            supports_model and not (generate_descriptions or regenerate_all)
+        ):
             continue
         command = [sys.executable, "-m", module]
         if model and supports_model:
@@ -443,6 +446,11 @@ def render(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Build the website.")
     parser.add_argument(
+        "--render-only",
+        action="store_true",
+        help="Render existing metadata and descriptions without Lean extraction or content generation (requires Pandoc).",
+    )
+    parser.add_argument(
         "--generate-descriptions",
         action="store_true",
         help="Use Codex to generate missing setup descriptions and reference reports; keep existing files.",
@@ -472,12 +480,15 @@ if __name__ == "__main__":
         help="Generated table directory containing tables/ and results_table.bib (optional).",
     )
     args = parser.parse_args()
+    if args.render_only and (args.generate_descriptions or args.regenerate_all):
+        parser.error("--render-only cannot be combined with generation flags")
     if args.jobs < 1:
         parser.error("jobs must be at least 1")
     page = render(
         args.regenerate_all,
         args.jobs,
         args.model,
+        render_only=args.render_only,
         generate_descriptions=args.generate_descriptions,
         reviews_dir=args.reviews_dir,
         tables_dir=args.tables_dir,
