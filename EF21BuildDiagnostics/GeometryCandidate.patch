@@ -1,0 +1,103 @@
+--- a/LongTails/Proofs/ProximalEf21Geometry.lean
++++ b/LongTails/Proofs/ProximalEf21Geometry.lean
+@@ -50,10 +50,13 @@
+     2 * ⟪u, v⟫_ℝ ≤ a * ‖u‖ ^ 2 + a⁻¹ * ‖v‖ ^ 2 := by
+   have h := sq_nonneg ‖a • u - v‖
+   rw [square_sub, square_smul, real_inner_smul_left] at h
+-  simp at h
+   apply (mul_le_mul_left ha).mp
+-  rw [mul_add, ← mul_assoc a a⁻¹, mul_inv_cancel₀ (ne_of_gt ha), one_mul]
+-  nlinarith [h]
++  calc
++    a * (2 * ⟪u, v⟫_ℝ) ≤ a ^ 2 * ‖u‖ ^ 2 + ‖v‖ ^ 2 := by
++      linarith only [h]
++    _ = a * (a * ‖u‖ ^ 2 + a⁻¹ * ‖v‖ ^ 2) := by
++      field_simp [ne_of_gt ha]
++      <;> ring
+ 
+ lemma inner_young (a : ℝ) (ha : 0 < a) (u v : E) :
+     ⟪u, v⟫_ℝ ≤ a / 2 * ‖u‖ ^ 2 + 1 / (2 * a) * ‖v‖ ^ 2 := by
+@@ -85,13 +88,15 @@
+ lemma square_convex_combination (a : ℝ) (ha : 0 ≤ a) (ha1 : a ≤ 1)
+     (u v : E) :
+     ‖(1 - a) • u + a • v‖ ^ 2 ≤ (1 - a) * ‖u‖ ^ 2 + a * ‖v‖ ^ 2 := by
+-  have h := sq_nonneg ‖u - v‖
+-  rw [square_sub] at h
+-  have hc : 0 ≤ a * (1 - a) := mul_nonneg ha (sub_nonneg.mpr ha1)
+-  have hmul := mul_nonneg hc h
+-  rw [square_add, square_smul, square_smul, real_inner_smul_left, real_inner_smul_right]
+-  simp
+-  nlinarith [hmul]
++  have hnonneg : 0 ≤ a * (1 - a) * ‖u - v‖ ^ 2 :=
++    mul_nonneg (mul_nonneg ha (sub_nonneg.mpr ha1)) (sq_nonneg ‖u - v‖)
++  have hid :
++      (1 - a) * ‖u‖ ^ 2 + a * ‖v‖ ^ 2 - ‖(1 - a) • u + a • v‖ ^ 2 =
++        a * (1 - a) * ‖u - v‖ ^ 2 := by
++    rw [square_add, square_smul, square_smul,
++      real_inner_smul_left, real_inner_smul_right, square_sub]
++    ring
++  exact sub_nonneg.mp (hid.symm ▸ hnonneg)
+ 
+ lemma complete_model_square (ψ : E → ℝ) {τ : ℝ} (hτ : τ ≠ 0)
+     (x m z : E) :
+@@ -121,7 +126,7 @@
+     field_simp [ne_of_gt hτ]
+     <;> ring
+   rw [heq]
+-  nlinarith
++  linarith only [h]
+ 
+ lemma next_model_lower_bound (ψ : E → ℝ) {τ : ℝ} (hτ : 0 < τ)
+     (x y m mnext z znext : E)
+@@ -220,7 +225,7 @@
+   have hden : 0 < τ - γ := sub_pos.mpr hτγ
+   have hv : γ⁻¹ • (x - y) - v - (τ⁻¹ • (x - z) - m) =
+       γ⁻¹ • (x - y) - τ⁻¹ • (x - z) - (v - m) := by abel
+-  rw [hv, proximal_displacement_identity (ne_of_gt hγ) (ne_of_gt hτ),
++  rw [hv, proximal_displacement_identity (ne_of_gt hγ) (ne_of_gt hτ) x y z,
+     inner_sub_right, real_inner_smul_right, real_inner_smul_right] at hmono
+   have hi :
+       ⟪γ⁻¹ • (x - y) - τ⁻¹ • (x - z) - (v - m),
+@@ -231,7 +236,7 @@
+   rw [hi] at hmono
+   rw [div_mul_eq_mul_div]
+   apply (div_le_iff₀ hden).2
+-  nlinarith
++  linarith only [hmono]
+ 
+ lemma mixed_proximal_products {γ μ τ : ℝ}
+     (hγ : 0 < γ) (hμ : 0 < μ) (hτγ : γ < τ)
+@@ -269,12 +274,21 @@
+   rw [real_inner_comm (r - rτ) c] at hy₂
+   have hy₂' := mul_le_mul_of_nonneg_left hy₂
+     (show 0 ≤ γ / (μ * (τ - γ)) by positivity)
+-  have hquarter : γ * (1 / (4 * μ * (τ - γ))) =
+-      γ / (μ * (τ - γ)) / 4 := by ring
++  have hy₁'' :
++      -γ * ⟪a, r - rτ⟫_ℝ ≤
++        (γ / (μ * (τ - γ))) / 4 * ‖r - rτ‖ ^ 2 +
++          γ * μ * (τ - γ) * ‖a‖ ^ 2 := by
++    convert hy₁' using 1 <;>
++      field_simp [ne_of_gt hμ, ne_of_gt hd] <;> ring
++  have hy₂'' :
++      γ / (μ * (τ - γ)) * ⟪c, r - rτ⟫_ℝ ≤
++        (γ / (μ * (τ - γ))) / 4 * ‖r - rτ‖ ^ 2 +
++          γ / (μ * (τ - γ)) * ‖c‖ ^ 2 := by
++    convert hy₂' using 1 <;> ring
+   have hhalf : -γ / (2 * μ * (τ - γ)) =
+       -(γ / (μ * (τ - γ))) / 2 := by ring
+   rw [hhalf]
+-  nlinarith [hmono', hy₁', hy₂', hquarter]
++  linarith only [hmono', hy₁'', hy₂'']
+ 
+ lemma objective_cross_lower_bound (F ψ : E → ℝ) (μ γ : ℝ)
+     (x y xstar g m v b : E)
+@@ -321,7 +335,7 @@
+   rw [hq] at hmin
+   apply (le_div_iff₀ (mul_pos hμ hτ)).2
+   unfold modelDecrease
+-  nlinarith [hconvex, hmin]
++  linarith only [hconvex, hmin]
+ 
+ lemma functionalEnergy_nonnegative (F ψ : E → ℝ) {μ τ : ℝ}
+     (hμ : 0 < μ) (hτ : 0 < τ) (xstar x m z : E)

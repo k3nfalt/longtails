@@ -1,0 +1,7 @@
+import LongTails.Theorems.ProximalEf21Homotopy
+
+#check LongTails.Proofs.ProximalEf21Execution.executeWithTrace_eq_replay
+#check LongTails.Proofs.ProximalEf21Execution.execute_eq_traceOutput
+#check LongTails.Proofs.ProximalEf21Execution.execute_success
+#check LongTails.Theorems.ProximalEf21Homotopy.result
+#print axioms LongTails.Theorems.ProximalEf21Homotopy.result

@@ -1,0 +1,95 @@
+========== EXECUTABLE LOCATIONS ==========
+lean is /home/codespace/.elan/bin/lean
+lean is /home/codespace/.elan/bin/lean
+lake is /home/codespace/.elan/bin/lake
+lake is /home/codespace/.elan/bin/lake
+
+========== A: Lean without Lake ==========
+Command: lean --version
+Lean (version 4.35.0-rc2, x86_64-unknown-linux-gnu, commit 11acb17ec6b07a8f9e9173e6845197929540936b, Release)
+EXIT_STATUS=0
+ELAPSED_SECONDS=0
+
+========== B: Lake environment without Lean ==========
+Command: lake --no-ansi -v env /bin/echo EF21_LAKE_ENV_READY
+EF21_LAKE_ENV_READY
+EXIT_STATUS=0
+ELAPSED_SECONDS=1
+
+========== C: Lean inside Lake environment ==========
+Command: lake --no-ansi -v env /bin/sh -c echo\ EF21_CHILD_STARTED\;\ command\ -v\ lean\;\ exec\ lean\ --version
+EF21_CHILD_STARTED
+/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lean
+Lean (version 4.35.0-rc2, x86_64-unknown-linux-gnu, commit 11acb17ec6b07a8f9e9173e6845197929540936b, Release)
+EXIT_STATUS=0
+ELAPSED_SECONDS=1
+
+========== PROJECT CONFIGURATION ==========
+
+--- lakefile.toml ---
+name = "LongTails"
+version = "0.1.0"
+defaultTargets = ["LongTails"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "7a751b750301cb7ae12b59be70b5fb38b0e2d39a"
+
+
+[[lean_lib]]
+name = "LongTails"
+globs = ["LongTails.*"]
+
+[[lean_exe]]
+name = "runLinterNoDocString"
+root = "RunLinterNoDocString"
+srcDir = "tools"
+needs = ["LongTails"]
+supportInterpreter = true
+
+[[require]]
+name = "LeanTeX"
+git = "https://github.com/kmill/LeanTeX"
+rev = "d66db4582b6cb4d9fa0b6309168103a248a5fd46"
+
+[[require]]
+name = "proofwidgets"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/ProofWidgets4"
+rev = "4c70ac059693669e5756e32a7a94b57ee1e99dc5"
+
+[[require]]
+name = "batteries"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/batteries"
+rev = "167242e0621ba382fd6f7b2a7e932ce0811f9ab1"
+
+[[lean_lib]]
+name = "BudgetLatex"
+srcDir = "server/Theorems"
+roots = ["BudgetLatex", "TestBudgetLatex"]
+
+[[lean_lib]]
+name = "Tutorial"
+roots = ["tutorial.ToBeDiscovered.Theorems.SgdNonconvex"]
+globs = ["tutorial.ToBeDiscovered.+"]
+
+[[lean_lib]]
+name = "ComparatorChallenge"
+srcDir = ".lake/comparator-check"
+globs = ["ComparatorChallenge.*"]
+
+[[require]]
+name = "Comparator"
+scope = "leanprover"
+git = "https://github.com/leanprover/comparator"
+rev = "32bd61da1d68fbaa310234964e9b820b03a0f82f"
+
+
+[[require]]
+name = "lean4export"
+scope = "leanprover"
+git = "https://github.com/leanprover/lean4export"
+rev = "6cea97789dc088ea47fcea15692db85685aedac5"

@@ -1,0 +1,470 @@
+EF21 live import diagnostic; no EF21 lemmas are checked.
+UTC=2026-11-08T12:28:28.875054+00:00
+Repository=/workspaces/longtails
+Pinned toolchain: leanprover/lean4:v4.35.0-rc2
+Lake command: /home/codespace/.elan/bin/lake
+CPU count: 2
+No proof edits, patch application, cache deletion, or toolchain updates requested.
+--- Lean/Lake processes visible BEFORE this test (not stopped by this script) ---
+MemTotal:        8131876 kB
+MemAvailable:    5159040 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=0.00 avg60=0.00 avg300=0.01 total=10206334
+full avg10=0.00 avg60=0.00 avg300=0.00 total=8017604
+pressure/io: some avg10=6.34 avg60=4.91 avg300=5.00 total=575649995
+full avg10=5.73 avg60=4.60 avg300=4.56 total=406445093
+pressure/cpu: some avg10=38.31 avg60=45.04 avg300=46.74 total=713914358
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+
+========== Core file: no explicit Mathlib import ==========
+Command: /home/codespace/.elan/bin/lake env /bin/sh -c 'printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1"' ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/CoreOnly.lean
+Diagnostic wall-clock cutoff: 15s (not a verification-time estimate)
+
+SNAPSHOT elapsed=1.0s session=33172
+MemTotal:        8131876 kB
+MemAvailable:    5027912 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=0.18 avg60=0.03 avg300=0.02 total=10239645
+full avg10=0.00 avg60=0.00 avg300=0.00 total=8024587
+pressure/io: some avg10=18.05 avg60=7.08 avg300=5.45 total=575975888
+full avg10=9.40 avg60=5.30 avg300=4.71 total=406518564
+pressure/cpu: some avg10=40.43 avg60=45.20 avg300=46.76 total=714474591
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33172 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=790.3 minor_faults=24219 major_faults=51 threads=5 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/CoreOnly.lean
+io: rchar: 3610757; wchar: 729; syscr: 7309; syscw: 41; read_bytes: 19259392; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33175 state=S cpu_seconds=0.49 wchan=do_wait
+  TID=33172 state=S cpu_seconds=0.05 wchan=futex_wait_queue
+  TID=33173 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33174 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33240 PPID=33172 state=R cpu_seconds=0.00 rss_MiB=0.0 minor_faults=57 major_faults=0 threads=1 wchan=0
+command=[unavailable: No such file or directory]
+io: [unavailable: No such file or directory]
+Mapped library/artifact paths (last 8 distinct, not a call stack): []
+PROCESS_RETURN_CODE=0 TIMED_OUT=False TRACE_LIMIT_REACHED=False WALL_SECONDS=1.79
+--- Captured command output ---
+EF21_CHILD_STARTED
+/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lean
+LEAN_PATH=/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean:/workspaces/longtails/.lake/build/lib/lean:/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean
+LEAN_SYSROOT=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2
+Nat : Type
+
+
+========== Small Mathlib import ==========
+Command: /home/codespace/.elan/bin/lake env /bin/sh -c 'printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1"' ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+Diagnostic wall-clock cutoff: 30s (not a verification-time estimate)
+
+SNAPSHOT elapsed=1.0s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    5010048 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=0.14 avg60=0.03 avg300=0.02 total=10268816
+full avg10=0.00 avg60=0.00 avg300=0.00 total=8042011
+pressure/io: some avg10=17.86 avg60=7.40 avg300=5.53 total=576199158
+full avg10=8.42 avg60=5.26 avg300=4.70 total=406587559
+pressure/cpu: some avg10=41.98 avg60=45.32 avg300=46.78 total=715316156
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=0.24 rss_MiB=289.1 minor_faults=10545 major_faults=2 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 805546; wchar: 1110; syscr: 9016; syscw: 6; read_bytes: 1847296; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Sym/Arith/MonadCanon.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Std/Time/Duration.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Std/Time/Duration.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33360 state=D cpu_seconds=0.38 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+
+SNAPSHOT elapsed=6.2s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    4996064 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=6.37 avg60=1.22 avg300=0.27 total=11527380
+full avg10=2.19 avg60=0.42 avg300=0.09 total=8531859
+pressure/io: some avg10=32.62 avg60=10.89 avg300=6.30 total=579778926
+full avg10=11.26 avg60=5.99 avg300=4.87 total=407628187
+pressure/cpu: some avg10=46.04 avg60=45.89 avg300=46.88 total=718213693
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=0.59 rss_MiB=408.5 minor_faults=17669 major_faults=465 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1097266; wchar: 1110; syscr: 12331; syscw: 6; read_bytes: 47759360; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/Order/IsBotOne.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/Order/IsBotOne.ir', '/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Batteries/Data/List/Perm.olean', '/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Batteries/Data/List/Perm.olean.server', '/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Batteries/Data/List/Perm.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Simp/BuiltinSimprocs/BitVec.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Simp/BuiltinSimprocs/BitVec.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Simp/BuiltinSimprocs/BitVec.olean.private']
+  TID=33360 state=D cpu_seconds=0.60 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+
+SNAPSHOT elapsed=11.3s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    4985888 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=12.39 avg60=3.13 avg300=0.71 total=12331600
+full avg10=4.20 avg60=1.06 avg300=0.24 total=8781313
+pressure/io: some avg10=50.39 avg60=16.64 avg300=7.62 total=583441933
+full avg10=15.35 avg60=7.30 avg300=5.17 total=408735949
+pressure/cpu: some avg10=49.52 avg60=46.71 avg300=47.03 total=720875714
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=0.73 rss_MiB=435.5 minor_faults=19064 major_faults=830 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1199434; wchar: 1110; syscr: 13492; syscw: 6; read_bytes: 86822912; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Simp/LoopProtection.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Simp/LoopProtection.ir', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Set/Function.olean', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Set/Function.olean.server', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Set/Function.olean.private', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/SimpRw.olean', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/SimpRw.olean.server', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/SimpRw.olean.private']
+  TID=33360 state=D cpu_seconds=0.71 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+
+SNAPSHOT elapsed=16.3s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    4991444 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=10.59 avg60=3.35 avg300=0.79 total=12623196
+full avg10=3.51 avg60=1.12 avg300=0.26 total=8889986
+pressure/io: some avg10=55.88 avg60=19.86 avg300=8.42 total=587007682
+full avg10=18.48 avg60=8.41 avg300=5.43 total=410019560
+pressure/cpu: some avg10=48.82 avg60=46.73 avg300=47.03 total=723202124
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=0.81 rss_MiB=449.1 minor_faults=19798 major_faults=1092 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1271154; wchar: 1110; syscr: 14307; syscw: 6; read_bytes: 117473280; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/Ring/Basic.olean.server', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/Ring/Basic.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Intro.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Intro.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Intro.olean.private', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/Ring/Basic.olean', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/Ring/Basic.olean.server', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/Ring/Basic.olean.private']
+  TID=33360 state=D cpu_seconds=0.81 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+
+SNAPSHOT elapsed=21.4s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    4985412 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=7.60 avg60=3.41 avg300=0.85 total=12895681
+full avg10=2.67 avg60=1.17 avg300=0.29 total=9009238
+pressure/io: some avg10=64.52 avg60=25.10 avg300=9.78 total=590716825
+full avg10=22.39 avg60=10.15 avg300=5.87 total=411225246
+pressure/cpu: some avg10=47.57 avg60=46.66 avg300=47.01 total=725708269
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=0.92 rss_MiB=468.1 minor_faults=20751 major_faults=1447 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1355810; wchar: 1110; syscr: 15269; syscw: 6; read_bytes: 157900800; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/CongrExclamation.ir', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Util/AtomM.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Util/AtomM.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/MethodSpecsSimp.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/MethodSpecsSimp.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/MethodSpecsSimp.olean.private', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/Ring/Torsion.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/Ring/Torsion.ir']
+  TID=33360 state=D cpu_seconds=0.94 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+
+SNAPSHOT elapsed=26.5s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    4989264 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=6.08 avg60=3.39 avg300=0.88 total=13120827
+full avg10=2.45 avg60=1.23 avg300=0.32 total=9144836
+pressure/io: some avg10=65.47 avg60=27.80 avg300=10.56 total=594485137
+full avg10=19.93 avg60=10.43 avg300=5.98 total=412271714
+pressure/cpu: some avg10=50.34 avg60=47.26 avg300=47.13 total=728437609
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=1.05 rss_MiB=489.4 minor_faults=21846 major_faults=1853 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1440114; wchar: 1110; syscr: 16227; syscw: 6; read_bytes: 198750208; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Std/Data/DTreeMap/Internal/WF/Defs.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Std/Data/DTreeMap/Internal/WF/Defs.ir', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Order/Interval/Set/Disjoint.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Order/Interval/Set/Disjoint.ir', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Finset/Range.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Finset/Range.ir', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Finset/Fold.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Finset/Fold.ir']
+  TID=33360 state=D cpu_seconds=1.02 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+
+SNAPSHOT elapsed=30.2s session=33273
+MemTotal:        8131876 kB
+MemAvailable:    4970472 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=5.58 avg60=3.46 avg300=0.93 total=13300879
+full avg10=2.12 avg60=1.24 avg300=0.33 total=9220542
+pressure/io: some avg10=70.24 avg60=31.18 avg300=11.51 total=597473581
+full avg10=19.41 avg60=11.00 avg300=6.17 total=412887300
+pressure/cpu: some avg10=50.43 avg60=47.44 avg300=47.17 total=730379025
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33273 PPID=33154 state=S cpu_seconds=0.47 rss_MiB=794.3 minor_faults=25709 major_faults=0 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 4885610; wchar: 1091; syscr: 8104; syscw: 61; read_bytes: 0; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/DiscrTree/Types.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/Slice/Array/Iterator.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/OfFn.olean.private']
+  TID=33276 state=S cpu_seconds=0.42 wchan=do_wait
+  TID=33273 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33274 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33275 state=S cpu_seconds=0.00 wchan=ep_poll
+PID=33356 PPID=33273 state=S cpu_seconds=1.11 rss_MiB=498.4 minor_faults=22322 major_faults=2032 threads=5 wchan=futex_wait_queue
+command=lean /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1490714; wchar: 1110; syscr: 16802; syscw: 6; read_bytes: 222978048; write_bytes: 4096; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/GrindInstances/Ring/SInt.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/GrindInstances/Ring/SInt.olean.private', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/List/Zip.ir.sig', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/List/Zip.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Ext.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Ext.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Lean/Meta/Tactic/Ext.olean.private', '/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic/ClickSuggestions/ApplyAt.olean']
+  TID=33360 state=D cpu_seconds=1.10 wchan=folio_wait_bit_common
+  TID=33356 state=S cpu_seconds=0.03 wchan=futex_wait_queue
+  TID=33357 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33358 state=S cpu_seconds=0.00 wchan=ep_poll
+  TID=33359 state=S cpu_seconds=0.00 wchan=futex_wait_queue
+Diagnostic timeout; stopping only this test's process group.
+PROCESS_RETURN_CODE=-15 TIMED_OUT=True TRACE_LIMIT_REACHED=False WALL_SECONDS=31.58
+--- Captured command output ---
+EF21_CHILD_STARTED
+/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lean
+LEAN_PATH=/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean:/workspaces/longtails/.lake/build/lib/lean:/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean
+LEAN_SYSROOT=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2
+
+
+========== Optional syscall trace of failing test ==========
+Command: /usr/bin/strace -f -tt -T -s 120 -e trace=%file,%process,futex -o /workspaces/longtails/Ef21LiveProbe_365_2dxj/syscalls.log /home/codespace/.elan/bin/lake env /bin/sh -c 'printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1"' ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+Diagnostic wall-clock cutoff: 15s (not a verification-time estimate)
+
+SNAPSHOT elapsed=1.1s session=33723
+MemTotal:        8131876 kB
+MemAvailable:    5144828 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+pressure/memory: some avg10=5.17 avg60=3.52 avg300=0.98 total=13417074
+full avg10=1.90 avg60=1.26 avg300=0.35 total=9272941
+pressure/io: some avg10=67.38 avg60=33.24 avg300=12.22 total=598694774
+full avg10=17.76 avg60=11.25 avg300=6.29 total=413078883
+pressure/cpu: some avg10=51.42 avg60=47.83 avg300=47.26 total=731801023
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+PID=33723 PPID=33154 state=S cpu_seconds=0.21 rss_MiB=3.9 minor_faults=329 major_faults=11 threads=1 wchan=do_wait
+command=/usr/bin/strace -f -tt -T -s 120 -e trace=%file,%process,futex -o /workspaces/longtails/Ef21LiveProbe_365_2dxj/syscalls.log /home/codespace/.elan/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 10598; wchar: 608805; syscr: 17; syscw: 7653; read_bytes: 2199552; write_bytes: 610304; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1', '/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5', '/usr/lib/x86_64-linux-gnu/libc.so.6', '/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1', '/usr/lib/x86_64-linux-gnu/libunwind-ptrace.so.0.0.0', '/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2']
+  TID=33723 state=S cpu_seconds=0.21 wchan=do_wait
+PID=33732 PPID=33723 state=S cpu_seconds=0.09 rss_MiB=118.9 minor_faults=4926 major_faults=13 threads=4 wchan=futex_wait_queue
+command=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lake env /bin/sh -c printf "EF21_CHILD_STARTED\n"; command -v lean; printf "LEAN_PATH=%s\n" "$LEAN_PATH"; printf "LEAN_SYSROOT=%s\n" "$LEAN_SYSROOT"; exec lean "$1" ef21-probe /workspaces/longtails/Ef21LiveProbe_365_2dxj/SmallImport.lean
+io: rchar: 1824292; wchar: 364; syscr: 1438; syscw: 21; read_bytes: 18518016; write_bytes: 0; cancelled_write_bytes: 0
+Mapped library/artifact paths (last 8 distinct, not a call stack): ['/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Prelude.ir.sig', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Prelude.ir', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/NeZero.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/NeZero.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/NeZero.olean.private', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Control/Lawful/MonadLift/Instances.olean', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Control/Lawful/MonadLift/Instances.olean.server', '/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Control/Lawful/MonadLift/Instances.olean.private']
+  TID=33732 state=S cpu_seconds=0.04 wchan=futex_wait_queue
+  TID=33741 state=t cpu_seconds=0.04 wchan=ptrace_stop.part.0
+  TID=33739 state=S cpu_seconds=0.00 wchan=io_sq_thread
+  TID=33740 state=S cpu_seconds=0.00 wchan=ep_poll
+Trace size limit reached; stopping only this test's process group.
+PROCESS_RETURN_CODE=-15 TIMED_OUT=False TRACE_LIMIT_REACHED=True WALL_SECONDS=5.74
+--- Captured command output ---
+EF21_CHILD_STARTED
+/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/bin/lean
+LEAN_PATH=/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean:/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean:/workspaces/longtails/.lake/build/lib/lean:/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean
+LEAN_SYSROOT=/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2
+
+--- Last 160 syscall-trace lines (diagnostic, not proof output) ---
+33884 12:29:07.922627 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000032>
+33884 12:29:07.922716 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000032>
+33884 12:29:07.922803 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.922911 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000042>
+33884 12:29:07.923028 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000034>
+33884 12:29:07.923184 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.923294 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000035>
+33884 12:29:07.923435 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000032>
+33884 12:29:07.924705 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.001798>
+33884 12:29:07.926637 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000039>
+33884 12:29:07.926760 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000028>
+33884 12:29:07.926873 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000035>
+33884 12:29:07.927599 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000046>
+33884 12:29:07.927735 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.001760>
+33884 12:29:07.929606 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000035>
+33884 12:29:07.929714 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.001790>
+33884 12:29:07.931586 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000015>
+33884 12:29:07.931687 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000830>
+33884 12:29:07.932592 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000012>
+33884 12:29:07.932733 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000018>
+33884 12:29:07.932818 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFDIR|0755, stx_size=12288, ...}) = 0 <0.000016>
+33884 12:29:07.932931 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=61456, ...}) = 0 <0.000036>
+33884 12:29:07.933091 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.olean", O_RDONLY) = 11 <0.000057>
+33884 12:29:07.933334 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.olean.server", O_RDONLY) = 11 <0.000049>
+33884 12:29:07.933562 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.olean.private", O_RDONLY) = 11 <0.000048>
+33884 12:29:07.933783 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000012>
+33884 12:29:07.933904 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000009>
+33884 12:29:07.933994 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000021>
+33884 12:29:07.934067 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000043>
+33884 12:29:07.934162 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000046>
+33884 12:29:07.934270 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000040>
+33884 12:29:07.934366 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000042>
+33884 12:29:07.934471 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000053>
+33884 12:29:07.934583 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000040>
+33884 12:29:07.934683 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000039>
+33884 12:29:07.934772 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000034>
+33884 12:29:07.934852 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000030>
+33884 12:29:07.934917 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000028>
+33884 12:29:07.935007 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000018>
+33884 12:29:07.935084 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000020>
+33884 12:29:07.935166 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000015>
+33884 12:29:07.935240 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000020>
+33884 12:29:07.935333 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000038>
+33884 12:29:07.935431 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000018>
+33884 12:29:07.935541 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.935608 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000011>
+33884 12:29:07.935724 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.935813 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000022>
+33884 12:29:07.935908 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000011>
+33884 12:29:07.935996 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000021>
+33884 12:29:07.936089 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.936178 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFDIR|0755, stx_size=12288, ...}) = 0 <0.000012>
+33884 12:29:07.936288 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.ir.sig", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=176, ...}) = 0 <0.000020>
+33884 12:29:07.936380 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.ir.sig", O_RDONLY) = 11 <0.000016>
+33884 12:29:07.936566 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Bootstrap.ir", O_RDONLY) = 11 <0.000058>
+33884 12:29:07.936831 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000020>
+33884 12:29:07.936938 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.937027 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000010>
+33884 12:29:07.937117 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000020>
+33884 12:29:07.937210 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000021>
+33884 12:29:07.937308 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000018>
+33884 12:29:07.937402 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.937482 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000036>
+33884 12:29:07.937604 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000015>
+33884 12:29:07.937690 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000010>
+33884 12:29:07.937750 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000034>
+33884 12:29:07.937829 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.937902 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000033>
+33884 12:29:07.937978 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000029>
+33884 12:29:07.938051 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.938126 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000032>
+33884 12:29:07.938223 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000017>
+33884 12:29:07.938304 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000017>
+33884 12:29:07.938387 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000011>
+33884 12:29:07.938481 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000046>
+33884 12:29:07.938588 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000035>
+33884 12:29:07.938669 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000009>
+33884 12:29:07.938772 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000017>
+33884 12:29:07.938852 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.938934 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.939016 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffcec0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.939095 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFDIR|0755, stx_size=12288, ...}) = 0 <0.000019>
+33884 12:29:07.939193 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=1253696, ...}) = 0 <0.000038>
+33884 12:29:07.939279 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.olean", O_RDONLY) = 11 <0.000037>
+33884 12:29:07.939457 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.olean.server", O_RDONLY) = 11 <0.000056>
+33884 12:29:07.939673 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.olean.private", O_RDONLY) = 11 <0.000022>
+33884 12:29:07.939865 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000048>
+33884 12:29:07.939982 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000041>
+33884 12:29:07.940080 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000040>
+33884 12:29:07.940175 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000039>
+33884 12:29:07.940269 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000038>
+33884 12:29:07.940362 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000040>
+33884 12:29:07.940453 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.940553 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000009>
+33884 12:29:07.940627 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000028>
+33884 12:29:07.940695 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000029>
+33884 12:29:07.940760 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.940833 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000032>
+33884 12:29:07.940906 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000011>
+33884 12:29:07.940998 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.941072 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.941157 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.941238 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000012>
+33884 12:29:07.941320 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000017>
+33884 12:29:07.941397 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000017>
+33884 12:29:07.941471 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.941568 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000009>
+33884 12:29:07.941662 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.941751 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.941841 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000020>
+33884 12:29:07.941927 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000009>
+33884 12:29:07.942019 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffced0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.942105 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFDIR|0755, stx_size=12288, ...}) = 0 <0.000019>
+33884 12:29:07.942197 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.ir.sig", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=176, ...}) = 0 <0.000013>
+33884 12:29:07.942292 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.ir.sig", O_RDONLY) = 11 <0.000014>
+33884 12:29:07.942489 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/BitVec/Lemmas.ir", O_RDONLY) = 11 <0.000064>
+33884 12:29:07.942762 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000050>
+33884 12:29:07.942908 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Cli/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000031>
+33884 12:29:07.942999 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000009>
+33884 12:29:07.943098 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Qq/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000043>
+33884 12:29:07.943231 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000042>
+33884 12:29:07.943356 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/aesop/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000040>
+33884 12:29:07.943473 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000050>
+33884 12:29:07.943576 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/importGraph/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000036>
+33884 12:29:07.943676 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000017>
+33884 12:29:07.943765 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanSearchClient/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000046>
+33884 12:29:07.943863 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000035>
+33884 12:29:07.943964 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/plausible/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000018>
+33884 12:29:07.944044 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000015>
+33884 12:29:07.944126 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/mathlib/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000022>
+33884 12:29:07.944216 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.944309 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/LeanTeX/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000010>
+33884 12:29:07.944412 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000012>
+33884 12:29:07.944527 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/proofwidgets/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000044>
+33884 12:29:07.944653 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000020>
+33884 12:29:07.944754 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/batteries/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000019>
+33884 12:29:07.944848 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.944927 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/Comparator/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000016>
+33884 12:29:07.945015 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000021>
+33884 12:29:07.945115 statx(AT_FDCWD, "/workspaces/longtails/.lake/packages/lean4export/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000014>
+33884 12:29:07.945189 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000018>
+33884 12:29:07.945270 statx(AT_FDCWD, "/workspaces/longtails/.lake/build/lib/lean/Init.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, 0x7b6d5fffccb0) = -1 ENOENT (No such file or directory) <0.000010>
+33884 12:29:07.945349 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFDIR|0755, stx_size=12288, ...}) = 0 <0.000037>
+33884 12:29:07.945436 statx(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/Nat/TakeDrop.olean", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_ALL|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=138952, ...}) = 0 <0.000039>
+33884 12:29:07.945532 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/Nat/TakeDrop.olean", O_RDONLY) = 11 <0.000046>
+33880 12:29:07.945898 <... futex resumed>) = ? ERESTARTSYS (To be restarted if SA_RESTART is set) <0.786451>
+33732 12:29:07.945948 <... futex resumed>) = ? ERESTARTSYS (To be restarted if SA_RESTART is set) <0.977710>
+33880 12:29:07.945998 --- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=33154, si_uid=1000} ---
+33732 12:29:07.946045 --- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=33154, si_uid=1000} ---
+33741 12:29:07.946111 <... wait4 resumed> <unfinished ...>) = ?
+33741 12:29:07.946253 +++ killed by SIGTERM +++
+33884 12:29:07.946320 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/Nat/TakeDrop.olean.server", O_RDONLY) = 11 <0.000024>
+33884 12:29:07.946566 openat(AT_FDCWD, "/home/codespace/.elan/toolchains/leanprover--lean4---v4.35.0-rc2/lib/lean/Init/Data/List/Nat/TakeDrop.olean.private", O_RDONLY) = 11 <0.000017>
+33883 12:29:07.946690 <... futex resumed>) = ?
+33882 12:29:07.946778 +++ killed by SIGTERM +++
+33883 12:29:07.946852 +++ killed by SIGTERM +++
+33884 12:29:07.948531 +++ killed by SIGTERM +++
+33880 12:29:07.962972 +++ killed by SIGTERM +++
+33740 12:29:08.006211 +++ killed by SIGTERM +++
+33732 12:29:08.006324 +++ killed by SIGTERM +++
+
+Checks are complete. Upload this plain-text report, not an archive:
+/workspaces/longtails/Ef21LiveProbe_365_2dxj/Ef21LiveReport.txt
