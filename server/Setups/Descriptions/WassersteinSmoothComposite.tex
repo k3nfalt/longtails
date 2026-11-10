@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Wasserstein Smooth Composite Minimization}
+We minimize $F(\mu)=\int V\,d\mu+H(\mu)$ over a set $Q$ of absolutely continuous probability measures on $\mathbb{R}^d$ with finite second moments, where $d\geq0$ is an integer. The potential $V:\mathbb{R}^d\to\mathbb{R}$ is convex with $L$-Lipschitz gradient, $L>0$, and $H$ is convex along generalized Wasserstein geodesics in $Q$. A given $\mu^0\in Q$ is within Wasserstein distance $R\geq0$ of a minimizer $\mu^\star\in Q$. The oracle returns gradient pushforwards, proximal minimizers of $H$, and optimal transport maps. For $\varepsilon>0$, the goal is $\bar\mu\in Q$ with $F(\bar\mu)-F(\mu^\star)\leq\varepsilon$, almost surely under the joint law of algorithm and oracle randomness.
+
+Write $\mathcal{P}_2(\mathbb{R}^d)$ for the Borel probability measures with finite second moments, and use the Euclidean norm on $\mathbb{R}^d$. For $\mu,\nu\in\mathcal{P}_2(\mathbb{R}^d)$, let $\Pi(\mu,\nu)$ be their probability couplings and define
+\[
+W_2^2(\mu,\nu)
+=\inf_{\pi\in\Pi(\mu,\nu)}
+\int \|x-y\|^2\,d\pi(x,y).
+\]
+All these coupling costs are finite. For a measurable map $T$, the notation $T_\#\mu$ denotes its pushforward. The objective and optimization problem are
+\[
+F(\mu)=\int_{\mathbb{R}^d}V(x)\,d\mu(x)+H(\mu),
+\qquad
+\min_{\mu\in Q}F(\mu),
+\]
+where $H:\mathcal{P}_2(\mathbb{R}^d)\to\mathbb{R}$. The algorithm receives $d,L,R,\varepsilon$, and $\mu^0$; the functions $V,H$, the set $Q$, and the minimizer are accessed only through the specified oracle.
+
+Our assumptions:
+\begin{assumption}[Convex smooth potential]
+The function $V$ is differentiable everywhere, and for all $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+V((1-t)x+ty)&\leq(1-t)V(x)+tV(y),\\
+\|\nabla V(x)-\nabla V(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized geodesic convexity]
+Every $\mu\in Q$ is absolutely continuous with respect to Lebesgue measure. For every base measure $\beta\in\mathcal{P}_2(\mathbb{R}^d)$ and every $\mu,\nu\in Q$, there exists a probability measure $\gamma$ on $(\mathbb{R}^d)^3$, with respective marginals $\beta,\mu,\nu$, such that
+\[
+\begin{aligned}
+\int\|z-x\|^2\,d\gamma(z,x,y)&=W_2^2(\beta,\mu),\\
+\int\|z-y\|^2\,d\gamma(z,x,y)&=W_2^2(\beta,\nu).
+\end{aligned}
+\]
+For this same $\gamma$, every $t\in[0,1]$ gives a measure
+\[
+\rho_t=\bigl((z,x,y)\mapsto(1-t)x+ty\bigr)_\#\gamma
+\]
+that satisfies
+\[
+\rho_t\in Q,
+\qquad
+H(\rho_t)\leq(1-t)H(\mu)+tH(\nu).
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial distance]
+The given initial measure and a minimizer satisfy $\mu^0,\mu^\star\in Q$ and
+\[
+\begin{aligned}
+F(\mu^\star)&\leq F(\mu) &&\text{for every }\mu\in Q,\\
+W_2^2(\mu^0,\mu^\star)&\leq R^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle supports three kinds of queries. A forward query at any $h\in\mathbb{R}$ and $\mu\in\mathcal{P}_2(\mathbb{R}^d)$ returns the distribution
+\[
+b=\bigl(x\mapsto x-h\nabla V(x)\bigr)_\#\mu.
+\]
+A proximal query at $h>0$ and $b\in\mathcal{P}_2(\mathbb{R}^d)$ returns $u\in Q$ satisfying
+\[
+2hH(u)+W_2^2(b,u)
+\leq 2hH(\rho)+W_2^2(b,\rho),
+\qquad \rho\in Q.
+\]
+There is no correctness requirement for proximal queries with $h\leq0$.
+
+A transport query at $\mu\in Q$ and any $\nu\in\mathcal{P}_2(\mathbb{R}^d)$ returns a measurable map $T:\mathbb{R}^d\to\mathbb{R}^d$ such that $T_\#\mu=\nu$, the function $x\mapsto\|x-T(x)\|^2$ is integrable under $\mu$, and
+\[
+\int\|x-T(x)\|^2\,d\mu(x)
+\leq\int\|x-y\|^2\,d\pi(x,y),
+\qquad \pi\in\Pi(\mu,\nu).
+\]
+There is no correctness requirement for transport queries whose first argument lies outside $Q$. Each query of any of the three kinds counts toward a single oracle-call budget. These reply conditions hold for every query history and every realization of oracle randomness; different valid proximal minimizers or transport maps may be returned.
+
+After the allotted calls, the output distribution must satisfy
+\[
+\bar\mu\in Q,
+\qquad
+F(\bar\mu)-F(\mu^\star)\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle's randomness, which are independent.
+\end{document}

@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.SmoothFiniteMaximum",
+  "searched_at": "2026-11-10T09:14:09.890688+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{1}{\\delta} \\right\\rceil_{+}\\right)\\right) \\cdot \\left\\lceil 2000000000000000000000 \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil 2 + m + \\frac{G \\cdot R}{\\varepsilon} + \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right)^{7} \\cdot \\left(m + m \\cdot \\left(\\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{1}{3}} + m^{\\frac{3}{4}} \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + m^{\\frac{6}{7}} \\cdot \\left(\\frac{G \\cdot L \\cdot R^{3}}{\\varepsilon^{2}}\\right)^{\\frac{2}{7}} + \\frac{G \\cdot R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothFiniteMaximum.spec.Params → ℕ",
+        "value": "fun p =>\n  (1 + Nat.clog 2 ⌈p.δ⁻¹⌉₊) *\n    ⌈2000000000000000000000 * (1 + ↑(Nat.clog 2 ⌈2 + ↑p.m + p.G * p.R / p.ε + p.L * p.R ^ 2 / p.ε⌉₊)) ^ 7 *\n        (↑p.m + ↑p.m * (p.L * p.R ^ 2 / p.ε) ^ 3⁻¹ + ↑p.m ^ (3 / 4) * √(p.L * p.R ^ 2 / p.ε) +\n            ↑p.m ^ (6 / 7) * (p.G * p.L * p.R ^ 3 / p.ε ^ 2) ^ (2 / 7) +\n          p.G * p.R / p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{1}{\\delta} \\right\\rceil_{+}\\right)\\right) \\cdot \\left\\lceil 2000000000000000000000 \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil 2 + m + \\frac{G \\cdot R}{\\varepsilon} + \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right)^{7} \\cdot \\left(m + m \\cdot \\left(\\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{1}{3}} + m^{\\frac{3}{4}} \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} + m^{\\frac{6}{7}} \\cdot \\left(\\frac{G \\cdot L \\cdot R^{3}}{\\varepsilon^{2}}\\right)^{\\frac{2}{7}} + \\frac{G \\cdot R}{\\varepsilon}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothFiniteMaximum.spec.Params → ℕ",
+          "value": "fun p =>\n  (1 + Nat.clog 2 ⌈p.δ⁻¹⌉₊) *\n    ⌈2000000000000000000000 * (1 + ↑(Nat.clog 2 ⌈2 + ↑p.m + p.G * p.R / p.ε + p.L * p.R ^ 2 / p.ε⌉₊)) ^ 7 *\n        (↑p.m + ↑p.m * (p.L * p.R ^ 2 / p.ε) ^ 3⁻¹ + ↑p.m ^ (3 / 4) * √(p.L * p.R ^ 2 / p.ε) +\n            ↑p.m ^ (6 / 7) * (p.G * p.L * p.R ^ 3 / p.ε ^ 2) ^ (2 / 7) +\n          p.G * p.R / p.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AffineSoftmaxFiniteMaximum",
+      "namespace": "LongTails.Setups.SmoothFiniteMaximum",
+      "setup": "LongTails.Setups.SmoothFiniteMaximum",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothFiniteMaximum.spec OracleTemplate.AffineSoftmaxFiniteMaximum.budget",
+      "theorem": "OracleTemplate.AffineSoftmaxFiniteMaximum.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AffineSoftmaxFiniteMaximum",
+      "theorem": "OracleTemplate.AffineSoftmaxFiniteMaximum.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(x)=max_{i<m} loss_i(x) over the closed Euclidean ball B(x0,R). Every component is convex on this ball; a constrained minimizer exists.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: domain, objective, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query (i,x) returns the exact gradient of component i for every in-domain x, independently of history and oracle seed.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: spec.Query, spec.Reply, spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same query also returns the exact component value loss_i(x); the value-gradient pair counts as one oracle call.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: spec.Reply and spec.admissible; LongTails/Template.lean: executeWithTrace and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: Public."
+      },
+      {
+        "label": "other",
+        "details": "Public parameters include m≥2, G>0, L≥0, R>0, ε>0, δ∈(0,1), and x0. On B(x0,R), each component satisfies ||∇loss_i(x)||≤G and ||∇loss_i(x)−∇loss_i(y)||≤L||x−y||. Component functions and the constrained minimizer are hidden. No oracle error is permitted on the domain.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: Public, Instance, spec.valid, spec.publicInput, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The measurable output x must satisfy F(x)−F(xstar)≤ε on the success event.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The output belongs to B(x0,R) almost surely; this guarantee concerns feasibility.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "The objective-gap event has probability at least 1−δ under the joint algorithm and oracle seed law, with a fixed oracle budget.",
+        "evidence": "LongTails/Setups/SmoothFiniteMaximum.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Constrained minimization of a finite maximum of convex smooth Lipschitz components using exact component first-order queries is an established optimization formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.AffineSoftmaxFiniteMaximum.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AffineSoftmaxFiniteMaximum",
+          "theorem": "OracleTemplate.AffineSoftmaxFiniteMaximum.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

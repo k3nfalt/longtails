@@ -1,0 +1,25 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConfidentStochasticSurjectiveInequalities.lean}{ConfidentStochasticSurjectiveInequalities}.}\label{tab:ConfidentStochasticSurjectiveInequalities}
+\parbox{\linewidth}{\footnotesize Minimize $f(x)$ subject to $c(x)\le0$ on a finite-dimensional real inner-product space. Globally, $\|\nabla f\|,\|J\|_F,\operatorname{Lip}(\nabla f),\operatorname{Lip}(J)\le H$ and $\|\lambda\|\le H\|J(x)^*\lambda\|$ for every $x,\lambda$, including inactive rows. The penalty $F=f+4H(H+1)\sum_i[c_i]_+$ satisfies $F(x_0)-\inf F\le\Delta$. Jointly measurable, integrable stochastic triples $(g,v,D)$ have means $(\nabla f,c,J)$, summed mean-square error at most $\sigma^2$, and summed same-sample mean-square differences at most $H^2\|x-y\|^2$. Samples are IID under an abstract probability law $P$. Here $m\ge1$, $H\ge1$, $\Delta,\sigma\ge0$, $0<\varepsilon\le1$, $0<\delta<1$. Target: a measurable pair $(x,\lambda)$ with $P\{\lambda\ge0,\ \|\nabla f(x)+J(x)^*\lambda\|\le\varepsilon,\ \|[c(x)]_+\|\le\varepsilon,\ \sum_i|\lambda_i c_i(x)|\le\varepsilon\}\ge1-\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConfidentSurjectiveStochasticInequalityKkt.lean}{Confident\allowbreak Surjective\allowbreak Stochastic\allowbreak Inequality\allowbreak Kkt} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConfidentSurjectiveStochasticInequalityKkt.md}{(review)} &
+$\begin{gathered}\mathcal{O}\!\left(\ell\left[1+\frac{m^2H^{10}\Delta}{\varepsilon^2}+\frac{m^4H^{19}\Delta\sigma}{\varepsilon^3}\right]\right.\\\left.{}+\ell^2\left[1+\frac{m^4H^{18}\sigma^2}{\varepsilon^2}\right]\right)\end{gathered}$ paired triple calls, including replication and validation. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Prox-linear \citep{cssiZhangXiaoV2}, Thm.~3; hinge-penalty specialization & $\mathcal{O}(\varepsilon^{-5})$ total joint calls; values $\mathcal{O}(\varepsilon^{-5})$, Jacobians $\mathcal{O}(\varepsilon^{-3})$. Fixed remaining parameters; $\mathbb{E}\|G_M\|^2\le\varepsilon^2$. KKT conversion uses surjectivity. & \textbf{(1)}: Values $\varepsilon^{-5}\to\varepsilon^{-3}$ for fixed positive $m,H,\Delta,\sigma$ and $\ell=o(\varepsilon^{-2})$. Explicit complementary KKT pair with confidence $1-\delta$, replacing expected prox-gradient accuracy. & \textbf{(1)} requires global surjectivity, hence $m\le\dim E$; \textbf{(2)} permits broader composite objectives. \\
+\midrule
+\textbf{(3)} Directional decomposition \citep{cssiShiWangV2}, Thm.~7; bounded-constraint, level-bounded-objective, sample-smooth subclass & $\mathcal{O}(\varepsilon^{-5}(1+\log(1/\varepsilon))^2)$ total calls; gradient/Jacobian calls $\mathcal{O}(\varepsilon^{-3}(1+\log(1/\varepsilon))^2)$. Fixed remaining parameters; KKT confidence $1-\varepsilon$. & \textbf{(1)}: Value exponent $5\to3$ on the common subclass, fixed positive remaining parameters and $\ell=o(\varepsilon^{-2})$. Arbitrary $\delta$; finite variance and mean-square smoothness replace bounded errors and sample-wise smoothness. No bounded $c$ or level-bounded $f$ required. & \textbf{(1)} requires globally surjective whole Jacobians; \textbf{(3)} allows redundant rows and $m>\dim E$ through slack-form strong MFCQ. Classes are incomparable. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $J=Dc$; $m$ is the constraint count; $[\cdot]_+$ is componentwise positive part; $\ell=1+\log(1/\delta)$. One paired call evaluates $(g,v,D)$ at two points with one fresh common sample; single-point primitive counts differ by universal factors. $G_M$ is the exact prox-linear gradient mapping. Prior-work constants are not mapped to $m,H,\Delta,\sigma$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

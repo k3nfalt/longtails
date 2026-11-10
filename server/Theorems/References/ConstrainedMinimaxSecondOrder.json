@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.ConstrainedMinimaxSecondOrder",
+  "searched_at": "2026-11-10T09:05:10.719192+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "4 \\cdot \\left(1 + \\left\\lceil \\frac{16 \\cdot L}{\\mu} \\cdot \\log\\left(1 + \\frac{32 \\cdot \\rho \\cdot B}{\\mu^{2}}\\right) \\right\\rceil_{+} + \\left(2 + \\left\\lceil \\frac{384 \\cdot \\Delta \\cdot \\sqrt{\\rho} \\cdot \\left(\\frac{L}{\\mu}\\right)^{\\frac{3}{4}}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + \\left\\lceil \\frac{2048 \\cdot \\rho \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\mu \\cdot \\varepsilon} + \\frac{8 \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\mu} \\right\\rceil_{+}\\right) \\cdot \\left(2 + \\left\\lceil 2 \\cdot \\log\\left(33 + \\frac{512 \\cdot L \\cdot \\mu}{\\rho \\cdot \\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.ConstrainedMinimaxSecondOrder.spec.Params → ℕ",
+        "value": "fun p =>\n  4 *\n    (1 + ⌈16 * p.L / p.μ * Real.log (1 + 32 * p.ρ * p.B / p.μ ^ 2)⌉₊ +\n      (2 + ⌈384 * p.Δ * √p.ρ * (p.L / p.μ) ^ (3 / 4) / (p.ε * √p.ε)⌉₊ +\n          ⌈2048 * p.ρ * √(p.L / p.μ) * p.Δ / (p.μ * p.ε) + 8 * √(p.ρ * p.ε) / p.μ⌉₊) *\n        (2 + ⌈2 * Real.log (33 + 512 * p.L * p.μ / (p.ρ * p.ε))⌉₊))"
+      },
+      "budgets": [
+        {
+          "latex": "4 \\cdot \\left(1 + \\left\\lceil \\frac{16 \\cdot L}{\\mu} \\cdot \\log\\left(1 + \\frac{32 \\cdot \\rho \\cdot B}{\\mu^{2}}\\right) \\right\\rceil_{+} + \\left(2 + \\left\\lceil \\frac{384 \\cdot \\Delta \\cdot \\sqrt{\\rho} \\cdot \\left(\\frac{L}{\\mu}\\right)^{\\frac{3}{4}}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + \\left\\lceil \\frac{2048 \\cdot \\rho \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\Delta}{\\mu \\cdot \\varepsilon} + \\frac{8 \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\mu} \\right\\rceil_{+}\\right) \\cdot \\left(2 + \\left\\lceil 2 \\cdot \\log\\left(33 + \\frac{512 \\cdot L \\cdot \\mu}{\\rho \\cdot \\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.ConstrainedMinimaxSecondOrder.spec.Params → ℕ",
+          "value": "fun p =>\n  4 *\n    (1 + ⌈16 * p.L / p.μ * Real.log (1 + 32 * p.ρ * p.B / p.μ ^ 2)⌉₊ +\n      (2 + ⌈384 * p.Δ * √p.ρ * (p.L / p.μ) ^ (3 / 4) / (p.ε * √p.ε)⌉₊ +\n          ⌈2048 * p.ρ * √(p.L / p.μ) * p.Δ / (p.μ * p.ε) + 8 * √(p.ρ * p.ε) / p.μ⌉₊) *\n        (2 + ⌈2 * Real.log (33 + 512 * p.L * p.μ / (p.ρ * p.ε))⌉₊))"
+        }
+      ],
+      "module": "LongTails.Theorems.ConstrainedMinimaxCubic",
+      "namespace": "LongTails.Setups.ConstrainedMinimaxSecondOrder",
+      "setup": "LongTails.Setups.ConstrainedMinimaxSecondOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ConstrainedMinimaxSecondOrder.spec\n  LongTails.Theorems.ConstrainedMinimaxCubic.budget",
+      "theorem": "LongTails.Theorems.ConstrainedMinimaxCubic.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ConstrainedMinimaxCubic",
+      "theorem": "LongTails.Theorems.ConstrainedMinimaxCubic.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Minimize Φ(x)=sup_{y∈Y} f(x,y) over E. Nonconvex dependence on x is permitted.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: value, Regularity, spec.Output."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Nonconvex–μ-strongly-concave minimax optimization with an unconstrained minimization variable and a nonempty closed convex maximization domain Y. Strong concavity holds on all of F.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: Regularity.strongly_concave, spec.valid, value."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "The bundled reply contains ∇f(z), exactly for every history and seed; no oracle error or sampling dependence is present.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "Each query at z∈E×F returns the exact value f(z), bundled with its gradient and full Hessian.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: spec.Query, spec.Reply, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Exact full second-order oracle: each bundled call also returns D(∇f)(z) as a continuous linear operator. Queries may lie anywhere in E×F, including outside E×Y.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: spec.Query, spec.Reply, spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "E and F are finite-dimensional real inner-product spaces, with the Euclidean product norm on E×F.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: Params.finiteE, Params.finiteF, Params.innerE, Params.innerF, Space."
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz gradient and ρ-Lipschitz Hessian; 0<μ≤L and ρ>0. Public parameters include Y,L,μ,ρ,Δ,B,ε,x0,y0. Initialization satisfies y0∈Y, Φ(x0)−Φ(x)≤Δ for every x, and ‖∇f(x0,y0)‖≤B, with Δ,B≥0. No boundedness of Y is required.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: Regularity.gradient_lipschitz, Regularity.hessian_lipschitz, Assumptions.initial_gap, Assumptions.initial_gradient, spec.valid, spec.Public, spec.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return x∈E with ‖∇Φ(x)‖≤ε, where ε>0. Success additionally requires differentiability of Φ on E.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: spec.successful, spec.valid."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The gradient-norm criterion holds almost surely under the joint algorithm and oracle seed law, within the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/ConstrainedMinimaxSecondOrder.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "A standard smooth nonconvex–strongly-concave minimax formulation with convex constraints on the maximization variable, exact second-order information, and value-function first-order stationarity."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ConstrainedMinimaxCubic.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ConstrainedMinimaxCubic",
+          "theorem": "LongTails.Theorems.ConstrainedMinimaxCubic.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

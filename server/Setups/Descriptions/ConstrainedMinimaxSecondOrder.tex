@@ -1,0 +1,72 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Constrained Second-Order Minimax Optimization}
+We consider minimizing $\phi(x)=\sup_{y\in Y}f(x,y)$, where $f:E\times F\to\mathbb{R}$, $E$ and $F$ are finite-dimensional real inner product spaces, and $Y\subseteq F$ is nonempty, closed, and convex. The function $f$ has a globally Lipschitz gradient and Hessian and is strongly concave in its second variable. Given initial points have bounded value gap and gradient norm. The oracle returns the value, gradient, and Hessian of $f$ at any queried point. For $\varepsilon>0$, the goal is differentiability of $\phi$ and an output $\bar{x}\in E$ satisfying $\|\nabla\phi(\bar{x})\|\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E}\sup_{y\in Y} f(x,y).
+\]
+Equip $E\times F$ with the product inner product and norm
+\[
+\|(x,y)\|=\bigl(\|x\|^2+\|y\|^2\bigr)^{1/2}.
+\]
+Write $\nabla_y f(x,y)$ for the $F$ component of $\nabla f(x,y)$. The Hessian $\nabla^2 f(z)$ is the derivative of the gradient, viewed as a linear operator from $E\times F$ to itself; $\|\cdot\|_{\mathrm{op}}$ denotes its induced operator norm.
+
+The parameters satisfy
+\[
+0<\mu\leq L,\qquad \rho>0,\qquad
+\Delta\geq0,\qquad B\geq0,\qquad \varepsilon>0.
+\]
+The given initial points are $x^0\in E$ and $y^0\in Y$. The algorithm receives $E$, $F$, $Y$, $L$, $\mu$, $\rho$, $\Delta$, $B$, $\varepsilon$, $x^0$, and $y^0$.
+
+Our assumptions:
+\begin{assumption}[Second-order regularity]
+The function $f$ is Fr\'echet differentiable everywhere, its gradient is Fr\'echet differentiable everywhere, and, for all $z,w\in E\times F$,
+\[
+\begin{aligned}
+\|\nabla f(z)-\nabla f(w)\|
+&\leq L\|z-w\|,\\
+\|\nabla^2 f(z)-\nabla^2 f(w)\|_{\mathrm{op}}
+&\leq\rho\|z-w\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Strong concavity]
+For every $x\in E$ and $y,y'\in F$,
+\[
+\begin{aligned}
+f(x,y')\leq{}&f(x,y)
++\langle\nabla_y f(x,y),y'-y\rangle\\
+&-\frac{\mu}{2}\|y'-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+The initial value gap and full gradient satisfy
+\[
+\begin{aligned}
+\phi(x^0)-\phi(x)&\leq\Delta
+&&\text{for every }x\in E,\\
+\|\nabla f(x^0,y^0)\|&\leq B.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any $z\in E\times F$, including points whose second component lies outside $Y$. The exact second-order oracle returns
+\[
+\bigl(f(z),\nabla f(z),\nabla^2 f(z)\bigr).
+\]
+The output requirement is that $\phi$ be differentiable everywhere on $E$ and that, after the allotted oracle calls, $\bar{x}\in E$ satisfy
+\[
+\|\nabla\phi(\bar{x})\|\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

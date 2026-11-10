@@ -1,0 +1,105 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Inequalities with Surjective Jacobians}
+We consider minimizing a differentiable function $f:E\to\mathbb{R}$ subject to $c_i(x)\leq0$, where $E$ is a finite-dimensional real inner product space and $c_i:E\to\mathbb{R}$, $i=1,\ldots,m$, are differentiable constraints. Gradients are bounded and Lipschitz, the constraint Jacobian is uniformly surjective, and the initial penalty gap is bounded. Each oracle call returns unbiased estimates of the objective gradient, constraint values, and constraint gradients at two points using a shared sample; samples across calls are independent, with bounded variance and mean-square smoothness. Given $\varepsilon\in(0,1]$ and $\delta\in(0,1)$, the goal is a pair $(\bar{x},\bar{\lambda})\in E\times\mathbb{R}_+^m$ satisfying $\|\nabla f(\bar{x})+\sum_i\bar{\lambda}_i\nabla c_i(\bar{x})\|\leq\varepsilon$, $\|(\max\{c_i(\bar{x}),0\})_i\|\leq\varepsilon$, and $\sum_i|\bar{\lambda}_ic_i(\bar{x})|\leq\varepsilon$ simultaneously with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\min_{x\in E:\ c_i(x)\leq0,\ i=1,\ldots,m} f(x).
+\]
+Write $c=(c_1,\ldots,c_m):E\to\mathbb{R}^m$ and
+\[
+\begin{aligned}
+J(x)&=(\nabla c_i(x))_{i=1}^m\in E^m,\\
+J(x)^\top\lambda&=\sum_{i=1}^m\lambda_i\nabla c_i(x),
+\qquad \lambda\in\mathbb{R}^m.
+\end{aligned}
+\]
+The norm on $E$ is induced by its inner product; $\mathbb{R}^m$, $E^m$, and their products carry Euclidean product norms. In particular, $\|J(x)\|^2=\sum_i\|\nabla c_i(x)\|^2$.
+The parameters satisfy
+\[
+m\geq1,\qquad H\geq1,\qquad \sigma\geq0,\qquad
+\Delta\geq0,\qquad 0<\varepsilon\leq1,\qquad 0<\delta<1.
+\]
+The algorithm receives $E$, a measurable sample space $\Omega$, $m$, $H$, $\sigma$, $\Delta$, $\varepsilon$, $\delta$, and a given starting point $x^0\in E$.
+
+Our assumptions:
+\begin{assumption}[Regularity and surjectivity]
+The functions $f$ and $c_i$ are Fr\'echet differentiable everywhere. For every $x,y\in E$ and $\lambda\in\mathbb{R}^m$,
+\[
+\begin{aligned}
+\|\nabla f(x)\|&\leq H,& \|J(x)\|&\leq H,\\
+\|\nabla f(x)-\nabla f(y)\|&\leq H\|x-y\|,\\
+\|J(x)-J(y)\|&\leq H\|x-y\|,\\
+\|\lambda\|&\leq H\|J(x)^\top\lambda\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial penalty gap]
+Define the penalty function
+\[
+\Phi(x)=f(x)+4H(H+1)\sum_{i=1}^m\max\{c_i(x),0\}.
+\]
+The given point $x^0$ satisfies
+\[
+\Phi(x^0)-\Phi(x)\leq\Delta
+\qquad\text{for every }x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic estimates]
+There is a probability law $\nu$ on $\Omega$ and jointly measurable maps
+\[
+\begin{aligned}
+g&:E\times\Omega\to E,\\
+v&:E\times\Omega\to\mathbb{R}^m,\\
+D&:E\times\Omega\to E^m.
+\end{aligned}
+\]
+Set
+\[
+\begin{aligned}
+F(x,\xi)&=(g(x,\xi),v(x,\xi),D(x,\xi)),\\
+T(x)&=(\nabla f(x),c(x),J(x)).
+\end{aligned}
+\]
+For every fixed $x\in E$, the three components of $F(x,\cdot)$ are Bochner integrable under $\nu$, and
+\[
+\mathbb{E}_{\xi\sim\nu}[F(x,\xi)]=T(x).
+\]
+For every $x,y\in E$, the random variables $\|F(x,\xi)-T(x)\|^2$ and $\|F(x,\xi)-F(y,\xi)\|^2$ are integrable and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}\bigl[\|F(x,\xi)-T(x)\|^2\bigr]
+&\leq\sigma^2,\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|F(x,\xi)-F(y,\xi)\|^2\bigr]
+&\leq H^2\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+A query is any pair $(x,y)\in E\times E$. At call $k$, the oracle returns
+\[
+\bigl(F(x,\xi_k),F(y,\xi_k)\bigr).
+\]
+The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$. They are independent of the algorithm's randomness. Thus one call provides both triples using the same sample, including when the query points are chosen adaptively.
+
+After the allotted calls, the algorithm must return a measurable pair $(\bar{x},\bar{\lambda})\in E\times\mathbb{R}^m$. Define $c_+(x)=(\max\{c_i(x),0\})_{i=1}^m$. The required accuracy is
+\[
+P\!\left(
+\begin{gathered}
+\bar{\lambda}\in\mathbb{R}_+^m,\\
+\|\nabla f(\bar{x})+J(\bar{x})^\top\bar{\lambda}\|\leq\varepsilon,\\
+\|c_+(\bar{x})\|\leq\varepsilon,\\
+\displaystyle\sum_{i=1}^m|\bar{\lambda}_i c_i(\bar{x})|\leq\varepsilon
+\end{gathered}
+\right)\geq1-\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

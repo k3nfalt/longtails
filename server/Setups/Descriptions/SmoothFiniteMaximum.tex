@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Smooth Finite-Maximum Minimization}
+We minimize $F(x)=\max_{1\leq i\leq m} f_i(x)$ over $C=\{x\in E:\|x-x^0\|\leq R\}$, where $E$ is a finite-dimensional real inner-product space, $x^0\in E$, $R>0$, and $m\geq2$ is an integer. Each $f_i:E\to\mathbb{R}$ is convex on $C$, differentiable at every point of $C$, and has an $L$-Lipschitz gradient bounded in norm by $G$, where $L\geq0$ and $G>0$. The oracle returns $(f_i(x),\nabla f_i(x))$ at $(i,x)$ with $x\in C$. Given $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}\in C$ almost surely satisfying $F(\bar{x})-F(x^\star)\leq\varepsilon$ with probability at least $1-\delta$, where $x^\star$ minimizes $F$ on $C$ and probabilities follow the law $P$ of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in C} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $m$, $G$, $L$, $R$, $\varepsilon$, $\delta$, and $x^0$; the component functions and the minimizer are accessed only through the specified oracle information.
+
+Our assumptions:
+\begin{assumption}[Component convexity]
+For every $i\in\{1,\ldots,m\}$, $x,y\in C$, and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq (1-t)f_i(x)+t f_i(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Component regularity]
+Each $f_i:E\to\mathbb{R}$ is Fr\'echet differentiable at every $x\in C$. For every $i\in\{1,\ldots,m\}$ and $x,y\in C$,
+\[
+\begin{aligned}
+\|\nabla f_i(x)\|&\leq G,\\
+\|\nabla f_i(x)-\nabla f_i(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Constrained minimizer]
+There exists $x^\star\in C$ such that
+\[
+F(x^\star)\leq F(x),\qquad x\in C.
+\]
+\end{assumption}
+
+Oracle access consists of component queries: choosing an index $i\in\{1,\ldots,m\}$ and a point $x\in C$ returns the exact value and gradient of that component. Each such pair is obtained in one oracle call.
+
+After the allotted calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+\bar{x}\in C\quad P\text{-a.s.},
+\qquad
+P\!\left(F(\bar{x})-F(x^\star)\leq\varepsilon\right)
+\geq 1-\delta.
+\]
+\end{document}
