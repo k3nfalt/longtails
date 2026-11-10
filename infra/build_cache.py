@@ -5,8 +5,10 @@ import platform
 import re
 import shutil
 import subprocess
+import sys
 import tarfile
 import tempfile
+import time
 import urllib.request
 from pathlib import PurePosixPath
 from urllib.parse import quote
@@ -17,7 +19,34 @@ CONFIG = ("lean-toolchain", "lake-manifest.json", "lakefile.toml")
 
 def open_url(url):
     request = urllib.request.Request(url, headers={"User-Agent": "longtails-build"})
-    return urllib.request.urlopen(request, timeout=60)
+    return urllib.request.urlopen(request, timeout=300)
+
+
+def download_cache(response, archive):
+    total = int(response.headers.get("Content-Length", 0))
+    downloaded = 0
+    last_update = 0
+    terminal = sys.stdout.isatty()
+    try:
+        while chunk := response.read(1024 * 1024):
+            archive.write(chunk)
+            downloaded += len(chunk)
+            now = time.monotonic()
+            if now - last_update >= 1 or downloaded == total:
+                progress = f"{downloaded / 1024**2:.1f} MiB"
+                if total:
+                    progress += f" / {total / 1024**2:.1f} MiB ({downloaded / total:.0%})"
+                print(
+                    f"↓ Downloading cache: {progress}",
+                    end="\r" if terminal else "\n",
+                    flush=True,
+                )
+                last_update = now
+        if total and downloaded != total:
+            raise OSError(f"Incomplete cache download: {downloaded} of {total} bytes")
+    finally:
+        if terminal:
+            print(flush=True)
 
 
 def compatible(root, commit):
@@ -117,8 +146,9 @@ def restore_cache(root):
             prefix="cache-", suffix=".tar.gz", dir=root / ".lake"
         ) as archive:
             with open_url(url) as response:
-                shutil.copyfileobj(response, archive)
+                download_cache(response, archive)
             archive.flush()
+            print("Extracting cache...", flush=True)
             unpack_cache(archive.name, root)
         print(f"Restored nightly cache from {tag}.", flush=True)
     except (
