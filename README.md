@@ -1,6 +1,6 @@
 <h1 align="center"><img src="server/wordmark.svg" width="227" height="60" align="middle" alt="LongTails"> <img src="server/logo.png" width="100" height="100" align="middle" alt="LongTails logo"></h1>
 
-<p align="center">
+<p align="left">
   <a href="https://github.com/k3nfalt/longtails/actions/workflows/nightly.yml"><img src="https://img.shields.io/github/actions/workflow/status/k3nfalt/longtails/nightly.yml?label=CI&amp;logo=github" alt="CI status"></a>
   <a href="https://arxiv.org/abs/2611.13872"><img src="https://img.shields.io/badge/arXiv-2611.13872-b31b1b" alt="arXiv:2611.13872"></a>
 </p>
