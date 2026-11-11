@@ -160,7 +160,8 @@ If you use LongTails in your research, please cite:
   year = {2026},
   eprint = {2611.13872},
   archivePrefix = {arXiv},
-  url = {https://arxiv.org/abs/2611.13872}
+  url = {https://arxiv.org/abs/2611.13872},
+  howpublished = {arXiv preprint arXiv:2611.13872},
 }
 ```
 
