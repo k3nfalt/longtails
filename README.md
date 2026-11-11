@@ -157,7 +157,10 @@ If you use LongTails in your research, please cite:
 @misc{longtails2026,
   author = {Tyurin, Alexander and Pham, QuocViet and Khrulkov, Valentin and Oseledets, Ivan},
   title = {{LongTails}: Automated Research in Optimization},
-  year = {2026}
+  year = {2026},
+  eprint = {2611.13872},
+  archivePrefix = {arXiv},
+  url = {https://arxiv.org/abs/2611.13872}
 }
 ```
 
