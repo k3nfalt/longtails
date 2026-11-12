@@ -1,6 +1,6 @@
 {
   "setup": "LongTails.Setups.ConvexBallProximal",
-  "searched_at": "2026-10-12T07:54:25.461963+00:00",
+  "searched_at": "2026-11-12T11:58:30.887570+00:00",
   "none_means": "No qualifying prior reference verified; not a proof of novelty.",
   "proved_results": [
     {
@@ -23,13 +23,40 @@
       "setup": "LongTails.Setups.ConvexBallProximal",
       "statement": "OracleTemplate.Convergence LongTails.Setups.ConvexBallProximal.spec OracleTemplate.BallProximal.budget",
       "theorem": "OracleTemplate.BallProximal.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\min\\left\\{ \\left(\\frac{R}{t}\\right)^{2}, \\frac{R}{t} \\cdot \\frac{\\sqrt{\\max\\left\\{ 0, \\log\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\}}}{\\sqrt{2}} \\right\\} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ConvexBallProximal.spec.Params → ℕ",
+        "value": "fun p => ⌈min ((p.R / p.t) ^ 2) (p.R / p.t * (√(max 0 (Real.log (p.Δ / p.ε))) / √2))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\min\\left\\{ \\left(\\frac{R}{t}\\right)^{2}, \\frac{R}{t} \\cdot \\frac{\\sqrt{\\max\\left\\{ 0, \\log\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\}}}{\\sqrt{2}} \\right\\} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ConvexBallProximal.spec.Params → ℕ",
+          "value": "fun p => ⌈min ((p.R / p.t) ^ 2) (p.R / p.t * (√(max 0 (Real.log (p.Δ / p.ε))) / √2))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.BallProximalGaussian",
+      "namespace": "LongTails.Setups.ConvexBallProximal",
+      "setup": "LongTails.Setups.ConvexBallProximal",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ConvexBallProximal.spec OracleTemplate.BallProximalGaussian.budget",
+      "theorem": "OracleTemplate.BallProximalGaussian.result"
     }
   ],
   "results": [
     {
       "module": "LongTails.Theorems.BallProximalSharpProfile",
       "theorem": "OracleTemplate.BallProximal.result",
-      "references": "- Peter Richtárik and Hanmin Li. [A Sharper Theory of Ball-Proximal Optimization: Convergence and Radius Selection](https://arxiv.org/html/2609.35147v1). 2026, preprint v1 (28 September). Complexity: $O\\!\\left(\\left\\lceil\\min\\left\\{R^2/t^2,(R/t)\\log(\\Delta/\\varepsilon),(R/t)\\sqrt{\\log(\\Delta/\\varepsilon)}\\right\\}\\right\\rceil\\right)$ fixed exact ball-minimization oracle calls by the ball-proximal point method for $f(x_K)-f_\\star\\le\\varepsilon$, when $0<\\varepsilon<\\Delta$; zero calls suffice when $\\varepsilon\\ge\\Delta$ or $R=0$.",
+      "references": "- Peter Richtárik and Hanmin Li. [A Sharper Theory of Ball-Proximal Optimization: Convergence and Radius Selection](https://arxiv.org/html/2609.35147v1). 2026, preprint v1. Complexity: $O(\\min\\{\\lceil(R/t)^2\\rceil,\\lceil(R/t)\\sqrt{\\tfrac12\\log(\\Delta/\\varepsilon)}\\rceil\\})$ exact ball-minimization oracle calls for objective gap at most $\\varepsilon$, for $0<\\varepsilon<\\Delta$; zero calls when $\\varepsilon\\geq\\Delta$.",
+      "match_status": "related"
+    },
+    {
+      "module": "LongTails.Theorems.BallProximalGaussian",
+      "theorem": "OracleTemplate.BallProximalGaussian.result",
+      "references": "- Peter Richtárik and Hanmin Li. [A Sharper Theory of Ball-Proximal Optimization: Convergence and Radius Selection](https://arxiv.org/html/2609.35147v1). 2026, preprint v1. Complexity: $O(\\min\\{\\lceil(R/t)^2\\rceil,\\lceil(R/t)\\sqrt{\\tfrac12\\log(\\Delta/\\varepsilon)}\\rceil\\})$ exact ball-minimization oracle calls for objective gap at most $\\varepsilon$, for $0<\\varepsilon<\\Delta$; zero calls when $\\varepsilon\\geq\\Delta$.",
       "match_status": "match"
     }
   ],
@@ -37,59 +64,65 @@
     "problem_class": [
       {
         "label": "convex",
-        "details": "Minimize f over a convex feasible set C. The restricted epigraph {(x,a): x∈C, f(x)≤a} is closed. A minimizer xstar∈C exists; no smoothness or strong convexity is assumed.",
-        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.admissible, ConvexOn, IsClosed, and IsMinOn clauses."
+        "details": "Minimize f on C, with ConvexOn ℝ C f and closed constrained epigraph; a minimizer exists.",
+        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.admissible"
       }
     ],
     "oracle": [
       {
         "label": "other",
-        "details": "Exact ball-minimization oracle: at any feasible query x, returns y∈argmin{f(z): z∈C, ‖z−x‖≤t}. The reply contains only y. Every call index and seed must satisfy this exact condition; no oracle error or independence assumption is imposed.",
-        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.Query, spec.Reply, and spec.admissible oracle-answer clause."
+        "details": "Exact ball-minimization oracle: at feasible x, returns y in C with ‖y−x‖≤t minimizing f over C∩B(x,t). Only the point y is returned. Every history and seed must satisfy this condition.",
+        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.admissible, Query, Reply"
       }
     ],
     "distinctive_assumptions": [
       {
         "label": "finite_dimensional",
-        "details": "E is a finite-dimensional real inner-product space, with balls defined by its induced norm.",
-        "evidence": "LongTails/Setups/ConvexBallProximal.lean: Public.normedE, Public.innerE, and Public.finiteE."
+        "details": "Finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/ConvexBallProximal.lean: Public.E, normedE, innerE, finiteE"
       },
       {
         "label": "other",
-        "details": "E, t, R, Δ, ε, and x0 are public, with t>0, R≥0, Δ>0, and ε>0. C and f are hidden. The feasible start has a common minimizing witness xstar satisfying ‖x0−xstar‖≤R and f(x0)−f(xstar)≤Δ.",
-        "evidence": "LongTails/Setups/ConvexBallProximal.lean: Public, Instance, spec.publicInput, spec.valid, and spec.admissible initialization clause."
+        "details": "Public t>0, R≥0, Δ>0, ε>0 and feasible x0; some hidden minimizer xstar satisfies ‖x0−xstar‖≤R and f(x0)−f(xstar)≤Δ. C and f are hidden. No smoothness assumption. The allowed algorithm repeatedly replaces its state by the oracle reply.",
+        "evidence": "LongTails/Setups/ConvexBallProximal.lean: Public, Instance, spec.valid, spec.admissible, spec.allowedAlgorithm; OracleTemplate.BallProximal.algorithm"
       }
     ],
     "accuracy": [
       {
         "label": "objective_gap",
-        "details": "The returned point must lie in C and satisfy f(output)−f(xstar)≤ε for a global minimizer xstar∈C.",
-        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.successful."
+        "details": "The final output belongs to C and satisfies f(output)−f(xstar)≤ε for a minimizer xstar.",
+        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.successful"
       },
       {
         "label": "almost_sure",
-        "details": "Feasibility and the ε objective-gap guarantee hold almost surely under the joint algorithm/oracle seed law, after execution with a fixed oracle-call budget.",
-        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.successful, ∀ᵐ clause; LongTails/Template.lean: Convergence and execute."
+        "details": "Feasibility and objective-gap accuracy hold almost surely under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/ConvexBallProximal.lean: spec.successful; LongTails/Template.lean: Convergence"
       }
     ],
     "setup_category": {
       "label": "non_standard",
-      "reason": "Convex minimization uses an exact local ball-minimization primitive that solves an entire constrained subproblem per call, an unusual oracle model compared with standard first-order benchmarks."
+      "reason": "Convex minimization with an exact local ball-minimization oracle is a meaningful specialized oracle formulation; each call solves an entire constrained optimization subproblem."
     },
     "schema_version": 2,
     "proof_status": {
       "status": "exported_theorem",
       "theorems": [
-        "OracleTemplate.BallProximal.result"
+        "OracleTemplate.BallProximal.result",
+        "OracleTemplate.BallProximalGaussian.result"
       ],
       "verification": "not_checked_by_catalog"
     },
     "literature_status": {
-      "status": "match",
+      "status": "related",
       "results": [
         {
           "module": "LongTails.Theorems.BallProximalSharpProfile",
           "theorem": "OracleTemplate.BallProximal.result",
+          "match_status": "related"
+        },
+        {
+          "module": "LongTails.Theorems.BallProximalGaussian",
+          "theorem": "OracleTemplate.BallProximalGaussian.result",
           "match_status": "match"
         }
       ]

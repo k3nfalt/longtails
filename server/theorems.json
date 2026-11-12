@@ -3212,6 +3212,28 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}}}{512} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",
+      "value": "fun q => ⌊√(q.L * q.R ^ 2 / q.ε) / 512⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}}}{512} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",
+        "value": "fun q => ⌊√(q.L * q.R ^ 2 / q.ε) / 512⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.SmoothConvexExpectedLowerBound",
+    "namespace": "LongTails.Setups.SmoothAndConvexExpected",
+    "setup": "LongTails.Setups.SmoothAndConvexExpected",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.SmoothAndConvexExpected.spec\n  LongTails.Theorems.SmoothConvexExpectedLowerBound.budget",
+    "theorem": "LongTails.Theorems.SmoothConvexExpectedLowerBound.result"
+  },
+  {
+    "budget": {
       "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} \\right\\}",
       "oracle": 0,
       "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",

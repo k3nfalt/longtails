@@ -1,6 +1,6 @@
 {
   "setup": "LongTails.Setups.GeneralizedAffineHessianVector",
-  "searched_at": "2026-10-28T12:10:18.414154+00:00",
+  "searched_at": "2026-11-12T12:00:02.007904+00:00",
   "none_means": "No qualifying prior reference verified; not a proof of novelty.",
   "proved_results": [
     {
@@ -23,6 +23,27 @@
       "setup": "LongTails.Setups.GeneralizedAffineHessianVector",
       "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedAffineHessianVector.spec\n  OracleTemplate.GuardedAffineHessianTransport.budget",
       "theorem": "OracleTemplate.GuardedAffineHessianTransport.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{32 \\cdot \\frac{p}{p - 1} + \\frac{16 \\cdot q}{q - 1} + 64} \\cdot \\left(\\frac{p}{p - 1} + 1\\right) \\cdot \\left(1 + \\log\\left(2 + \\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right) + \\frac{\\Delta \\cdot \\left(L0 + \\sigma h + \\left(L1 + \\alpha h\\right) \\cdot \\left(\\varepsilon + \\frac{\\sigma g}{1 + \\alpha g}\\right)\\right)}{\\varepsilon^{2}} + \\frac{\\sqrt{L0 \\cdot \\Delta} + L1 \\cdot \\Delta + \\varepsilon + \\sigma g}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right)^{\\frac{p}{p - 1}} + \\frac{\\Delta \\cdot \\left(L0 + \\sigma h + \\left(L1 + \\alpha h\\right) \\cdot \\left(\\varepsilon + \\frac{\\sigma g}{1 + \\alpha g}\\right)\\right)}{\\varepsilon^{2}} \\cdot \\left(\\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right)^{\\frac{\\frac{p}{p - 1}}{q}} + \\left(1 + \\alpha g\\right)^{2} \\cdot \\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right)^{\\frac{p}{p - 1} - 2}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedAffineHessianVector.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈2 ^ (32 * (p.p / (p.p - 1)) + 16 * p.q / (p.q - 1) + 64) * (p.p / (p.p - 1) + 1) *\n        (1 +\n          Real.log\n            (2 + (1 + p.σg / p.ε + p.αg) + p.Δ * (p.L0 + p.σh + (p.L1 + p.αh) * (p.ε + p.σg / (1 + p.αg))) / p.ε ^ 2 +\n              (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε + p.σg) / p.ε)) *\n      ((1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1)) +\n        p.Δ * (p.L0 + p.σh + (p.L1 + p.αh) * (p.ε + p.σg / (1 + p.αg))) / p.ε ^ 2 *\n          ((1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1) / p.q) +\n            (1 + p.αg) ^ 2 * (1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1) - 2)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{32 \\cdot \\frac{p}{p - 1} + \\frac{16 \\cdot q}{q - 1} + 64} \\cdot \\left(\\frac{p}{p - 1} + 1\\right) \\cdot \\left(1 + \\log\\left(2 + \\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right) + \\frac{\\Delta \\cdot \\left(L0 + \\sigma h + \\left(L1 + \\alpha h\\right) \\cdot \\left(\\varepsilon + \\frac{\\sigma g}{1 + \\alpha g}\\right)\\right)}{\\varepsilon^{2}} + \\frac{\\sqrt{L0 \\cdot \\Delta} + L1 \\cdot \\Delta + \\varepsilon + \\sigma g}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right)^{\\frac{p}{p - 1}} + \\frac{\\Delta \\cdot \\left(L0 + \\sigma h + \\left(L1 + \\alpha h\\right) \\cdot \\left(\\varepsilon + \\frac{\\sigma g}{1 + \\alpha g}\\right)\\right)}{\\varepsilon^{2}} \\cdot \\left(\\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right)^{\\frac{\\frac{p}{p - 1}}{q}} + \\left(1 + \\alpha g\\right)^{2} \\cdot \\left(1 + \\frac{\\sigma g}{\\varepsilon} + \\alpha g\\right)^{\\frac{p}{p - 1} - 2}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedAffineHessianVector.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈2 ^ (32 * (p.p / (p.p - 1)) + 16 * p.q / (p.q - 1) + 64) * (p.p / (p.p - 1) + 1) *\n        (1 +\n          Real.log\n            (2 + (1 + p.σg / p.ε + p.αg) + p.Δ * (p.L0 + p.σh + (p.L1 + p.αh) * (p.ε + p.σg / (1 + p.αg))) / p.ε ^ 2 +\n              (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε + p.σg) / p.ε)) *\n      ((1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1)) +\n        p.Δ * (p.L0 + p.σh + (p.L1 + p.αh) * (p.ε + p.σg / (1 + p.αg))) / p.ε ^ 2 *\n          ((1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1) / p.q) +\n            (1 + p.αg) ^ 2 * (1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1) - 2)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HystereticAffineHessianTransport",
+      "namespace": "LongTails.Setups.GeneralizedAffineHessianVector",
+      "setup": "LongTails.Setups.GeneralizedAffineHessianVector",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedAffineHessianVector.spec\n  OracleTemplate.HystereticAffineHessianTransport.budget",
+      "theorem": "OracleTemplate.HystereticAffineHessianTransport.result"
     }
   ],
   "results": [
@@ -31,71 +52,78 @@
       "theorem": "OracleTemplate.GuardedAffineHessianTransport.result",
       "references": "None",
       "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.HystereticAffineHessianTransport",
+      "theorem": "OracleTemplate.HystereticAffineHessianTransport.result",
+      "references": "None",
+      "match_status": "none"
     }
   ],
   "catalog": {
     "problem_class": [
       {
         "label": "nonconvex",
-        "details": "Unconstrained minimization of a twice continuously differentiable function on R^d. Nonconvex objectives are permitted. There exists a global lower bound m with f(x0) − m ≤ Δ; attainment of the minimum is not required.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Instance and spec.admissible."
+        "details": "Unconstrained minimization on R^d; nonconvex objectives are permitted. The gradient is continuously differentiable, and there exists a global lower bound m with f(x0)-m≤Δ. A minimizer need not exist.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.admissible, Space"
       }
     ],
     "oracle": [
       {
         "label": "stochastic_gradient",
-        "details": "A query (x, none) returns an unbiased gradient estimate g(x, ξ). Each query consumes a fresh IID seed; only the returned vector is supplied.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Query and spec.admissible, oracle answer and gradient unbiasedness clauses."
+        "details": "An independent fresh seed supplies an unbiased gradient g(x), with E‖g(x)-∇f(x)‖^p≤σg^p+αg^p‖∇f(x)‖^p. Queries do not expose the seed or permit its reuse.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Query, spec.admissible oracle answer, IID and gradient moment clauses"
       },
       {
         "label": "other",
-        "details": "A query (x, some v) returns an unbiased stochastic Hessian-vector product h(x,v,ξ), with expectation ∇²f(x)v. Gradient and Hessian-vector queries each count as one call against the same fixed total budget. No full Hessian or function-value oracle is supplied.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Query and spec.admissible; LongTails/Template.lean: Algorithm.query, executeWithTrace and Convergence."
+        "details": "Unbiased stochastic Hessian-vector products h(x,v), with E‖h(x,v)-∇²f(x)v‖^q≤(σh^q+αh^q‖∇f(x)‖^q)‖v‖^q. Each query requests either one gradient or one Hessian-vector product; both consume the same fixed total oracle budget.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Query and spec.admissible; LongTails/Template.lean: executeWithTrace, Convergence"
       }
     ],
     "distinctive_assumptions": [
       {
         "label": "generalized_smoothness",
-        "details": "The gradient is continuously differentiable and ‖∇²f(x)‖op ≤ L0 + L1‖∇f(x)‖ everywhere, with L0,L1 ≥ 0. No Lipschitz-Hessian condition is imposed.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.valid and spec.admissible, ContDiff and fderiv norm clauses."
+        "details": "‖∇²f(x)‖op≤L0+L1‖∇f(x)‖ everywhere, with L0,L1≥0; no Lipschitz Hessian assumption.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.valid and spec.admissible Hessian norm clause"
       },
       {
         "label": "heavy_tailed_noise",
-        "details": "For independently specified p,q ∈ (1,2], E‖g(x,ξ)−∇f(x)‖^p ≤ σg^p + αg^p‖∇f(x)‖^p and E‖h(x,v,ξ)−∇²f(x)v‖^q ≤ (σh^q + αh^q‖∇f(x)‖^q)‖v‖^q. All four noise parameters are nonnegative. These are affine central-moment bounds, permitting infinite variance when the corresponding exponent is below 2. The Hessian-vector bound is directional, rather than an operator-norm moment bound on a random matrix.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.valid and spec.admissible, gradient and Hessian-vector moment inequalities."
+        "details": "Separate exponents 1<p≤2 and 1<q≤2 control gradient and Hessian-vector central moments. Their scales may grow with the gradient norm through αg and αh; finite variance is not required when the corresponding exponent is below two. All noise coefficients are nonnegative.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.valid and spec.admissible moment clauses"
       },
       {
         "label": "finite_dimensional",
-        "details": "The ambient space is EuclideanSpace ℝ (Fin d), with its Euclidean norm and d ∈ ℕ.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: Params.d and Space."
+        "details": "Euclidean space R^d with its Euclidean norm.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: Params.d and Space"
       },
       {
         "label": "other",
-        "details": "All Params fields are public, including x0, Δ, ε, smoothness constants, noise coefficients and moment exponents. The objective, oracle maps and sampling laws are hidden admissible-instance data. Seeds are mutually independent with a common marginal law; the setup does not provide seed reuse across queries.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: Params, spec.Public, spec.publicInput and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+        "details": "Oracle seeds are independent and identically distributed across calls. All Params, including dimension, initial point, accuracy, moment exponents, smoothness and noise bounds, and Δ, are public; f and the oracle distributions are hidden.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Public, spec.publicInput, spec.admissible IID; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
       }
     ],
     "accuracy": [
       {
         "label": "gradient_norm",
-        "details": "The output X is a measurable point in R^d, its gradient norm is integrable, and E‖∇f(X)‖ ≤ ε for ε > 0. The criterion uses the unsquared Euclidean norm; no last-iterate requirement is specified.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.Output, spec.valid and spec.successful."
+        "details": "Output is a measurable point X in R^d with integrable ‖∇f(X)‖ and E‖∇f(X)‖≤ε, ε>0.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.successful and spec.valid"
       },
       {
         "label": "expected",
-        "details": "Expectation is over the joint algorithm and oracle randomness. The oracle-call budget is a fixed cap, rather than an expected stopping cost.",
-        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.successful; LongTails/Template.lean: executeWithTrace and Convergence."
+        "details": "Expectation includes algorithm randomness and the independent oracle sequence; execution uses a fixed upper budget counting all gradient and Hessian-vector calls.",
+        "evidence": "LongTails/Setups/GeneralizedAffineHessianVector.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace"
       }
     ],
     "setup_category": {
       "label": "non_standard",
-      "reason": "The setup combines gradient-dependent generalized smoothness with unbiased gradient and Hessian-vector oracles whose affine heavy-tailed central-moment bounds have separate exponents p and q. This combination is a meaningful departure from standard globally smooth, bounded-variance formulations."
+      "reason": "Combines generalized smoothness with separate heavy-tail exponents and gradient-dependent moment scales for independent stochastic gradient and Hessian-vector observations."
     },
     "schema_version": 2,
     "proof_status": {
       "status": "exported_theorem",
       "theorems": [
-        "OracleTemplate.GuardedAffineHessianTransport.result"
+        "OracleTemplate.GuardedAffineHessianTransport.result",
+        "OracleTemplate.HystereticAffineHessianTransport.result"
       ],
       "verification": "not_checked_by_catalog"
     },
@@ -105,6 +133,11 @@
         {
           "module": "LongTails.Theorems.GuardedAffineHessianTransport",
           "theorem": "OracleTemplate.GuardedAffineHessianTransport.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.HystereticAffineHessianTransport",
+          "theorem": "OracleTemplate.HystereticAffineHessianTransport.result",
           "match_status": "none"
         }
       ]
