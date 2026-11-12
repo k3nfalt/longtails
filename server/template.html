@@ -239,15 +239,21 @@
     function budgetsView(setup) {
       const section = make('section', undefined, 'budgets');
       const references = make('section', undefined, 'previous-results');
-      section.append(make('h3', 'Proved Complexities'));
+      const isLower = theorem => theorem.kind === 'lower' || (!theorem.kind && theorem.statement.includes('OracleTemplate.NonConvergence '));
+      if (!setup.theorems.length || setup.theorems.some(theorem => !isLower(theorem))) section.append(make('h3', 'Proved Complexities'));
+      let lowerHeading = false;
       if (!setup.theorems.length) section.append(make('p', 'No proved budget is currently listed for this setup.'));
-      for (const theorem of setup.theorems) {
+      for (const theorem of [...setup.theorems].sort((a, b) => Number(isLower(a)) - Number(isLower(b)))) {
+        if (isLower(theorem) && !lowerHeading) {
+          section.append(make('h3', 'Proved Lower Bounds'));
+          lowerHeading = true;
+        }
         const entry = make('div', undefined, 'budget');
         const filename = theorem.module.split('.').pop() + '.lean';
         const title = make('div', undefined, 'budget-name');
         title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
         const kind = theorem.kind || (theorem.statement.includes('OracleTemplate.NonConvergence ') ? 'lower' : theorem.statement.includes('OracleTemplate.OnlineConvergence ') ? 'online' : 'upper');
-        title.append(kind === 'lower' ? ' — Lower bound (necessary budget)' : kind === 'online' ? ' — Online guarantee' : ' — Upper bound (sufficient budget)');
+        if (kind === 'online') title.append(' — Online guarantee');
         const score = theorem.contribution;
         const rating = make('span', score == null ? 'Not rated' : '★'.repeat(score) + '☆'.repeat(3 - score), 'result-rating');
         rating.setAttribute('aria-label', score == null ? 'Contribution not rated' : `Contribution: ${score} out of 3 stars`);
