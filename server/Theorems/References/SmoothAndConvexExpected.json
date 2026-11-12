@@ -1,8 +1,30 @@
 {
   "setup": "LongTails.Setups.SmoothAndConvexExpected",
-  "searched_at": "2026-11-12T07:41:30.210591+00:00",
+  "searched_at": "2026-11-12T11:57:45.340451+00:00",
   "none_means": "No qualifying prior reference verified; not a proof of novelty.",
   "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}}}{512} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",
+        "value": "fun q => ⌊√(q.L * q.R ^ 2 / q.ε) / 512⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}}}{512} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",
+          "value": "fun q => ⌊√(q.L * q.R ^ 2 / q.ε) / 512⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.SmoothConvexExpectedLowerBound",
+      "namespace": "LongTails.Setups.SmoothAndConvexExpected",
+      "setup": "LongTails.Setups.SmoothAndConvexExpected",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.SmoothAndConvexExpected.spec\n  LongTails.Theorems.SmoothConvexExpectedLowerBound.budget",
+      "theorem": "LongTails.Theorems.SmoothConvexExpectedLowerBound.result"
+    },
     {
       "budget": {
         "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} \\right\\}",
@@ -27,9 +49,15 @@
   ],
   "results": [
     {
+      "module": "LongTails.Theorems.SmoothConvexExpectedLowerBound",
+      "theorem": "LongTails.Theorems.SmoothConvexExpectedLowerBound.result",
+      "references": "- Jelena Diakonikolas and Cristóbal Guzmán. [Lower Bounds for Parallel and Randomized Convex Optimization](https://jmlr.org/papers/volume21/19-771/19-771.pdf). 2020. Complexity: $\\Omega(\\sqrt{LR^2/\\varepsilon})$ sequential local-oracle calls for randomized algorithms achieving objective gap $\\varepsilon$ with probability at least $1-\\gamma$, for constant $\\gamma\\in(0,1)$ and $d=\\Omega((LR^2/\\varepsilon)^{3/2}\\log(LR^2/\\varepsilon))$; the oracle can supply exact function values and gradients.",
+      "match_status": "related"
+    },
+    {
       "module": "LongTails.Theorems.AcceleratedConvexExpected",
       "theorem": "OracleTemplate.Gradient.AcceleratedConvexExpected.result",
-      "references": "- Yu. E. Nesterov. [A method of solving a convex programming problem with convergence rate O(1/k²)](https://hengshuaiyao.github.io/papers/nesterov83.pdf). 1983. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ exact-gradient calls using the known-$L$ accelerated gradient method, with no function-value calls, for deterministic objective gap at most $\\varepsilon$ (hence also expected gap).",
+      "references": "- Yurii E. Nesterov. [A method of solving a convex programming problem with convergence rate O(1/k²)](https://hengshuaiyao.github.io/papers/nesterov83.pdf). 1983. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ exact-gradient calls for objective gap at most $\\varepsilon$, using Nesterov’s accelerated method with known $L$; no function-value calls are required.",
       "match_status": "match"
     }
   ],
@@ -37,51 +65,57 @@
     "problem_class": [
       {
         "label": "convex",
-        "details": "Unconstrained convex minimization of a globally differentiable function with L-Lipschitz gradient; a global minimizer lies within distance R of x0.",
-        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.admissible and Params.toSmoothAndConvex; LongTails/Setups/SmoothAndConvex.lean: spec.admissible."
+        "details": "Unconstrained convex minimization on ℝᵈ with globally L-Lipschitz gradient and a global minimizer xstar satisfying ‖x0−xstar‖≤R.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.admissible; LongTails/Setups/SmoothAndConvexExpected.lean: spec.admissible and Params.toSmoothAndConvex."
       }
     ],
     "oracle": [
       {
         "label": "exact_gradient",
-        "details": "Each call returns the exact gradient at the queried point for every history and oracle seed. Gradient uniqueness excludes oracle noise despite the general randomized oracle interface.",
-        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.admissible, HasGradientAt condition; LongTails/Template.lean: Oracle.answer."
+        "details": "Each query x returns ∇f(x). Every history and seed must return the exact gradient; no function values or noisy observations are supplied.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.admissible, HasGradientAt condition; LongTails/Setups/SmoothAndConvexExpected.lean: spec.Query and spec.Reply."
       }
     ],
     "distinctive_assumptions": [
       {
         "label": "finite_dimensional",
-        "details": "Euclidean space R^d. All parameters d,L,x0,R,ε are public. Validity requires L,R,ε>0, 262144ε≤LR², and 65536(floor(sqrt(LR²/ε)/512)+1)^5≤d.",
-        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.Instance."
+        "details": "Euclidean space ℝᵈ. All parameters d,L,x0,R,ε are public. Require L,R,ε>0, 262144ε≤LR², and d≥65536(⌊√(LR²/ε)/512⌋+1)⁵.",
+        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: Params, spec.Public, spec.publicInput, spec.valid."
       }
     ],
     "accuracy": [
       {
         "label": "objective_gap",
-        "details": "Output a point whose objective gap relative to a global minimizer is integrable and at most ε in expectation.",
-        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.successful."
+        "details": "The output is a point in ℝᵈ; its objective gap relative to an attained global minimum is integrable and has integral at most ε.",
+        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.Output and spec.successful."
       },
       {
         "label": "expected",
-        "details": "Expectation is over the product of algorithm and oracle seed laws; no almost-sure accuracy is required.",
+        "details": "Expected objective gap E[f(output)−f(xstar)]≤ε under the execution probability law, allowing randomized algorithms.",
         "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.successful; LongTails/Template.lean: Convergence."
       }
     ],
     "setup_category": {
       "label": "classical",
-      "reason": "Standard smooth convex exact-gradient minimization with an expected objective-gap target; the additional dimension and accuracy restrictions select a benchmark parameter regime."
+      "reason": "Standard smooth convex exact-gradient optimization with expected objective accuracy; the small-accuracy and large-dimension restrictions specify a lower-bound benchmark regime."
     },
     "schema_version": 2,
     "proof_status": {
       "status": "exported_theorem",
       "theorems": [
+        "LongTails.Theorems.SmoothConvexExpectedLowerBound.result",
         "OracleTemplate.Gradient.AcceleratedConvexExpected.result"
       ],
       "verification": "not_checked_by_catalog"
     },
     "literature_status": {
-      "status": "match",
+      "status": "related",
       "results": [
+        {
+          "module": "LongTails.Theorems.SmoothConvexExpectedLowerBound",
+          "theorem": "LongTails.Theorems.SmoothConvexExpectedLowerBound.result",
+          "match_status": "related"
+        },
         {
           "module": "LongTails.Theorems.AcceleratedConvexExpected",
           "theorem": "OracleTemplate.Gradient.AcceleratedConvexExpected.result",
