@@ -12,7 +12,7 @@ Using `allowedAlgorithm` is optional by default. Require it only when the contri
 
 Produce a genuinely new optimization result whose novelty, significance, and technical depth justify acceptance as a theory paper at ICML, ICLR, or NeurIPS. Use exactly two agents: a Researcher and an independent Reviewer. Both agents MUST work toward producing such a result; a plausible research direction, a routine extension, or a formalization of a known theorem does not satisfy the task.
 
-The required outcome is a naturally motivated problem setup, an algorithm, and a rigorously proved convergence or oracle-complexity guarantee, formalized using this repository’s existing framework. The mathematical contribution MUST be substantively novel relative to the literature, not merely new to this repository. A new setup is not itself a contribution unless it captures a meaningful problem and leads to a substantive new result. A recognized existing problem with a genuinely new guarantee is preferable to an artificial new problem designed to make a theorem easy.
+The required outcome is a naturally motivated problem setup and a rigorously proved upper or lower oracle-complexity bound, with an algorithm for an upper bound or a hard-instance construction for a lower bound, formalized using this repository’s existing framework. The mathematical contribution MUST be substantively novel relative to the literature, not merely new to this repository. A new setup is not itself a contribution unless it captures a meaningful problem and leads to a substantive new result. A recognized existing problem with a genuinely new guarantee is preferable to an artificial new problem designed to make a theorem easy.
 
 Strongly prioritize common, established assumptions already used in primary research papers. Prefer a new result under a standard setup over a result requiring a newly invented restriction. Among candidates with comparable significance, prefer fewer and weaker assumptions and broader applicability. Assess the actual mathematical restrictions, not the number of named assumptions; bundling restrictions does not make a setup more general. Removing or weakening an established assumption can itself be a substantive contribution.
 
@@ -26,11 +26,13 @@ The files in `scripts/proposals` are previous artifacts, not the research agenda
 
 Treat acceptance-quality research as a completion requirement, not an aspiration. Actual conference acceptance cannot be guaranteed by either agent. The Reviewer must independently support an acceptance recommendation with evidence; the requirement to produce a result never authorizes invented novelty, concealed limitations, or forced approval.
 
-Two research routes are explicitly allowed:
+The following research routes are explicitly allowed:
+
 - Remove, relax, or replace an established assumption, or add a naturally motivated structural assumption, and establish a substantive new guarantee. Anchor the change in a known theorem and explain which instances become covered or excluded, why that matters, and where its proof stops applying. A stronger assumption must yield a new result relative to existing work under that stronger assumption. A naturally motivated new setup is also allowed when its connection to an established optimization question is explicit.
 - Take an established setup from the literature and obtain a NEW STATE-OF-THE-ART convergence or oracle-complexity guarantee. The setup need not be novel; the result MUST be. Demonstrate a meaningful improvement over the strongest applicable known guarantees under comparable assumptions, oracle access, accuracy criteria, and cost accounting. State the precise parameter regimes of improvement and any tradeoffs; do not claim universal superiority from a restricted-regime improvement.
+- Prove a substantively new oracle-complexity lower bound for an established or naturally motivated setup. Compare with the strongest applicable lower bounds and upper bounds, state the remaining gap, and distinguish unrestricted randomized hardness from hardness for a restricted algorithm family.
 
-Both routes require repository deliverables. In particular, choosing a setup from the literature does not excuse leaving it outside the repository: add its faithful Lean specification, the new theorem, and the complete supporting proofs.
+All routes require repository deliverables. In particular, choosing a setup from the literature does not excuse leaving it outside the repository: add its faithful Lean specification, the new theorem, and the complete supporting proofs.
 
 1. Scope and deliverables
 
@@ -43,10 +45,10 @@ You may install reasonable Python libraries, system packages, and Lean libraries
 Deliver only:
 - The chosen setup as a Lean specification under `LongTails/Setups`, including when it is an established setup from the literature. If an exactly equivalent specification already exists in the repository, reuse it explicitly rather than adding a duplicate; otherwise, adding the setup is mandatory.
   Keep each setup's definitions, assumptions, and `spec` in exactly one Lean file; do not split a setup across multiple files. Reuse existing shared definitions by importing them, and put supporting proofs in `LongTails/Proofs`.
-- Algorithm definitions.
+- Algorithm definitions for an upper bound, or hard-instance constructions for a lower bound.
 - Complete supporting Lean proofs and lemmas for the new result, following the existing proof-module layout.
-- Exactly one NEW main proved convergence or oracle-complexity theorem under `LongTails/Theorems`, connected to the chosen setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
-- A companion Markdown contribution note beside that theorem, with the same basename: `LongTails/Theorems/<TheoremName>.md` for `<TheoremName>.lean`. Include it with the reviewed final Lean deliverables.
+- Exactly one NEW main proved result: `result : Convergence spec budget` under `LongTails/Theorems`, or `result : NonConvergence spec budget` under `LongTails/LowerBounds`, connected to the chosen setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
+- A companion Markdown contribution note beside that theorem, with the same basename: `<TheoremName>.md` for `<TheoremName>.lean` in the chosen result directory. Include it with the reviewed final Lean deliverables.
 - Necessary Lean dependency additions in `lakefile.toml` and `lake-manifest.json`.
 
 Prefer new files. Supporting lemmas are allowed; “one theorem” means one main research result.
@@ -107,7 +109,7 @@ For the chosen direction, specify:
 
 Develop a complete mathematical proof and formalize it in the repository. Explicitly handle randomness, expectations, stopping rules, parameter ranges, and oracle-call accounting where relevant.
 
-Simplify the public oracle-call budget before final review. In `LongTails/Theorems/`, write each public `budget` definition as one explicit, human-readable line in the setup parameters, without local tuning variables or opaque helpers. Simplify nested fractions, products, repeated expressions, and rounding where possible. Prefer one readable formula over multiple tuning cases when it preserves the rate. A universal constant-factor increase is acceptable only when it preserves the parameter rates and the claimed improvement over prior work. Prove that the simplified budget suffices for the actual algorithm execution, counting every oracle call and retaining necessary noise, initialization, and other required terms. Keep supporting algebra in proof modules. Simplify the Lean definition itself, not merely its website or LaTeX presentation.
+Simplify the public oracle-call budget before final review. In either result directory, write each public `budget` definition as one explicit, human-readable line in the setup parameters, without local tuning variables or opaque helpers. Simplify nested fractions, products, repeated expressions, and rounding where possible. Prefer one readable formula over multiple tuning cases when it preserves the rate. For upper bounds, a universal constant-factor increase is acceptable only when it preserves the parameter rates and the claimed improvement over prior work. Prove that the simplified budget suffices for the actual algorithm execution, counting every oracle call and retaining necessary noise, initialization, and other required terms. For lower bounds, prove failure at the simplified budget; increasing a lower-bound budget requires a proof and is not automatically safe. Keep supporting algebra in proof modules. Simplify the Lean definition itself, not merely its website or LaTeX presentation.
 
 After the initial novelty and naturalness screening, formalize established supporting lemmas incrementally in the Researcher’s worktree and compile the affected modules. Do not postpone all Lean work until the final review, and do not create empty scaffolding merely to show changed files. Keep speculative calculations and rejected candidate notes outside the repository. Progress must consist of a proved lemma, a checked counterexample, a concrete literature comparison, a compiled proof step, or a resolved review issue—not repeated statements that a difficult argument remains to be found.
 
@@ -178,11 +180,11 @@ Before delivery, the Reviewer must:
 - Inspect the full diff against the recorded starting base.
 - Confirm that every changed path is inside `LongTails/`, except reviewed, necessary dependency additions in `lakefile.toml` and `lake-manifest.json`.
 - Confirm that `LongTails/Template.lean` and all other frozen core files are unchanged.
-- Confirm that the deliverables contain exactly one main research theorem under `LongTails/Theorems`.
+- Confirm that the deliverables contain exactly one main research theorem under `LongTails/Theorems` or `LongTails/LowerBounds`.
 - Confirm that the chosen setup is present under `LongTails/Setups` and that the new theorem and complete supporting proofs are included, regardless of which research route was selected.
 - Independently review the companion `<TheoremName>.md` for accuracy of its contribution claims, literature comparisons, and limitations; confirm it reflects the final clarifications and integrated Lean result and is included with the approved deliverables.
 - Check that the public budget satisfies the simplification requirement and that its proof preserves all required terms, actual oracle-call accounting, parameter rates, and the claimed improvement over prior work.
-- Run `./build.sh`, `./lint.sh`, and `python3 run_comparator.py <TheoremName>.lean` on the final integrated result. All three must pass before delivery; a full-library comparator run is not required for adding a new result.
+- Run `./build.sh` and `./lint.sh` on the final integrated result. For upper bounds, also run `python3 run_comparator.py <TheoremName>.lean`; for lower bounds, perform the verification specified in `AGENTS.md`. All applicable checks must pass before delivery; a full-library comparator run is not required for adding a new result.
 - Confirm that the final diff contains only the requested deliverables.
 
 Any substantive change after approval, including conflict resolution, requires renewed review and validation.
@@ -195,3 +197,5 @@ Finish with:
 - The Reviewer’s verdict and remaining limitations.
 - Verification results and changed file paths.
 - The deliverable worktree paths and recorded base revision, or an explicit explanation of why delivery was blocked.
+
+For lower-bound tasks, apply the `NonConvergence` requirements in `AGENTS.md`. Algorithm-design and tuning instructions above apply to upper bounds; for lower bounds, instead describe the quantified algorithm class, hard-instance family, seed independence, and parameter-dependent dimension. Use the same novelty and review standards. Run the required build and lint checks, and audit the lower theorem and budget as specified in `AGENTS.md`; the upper-bound Comparator command above does not currently support this directory. Do not change the template or mislabel a lower bound as a convergence theorem to satisfy tooling.
