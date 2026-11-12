@@ -26,7 +26,7 @@ Deliver only:
 - New setup definitions, if the improvement requires them.
 - New algorithm definitions, if needed.
 - Supporting proofs and lemmas.
-- Exactly one NEW main proved improved theorem under `LongTails/Theorems` for an upper bound or `LongTails/LowerBounds` for a lower bound, following repository conventions. A lower-bound result must address the requested improvement; do not substitute it for a requested algorithm without user agreement.
+- Exactly one NEW main proved improved theorem under `LongTails/Theorems`, following repository conventions.
 - A companion Markdown contribution note beside the new theorem, with the same basename, explaining its improvement, literature comparisons, and limitations.
 - Necessary Lean dependency additions.
 
@@ -105,7 +105,7 @@ Before committing, the Reviewer must:
 - Independently check the companion contribution note against the improved theorem and literature.
 - Confirm that `LongTails/Template.lean`, frozen core files, and existing theorem statements are unchanged.
 - Verify the improved theorem and its comparison with the original.
-- Run the required build, proof, and axiom checks. For upper bounds, audit the new theorem with `python3 run_comparator.py <TheoremName>.lean`; for lower bounds, follow the verification requirements in `AGENTS.md`; a full-library comparator run is not required for adding a new result.
+- Run the required build, proof, and axiom checks. Audit the new theorem with `python3 run_comparator.py <TheoremName>.lean`; a full-library comparator run is not required for adding a new result.
 - Confirm that only the requested deliverables are staged.
 
 Any substantive change after approval requires renewed review and validation.
@@ -119,5 +119,3 @@ Finish with:
 - The central proof idea and comparison with prior work.
 - The Reviewer’s verdict and remaining limitations.
 - Verification results, changed file paths, and the pushed research commit ID, PR URL, or why submission was blocked or no commit was justified.
-
-For a lower-bound task, use `result : NonConvergence spec budget` and follow the quantifier, construction, and verification requirements in `AGENTS.md`. Compare the new necessary budget with prior lower bounds and the best applicable upper bound. Replace algorithm-design deliverables with the hard-instance construction where appropriate; keep the companion note beside the lower-bound theorem. The Comparator command above currently supports upper bounds only.

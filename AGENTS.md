@@ -19,9 +19,7 @@ project preferences; newer explicit user requests take precedence.
   must name that setup's `spec` explicitly and import its module directly.
 - Group related supporting lemmas into cohesive proof modules instead of creating
   a separate Lean file for each helper or small proof step.
-- Put public upper-bound exports in `LongTails/Theorems/` and lower-bound exports
-  in `LongTails/LowerBounds/`. Put supporting constructions and proofs in
-  `LongTails/Proofs/`.
+- Put public theorem exports in `LongTails/Theorems/` so the audit discovers them.
 - Keep public declaration names distinct across modules so `LongTails.lean` can
   import the whole library. This file is generated and ignored by Git.
   `./build.sh` and `./lint.sh` regenerate it automatically with
@@ -30,14 +28,6 @@ project preferences; newer explicit user requests take precedence.
   theorem, `result : Convergence spec budget`. Put distinct mathematical cases in
   separate files. Proof modules use lemmas for supporting results; do not add redundant public convergence/rate
   wrappers or drop a mathematical case merely to reduce the theorem count.
-- Each file in `LongTails/LowerBounds/` must contain exactly one main theorem,
-  `result : NonConvergence spec budget`, using `LongTails/TemplateLowerBound.lean`.
-  Name the setup explicitly and import its module directly. Prove the result for
-  every valid parameter choice, not merely one hard parameter value. Put necessary
-  parameter and dimension restrictions in the setup’s `valid` field and justify
-  that the claimed parameter regime is nonempty. The hard instance and oracle may
-  depend on the algorithm, but not on its realized random seed. Do not substitute
-  `¬ Convergence spec budget` for this stronger pointwise statement.
 - Do not add explanatory comments or docstrings to Lean files unless requested.
 - Do not add README files or extra documentation unless requested. This
   `AGENTS.md` is explicitly requested repository guidance.
@@ -68,13 +58,11 @@ project preferences; newer explicit user requests take precedence.
   explicit formula rather than an opaque helper or an unspecified constant.
   Prefer one readable budget formula to a collection of tuning cases when it
   preserves the rate. Keep supporting algebra in proof modules.
-- In `LongTails/Theorems/` and `LongTails/LowerBounds/`, write each public `budget` definition as one explicit,
+- In `LongTails/Theorems/`, write each public `budget` definition as one explicit,
   human-readable line in the setup parameters, without local tuning variables.
-  Simplify nested fractions, products, and rounding where possible. For upper
-  bounds, a universal constant-factor increase is acceptable when it preserves
-  the parameter rates; increasing a lower-bound budget requires a proof.
-  For upper bounds, prove that the simplified budget suffices; for lower bounds,
-  prove failure at the stated budget. Connect both to actual execution, retaining
+  Simplify nested fractions, products, and rounding where possible; a universal
+  constant-factor increase is acceptable when it preserves the parameter rates.
+  Prove that the simplified budget suffices for the actual execution, retaining
   all oracle calls and required terms. Keep the supporting algebra in proof modules.
 - Seek the strongest rate justified by the exact setup, and check the primary
   literature before choosing a target rate. Compare assumptions, algorithm
@@ -123,8 +111,3 @@ project preferences; newer explicit user requests take precedence.
   The default build command only builds; it does not run the audit.
 - For comment-only or documentation changes, inspect the diff and run
   `git diff --check`; do not repeat unrelated proof builds.
-- Lower-bound verification must include targeted Lean compilation and an axiom
-  audit of both `result` and `budget`, allowing only `propext`, `Classical.choice`,
-  and `Quot.sound`. The current `run_comparator.py` discovers only `Theorems`; do
-  not claim a lower-bound Comparator audit passed unless it was separately run
-  against a `NonConvergence` challenge. Report this tooling limitation explicitly.
