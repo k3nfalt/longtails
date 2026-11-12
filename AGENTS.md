@@ -37,7 +37,9 @@ project preferences; newer explicit user requests take precedence.
 - Lower bounds use `LongTails/TemplateLowerBound.lean` and stay in `Theorems/`;
   use a descriptive filename such as `<Name>LowerBound.lean`. Put hard-instance
   constructions in `Proofs/`. Prove failure for every valid parameter choice and
-  every allowed algorithm, with necessary parameter and dimension restrictions
+  every allowed algorithm at every componentwise budget `b ≤ budget p`,
+  including zero and the stated budget. The hard instance may depend on `b`.
+  State necessary parameter and dimension restrictions
   in `valid`. The hard instance may depend on the algorithm but not its realized
   seed. Do not replace `NonConvergence` by `¬ Convergence`, which need not
   establish hardness at every valid parameter choice. Check that the claimed

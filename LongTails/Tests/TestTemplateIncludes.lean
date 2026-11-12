@@ -82,7 +82,7 @@ lemma nonconvergence (h : Inclusion strong weak)
     (budget : strong.Params → Fin strong.numOracles → ℕ)
     (coverage : ∀ p, strong.valid p → ∃ q, weak.valid q ∧ h.mapParams q = p)
     (hn : NonConvergence weak (h.mapBudget budget)) : NonConvergence strong budget := by
-  intro p hp A ha
+  intro p hp A ha b hb
   obtain ⟨q, hqvalid, rfl⟩ := coverage p hp
   have hq := (congrArg strong.Query (h.public_eq q)).trans (h.query_eq (weak.publicInput q))
   have hr := (congrArg strong.Reply (h.public_eq q)).trans (h.reply_eq (weak.publicInput q))
@@ -94,6 +94,8 @@ lemma nonconvergence (h : Inclusion strong weak)
   have haw : weak.allowedAlgorithm (weak.publicInput q) Aw := by
     simpa only [cast_cast] using h.allowedAlgorithm (weak.publicInput q) _ hal
   obtain ⟨I, O, had, hbad⟩ := hn q hqvalid Aw haw
+    (fun i => b (Fin.cast h.numOracles_eq.symm i))
+    (fun i => hb (Fin.cast h.numOracles_eq.symm i))
   refine ⟨cast (by rw [h.public_eq q, h.instance_eq]) I,
     cast (by rw [hq, hr, h.numOracles_eq]) O, h.admissible q hqvalid I O had, ?_⟩
   dsimp only
@@ -102,7 +104,7 @@ lemma nonconvergence (h : Inclusion strong weak)
     (fun {_} _ output P => strong.successful (h.mapParams q)
       (cast (by rw [h.public_eq q, h.instance_eq]) I) output P)
     (fun {_} _ output P => weak.successful q I output P)
-    (h.successful q hqvalid I O had) A O (budget (h.mapParams q)) hs)
+    (h.successful q hqvalid I O had) A O b hs)
 
 end Inclusion
 
@@ -201,9 +203,9 @@ example : ¬ (NonConvergence (testSpec False) (fun _ _ => 0) →
     NonConvergence (testSpec True) (fun _ _ => 0)) := by
   intro transfer
   have hard : NonConvergence (testSpec False) (fun _ _ => 0) := by
-    intro p _ A _
+    intro p _ A _ b hb
     exact ⟨(), { answer := fun _ _ _ => () }, trivial, by simp⟩
-  obtain ⟨I, O, _, hbad⟩ := transfer hard () trivial unitAlgorithm trivial
+  obtain ⟨I, O, _, hbad⟩ := transfer hard () trivial unitAlgorithm trivial (fun _ => 0) (fun _ => le_rfl)
   exact hbad trivial
 
 abbrev parameterSpec : Setup where
@@ -235,11 +237,11 @@ example :
     admissible := fun _ _ _ _ h => h
     successful := fun _ _ _ _ _ _ _ _ _ h => h
     allowedAlgorithm := fun _ _ h => h }⟩, ?_, ?_⟩
-  · intro p hp A _
+  · intro p hp A _ b hb
     subst p
     exact ⟨(), { answer := fun _ _ _ => () }, trivial, by simp⟩
   · intro h
-    obtain ⟨I, O, _, hbad⟩ := h true trivial unitAlgorithm trivial
+    obtain ⟨I, O, _, hbad⟩ := h true trivial unitAlgorithm trivial (fun _ => 0) (fun _ => le_rfl)
     exact hbad rfl
 
 end OracleTemplate.IncludesTests

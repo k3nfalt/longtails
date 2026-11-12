@@ -10,11 +10,12 @@ def NonConvergence (S : Setup)
     ∀ A : Algorithm (S.Query (S.publicInput p)) (S.Reply (S.publicInput p))
         (S.Output (S.publicInput p)) S.numOracles,
       S.allowedAlgorithm (S.publicInput p) A →
+        ∀ b : Fin S.numOracles → ℕ, (∀ i, b i ≤ budget p i) →
         ∃ (I : S.Instance (S.publicInput p))
           (oracle : Oracle (S.Query (S.publicInput p)) (S.Reply (S.publicInput p)) S.numOracles),
           S.admissible p I oracle ∧
             let result := fun seed : A.Seed × ((k : ℕ) → oracle.Seed k) =>
-              execute oracle A (budget p) seed.1 seed.2
+              execute oracle A b seed.1 seed.2
             ¬ S.successful p I result
               ⟨(A.law : Measure _).prod (oracle.law : Measure _), inferInstance⟩
 
