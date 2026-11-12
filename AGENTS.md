@@ -15,7 +15,7 @@ project preferences; newer explicit user requests take precedence.
 - Setups must not import `LongTails.Algorithms` or `LongTails.Proofs`. Put method
   definitions required by a setup's algorithm restrictions in that setup.
 - Match each setup namespace to its module path, for example
-  `LongTails.Setups.GeneralizedSmoothAndConvex`. Public convergence statements
+  `LongTails.Setups.GeneralizedSmoothAndConvex`. Public result statements
   must name that setup's `spec` explicitly and import its module directly.
 - Group related supporting lemmas into cohesive proof modules instead of creating
   a separate Lean file for each helper or small proof step.
@@ -24,10 +24,20 @@ project preferences; newer explicit user requests take precedence.
   import the whole library. This file is generated and ignored by Git.
   `./build.sh` and `./lint.sh` regenerate it automatically with
   `lake exe mk_all --lib LongTails`; do not commit it.
-- Each file in `LongTails/Theorems/` must contain exactly one main convergence
-  theorem, `result : Convergence spec budget`. Put distinct mathematical cases in
+- Each file in `LongTails/Theorems/` must contain exactly one main theorem:
+  `result : Convergence spec budget` for an upper bound,
+  `result : NonConvergence spec budget` for a lower bound, or
+  `result : OnlineConvergence spec bound` for an online guarantee. Put distinct mathematical cases in
   separate files. Proof modules use lemmas for supporting results; do not add redundant public convergence/rate
   wrappers or drop a mathematical case merely to reduce the theorem count.
+- Lower bounds use `LongTails/TemplateLowerBound.lean` and stay in `Theorems/`;
+  use a descriptive filename such as `<Name>LowerBound.lean`. Put hard-instance
+  constructions in `Proofs/`. Prove failure for every valid parameter choice and
+  every allowed algorithm, with necessary parameter and dimension restrictions
+  in `valid`. The hard instance may depend on the algorithm but not its realized
+  seed. Do not replace `NonConvergence` by `¬ Convergence`, which need not
+  establish hardness at every valid parameter choice. Check that the claimed
+  parameter regime is nonempty.
 - Do not add explanatory comments or docstrings to Lean files unless requested.
 - Do not add README files or extra documentation unless requested. This
   `AGENTS.md` is explicitly requested repository guidance.
@@ -61,8 +71,9 @@ project preferences; newer explicit user requests take precedence.
 - In `LongTails/Theorems/`, write each public `budget` definition as one explicit,
   human-readable line in the setup parameters, without local tuning variables.
   Simplify nested fractions, products, and rounding where possible; a universal
-  constant-factor increase is acceptable when it preserves the parameter rates.
-  Prove that the simplified budget suffices for the actual execution, retaining
+  constant-factor increase of an upper-bound budget is acceptable when it
+  preserves the parameter rates. For lower bounds, prove failure at the stated
+  budget; increasing it requires a proof. Connect the bound to execution, retaining
   all oracle calls and required terms. Keep the supporting algebra in proof modules.
 - Seek the strongest rate justified by the exact setup, and check the primary
   literature before choosing a target rate. Compare assumptions, algorithm

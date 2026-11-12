@@ -38,7 +38,8 @@ private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
         ("type", toJson (← ppExpr (← inferType value)).pretty),
         ("value", toJson (← ppExpr value).pretty),
         ("latex", toJson (← TheoremDescriptions.budgetLatex value))]]
-    if type.isAppOfArity ``OracleTemplate.Convergence 2 then
+    if type.isAppOfArity ``OracleTemplate.Convergence 2 ||
+        type.isAppOfArity `OracleTemplate.NonConvergence 2 then
       let budget := type.getAppArgs.back!
       let value ← if let .const name levels := budget then do
         let .defnInfo info ← getConstInfo name | throwError "Expected a budget definition"
@@ -80,6 +81,7 @@ run_cmd do
         ("namespace", toJson entry.setupName.getPrefix.toString),
         ("module", toJson entry.moduleName.toString),
         ("theorem", toJson entry.theoremName.toString),
+        ("kind", toJson (if entry.lower then "lower" else if entry.online then "online" else "upper")),
         ("statement", toJson (← ppExpr info.type).pretty),
         ("budget", if found.size == 1 then found[0]! else Json.null),
         ("budgets", toJson found)]

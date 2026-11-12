@@ -429,6 +429,12 @@ def main(argv=None):
             {
                 "theorem": str(p),
                 "basename": p.stem,
+                "kind": next(
+                    "lower" if r["lower"] else "online" if r["online"] else "upper"
+                    for r in metadata
+                    if r["module"]
+                    == ".".join(p.relative_to(scripts.parent).with_suffix("").parts)
+                ),
                 "review": str(reviews / f"{p.stem}.md"),
                 "review_url": (
                     repository_url

@@ -280,3 +280,5 @@ bibliography, source files, or another session's output. The runner merges and
 sorts tables. Check before saving: exact theorem coverage; assumptions below
 caption; notation below table; explicit extra assumptions where needed; consistent
 four-column headers; advantages/disadvantages only in prior-work rows; brief explicit comparisons; valid links/citations; faithful formulas; no redundant commentary.
+
+The supplied result kind is `upper`, `lower`, or `online`, determined from its Lean proposition. Keep all result files and review links in the existing paths. Explicitly label lower-bound rows as lower bounds (necessary budgets), and compare them only with applicable lower bounds; a larger necessary budget is stronger. Label upper bounds as sufficient budgets. Do not rank a necessary budget as if it were an algorithm cost. When both occur in one setup table, use separate labeled upper/lower sections and state the remaining gap only under matching assumptions, oracle models, and accuracy criteria. Online bounds retain their stated online criterion.

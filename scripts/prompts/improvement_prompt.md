@@ -119,3 +119,5 @@ Finish with:
 - The central proof idea and comparison with prior work.
 - The Reviewer’s verdict and remaining limitations.
 - Verification results, changed file paths, and the pushed research commit ID, PR URL, or why submission was blocked or no commit was justified.
+
+Lower bounds are also supported in `LongTails/Theorems` as `NonConvergence spec budget`. Follow `AGENTS.md`: inspect the quantified algorithm class, every valid parameter choice, dimension restrictions, and a hard-instance construction independent of the realized random seed. Compare necessary budgets against prior lower bounds and state the gap to upper bounds; a larger necessary budget is stronger. A lower-bound contribution does not require a new solving algorithm. Keep the requested research scope and do not substitute a lower bound for an explicitly requested algorithm without agreement.

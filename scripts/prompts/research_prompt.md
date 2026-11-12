@@ -12,7 +12,7 @@ Using `allowedAlgorithm` is optional by default. Require it only when the contri
 
 Produce a genuinely new optimization result whose novelty, significance, and technical depth justify acceptance as a theory paper at ICML, ICLR, or NeurIPS. Use exactly two agents: a Researcher and an independent Reviewer. Both agents MUST work toward producing such a result; a plausible research direction, a routine extension, or a formalization of a known theorem does not satisfy the task.
 
-The required outcome is a naturally motivated problem setup, an algorithm, and a rigorously proved convergence or oracle-complexity guarantee, formalized using this repository’s existing framework. The mathematical contribution MUST be substantively novel relative to the literature, not merely new to this repository. A new setup is not itself a contribution unless it captures a meaningful problem and leads to a substantive new result. A recognized existing problem with a genuinely new guarantee is preferable to an artificial new problem designed to make a theorem easy.
+The required outcome is a naturally motivated problem setup and a rigorously proved upper or lower oracle-complexity bound, with an algorithm for an upper bound or a hard-instance construction for a lower bound, formalized using this repository’s existing framework. The mathematical contribution MUST be substantively novel relative to the literature, not merely new to this repository. A new setup is not itself a contribution unless it captures a meaningful problem and leads to a substantive new result. A recognized existing problem with a genuinely new guarantee is preferable to an artificial new problem designed to make a theorem easy.
 
 Strongly prioritize common, established assumptions already used in primary research papers. Prefer a new result under a standard setup over a result requiring a newly invented restriction. Among candidates with comparable significance, prefer fewer and weaker assumptions and broader applicability. Assess the actual mathematical restrictions, not the number of named assumptions; bundling restrictions does not make a setup more general. Removing or weakening an established assumption can itself be a substantive contribution.
 
@@ -26,11 +26,13 @@ The files in `scripts/proposals` are previous artifacts, not the research agenda
 
 Treat acceptance-quality research as a completion requirement, not an aspiration. Actual conference acceptance cannot be guaranteed by either agent. The Reviewer must independently support an acceptance recommendation with evidence; the requirement to produce a result never authorizes invented novelty, concealed limitations, or forced approval.
 
-Two research routes are explicitly allowed:
+The following research routes are explicitly allowed:
 - Remove, relax, or replace an established assumption, or add a naturally motivated structural assumption, and establish a substantive new guarantee. Anchor the change in a known theorem and explain which instances become covered or excluded, why that matters, and where its proof stops applying. A stronger assumption must yield a new result relative to existing work under that stronger assumption. A naturally motivated new setup is also allowed when its connection to an established optimization question is explicit.
 - Take an established setup from the literature and obtain a NEW STATE-OF-THE-ART convergence or oracle-complexity guarantee. The setup need not be novel; the result MUST be. Demonstrate a meaningful improvement over the strongest applicable known guarantees under comparable assumptions, oracle access, accuracy criteria, and cost accounting. State the precise parameter regimes of improvement and any tradeoffs; do not claim universal superiority from a restricted-regime improvement.
 
-Both routes require repository deliverables. In particular, choosing a setup from the literature does not excuse leaving it outside the repository: add its faithful Lean specification, the new theorem, and the complete supporting proofs.
+- Prove a substantively new oracle-complexity lower bound. Compare with the strongest applicable lower bounds and state the gap to upper bounds under matching oracle, algorithm, and accuracy models.
+
+All routes require repository deliverables. In particular, choosing a setup from the literature does not excuse leaving it outside the repository: add its faithful Lean specification, the new theorem, and the complete supporting proofs.
 
 1. Scope and deliverables
 
@@ -43,7 +45,7 @@ You may install reasonable Python libraries, system packages, and Lean libraries
 Deliver only:
 - The chosen setup as a Lean specification under `LongTails/Setups`, including when it is an established setup from the literature. If an exactly equivalent specification already exists in the repository, reuse it explicitly rather than adding a duplicate; otherwise, adding the setup is mandatory.
   Keep each setup's definitions, assumptions, and `spec` in exactly one Lean file; do not split a setup across multiple files. Reuse existing shared definitions by importing them, and put supporting proofs in `LongTails/Proofs`.
-- Algorithm definitions.
+- Algorithm definitions for upper bounds, or hard-instance constructions for lower bounds.
 - Complete supporting Lean proofs and lemmas for the new result, following the existing proof-module layout.
 - Exactly one NEW main proved convergence or oracle-complexity theorem under `LongTails/Theorems`, connected to the chosen setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
 - A companion Markdown contribution note beside that theorem, with the same basename: `LongTails/Theorems/<TheoremName>.md` for `<TheoremName>.lean`. Include it with the reviewed final Lean deliverables.
@@ -195,3 +197,5 @@ Finish with:
 - The Reviewer’s verdict and remaining limitations.
 - Verification results and changed file paths.
 - The deliverable worktree paths and recorded base revision, or an explicit explanation of why delivery was blocked.
+
+Lower bounds are public results in `LongTails/Theorems`, using `result : NonConvergence spec budget` and the requirements in `AGENTS.md`. Algorithm-design instructions apply to upper bounds; for lower bounds, describe and prove the hard-instance construction, parameter coverage, and seed independence instead. A larger necessary budget is stronger and cannot be substituted without proof. Apply the same novelty, contribution-note, review, and Comparator requirements to both kinds.

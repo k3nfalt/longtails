@@ -357,13 +357,18 @@ def validate_catalog(catalog):
 def generate_setup(setup, rows, output, model=None, regenerate_all=False):
     output = Path(output).absolute()
     if not regenerate_all and verified_output(output):
-        print(f"Reusing {output}; skipping Codex", flush=True)
-        return output
+        saved = json.loads(output.read_text(encoding="utf-8"))
+        expected = {(row["module"], row["theorem"]) for row in rows}
+        recorded = {(row["module"], row["theorem"]) for row in saved.get("results", [])}
+        if recorded == expected:
+            print(f"Reusing {output}; skipping Codex", flush=True)
+            return output
     commit = current_commit()
     budgets = [
         {
             "module": row["module"],
             "theorem": row["theorem"],
+            "kind": row.get("kind", "upper"),
             "budgets": [
                 {
                     key: budget[key]
@@ -375,7 +380,12 @@ def generate_setup(setup, rows, output, model=None, regenerate_all=False):
         }
         for row in rows
     ]
-    prompt = PROMPT + "\nPROVED RESULTS:\n" + json.dumps(budgets, ensure_ascii=False)
+    prompt = (
+        PROMPT
+        + "\nFor results marked lower, the budget is necessary, not sufficient. Match against lower-bound theorems for the same oracle, algorithm class, and accuracy criterion. A larger necessary budget is stronger. Upper bounds may provide context but cannot be a matching lower-bound reference. For online results, compare the stated online guarantee. These rules override upper-bound comparison instructions elsewhere in this prompt.\n"
+        + "\nPROVED RESULTS:\n"
+        + json.dumps(budgets, ensure_ascii=False)
+    )
     prompt += f"\n--- SOURCE: {setup.name} ---\n{setup.read_text(encoding='utf-8')}"
     prompt += (
         CATALOG_PROMPT

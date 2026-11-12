@@ -1,4 +1,4 @@
-"""Generate setup challenges and compare them with the local convergence theorems."""
+"""Generate setup challenges and compare them with the local upper- and lower-bound theorems."""
 
 import argparse
 import json
@@ -56,6 +56,7 @@ run_cmd do
       ("setup", toJson entry.setupName.toString),
       ("budget", toJson entry.budgetName.toString),
       ("online", toJson entry.online),
+      ("lower", toJson entry.lower),
       ("bound_type", toJson boundType.pretty)]
   (← IO.getStdout).putStrLn (Json.arr rows).compress
 """
@@ -71,7 +72,7 @@ run_cmd do
         raise ValueError(f"Theorem inspection failed:\n{result.stdout}{result.stderr}")
     rows = [row for row in json.loads(result.stdout) if row["module"] in modules]
     if sorted(row["module"] for row in rows) != sorted(modules):
-        raise ValueError("Expected exactly one convergence theorem per selected module")
+        raise ValueError("Expected exactly one public result per selected module")
     return rows
 
 
@@ -86,9 +87,12 @@ def generate(rows, work):
             convergence = "OnlineConvergence"
             bound_type = row["bound_type"]
         else:
-            convergence = "Convergence"
+            convergence = "NonConvergence" if row["lower"] else "Convergence"
             bound_type = f"(let S := {row['setup']}; S.Params → Fin S.numOracles → ℕ)"
-        source.write_text(f"""import {setup_module}
+        template_import = (
+            "import LongTails.TemplateLowerBound\n" if row["lower"] else ""
+        )
+        source.write_text(f"""{template_import}import {setup_module}
 noncomputable def {row["budget"]} : {bound_type} := by sorry
 theorem {row["theorem"]} : OracleTemplate.{convergence} {row["setup"]} {row["budget"]} := by sorry
 """)
@@ -168,10 +172,7 @@ def main():
                     failed.append(name)
         if failed:
             raise ValueError("Comparator failed for: " + ", ".join(sorted(failed)))
-    summary = (
-        f"Checked {len(files)} convergence results and their budgets. "
-        "The solutions are okay!"
-    )
+    summary = f"Checked {len(files)} results and their budgets. The solutions are okay!"
     print(f"\033[32m{summary}\033[0m" if sys.stdout.isatty() else summary)
 
 

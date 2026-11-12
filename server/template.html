@@ -246,6 +246,8 @@
         const filename = theorem.module.split('.').pop() + '.lean';
         const title = make('div', undefined, 'budget-name');
         title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
+        const kind = theorem.kind || (theorem.statement.includes('OracleTemplate.NonConvergence ') ? 'lower' : theorem.statement.includes('OracleTemplate.OnlineConvergence ') ? 'online' : 'upper');
+        title.append(kind === 'lower' ? ' — Lower bound (necessary budget)' : kind === 'online' ? ' — Online guarantee' : ' — Upper bound (sufficient budget)');
         const score = theorem.contribution;
         const rating = make('span', score == null ? 'Not rated' : '★'.repeat(score) + '☆'.repeat(3 - score), 'result-rating');
         rating.setAttribute('aria-label', score == null ? 'Contribution not rated' : `Contribution: ${score} out of 3 stars`);

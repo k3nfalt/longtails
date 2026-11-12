@@ -2,7 +2,7 @@ import LongTails.TemplateLowerBound
 import LongTails.Setups.SmoothAndConvexExpected
 import LongTails.Proofs.SmoothConvexFiniteLowerBound
 
-namespace LongTails.LowerBounds.SmoothAndConvexExpected
+namespace LongTails.Theorems.SmoothConvexExpectedLowerBound
 
 open OracleTemplate LongTails.Proofs.SmoothConvexFiniteLowerBound
 open LongTails.Proofs.SmoothConvexFiniteExpectation
@@ -15,4 +15,4 @@ theorem result : NonConvergence LongTails.Setups.SmoothAndConvexExpected.spec bu
   exact exists_failure q (budget q 0) hL hR hd
     (floor_budget_insufficient q.L q.R q.ε hL hR hε hregime) A
 
-end LongTails.LowerBounds.SmoothAndConvexExpected
+end LongTails.Theorems.SmoothConvexExpectedLowerBound
