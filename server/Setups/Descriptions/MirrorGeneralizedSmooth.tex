@@ -1,0 +1,73 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Smooth Convex Mirror Geometry}
+We minimize a differentiable convex function $f:E\to\mathbb{R}$ on a finite-dimensional real normed space $E$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$. A differentiable mirror function $\psi:E\to\mathbb{R}$ induces a Bregman divergence $B_\psi$ dominating half the squared norm. A given point $x^0\in E$ satisfies $B_\psi(x^\star,x^0)\leq D$ and $f(x^0)-f(x^\star)\leq\Delta$ for a minimizer $x^\star$, where $D,\Delta>0$. The oracle returns exact derivatives and Bregman proximal minimizers. For $\varepsilon>0$, the goal is $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+Write $E^*$ for the continuous dual of $E$. Derivatives $\nabla f(x)$ and $\nabla\psi(x)$ belong to $E^*$, and their norms are the induced operator norms $\|\cdot\|_{\mathrm{op}}$. Define
+\[
+B_\psi(u,z)=\psi(u)-\psi(z)-\nabla\psi(z)[u-z].
+\]
+The algorithm receives $E$, $L_0$, $L_1$, $D$, $\Delta$, and $x^0$; the tolerance $\varepsilon$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is everywhere Fr\'echet differentiable, its derivative is continuous, and
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y),
+\qquad x,y\in E,\quad t\in[0,1].
+\]
+Its $(L_0,L_1)$-smoothness means that, for every $x,y\in E$ and $M\in\mathbb{R}$,
+\[
+\begin{aligned}
+&\|\nabla f(x+\theta(y-x))\|_{\mathrm{op}}\leq M
+\quad\text{for all }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
+\|\nabla f(x)-\nabla f(y)\|_{\mathrm{op}}
+\leq (L_0+L_1M)\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Mirror geometry and proximal access]
+The function $\psi$ is everywhere Fr\'echet differentiable and satisfies
+\[
+B_\psi(y,x)\geq\frac12\|y-x\|^2,
+\qquad x,y\in E.
+\]
+For every $z\in E$ and $v\in E^*$, a selected proximal minimizer exists:
+\[
+\operatorname{prox}_\psi(z,v)\in
+\mathop{\rm arg\,min}_{u\in E}
+\bigl\{v[u]+B_\psi(u,z)\bigr\}.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+B_\psi(x^\star,x^0)&\leq D,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle returns $\nabla f(x)$ at $x$. It also returns $\operatorname{prox}_\psi(z,v)$ on a query $(z,v)\in E\times E^*$. Both types of queries are exact, may be made anywhere in their stated domains, and count toward a single total oracle-call budget.
+
+After the allotted calls, the output $\bar{x}\in E$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where the global minimizer $x^\star$ is fixed independently of the algorithm's randomness.
+\end{document}

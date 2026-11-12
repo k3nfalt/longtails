@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.GaussianVariationalInference",
+  "searched_at": "2026-11-12T08:39:25.666987+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\left(2 + 3 \\cdot d + 8 \\cdot \\log\\left(\\frac{48 \\cdot L}{\\mu}\\right)\\right) \\cdot \\left(\\frac{26 \\cdot L \\cdot R}{\\sqrt{\\mu \\cdot \\varepsilon}} + \\frac{32 \\cdot d \\cdot L}{\\mu \\cdot \\varepsilon}\\right) \\right\\rceil_{+} \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GaussianVariationalInference.spec.Params → ℕ",
+        "value": "fun q =>\n  max 1\n    ⌈(2 + 3 * ↑q.d + 8 * Real.log (48 * q.L / q.μ)) * (26 * q.L * q.R / √(q.μ * q.ε) + 32 * ↑q.d * q.L / (q.μ * q.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\left(2 + 3 \\cdot d + 8 \\cdot \\log\\left(\\frac{48 \\cdot L}{\\mu}\\right)\\right) \\cdot \\left(\\frac{26 \\cdot L \\cdot R}{\\sqrt{\\mu \\cdot \\varepsilon}} + \\frac{32 \\cdot d \\cdot L}{\\mu \\cdot \\varepsilon}\\right) \\right\\rceil_{+} \\right\\}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GaussianVariationalInference.spec.Params → ℕ",
+          "value": "fun q =>\n  max 1\n    ⌈(2 + 3 * ↑q.d + 8 * Real.log (48 * q.L / q.μ)) * (26 * q.L * q.R / √(q.μ * q.ε) + 32 * ↑q.d * q.L / (q.μ * q.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ReparameterizedGaussianVI",
+      "namespace": "LongTails.Setups.GaussianVariationalInference",
+      "setup": "LongTails.Setups.GaussianVariationalInference",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GaussianVariationalInference.spec\n  OracleTemplate.GaussianVariational.ReparameterizedGaussianVI.budget",
+      "theorem": "OracleTemplate.GaussianVariational.ReparameterizedGaussianVI.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ReparameterizedGaussianVI",
+      "theorem": "OracleTemplate.GaussianVariational.ReparameterizedGaussianVI.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(m,C)=E[V(m+Cξ)]−Σᵢlog Cᵢᵢ over lower-triangular C with positive diagonal, with ξ∼N(0,I_d).",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: objective, sample, noiseLaw, IsCholesky, spec.admissible"
+      },
+      {
+        "label": "strongly_convex",
+        "details": "V has L-Lipschitz gradient and μ-strongly monotone gradient, with 0<μ≤L; the Gaussian location–Cholesky objective is μ-strongly convex in the Euclidean/Frobenius product geometry.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: spec.valid, spec.admissible, sqDist"
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines the smooth expected potential with the convex negative-log-diagonal entropy term on the Cholesky domain.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: objective, IsCholesky"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query x∈ℝ^d returns ∇V(x) exactly. Gaussian expectations and gradients of the variational objective are not supplied by the oracle.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: spec.Query, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Full-covariance Gaussian family in ℝ^d, represented by a mean and a lower-triangular scale matrix with strictly positive diagonal.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: Point, Location, Scale, IsCholesky"
+      },
+      {
+        "label": "other",
+        "details": "Public parameters are d,L,μ,R,ε,m₀,C₀, with R≥0 and ε>0. The hidden potential admits a Cholesky minimizer satisfying ‖m₀−m*‖²+‖C₀−C*‖_F²≤R²; no initial objective-gap bound is required.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return measurable Gaussian parameters with positive-diagonal lower-triangular scale for every outcome; the objective gap must be integrable and at most ε in expectation.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "E[F(m_out,C_out)−F(m*,C*)]≤ε under the execution probability law; no pointwise objective-gap guarantee is required.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: spec.successful; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Full-covariance Gaussian variational inference for a smooth strongly log-concave target, using pointwise potential gradients and expected variational objective accuracy, is an established formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GaussianVariational.ReparameterizedGaussianVI.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ReparameterizedGaussianVI",
+          "theorem": "OracleTemplate.GaussianVariational.ReparameterizedGaussianVI.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

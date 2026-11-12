@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean}{DiagonalSmoothStronglyConvexBlackBox}.}\label{tab:DiagonalSmoothStronglyConvexBlackBox}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $d\ge1$, differentiable $f$ satisfies $\frac\mu2\|y-x\|_w^2\le f(y)-f(x)-\langle\nabla f(x),y-x\rangle\le\frac12\|y-x\|_w^2$, with hidden $w_i>0$, $0<\mu\le1$. A minimizer $x_\star$ exists with $f(x_0)-f(x_\star)\le\Delta$, $\Delta\ge0$. Exact joint value--gradient calls target $f(\widehat x)-f(x_\star)\le\varepsilon$, $\varepsilon>0$, deterministically. Only $d,x_0$ are public; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BlackBoxDiagonalAcceleration.lean}{Black\allowbreak Box\allowbreak Diagonal\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BlackBoxDiagonalAcceleration.md}{(review)} & $\mathcal{O}\!\left(d+\sqrt\kappa\log(1+\Delta\kappa^2/\varepsilon)+d\sqrt\kappa h^4\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Multidimensional backtracking, derived bound \citep{diagKunstner2023v1}, Prop.~3.2, Thm.~5.3 & $\mathcal{O}(1+\sqrt d\,\kappa\ell+d\log_+(L/\alpha_0))$; twice differentiable; initial set contains an optimal preconditioner. & \textbf{(1)}: leading accuracy term saves $\sqrt{d\kappa}$ when $\ell\gtrsim\sqrt{d/\kappa}\,h^4$. Needs neither initial set nor twice differentiability. & \textbf{(1)}: warm-up $d\sqrt\kappa h^4$ replaces $d\log_+(L/\alpha_0)$; extra $\kappa^2$ inside accuracy logarithm. \\
+\midrule
+\textbf{(3)} OSGM-R \citep{diagGao2025v2}, Thm.~6.2 & $\mathcal{O}(1+\kappa L^2\|P_1-\widehat P\|_F^2+\kappa\ell)$ on diagonal candidate matrices; known $L,f^\star$. & \textbf{(1)}: leading accuracy term saves $\sqrt\kappa$ when $\ell\gtrsim dh^4/\sqrt\kappa$; no $L,f^\star$ knowledge or uncontrolled regret initialization. & \textbf{(1)}: dimension-dependent warm-up; extra $\kappa^2$ inside logarithm. Covers diagonal metrics, whereas \textbf{(3)} also permits full matrices. \\
+\midrule
+\textbf{(4)} Centre of gravity, derived bound \citep{diagBubeckVerified}, Sec.~2.1 & $\mathcal{O}(d+d\log(1+\Delta\kappa^4/\varepsilon))$ including secant probes; known $\mu$; exact centroid computation. & \textbf{(1)}: no $\mu$ knowledge. For $d=\ell=\kappa\to\infty$, total $\mathcal{O}(\kappa^{3/2}h^4)$ versus $\mathcal{O}(\kappa^2)$; gain requires $d\gg\sqrt\kappa$, $\ell\gg\sqrt\kappa h^4$. & \textbf{(1)}: worse oracle cost when $d\lesssim\sqrt\kappa$ or warm-up dominates. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\|z\|_w^2=\sum_iw_i z_i^2$, $\kappa=1/\mu$, $h=1+\log\kappa$, $\ell=1+\log_+(\Delta/\varepsilon)$; $\log_+t=\log\max\{1,t\}$. $L$ is Euclidean smoothness, $\alpha_0$ the initial search scale, $P_1$ the initial scaling, and $\widehat P$ the comparator scaling. Secant metric $J$ satisfies $J\preceq\operatorname{diag}(w)\preceq J/\mu$. All costs count joint value--gradient calls. Updates in \textbf{(1)} use no $w,\mu,\Delta,\varepsilon,f^\star$; its budget depends on them and is not a stopping certificate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

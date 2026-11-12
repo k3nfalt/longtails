@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Gaussian Variational Inference}
+We minimize the Gaussian variational objective $F(m,C)=\mathbb{E}[V(m+C\xi)]-\sum_{i=1}^d\log C_{ii}$ over $m\in\mathbb{R}^d$ and lower triangular $C\in\mathbb{R}^{d\times d}$ with positive diagonal, where $\xi\sim\mathcal{N}(0,I_d)$. The differentiable potential $V:\mathbb{R}^d\to\mathbb{R}$ has an $L$-Lipschitz, $\mu$-strongly monotone gradient, with $0<\mu\leq L$. A given feasible pair $(m^0,C^0)$ is within Euclidean--Frobenius distance $R\geq0$ of a minimizer $(m^\star,C^\star)$. The oracle returns $\nabla V(x)$ at $x$. For $\varepsilon>0$, the goal is a measurable feasible output $(\bar m,\bar C)$ with integrable gap satisfying $\mathbb{E}[F(\bar m,\bar C)-F(m^\star,C^\star)]\leq\varepsilon$.
+
+Let $d\geq0$ be an integer, equip $\mathbb{R}^d$ with its Euclidean inner product and norm, and write $\|\cdot\|_{\mathrm F}$ for the Frobenius norm. Define
+\[
+\mathcal{C}_d=\{C\in\mathbb{R}^{d\times d}: C_{ij}=0\text{ for }i<j,\ C_{ii}>0\text{ for every }i\}.
+\]
+The coordinates of $\xi$ are independent standard normal random variables. With the objective $F$ defined above, the problem is
+\[
+\min_{m\in\mathbb{R}^d,\ C\in\mathcal{C}_d} F(m,C).
+\]
+The algorithm receives $d,L,\mu,R,\varepsilon,m^0,C^0$, where $0<\mu\leq L$, $R\geq0$, $\varepsilon>0$, and $C^0\in\mathcal{C}_d$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and strong monotonicity]
+The potential $V$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla V(x)-\nabla V(y)\|&\leq L\|x-y\|,\\
+\langle\nabla V(x)-\nabla V(y),x-y\rangle&\geq\mu\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Minimizer and initial distance]
+There exists $(m^\star,C^\star)\in\mathbb{R}^d\times\mathcal{C}_d$ such that
+\[
+\begin{aligned}
+F(m^\star,C^\star)&\leq F(m,C)
+&&\text{for all }m\in\mathbb{R}^d,\ C\in\mathcal{C}_d,\\
+\|m^0-m^\star\|^2+\|C^0-C^\star\|_{\mathrm F}^2&\leq R^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any $x\in\mathbb{R}^d$. The oracle returns $\nabla V(x)$ at $x$. The Gaussian expectation defining $F$ is over $\xi$; output expectations are under $P$, the law of the algorithm's randomness. After the allotted oracle calls, the output $(\bar m,\bar C)$ must be measurable and satisfy $\bar C\in\mathcal{C}_d$ for every realization. Its objective gap must be integrable under $P$, and the required accuracy is
+\[
+\mathbb{E}_{P}\bigl[F(\bar m,\bar C)-F(m^\star,C^\star)\bigr]
+\leq\varepsilon.
+\]
+\end{document}

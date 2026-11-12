@@ -30,6 +30,15 @@ $\left.\left.{}+d\{1+\log_+(L_3/L_{\rm init})\}\right]\right)$ total, counting t
 \newline Valid for $\varepsilon^{2/3}\le\delta^{1/2}L_3^{1/6}$ and $8L_3^{1/3}\varepsilon^{2/3}\le L_1$.
 & \textbf{(1)}: Scope extends beyond global $L_1$, including quartic least squares. On the overlap, replaces $\sqrt{L_1}$ by $(L_3\Delta)^{1/4}$; total gain for $L_1\gg\beta$ and $m\ll\Delta^{1/4}L_1^{1/2}L_3^{-1/12}\varepsilon^{-2/3}$, up to logarithms.
 & \textbf{(1)} needs Hessians and $H_0$; larger gradient prefactor when $L_1<\beta$ within \textbf{(4)}'s admissible accuracy range. \\
+\midrule
+\textbf{(5)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LogFreeSecondOrderThirdSmooth.lean}{Log\allowbreak Free\allowbreak Second\allowbreak Order\allowbreak Third\allowbreak Smooth} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LogFreeSecondOrderThirdSmooth.md}{(review)}
+& $\mathcal{O}\!\left((1+m)\left[1+S+\log(2+H_0\Delta/\varepsilon^2)\right]\right)$ total; equal-order budgets for value/gradient and Hessian calls.
+& & \\
+\midrule
+\textbf{(6)} \citep{tdsHeZhang2026v1}, Thm.~4.7; globally $L_H$-Lipschitz Hessian
+& $\mathcal{O}\!\left((1+m)(1+S)\left[1+\log\!\left(1+\frac{L_H}{(L_3^2\varepsilon)^{1/3}}\right)\right]\right)$ total; $\varepsilon_g=\varepsilon$, $\varepsilon_H=2(L_3\varepsilon^2)^{1/3}$.
+& \textbf{(5)}: Removes multiplicative logarithm when $L_H\gg(L_3^2\varepsilon)^{1/3}$ and $S\gtrsim\log(2+H_0\Delta/\varepsilon^2)$. Scope: no global Hessian-Lipschitz assumption. Saving concerns the shared gradient target.
+& \textbf{(5)} loses second-order stationarity; adds $H_0$ dependence, potentially worse when its additive logarithm dominates \textbf{(6)}'s cost. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

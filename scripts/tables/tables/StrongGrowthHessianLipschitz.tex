@@ -1,0 +1,20 @@
+\begin{table}[tp]
+\centering
+\caption{Strong-growth stochastic stationarity under Lipschitz Hessians: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StrongGrowthHessianLipschitz.lean}{StrongGrowthHessianLipschitz}.}\label{tab:StrongGrowthHessianLipschitz}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f\in C^2$ has $L$-Lipschitz gradient, $\rho$-Lipschitz Hessian, and $f(x_0)-f(x)\le\Delta$ for every $x$. The jointly measurable IID oracle is unbiased with integrable gradients and squared errors satisfying $\mathbb E\|g(x)-\nabla f(x)\|^2\le(\kappa-1)\|\nabla f(x)\|^2$. Here $L,\rho,\varepsilon>0$, $\kappa\ge1$, $\Delta\ge0$, and $4^8\rho\varepsilon\le L^2$. Target: $\int\|\nabla f(\mathrm{out}(\xi))\|\,dP(\xi)\le\varepsilon$, for the constructed restarted AGD's validated candidate; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StrongGrowthRestartedAgd.lean}{Strong\allowbreak Growth\allowbreak Restarted\allowbreak Agd} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StrongGrowthRestartedAgd.md}{(review)} & $\mathcal{O}\!\left(\kappa\ell\left(1+\frac{\Delta\sqrt\rho}{\varepsilon^{3/2}}\right)\left[\left(\frac{L^2}{\rho\varepsilon}\right)^{1/4}+\ell\right]\right)$ stochastic gradient calls, including batching and validation. & & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=\log(2+L\Delta/\varepsilon^2+L^2/(\rho\varepsilon))$; $P$ is the IID sample-sequence law; $\mathrm{out}$ is the validated candidate; $\nabla^2 f$ denotes the Hessian.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

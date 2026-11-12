@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.StochasticRegularEqualities",
+  "searched_at": "2026-11-12T07:15:20.240092+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10^{47} \\cdot \\frac{\\left(\\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{38} + \\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{48} \\cdot \\sigma^{2} + \\frac{\\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{60} \\cdot \\sigma}{\\varepsilon}\\right) \\cdot \\left(1 + \\log\\left(\\frac{2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise}{\\varepsilon}\\right)\\right) + \\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{14} \\cdot \\sigma^{2} \\cdot \\left(1 + \\log\\left(\\frac{2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise}{\\varepsilon}\\right)\\right)^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticRegularEqualities.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈10 ^ 47 *\n      ((((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 38 +\n                (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 48 * p.σ ^ 2 +\n              (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 60 * p.σ / p.ε) *\n            (1 + Real.log ((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) / p.ε)) +\n          (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 14 * p.σ ^ 2 *\n            (1 + Real.log ((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) / p.ε)) ^ 2) /\n        p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10^{47} \\cdot \\frac{\\left(\\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{38} + \\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{48} \\cdot \\sigma^{2} + \\frac{\\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{60} \\cdot \\sigma}{\\varepsilon}\\right) \\cdot \\left(1 + \\log\\left(\\frac{2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise}{\\varepsilon}\\right)\\right) + \\left(2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise\\right)^{14} \\cdot \\sigma^{2} \\cdot \\left(1 + \\log\\left(\\frac{2 + Lf + Lc + LJ + \\nu + \\frac{1}{\\nu} + \\Delta + C0 + Lnoise}{\\varepsilon}\\right)\\right)^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticRegularEqualities.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈10 ^ 47 *\n      ((((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 38 +\n                (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 48 * p.σ ^ 2 +\n              (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 60 * p.σ / p.ε) *\n            (1 + Real.log ((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) / p.ε)) +\n          (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 14 * p.σ ^ 2 *\n            (1 + Real.log ((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) / p.ε)) ^ 2) /\n        p.ε ^ 2)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StochasticRegularEqualityKkt",
+      "namespace": "LongTails.Setups.StochasticRegularEqualities",
+      "setup": "LongTails.Setups.StochasticRegularEqualities",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticRegularEqualities.spec\n  LongTails.Theorems.StochasticRegularEqualityKkt.budget",
+      "theorem": "LongTails.Theorems.StochasticRegularEqualityKkt.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticRegularEqualityKkt",
+      "theorem": "LongTails.Theorems.StochasticRegularEqualityKkt.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Smooth, lower-bounded objective f on R^d with nonlinear equality constraints c(x)=0; neither objective nor constraints must be convex. Initial objective gap is at most Δ and initial constraint norm at most C0.",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call returns jointly sampled unbiased estimates of ∇f(x), c(x), and Dc(x)*. Consecutive calls numbered 2k and 2k+1 share the same sample; different pairs use independent identically distributed samples. No objective values are supplied.",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: Reply and spec.admissible, oracle law ξ(n / 2)"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform joint second-moment bound E[‖g−∇f‖²+‖ĉ−c‖²+‖Ĵ−J‖²]≤σ²; matrix norms here are Euclidean (Frobenius) norms.",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: spec.admissible; LongTails/Setups/FiniteVarianceSpectralSmooth.lean: MatrixPolar.Space"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean domain R^d and constraint space R^m, with 1≤m≤d.",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: Point and spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "Global uniform regularity ‖Dc(x)*v‖≥ν‖v‖ with ν>0; ‖J(x)‖F≤Lc; Lipschitz gradient and Jacobian constants Lf and LJ. Joint sample maps satisfy mean-square Lipschitz continuity with constant Lnoise. All numerical bounds, dimensions, x0, and ε are public; sample spaces and distributions are hidden. The oracle permits exactly two consecutive evaluations per independent sample.",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: Public, Params, spec.publicInput, and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "E[‖∇f(x)+Dc(x)*λ‖²+‖c(x)‖²]≤ε², for 0<ε≤1; expectation includes algorithm and oracle randomness under a fixed call budget.",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: spec.valid and spec.successful; LongTails/Template.lean: Convergence and execute"
+      },
+      {
+        "label": "other",
+        "details": "Output is a measurable primal–multiplier pair (x,λ), with integrable squared KKT residual ‖∇f(x)+Dc(x)*λ‖²+‖c(x)‖².",
+        "evidence": "LongTails/Setups/StochasticRegularEqualities.lean: spec.Output and spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Equality-constrained stochastic optimization is established, but this setup specifies a restricted paired-sample oracle for jointly noisy objective gradients, constraint values, and Jacobians, together with global uniform Jacobian regularity and a squared primal–dual KKT guarantee."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StochasticRegularEqualityKkt.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticRegularEqualityKkt",
+          "theorem": "LongTails.Theorems.StochasticRegularEqualityKkt.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

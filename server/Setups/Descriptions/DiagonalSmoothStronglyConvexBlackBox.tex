@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Hidden Diagonal Curvature Minimization}
+We consider minimizing a differentiable function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq1$, with a given starting point $x^0\in\mathbb{R}^d$. For hidden weights $w_1,\ldots,w_d>0$, its first-order remainder lies between $\mu\|y-x\|_w^2/2$ and $\|y-x\|_w^2/2$, where $\|v\|_w^2=\sum_{i=1}^d w_i v_i^2$ and $0<\mu\leq1$. A global minimizer $x^\star$ satisfies $f(x^0)-f(x^\star)\leq\Delta$, with $\Delta\geq0$. The oracle returns $(f(x),\nabla f(x))$ at $x$. For $\varepsilon>0$, the goal is $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+The inner product and gradient are Euclidean. The algorithm receives only $d$ and $x^0$; the weights $w_1,\ldots,w_d$, relative curvature parameter $\mu$, initial gap bound $\Delta$, and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Diagonal curvature bounds]
+The function $f$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+f(y)&\leq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{1}{2}\|y-x\|_w^2,\\
+f(y)&\geq f(x)+\langle\nabla f(x),y-x\rangle
+       +\frac{\mu}{2}\|y-x\|_w^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$, with each call returning the exact function value and Euclidean gradient together. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

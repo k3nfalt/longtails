@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Parameter-Free Heavy-Tailed Stationarity}
+We consider a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$, with hidden gradient Lipschitz constant $L>0$. A given point $x^0\in E$ satisfies $f(x^0)-\ell\leq\Delta$ for a global lower bound $\ell\in\mathbb{R}$ and $\Delta>0$. The oracle returns an unbiased stochastic gradient $g(x,\xi)$ at $x$, using independent samples $\xi$ with common law $\nu$, with centered $p$th moment at most $\sigma^p$, where $1<p\leq2$ and $\sigma\geq0$. For $\varepsilon>0$, the goal is $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$ for an output $\bar{x}\in E$, averaging over sampling and algorithm randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $E$ carries its Borel sigma-algebra. The algorithm receives only $E$ and $x^0$; the parameters $L$, $\Delta$, $\sigma$, $p$, and $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+There exists $\ell\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+\ell&\leq f(x) &&\text{for every }x\in E,\\
+f(x^0)-\ell&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Heavy-tailed stochastic gradients]
+Let $\Omega$ be a measurable sample space and $\nu$ a probability measure on $\Omega$. The map $g:E\times\Omega\to E$ is jointly measurable. For every $x\in E$, $g(x,\cdot)$ is Bochner integrable, the random variable $\|g(x,\xi)-\nabla f(x)\|^p$ is integrable for $\xi\sim\nu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}
+ [\|g(x,\xi)-\nabla f(x)\|^p]&\leq\sigma^p.
+\end{aligned}
+\]
+\end{assumption}
+
+At call $k$, a query $x\in E$ receives $g(x,\xi_k)$. The sample variables $(\xi_k)_{k\geq0}$ are measurable and mutually independent with common law $\nu$ under their joint probability law. Any algorithm randomness is independent of this sample sequence. Queries may be made at any point of $E$.
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, $\|\nabla f(\bar{x})\|$ must be integrable, and
+\[
+\mathbb{E}_{P}[\|\nabla f(\bar{x})\|]\leq\varepsilon,
+\]
+where $P$ is the joint law of the algorithm randomness and the sample sequence.
+\end{document}

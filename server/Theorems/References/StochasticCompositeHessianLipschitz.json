@@ -1,0 +1,118 @@
+{
+  "setup": "LongTails.Setups.StochasticCompositeHessianLipschitz",
+  "searched_at": "2026-11-12T07:18:36.550082+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 10^{6} \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\Delta \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\varepsilon^{2}} + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + 1\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticCompositeHessianLipschitz.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈10 ^ 6 * (q.L * q.Δ / q.ε ^ 2 + (1 + q.σ ^ 2 / q.ε ^ 2) * q.Δ * √(q.ρ * q.ε) / q.ε ^ 2 + q.σ ^ 2 / q.ε ^ 2 + 1)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 10^{6} \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\Delta \\cdot \\sqrt{\\rho \\cdot \\varepsilon}}{\\varepsilon^{2}} + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + 1\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticCompositeHessianLipschitz.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈10 ^ 6 * (q.L * q.Δ / q.ε ^ 2 + (1 + q.σ ^ 2 / q.ε ^ 2) * q.Δ * √(q.ρ * q.ε) / q.ε ^ 2 + q.σ ^ 2 / q.ε ^ 2 + 1)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.CompositeImplicitTransport",
+      "namespace": "LongTails.Setups.StochasticCompositeHessianLipschitz",
+      "setup": "LongTails.Setups.StochasticCompositeHessianLipschitz",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticCompositeHessianLipschitz.spec\n  OracleTemplate.CompositeTransport.budget",
+      "theorem": "OracleTemplate.CompositeTransport.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CompositeImplicitTransport",
+      "theorem": "OracleTemplate.CompositeTransport.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Minimize F=f+ψ over convex Q; f may be nonconvex. F(x0)−F(x)≤Δ for every x∈Q.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: spec.admissible, objective"
+      },
+      {
+        "label": "composite",
+        "details": "Smooth f plus ψ convex on Q, with an exact constrained proximal minimizer available.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: proxObjective, spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Fresh IID samples give unbiased g(x,ω) with E‖g(x,ω)−∇f(x)‖²≤σ². No samplewise smoothness or sample reuse is supplied.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      },
+      {
+        "label": "proximal",
+        "details": "Exact minimizer over Q of ‖u−z‖²/(2a)+⟨v,u−z⟩+ψ(u), for every a>0. Gradient and proximal queries consume the same fixed oracle budget.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: Query, proxObjective, spec.admissible; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform finite second-moment noise bound σ²; σ≥0. No light-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: spec.valid, spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "∇f is L-Lipschitz and its derivative is ρ-Lipschitz in operator norm, with L>0 and ρ≥0. L,ρ,σ,Δ,ε,x0 are public; f,ψ,Q and their oracle realizations are hidden.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: Params, Instance, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The gradient-mapping norm is integrable and its expectation over algorithm and oracle randomness is at most ε.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The measurable output belongs to Q almost surely.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: spec.successful"
+      },
+      {
+        "label": "other",
+        "details": "E‖G_L(X)‖≤ε, where G_L(x)=L(x−prox(1/L,x,∇f(x))) and ε>0; the norm is unsquared.",
+        "evidence": "LongTails/Setups/StochasticCompositeHessianLipschitz.lean: gradientMapping, spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Standard stochastic nonconvex composite optimization with exact proximal access, IID bounded-variance gradients, Lipschitz Hessians, and expected gradient-mapping stationarity."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CompositeTransport.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CompositeImplicitTransport",
+          "theorem": "OracleTemplate.CompositeTransport.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

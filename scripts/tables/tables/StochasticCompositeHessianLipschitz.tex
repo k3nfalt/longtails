@@ -1,0 +1,24 @@
+\begin{table}[tp]
+\centering
+\caption{Comparison for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticCompositeHessianLipschitz.lean}{StochasticCompositeHessianLipschitz}.}\label{tab:StochasticCompositeHessianLipschitz}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, minimize $F=f+\psi$ on convex $Q$, with $x_0\in Q$, $F(x_0)-\inf_Q F\le\Delta$, convex $\psi$ on $Q$, and measurable exact proximal evaluations. Globally, $\nabla f$ is $L$-Lipschitz and $\nabla^2f$ is $\rho$-Lipschitz. The jointly measurable IID oracle is unbiased with integrable gradients and centered second moment at most $\sigma^2$. Here $L,\varepsilon>0$ and $\rho,\sigma,\Delta\ge0$. Target: a measurable feasible output with $\int\|G_L(x_\tau(\omega))\|\,dP(\omega)\le\varepsilon$; $P$ includes sampling and output randomization.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CompositeImplicitTransport.lean}{Composite\allowbreak Implicit\allowbreak Transport} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CompositeImplicitTransport.md}{(review)} & $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{\sqrt\rho\Delta}{\varepsilon^{3/2}}+\frac{\sigma^2\sqrt\rho\Delta}{\varepsilon^{7/2}}+\frac{\sigma^2}{\varepsilon^2}\right)$ gradient plus prox calls, including initialization. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Proximal momentum SGD \citep{schlGao2024v3}, Theorem 4, initialization in Section 5.2 & $\mathcal{O}\!\left(1+\frac{L\Delta\sigma^2}{\varepsilon^4}+\frac{L\Delta}{\varepsilon^2}+\frac{\sigma^2}{L\Delta}\right)$ gradient plus prox calls; $\Delta>0$, including initial batch. & \textbf{(1)}: noise term smaller by $L/\sqrt{\rho\varepsilon}$ when $\rho\varepsilon\ll L^2$; total gain when noise dominates, $\sigma\gtrsim\varepsilon$, and initialization does not dominate. & \textbf{(1)} needs global Hessian regularity and known $\rho$; noise term worsens if $\rho\varepsilon>L^2$. Loses squared subgradient stationarity. \\
+\midrule
+\textbf{(3)} NIGT \citep{schlCutkosky2020}, Theorem 3 & $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{\sqrt\rho\Delta\sigma^2}{\varepsilon^{7/2}}+\frac{\sigma^{13/3}}{\Delta^{4/3}\rho^{2/3}\varepsilon^{7/3}}\right)$ gradient calls; $\psi=0$, $Q=E$, $\Delta,\rho,\sigma>0$. & \textbf{(1)}: Scope extends to convex composite penalties and constrained, possibly unbounded $Q$. Matches leading deterministic and noise terms on the overlap. & \textbf{(1)}: remaining terms incomparable. On $\psi=0$, $Q=E$, the prox is a closed-form update. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\operatorname{prox}_a(x,v)=\arg\min_{u\in Q}\{\|u-x\|^2/(2a)+\langle v,u-x\rangle+\psi(u)\}$; $G_L(x)=L(x-\operatorname{prox}_{1/L}(x,\nabla f(x)))$; $\Delta$ is the initial objective-gap bound, $\sigma^2$ the variance bound. Costs count every stochastic gradient and exact prox call. \textbf{(1)} uses known $L,\rho,\sigma,\Delta,\varepsilon$ and a uniformly random iterate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
