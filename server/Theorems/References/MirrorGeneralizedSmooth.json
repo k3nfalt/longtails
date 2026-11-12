@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.MirrorGeneralizedSmooth",
+  "searched_at": "2026-11-12T07:19:23.476634+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "3 \\cdot \\left\\lceil 24576 \\cdot \\left(1 + \\sqrt{\\frac{2 \\cdot L0 \\cdot D}{\\varepsilon}} + \\left(1 + 2 \\cdot L1 \\cdot \\sqrt{D}\\right) \\cdot \\log\\left(2 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.MirrorGeneralizedSmooth.spec.Params → ℕ",
+        "value": "fun p => 3 * ⌈24576 * (1 + √(2 * p.L0 * p.D / p.ε) + (1 + 2 * p.L1 * √p.D) * Real.log (2 + 2 * p.Δ / p.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "3 \\cdot \\left\\lceil 24576 \\cdot \\left(1 + \\sqrt{\\frac{2 \\cdot L0 \\cdot D}{\\varepsilon}} + \\left(1 + 2 \\cdot L1 \\cdot \\sqrt{D}\\right) \\cdot \\log\\left(2 + \\frac{2 \\cdot \\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.MirrorGeneralizedSmooth.spec.Params → ℕ",
+          "value": "fun p => 3 * ⌈24576 * (1 + √(2 * p.L0 * p.D / p.ε) + (1 + 2 * p.L1 * √p.D) * Real.log (2 + 2 * p.Δ / p.ε))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration",
+      "namespace": "LongTails.Setups.MirrorGeneralizedSmooth",
+      "setup": "LongTails.Setups.MirrorGeneralizedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MirrorGeneralizedSmooth.spec\n  LongTails.Theorems.DynamicMirrorGeneralizedAcceleration.budget",
+      "theorem": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration",
+      "theorem": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration.result",
+      "references": "- Alexander Tyurin. [Near-Optimal Convergence of Accelerated Gradient Methods under Generalized and $(L_0,L_1)$–Smoothness](https://arxiv.org/html/2508.06884v2). 2025 preprint; 2026 publication (v2 used). Complexity: $O(1+\\sqrt{L_0R^2/\\varepsilon}+L_1\\bar R\\log_+\\min\\{L_1^2\\bar R^2\\Gamma_0/L_0,\\Gamma_0R^2/\\varepsilon\\}+\\log_+(\\Gamma_0/L_0))$ exact gradient calls for AGD with increasing step sizes and $f(y)-f^*\\le\\varepsilon$; $R=\\|x_0-x^*\\|_2$, $\\bar R\\ge R$, $\\Gamma_0\\ge2\\Delta/R^2$, and $\\log_+t=\\max\\{0,\\log t\\}$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on E, with an attained minimum; no strong convexity of f is assumed.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Queries return the exact derivative in the dual space, for every history and seed.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: Query.gradient and spec.admissible"
+      },
+      {
+        "label": "proximal",
+        "details": "Exact minimizer of v(u)+Bψ(u,z) over E. Gradient and prox queries share the single counted oracle budget; function values are unavailable.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: Query.prox, proxObjective, spec.admissible; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Continuous derivative g satisfies ‖g(x)−g(y)‖≤(L0+L1 M)‖x−y‖ whenever its norm is bounded by M throughout the segment. Public parameters satisfy L0>0 and L1≥0.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: SegmentSmooth, Public, spec.valid, spec.admissible"
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Arbitrary norm and differentiable mirror function with Bψ(y,x)≥‖y−x‖²/2. A minimizer satisfies Bψ(x*,x0)≤D and f(x0)−f(x*)≤Δ, with public D,Δ>0; the mirror function is hidden behind the prox oracle.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: Public, Instance, bregman, spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real normed vector space.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: Public.finiteE"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(x*)≤ε for a minimizer x*, with ε>0. ε is excluded from publicInput, so the algorithm is independent of the requested tolerance.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: Params, spec.publicInput, spec.successful; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap bound holds almost surely under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean: spec.successful; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Gradient-dependent segment smoothness combined with general Bregman geometry and a joint exact gradient/prox budget is a meaningful variant of standard smooth convex optimization."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration",
+          "theorem": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

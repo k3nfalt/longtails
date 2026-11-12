@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Gaussian variational inference: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GaussianVariationalInference.lean}{GaussianVariationalInference}.}\label{tab:GaussianVariationalInference}
+\parbox{\linewidth}{\footnotesize Differentiable $V:\mathbb R^d\to\mathbb R$ has $L$-Lipschitz gradient and $\mu$-strongly monotone gradient, $0<\mu\le L$. A Cholesky minimizer $(m_*,C_*)$ exists; $C_0$ is lower triangular with positive diagonal and $\|m_0-m_*\|^2+\|C_0-C_*\|_F^2\le R^2$. Exact pointwise $\nabla V$ access; target $\mathbb E[F(\widehat m,\widehat C)-F_*]\le\varepsilon$, $\varepsilon>0$. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ReparameterizedGaussianVI.lean}{Reparameterized\allowbreak Gaussian\allowbreak VI} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ReparameterizedGaussianVI.md}{(review)} & $\mathcal{O}\!\left(1+(1+d+\log\kappa)\left(\frac{LR}{\sqrt{\mu\varepsilon}}+\frac{d\kappa}{\varepsilon}\right)\right)$ gradient calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Proximal SGD \citep{gviKim2023v4}, Thm.~7 & $\mathcal{O}\!\left(1+d\left[\kappa^2+\frac{L^2(\|\bar z-m_*\|^2+\operatorname{tr}\Sigma_*)}{\mu\varepsilon}\right]\ell\right)$ gradient calls; last-iterate squared distance $\le2\varepsilon/\mu$. & \textbf{(1)}: Worst-case statistical term $d^2\kappa^2/\varepsilon$ becomes $(d+\log\kappa)d\kappa/\varepsilon$; gain when $\operatorname{tr}\Sigma_*\asymp d/\mu$ and startup does not dominate. KL implies distance. & \textbf{(1)}: Weighted average replaces last iterate. Polynomial startup can lose when $\sqrt{\mu R^2/\varepsilon}\gg\kappa\ell+d/\varepsilon$; near $\operatorname{tr}\Sigma_*\asymp d/L$, no statistical gain is established. \\
+\midrule
+\textbf{(3)} Price estimator \citep{gviKim2026v2}, Thm.~3.3 & $\mathcal{O}\!\left(1+\frac{d\kappa}{\varepsilon}+\frac{\sqrt d\kappa^{3/2}}{\sqrt\varepsilon}(1+\log_+(\kappa\mu R^2))+\kappa^2\ell\right)$ gradient--Hessian evaluations; $\mu\mathbb E W_2^2\le\varepsilon$. & \textbf{(1)}: Gradient-only access replaces $C^\top\nabla^2V$, requiring a Hessian or $d$ Hessian-vector products per step; expected KL instead of Wasserstein distance. & \textbf{(1)}: Leading iteration cost is about $d$ times larger when statistical terms dominate and $\log\kappa\lesssim d$. Different oracles and accuracy criteria preclude total-cost dominance. \\
+\midrule
+\textbf{(4)} \citep{gviPark2026v1}, Thm.~4.1 & $\mathcal{O}\!\left(\left(d\sqrt\kappa+\frac{\lambda_H^2d^3}{\varepsilon}\right)(1+\log(\Delta_0/\varepsilon))\right)$ gradient calls, including calibration and batches. & \textbf{(1)}: Scope: no Lipschitz Hessian required. On overlap, smaller statistical term when $\lambda_H^2d\gg\kappa(1+\log\kappa/d)$, subject to initialization and logarithms. & \textbf{(1)}: Loses accelerated cost on nearly constant Hessians, especially Gaussian targets. \textbf{(4)} requires Lipschitz Hessian, $\|C_0\|_F^2\le d/\mu$, and $\varepsilon\le\Delta_0$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $F(m,C)=\mathbb E_{\xi\sim N(0,I_d)}V(m+C\xi)-\sum_i\log C_{ii}$; $F_*=F(m_*,C_*)$; $\kappa=L/\mu$; $\Sigma_*=C_*C_*^\top$; $\bar z=\arg\min V$; $\ell=1+\log_+(\mu R^2/\varepsilon)$; $\log_+t=\max\{0,\log t\}$ (zero at $t=0$); $W_2$ is Wasserstein distance; $\lambda_H=L_H/\mu^{3/2}$ for Hessian Lipschitz constant $L_H$; $\Delta_0=F(m_0,C_0)-F_*+\mu(\|m_0-m_*\|^2+\|C_0-C_*\|_F^2)/2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

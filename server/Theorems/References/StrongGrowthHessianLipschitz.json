@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.StrongGrowthHessianLipschitz",
+  "searched_at": "2026-11-12T07:16:26.453398+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\log\\left(1 + \\frac{8 \\cdot \\sqrt{2 \\cdot L \\cdot \\Delta}}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{268435456 \\cdot \\Delta \\cdot \\sqrt{\\rho}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{\\sqrt{L}}{\\sqrt{\\sqrt{\\rho \\cdot \\varepsilon}}} \\right\\rceil_{+} + 1 + \\left(8 + \\left\\lceil 2 \\cdot \\log\\left(1 + \\frac{8 \\cdot \\left(\\log\\left(1 + \\frac{8 \\cdot \\sqrt{2 \\cdot L \\cdot \\Delta}}{\\varepsilon}\\right) + 2\\right) \\cdot \\left(\\frac{268435456 \\cdot \\Delta \\cdot \\sqrt{\\rho}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} + 2\\right) \\cdot \\left(\\sqrt{8 \\cdot L \\cdot \\Delta + L \\cdot \\varepsilon \\cdot \\sqrt{\\frac{\\varepsilon}{\\rho}} + \\varepsilon^{2}} + L \\cdot \\sqrt{\\frac{\\varepsilon}{\\rho}}\\right)}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right) \\cdot \\left\\lceil 800 \\cdot \\kappa \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StrongGrowthHessianLipschitz.spec.Params → ℕ",
+        "value": "fun q =>\n  (⌈Real.log (1 + 8 * √(2 * q.L * q.Δ) / q.ε)⌉₊ + 1) * (⌈268435456 * q.Δ * √q.ρ / (q.ε * √q.ε)⌉₊ + 1) *\n      (⌈√q.L / √√(q.ρ * q.ε)⌉₊ + 1 +\n        (8 +\n          ⌈2 *\n              Real.log\n                (1 +\n                  8 * (Real.log (1 + 8 * √(2 * q.L * q.Δ) / q.ε) + 2) * (268435456 * q.Δ * √q.ρ / (q.ε * √q.ε) + 2) *\n                      (√(8 * q.L * q.Δ + q.L * q.ε * √(q.ε / q.ρ) + q.ε ^ 2) + q.L * √(q.ε / q.ρ)) /\n                    q.ε)⌉₊)) *\n    ⌈800 * q.κ⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\log\\left(1 + \\frac{8 \\cdot \\sqrt{2 \\cdot L \\cdot \\Delta}}{\\varepsilon}\\right) \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{268435456 \\cdot \\Delta \\cdot \\sqrt{\\rho}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{\\sqrt{L}}{\\sqrt{\\sqrt{\\rho \\cdot \\varepsilon}}} \\right\\rceil_{+} + 1 + \\left(8 + \\left\\lceil 2 \\cdot \\log\\left(1 + \\frac{8 \\cdot \\left(\\log\\left(1 + \\frac{8 \\cdot \\sqrt{2 \\cdot L \\cdot \\Delta}}{\\varepsilon}\\right) + 2\\right) \\cdot \\left(\\frac{268435456 \\cdot \\Delta \\cdot \\sqrt{\\rho}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} + 2\\right) \\cdot \\left(\\sqrt{8 \\cdot L \\cdot \\Delta + L \\cdot \\varepsilon \\cdot \\sqrt{\\frac{\\varepsilon}{\\rho}} + \\varepsilon^{2}} + L \\cdot \\sqrt{\\frac{\\varepsilon}{\\rho}}\\right)}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right) \\cdot \\left\\lceil 800 \\cdot \\kappa \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StrongGrowthHessianLipschitz.spec.Params → ℕ",
+          "value": "fun q =>\n  (⌈Real.log (1 + 8 * √(2 * q.L * q.Δ) / q.ε)⌉₊ + 1) * (⌈268435456 * q.Δ * √q.ρ / (q.ε * √q.ε)⌉₊ + 1) *\n      (⌈√q.L / √√(q.ρ * q.ε)⌉₊ + 1 +\n        (8 +\n          ⌈2 *\n              Real.log\n                (1 +\n                  8 * (Real.log (1 + 8 * √(2 * q.L * q.Δ) / q.ε) + 2) * (268435456 * q.Δ * √q.ρ / (q.ε * √q.ε) + 2) *\n                      (√(8 * q.L * q.Δ + q.L * q.ε * √(q.ε / q.ρ) + q.ε ^ 2) + q.L * √(q.ε / q.ρ)) /\n                    q.ε)⌉₊)) *\n    ⌈800 * q.κ⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.StrongGrowthRestartedAgd",
+      "namespace": "LongTails.Setups.StrongGrowthHessianLipschitz",
+      "setup": "LongTails.Setups.StrongGrowthHessianLipschitz",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StrongGrowthHessianLipschitz.spec\n  OracleTemplate.StrongGrowthRestartedAgd.budget",
+      "theorem": "OracleTemplate.StrongGrowthRestartedAgd.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StrongGrowthRestartedAgd",
+      "theorem": "OracleTemplate.StrongGrowthRestartedAgd.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a C² real-valued function; convexity is not required. The initial objective gap satisfies f(x0)−inf f≤Δ.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using fresh IID randomness, with E[g(x,ξ)]=∇f(x). Only gradient samples are available; function values and Hessians are not supplied.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: spec.admissible, oracle answer and unbiasedness clauses; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "relative_error",
+        "details": "Unbiased multiplicative second-moment noise: E‖g(x,ξ)−∇f(x)‖²≤(κ−1)‖∇f(x)‖², κ≥1. Equivalently E‖g(x,ξ)‖²≤κ‖∇f(x)‖²; this is a mean-square strong-growth condition, not a samplewise relative-error bound.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: spec.admissible variance and unbiasedness clauses"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: Params.finiteE, Params.innerE, Params.borelE"
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz gradient and ρ-Lipschitz Hessian in operator norm. Public parameters include L>0, ρ>0, κ≥1, Δ≥0, ε>0 and x0, with 4^8 ρε≤L². The objective and gradient-sampling distribution are hidden.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "A measurable output X with integrable gradient norm must satisfy E‖∇f(X)‖≤ε.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over algorithm randomness and IID oracle randomness, under a fixed cap on total stochastic-gradient calls.",
+        "evidence": "LongTails/Setups/StrongGrowthHessianLipschitz.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "An established smooth nonconvex stationarity formulation with Lipschitz Hessian and the standard unbiased strong-growth stochastic-gradient model."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StrongGrowthRestartedAgd.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StrongGrowthRestartedAgd",
+          "theorem": "OracleTemplate.StrongGrowthRestartedAgd.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "setup": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox",
+  "searched_at": "2026-11-12T07:29:27.744007+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "d + 1 + \\left\\lceil 21 \\cdot \\frac{\\sqrt{2}}{\\sqrt{\\mu}} \\cdot \\left(\\log\\left(1 + \\frac{\\Delta}{\\mu^{2} \\cdot \\varepsilon}\\right) + \\left(d + 1\\right) \\cdot \\left(3 + -\\log_{2}\\left(\\mu\\right)\\right)^{4}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox.spec.Params → ℕ",
+        "value": "fun q =>\n  q.d + 1 + ⌈21 * (√2 / √q.μ) * (Real.log (1 + q.Δ / (q.μ ^ 2 * q.ε)) + (↑q.d + 1) * (3 + -Real.logb 2 q.μ) ^ 4)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "d + 1 + \\left\\lceil 21 \\cdot \\frac{\\sqrt{2}}{\\sqrt{\\mu}} \\cdot \\left(\\log\\left(1 + \\frac{\\Delta}{\\mu^{2} \\cdot \\varepsilon}\\right) + \\left(d + 1\\right) \\cdot \\left(3 + -\\log_{2}\\left(\\mu\\right)\\right)^{4}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox.spec.Params → ℕ",
+          "value": "fun q =>\n  q.d + 1 + ⌈21 * (√2 / √q.μ) * (Real.log (1 + q.Δ / (q.μ ^ 2 * q.ε)) + (↑q.d + 1) * (3 + -Real.logb 2 q.μ) ^ 4)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.BlackBoxDiagonalAcceleration",
+      "namespace": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox",
+      "setup": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox.spec\n  OracleTemplate.BlackBoxDiagonal.budget",
+      "theorem": "OracleTemplate.BlackBoxDiagonal.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BlackBoxDiagonalAcceleration",
+      "theorem": "OracleTemplate.BlackBoxDiagonal.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on R^d, with an attained minimum.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.admissible"
+      },
+      {
+        "label": "strongly_convex",
+        "details": "For W=diag(w), w_i>0, the first-order remainder lies between μ||y-x||_W²/2 and ||y-x||_W²/2; 0<μ≤1. Initially f(x0)-f*≤Δ, with Δ≥0.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.valid and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query returns the exact full Euclidean gradient together with the function value, regardless of history or seed.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.Reply and spec.admissible"
+      },
+      {
+        "label": "function_value",
+        "details": "The exact function value is included in every full-gradient oracle reply; the pair counts as one oracle call.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.Reply and spec.admissible; LongTails/Template.lean: executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "Only d and x0 are public. The positive diagonal weights w, relative strong-convexity parameter μ, initial-gap bound Δ, and target ε are hidden from the algorithm constructor.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: Public, Params, spec.publicInput; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "Smoothness and strong convexity share the unknown weighted norm ||v||_W²=Σ_i w_i v_i². The supplied budget is independent of the magnitudes and spread of the weights.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.admissible; supplied extracted budget"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain and output space are EuclideanSpace R (Fin d), with d≥1 public.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: Public and spec.Instance"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output must satisfy f(output)-f(xstar)≤ε for a global minimizer xstar, with ε>0.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.successful and spec.valid"
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law, after the supplied fixed oracle budget.",
+        "evidence": "LongTails/Setups/DiagonalSmoothStronglyConvexBlackBox.lean: spec.successful; LongTails/Template.lean: Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation hides the entire diagonal geometry and all convergence parameters while requiring a fixed-budget, almost-sure objective guarantee with weight-independent oracle complexity."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.BlackBoxDiagonal.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BlackBoxDiagonalAcceleration",
+          "theorem": "OracleTemplate.BlackBoxDiagonal.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

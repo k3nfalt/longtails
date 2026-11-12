@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Parameter-free heavy-tailed smooth optimization: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean}{ParameterFreeHeavyTailedSmooth}.}\label{tab:ParameterFreeHeavyTailedSmooth}
+\parbox{\linewidth}{\footnotesize $f$ is differentiable on a complete, second-countable real inner-product space with its Borel structure, $\nabla f$ is $L$-Lipschitz, and $f(x_0)-f_{\rm lower}\le\Delta$ for a global lower bound. IID samples give a jointly measurable, unbiased, integrable gradient oracle with integrable central $p$th moment at most $\sigma^p$, $1<p\le2$. Here $L,\Delta,\varepsilon>0$, $\sigma\ge0$. Target: $\int\|\nabla f(x_{\rm out})\|\,dP\le\varepsilon$. Only the space and $x_0$ are public; the setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ParameterFreeHeavyTailedNsgdm.lean}{Parameter\allowbreak Free\allowbreak Heavy\allowbreak Tailed\allowbreak Nsgdm} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ParameterFreeHeavyTailedNsgdm.md}{(review)} & $\mathcal{O}(B[1+\log(1+B)]^2)$ stochastic gradients, including all restarted runs and validation samples. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{pfLZ}, Thm.~3.6 ($L_1=\sigma_1=0$); \citep{pfHFH}, Prop.~1, (4) & $\mathcal{O}(1+(\Delta^4+L^4)/\varepsilon^4+(\sigma/\varepsilon)^{2p/(p-1)})$ stochastic gradients. & \textbf{(1)}: Unknown-$p$ gain; at $p=3/2$, $L=\Delta=\sigma=1$, $\varepsilon^{-6}$ becomes $\varepsilon^{-5}\log^2(1/\varepsilon)$. Deterministic term becomes $L\Delta/\varepsilon^2$. No horizon input. & \textbf{(1)}: Squared logarithm, validation and scale costs; very large constants as $p\downarrow1$. Horizon dependence in \textbf{(2)} is removable by doubling. \\
+\midrule
+\textbf{(3)} \citep{pfLZ}, Thm.~3.2 ($L_1=\sigma_1=0$) & $\mathcal{O}(1+L\Delta/\varepsilon^2+(\sigma/\varepsilon)^{(2p-1)/(p-1)}+L\Delta\sigma^{p/(p-1)}\varepsilon^{-(3p-2)/(p-1)})$ stochastic gradients. & \textbf{(1)}: Needs no $p,\sigma,L,\Delta,T$ in updates. Matches leading parameter rates up to logarithms and additive costs when $\sigma\varepsilon\le L\Delta$. & \textbf{(1)}: Extra logarithms, validation and scale terms; when $\sigma\varepsilon>L\Delta$, deterioration can scale as $(\sigma\varepsilon/(L\Delta))^{p/(2p-2)}$. \\
+\midrule
+\textbf{(4)} \citep{pfKJ}, Thm.~6, bounded-noise restriction & $\mathcal{O}(H[1+L\Delta/\varepsilon^2+L\Delta R^2/\varepsilon^4+R^2/\varepsilon^2])$ stochastic gradients; $\|\nabla f(x_{\rm out})\|\le\varepsilon$ with probability $1-\delta$. & \textbf{(1)}: Scope: finite central $p$th moments for all $1<p\le2$, replacing bounded noise at $p=2$. Removes parameter hints. Rates not comparable across confidence criteria. & \textbf{(1)}: Expectation guarantee only; \textbf{(4)} supplies high probability. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L$: smoothness; $\Delta$: initial gap bound; $\sigma$: central-moment scale; $p$: moment order; $\varepsilon$: accuracy. For a universal $C>1$,
+$B=1+L\Delta/\varepsilon^2+C^{1/(p-1)}[L\Delta\sigma^{p/(p-1)}\varepsilon^{-(3p-2)/(p-1)}+\sigma^{(5p-2)/(2p-2)}(L\Delta)^{-p/(2p-2)}\varepsilon^{-(3p-2)/(2p-2)}+(\sigma^2/(L\Delta))^{p/(2p-2)}+(1+\sigma/\varepsilon)^{p/(p-1)}((1+\log(1+\sigma/\varepsilon))/(p-1))^{4/(p-1)}]+\sqrt{L/\Delta}+(\Delta/L)^{1/3}$.
+$R$: almost-sure noise bound; $H$: polylogarithmic factor in confidence $1/\delta$, budget and ratios of supplied positive upper/lower hints for $L,\Delta,R$. All costs count individual stochastic-gradient calls; big-O constants are universal.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

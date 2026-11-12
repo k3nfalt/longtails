@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Expected Smooth Convex Minimization}
+We consider minimizing a differentiable convex function $f:\mathbb{R}^d\to\mathbb{R}$ with $L$-Lipschitz gradient, where $d$ is a nonnegative integer and $L>0$. A given point $x^0\in\mathbb{R}^d$ lies within Euclidean distance $R>0$ of a global minimizer $x^\star$. The oracle returns $\nabla f(x)$ at $x$. For a tolerance $\varepsilon>0$, the goal is a random output $\bar{x}\in\mathbb{R}^d$ with integrable objective gap and $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness. The parameters satisfy the accuracy and dimension restrictions specified below.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+Throughout, $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives $d$, $L$, $x^0$, $R$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The parameters satisfy $d\in\mathbb{Z}_{\geq 0}$ and $L,R,\varepsilon>0$, with
+\[
+\begin{aligned}
+262144\,\varepsilon &\leq LR^2,\\
+65536\left(\left\lfloor
+\frac{\sqrt{LR^2/\varepsilon}}{512}
+\right\rfloor+1\right)^5 &\leq d.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Convexity and smoothness]
+The function $f$ is differentiable everywhere on $\mathbb{R}^d$. For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq (1-t)f(x)+tf(y),\\
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x)
+&&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}$ must have an integrable objective gap under $P$ and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]
+\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,92 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Regular Equality Constraints}
+We consider minimizing a differentiable function $f:\mathbb{R}^d\to\mathbb{R}$ subject to differentiable equalities $c:\mathbb{R}^d\to\mathbb{R}^m$ with $c(x)=0$. The gradient is Lipschitz, the constraint Jacobian is bounded and Lipschitz, and its adjoint is uniformly bounded below. The objective is lower bounded, with controlled initial gap and constraint residual. The oracle returns unbiased estimates of the gradient, constraints, and adjoint Jacobian, with bounded variance and mean-square Lipschitz dependence; consecutive call pairs share independent samples. For $\varepsilon\in(0,1]$, the goal is $(\bar{x},\bar{\lambda})\in\mathbb{R}^d\times\mathbb{R}^m$ satisfying $\mathbb{E}[\|\nabla f(\bar{x})+\nabla c(\bar{x})^\top\bar{\lambda}\|^2+\|c(\bar{x})\|^2]\leq\varepsilon^2$, where expectation includes oracle and independent algorithm randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d:\ c(x)=0} f(x).
+\]
+Here $1\leq m\leq d$. Vector norms are Euclidean, and matrix norms $\|\cdot\|_{\mathrm F}$ are Frobenius norms. Write $A(x)=\nabla c(x)^\top\in\mathbb{R}^{d\times m}$ for the matrix of the adjoint derivative of $c$. The algorithm receives $d,m,x^0,L_f,L_c,L_J,\nu,\sigma,L_{\mathrm{noise}},\Delta,C_0,\varepsilon$, where $x^0\in\mathbb{R}^d$, $\nu>0$, and all listed scalar parameters other than $\nu$ and $\varepsilon$ are nonnegative.
+
+Our assumptions:
+\begin{assumption}[Smoothness and regularity]
+The functions $f$ and $c$ are differentiable everywhere. For all $x,y\in\mathbb{R}^d$ and $v\in\mathbb{R}^m$,
+\[
+\begin{aligned}
+\|\nabla f(y)-\nabla f(x)\|&\leq L_f\|y-x\|,\\
+\|A(x)\|_{\mathrm F}&\leq L_c,\\
+\|A(y)-A(x)\|_{\mathrm F}&\leq L_J\|y-x\|,\\
+\nu\|v\|&\leq\|A(x)v\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_{\mathrm{low}}&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta, &\qquad \|c(x^0)\|&\leq C_0.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic oracle]
+Let $\mu$ be a probability law on a measurable sample space $\Omega$. The jointly measurable maps
+\[
+\begin{aligned}
+g &: \mathbb{R}^d\times\Omega\to\mathbb{R}^d,\\
+h &: \mathbb{R}^d\times\Omega\to\mathbb{R}^m,\\
+H &: \mathbb{R}^d\times\Omega\to\mathbb{R}^{d\times m}
+\end{aligned}
+\]
+are Bochner integrable in the sample argument at every fixed point. For $W\sim\mu$ and every $x$,
+\[
+\begin{aligned}
+\mathbb{E}[g(x,W)]&=\nabla f(x),\\
+\mathbb{E}[h(x,W)]&=c(x),\\
+\mathbb{E}[H(x,W)]&=A(x).
+\end{aligned}
+\]
+Define the nonnegative random quantities
+\[
+\begin{aligned}
+V(x,W)={}&\|g(x,W)-\nabla f(x)\|^2\\
+&+\|h(x,W)-c(x)\|^2
++\|H(x,W)-A(x)\|_{\mathrm F}^2,\\
+D(x,y,W)={}&\|g(y,W)-g(x,W)\|^2\\
+&+\|h(y,W)-h(x,W)\|^2
++\|H(y,W)-H(x,W)\|_{\mathrm F}^2.
+\end{aligned}
+\]
+For every $x,y$, these quantities are integrable and satisfy
+\[
+\begin{aligned}
+\mathbb{E}[V(x,W)]&\leq\sigma^2,\\
+\mathbb{E}[D(x,y,W)]&\leq L_{\mathrm{noise}}^2\|y-x\|^2.
+\end{aligned}
+\]
+Let $(W_k)_{k\geq0}$ be measurable, mutually independent samples, each with law $\mu$, independent of the algorithm's randomness. At call $n\geq0$, a query $x\in\mathbb{R}^d$ returns
+\[
+\bigl(g(x,W_{\lfloor n/2\rfloor}),
+ h(x,W_{\lfloor n/2\rfloor}),
+ H(x,W_{\lfloor n/2\rfloor})\bigr).
+\]
+Thus calls $2k$ and $2k+1$ use the same sample, including across the three components of each reply.
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. The output $(\bar{x},\bar{\lambda})$ must be measurable, and its squared stationarity and feasibility residual must be integrable and satisfy
+\[
+\mathbb{E}_{P}\!\left[
+\|\nabla f(\bar{x})+A(\bar{x})\bar{\lambda}\|^2
++\|c(\bar{x})\|^2
+\right]\leq\varepsilon^2,
+\]
+where $P$ is the joint law of the oracle samples and the independent algorithm randomness.
+\end{document}

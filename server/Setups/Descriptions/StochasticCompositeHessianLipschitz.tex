@@ -1,0 +1,78 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Composite Stationarity}
+We consider minimizing $F=f+\psi$ over a convex set $Q$ in a finite-dimensional real inner product space $E$. The possibly nonconvex function $f:E\to\mathbb{R}$ has an $L$-Lipschitz gradient and a $\rho$-Lipschitz Hessian, with $L>0$ and $\rho\geq0$, while $\psi:E\to\mathbb{R}$ is convex on $Q$. A given $x^0\in Q$ has objective gap at most $\Delta\geq0$. The oracle returns unbiased stochastic gradients with variance at most $\sigma^2$, $\sigma\geq0$, from independent identically distributed samples, or exact proximal minimizers $T_a(z,v)$ of $\|u-z\|^2/(2a)+\langle v,u-z\rangle+\psi(u)$ over $u\in Q$, for $a>0$ and $z,v\in E$. For $\varepsilon>0$, the goal is a feasible output $\bar{x}$ with $\mathbb{E}\|L(\bar{x}-T_{1/L}(\bar{x},\nabla f(\bar{x})))\|\leq\varepsilon$.
+
+The optimization problem is
+\[
+\min_{x\in Q} F(x),
+\qquad F(x):=f(x)+\psi(x).
+\]
+The norm is induced by the inner product on $E$; operator norms below are the induced operator norms. The algorithm receives $E$, the measurable sample space $\Omega$, $L$, $\rho$, $\sigma$, $\Delta$, $\varepsilon$, and $x^0$, and accesses the objective through the oracle described below.
+
+Our assumptions:
+\begin{assumption}[Gradient and Hessian regularity]
+The function $f$ is Fr\'echet differentiable on $E$, its gradient is Fr\'echet differentiable on $E$, and, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}&\leq\rho\|x-y\|.
+\end{aligned}
+\]
+Here $\nabla^2 f(x)$ is a linear operator from $E$ to $E$.
+\end{assumption}
+
+\begin{assumption}[Convex composite term and proximal access]
+The set $Q\subseteq E$ is convex, and, for every $x,y\in Q$ and $t\in[0,1]$,
+\[
+\psi((1-t)x+ty)\leq(1-t)\psi(x)+t\psi(y).
+\]
+For every $a>0$ and $z,v\in E$, the exact proximal reply satisfies
+\[
+\begin{aligned}
+T_a(z,v)&\in Q,\\
+T_a(z,v)&\in\operatorname*{arg\,min}_{u\in Q}
+\left\{\frac{\|u-z\|^2}{2a}
++\langle v,u-z\rangle+\psi(u)\right\}.
+\end{aligned}
+\]
+The map on $\mathbb{R}\times E\times E$ equal to $T_a(z,v)$ when $a>0$ and to $0$ otherwise is measurable.
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point and gap bound satisfy
+\[
+x^0\in Q,
+\qquad F(x^0)-F(x)\leq\Delta
+\quad\text{for every }x\in Q.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient access]
+There is a probability measure $\mu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For each $x\in E$, the random vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable under $\xi\sim\mu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\mu}\|g(x,\xi)-\nabla f(x)\|^2&\leq\sigma^2.
+\end{aligned}
+\]
+The oracle samples form a measurable, mutually independent sequence $(\xi_k)_{k\geq0}$ with common law $\mu$, under a joint probability law $\mathcal{P}$ on $\Omega^{\mathbb{N}}$. This sequence is independent of the algorithm's internal randomness. At call $k$, a gradient query at any $x\in E$ returns $g(x,\xi_k)$; a proximal query returns $T_a(z,v)$ exactly. Each query of either type counts as one oracle call in a common budget. Proximal queries may use any real $a$, although the minimization and measurability conditions above concern positive $a$.
+\end{assumption}
+
+Define the composite gradient mapping by
+\[
+G_L(x):=L\bigl(x-T_{1/L}(x,\nabla f(x))\bigr).
+\]
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its residual norm $\|G_L(\bar{x})\|$ must be integrable, and it must satisfy
+\[
+\bar{x}\in Q\quad P\text{-a.s.},
+\qquad
+\mathbb{E}_{P}\bigl[\|G_L(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the algorithm's internal randomness and the independent oracle sample sequence.
+\end{document}

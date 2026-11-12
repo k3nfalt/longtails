@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Stochastic regular equalities: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticRegularEqualities.lean}{StochasticRegularEqualities}.}\label{tab:StochasticRegularEqualities}
+\parbox{\linewidth}{\footnotesize Minimize $f$ subject to $c=0$ on $\mathbb R^d$, with $1\le m\le d$, differentiable $f,c$, globally $L_f$-Lipschitz gradient, $L_J$-Lipschitz Jacobian, $\|J\|_{\rm HS}\le L_c$, and $\|Dc(x)^*v\|\ge\nu\|v\|$. The objective is bounded below, $f(x_0)-\inf f\le\Delta$, and $\|c(x_0)\|\le C_0$. Jointly measurable, unbiased, integrable oracle triples have joint variance at most $\sigma^2$ and same-sample mean-square Lipschitz constant $L_{\rm noise}$. Independent samples are reused for paired queries. For $0<\varepsilon\le1$, the returned $(X,\widehat\lambda)$ satisfies $\int(\|\nabla f(X)+Dc(X)^*\widehat\lambda\|^2+\|c(X)\|^2)\,dP\le\varepsilon^2$, with measurable output and integrable residual.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticRegularEqualityKkt.lean}{Stochastic\allowbreak Regular\allowbreak Equality\allowbreak Kkt} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticRegularEqualityKkt.md}{(review)} & $\mathcal{O}\!\left(\dfrac{(\Sigma^{38}+\Sigma^{48}\sigma^2+\Sigma^{60}\sigma/\varepsilon)\ell}{\varepsilon^2}\right)$ deterministic triple calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} Fletcher AL \citep{cui2026fletcherV1}, Thm.~4.2 & $\mathcal{O}(\varepsilon^{-3})$ expected calls per oracle; other parameters fixed. Expected-norm KKT accuracy. & \textbf{(1)}: No Hessian Lipschitzness or assumed containment with bounded $\nabla f,c$; deterministic budget and mean-square accuracy with returned multiplier. Matches fixed-noise polynomial order. & \textbf{(1)}: Global LICQ and oracle bounds instead of regional bounds; extra logarithms, geometry powers up to $\Sigma^{60}$, and large constants. \\
+\midrule
+\textbf{(3)} Exact penalty \citep{cui2025penaltyNov}, Thm.~4.1 & $\mathcal{O}(\varepsilon^{-5})$ total triple-equivalent calls: constraint values dominate $\mathcal{O}(\varepsilon^{-3})$ gradient/Jacobian calls; other parameters fixed. Expected-norm KKT accuracy. & \textbf{(1)}: On overlap, fixed-noise cost $\varepsilon^{-5}$ to $\varepsilon^{-3}$ up to logarithms. Removes assumed bounded-region containment and lower singular-value bounds on random Jacobian estimates; mean-square accuracy. & \textbf{(1)}: Requires LICQ and uniform oracle bounds globally rather than along a containing region; large geometry polynomials. \\
+\midrule
+\textbf{(4)} \citep{alacaoglu2023singleV1}, Thm.~3.1 (case III) & $\mathcal{O}(\varepsilon^{-5}(1+\log(1/\varepsilon))^2)$ sampled calls; other parameters fixed. Expected-norm stationarity and feasibility on convex $X$. & \textbf{(1)}: Allows unbounded $c,\nabla f$. Rates not comparable: bounded $c$ on $X=\mathbb R^d$ contradicts global LICQ. & \textbf{(1)}: No general convex-set constraint $X$; global LICQ replaces regularity required only along iterates. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $J=Dc^*$; $\Sigma=2+L_f+L_c+L_J+\nu+\nu^{-1}+\Delta+C_0+L_{\rm noise}$; $\ell=1+\log(\Sigma/\varepsilon)$. $P$ is the execution law induced by IID samples. One triple call returns noisy $(\nabla f,c,J)$; paired evaluations, batches, and validation are counted. LICQ denotes the displayed uniform singular-value condition.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

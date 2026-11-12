@@ -1,0 +1,93 @@
+{
+  "setup": "LongTails.Setups.SmoothAndConvexExpected",
+  "searched_at": "2026-11-12T07:41:30.210591+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",
+        "value": "fun q => max 1 ⌈√(2 * q.L * q.R ^ 2 / q.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{2 \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} \\right\\}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SmoothAndConvexExpected.spec.Params → ℕ",
+          "value": "fun q => max 1 ⌈√(2 * q.L * q.R ^ 2 / q.ε)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.AcceleratedConvexExpected",
+      "namespace": "LongTails.Setups.SmoothAndConvexExpected",
+      "setup": "LongTails.Setups.SmoothAndConvexExpected",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SmoothAndConvexExpected.spec\n  OracleTemplate.Gradient.AcceleratedConvexExpected.budget",
+      "theorem": "OracleTemplate.Gradient.AcceleratedConvexExpected.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AcceleratedConvexExpected",
+      "theorem": "OracleTemplate.Gradient.AcceleratedConvexExpected.result",
+      "references": "- Yu. E. Nesterov. [A method of solving a convex programming problem with convergence rate O(1/k²)](https://hengshuaiyao.github.io/papers/nesterov83.pdf). 1983. Complexity: $O(1+\\sqrt{LR^2/\\varepsilon})$ exact-gradient calls using the known-$L$ accelerated gradient method, with no function-value calls, for deterministic objective gap at most $\\varepsilon$ (hence also expected gap).",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex minimization of a globally differentiable function with L-Lipschitz gradient; a global minimizer lies within distance R of x0.",
+        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.admissible and Params.toSmoothAndConvex; LongTails/Setups/SmoothAndConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each call returns the exact gradient at the queried point for every history and oracle seed. Gradient uniqueness excludes oracle noise despite the general randomized oracle interface.",
+        "evidence": "LongTails/Setups/SmoothAndConvex.lean: spec.admissible, HasGradientAt condition; LongTails/Template.lean: Oracle.answer."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space R^d. All parameters d,L,x0,R,ε are public. Validity requires L,R,ε>0, 262144ε≤LR², and 65536(floor(sqrt(LR²/ε)/512)+1)^5≤d.",
+        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.Instance."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Output a point whose objective gap relative to a global minimizer is integrable and at most ε in expectation.",
+        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the product of algorithm and oracle seed laws; no almost-sure accuracy is required.",
+        "evidence": "LongTails/Setups/SmoothAndConvexExpected.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Standard smooth convex exact-gradient minimization with an expected objective-gap target; the additional dimension and accuracy restrictions select a benchmark parameter regime."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.Gradient.AcceleratedConvexExpected.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AcceleratedConvexExpected",
+          "theorem": "OracleTemplate.Gradient.AcceleratedConvexExpected.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

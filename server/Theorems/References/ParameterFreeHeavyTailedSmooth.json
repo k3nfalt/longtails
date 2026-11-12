@@ -1,0 +1,103 @@
+{
+  "setup": "LongTails.Setups.ParameterFreeHeavyTailedSmooth",
+  "searched_at": "2026-11-12T07:09:26.235729+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 80 \\cdot \\left(2 + \\log_{2}\\left(\\frac{8000 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + L \\cdot \\Delta \\cdot \\sigma^{\\frac{p}{p - 1}} \\cdot \\left(\\frac{80}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{p - 1}} + \\sigma^{\\frac{5 \\cdot p - 2}{2 \\cdot p - 2}} \\cdot \\left(L \\cdot \\Delta\\right)^{-\\frac{p}{2 \\cdot p - 2}} \\cdot \\left(\\frac{60}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{2 \\cdot p - 2}} + \\left(\\frac{\\sigma^{2}}{L \\cdot \\Delta}\\right)^{\\frac{p}{2 \\cdot p - 2}} + \\sqrt{\\frac{3 \\cdot L}{\\Delta}} + \\left(\\frac{\\Delta}{3 \\cdot L}\\right)^{\\frac{1}{3}} + 6^{\\frac{1}{p - 1}} \\cdot \\left(\\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + 1 + \\left(64 \\cdot \\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{p} \\cdot \\left(\\frac{22 + 2 \\cdot p \\cdot \\log_{2}\\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)}{p - 1}\\right)^{4}\\right)^{\\frac{1}{p - 1}}\\right)\\right)^{2} \\cdot \\left(\\frac{8000 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + L \\cdot \\Delta \\cdot \\sigma^{\\frac{p}{p - 1}} \\cdot \\left(\\frac{80}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{p - 1}} + \\sigma^{\\frac{5 \\cdot p - 2}{2 \\cdot p - 2}} \\cdot \\left(L \\cdot \\Delta\\right)^{-\\frac{p}{2 \\cdot p - 2}} \\cdot \\left(\\frac{60}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{2 \\cdot p - 2}} + \\left(\\frac{\\sigma^{2}}{L \\cdot \\Delta}\\right)^{\\frac{p}{2 \\cdot p - 2}} + \\sqrt{\\frac{3 \\cdot L}{\\Delta}} + \\left(\\frac{\\Delta}{3 \\cdot L}\\right)^{\\frac{1}{3}} + 6^{\\frac{1}{p - 1}} \\cdot \\left(\\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + 1 + \\left(64 \\cdot \\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{p} \\cdot \\left(\\frac{22 + 2 \\cdot p \\cdot \\log_{2}\\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)}{p - 1}\\right)^{4}\\right)^{\\frac{1}{p - 1}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ParameterFreeHeavyTailedSmooth.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈80 *\n        (2 +\n            Real.logb 2\n              (8000 * q.L * q.Δ / q.ε ^ 2 +\n                              q.L * q.Δ * q.σ ^ (q.p / (q.p - 1)) * (80 / q.ε) ^ ((3 * q.p - 2) / (q.p - 1)) +\n                            q.σ ^ ((5 * q.p - 2) / (2 * q.p - 2)) * (q.L * q.Δ) ^ (-(q.p / (2 * q.p - 2))) *\n                              (60 / q.ε) ^ ((3 * q.p - 2) / (2 * q.p - 2)) +\n                          (q.σ ^ 2 / (q.L * q.Δ)) ^ (q.p / (2 * q.p - 2)) +\n                        √(3 * q.L / q.Δ) +\n                      (q.Δ / (3 * q.L)) ^ 3⁻¹ +\n                    6 ^ (q.p - 1)⁻¹ * (5 * q.σ / q.ε) ^ (q.p / (q.p - 1)) +\n                  1 +\n                (64 * (1 + 5 * q.σ / q.ε) ^ q.p * ((22 + 2 * q.p * Real.logb 2 (1 + 5 * q.σ / q.ε)) / (q.p - 1)) ^ 4) ^\n                  (q.p - 1)⁻¹)) ^\n          2 *\n      (8000 * q.L * q.Δ / q.ε ^ 2 + q.L * q.Δ * q.σ ^ (q.p / (q.p - 1)) * (80 / q.ε) ^ ((3 * q.p - 2) / (q.p - 1)) +\n                    q.σ ^ ((5 * q.p - 2) / (2 * q.p - 2)) * (q.L * q.Δ) ^ (-(q.p / (2 * q.p - 2))) *\n                      (60 / q.ε) ^ ((3 * q.p - 2) / (2 * q.p - 2)) +\n                  (q.σ ^ 2 / (q.L * q.Δ)) ^ (q.p / (2 * q.p - 2)) +\n                √(3 * q.L / q.Δ) +\n              (q.Δ / (3 * q.L)) ^ 3⁻¹ +\n            6 ^ (q.p - 1)⁻¹ * (5 * q.σ / q.ε) ^ (q.p / (q.p - 1)) +\n          1 +\n        (64 * (1 + 5 * q.σ / q.ε) ^ q.p * ((22 + 2 * q.p * Real.logb 2 (1 + 5 * q.σ / q.ε)) / (q.p - 1)) ^ 4) ^\n          (q.p - 1)⁻¹)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 80 \\cdot \\left(2 + \\log_{2}\\left(\\frac{8000 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + L \\cdot \\Delta \\cdot \\sigma^{\\frac{p}{p - 1}} \\cdot \\left(\\frac{80}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{p - 1}} + \\sigma^{\\frac{5 \\cdot p - 2}{2 \\cdot p - 2}} \\cdot \\left(L \\cdot \\Delta\\right)^{-\\frac{p}{2 \\cdot p - 2}} \\cdot \\left(\\frac{60}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{2 \\cdot p - 2}} + \\left(\\frac{\\sigma^{2}}{L \\cdot \\Delta}\\right)^{\\frac{p}{2 \\cdot p - 2}} + \\sqrt{\\frac{3 \\cdot L}{\\Delta}} + \\left(\\frac{\\Delta}{3 \\cdot L}\\right)^{\\frac{1}{3}} + 6^{\\frac{1}{p - 1}} \\cdot \\left(\\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + 1 + \\left(64 \\cdot \\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{p} \\cdot \\left(\\frac{22 + 2 \\cdot p \\cdot \\log_{2}\\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)}{p - 1}\\right)^{4}\\right)^{\\frac{1}{p - 1}}\\right)\\right)^{2} \\cdot \\left(\\frac{8000 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} + L \\cdot \\Delta \\cdot \\sigma^{\\frac{p}{p - 1}} \\cdot \\left(\\frac{80}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{p - 1}} + \\sigma^{\\frac{5 \\cdot p - 2}{2 \\cdot p - 2}} \\cdot \\left(L \\cdot \\Delta\\right)^{-\\frac{p}{2 \\cdot p - 2}} \\cdot \\left(\\frac{60}{\\varepsilon}\\right)^{\\frac{3 \\cdot p - 2}{2 \\cdot p - 2}} + \\left(\\frac{\\sigma^{2}}{L \\cdot \\Delta}\\right)^{\\frac{p}{2 \\cdot p - 2}} + \\sqrt{\\frac{3 \\cdot L}{\\Delta}} + \\left(\\frac{\\Delta}{3 \\cdot L}\\right)^{\\frac{1}{3}} + 6^{\\frac{1}{p - 1}} \\cdot \\left(\\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + 1 + \\left(64 \\cdot \\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)^{p} \\cdot \\left(\\frac{22 + 2 \\cdot p \\cdot \\log_{2}\\left(1 + \\frac{5 \\cdot \\sigma}{\\varepsilon}\\right)}{p - 1}\\right)^{4}\\right)^{\\frac{1}{p - 1}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ParameterFreeHeavyTailedSmooth.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈80 *\n        (2 +\n            Real.logb 2\n              (8000 * q.L * q.Δ / q.ε ^ 2 +\n                              q.L * q.Δ * q.σ ^ (q.p / (q.p - 1)) * (80 / q.ε) ^ ((3 * q.p - 2) / (q.p - 1)) +\n                            q.σ ^ ((5 * q.p - 2) / (2 * q.p - 2)) * (q.L * q.Δ) ^ (-(q.p / (2 * q.p - 2))) *\n                              (60 / q.ε) ^ ((3 * q.p - 2) / (2 * q.p - 2)) +\n                          (q.σ ^ 2 / (q.L * q.Δ)) ^ (q.p / (2 * q.p - 2)) +\n                        √(3 * q.L / q.Δ) +\n                      (q.Δ / (3 * q.L)) ^ 3⁻¹ +\n                    6 ^ (q.p - 1)⁻¹ * (5 * q.σ / q.ε) ^ (q.p / (q.p - 1)) +\n                  1 +\n                (64 * (1 + 5 * q.σ / q.ε) ^ q.p * ((22 + 2 * q.p * Real.logb 2 (1 + 5 * q.σ / q.ε)) / (q.p - 1)) ^ 4) ^\n                  (q.p - 1)⁻¹)) ^\n          2 *\n      (8000 * q.L * q.Δ / q.ε ^ 2 + q.L * q.Δ * q.σ ^ (q.p / (q.p - 1)) * (80 / q.ε) ^ ((3 * q.p - 2) / (q.p - 1)) +\n                    q.σ ^ ((5 * q.p - 2) / (2 * q.p - 2)) * (q.L * q.Δ) ^ (-(q.p / (2 * q.p - 2))) *\n                      (60 / q.ε) ^ ((3 * q.p - 2) / (2 * q.p - 2)) +\n                  (q.σ ^ 2 / (q.L * q.Δ)) ^ (q.p / (2 * q.p - 2)) +\n                √(3 * q.L / q.Δ) +\n              (q.Δ / (3 * q.L)) ^ 3⁻¹ +\n            6 ^ (q.p - 1)⁻¹ * (5 * q.σ / q.ε) ^ (q.p / (q.p - 1)) +\n          1 +\n        (64 * (1 + 5 * q.σ / q.ε) ^ q.p * ((22 + 2 * q.p * Real.logb 2 (1 + 5 * q.σ / q.ε)) / (q.p - 1)) ^ 4) ^\n          (q.p - 1)⁻¹)⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm",
+      "namespace": "LongTails.Setups.ParameterFreeHeavyTailedSmooth",
+      "setup": "LongTails.Setups.ParameterFreeHeavyTailedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.ParameterFreeHeavyTailedSmooth.spec\n  LongTails.Theorems.ParameterFreeHeavyTailedNsgdm.budget",
+      "theorem": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm",
+      "theorem": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm.result",
+      "references": "- Florian Hübler, Ilyas Fatkhullin, and Niao He. [From Gradient Clipping to Normalization for Heavy Tailed SGD](https://proceedings.mlr.press/v258/hubler25a.html). 2025 (preprint 2024; analysis checked in arXiv v3). Complexity: $O(1+L\\Delta\\varepsilon^{-2}[1+(\\sigma/\\varepsilon)^{p/(p-1)}])$ stochastic-gradient calls, including minibatches, for $\\mathbb E\\|\\nabla f(X)\\|\\le\\varepsilon$ using tuned minibatch normalized SGD.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Lower-bounded differentiable objectives with globally L-Lipschitz gradients; convexity is not required. The initial gap to a lower bound is at most Δ, with L,Δ>0.",
+        "evidence": "LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: spec.valid and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One unbiased gradient sample g(x,ω) per call, with i.i.d. seeds; only gradient samples are supplied.",
+        "evidence": "LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: spec.admissible, oracle answer and unbiasedness clauses; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "unknown_smoothness",
+        "details": "Only the real separable Hilbert space E and initial point x0 are public. L,Δ,σ,p,ε are hidden from the algorithm constructor; execution is truncated at the supplied parameter-dependent budget.",
+        "evidence": "LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: Public, Params, spec.publicInput; LongTails/Template.lean: Convergence"
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform central moment bound E‖g(x,ω)−∇f(x)‖^p≤σ^p for 1<p≤2 and σ≥0; finite variance is not required when p<2.",
+        "evidence": "LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: spec.valid and spec.admissible"
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The ambient space is a complete real inner-product space with its Borel measurable structure and second-countable topology; finite dimension is not assumed.",
+        "evidence": "LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: Public"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "A measurable E-valued output X must have integrable gradient norm and satisfy E‖∇f(X)‖≤ε, with ε>0.",
+        "evidence": "LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: spec.successful and spec.valid"
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over independent algorithm randomness and the i.i.d. oracle stream, under a fixed parameter-dependent cap on oracle calls.",
+        "evidence": "LongTails/Template.lean: Convergence and executeWithTrace; LongTails/Setups/ParameterFreeHeavyTailedSmooth.lean: spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth lower-bounded nonconvex optimization with unbiased i.i.d. gradients having a bounded central p-th moment is an established heavy-tailed stochastic optimization formulation, including study of unknown problem parameters."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm",
+          "theorem": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

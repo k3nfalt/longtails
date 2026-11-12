@@ -1,0 +1,98 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Heavy-Tailed Nonconvex Strongly Concave Optimization}
+We consider $\inf_{x\in E}\max_{y\in F}f(x,y)$ on finite-dimensional real inner product spaces $E$ and $F$. The differentiable objective $f:E\times F\to\mathbb{R}$ has an $L$-Lipschitz joint gradient and is $\mu$-strongly concave in $y$, with $L\geq\mu>0$, while it may be nonconvex in $x$. Given initial points, an initial value-gap bound, and an initial dual-gradient bound, the oracle returns unbiased gradient pairs from independent, identically distributed samples with bounded centered $p$th moment, $1<p\leq2$. The goal is a measurable output $\bar{x}$ with $\|\nabla\Phi(\bar{x})\|\leq\varepsilon$ with probability at least $1-\delta$, where $\Phi(x)=\max_y f(x,y)$, $\varepsilon>0$, and $0<\delta<1/2$.
+
+Write the objective and optimization problem as
+\[
+\Phi(x)=\max_{y\in F}f(x,y),
+\qquad \inf_{x\in E}\Phi(x).
+\]
+Equip $E\times F$ with the product norm
+\[
+\|(u,v)\|=\bigl(\|u\|^2+\|v\|^2\bigr)^{1/2}.
+\]
+The given points are $x^0\in E$ and $y^0\in F$. The parameters satisfy
+\[
+0<\mu\leq L,\qquad 1<p\leq2,\qquad
+\sigma,\Delta,G\geq0,\qquad
+\varepsilon>0,\qquad 0<\delta<\tfrac12.
+\]
+The algorithm receives $E,F$, the measurable sample space $\Omega$, all these parameters, and $x^0,y^0$; the objective and sampling law are accessed through the oracle.
+
+Our assumptions:
+\begin{assumption}[Smoothness and strong concavity]
+Both partial gradients of $f$ exist everywhere. For all $z,z'\in E\times F$,
+\[
+\begin{aligned}
+&\|\nabla_x f(z)-\nabla_x f(z')\|^2
+ +\|\nabla_y f(z)-\nabla_y f(z')\|^2\\
+&\hspace{1em}\leq L^2\|z-z'\|^2.
+\end{aligned}
+\]
+For every $x\in E$ and $y,y'\in F$,
+\[
+f(x,y')\leq f(x,y)
++\langle\nabla_y f(x,y),y'-y\rangle
+-\frac{\mu}{2}\|y'-y\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+For every $x\in E$ and $y\in F$, there exists $y'\in F$ such that
+\[
+f(x^0,y)-f(x,y')\leq\Delta.
+\]
+The initial dual gradient satisfies
+\[
+\|\nabla_y f(x^0,y^0)\|\leq G.
+\]
+\end{assumption}
+
+\begin{assumption}[Heavy-tailed stochastic gradients]
+Let $\nu$ be a probability measure on $\Omega$. The oracle maps
+\[
+g_x:(E\times F)\times\Omega\to E,
+\qquad g_y:(E\times F)\times\Omega\to F
+\]
+are jointly measurable. At each fixed $z\in E\times F$, both maps are Bochner integrable under $\nu$ and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g_x(z,\xi)]&=\nabla_x f(z),\\
+\mathbb{E}_{\xi\sim\nu}[g_y(z,\xi)]&=\nabla_y f(z).
+\end{aligned}
+\]
+Define the paired error by
+\[
+e(z,\xi)=\bigl(g_x(z,\xi)-\nabla_x f(z),
+                 g_y(z,\xi)-\nabla_y f(z)\bigr).
+\]
+For every $z$, the random variable $\|e(z,\xi)\|^p$ is integrable and
+\[
+\mathbb{E}_{\xi\sim\nu}\bigl[\|e(z,\xi)\|^p\bigr]\leq\sigma^p.
+\]
+The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent, and each has law $\nu$ under their joint law. At query $z_k\in E\times F$, call $k$ returns the pair
+\[
+\bigl(g_x(z_k,\xi_k),g_y(z_k,\xi_k)\bigr),
+\]
+using the same sample for both components. Algorithm randomness is independent of the sample sequence.
+\end{assumption}
+
+Queries may be made anywhere in $E\times F$. The output requirement includes the existence of a maximizing selection $y^\star:E\to F$ satisfying
+\[
+f(x,y)\leq f(x,y^\star(x))
+\qquad\text{for every }x\in E,\ y\in F.
+\]
+For every such selection, the measurable output $\bar{x}\in E$ must satisfy
+\[
+\mathbb{P}\!\left(
+\left\|\nabla\bigl[x\mapsto f(x,y^\star(x))\bigr](\bar{x})\right\|
+>\varepsilon\right)\leq\delta,
+\]
+where $\mathbb{P}$ is the joint law of the samples and the independent algorithm randomness. Since every maximizing selection represents $\Phi$, this is the high-probability stationarity requirement for the value function.
+\end{document}

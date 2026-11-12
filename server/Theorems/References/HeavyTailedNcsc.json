@@ -1,0 +1,108 @@
+{
+  "setup": "LongTails.Setups.HeavyTailedNcsc",
+  "searched_at": "2026-11-12T07:48:58.148645+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\left(2^{80} \\cdot \\frac{p}{p - 1}\\right)^{\\frac{p}{p - 1} + 2} \\cdot \\left(1 + \\log\\left(2 + \\frac{L}{\\mu} + \\frac{1}{\\delta} + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\left(\\frac{L}{\\mu} \\cdot \\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + \\log\\left(2 + \\frac{\\left(\\frac{L}{\\mu}\\right)^{3} \\cdot L \\cdot \\left(\\Delta + \\frac{G^{2}}{\\mu}\\right)}{\\varepsilon^{2}}\\right)\\right)\\right)^{2 \\cdot \\frac{p}{p - 1} + 3} \\cdot \\left(\\sqrt{\\frac{L}{\\mu}} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\log\\left(2 + \\frac{\\left(\\frac{L}{\\mu}\\right)^{3} \\cdot L \\cdot \\left(\\Delta + \\frac{G^{2}}{\\mu}\\right)}{\\varepsilon^{2}}\\right)\\right) + \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}} \\cdot \\left(\\frac{L}{\\mu}\\right)^{\\frac{\\frac{p}{p - 1}}{2}} + \\left(\\frac{L}{\\mu}\\right)^{\\frac{p}{p - 1}}\\right) \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HeavyTailedNcsc.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈(2 ^ 80 * (q.p / (q.p - 1))) ^ (q.p / (q.p - 1) + 2) *\n        (1 +\n            Real.log\n              (2 + q.L / q.μ + q.δ⁻¹ + q.L * q.Δ / q.ε ^ 2 + (q.L / q.μ * (q.σ / q.ε)) ^ (q.p / (q.p - 1)) +\n                Real.log (2 + (q.L / q.μ) ^ 3 * q.L * (q.Δ + q.G ^ 2 / q.μ) / q.ε ^ 2))) ^\n          (2 * (q.p / (q.p - 1)) + 3) *\n      (√(q.L / q.μ) *\n          (1 + q.L * q.Δ / q.ε ^ 2 + Real.log (2 + (q.L / q.μ) ^ 3 * q.L * (q.Δ + q.G ^ 2 / q.μ) / q.ε ^ 2)) +\n        (q.L * q.Δ / q.ε ^ 2 * (q.L / q.μ) ^ (q.p / (q.p - 1) / 2) + (q.L / q.μ) ^ (q.p / (q.p - 1))) *\n          (q.σ / q.ε) ^ (q.p / (q.p - 1)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\left(2^{80} \\cdot \\frac{p}{p - 1}\\right)^{\\frac{p}{p - 1} + 2} \\cdot \\left(1 + \\log\\left(2 + \\frac{L}{\\mu} + \\frac{1}{\\delta} + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\left(\\frac{L}{\\mu} \\cdot \\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}} + \\log\\left(2 + \\frac{\\left(\\frac{L}{\\mu}\\right)^{3} \\cdot L \\cdot \\left(\\Delta + \\frac{G^{2}}{\\mu}\\right)}{\\varepsilon^{2}}\\right)\\right)\\right)^{2 \\cdot \\frac{p}{p - 1} + 3} \\cdot \\left(\\sqrt{\\frac{L}{\\mu}} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\log\\left(2 + \\frac{\\left(\\frac{L}{\\mu}\\right)^{3} \\cdot L \\cdot \\left(\\Delta + \\frac{G^{2}}{\\mu}\\right)}{\\varepsilon^{2}}\\right)\\right) + \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}} \\cdot \\left(\\frac{L}{\\mu}\\right)^{\\frac{\\frac{p}{p - 1}}{2}} + \\left(\\frac{L}{\\mu}\\right)^{\\frac{p}{p - 1}}\\right) \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{\\frac{p}{p - 1}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HeavyTailedNcsc.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈(2 ^ 80 * (q.p / (q.p - 1))) ^ (q.p / (q.p - 1) + 2) *\n        (1 +\n            Real.log\n              (2 + q.L / q.μ + q.δ⁻¹ + q.L * q.Δ / q.ε ^ 2 + (q.L / q.μ * (q.σ / q.ε)) ^ (q.p / (q.p - 1)) +\n                Real.log (2 + (q.L / q.μ) ^ 3 * q.L * (q.Δ + q.G ^ 2 / q.μ) / q.ε ^ 2))) ^\n          (2 * (q.p / (q.p - 1)) + 3) *\n      (√(q.L / q.μ) *\n          (1 + q.L * q.Δ / q.ε ^ 2 + Real.log (2 + (q.L / q.μ) ^ 3 * q.L * (q.Δ + q.G ^ 2 / q.μ) / q.ε ^ 2)) +\n        (q.L * q.Δ / q.ε ^ 2 * (q.L / q.μ) ^ (q.p / (q.p - 1) / 2) + (q.L / q.μ) ^ (q.p / (q.p - 1))) *\n          (q.σ / q.ε) ^ (q.p / (q.p - 1)))⌉₊"
+        }
+      ],
+      "module": "LongTails.Theorems.HeavyTailedNcscAccelerated",
+      "namespace": "LongTails.Setups.HeavyTailedNcsc",
+      "setup": "LongTails.Setups.HeavyTailedNcsc",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HeavyTailedNcsc.spec OracleTemplate.HeavyTailedNcscAccelerated.budget",
+      "theorem": "OracleTemplate.HeavyTailedNcscAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HeavyTailedNcscAccelerated",
+      "theorem": "OracleTemplate.HeavyTailedNcscAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The minimization variable x is unrestricted; convexity in x is not assumed.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.admissible"
+      },
+      {
+        "label": "saddle_point",
+        "details": "Unconstrained minimax problem Φ(x)=max_y f(x,y), with μ-strong concavity in y and jointly L-Lipschitz partial gradients; 0<μ≤L.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.admissible, spec.valid"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call at (x,y) returns both partial stochastic gradients using one fresh IID seed. Both components are unbiased. No function values or samplewise smoothness are assumed.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Uniform joint central-moment bound E[(‖ox−gx‖²+‖oy−gy‖²)^(p/2)]≤σ^p, with 1<p≤2 and σ≥0; variance can be infinite when p<2.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.admissible, spec.valid"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E and F are finite-dimensional real inner-product spaces with Borel measurable structures.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: Params"
+      },
+      {
+        "label": "other",
+        "details": "Initialization satisfies ∀x,y ∃y′, f(x0,y)−f(x,y′)≤Δ and ‖gy(x0,y0)‖≤G, with Δ,G≥0. All Params, including L,μ,p,σ,Δ,G,ε,δ,x0,y0, are public; f and the oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.admissible, spec.Public, spec.publicInput, spec.valid"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "A measurable output x must satisfy ‖∇Φ(x)‖≤ε. Success also requires existence of a global maximizing selector y*(x); the guarantee holds for every such selector.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "P(‖∇Φ(output)‖>ε)≤δ, where ε>0 and 0<δ<1/2. Probability includes algorithm randomness and oracle seeds; oracle cost is bounded by the fixed supplied budget.",
+        "evidence": "LongTails/Setups/HeavyTailedNcsc.lean: spec.successful, spec.valid; LongTails/Template.lean: Convergence, executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth nonconvex–strongly-concave minimax optimization with unbiased IID bounded-p-moment gradients and high-probability primal stationarity is an established research formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HeavyTailedNcscAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HeavyTailedNcscAccelerated",
+          "theorem": "OracleTemplate.HeavyTailedNcscAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
