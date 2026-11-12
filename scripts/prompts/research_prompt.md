@@ -47,11 +47,11 @@ Deliver only:
   Keep each setup's definitions, assumptions, and `spec` in exactly one Lean file; do not split a setup across multiple files. Reuse existing shared definitions by importing them, and put supporting proofs in `LongTails/Proofs`.
 - Algorithm definitions for upper bounds, or hard-instance constructions for lower bounds.
 - Complete supporting Lean proofs and lemmas for the new result, following the existing proof-module layout.
-- Exactly one NEW main proved convergence or oracle-complexity theorem under `LongTails/Theorems`, connected to the chosen setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
-- A companion Markdown contribution note beside that theorem, with the same basename: `LongTails/Theorems/<TheoremName>.md` for `<TheoremName>.lean`. Include it with the reviewed final Lean deliverables.
+- One NEW main proved result, or two complementary results establishing an upper and a lower bound for the same research question, under `LongTails/Theorems`. Keep one main `result` per Lean file and connect each to its setup and actual algorithm execution. Preserve existing theorems; do not replace a prior result with the new one.
+- A companion Markdown contribution note beside each theorem, with the same basename: `LongTails/Theorems/<TheoremName>.md` for `<TheoremName>.lean`. Include it with the reviewed final Lean deliverables.
 - Necessary Lean dependency additions in `lakefile.toml` and `lake-manifest.json`.
 
-Prefer new files. Supporting lemmas are allowed; “one theorem” means one main research result.
+Prefer new files. Supporting lemmas are allowed. An upper/lower pair is optional; do not add a second theorem merely to fill a quota. Explain how the pair forms one coherent contribution, state any differences in assumptions or parameter ranges, and claim matching bounds only where their models and guarantees align.
 
 The companion contribution note is required; no LaTeX draft, additional standalone research note, or committed review report is required. Keep working research notes and review exchanges outside the repository and summarize the findings in the final response.
 
@@ -180,11 +180,11 @@ Before delivery, the Reviewer must:
 - Inspect the full diff against the recorded starting base.
 - Confirm that every changed path is inside `LongTails/`, except reviewed, necessary dependency additions in `lakefile.toml` and `lake-manifest.json`.
 - Confirm that `LongTails/Template.lean` and all other frozen core files are unchanged.
-- Confirm that the deliverables contain exactly one main research theorem under `LongTails/Theorems`.
+- Confirm that the deliverables contain one main research result or a complementary upper/lower pair under `LongTails/Theorems`, with one main result per file.
 - Confirm that the chosen setup is present under `LongTails/Setups` and that the new theorem and complete supporting proofs are included, regardless of which research route was selected.
-- Independently review the companion `<TheoremName>.md` for accuracy of its contribution claims, literature comparisons, and limitations; confirm it reflects the final clarifications and integrated Lean result and is included with the approved deliverables.
+- Independently review each companion `<TheoremName>.md` for accuracy of its contribution claims, literature comparisons, and limitations; confirm it reflects the final clarifications and integrated Lean result and is included with the approved deliverables.
 - Check that the public budget satisfies the simplification requirement and that its proof preserves all required terms, actual oracle-call accounting, parameter rates, and the claimed improvement over prior work.
-- Run `./build.sh`, `./lint.sh`, and `python3 run_comparator.py <TheoremName>.lean` on the final integrated result. All three must pass before delivery; a full-library comparator run is not required for adding a new result.
+- Run `./build.sh` and `./lint.sh` on the final integrated result, and `python3 run_comparator.py <TheoremName>.lean` for each new theorem. All checks must pass before delivery; a full-library comparator run is not required for adding a new result.
 - Confirm that the final diff contains only the requested deliverables.
 
 Any substantive change after approval, including conflict resolution, requires renewed review and validation.

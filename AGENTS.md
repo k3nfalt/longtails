@@ -30,6 +30,10 @@ project preferences; newer explicit user requests take precedence.
   `result : OnlineConvergence spec bound` for an online guarantee. Put distinct mathematical cases in
   separate files. Proof modules use lemmas for supporting results; do not add redundant public convergence/rate
   wrappers or drop a mathematical case merely to reduce the theorem count.
+- A contribution may contain one main result or a paired upper and lower bound
+  for the same research question, in separate files under `Theorems/`. Review and
+  audit both theorems and budgets. State any differences in setups, parameter
+  ranges, oracle models, or accuracy criteria before claiming matching bounds.
 - Lower bounds use `LongTails/TemplateLowerBound.lean` and stay in `Theorems/`;
   use a descriptive filename such as `<Name>LowerBound.lean`. Put hard-instance
   constructions in `Proofs/`. Prove failure for every valid parameter choice and

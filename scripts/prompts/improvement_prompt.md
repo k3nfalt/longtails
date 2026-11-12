@@ -26,8 +26,8 @@ Deliver only:
 - New setup definitions, if the improvement requires them.
 - New algorithm definitions, if needed.
 - Supporting proofs and lemmas.
-- Exactly one NEW main proved improved theorem under `LongTails/Theorems`, following repository conventions.
-- A companion Markdown contribution note beside the new theorem, with the same basename, explaining its improvement, literature comparisons, and limitations.
+- One NEW main proved improved result, or a complementary upper/lower pair for the same research question, under `LongTails/Theorems`. Keep one main result per Lean file. A pair is optional; explain its shared contribution and any differences in assumptions, parameter ranges, oracle models, or accuracy criteria.
+- A companion Markdown contribution note beside each new theorem, with the same basename, explaining its improvement, literature comparisons, and limitations.
 - Necessary Lean dependency additions.
 
 Reuse existing definitions when appropriate. Do not duplicate a setup or algorithm merely to rename it.
@@ -102,10 +102,10 @@ Before committing, the Reviewer must:
 - Approve the exact integrated candidate contents.
 - Inspect the full diff against the recorded starting base.
 - Confirm that all changed paths match the permitted research deliverables above.
-- Independently check the companion contribution note against the improved theorem and literature.
+- Independently check each companion contribution note against its theorem and literature.
 - Confirm that `LongTails/Template.lean`, frozen core files, and existing theorem statements are unchanged.
 - Verify the improved theorem and its comparison with the original.
-- Run the required build, proof, and axiom checks. Audit the new theorem with `python3 run_comparator.py <TheoremName>.lean`; a full-library comparator run is not required for adding a new result.
+- Run the required build, proof, and axiom checks. Audit each new theorem with `python3 run_comparator.py <TheoremName>.lean`; a full-library comparator run is not required for adding a new result.
 - Confirm that only the requested deliverables are staged.
 
 Any substantive change after approval requires renewed review and validation.
