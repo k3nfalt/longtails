@@ -5,6 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from run_comparator import generate
+
 ROOT = Path(__file__).resolve().parents[1]
 SETUP = """import LongTails.Template
 
@@ -44,6 +46,31 @@ PROOF = """by
 """
 
 
+class ChallengeGenerationTests(unittest.TestCase):
+    def test_upper_and_lower_with_same_filename(self):
+        rows = [
+            {
+                "module": f"LongTails.{directory}.SameName",
+                "theorem": f"LongTails.{directory}.SameName.result",
+                "setup": "LongTails.Setups.ComparatorTest.spec",
+                "budget": f"LongTails.{directory}.SameName.budget",
+                "online": False,
+                "lower": directory == "LowerBounds",
+            }
+            for directory in ("Theorems", "LowerBounds")
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            configs = list(generate(rows, Path(directory)))
+            self.assertNotEqual(configs[0], configs[1])
+            self.assertIn(
+                "OracleTemplate.Convergence",
+                configs[0].with_suffix(".lean").read_text(),
+            )
+            lower = configs[1].with_suffix(".lean").read_text()
+            self.assertIn("import LongTails.TemplateLowerBound", lower)
+            self.assertIn("OracleTemplate.NonConvergence", lower)
+
+
 class ComparatorTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -58,7 +85,13 @@ class ComparatorTests(unittest.TestCase):
             "run_comparator.py",
         ):
             shutil.copy2(ROOT / name, cls.root / name)
-        for directory in ("tools", "LongTails/Setups", "LongTails/Theorems", ".lake"):
+        for directory in (
+            "tools",
+            "LongTails/Setups",
+            "LongTails/Theorems",
+            "LongTails/LowerBounds",
+            ".lake",
+        ):
             (cls.root / directory).mkdir(parents=True, exist_ok=True)
         (cls.root / ".lake/packages").symlink_to(
             ROOT / ".lake/packages", target_is_directory=True
@@ -67,6 +100,7 @@ class ComparatorTests(unittest.TestCase):
             "tools/ConvergenceMetadata.lean",
             "LongTails/Template.lean",
             "LongTails/TemplateOnline.lean",
+            "LongTails/TemplateLowerBound.lean",
         ):
             shutil.copy2(ROOT / name, cls.root / name)
         (cls.root / "LongTails/Setups/ComparatorTest.lean").write_text(SETUP)
@@ -93,21 +127,26 @@ class ComparatorTests(unittest.TestCase):
         extra="",
         rejection=None,
         online=False,
+        lower=False,
         bound_declaration=None,
     ):
+        directory = "LowerBounds" if lower else "Theorems"
+        if statement is None and lower:
+            statement = "NonConvergence spec budget"
         if statement is None:
             statement = (
                 "OnlineConvergence spec budget" if online else "Convergence spec budget"
             )
-        source = f"""import LongTails.TemplateOnline
+        source = f"""import LongTails.TemplateLowerBound
+import LongTails.TemplateOnline
 import LongTails.Setups.ComparatorTest
-namespace LongTails.Theorems.{name}
+namespace LongTails.{directory}.{name}
 open OracleTemplate LongTails.Setups.ComparatorTest
 {ALGORITHM}
 {extra}
 noncomputable def budget : (let S := spec; S.Params → Fin S.numOracles → Nat) := {budget}
 theorem result : {statement} := {proof}
-end LongTails.Theorems.{name}
+end LongTails.{directory}.{name}
 """
         if online:
             source = (
@@ -120,7 +159,7 @@ end LongTails.Theorems.{name}
                 "def bound : (let S := spec; S.Params → Horizon → ℝ)",
                 f"def bound {bound_declaration}",
             )
-        (self.root / f"LongTails/Theorems/{name}.lean").write_text(source)
+        (self.root / f"LongTails/{directory}/{name}.lean").write_text(source)
         result = subprocess.run(
             [sys.executable, "run_comparator.py", f"{name}.lean"],
             cwd=self.root,
@@ -131,12 +170,40 @@ end LongTails.Theorems.{name}
         )
         if rejection is None:
             self.assertEqual(result.returncode, 0, result.stdout)
-            self.assertIn(
-                "Checked 1 convergence results and their budgets.", result.stdout
-            )
+            self.assertIn("Checked 1 results and their budgets.", result.stdout)
         else:
             self.assertNotEqual(result.returncode, 0, result.stdout)
             self.assertIn(rejection, result.stdout)
+
+    def test_lower_bound_rejections(self):
+        for name, statement, proof, rejection in (
+            (
+                "LowerMissingProof",
+                "NonConvergence spec budget",
+                "by sorry",
+                "Illegal axiom detected: 'sorryAx'",
+            ),
+            (
+                "LowerExtraHypothesis",
+                "False → NonConvergence spec budget",
+                "by intro h; exact h.elim",
+                "without extra hypotheses",
+            ),
+            (
+                "LowerWrongProtocol",
+                "Convergence spec budget",
+                PROOF,
+                "convergence results belong in Theorems",
+            ),
+        ):
+            with self.subTest(name=name):
+                self.audit(
+                    name,
+                    lower=True,
+                    statement=statement,
+                    proof=proof,
+                    rejection=rejection,
+                )
 
     def test_online_results(self):
         proof = "by exact ⟨fun _ => algorithm, fun _ _ _ _ _ _ => zero_le_one, fun _ _ _ => trivial⟩"

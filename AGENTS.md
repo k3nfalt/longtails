@@ -125,6 +125,7 @@ project preferences; newer explicit user requests take precedence.
   `git diff --check`; do not repeat unrelated proof builds.
 - Lower-bound verification must include targeted Lean compilation and an axiom
   audit of both `result` and `budget`, allowing only `propext`, `Classical.choice`,
-  and `Quot.sound`. The current `run_comparator.py` discovers only `Theorems`; do
-  not claim a lower-bound Comparator audit passed unless it was separately run
-  against a `NonConvergence` challenge. Report this tooling limitation explicitly.
+  and `Quot.sound`. Run
+  `python3 run_comparator.py LongTails/LowerBounds/<TheoremName>.lean`.
+  The default audit discovers both result directories. Use a full repository path
+  when an upper and lower result share a filename.
