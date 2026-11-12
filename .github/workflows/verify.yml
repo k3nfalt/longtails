@@ -51,7 +51,7 @@ jobs:
       - name: Test comparator rejection checks
         run: python3 -m unittest discover -s tests -p 'test_comparator.py' -v 2>&1 | tee comparator-tests.log
 
-      - name: Audit upper and lower bounds and budgets
+      - name: Audit convergence results and budgets
         env:
           PR_BASE: ${{ github.event.pull_request.base.sha }}
           PR_HEAD: ${{ github.event.pull_request.head.sha }}
@@ -59,7 +59,7 @@ jobs:
           {
             if [ -n "$PR_HEAD" ]; then
               git diff --name-only --diff-filter=A --no-renames -z "$PR_BASE...$PR_HEAD" \
-                -- ':(glob)LongTails/Theorems/*.lean' ':(glob)LongTails/LowerBounds/*.lean' > "$RUNNER_TEMP/new-theorems"
+                -- ':(glob)LongTails/Theorems/*.lean' > "$RUNNER_TEMP/new-theorems"
               found=false
               while IFS= read -r -d '' theorem; do
                 found=true

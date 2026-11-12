@@ -120,4 +120,4 @@ Finish with:
 - The Reviewer’s verdict and remaining limitations.
 - Verification results, changed file paths, and the pushed research commit ID, PR URL, or why submission was blocked or no commit was justified.
 
-For a lower-bound task, use `result : NonConvergence spec budget` and follow the quantifier, construction, and verification requirements in `AGENTS.md`. Compare the new necessary budget with prior lower bounds and the best applicable upper bound. Replace algorithm-design deliverables with the hard-instance construction where appropriate; keep the companion note beside the lower-bound theorem. Audit with `python3 run_comparator.py LongTails/LowerBounds/<TheoremName>.lean`.
+For a lower-bound task, use `result : NonConvergence spec budget` and follow the quantifier, construction, and verification requirements in `AGENTS.md`. Compare the new necessary budget with prior lower bounds and the best applicable upper bound. Replace algorithm-design deliverables with the hard-instance construction where appropriate; keep the companion note beside the lower-bound theorem. The Comparator command above currently supports upper bounds only.

@@ -38,4 +38,4 @@ After verifying the submitted PR, stop all processes using the task worktrees an
 
 In the final report, also include the pushed research commit ID and PR URL, or an explicit explanation of why submission was blocked.
 
-Lower-bound deliverables belong in `LongTails/LowerBounds`, with their companion note beside the Lean file, following `AGENTS.md`. Comparator and CI audit discovery support both directories, but automatic novelty postprocessing still only handles `LongTails/Theorems`. For a lower-bound PR, state this limitation and the targeted verification actually performed; do not promise automatic lower-bound novelty reviews, and do not relocate or restate the result as an upper bound to trigger them.
+Lower-bound deliverables belong in `LongTails/LowerBounds`, with their companion note beside the Lean file, following `AGENTS.md`. The current automatic theorem discovery and novelty postprocessing only handle `LongTails/Theorems`. For a lower-bound PR, state this limitation and the targeted verification actually performed; do not promise automatic lower-bound audits or reviews, and do not relocate or restate the result as an upper bound to trigger them.

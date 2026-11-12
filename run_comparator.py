@@ -1,4 +1,4 @@
-"""Generate setup challenges and compare them with the local upper- and lower-bound theorems."""
+"""Generate setup challenges and compare them with the local convergence theorems."""
 
 import argparse
 import json
@@ -45,7 +45,7 @@ def inspect(files, env):
     program += r"""
 open Lean Elab Command in
 run_cmd do
-  let entries ← liftTermElabM (ConvergenceMetadata.inspect true)
+  let entries ← liftTermElabM ConvergenceMetadata.inspect
   let rows ← entries.mapM fun entry => do
     let info ← Lean.getConstInfo entry.budgetName
     let boundType ← liftTermElabM <| withOptions
@@ -56,7 +56,6 @@ run_cmd do
       ("setup", toJson entry.setupName.toString),
       ("budget", toJson entry.budgetName.toString),
       ("online", toJson entry.online),
-      ("lower", toJson entry.lower),
       ("bound_type", toJson boundType.pretty)]
   (← IO.getStdout).putStrLn (Json.arr rows).compress
 """
@@ -78,7 +77,7 @@ run_cmd do
 
 def generate(rows, work):
     for row in rows:
-        name = row["module"].removeprefix("LongTails.")
+        name = row["module"].removeprefix("LongTails.Theorems.")
         challenge = f"ComparatorChallenge.{work.name}.{name}"
         source = work / Path(*name.split(".")).with_suffix(".lean")
         source.parent.mkdir(parents=True, exist_ok=True)
@@ -87,12 +86,9 @@ def generate(rows, work):
             convergence = "OnlineConvergence"
             bound_type = row["bound_type"]
         else:
-            convergence = "NonConvergence" if row["lower"] else "Convergence"
+            convergence = "Convergence"
             bound_type = f"(let S := {row['setup']}; S.Params → Fin S.numOracles → ℕ)"
-        template_import = (
-            "import LongTails.TemplateLowerBound\n" if row["lower"] else ""
-        )
-        source.write_text(f"""{template_import}import {setup_module}
+        source.write_text(f"""import {setup_module}
 noncomputable def {row["budget"]} : {bound_type} := by sorry
 theorem {row["theorem"]} : OracleTemplate.{convergence} {row["setup"]} {row["budget"]} := by sorry
 """)
@@ -118,7 +114,7 @@ def main():
     parser.add_argument(
         "file",
         nargs="?",
-        help="Optional file in LongTails/Theorems or LongTails/LowerBounds; otherwise check all",
+        help="Optional file in LongTails/Theorems; otherwise check all",
     )
     parser.add_argument(
         "-j", "--jobs", type=int, default=1, help="Parallel audits (default: 1)"
@@ -126,25 +122,16 @@ def main():
     args = parser.parse_args()
     if args.jobs < 1:
         parser.error("--jobs must be positive")
-    files = sorted(
-        path
-        for directory in ("Theorems", "LowerBounds")
-        for path in (ROOT / "LongTails" / directory).glob("*.lean")
-    )
+    files = sorted((ROOT / "LongTails/Theorems").glob("*.lean"))
     if args.file:
         selected = Path(args.file)
-        if selected.parent == Path("."):
-            matches = [path for path in files if path.name == selected.name]
-            if len(matches) != 1:
-                parser.error(
-                    "Expected a unique result filename; use its full repository path"
-                )
-            selected = matches[0]
-        selected = selected.resolve()
+        selected = (
+            ROOT / "LongTails/Theorems" / selected
+            if selected.parent == Path(".")
+            else selected
+        ).resolve()
         if selected not in files:
-            parser.error(
-                "Expected a file in LongTails/Theorems or LongTails/LowerBounds"
-            )
+            parser.error("Expected a file in LongTails/Theorems")
         files = [selected]
     env = prepare_tools()
     comparator = env["COMPARATOR_BIN"]
@@ -181,7 +168,10 @@ def main():
                     failed.append(name)
         if failed:
             raise ValueError("Comparator failed for: " + ", ".join(sorted(failed)))
-    summary = f"Checked {len(files)} results and their budgets. The solutions are okay!"
+    summary = (
+        f"Checked {len(files)} convergence results and their budgets. "
+        "The solutions are okay!"
+    )
     print(f"\033[32m{summary}\033[0m" if sys.stdout.isatty() else summary)
 
 

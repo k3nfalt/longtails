@@ -43,10 +43,7 @@ To independently audit a public theorem and its budget, run:
 python3 run_comparator.py YourTheorem.lean
 ```
 
-For a lower bound, use `python3 run_comparator.py LongTails/LowerBounds/YourTheorem.lean`.
-Use the full repository path if both result directories contain the same filename.
-
-To audit all upper and lower bounds with four parallel workers, run `python3 run_comparator.py -j 4`.
+To audit all theorems with four parallel workers, run `python3 run_comparator.py -j 4`.
 The script builds the selected modules first, then runs the audits in parallel.
 
 ## Server (optional)
