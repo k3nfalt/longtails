@@ -54,6 +54,7 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args[4]!).latex.1 ++ " & \\mathrm{otherwise} \\end{cases}")
   | ``OfNat.ofNat => latexPP args[1]!
   | ``Nat.cast | ``NatCast.natCast | ``PNat.val => latexPP args.back!
+  | ``Eq => binary args " = " 50 .none
   | ``LE.le => binary args " \\leq " 50 .none
   | ``HAdd.hAdd => binary args " + " 65 .left
   | ``HSub.hSub => binary args " - " 65 .left
@@ -100,14 +101,16 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
   | _ =>
     let some projection ← getProjectionFnInfo? name | failure
     let structName := projection.ctorName.getPrefix
-    guard (structName.getString! == "Params" || structName.getString! == "Public")
+    guard (structName.getString! == "Params" || structName.getString! == "Public" ||
+      structName.getString! == "Parameters")
     let mut parameter := args[projection.numParams]!
     while !parameter.isFVar do
       let parentName := parameter.getAppFn.constName!
       let some parent ← getProjectionFnInfo? parentName | failure
       guard ((getStructureParentInfo (← getEnv) parent.ctorName.getPrefix).any
         (fun info => info.projFn == parentName) ||
-        (parent.ctorName.getPrefix.getString! == "Params" &&
+        ((parent.ctorName.getPrefix.getString! == "Params" ||
+          parent.ctorName.getPrefix.getString! == "Parameters") &&
           (← inferType parameter).getAppFn.constName! == structName))
       parameter := parameter.getAppArgs[parent.numParams]!
     let mut result := symbol name.getString!

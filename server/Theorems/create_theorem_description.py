@@ -40,9 +40,10 @@ private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
         ("latex", toJson (← TheoremDescriptions.budgetLatex value))]]
     if type.isAppOfArity ``OracleTemplate.Convergence 2 then
       let budget := type.getAppArgs.back!
-      let value ← if let .const name levels := budget then do
+      let value ← if let .const name levels := budget.getAppFn then do
         let .defnInfo info ← getConstInfo name | throwError "Expected a budget definition"
-        pure (info.value.instantiateLevelParams info.levelParams levels)
+        pure (mkAppN (info.value.instantiateLevelParams info.levelParams levels)
+          budget.getAppArgs).headBeta
         else pure budget
       return ← lambdaBoundedTelescope value 1 fun params body => do
         let .forallE _ domain _ _ ← whnf (← inferType body)
@@ -50,8 +51,20 @@ private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
         let domain ← whnf domain
         unless domain.isAppOfArity ``Fin 1 do
           throwError "Expected a Fin-indexed budget"
-        let some count ← getNatValue? (← whnf domain.appArg!)
-          | throwError "Expected a concrete oracle count"
+        let count? ← getNatValue? (← whnf domain.appArg!)
+        if count?.isNone then
+          return ← withLocalDeclD `i domain fun index => do
+            let (component, _) ← simp (mkApp body index)
+              (← Simp.mkContext {} #[← getSimpTheorems]) #[← Simp.getSimprocs]
+            if component.expr.containsFVar index.fvarId! then
+              throwError "Indexed oracle families require a uniform per-oracle budget"
+            let component ← mkLambdaFVars params component.expr
+            return #[Json.mkObj [
+              ("oracle_count", toJson (← ppExpr domain.appArg!).pretty),
+              ("type", toJson (← ppExpr (← inferType component)).pretty),
+              ("value", toJson (← ppExpr component).pretty),
+              ("latex", toJson (← TheoremDescriptions.budgetLatex component))]]
+        let count := count?.getD 0
         let mut rows := #[]
         for i in [:count] do
           let index := mkApp3 (mkConst ``Fin.mk) (mkNatLit count) (mkNatLit i)

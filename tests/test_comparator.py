@@ -70,6 +70,15 @@ class ComparatorTests(unittest.TestCase):
         ):
             shutil.copy2(ROOT / name, cls.root / name)
         (cls.root / "LongTails/Setups/ComparatorTest.lean").write_text(SETUP)
+        for name, indices in (
+            ("ComparatorIndexedTest", "(_n : Nat)"),
+            ("ComparatorDoubleIndexedTest", "(_n _m : Nat)"),
+        ):
+            (cls.root / f"LongTails/Setups/{name}.lean").write_text(
+                SETUP.replace("ComparatorTest", name).replace(
+                    "spec : Setup", f"spec {indices} : Setup"
+                )
+            )
         (cls.root / "LongTails/Setups/ComparatorOnlineTest.lean").write_text(
             SETUP.replace("LongTails.Template", "LongTails.TemplateOnline")
             .replace("ComparatorTest", "ComparatorOnlineTest")
@@ -179,6 +188,96 @@ end LongTails.Theorems.{name}
                     rejection=rejection,
                     online=True,
                 )
+
+    def test_indexed_results(self):
+        cases = (
+            ("IndexedValid", "(n : Nat)", "(n : Nat)", "n", "n", PROOF, None),
+            (
+                "IndexedProofHypothesis",
+                "(n : Nat) (h : False)",
+                "(n : Nat)",
+                "n",
+                "n",
+                "by exact h.elim",
+                "without extra hypotheses",
+            ),
+            (
+                "IndexedOmitted",
+                "(n m : Nat)",
+                "(n : Nat)",
+                "n",
+                "n",
+                PROOF,
+                "exactly the result indices in order",
+            ),
+            (
+                "IndexedReordered",
+                "(n m : Nat)",
+                "(n m : Nat)",
+                "m n",
+                "n m",
+                PROOF,
+                "exactly the result indices in order",
+            ),
+            (
+                "IndexedMissingProof",
+                "(n : Nat)",
+                "(n : Nat)",
+                "n",
+                "n",
+                "by sorry",
+                "Illegal axiom detected: 'sorryAx'",
+            ),
+        )
+        for (
+            name,
+            binders,
+            budget_binders,
+            setup_args,
+            budget_args,
+            proof,
+            rejection,
+        ) in cases:
+            with self.subTest(name=name):
+                setup = (
+                    "ComparatorDoubleIndexedTest"
+                    if name == "IndexedReordered"
+                    else "ComparatorIndexedTest"
+                )
+                source = f"""import LongTails.Setups.{setup}
+namespace LongTails.Theorems.{name}
+open OracleTemplate LongTails.Setups.{setup}
+{ALGORITHM}
+noncomputable def budget {budget_binders} :
+    (let S := spec {budget_args}; S.Params → Fin S.numOracles → Nat) := fun _ _ => 1
+theorem result {binders} :
+    Convergence (spec {setup_args}) (budget {budget_args}) := {proof}
+end LongTails.Theorems.{name}
+"""
+                (self.root / f"LongTails/Theorems/{name}.lean").write_text(source)
+                result = subprocess.run(
+                    [sys.executable, "run_comparator.py", f"{name}.lean"],
+                    cwd=self.root,
+                    capture_output=True,
+                    text=True,
+                    timeout=300,
+                )
+                output = result.stdout + result.stderr
+                if rejection is None:
+                    self.assertEqual(result.returncode, 0, output)
+                    self.assertIn("Checked 1 convergence results", output)
+                else:
+                    self.assertNotEqual(result.returncode, 0, output)
+                    self.assertIn(rejection, output)
+
+    def test_indexed_online_is_rejected(self):
+        self.audit(
+            "IndexedOnline",
+            online=True,
+            statement="∀ _n : Nat, OnlineConvergence spec budget",
+            proof="by intro n; exact ⟨fun _ => algorithm, fun _ _ _ _ _ _ => zero_le_one, fun _ _ _ => trivial⟩",
+            rejection="indexed OnlineConvergence families are not supported",
+        )
 
     def test_online_explicit_bound_parameters(self):
         self.audit(

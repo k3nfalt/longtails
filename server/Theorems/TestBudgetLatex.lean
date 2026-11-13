@@ -109,3 +109,19 @@ run_cmd liftTermElabM do
   let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
   unless result == "\\log_{2}\\left(\\frac{R}{r0}\\right)" do
     throwError "Unexpected logarithm base: {result}"
+
+namespace BudgetLatexIndexedTests
+structure Params (n : ℕ) where
+  δ : ℝ
+structure Parameters (n : ℕ) where
+  base : Params n
+  localSteps : ℕ
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (n : ℕ) (p : Parameters (n + 1)) =>
+    if p.base.δ = 0 then p.localSteps else 1)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\begin{cases} localSteps & \\delta = 0 \\\\ 1 & \\mathrm{otherwise} \\end{cases}" do
+    throwError "Unexpected indexed nested parameter budget: {result}"
+end BudgetLatexIndexedTests
