@@ -1,0 +1,36 @@
+# Novelty assessment: `PolynomialMixingHeavyTailedConvexLowerBound`
+
+[`result`](../../LongTails/Theorems/PolynomialMixingHeavyTailedConvexLowerBound.lean) is a lower bound. It shows that every randomized adaptive algorithm with any budget b ≤ B fails on some instance of the [setup](../../LongTails/Setups/PolynomialMixingHeavyTailedConvex.lean) (built on [`HeavyTailedMarkovSmoothAndConvex`](../../LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean)). Failure means 𝔼[f(x̂)] − f* > ε. Each instance is an L-smooth convex f with ‖x₀ − x*‖ ≤ R, queried through a stationary Markov chain. The oracle is unbiased under π with centered α-moment ≤ σ^α, and the chain satisfies ∫TV(κᵗ(z,·),π)dπ(z) ≤ (1+t/τ)^(−β). The hard pair is built in [`PolynomialMixingLowerBound.lean`](../../LongTails/Proofs/PolynomialMixingLowerBound.lean). It depends only on the parameters, not on the algorithm, its seed or b.
+
+**Proved necessary budget.** L is the smoothness constant, R the initial distance, σ the noise scale, α ∈ (1,2] the moment order, τ and β the mixing scale and exponent, and ε the target gap. The bound is
+
+  B = ⌊(τ/β) · 2^{−(4α−1)(β+1)/(β(α−1))} · (σR/ε)^{α(β+1)/(β(α−1))}⌋ = Ω_{α,β}(τ (σR/ε)^{α(β+1)/(β(α−1))}).
+
+It holds on the following domain: 16 ≤ LR²/ε ≤ (σR/ε)^{α/(α−1)}, (σR/ε)^α ≥ 2^{4α−1}, and τ ≥ β(2^{4α−1}(σR/ε)^{−α})^{1/(β(α−1))}. The last condition makes the refresh rate at most 1. The dimension is any nontrivial Hilbert space, and Ω only needs two measurable singletons. The domain is nonempty: α=2, β=1, R=ε=1, L=σ=16 and τ=2 satisfy it and give B = 8. Below, S := (σR/ε)^{α/(α−1)} is shorthand only.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Sarkar–Chakrabartty–Aggarwal, [arXiv:2606.26316v1](https://arxiv.org/abs/2606.26316) (24 Jun 2026, prior), Thm 4 / App. H.4. Sticky chain refreshing w.p. 1/τ from a rare atom; **uniform** geometric mixing; 1-D PL quadratic; constant-probability error; all algorithms. **Applicability:** the theorem itself is for a different class and criterion. I transferred its construction myself. | Under uniform mixing, the rare state's TV is about (1−r)ᵗ, so the envelope forces r ≳ β/τ. The two-atom transfer then gives Ω((τ/β)(σR/ε)^{α/(α−1)}) → Ω_{α,β}((τ/β)(σR/ε)^{α(β+1)/(β(α−1))}) | A larger necessary budget by the factor (σR/ε)^{α/(β(α−1))} throughout the valid domain. | Uniform sup_z mixing (geometric) → π-averaged polynomial mixing (absolute regularity). Uniform-mixing chains are a subclass. | Constant-probability error → expected gap; both quantify over all algorithms. | Valid only for T ≤ S and refresh rate ≤ 1. Constants degrade as α→1 or β→0. The gain comes from the weaker mixing notion, under which a rare state can stay sticky for a long time. |
+| i.i.d. heavy-tailed two-point bound (classical; also the r=1 case of the same construction, since an i.i.d. chain satisfies the envelope) | Ω((σR/ε)^{α/(α−1)}) → Ω_{α,β}((τ/β)(σR/ε)^{α(β+1)/(β(α−1))}) | Factor (τ/β)(σR/ε)^{α/(β(α−1))}, which is ≳ 1 on the domain. | Adds Markov dependence. | None | None beyond the regime restrictions. |
+| Repository upper bound [`AcceleratedHeavyTailedMarkovConvex`](../../LongTails/Theorems/AcceleratedHeavyTailedMarkovConvex.lean) (in the initial commit 2026-10-14; [review](AcceleratedHeavyTailedMarkovConvex.md)) | Upper bound O((√(LR²/ε) + (256σR/ε)^{α/(α−1)})(1 + τ(256LR²/ε + 64(256σR/ε)^{α/(α−1)})^{1/β})). On the domain this is O_{α,β}(τ(σR/ε)^{α(β+1)/(β(α−1))}). | Exponents of τ, σ, R and ε now match, so the gap is a constant depending on α and β. That constant is huge: about 10^15 at α=2, β=1. | Same class (the formal inclusion `polynomialMixing_inclusion` is checked). | Same output criterion | The match does not cover T > S, the √(LR²/ε) term, uniformity in α and β, or high-probability accuracy. |
+
+**Reduction check and proof ancestry.** The instance, sticky refresh chain, rare atom and two-point indistinguishability event are Sarkar et al.'s App. H.4 construction. The only change is the refresh rate. The theorem calibrates r = β(4p)^{1/β}/τ jointly with the rare mass p ≍ S^{−1}. This is admissible because π-averaged TV weights the rare state by p, giving 2p(1−p)(1−r)ᵗ, whereas uniform mixing does not. That recalibration is a few lines. The gap-sum argument for the √-ridge pair f₊, f₋ (combined gap ≥ 6ε) is standard. A side computation suggests the mean-estimation exponent ε ∝ (τ/N)^{β(α−1)/(α(β+1))}. It appears to coincide with the Marcinkiewicz–Zygmund exponent from Rio-type quantile–mixing conditions (Rio, Ann. Probab. 23, 1995). I could not open that paper, so this link is unverified. If it holds, those results are asymptotic almost-sure laws, not finite-budget oracle bounds.
+
+**Search coverage (2026-11-13).** I searched arXiv, PMLR and NeurIPS/ICML for lower bounds with Markovian, polynomial or subgeometric mixing, and for heavy-tailed mean estimation under β-mixing. I read the statement and proof of Sarkar et al.'s Thm 4 in full. Chandak et al. ([arXiv:2603.19648](https://arxiv.org/abs/2603.19648)) treat independent heavy-tailed or long-range-dependent noise and prove upper bounds only. The geometric-mixing lower bounds of Even et al. (ICML 2023), Beznosikov et al. (NeurIPS 2023) and Nagaraj et al. (NeurIPS 2020) are light-tailed; I did not re-read them for this review. The companion note's citations of Lovas–Tukora (arXiv:2610.15974) and Rio's lecture notes could not be retrieved or verified. Its description of Sarkar et al. is accurate. The note's claim that the construction is not invented here is correct. The lower bound was introduced in commit 8f5916c3 on 2026-11-13. I did not run the build or the axiom audit.
+
+## Conclusion
+
+**Yes, a strictly larger necessary budget is proved, but by a routine recalibration of a known construction.**
+
+The closest prior lower bound is Sarkar et al.'s sticky-chain Theorem 4. Its construction, transferred to this convex expected-gap setting, forces only (τ/β)·S calls. Under the weaker π-averaged polynomial mixing, the new theorem forces
+
+  Ω_{α,β}((τ/β)(σR/ε)^{α(β+1)/(β(α−1))}) instead of Ω((τ/β)(σR/ε)^{α/(α−1)}).
+
+That is an extra polynomial factor (σR/ε)^{α/(β(α−1))}. It matches the parameter exponents of the repository's accelerated clipped Markov upper bound. The match holds only for fixed α and β, when LR²/ε ≤ (σR/ε)^{α/(α−1)}, and up to very large constants.
+
+The gain arises because averaging mixing over π lets a rare, heavy-tailed state stay stuck for a long time. Exploiting this needs only one new choice, a refresh rate tied to the rare mass, inside Sarkar et al.'s instance and indistinguishability argument. The upper bound being matched is itself a routine composition. I found no prior lower bound under this mixing model, but failing to find one does not establish priority. A classical Rio-type asymptotic version of the same exponent may exist and remains unchecked.
+
+The claimable contribution is a first finite-budget, all-algorithm lower bound for this setup under polynomial π-averaged mixing. It shows the multiplicative τ·S^{1+1/β} cost is unavoidable in the noise-dominated regime.
+
+**Verdict: LIMITED OR INCREMENTAL NOVELTY**
+**Confidence: medium**
