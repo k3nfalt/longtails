@@ -120,6 +120,11 @@ Environment:
             command.append("--")
         command.extend(("--model", args.model))
 
+    if args.agent == "codex":
+        if "--" not in command:
+            command.append("--")
+        command.append("--no-daemon")
+
     tmux = [
         "tmux",
         "new-window",
