@@ -78,7 +78,7 @@ def write_site(root, rendered, fonts, site_url=None):
     css = re.search(r"<style>(.*?)</style>", template, re.S)[1]
     css = css.replace("__FONT_FACES__", fonts).replace("__MATH_CSS__", rendered["css"])
     (assets / "site.css").write_text(
-        "\n".join(line.rstrip() for line in css.splitlines()) + "\n"
+        "\n".join(line.rstrip() for line in css.splitlines()).rstrip() + "\n"
     )
     template = re.sub(
         r"<style>.*?</style>",
@@ -93,7 +93,10 @@ def write_site(root, rendered, fonts, site_url=None):
 
     def write(path, content):
         if path.endswith((".html", ".js")):
-            content = "\n".join(line.rstrip() for line in content.splitlines()) + "\n"
+            content = (
+                "\n".join(line.rstrip() for line in content.splitlines()).rstrip()
+                + "\n"
+            )
         if path.endswith(".html") and len(content.encode()) >= 2_000_000:
             raise ValueError(f"HTML exceeds crawler size budget: {path}")
         target = output / path
@@ -232,7 +235,8 @@ def write_site(root, rendered, fonts, site_url=None):
     write("assets/catalog.js", script)
     template = re.sub(r"<script>.*?</script>", "", template, flags=re.S)
     template = template.replace(
-        "</body>", '<script src="assets/catalog.js"></script>\n</body>'
+        "</body>",
+        '<script src="assets/catalog.js" onerror="document.documentElement.classList.remove(\'catalog-loading\')"></script>\n</body>',
     )
     write("index.html", template)
     write(

@@ -9,6 +9,7 @@
   <link rel="canonical" href="__SITE_URL__">
   <link rel="sitemap" type="application/xml" href="sitemap.xml">
   <link rel="icon" type="image/png" href="assets/mini-logo.png">
+  <script data-catalog-startup>document.documentElement.classList.add('catalog-loading');</script>
   <style>
     __FONT_FACES__
     __MATH_CSS__
@@ -32,6 +33,7 @@
     .sort-note{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.evaluation-note{margin-left:auto;text-align:right}
     .filter-bar input{height:40px;min-height:40px;font-size:14px;line-height:20px}
     .pagination{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin:16px 0}.pagination button{font:inherit;padding:8px 16px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}.pagination button:disabled{opacity:.45;cursor:default}
+    #catalog-loading{display:none}.catalog-loading #catalog-loading{display:block}.catalog-loading #setups>nav{display:none}
     .empty-results{color:var(--muted);padding:12px 0 36px}.layout{padding-bottom:0}
     article{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:36px;overflow:hidden;scroll-margin-top:24px;box-shadow:0 2px 8px #0000000a}
     .card-body{padding:48px 72px}
@@ -118,7 +120,7 @@
       </div>
     </form>
     <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
-    <div class="layout"><section id="setups" aria-label="Setup collection">__STATIC_CATALOG__</section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
+    <div class="layout"><p id="catalog-loading" role="status">Loading results…</p><section id="setups" aria-label="Setup collection">__STATIC_CATALOG__</section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
     <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
     </div>
     <section class="framework detail" id="framework" hidden><a class="back" href="#">← All setups</a><div class="eyebrow">Shared definitions</div><h2>The oracle framework</h2><p>Every setup uses the same definitions of an algorithm, an oracle, and convergence.</p><div id="framework-source"></div></section>
@@ -265,8 +267,7 @@
         const entry = make('div', undefined, 'budget');
         const filename = theorem.module.split('.').pop() + '.lean';
         const title = make('div', undefined, 'budget-name');
-        const resultLink = make('a', filename);resultLink.href = theorem.url;
-        title.append(resultLink, ' ', sourceLink(theorem.module.replaceAll('.', '/') + '.lean', '(Lean proof)'));
+        title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
         const kind = theorem.kind || (theorem.statement.includes('OracleTemplate.NonConvergence ') ? 'lower' : theorem.statement.includes('OracleTemplate.OnlineConvergence ') ? 'online' : 'upper');
         if (kind === 'online') title.append(' — Online guarantee');
         const score = theorem.contribution;
@@ -328,7 +329,7 @@
       return section;
     }
     function setupAnchor(setup) {
-      const link = make('a', undefined, 'setup-anchor');link.href = setup.url;
+      const link = make('a', undefined, 'setup-anchor');link.href = '#' + setup.id;
       link.title = 'Link to this setup';link.setAttribute('aria-label', 'Link to ' + setup.title);
       link.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7 .3l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7-.3l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
       return link;
@@ -429,6 +430,7 @@
       if (version !== renderVersion) return false;
       cards = setups.map(setupCard);
       document.getElementById('setups').replaceChildren(...cards.map(({card}) => card));
+      document.documentElement.classList.remove('catalog-loading');
       document.getElementById('catalog-error')?.remove();
       if (query.trim()) {
         for (const {setup, card} of cards) {
@@ -502,6 +504,7 @@
     await route();
     }
     function showError(error) {
+      document.documentElement.classList.remove('catalog-loading');
       console.error(error);
       let message = document.getElementById('catalog-error');
       if (!message) {
