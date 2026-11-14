@@ -1525,6 +1525,28 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\frac{L1 \\cdot R}{\\log\\left(2 + L1 \\cdot R\\right)}}{8388608} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.GeneralizedSmoothConvexFull.spec.Params → ℕ",
+      "value": "fun p => ⌊(√(p.L0 * p.R ^ 2 / p.ε) + p.L1 * p.R / Real.log (2 + p.L1 * p.R)) / 8388608⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\frac{L1 \\cdot R}{\\log\\left(2 + L1 \\cdot R\\right)}}{8388608} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothConvexFull.spec.Params → ℕ",
+        "value": "fun p => ⌊(√(p.L0 * p.R ^ 2 / p.ε) + p.L1 * p.R / Real.log (2 + p.L1 * p.R)) / 8388608⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound",
+    "namespace": "LongTails.Setups.GeneralizedSmoothConvexFull",
+    "setup": "LongTails.Setups.GeneralizedSmoothConvexFull",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.GeneralizedSmoothConvexFull.spec\n  LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.budget",
+    "theorem": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lfloor \\frac{L1 \\cdot R}{4096 \\cdot \\log\\left(2 + L1 \\cdot R\\right)} \\right\\rfloor_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension.spec.Params → ℕ",
