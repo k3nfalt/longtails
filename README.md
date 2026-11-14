@@ -10,7 +10,7 @@ More than 100 new results so far—and more to come.</h3>
   <a href="https://arxiv.org/abs/2611.13872"><img src="https://img.shields.io/badge/arXiv-2611.13872-b31b1b" alt="arXiv:2611.13872"></a>
 </p>
 
-<p><img src="server/new-badge.png" width="42" height="28" style="vertical-align: -8px;" alt="New"> Our framework now supports <strong>lower bounds</strong> (e.g., <a href="https://k3nfalt.github.io/longtails/#GeneralizedSmoothConvexFull">(L₀,L₁)-smoothness</a>, <a href="https://k3nfalt.github.io/longtails/#PolynomialMixingHeavyTailedConvex">polynomial mixing</a>, <a href="https://k3nfalt.github.io/longtails/#StretchedExponentialMarkovConvex">Markov noise</a>).</p>
+<p><img src="server/new-badge.png" width="42" height="28" style="vertical-align: -16px;" alt="New"> Our framework now supports <strong>lower bounds</strong> (e.g., <a href="https://k3nfalt.github.io/longtails/#GeneralizedSmoothConvexFull">(L₀,L₁)-smoothness</a>, <a href="https://k3nfalt.github.io/longtails/#PolynomialMixingHeavyTailedConvex">polynomial mixing</a>, <a href="https://k3nfalt.github.io/longtails/#StretchedExponentialMarkovConvex">Markov noise</a>).</p>
 
 ## Preliminaries: Setup and Complexity
 
