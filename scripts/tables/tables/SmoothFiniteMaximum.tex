@@ -27,6 +27,25 @@
 & $\begin{aligned}\mathcal{O}\bigl(hk^3[&m\{1+(s\log m)^{2/3}\}\\&+\sqrt m(s\sqrt{\log m}+\sqrt t)]\bigr)\end{aligned}$; includes confidence amplification and scoring.
 & \textbf{(1)}: On common global-minimizer instances, polynomial saving for every $m=\varepsilon^{-\alpha}$, $\alpha>0$, in the normalized regime. Scope: local ball assumptions suffice; classes overlap, without nesting.
 & \textbf{(1)}: Can lose when $L\gg G^2/\varepsilon$. For $G=R=1$, $L=\varepsilon^{-2}$: contains $m\varepsilon^{-1}$ versus $m\varepsilon^{-2/3}+\sqrt m\varepsilon^{-3/2}$, ignoring logarithms. \\
+\midrule
+\textbf{(5)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AffineResidualFiniteMaximum.lean}{Affine\allowbreak Residual\allowbreak Finite\allowbreak Maximum} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AffineResidualFiniteMaximum.md}{(review)}
+& $\begin{aligned}\mathcal{O}\bigl(h\ell^8[&m+mt^{2/5}+m^{3/4}t^{1/2}\\&+t^{2/3}]\bigr)\end{aligned}$; sufficient deterministic cap on component value-and-gradient calls.
+& & \\
+\midrule
+\textbf{(6)} Accelerated linearization \citep{sfmCarmon2021v1}, App.~A.3
+& $\mathcal{O}\bigl(m(1+\sqrt t)\bigr)$; sufficient budget; deterministic accuracy.
+& \textbf{(5)}: For $t\ge1$, ignoring logs, saving factor $\min\{t^{1/10},m^{1/4},mt^{-1/6}\}$; strict polynomial gain needs $m\gg t^{1/6}$. Normalized $m=\varepsilon^{-1}$: $\mathcal{O}(\varepsilon^{-3/2})\to\mathcal{O}(h\ell^8\varepsilon^{-7/5})$.
+& \textbf{(5)}: Worse for $m\ll t^{1/6}$; randomized, with $h\ell^8$ overhead and a much larger universal constant. \\
+\midrule
+\textbf{(7)} \citep{sfmCarmon2023v1}, Thm.~8.1 and Table~1, ball case; confidence amplification
+& $\mathcal{O}\bigl(h[mt^{1/3}+s^2]\operatorname{polylog}(2+m+s+t)\bigr)$; sufficient budget for $0<\varepsilon\le\min\{LR^2,G^2/L\}$. Includes repetitions, cost cutoffs and $\mathcal{O}(mh)$ scoring calls.
+& \textbf{(5)}: Ignoring logs, improves when $s^2\gg mt^{2/5}+m^{3/4}\sqrt t+t^{2/3}$; drops the accuracy restriction. Against \textbf{(1)}, replaces $m^{6/7}(st)^{2/7}+s$ by $mt^{2/5}+t^{2/3}$, benefiting sufficiently large $G$.
+& \textbf{(5)}: Can lose when $s^2$ is small; factor $t^{1/15}$ loss when $mt^{2/5}$ dominates the compared costs. No runtime/simplex guarantee. Against \textbf{(1)}, extra $\ell$ and worse large-$m$ dependence. \\
+\midrule
+\textbf{(8)} \citep{sfmCarmon2021v1}, Thm.~2; unconstrained, globally convex, $G$-Lipschitz, $L$-smooth components; global minimizer within $R$ of $x_0$
+& $\begin{aligned}\mathcal{O}\bigl(hk^3[&m\{1+(s\log m)^{2/3}\}\\&+\sqrt m(s\sqrt{\log m}+\sqrt t)]\bigr)\end{aligned}$; sufficient budget including confidence amplification and scoring.
+& \textbf{(5)}: On common global-minimizer instances, normalized $m=\varepsilon^{-1}$ gives $\mathcal{O}(\varepsilon^{-5/3})\to\mathcal{O}(\varepsilon^{-7/5})$, ignoring logs. Scope: local ball assumptions suffice; classes overlap without nesting.
+& \textbf{(5)}: For $G=R=1$, $L=\varepsilon^{-2}$, has $\mathcal{O}(m\varepsilon^{-6/5}+m^{3/4}\varepsilon^{-3/2}+\varepsilon^{-2})$ versus $\mathcal{O}(m\varepsilon^{-2/3}+\sqrt m\varepsilon^{-3/2})$, ignoring logs; can lose. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

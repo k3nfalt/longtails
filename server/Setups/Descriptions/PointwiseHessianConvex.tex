@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Hessian Access}
+We consider minimizing a three-times continuously differentiable convex function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. We assume a gradient-dependent third-derivative bound, a hidden bound on the Hessian at a given starting point $x^0\in E$, and bounds on its distance and objective gap to a global minimizer $x^\star\in E$. Two exact oracles return $\nabla f(x)$ and $\nabla^2 f(x)$ at $x\in E$, respectively. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator and multilinear norms. We regard $\nabla^2 f(x)$ as a linear operator from $E$ to $E$ and $\nabla^3 f(x)$ as a trilinear form on $E$. The parameters satisfy
+\[
+M_0,M_1,H_0\geq 0,
+\qquad R,\Delta,\varepsilon>0.
+\]
+The algorithm receives $E$, $x^0$, $M_0$, $M_1$, $R$, $\Delta$, and $\varepsilon$; the hidden parameter $H_0$ may enter only the oracle-call budget.
+
+Our assumptions:
+\begin{assumption}[Regularity and convexity]
+The function $f$ belongs to $C^3(E;\mathbb{R})$ and, for every $x,y\in E$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Third-derivative bound]
+For every $x\in E$,
+\[
+\|\nabla^3 f(x)\|_{\mathrm{op}}
+\leq M_0+M_1\|\nabla f(x)\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial Hessian and minimizer bounds]
+At the given starting point,
+\[
+\|\nabla^2 f(x^0)\|_{\mathrm{op}}\leq H_0.
+\]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries to either oracle may be made at any point of $E$. Gradient calls and Hessian calls are counted separately. After the allotted calls, the output must satisfy
+\[
+f(\bar{x})-f(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+\end{document}

@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.VarianceOnlySecondOrder",
+  "searched_at": "2026-11-14T08:48:08.152924+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{40} \\cdot \\left(\\log\\left(\\frac{4096 \\cdot \\log\\left(20480 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right)\\right) \\cdot \\frac{L}{\\sqrt{\\rho \\cdot \\varepsilon}} \\cdot \\left(1 + \\frac{\\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\left(\\log\\left(20480 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right)\\right)\\right)^{4} \\cdot \\frac{L}{\\sqrt{\\rho \\cdot \\varepsilon}} \\cdot \\left(1 + \\frac{\\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right) \\right\\rceil_{+} \\cdot \\left(\\left\\lceil 2^{54} \\cdot \\left(\\log\\left(20480 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right)\\right)\\right)^{4} \\cdot \\left(1 + \\frac{\\dim_{\\mathbb{R}}\\left(E\\right) \\cdot \\sigma^{2} \\cdot \\sqrt{\\rho}}{L \\cdot \\varepsilon \\cdot \\sqrt{\\varepsilon}} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.VarianceOnlySecondOrder.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 40 *\n              Real.log\n                  (4096 * Real.log (20480 * ↑(Module.finrank ℝ q.E)) * (q.L / √(q.ρ * q.ε)) *\n                      (1 + √q.ρ * q.Δ / (q.ε * √q.ε)) /\n                    q.δ) ^\n                2 *\n            Real.log (20480 * ↑(Module.finrank ℝ q.E)) ^ 4 *\n          (q.L / √(q.ρ * q.ε)) *\n        (1 + √q.ρ * q.Δ / (q.ε * √q.ε))⌉₊ *\n    (⌈2 ^ 54 * Real.log (20480 * ↑(Module.finrank ℝ q.E)) ^ 4 *\n          (1 + ↑(Module.finrank ℝ q.E) * q.σ ^ 2 * √q.ρ / (q.L * q.ε * √q.ε) + q.σ ^ 2 / q.ε ^ 2)⌉₊ +\n      1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{40} \\cdot \\left(\\log\\left(\\frac{4096 \\cdot \\log\\left(20480 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right)\\right) \\cdot \\frac{L}{\\sqrt{\\rho \\cdot \\varepsilon}} \\cdot \\left(1 + \\frac{\\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right)}{\\delta}\\right)\\right)^{2} \\cdot \\left(\\log\\left(20480 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right)\\right)\\right)^{4} \\cdot \\frac{L}{\\sqrt{\\rho \\cdot \\varepsilon}} \\cdot \\left(1 + \\frac{\\sqrt{\\rho} \\cdot \\Delta}{\\varepsilon \\cdot \\sqrt{\\varepsilon}}\\right) \\right\\rceil_{+} \\cdot \\left(\\left\\lceil 2^{54} \\cdot \\left(\\log\\left(20480 \\cdot \\dim_{\\mathbb{R}}\\left(E\\right)\\right)\\right)^{4} \\cdot \\left(1 + \\frac{\\dim_{\\mathbb{R}}\\left(E\\right) \\cdot \\sigma^{2} \\cdot \\sqrt{\\rho}}{L \\cdot \\varepsilon \\cdot \\sqrt{\\varepsilon}} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.VarianceOnlySecondOrder.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 40 *\n              Real.log\n                  (4096 * Real.log (20480 * ↑(Module.finrank ℝ q.E)) * (q.L / √(q.ρ * q.ε)) *\n                      (1 + √q.ρ * q.Δ / (q.ε * √q.ε)) /\n                    q.δ) ^\n                2 *\n            Real.log (20480 * ↑(Module.finrank ℝ q.E)) ^ 4 *\n          (q.L / √(q.ρ * q.ε)) *\n        (1 + √q.ρ * q.Δ / (q.ε * √q.ε))⌉₊ *\n    (⌈2 ^ 54 * Real.log (20480 * ↑(Module.finrank ℝ q.E)) ^ 4 *\n          (1 + ↑(Module.finrank ℝ q.E) * q.σ ^ 2 * √q.ρ / (q.L * q.ε * √q.ε) + q.σ ^ 2 / q.ε ^ 2)⌉₊ +\n      1)"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.GatedPerturbedEscapeSosp",
+      "namespace": "LongTails.Setups.VarianceOnlySecondOrder",
+      "setup": "LongTails.Setups.VarianceOnlySecondOrder",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.VarianceOnlySecondOrder.spec OracleTemplate.GatedPerturbedEscapeSosp.budget",
+      "theorem": "OracleTemplate.GatedPerturbedEscapeSosp.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GatedPerturbedEscapeSosp",
+      "theorem": "OracleTemplate.GatedPerturbedEscapeSosp.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a twice continuously differentiable function f:E→ℝ; nonconvex objectives are permitted. The initialization satisfies f(x0)−inf f≤Δ, without requiring an attained minimum.",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.admissible, ContDiff and initial objective-gap conditions."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns only g(x,ξ), with fresh IID samples, E[g(x,ξ)]=∇f(x), and jointly measurable g. No function values, Hessians, sample reuse, or sample-level smoothness are supplied. All Params, including L, ρ, σ, Δ, ε, δ and x0, are public; f and the oracle distribution are hidden. Cost counts individual gradient replies under a fixed call budget.",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.Public, spec.publicInput, spec.Query, spec.Reply and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every x, E‖g(x,ξ)−∇f(x)‖²≤σ², with σ≥0. Only a second-moment bound is imposed; bounded noise, exponential tails and higher moments are not required.",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.valid and spec.admissible, variance integrability and variance bound."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a real inner-product space with its Borel measurable structure and finite positive dimension d=finrankℝ(E).",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: Params.innerE, Params.finiteE, Params.borelE and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The population gradient is globally L-Lipschitz and its Hessian is globally ρ-Lipschitz in operator norm. Parameters satisfy L>0, ρ>0, Δ≥0, ε>0, 0<δ<1 and ρε≤L².",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.valid and spec.admissible, gradient and Hessian Lipschitz inequalities."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point x̂ satisfying ‖∇f(x̂)‖≤ε; the criterion uses the unsquared norm.",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "Both stationarity conditions hold jointly with probability at least 1−δ over algorithm randomness and the IID oracle samples.",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.successful; LongTails/Template.lean: Convergence, product probability measure."
+      },
+      {
+        "label": "other",
+        "details": "The same returned point must satisfy ⟨v,∇²f(x̂)v⟩≥−√(ρε)‖v‖² for every v∈E, equivalently λmin(∇²f(x̂))≥−√(ρε).",
+        "evidence": "LongTails/Setups/VarianceOnlySecondOrder.lean: spec.successful, universal quadratic-form inequality."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Approximate second-order stationarity for smooth nonconvex optimization with Lipschitz Hessian and an IID unbiased bounded-variance gradient oracle is an established standard formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.GatedPerturbedEscapeSosp.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GatedPerturbedEscapeSosp",
+          "theorem": "OracleTemplate.GatedPerturbedEscapeSosp.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

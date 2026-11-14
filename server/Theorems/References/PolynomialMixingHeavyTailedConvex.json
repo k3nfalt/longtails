@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.PolynomialMixingHeavyTailedConvex",
+  "searched_at": "2026-11-14T08:44:19.439187+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\tau}{\\beta} \\cdot \\left(\\frac{\\left(\\frac{\\sigma \\cdot R}{\\varepsilon}\\right)^{\\alpha}}{2^{4 \\cdot \\alpha - 1}}\\right)^{\\frac{\\beta + 1}{\\beta \\cdot \\left(\\alpha - 1\\right)}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.PolynomialMixingHeavyTailedConvex.spec.Params → ℕ",
+        "value": "fun q => ⌊q.τ / q.β * ((q.σ * q.R / q.ε) ^ q.α / 2 ^ (4 * q.α - 1)) ^ ((q.β + 1) / (q.β * (q.α - 1)))⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\tau}{\\beta} \\cdot \\left(\\frac{\\left(\\frac{\\sigma \\cdot R}{\\varepsilon}\\right)^{\\alpha}}{2^{4 \\cdot \\alpha - 1}}\\right)^{\\frac{\\beta + 1}{\\beta \\cdot \\left(\\alpha - 1\\right)}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.PolynomialMixingHeavyTailedConvex.spec.Params → ℕ",
+          "value": "fun q => ⌊q.τ / q.β * ((q.σ * q.R / q.ε) ^ q.α / 2 ^ (4 * q.α - 1)) ^ ((q.β + 1) / (q.β * (q.α - 1)))⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound",
+      "namespace": "LongTails.Setups.PolynomialMixingHeavyTailedConvex",
+      "setup": "LongTails.Setups.PolynomialMixingHeavyTailedConvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.PolynomialMixingHeavyTailedConvex.spec\n  LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound.budget",
+      "theorem": "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound",
+      "theorem": "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f:E→ℝ with L-Lipschitz gradient and a global minimizer x⋆ satisfying ‖x0−x⋆‖≤R.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.admissible; LongTails/Setups/PolynomialMixingHeavyTailedConvex.lean: spec inherits admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "At query x, returns g(x,Zk), where Zk follows a stationary time-homogeneous Markov chain. For every fixed x, ∫g(x,z)π(dz)=∇f(x); conditional unbiasedness at adaptive queries is not assumed. Only the gradient vector is returned. Each call consumes the next chain state, with no separate free-transition oracle. All Params are public, including E, Ω, L, R, σ, α, τ, β, ε, and x0; f, g, κ, and π are hidden. Algorithms may randomize and have no additional restrictions.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: Params, pathLaw, spec.Public, spec.publicInput, spec.Query, spec.Reply, spec.admissible; LongTails/Template.lean: Setup.allowedAlgorithm and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "markov_dependence",
+        "details": "The chain starts in its invariant law π. For every integer t≥0, ∫sup_{A measurable}|κ^t(z,A)−π(A)|π(dz)≤(1+t/τ)^(−β), with τ>0 and β>0. This is a stationary-average total-variation condition, without uniform mixing over initial states.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: pathLaw, mixingDistance, spec.admissible."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every fixed x, the stationary centered moment satisfies ∫‖g(x,z)−∇f(x)‖^α π(dz)≤σ^α, with 1<α≤2 and σ>0. Infinite variance is permitted when α<2. The bound is stationary rather than conditional on the query history.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.valid and spec.admissible; LongTails/Setups/PolynomialMixingHeavyTailedConvex.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "E is a complete second-countable real Hilbert space with its Borel measurable structure and a unit vector; Ω contains two distinct points with measurable singletons. L,R,ε>0. The restricted regime requires 16≤LR²/ε≤(σR/ε)^(α/(α−1)), 2^(4α−1)≤(σR/ε)^α, and β(2^(4α−1)/(σR/ε)^α)^(1/(β(α−1)))≤τ.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: Params and spec.valid; LongTails/Setups/PolynomialMixingHeavyTailedConvex.lean: spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Output one measurable point xout∈E whose objective gap relative to a global minimizer is integrable and satisfies E[f(xout)−f(x⋆)]≤ε. No last-iterate or averaging requirement is imposed.",
+        "evidence": "LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the product of the algorithm's random seed law and the stationary Markov oracle path law.",
+        "evidence": "LongTails/Template.lean: Convergence; LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: spec.successful and pathLaw."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines smooth convex Hilbert-space optimization with stationary heavy-tailed gradient noise, stationary-average polynomial total-variation mixing, and explicit coupled parameter restrictions."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound",
+          "theorem": "LongTails.Theorems.PolynomialMixingHeavyTailedConvexLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

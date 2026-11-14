@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.StructuredGaussianVariationalInference",
+  "searched_at": "2026-11-14T08:47:18.819885+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 1, \\left\\lceil \\left(2 + 3 \\cdot w + 8 \\cdot \\log\\left(\\frac{48 \\cdot d \\cdot L}{\\mu}\\right)\\right) \\cdot \\left(\\frac{26 \\cdot L \\cdot R}{\\sqrt{\\mu \\cdot \\varepsilon}} + \\frac{32 \\cdot d \\cdot L}{\\mu \\cdot \\varepsilon}\\right) \\right\\rceil_{+} \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StructuredGaussianVariationalInference.spec.Params → ℕ",
+        "value": "fun q =>\n  max 1\n    ⌈(2 + 3 * ↑q.w + 8 * Real.log (48 * ↑q.d * q.L / q.μ)) *\n        (26 * q.L * q.R / √(q.μ * q.ε) + 32 * ↑q.d * q.L / (q.μ * q.ε))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 1, \\left\\lceil \\left(2 + 3 \\cdot w + 8 \\cdot \\log\\left(\\frac{48 \\cdot d \\cdot L}{\\mu}\\right)\\right) \\cdot \\left(\\frac{26 \\cdot L \\cdot R}{\\sqrt{\\mu \\cdot \\varepsilon}} + \\frac{32 \\cdot d \\cdot L}{\\mu \\cdot \\varepsilon}\\right) \\right\\rceil_{+} \\right\\}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StructuredGaussianVariationalInference.spec.Params → ℕ",
+          "value": "fun q =>\n  max 1\n    ⌈(2 + 3 * ↑q.w + 8 * Real.log (48 * ↑q.d * q.L / q.μ)) *\n        (26 * q.L * q.R / √(q.μ * q.ε) + 32 * ↑q.d * q.L / (q.μ * q.ε))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.StructuredGaussianVI",
+      "namespace": "LongTails.Setups.StructuredGaussianVariationalInference",
+      "setup": "LongTails.Setups.StructuredGaussianVariationalInference",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StructuredGaussianVariationalInference.spec\n  OracleTemplate.StructuredGaussianVariational.StructuredGaussianVI.budget",
+      "theorem": "OracleTemplate.StructuredGaussianVariational.StructuredGaussianVI.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StructuredGaussianVI",
+      "theorem": "OracleTemplate.StructuredGaussianVariational.StructuredGaussianVI.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F(m,C)=E[V(m+Cξ)]−∑ᵢlog Cᵢᵢ, with ξ∼N(0,I_d), over locations m and lower-triangular factors C with positive diagonal and prescribed zero entries. The feasible parameter set and objective are convex.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: noiseLaw, sample, objective, IsCholesky; LongTails/Setups/StructuredGaussianVariationalInference.lean: InFamily, spec.admissible."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The potential V has an L-Lipschitz gradient and μ-strongly monotone gradient, where 0<μ≤L. Gaussian averaging transfers μ-strong convexity to the location and scale parameters in the Euclidean/Frobenius metric.",
+        "evidence": "LongTails/Setups/StructuredGaussianVariationalInference.lean: spec.valid and spec.admissible; LongTails/Setups/GaussianVariationalInference.lean: objective, sqDist."
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines the smooth expected potential E[V(m+Cξ)] with the convex negative-log-diagonal term and the prescribed sparsity constraints.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: objective; LongTails/Setups/StructuredGaussianVariationalInference.lean: InFamily."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x∈ℝᵈ returns exactly ∇V(x), independently of history and oracle seed. The oracle supplies neither function values nor Gaussian expectations nor Hessians. All Params fields are public; V is the hidden instance. The extracted budget counts pointwise gradient calls.",
+        "evidence": "LongTails/Setups/StructuredGaussianVariationalInference.lean: spec.Query, spec.Reply, spec.Public, spec.publicInput, spec.Instance, spec.admissible; LongTails/Template.lean: executeWithTrace, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The potential is defined on Euclidean ℝᵈ. Variational parameters comprise a location vector and a d×d scale matrix, with squared distance equal to the sum of squared location and Frobenius distances.",
+        "evidence": "LongTails/Setups/GaussianVariationalInference.lean: Point, Location, Scale, sqDist."
+      },
+      {
+        "label": "other",
+        "details": "A public pattern S satisfies i∈S(i), j≤i for j∈S(i), and |S(i)|≤w. Feasible covariance factors have positive diagonal and Cᵢⱼ=0 whenever j∉S(i). A family minimizer exists within squared parameter distance R² of the public feasible initialization (m0,C0), with R≥0. No additional assumptions are imposed on the sparsity of V.",
+        "evidence": "LongTails/Setups/StructuredGaussianVariationalInference.lean: IsPattern, InFamily, Params, spec.valid, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "For every family minimizer (m*,C*), the output objective gap is integrable and E[F(m_out,C_out)−F(m*,C*)]≤ε, where ε>0. The output must be measurable and its scale factor must belong to the prescribed family for every seed.",
+        "evidence": "LongTails/Setups/StructuredGaussianVariationalInference.lean: spec.valid, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over the product of the algorithm and oracle seed laws. Exact oracle replies do not require a deterministic algorithm.",
+        "evidence": "LongTails/Setups/StructuredGaussianVariationalInference.lean: spec.successful; LongTails/Template.lean: Algorithm.law, Oracle.law, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Gaussian variational inference with a prescribed sparse Cholesky covariance factor is an established constrained variational optimization formulation; this setup uses smooth strongly convex potentials, pointwise gradient access, and expected objective accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.StructuredGaussianVariational.StructuredGaussianVI.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StructuredGaussianVI",
+          "theorem": "OracleTemplate.StructuredGaussianVariational.StructuredGaussianVI.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

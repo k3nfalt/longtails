@@ -1,0 +1,44 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for stochastic inequality KKT points under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticMfcqInequalities.lean}{\texttt{StochasticMfcqInequalities}}.}\label{tab:StochasticMfcqInequalities}
+\parbox{\linewidth}{\footnotesize
+Minimize smooth, possibly nonconvex $f$ subject to $c_i\leq0$, $m\geq1$, in a finite-dimensional real inner-product space. Globally, $\nabla f,\nabla c_i$ are $H$-Lipschitz; their norms are at most $H$ on the feasible set. Here $H\geq1$, $0<\mu\leq H$, $\tau,\varepsilon>0$, $\sigma,L,\Delta\geq0$, and every feasible $x$ admits $\|z\|\leq1$ with $\langle\nabla c_i(x),z\rangle\leq-\mu$ whenever $c_i(x)\geq-\tau$. The feasible start may be on the boundary; $f(x_0)-f(x)\leq\Delta$ for every feasible $x$. Jointly measurable, integrable, unbiased samples of $(\nabla f,c,J)$ have joint variance at most $\sigma^2$ and same-sample mean-square differences at most $L^2\|x-y\|^2$ on feasible points; successive samples are IID. Parameters are supplied. Target: with probability at least $1-\rho$, $0<\rho<1$, output $(x,\lambda)$ satisfies $c(x)\leq0$, $\lambda\geq0$, $\|\nabla f(x)+J(x)^\top\lambda\|\leq\varepsilon$, and $\sum_i|\lambda_i c_i(x)|\leq\varepsilon$. The constructed execution also keeps every query feasible on this event.
+}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SafeStochasticMfcqKkt.lean}{Safe\allowbreak Stochastic\allowbreak Mfcq\allowbreak Kkt} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SafeStochasticMfcqKkt.md}{(review)}
+& $\mathcal{O}\!\left(\begin{gathered}\relax[\frac{H^2\sigma^2}{\mu^2e^2}+K(1+\frac{\sigma L}{\mu e})]\\ {}\cdot[1+\log(K/\rho)]\end{gathered}\right)$ vector primitives, counting evaluations at each point of every paired request.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} LB-SGD \citep{smfcqUsmanova2024}, Theorem 8
+& $\mathcal{O}((m+1)\varepsilon^{-7}\operatorname{polylog}(\varepsilon^{-1},\rho^{-1}))$ per-function value/gradient calls. Reported accuracy dependence; remaining problem parameters fixed. Componentwise complementarity.
+& \textbf{(1)}: $\varepsilon^{-7}\to\varepsilon^{-3}$ up to logs, for $\varepsilon\leq\min\{1,\tau\}$ and fixed positive other parameters on bounded, interior-start, sub-Gaussian paired overlap. Scope: boundary starts, finite variance, unbounded sets; sum complementarity.
+& \textbf{(1)} needs same-sample paired, mean-square-smooth feedback and globally smooth derivatives; \textbf{(2)} uses one-point feedback and feasible-set smoothness. \\
+\midrule
+\textbf{(3)} SafePD \citep{smfcqUsmanovaLevy2025v1}, Theorem 17; $m=1$ only
+& $\mathcal{O}(\varepsilon^{-6}\theta^{-1}\operatorname{polylog}(\varepsilon^{-1},\rho^{-1}))$ one-point value/gradient samples, including inner solves and batches. Remaining problem parameters fixed. Strict start margin $\alpha>0$; sub-Gaussian noise.
+& \textbf{(1)}: $\varepsilon^{-6}\to\varepsilon^{-3}$ up to logs for $m=1$, $\varepsilon\leq\min\{1,\tau\}$, fixed positive other parameters, and paired sub-Gaussian overlap. Scope: arbitrary $m$, including redundant constraints; boundary starts.
+& \textbf{(1)} additionally needs same-sample paired mean-square smoothness and global derivative smoothness. \\
+\midrule
+\textbf{(4)} \citep{cssiShiWangV2}, Theorem 7; equality-plus-bounds class
+& $\mathcal{O}(\varepsilon^{-5}\ell^2)$ total evaluations, including $\mathcal{O}(\varepsilon^{-3}\ell^2)$ gradients; constraint values dominate. Fixed other parameters; bounded noise, samplewise smoothness, strong MFCQ everywhere on the bound-feasible set. Success probability $1-\varepsilon$; approximate feasibility.
+& \textbf{(1)}: finite variance, near-active MFCQ, exact feasibility, safe queries, independently tunable $\rho$. Rates not comparable: a valid slack reduction between \textbf{(1)} and \textbf{(4)} is not established.
+& \textbf{(1)} excludes equality constraints and needs known $H,\mu,\tau$. \\
+\midrule
+\textbf{(5)} \citep{smfcqLuMeiXiao2025v4}, Corollary 1(i), $\theta=1$, and Section 5; deterministic constraints only
+& $\mathcal{O}(\varepsilon^{-3}\ell^3)$ samples and exact constraint evaluations, for fixed other parameters under a global error bound. Surely $\varepsilon$-feasible, with expected stationarity residual at most $\varepsilon$; inequality extension stated in Section 5.
+& \textbf{(1)}: stochastic $c,J$, exact feasibility, safe queries, high-probability KKT certificate with complementarity. Matches polynomial $\varepsilon^{-3}$ order; differing regularity and accuracy criteria preclude a total-cost ranking.
+& \textbf{(1)} needs near-active MFCQ rather than \textbf{(5)}'s error bound; feasibility is high probability rather than sure. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $J_i=\nabla c_i$; $e=\min\{\varepsilon,1,\tau\}$; $K=1+H^3\Delta/(\mu^2e^2)$; $\ell=1+\log_+(1/\varepsilon)$; $\log_+t=\max\{0,\log t\}$. $\sigma^2$ is joint variance, $L$ joint mean-square smoothness, $\Delta$ the feasible objective gap. A vector primitive is one evaluation of $\nabla f$, $c$, or $J$; a paired request uses at most six such primitives, or $2+4m$ scalar rows. In \textbf{(3)}, $\theta$ is the MFCQ band width. $\operatorname{polylog}$ denotes unspecified polynomial factors in logarithms.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

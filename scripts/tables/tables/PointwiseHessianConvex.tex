@@ -1,0 +1,39 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PointwiseHessianConvex.lean}{PointwiseHessianConvex}.}\label{tab:PointwiseHessianConvex}
+\parbox{\linewidth}{\footnotesize Convex $f\in C^3(E)$ on a finite-dimensional real inner-product space, with $\|D^3f(x)\|\le M_0+M_1\|\nabla f(x)\|$ everywhere. An attained minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $f(x_0)-f(x_\star)\le\Delta$; $\|\nabla^2f(x_0)\|\le H_0$. Here $M_0,M_1,H_0\ge0$ and $R,\Delta,\varepsilon>0$. Exact gradient and Hessian access; target $f(x_{\rm out})-f(x_\star)\le\varepsilon$ for every seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PointwiseHessianAcceleration.lean}{Pointwise\allowbreak{}Hessian\allowbreak{}Acceleration} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PointwiseHessianAcceleration.md}{(review)}
+& $\begin{aligned}\mathcal{O}\!\bigl([&1+(M_0R^3/\varepsilon)^{2/7}\\&+M_1^{3/2}R^3]\ell^4\bigr)\end{aligned}$ total gradient and Hessian calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound, \citep{hascAgafonov2026Inexact}, Thm.~4.1, Prop.~2.7, Cor.~F.6
+& $\mathcal{O}\!\left(\begin{aligned}&(\bar M_0R^3/\varepsilon)^{2/7}+\sqrt{\delta R^2/\varepsilon}\\&+B_\rho\ell_\rho+J_\rho+B_\rho C_\rho\ell_\rho^{2/3}\end{aligned}\right)$ total gradient and Hessian calls, including rejected trials. Restriction: $\|\nabla^2f\|\le L_0+L_1\|\nabla f\|$, $L_0>0$, $L_1\ge0$; any $\rho>0$.
+& \textbf{(1)}: For $\delta=M_0=0$, fixed positive $M_1,L_0,R$, $\varepsilon\to0$: $\mathcal{O}(\log^4(1/\varepsilon))$ removes the reduction's $(M_1L_0R^4/\varepsilon)^{1/5}$ term. Scope: pointwise growth alone; no extra Hessian-growth assumption. 
+& \textbf{(1)} needs $M_0,M_1,R,\Delta,\varepsilon$; \textbf{(2)} is parameter-free. $C^3$ instead of $C^2$; exact Hessians required. Growth terms: $(M_1R^2)^{3/2}$ versus $(M_1R^2)^{1/3}$ for $M_1R^2\gg1$. Same $M_0$-term exponent, with $\ell^4$ overhead. \\
+\midrule
+\textbf{(3)} Accelerated Newton, \citep{hssDoikov2023v1}, Thm.~6.2 (unconstrained restriction)
+& $\mathcal{O}\!\left(\begin{aligned}&(MR_D)^{2/3}\ell_D\\&{}\cdot\bigl[1+\log_+\!\bigl((MR_D)^{2/3}R_D\\&\qquad{}\cdot\sqrt{L_DF_D}\,\ell_D^2/\varepsilon\bigr)\bigr]\end{aligned}\right)$ total gradient and Hessian calls, including inner Dual Newton iterations. Restriction: QSC with $M>0$; relative accuracy converted using $d=f(x_0)-f_\star>0$.
+& \textbf{(1)} covers non-QSC examples $\tfrac12x^TQx+\beta\|x\|^4/4$, $Q\succeq0$ singular, $\beta>0$. Classes incomparable; no general rate comparison.
+& For $f=\sum_i\cosh x_i+\tfrac12x^TQx$, $Q\succeq0$, \textbf{(1)} with $M_1=1+\|Q\|$ has term $((1+\|Q\|)R^2)^{3/2}$; \textbf{(3)} has $M=1$, only logarithmic $\|Q\|$ dependence and $R_D^{2/3}$ outside logarithms. \\
+\midrule
+\textbf{(4)} Adaptive MS acceleration, \citep{phcCarmon2022v2}, Cor.~3
+& $\mathcal{O}\!\left(\begin{aligned}&1+(M_0R^3/\varepsilon)^{2/7}\\&+\log\!\bigl[1+\log\!\bigl(2+M_0R/\lambda_0\\&\qquad{}+\lambda_0R^2/\varepsilon\bigr)\bigr]\end{aligned}\right)$ total gradient and Hessian calls; same order of linear solves. Special case: $M_1=0$, $M_0>0$; initialization $\lambda_0>0$.
+& \textbf{(1)} extends scope to $M_1>0$; matches the leading $\varepsilon^{-2/7}$ rate at $M_1=0$.
+& \textbf{(1)} adds $\ell^4$ overhead at $M_1=0$ and needs $M_0$; \textbf{(4)} adapts without knowing $M_0$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $f_\star=f(x_\star)$; $\log_+t=\log(\max\{1,t\})$. $\ell=1+\log\!\left(2+(\Delta+H_0R^2+M_0R^3+M_1^2R^4\Delta)/\varepsilon+M_1R^2\right)$. $H_0$: analysis-only initial Hessian bound for \textbf{(1)}.
+For \textbf{(2)}, $\bar M_0=M_0+M_1L_0\rho e^{L_1\rho}$, $\bar M_1=M_1e^{L_1\rho}$ (positive certificates may be used); $\delta\ge0$ bounds symmetric Hessian error in operator norm, and comparisons use $\delta=0$. $B_\rho=1+(\bar M_1R^2)^{1/3}+(R/\rho)^{2/3}$, $r_\rho=\min\{\rho/2,1/(6\sqrt{\bar M_1})\}$, with $1/\sqrt0=+\infty$; $g_0=\|\nabla f(x_0)\|$, $G=\max_{\|x-x_\star\|\le(1+2/\sqrt3)R}\|\nabla f(x)\|$. For arbitrary initial regularization $\eta_0>0$, $\tau_\rho=\max\{4\delta,2\sqrt{(\bar M_0+\bar M_1g_0)g_0},2g_0/\rho\}$, $\ell_\rho=1+\log_+(\max\{\eta_0,\tau_\rho\}R^2/\varepsilon)$, $J_\rho=\log_+(\tau_\rho/\eta_0)$ and $C_\rho=\log_+((\delta+G/r_\rho)/(\delta+\bar M_0r_\rho))$.
+For \textbf{(3)}, QSC means $|D^3f(x)[u,u,v]|\le M\langle\nabla^2f(x)u,u\rangle\|v\|$; $R_D=\max\{R,2^{3/2}/M\}$, $\ell_D=1+\log_+(d/\varepsilon)$, $L_D=\max_{\|x-x_\star\|\le6R_D}\|\nabla^2f(x)\|$, $F_D=\max_{\|x-x_\star\|\le6R_D}(f(x)-f_\star)$; the theorem's absolute tuning constant is set to $1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

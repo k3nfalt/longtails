@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.SublevelPLBoundedVariance",
+  "searched_at": "2026-11-14T08:47:24.594458+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(6 + \\left\\lceil \\log_{2}\\left(\\frac{32 \\cdot \\left(\\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} + 2\\right) \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\left(1152 + 16 \\cdot \\left(6 + \\left\\lceil \\log_{2}\\left(\\frac{32 \\cdot \\left(\\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} + 2\\right) \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right) \\cdot \\left(\\frac{19 \\cdot \\alpha}{2 - \\alpha} \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\sigma^{2} \\cdot \\varepsilon^{-\\frac{2}{\\alpha}} + \\frac{2 \\cdot \\sigma^{2}}{L \\cdot \\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.SublevelPLBoundedVariance.spec.Params → ℕ",
+        "value": "fun p =>\n  (⌈32 * p.α / (7 * (2 - p.α)) * p.L * p.τ ^ (2 / p.α) * (p.ε / 4) ^ ((p.α - 2) / p.α)⌉₊ + 1) *\n    ((6 +\n        ⌈Real.logb 2\n            (32 * (32 * p.α / (7 * (2 - p.α)) * p.L * p.τ ^ (2 / p.α) * (p.ε / 4) ^ ((p.α - 2) / p.α) + 2) * p.Δ /\n              p.ε)⌉₊) *\n      (1 +\n        ⌈(1152 +\n              16 *\n                (6 +\n                  ↑⌈Real.logb 2\n                        (32 * (32 * p.α / (7 * (2 - p.α)) * p.L * p.τ ^ (2 / p.α) * (p.ε / 4) ^ ((p.α - 2) / p.α) + 2) *\n                            p.Δ /\n                          p.ε)⌉₊)) *\n            (19 * p.α / (2 - p.α) * p.τ ^ (2 / p.α) * p.σ ^ 2 * p.ε ^ (-(2 / p.α)) + 2 * p.σ ^ 2 / (p.L * p.ε))⌉₊))"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(6 + \\left\\lceil \\log_{2}\\left(\\frac{32 \\cdot \\left(\\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} + 2\\right) \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\left(1152 + 16 \\cdot \\left(6 + \\left\\lceil \\log_{2}\\left(\\frac{32 \\cdot \\left(\\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} + 2\\right) \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right) \\cdot \\left(\\frac{19 \\cdot \\alpha}{2 - \\alpha} \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\sigma^{2} \\cdot \\varepsilon^{-\\frac{2}{\\alpha}} + \\frac{2 \\cdot \\sigma^{2}}{L \\cdot \\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.SublevelPLBoundedVariance.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌈32 * p.α / (7 * (2 - p.α)) * p.L * p.τ ^ (2 / p.α) * (p.ε / 4) ^ ((p.α - 2) / p.α)⌉₊ + 1) *\n    ((6 +\n        ⌈Real.logb 2\n            (32 * (32 * p.α / (7 * (2 - p.α)) * p.L * p.τ ^ (2 / p.α) * (p.ε / 4) ^ ((p.α - 2) / p.α) + 2) * p.Δ /\n              p.ε)⌉₊) *\n      (1 +\n        ⌈(1152 +\n              16 *\n                (6 +\n                  ↑⌈Real.logb 2\n                        (32 * (32 * p.α / (7 * (2 - p.α)) * p.L * p.τ ^ (2 / p.α) * (p.ε / 4) ^ ((p.α - 2) / p.α) + 2) *\n                            p.Δ /\n                          p.ε)⌉₊)) *\n            (19 * p.α / (2 - p.α) * p.τ ^ (2 / p.α) * p.σ ^ 2 * p.ε ^ (-(2 / p.α)) + 2 * p.σ ^ 2 / (p.L * p.ε))⌉₊))"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.SublevelPLRobustBatchedGd",
+      "namespace": "LongTails.Setups.SublevelPLBoundedVariance",
+      "setup": "LongTails.Setups.SublevelPLBoundedVariance",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SublevelPLBoundedVariance.spec\n  OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.budget",
+      "theorem": "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SublevelPLRobustBatchedGd",
+      "theorem": "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable, bounded-below function with globally L-Lipschitz gradient. Convexity is not required; nonconvex objectives are permitted.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "Sublevel α-gradient dominance: f(x)−inf f ≤ τ‖∇f(x)‖^α whenever f(x)≤f(x0), with 1≤α<2 and τ>0. The initial gap is at most Δ≥0.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ξ) using fresh iid randomness, with E[g(x,ξ)]=∇f(x). Only gradient samples are returned; function values and shared-sample evaluations across different points are not supplied. E, L, τ, α, σ, Δ, ε, and x0 are public; f, g, the sampling law, and Ω are hidden.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: Public, Params, spec.publicInput, and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-moment noise bound E‖g(x,ξ)−∇f(x)‖²≤σ² for every x, with σ≥0. No stronger tail or samplewise smoothness condition is imposed.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.valid and spec.admissible variance integrability and variance inequalities."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure; no dimension bound is specified.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: Public.normedE, Public.innerE, Public.finiteE, Public.measurableE, and Public.borelE."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return an E-valued point X whose objective gap f(X)−inf_y f(y) is integrable and at most ε in expectation, with ε>0. No distance or gradient-norm requirement is imposed.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.successful and spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "E[f(X)−inf f]≤ε over the joint algorithm and oracle randomness, under the supplied fixed cap on total stochastic-gradient calls.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.successful; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The combination of global smoothness, α-gradient dominance restricted to the initial sublevel set for α<2, gradient-only bounded-variance access, and unconditional expected objective accuracy is a meaningful localized variant requiring control of excursions outside that sublevel set."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SublevelPLRobustBatchedGd",
+          "theorem": "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

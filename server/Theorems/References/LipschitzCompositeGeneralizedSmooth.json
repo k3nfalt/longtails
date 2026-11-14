@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.LipschitzCompositeGeneralizedSmooth",
+  "searched_at": "2026-11-14T08:45:03.062395+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 184 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot M\\right) \\cdot R^{2}}{\\varepsilon}} + 130000 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(2 + L1 \\cdot R\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.LipschitzCompositeGeneralizedSmooth.spec.Params → ℕ",
+        "value": "fun q => ⌈184 * √((q.L0 + q.L1 * q.M) * q.R ^ 2 / q.ε) + 130000 * (1 + q.L1 * q.R) * Real.log (2 + q.L1 * q.R)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 184 \\cdot \\sqrt{\\frac{\\left(L0 + L1 \\cdot M\\right) \\cdot R^{2}}{\\varepsilon}} + 130000 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(2 + L1 \\cdot R\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.LipschitzCompositeGeneralizedSmooth.spec.Params → ℕ",
+          "value": "fun q => ⌈184 * √((q.L0 + q.L1 * q.M) * q.R ^ 2 / q.ε) + 130000 * (1 + q.L1 * q.R) * Real.log (2 + q.L1 * q.R)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.LipschitzCompositeGeneralizedAccelerated",
+      "namespace": "LongTails.Setups.LipschitzCompositeGeneralizedSmooth",
+      "setup": "LongTails.Setups.LipschitzCompositeGeneralizedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.LipschitzCompositeGeneralizedSmooth.spec\n  OracleTemplate.CompositeSherpa.budget",
+      "theorem": "OracleTemplate.CompositeSherpa.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LipschitzCompositeGeneralizedAccelerated",
+      "theorem": "OracleTemplate.CompositeSherpa.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of F=f+ψ, with both summands convex and an attained minimum satisfying ‖x₀−x⋆‖≤R. No strong convexity is assumed.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: objective; spec.admissible."
+      },
+      {
+        "label": "composite",
+        "details": "The component f is continuously differentiable; ψ is convex, globally M-Lipschitz, and admits exact proximal minimization. ψ need not be differentiable.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: Instance; proxObjective; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query at x returns ∇f(x) exactly, independently of history and oracle randomness. No f-value query is supplied.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: Query.gradient; spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "Returns ψ(x) exactly. Gradient, proximal, and ψ-value queries each consume one call from the same fixed oracle budget.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: Query.value; spec.admissible. LongTails/Template.lean: executeWithTrace; Convergence."
+      },
+      {
+        "label": "proximal",
+        "details": "For a>0, returns an exact global minimizer over E of ‖u−z‖²/(2a)+⟨v,u−z⟩+ψ(u).",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: Query.prox; proxObjective; spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y,S, if ‖∇f(x+θ(y−x))‖≤S for all θ∈[0,1], then ‖∇f(x)−∇f(y)‖≤(L₀+L₁S)‖x−y‖. The gradient is continuous; L₀,L₁>0.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: spec.valid; spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is an arbitrary real Hilbert space, without a finite-dimensional restriction. The nonsmooth term satisfies |ψ(x)−ψ(y)|≤M‖x−y‖, M≥0. E,L₀,L₁,M,x₀ are public; R>0 and ε>0 are hidden from algorithm construction and enter the execution budget. No initial objective-gap bound is supplied.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: Public; Params; spec.publicInput; spec.valid; spec.admissible. LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point x∈E must satisfy (f+ψ)(x)−(f+ψ)(x⋆)≤ε for a global minimizer x⋆. No stationarity or distance accuracy is required.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: spec.Output; spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm and oracle seed law after execution with the fixed budget.",
+        "evidence": "LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean: spec.successful. LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines gradient-dependent generalized smoothness with a globally Lipschitz nonsmooth composite term and an exact gradient/prox/ψ-value oracle in an arbitrary Hilbert space."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CompositeSherpa.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LipschitzCompositeGeneralizedAccelerated",
+          "theorem": "OracleTemplate.CompositeSherpa.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

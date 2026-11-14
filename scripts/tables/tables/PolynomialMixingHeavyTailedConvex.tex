@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle budgets under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PolynomialMixingHeavyTailedConvex.lean}{PolynomialMixingHeavyTailedConvex}.}\label{tab:PolynomialMixingHeavyTailedConvex}
+\parbox{\linewidth}{\footnotesize Convex $L$-smooth $f$ on a nontrivial, second-countable real Hilbert space with its Borel structure; a minimizer satisfies $\|x_0-x^\star\|\le R$. A stationary Markov chain on a measurable space with two distinct measurable singletons supplies jointly measurable gradients $g$, with $\int g(x,z)\,d\pi(z)=\nabla f(x)$ and $\int\|g(x,z)-\nabla f(x)\|^\alpha\,d\pi(z)\le\sigma^\alpha$; these integrands are integrable. Its integrated total-variation distance satisfies $\int\|\kappa^t(z,\cdot)-\pi\|_{\rm TV}\,d\pi(z)\le(1+t/\tau)^{-\beta}$. Parameters obey $L,R,\sigma,\tau,\beta,\varepsilon>0$, $1<\alpha\le2$, $16\le T\le S$, $S\ge C_\alpha$, and $\tau\ge\beta(C_\alpha/S)^{1/\beta}$. Target: a measurable output with integrable gap and $\int[f(\widehat x)-f(x^\star)]\,dP\le\varepsilon$, where $P$ includes chain and algorithm randomness. Lower bounds concern every randomized adaptive algorithm.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PolynomialMixingHeavyTailedConvexLowerBound.lean}{Polynomial\allowbreak Mixing\allowbreak Heavy\allowbreak Tailed\allowbreak Convex\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PolynomialMixingHeavyTailedConvexLowerBound.md}{(review)}
+& Lower bound (necessary): $\Omega\!\left(\frac{\tau}{\beta}(S/C_\alpha)^{1+1/\beta}\right)$. Failure at every $N\le\lfloor(\tau/\beta)(S/C_\alpha)^{1+1/\beta}\rfloor$.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound \citep[App.~H.4]{pmhtSarkar2026v1}; stationary convex transfer
+& Lower bound (necessary): $\Omega_\alpha((\tau/\beta)S)$. Uniform-geometric subclass: $\sup_z\|\kappa^t(z,\cdot)-\pi\|_{\rm TV}\le e^{-\beta t/\tau}$, $\tau\ge2\beta$; expected-gap target.
+& \textbf{(1)}: averaged polynomial mixing increases the necessary budget by an asymptotic factor $S^{1/\beta}$ at fixed $\alpha,\beta$. This strengthens hardness for the larger class.
+& \textbf{(1)}: restricted to $T\le S$; constants deteriorate as $\alpha\downarrow1$ or $\beta\downarrow0$. \\
+\midrule
+\textbf{(3)} Derived bound \citep[App.~H.4]{pmhtSarkar2026v1}; i.i.d. two-point specialization
+& Lower bound (necessary): $\Omega_\alpha(S)$. Independent stationary samples; convex expected-gap target.
+& \textbf{(1)}: Markov dependence adds an asymptotic necessary-budget factor $(\tau/\beta)S^{1/\beta}$ at fixed $\alpha,\beta$ in the stated regime. This strengthens hardness for the larger class.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$, $S=(\sigma R/\varepsilon)^{\alpha/(\alpha-1)}$, $C_\alpha=2^{(4\alpha-1)/(\alpha-1)}$; $N$ counts gradient calls, including calls used only to advance the chain. $\pi$ is invariant, $\kappa$ is the transition kernel, and $P$ is the joint execution law. $\Omega$ denotes a necessary budget; subscripts indicate permitted dependence of its constant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

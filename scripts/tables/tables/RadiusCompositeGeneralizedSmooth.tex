@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean}{RadiusCompositeGeneralizedSmooth}.}\label{tab:RadiusCompositeGeneralizedSmooth}
+\parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex $Q$ in a real Hilbert space. The function $f$ is convex and continuously differentiable on the whole space, with $\|\nabla f(x)-\nabla f(y)\|\leq(L_0+L_1\sup_{z\in[x,y]}\|\nabla f(z)\|)\|x-y\|$; $\psi$ is convex on $Q$. Exact gradients and an exact joint prox of $\psi+\iota_Q$ are available. Here $L_0,R,\varepsilon>0$, $L_1,G\geq0$, $x_0\in Q$, and some minimizer $x^\star\in Q$ satisfies $\|x_0-x^\star\|\leq R$ and $\|\nabla f(x^\star)\|\leq G$. Target: feasible $x$ with $F(x)-F(x^\star)\leq\varepsilon$, deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/RadiusCompositeAccelerated.lean}{Radius\allowbreak Composite\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/RadiusCompositeAccelerated.md}{(review)}
+& $\mathcal{O}\!\left(((1+a)^{4/3}+\sqrt T)\ell^2\right)$ gradient and joint-prox calls, including initialization and rejected trials.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} AGLS \citep{rcaDengGaoV3}, Thm.~6.1, Prop.~6.2.
+& $\mathcal{O}\!\left(1+e^{a/2}\sqrt T+\log_+(L_\star/L_{\rm init})\right)$ gradient, prox and value calls; worst-ball substitution upper bound. Applies in $\mathbb R^d$ with closed $\psi+\iota_Q$.
+& \textbf{(1)}: polynomial dependence on $a$ replaces the exponential substitution bound; no function values. For $a\leq1$, matches the accuracy term up to $\ell^2$.
+& \textbf{(1)} needs $L_0,L_1,R,\varepsilon$ in updates and $G$ for stopping. \textbf{(2)} allows general continuous local curvature. \\
+\midrule
+\textbf{(3)} Derived bound \citep{cgCompositeGeneralizedSource}: prox initialization and gap certificate.
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt T+(1+a)\bigl(1+a\\[-2pt]&\qquad+\log(1+L_1G/L_0)\bigr)\end{aligned}\right)$ gradient and prox calls, conditional on the initialized certificate $\Delta\lesssim(L_0+L_1G)e^{\mathcal{O}(a)}R^2$.
+& \textbf{(1)}: gain when $a\gg1$ and $\sqrt T\ell^2\ll a^2$. At $T=a^2$, $\log(1+L_1G/L_0)=\mathcal{O}(a)$: $\mathcal{O}(a^{4/3}\log^2 a)$ instead of $\mathcal{O}(a^2)$.
+& \textbf{(1)} adds $\ell^2$ to the $\sqrt T$ term. \\
+\midrule
+\textbf{(4)} Gap-based acceleration \citep{cgCompositeGeneralizedSource}.
+& $\mathcal{O}\!\left(\begin{aligned}&1+\sqrt T+(1+a)\\[-2pt]&\quad\cdot\log\!\left(2+(1+a)\sqrt{\frac{\Delta}{L_0R^2}}\right)\end{aligned}\right)$ gradient and prox calls; supplied $\Delta\geq F(x_0)-F(x^\star)$.
+& \textbf{(1)}: no initial objective-gap bound is needed.
+& Small known $\Delta$ can make \textbf{(4)} cheaper; \textbf{(1)} adds $\ell^2$ to the $\sqrt T$ term. \\
+\midrule
+\textbf{(5)} \citep{mirrorEverestV2}, Thm.~3.7.
+& $\mathcal{O}\!\left(\sqrt{L_0R^2/\varepsilon}+(1+a)\log(2+a)\right)$ gradient calls. Special case: $E=\mathbb R^d$, $Q=E$, $\psi=0$, $G=0$; $L_1>0$.
+& \textbf{(1)}: scope extends to constrained composite objectives and minimizers with nonzero smooth-part gradient.
+& On the overlap, \textbf{(1)} has $a^{4/3}$ rather than $a$ transient dependence, with additional logarithmic factors; its prox becomes a closed-form update. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $a=L_1R$, $T=(L_0+L_1G)R^2/\varepsilon$, $\ell=\log(2+a+T)$; $\Delta$ is an initial gap bound at the indicated starting point; $\iota_Q$ is the convex indicator of $Q$. In \textbf{(2)}, $L_\star=2\sup_{x,y\in B_R(x^\star)}\mathcal L(x,y)\lesssim(L_0+L_1G)e^a$, where $\mathcal L$ is the local gradient Lipschitz coefficient; $L_{\rm init}>0$ is the initial line-search estimate; $\log_+t=\max\{0,\log t\}$. Each primitive gradient, prox or value evaluation counts as one call; all budgets are sufficient upper bounds.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
