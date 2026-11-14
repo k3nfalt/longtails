@@ -10,7 +10,7 @@ More than 100 new results so far—and more to come.</h3>
   <a href="https://arxiv.org/abs/2611.13872"><img src="https://img.shields.io/badge/arXiv-2611.13872-b31b1b" alt="arXiv:2611.13872"></a>
 </p>
 
-<img src="server/new-badge.png" width="60" height="40" align="middle" alt="New"> Our framework now supports **lower bounds** (e.g., [convex optimization with $(L_0,L_1)$-smoothness](https://k3nfalt.github.io/longtails/#GeneralizedSmoothConvexFull), [convex optimization with heavy-tailed, polynomially mixing gradients](https://k3nfalt.github.io/longtails/#PolynomialMixingHeavyTailedConvex), and [convex optimization with stretched-exponential Markov mixing](https://k3nfalt.github.io/longtails/#StretchedExponentialMarkovConvex)).
+<img src="server/new-badge.png" width="30" height="20" align="middle" alt="New"> Our framework now supports **lower bounds** (e.g., [$(L_0,L_1)$-smoothness](https://k3nfalt.github.io/longtails/#GeneralizedSmoothConvexFull), [polynomial mixing](https://k3nfalt.github.io/longtails/#PolynomialMixingHeavyTailedConvex), [Markov noise](https://k3nfalt.github.io/longtails/#StretchedExponentialMarkovConvex)).
 
 ## Preliminaries: Setup and Complexity
 
