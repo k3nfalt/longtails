@@ -76,7 +76,9 @@ def write_site(root, rendered, fonts, site_url=None):
             "site-url must be an absolute HTTP(S) URL without query or fragment"
         )
     output = root / "public"
-    output.mkdir(exist_ok=True)
+    if output.exists():
+        shutil.rmtree(output)
+    output.mkdir()
     assets = output / "assets"
     assets.mkdir(exist_ok=True)
     shutil.copytree(root / "fonts", assets / "fonts", dirs_exist_ok=True)
@@ -102,7 +104,6 @@ def write_site(root, rendered, fonts, site_url=None):
     template = template.replace("__PROJECT_NAME__", "LongTails")
     template = template.replace("__REPOSITORY_URL__", escape(repository, quote=True))
     urls = []
-    generated = set()
 
     def write(path, content):
         if path.endswith((".html", ".js")):
@@ -115,7 +116,6 @@ def write_site(root, rendered, fonts, site_url=None):
         target = output / path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
-        generated.add(target)
         if path.endswith(".html"):
             urls.append(site_url + path.removesuffix("index.html"))
 
@@ -258,8 +258,4 @@ def write_site(root, rendered, fonts, site_url=None):
         + "".join(f"<url><loc>{escape(url)}</loc></url>" for url in urls)
         + "</urlset>",
     )
-    for directory in ("setups", "results", "data"):
-        for path in (output / directory).rglob("*"):
-            if path.is_file() and path not in generated:
-                path.unlink()
     return output / "index.html"
