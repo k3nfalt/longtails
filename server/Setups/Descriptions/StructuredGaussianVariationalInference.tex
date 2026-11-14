@@ -1,0 +1,57 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Structured Gaussian Variational Inference}
+We optimize Gaussian location $m\in\mathbb{R}^d$ and lower-triangular scale $C\in\mathbb{R}^{d\times d}$ with positive diagonal and prescribed row supports of size at most $w$. For a differentiable potential $V:\mathbb{R}^d\to\mathbb{R}$, define $F(m,C)=\mathbb{E}[V(m+C\xi)]-\sum_{i=1}^d\log C_{ii}$, where $\xi\sim\mathcal{N}(0,I_d)$ is standard Gaussian. The gradient of $V$ is $L$-Lipschitz and $\mu$-strongly monotone, with $0<\mu\leq L$. A given feasible pair $(m^0,C^0)$ lies within Euclidean--Frobenius distance $R\geq0$ of a minimizer. The oracle returns $\nabla V(x)$ at $x$. For $\varepsilon>0$, the goal is a feasible output $(\bar m,\bar C)$ with $\mathbb{E}_{P}[F(\bar m,\bar C)-\min F]\leq\varepsilon$, where the minimum is over feasible pairs and $P$ is the law of algorithm randomness.
+
+Let $d,w\in\{0,1,2,\ldots\}$, and equip $\mathbb{R}^d$ with its Euclidean inner product and norm. For each $i\in\{1,\ldots,d\}$, the prescribed support $S_i$ satisfies
+\[
+i\in S_i\subseteq\{1,\ldots,i\},
+\qquad |S_i|\leq w.
+\]
+Define the structured scale family by
+\[
+\mathcal{C}_S=\left\{C\in\mathbb{R}^{d\times d}:
+C_{ii}>0\ \text{for every }i,\quad
+C_{ij}=0\ \text{whenever }j\notin S_i\right\}.
+\]
+The optimization problem is
+\[
+\min_{m\in\mathbb{R}^d,\ C\in\mathcal{C}_S} F(m,C).
+\]
+The expectation defining $F$ uses independent standard normal coordinates of $\xi$. The algorithm receives $d,w,(S_i)_{i=1}^d,L,\mu,R,\varepsilon,m^0,C^0$, where $m^0\in\mathbb{R}^d$ and $C^0\in\mathcal{C}_S$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and strong monotonicity]
+The potential $V$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla V(x)-\nabla V(y)\|&\leq L\|x-y\|,\\
+\langle\nabla V(x)-\nabla V(y),x-y\rangle
+&\geq\mu\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Attainment and initial distance]
+There exists $(m^\star,C^\star)\in\mathbb{R}^d\times\mathcal{C}_S$ such that
+\[
+\begin{aligned}
+F(m^\star,C^\star)&\leq F(m,C)
+&&\text{for every }(m,C)\in\mathbb{R}^d\times\mathcal{C}_S,\\
+\|m^0-m^\star\|^2+\|C^0-C^\star\|_{\mathrm F}^2&\leq R^2,
+\end{aligned}
+\]
+where $\|C\|_{\mathrm F}^2=\sum_{i=1}^d\sum_{j=1}^d C_{ij}^2$ is the squared Frobenius norm.
+\end{assumption}
+
+Queries may be made at any $x\in\mathbb{R}^d$. After the allotted oracle calls, the output $(\bar m,\bar C)$ must be measurable and satisfy $\bar C\in\mathcal{C}_S$ for every realization. For every minimizing pair $(m^\star,C^\star)\in\mathbb{R}^d\times\mathcal{C}_S$, its objective gap must be integrable under $P$ and satisfy
+\[
+\mathbb{E}_{P}\!\left[F(\bar m,\bar C)-F(m^\star,C^\star)\right]
+\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/LipschitzCompositeGeneralizedSmooth.lean}{LipschitzCompositeGeneralizedSmooth}.}\label{tab:LipschitzCompositeGeneralizedSmooth}
+\parbox{\linewidth}{\footnotesize On a real Hilbert space, minimize $F=f+\psi$ over the whole space. The function $f$ is convex with continuous gradient and satisfies $\|\nabla f(x)-\nabla f(y)\|\le (L_0+L_1 S)\|x-y\|$ whenever $\|\nabla f\|\le S$ along $[x,y]$. The function $\psi$ is convex and $M$-Lipschitz. A minimizer $x^\star$ satisfies $\|x_0-x^\star\|\le R$; $L_0,L_1,R,\varepsilon>0$, $M\ge0$. Exact gradient, composite-proximal and $\psi$-value queries are available. The target is $F(\hat x)-F(x^\star)\le\varepsilon$, deterministically (hence almost surely).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LipschitzCompositeGeneralizedAccelerated.lean}{Lipschitz\allowbreak Composite\allowbreak Generalized\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LipschitzCompositeGeneralizedAccelerated.md}{(review)}
+& $\begin{aligned}\mathcal{O}\!\bigl(&\sqrt{(L_0+L_1M)R^2/\varepsilon}\\&+(1+q)\log(2+q)\bigr)\end{aligned}$ total gradient, prox and $\psi$-value calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{LiLaiAnHuWen2026v3Composite}, v3, Theorem 8 (upper bound)
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt{(L_0+L_1M)R^2/\varepsilon}+(1+q)\\&\quad{}\cdot\bigl[q+\log\!\bigl(2+((L_0+L_1M)/L_1^2\\&\qquad{}+MR)/\varepsilon\bigr)\bigr]\end{aligned}\right)$ gradient/prox calls, using $\tau=M$ and a radius-derived gap bound; $f$ twice differentiable on $\mathbb{R}^d$.
+& \textbf{(1)}: transient $q\log q$ instead of $q^2$ when $q\ge2$, $(L_0+L_1M)/(L_1^4R^2)\ll\varepsilon\le (L_0+L_1M)/L_1^2$. For $L_0=L_1=M=\varepsilon=1$, $R=q$: $\mathcal{O}(q\log q)$ versus $\mathcal{O}(q^2)$. Matches the leading order as $\varepsilon\to0$ at fixed remaining parameters. Adaptivity: no $R$ or gap bound in updates. Scope: Hilbert, $C^1$.
+& \textbf{(1)} needs $\psi$ values; excludes constraints and non-Lipschitz $\psi$. With known $\tau\ll M$, \textbf{(2)} has leading term $\sqrt{(L_0+L_1\tau)R^2/\varepsilon}$. \\
+\midrule
+\textbf{(3)} Derived bound: Moreau smoothing and regularization, then \citep{mirrorEverestV2}, Theorem 3.7
+& $\mathcal{O}\!\left(\begin{aligned}&\sqrt{(L_0+L_1M)R^2/\varepsilon}\\&+MR/\varepsilon+(1+q)\log(2+q)\end{aligned}\right)$ gradient/prox calls; on $\mathbb{R}^d$, $M>0$, smoothing $\mu=\varepsilon/M^2$ and regularizer $\varepsilon\|x-x_0\|^2/(4R^2)$.
+& \textbf{(1)} removes $MR/\varepsilon$; unbounded total-cost gain when $\varepsilon\ll M^2/(L_0+L_1M)$ and $\varepsilon\ll MR/[(1+q)\log(2+q)]$. Updates need neither $R$ nor $\varepsilon$.
+& \textbf{(1)} additionally needs $\psi$ values. \\
+\midrule
+\textbf{(4)} \citep{mirrorEverestV2}, v2, Theorem 3.7
+& $\mathcal{O}\!\left(\sqrt{L_0R^2/\varepsilon}+(1+q)\log(2+q)\right)$ gradient calls; special case $\psi\equiv0$, $M=0$, on $\mathbb{R}^d$.
+& \textbf{(1)}: Scope: Lipschitz-composite objectives. Matches known rate on the overlap; updates need neither $R$ nor $\varepsilon$.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=L_1R$; $\log$ is natural. Prox denotes the exact minimizer of $\|u-z\|^2/(2a)+\langle v,u-z\rangle+\psi(u)$ for $a>0$. In \textbf{(2)}, $\tau\ge\|\nabla f(x^\star)\|$ and the warm-start scale satisfies $\Gamma_0R^2\ge2(F(x_0)-F(x^\star))$; the displayed bound uses $\Gamma_0R^2=2[(L_0+L_1M)L_1^{-2}(e^q-1-q)+2MR]$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

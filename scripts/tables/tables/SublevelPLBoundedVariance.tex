@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SublevelPLBoundedVariance.lean}{SublevelPLBoundedVariance}.}\label{tab:SublevelPLBoundedVariance}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f$ is differentiable, globally $L$-smooth and bounded below. With $f_\star=\inf_x f(x)$, assume $f(x_0)-f_\star\le\Delta$ and $f(x)-f_\star\le\tau\|\nabla f(x)\|^\alpha$ whenever $f(x)\le f(x_0)$, where $L,\tau>0$, $1\le\alpha<2$, $\sigma,\Delta\ge0$ and $\varepsilon>0$. The jointly measurable oracle uses IID samples from a probability measure $p$, with $\int g(x,z)\,dp(z)=\nabla f(x)$ and $\int\|g(x,z)-\nabla f(x)\|^2\,dp(z)\le\sigma^2$; these integrals are integrable. The target is the unconditional last-iterate guarantee $\int [f(x_K(\omega))-f_\star]\,dP(\omega)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.235\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SublevelPLRobustBatchedGd.lean}{Sublevel\allowbreak PL\allowbreak Robust\allowbreak Batched\allowbreak Gd} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SublevelPLRobustBatchedGd.md}{(review)}
+& $\begin{aligned}\mathcal{O}\!\bigl((1+cD)\ell\bigl[1+\ell(&c\sigma^2\tau^{2/\alpha}\varepsilon^{-2/\alpha}\\[-2pt]&+\sigma^2/(L\varepsilon))\bigr]\bigr)\end{aligned}$ gradient samples, including every robust sub-batch; fixed budget.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: SGD under trajectory containment, \citep{splFatkhullin2022v1,splMasiha2026v3}, Cor.~1 / Table~1
+& $\mathcal{O}\!\left(D+L\sigma^2\tau^{4/\alpha}\varepsilon^{-(4-\alpha)/\alpha}\right)$ gradient samples, assuming the trajectory stays where $\alpha$-PL holds; stated for $\varepsilon\lesssim\min\{\Delta,L^{\alpha/(2-\alpha)}\tau^{2/(2-\alpha)}\}$. The original global-$\alpha$-PL formulation admits only constant globally smooth objectives here.
+& \textbf{(1)}: Scope: unconditional guarantee on nonconstant sublevel instances, without assumed containment; preserves the accuracy powers up to logarithms.
+& \textbf{(1)}: For $D\ge1$, overhead $c\ell$ in the deterministic term and $c^2\ell^2$ in the noise term; $\Delta$ enters logarithms. Uses robust batches rather than SGD. \\
+\midrule
+\textbf{(3)} SARAH, \citep{splMasihaLocal2026v2}, Thm.~3.2
+& $\mathcal{O}(\varepsilon^{-2/\alpha})$ stochastic-gradient evaluations, including batches and paired evaluations; other constants depend on $\tau,\sigma,\widetilde L,s,R,\delta$. Requires a compact, isolated minimizer component, local smoothness, batch smoothness, $x_0\in\mathcal U_0$ and $\varepsilon\le s/2$. Expected local gap is conditional on containment, whose probability is $\ge1-\delta$.
+& \textbf{(1)}: Oracle: no mean-squared smoothness or paired samples. Unconditional global-gap expectation instead of conditional local-gap expectation; no prescribed minimizer neighbourhood.
+& \textbf{(1)}: Global smoothness required. Noise-dependent accuracy exponent $(4-\alpha)/\alpha$ instead of $2/\alpha$. Setups and criteria differ; total rates are not comparable. \\
+\midrule
+\textbf{(4)} Clipped SGD, \citep{splSadiev2023v2}, Thm.~E.4; classical-PL special case
+& $\begin{aligned}\mathcal{O}\!\biggl(1+&\frac{Lh}{\mu}\log\!\left(e+\frac{Lh}{\mu\beta}\right)\\[-2pt]&+\frac{L\sigma^2}{\mu^2\varepsilon}a\log^2\!\left(e+\frac{\Delta}{\varepsilon a}\right)\biggr)\end{aligned}$ gradient samples for gap $\le\varepsilon$ with probability $1-\beta$. Assumes $f-f_\star\le\|\nabla f\|^2/(2\mu)$ and smoothness on $Q=\{x:\operatorname{dist}(x,\{f\le f_\star+2\Delta\})\le\sqrt{\Delta/L}/20\}$; displayed cost specializes to finite variance.
+& \textbf{(1)}: Scope: covers sublevel exponents $1\le\alpha<2$ beyond classical PL. Establishes unconditional expectation, which \textbf{(4)} does not imply without failure-event control.
+& \textbf{(1)}: Global rather than $Q$-local smoothness; finite variance rather than heavier tails; expectation rather than high probability. On globally smooth PL instances with $\Delta>0$, $\alpha=2-h^{-1}$ and\par $\tau=\Delta^{1-\alpha/2}(2\mu)^{-\alpha/2}$, cost becomes $\begin{aligned}\mathcal{O}\!\bigl((&L/\mu\\&+L\sigma^2/(\mu^2\varepsilon))h^2\\&\cdot\log^2\!\bigl(e+L\Delta/(\mu\varepsilon)\bigr)\bigr)\end{aligned}$: extra polylogarithmic factors. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $c=\alpha/(2-\alpha)$, $D=L\tau^{2/\alpha}\varepsilon^{-(2-\alpha)/\alpha}$, $\ell=\log(e+(1+cD)\Delta/\varepsilon)$; $h=\log(e+\Delta/\varepsilon)$, $a=\log(e+L\sigma^2/(\beta\mu^2\varepsilon))$, $0<\beta,\delta<1$, $\mu>0$ is the classical PL parameter. $\widetilde L$ bounds mean-squared oracle smoothness: $\int\|g(x,z)-g(y,z)\|^2\,dp(z)\le\widetilde L^2\|x-y\|^2$. For \textbf{(3)}, $R$ is a minimizer-neighbourhood radius, $s>0$ its gap barrier, and $\mathcal U_0=\{x:\operatorname{dist}(x,\mathcal M)<R/2,\ f(x)-l\le s/2\}$, with minimizer component $\mathcal M$ of level $l$. Logarithms are natural; $\lesssim$ hides universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

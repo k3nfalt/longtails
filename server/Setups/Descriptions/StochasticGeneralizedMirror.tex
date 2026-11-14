@@ -1,0 +1,101 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Generalized Smooth Composite Minimization}
+We consider minimizing $F=f+\psi$ over a convex set $Q$ in a finite-dimensional real normed space $E$. The function $f:E\to\mathbb{R}$ is convex and $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$, and $\psi:E\to\mathbb{R}$ is convex on $Q$. A given starting point has bounded objective gap and Bregman divergence to a minimizer $x^\star\in Q$. The oracle returns unbiased stochastic derivatives with independent samples and bounded $\alpha$th error moments, $1<\alpha\leq2$, or exact Bregman proximal points. For $\varepsilon>0$ and $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ satisfying $\bar{x}\in Q$ and $F(\bar{x})-F(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\min_{x\in Q} F(x),
+\qquad F(x)=f(x)+\psi(x).
+\]
+Write $E^*$ for the continuous dual of $E$, equipped with its induced operator norm $\|\cdot\|_{\mathrm{op}}$. Let $\Omega$ be the measurable sample space. The algorithm receives $E$, $\Omega$, the starting point $x^0$, and the parameters
+\[
+\begin{aligned}
+&L_0>0,\quad L_1\geq0,\quad R>0,\quad \Delta>0,\\
+&G\geq0,\quad \sigma\geq0,\quad 1<\alpha\leq2,\\
+&\varepsilon>0,\quad 0<\delta<1.
+\end{aligned}
+\]
+The instance supplies the objective and proximal geometry through the oracle described below.
+
+Our assumptions:
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is convex and Fr\'echet differentiable on $E$, with continuous derivative $\mathrm{d}f:E\to E^*$. For every $x,y\in E$ and $M\in\mathbb{R}$,
+\[
+\begin{aligned}
+&\|\mathrm{d}f(x+\theta(y-x))\|_{\mathrm{op}}\leq M
+\quad\text{for all }\theta\in[0,1]\\
+&\hspace{1em}\Longrightarrow\quad
+\|\mathrm{d}f(x)-\mathrm{d}f(y)\|_{\mathrm{op}}
+\leq (L_0+L_1M)\|x-y\|.
+\end{aligned}
+\]
+The set $Q\subseteq E$ is convex and Borel measurable. The function $\psi$ is measurable on $E$ and convex on $Q$.
+\end{assumption}
+
+\begin{assumption}[Bregman geometry and exact proximal access]
+There is an open convex set $U\subseteq E$ and a function $h:E\to\mathbb{R}$ that is Fr\'echet differentiable on $U$. For $z\in U$ and $u\in E$, define
+\[
+D_h(u,z)=h(u)-h(z)-\mathrm{d}h(z)[u-z].
+\]
+The divergence satisfies
+\[
+D_h(u,z)\geq\frac12\|u-z\|^2,
+\qquad z\in Q\cap U,\quad u\in Q.
+\]
+An exact proximal map $T:\mathbb{R}\times E\times E^*\to E$ is supplied. For every $a>0$, $z\in Q\cap U$, and $v\in E^*$,
+\[
+\begin{aligned}
+T(a,z,v)&\in Q\cap U,\\
+T(a,z,v)&\in\underset{u\in Q}{\operatorname{argmin}}
+\bigl\{a\bigl(v[u-z]+\psi(u)\bigr)+D_h(u,z)\bigr\}.
+\end{aligned}
+\]
+The map on $\mathbb{R}\times E\times E^*$ given by
+\[
+(a,z,v)\longmapsto
+\begin{cases}
+T(a,z,v),&a>0,\\
+x^0,&a\leq0
+\end{cases}
+\]
+is measurable.
+\end{assumption}
+
+\begin{assumption}[Initial bounds and a minimizer]
+The given point satisfies $x^0\in Q\cap U$. There exists $x^\star\in Q$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in Q,\\
+D_h(x^\star,x^0)&\leq R^2/2,\\
+F(x^0)-F(x^\star)&\leq\Delta,\\
+\|\mathrm{d}f(x^\star)\|_{\mathrm{op}}&\leq G.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic derivative oracle]
+There is a probability measure $\mu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E^*$. For every $x\in Q$, the map $g(x,\cdot)$ is Bochner integrable, the random variable $\|g(x,\xi)-\mathrm{d}f(x)\|_{\mathrm{op}}^\alpha$ is integrable for $\xi\sim\mu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)]&=\mathrm{d}f(x),\\
+\mathbb{E}_{\xi\sim\mu}
+\bigl[\|g(x,\xi)-\mathrm{d}f(x)\|_{\mathrm{op}}^\alpha\bigr]
+&\leq\sigma^\alpha.
+\end{aligned}
+\]
+The sample sequence $(\xi_k)_{k\geq0}$ has a joint probability law $\nu$ on $\Omega^{\mathbb{N}}$ under which its coordinates are measurable, mutually independent, and each distributed according to $\mu$. This sequence is independent of the algorithm's randomness. At call $k$, a derivative query at $x\in E$ returns $g(x,\xi_k)$; a proximal query $(a,z,v)\in\mathbb{R}\times E\times E^*$ returns $T(a,z,v)$.
+\end{assumption}
+
+Both types of query count toward the same total oracle-call budget. The output $\bar{x}\in E$ must be measurable and satisfy
+\[
+P\bigl(\bar{x}\notin Q\ \text{or}\ F(\bar{x})-F(x^\star)>\varepsilon\bigr)
+\leq\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the sample sequence.
+\end{document}

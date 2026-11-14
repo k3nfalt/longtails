@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.FiniteSumStrongGrowthConvex",
+  "searched_at": "2026-11-14T08:45:30.342948+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "7000 \\cdot \\left(\\min\\left\\{ n, \\left\\lceil 1024 \\cdot \\rho \\right\\rceil_{+} \\right\\} + \\left\\lceil \\sqrt{\\frac{\\min\\left\\{ n, \\left\\lceil 1024 \\cdot \\rho \\right\\rceil_{+} \\right\\} \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil 2^{32} \\cdot \\rho^{5} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteSumStrongGrowthConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  7000 * (min p.n ⌈1024 * p.ρ⌉₊ + ⌈√(min ↑p.n ↑⌈1024 * p.ρ⌉₊ * p.L * p.R ^ 2 / p.ε)⌉₊) * Nat.clog 2 ⌈2 ^ 32 * p.ρ ^ 5⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "7000 \\cdot \\left(\\min\\left\\{ n, \\left\\lceil 1024 \\cdot \\rho \\right\\rceil_{+} \\right\\} + \\left\\lceil \\sqrt{\\frac{\\min\\left\\{ n, \\left\\lceil 1024 \\cdot \\rho \\right\\rceil_{+} \\right\\} \\cdot L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil 2^{32} \\cdot \\rho^{5} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteSumStrongGrowthConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  7000 * (min p.n ⌈1024 * p.ρ⌉₊ + ⌈√(min ↑p.n ↑⌈1024 * p.ρ⌉₊ * p.L * p.R ^ 2 / p.ε)⌉₊) * Nat.clog 2 ⌈2 ^ 32 * p.ρ ^ 5⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration",
+      "namespace": "LongTails.Setups.FiniteSumStrongGrowthConvex",
+      "setup": "LongTails.Setups.FiniteSumStrongGrowthConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteSumStrongGrowthConvex.spec\n  LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration.budget",
+      "theorem": "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration",
+      "theorem": "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of F(x) = (1/n)∑ᵢ fᵢ(x). Every component is differentiable, convex, and globally L-smooth, with L > 0. A minimizer x⋆ exists with ‖x₀ − x⋆‖ ≤ R, where R ≥ 0. Strong convexity is not assumed.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective averages n ≥ 1 hidden component functions. All Params, including n, L, ρ, R, ε, and x₀, are public.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: Params, objective, spec.Public, spec.Instance, and spec.publicInput; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query selects any component i and point x and returns exactly ∇fᵢ(x), independently of oracle history and seed. Each component-gradient evaluation counts as one call; there is no additional oracle noise or prescribed sampling dependence.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: spec.Query, spec.Reply, and spec.admissible oracle-answer equality; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "Global strong-growth condition: (1/n)∑ᵢ ‖∇fᵢ(x)‖² ≤ ρ‖∇F(x)‖² for every x, with public ρ ≥ 1. Consequently, every component gradient vanishes at any minimizer of F.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: Params.ρ, spec.valid, and spec.admissible strong-growth inequality."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is a finite-dimensional real inner-product space equipped with a measurable-space structure.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: Params.E, Params.innerE, Params.finiteE, and Params.measurableE."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "For ε > 0, return a measurable point-valued output with integrable objective gap F(output) − F(x⋆) for some global minimizer x⋆.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: spec.valid and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Require E[F(output) − F(x⋆)] ≤ ε under the execution law. The extracted budget caps the total component-gradient calls for every execution, rather than only in expectation.",
+        "evidence": "LongTails/Setups/FiniteSumStrongGrowthConvex.lean: spec.successful; LongTails/Template.lean: executeWithTrace and Convergence; supplied result budget."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth convex finite-sum minimization with an expected objective-gap target is established, but the global strong-growth restriction imposes substantial additional structure on component gradients."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration",
+          "theorem": "LongTails.Theorems.StrongGrowthConvexFiniteSumAcceleration.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

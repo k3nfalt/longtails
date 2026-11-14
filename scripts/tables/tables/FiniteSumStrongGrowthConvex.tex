@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient upper-bound budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteSumStrongGrowthConvex.lean}{FiniteSumStrongGrowthConvex}.}\label{tab:FiniteSumStrongGrowthConvex}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f=n^{-1}\sum_{i=1}^n f_i$, $n\ge1$, with convex differentiable $L$-smooth components and $n^{-1}\sum_i\|\nabla f_i(x)\|^2\le\rho\|\nabla f(x)\|^2$ globally. A minimizer $x_\star$ satisfies $\|x_0-x_\star\|\le R$; $L,\varepsilon>0$, $\rho\ge1$, $R\ge0$. Exact indexed component gradients are available. The target is $\int [f(X(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, with measurable output and integrable gap, where $P$ is the algorithm's probability law. Costs count all component-gradient evaluations, including reuse and inner solves.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StrongGrowthConvexFiniteSumAcceleration.lean}{Strong\allowbreak Growth\allowbreak Convex\allowbreak Finite\allowbreak Sum\allowbreak Acceleration} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StrongGrowthConvexFiniteSumAcceleration.md}{(review)}
+& $\mathcal{O}\!\left((\min\{n,\rho\}+\sqrt{\min\{n,\rho\}T})\ell_\rho\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} SNAG \citep{fsgHermant2026v3}, Thm.~3, (8)
+& $\mathcal{O}\!\left(1+\rho\sqrt{L_fR^2/\varepsilon}\right)$
+& \textbf{(1)}: rate gain $\asymp\sqrt{\rho L_f/L}/\ell_\rho$ when $\rho\le n$, $\rho L_f/L\gg\ell_\rho^2$, $L_fR^2/\varepsilon\gg\ell_\rho^2$. At $\rho=q$, $n=T=q^3$, $L_f=L$: $\mathcal{O}(q^2\log q)$ versus $\mathcal{O}(q^{5/2})$.
+& \textbf{(1)} needs convex smooth components and finite-sum reuse; adds $\ell_\rho$. Can lose when $L_f\lesssim L\ell_\rho^2/\rho$. \\
+\midrule
+\textbf{(3)} Katyusha + AdaptReg \citep{AllenZhu2018KatyushaComposite}, Cor.~3.5
+& $\mathcal{O}\!\left(n\ell_T+\sqrt{nT}\right)$
+& \textbf{(1)}: rate gain at least $\asymp\sqrt{n/\rho}/\ell_\rho$ when $\rho\ell_\rho^2\ll n\lesssim T$. At $\rho=q$, $n=T=q^3$: $\mathcal{O}(q^2\log q)$ versus $\mathcal{O}(q^3\log q)$.
+& \textbf{(1)} needs strong growth; adds $\ell_\rho$ to the accelerated term, losing that factor when $\rho\ge n$ and $T\gg n\ell_T^2$. \\
+\midrule
+\textbf{(4)} Proximal STORM \citep{fsgcProximalStorm2026}
+& $\mathcal{O}\!\left((\rho+\rho^{3/4}\sqrt{\bar L R^2/\varepsilon})\ell_\rho\right)$; same-index pairs cost two component calls.
+& \textbf{(1)}: $\rho^{1/2}$ instead of $\rho^{3/4}$ in the accuracy term for $\rho\le n$, $\bar L=L$. At $\rho=q$, $n=T=q^3$: $\mathcal{O}(q^2\log q)$ versus $\mathcal{O}(q^{9/4}\log q)$.
+& \textbf{(1)} needs convex components and finite sums. Its accuracy term is worse when $\bar L<L/\sqrt\rho$ and $\rho\le n$. \\
+\midrule
+\textbf{(5)} Derived bound \citep{fsgcNovoselov2026v1}, Thm.~5.1
+& $\mathcal{O}(1+T\ell_T)$; serial sample-reuse specialization, one worker, one query per round, unlimited IID sample pool.
+& \textbf{(1)}: for $\rho\le n$ and $T\gg\rho$, replaces linear $T$ dependence with $\sqrt{\rho T}$, retaining $\rho\ell_\rho$. At $\rho=q$, $n=T=q^3$: $\mathcal{O}(q^2\log q)$ versus $\mathcal{O}(q^3\log q)$.
+& \textbf{(1)} needs strong growth and a finite sum; \textbf{(5)} covers general interpolating populations without a strong-growth constant. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=LR^2/\varepsilon$; $\ell_\rho=1+\log\rho$; $\ell_T=1+\log(1+T)$. $L_f\le L$ is the mean's gradient Lipschitz constant; $\bar L\le L$ satisfies $n^{-1}\sum_i\|\nabla f_i(x)-\nabla f_i(y)\|^2\le\bar L^2\|x-y\|^2$. In \textbf{(4)}, $\Gamma^2=\rho-1$. In the examples $q\to\infty$. $\asymp$ denotes equality up to universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

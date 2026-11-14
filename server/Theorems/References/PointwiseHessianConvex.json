@@ -1,0 +1,110 @@
+{
+  "setup": "LongTails.Setups.PointwiseHessianConvex",
+  "searched_at": "2026-11-14T08:45:51.954594+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 35184372088832 \\cdot \\left(1 + \\left(\\frac{M_0 \\cdot R^{3}}{\\varepsilon}\\right)^{\\frac{2}{7}} + \\left(\\sqrt{M_1} \\cdot R\\right)^{3}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta + H_0 \\cdot R^{2} + M_0 \\cdot R^{3} + M_1^{2} \\cdot R^{4} \\cdot \\Delta}{\\varepsilon} + M_1 \\cdot R^{2}\\right)\\right)^{4} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.PointwiseHessianConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈35184372088832 * (1 + (p.M₀ * p.R ^ 3 / p.ε) ^ (2 / 7) + (√p.M₁ * p.R) ^ 3) *\n      (1 + Real.log (2 + (p.Δ + p.H₀ * p.R ^ 2 + p.M₀ * p.R ^ 3 + p.M₁ ^ 2 * p.R ^ 4 * p.Δ) / p.ε + p.M₁ * p.R ^ 2)) ^\n        4⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 35184372088832 \\cdot \\left(1 + \\left(\\frac{M_0 \\cdot R^{3}}{\\varepsilon}\\right)^{\\frac{2}{7}} + \\left(\\sqrt{M_1} \\cdot R\\right)^{3}\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta + H_0 \\cdot R^{2} + M_0 \\cdot R^{3} + M_1^{2} \\cdot R^{4} \\cdot \\Delta}{\\varepsilon} + M_1 \\cdot R^{2}\\right)\\right)^{4} \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.PointwiseHessianConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈35184372088832 * (1 + (p.M₀ * p.R ^ 3 / p.ε) ^ (2 / 7) + (√p.M₁ * p.R) ^ 3) *\n      (1 + Real.log (2 + (p.Δ + p.H₀ * p.R ^ 2 + p.M₀ * p.R ^ 3 + p.M₁ ^ 2 * p.R ^ 4 * p.Δ) / p.ε + p.M₁ * p.R ^ 2)) ^\n        4⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.PointwiseHessianAcceleration",
+      "namespace": "LongTails.Setups.PointwiseHessianConvex",
+      "setup": "LongTails.Setups.PointwiseHessianConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.PointwiseHessianConvex.spec\n  LongTails.Theorems.PointwiseHessianAcceleration.budget",
+      "theorem": "LongTails.Theorems.PointwiseHessianAcceleration.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PointwiseHessianAcceleration",
+      "theorem": "LongTails.Theorems.PointwiseHessianAcceleration.result",
+      "references": "- Artem Agafonov, Aslan Ashabokov, Alexander D’yakonov, Martin Takáč, Alexander Gasnikov, Dmitry Kamzolov. [Optimal Parameter-Free Second-order Acceleration with Inexact Hessians under Generalized Smoothness](https://arxiv.org/html/2609.32977v1). 2026 preprint, v1. Complexity: $O(N)$ exact Hessian calls and $O(N+B\\log_+(36M_1G/M_0)L^{2/3})$ exact gradient calls, including initialization and backtracking, for deterministic $f(w)-f^*\\le\\varepsilon$ using adaptive damped A-NPE. Here $N=1+(M_0R^3/\\varepsilon)^{2/7}+B[1+\\log_+(TR^2/\\max\\{\\varepsilon,48M_0R^3/B^{7/2}\\})]$, $B=\\max\\{1,(6\\sqrt{M_1}R)^{2/3}\\}$, $L=1+\\log_+(4TR^2/\\varepsilon)$, $T=2\\sqrt{(M_0+M_1g_0)g_0}$, $g_0=\\|\\nabla f(x_0)\\|$, $G=\\max_{\\|x-x^*\\|\\le(1+2/\\sqrt3)R}\\|\\nabla f(x)\\|$, and $\\log_+t=\\max\\{0,\\log t\\}$. Initialize regularization at $T$; return immediately if $g_0=0$. Stated here for $M_0>0$, $0<\\varepsilon\\le M_0R^3$, and global $\\|\\nabla^2f(y)-\\nabla^2f(x)\\|\\le(M_0+M_1\\|\\nabla f(x)\\|)\\|y-x\\|$; the gradient logarithmic term is absent when $M_1=0$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a globally convex C³ function f:E→ℝ. A global minimizer x* exists with ‖x0−x*‖≤R and f(x0)−f(x*)≤Δ; no strong convexity is required.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: spec.admissible, ContDiff, ConvexOn, and minimizer existence clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Oracle 0 returns ∇f(x) exactly at every queried point, independently of history and oracle seed. Gradient calls have a separate fixed budget. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: spec.numOracles, spec.Reply, and spec.admissible oracle-0 clause; LongTails/Template.lean: executeWithTrace and Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Oracle 1 returns the full exact Hessian D(∇f)(x), represented as a continuous linear operator E→L[ℝ]E. Hessian calls have a separate fixed budget; no oracle noise or approximation is allowed.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: spec.Reply and spec.admissible oracle-1 clause; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The pointwise operator-norm bound ‖D²(∇f)(x)‖≤M₀+M₁‖∇f(x)‖ holds globally, with M₀,M₁≥0. This bounds the third derivative and does not assert a two-point Hessian inequality with the same constants.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: spec.valid and spec.admissible third-derivative clause."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space, with its induced norm; the setup imposes no dimension-dependent restriction.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: Public.E, Public.normedE, Public.innerE, and Public.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "Public information includes x0, M₀, M₁, R>0, Δ>0, and ε>0. The initialization bound ‖D(∇f)(x0)‖≤H₀ has H₀≥0 hidden from the algorithm, although the supplied oracle budgets depend on H₀.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: Public, Params.H₀, spec.publicInput, spec.valid, and spec.admissible initial-Hessian clause; LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point in E satisfying f(output)−f(x*)≤ε for a global minimizer x*.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "The objective-gap guarantee holds almost surely under the joint algorithm-seed and oracle-seed distribution. The setup permits randomized algorithms.",
+        "evidence": "LongTails/Setups/PointwiseHessianConvex.lean: spec.successful almost-everywhere clause; LongTails/Template.lean: Algorithm.law and Convergence joint product measure."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation uses gradient-dependent pointwise third-derivative control and a hidden initial-Hessian bound, together with separately budgeted exact gradient and Hessian oracles."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PointwiseHessianAcceleration.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PointwiseHessianAcceleration",
+          "theorem": "LongTails.Theorems.PointwiseHessianAcceleration.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

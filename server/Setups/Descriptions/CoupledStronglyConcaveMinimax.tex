@@ -1,0 +1,106 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Coupled Strongly Concave Minimax}
+We consider minimizing over $x\in X\subset\mathbb{R}^{n_x}$ the maximum of $f(x,y)$ over $y\in Y\subset\mathbb{R}^{n_y}$ subject to $c(x,y)\leq0$, where $c$ has $m$ components and $n_x,n_y,m$ are nonnegative integers. The sets are compact and convex; $f$ is strongly concave in $y$, potentially nonconvex in $x$, and each constraint is convex in $y$. Gradients and constraint Jacobians satisfy Lipschitz and boundedness conditions, together with a uniform constraint qualification. On $X\times Y$, the oracle returns $f$, $\nabla f$, $c$, and its Jacobian. For $\varepsilon>0$, the goal is an output in $X\times Y$ with nonnegative multipliers whose Euclidean constraint violation, absolute complementarity sum, and two normal-cone stationarity residuals are each at most $\varepsilon$, almost surely.
+
+The optimization problem is
+\[
+\min_{x\in X}\ \max_{\substack{y\in Y\\c(x,y)\leq0}} f(x,y).
+\]
+Write $E=\mathbb{R}^{n_x}\times\mathbb{R}^{n_y}$, $D=X\times Y$, and let $f:E\to\mathbb{R}$ and $c:E\to\mathbb{R}^{m}$. All vector norms are Euclidean, with the product norm
+\[
+\|(x,y)\|=\bigl(\|x\|^2+\|y\|^2\bigr)^{1/2}.
+\]
+Operator norms $\|\cdot\|_{\mathrm{op}}$ are induced by these norms. The parameters satisfy
+\[
+\begin{aligned}
+&L_f,L_J,J,G_x,G_y,C,D_X,D_Y\geq0,\\
+&\mu,\delta,Z,\varepsilon>0.
+\end{aligned}
+\]
+The algorithm receives the dimensions, sets $X,Y$, given points $x^0,y^0$, and all the displayed scalar parameters.
+
+Our assumptions:
+\begin{assumption}[Domain and starting points]
+The sets $X$ and $Y$ are compact and convex, with $x^0\in X$ and $y^0\in Y$. Their diameters satisfy
+\[
+\begin{aligned}
+\|x-x'\|&\leq D_X &&(x,x'\in X),\\
+\|y-y'\|&\leq D_Y &&(y,y'\in Y).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Differentiability and uniform bounds]
+The functions $f$ and $c$ are Fr\'echet differentiable at every point of $D$. Write $A(z):E\to\mathbb{R}^{m}$ for the Jacobian of $c$ at $z$. For all $z,w\in D$,
+\[
+\begin{aligned}
+\|\nabla f(z)-\nabla f(w)\|&\leq L_f\|z-w\|,\\
+\|A(z)-A(w)\|_{\mathrm{op}}&\leq L_J\|z-w\|.
+\end{aligned}
+\]
+For every $z\in D$,
+\[
+\begin{aligned}
+\|A(z)\|_{\mathrm{op}}&\leq J,& \|c(z)\|&\leq C,\\
+\|\nabla_x f(z)\|&\leq G_x,& \|\nabla_y f(z)\|&\leq G_y.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Strong concavity and constraint convexity]
+For every $x\in X$ and $i\in\{1,\ldots,m\}$, the function $y\mapsto c_i(x,y)$ is convex on $Y$. For every $x\in X$ and $y,y'\in Y$,
+\[
+\begin{aligned}
+f(x,y')\leq{}&f(x,y)+\langle\nabla_y f(x,y),y'-y\rangle\\
+&-\frac{\mu}{2}\|y'-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+For a convex set $S$ and $u\in S$, define its normal cone by
+\[
+N_S(u)=\{n:\langle n,v-u\rangle\leq0\text{ for every }v\in S\}.
+\]
+\begin{assumption}[Uniform constraint qualification]
+For every $(x,y)\in D$, there exists $d\in\mathbb{R}^{n_y}$ such that
+\[
+\begin{aligned}
+\|d\|&\leq Z,\\
+\langle n,d\rangle&\leq0 &&\text{for every }n\in N_Y(y),\\
+\bigl[A(x,y)(0,d)\bigr]_i&\leq-\delta
+&&\text{whenever }c_i(x,y)>0.
+\end{aligned}
+\]
+\end{assumption}
+
+At a query $z\in D$, the oracle returns the exact tuple
+\[
+\bigl(f(z),\nabla f(z),c(z),A(z)\bigr).
+\]
+Queries take values in $E$; replies outside $D$ are unspecified.
+
+The output is a triple $(\bar{x},\bar{y},\bar{\lambda})\in\mathbb{R}^{n_x}\times\mathbb{R}^{n_y}\times\mathbb{R}^{m}$. Set $\bar{z}=(\bar{x},\bar{y})$ and
+\[
+r=\nabla f(\bar{z})-A(\bar{z})^*\bar{\lambda}
+  =(r_x,r_y),
+\]
+where $A(\bar{z})^*$ denotes the Euclidean adjoint. Define $[c(\bar{z})]_+$ componentwise by $[c(\bar{z})]_{+,i}=\max\{c_i(\bar{z}),0\}$. The required accuracy is
+\[
+\begin{gathered}
+\bar{x}\in X,\qquad \bar{y}\in Y,\qquad \bar{\lambda}\geq0,\\
+\|[c(\bar{z})]_+\|\leq\varepsilon,\qquad
+\sum_{i=1}^{m}|\bar{\lambda}_i c_i(\bar{z})|\leq\varepsilon,\\
+\exists\, n_x\in N_X(\bar{x}),\ n_y\in N_Y(\bar{y}):\\
+\|r_x+n_x\|\leq\varepsilon,\qquad
+\|r_y-n_y\|\leq\varepsilon,
+\qquad P\text{-a.s.}
+\end{gathered}
+\]
+Here $P$ is the law of the algorithm and oracle randomness, taken independently, and the almost-sure requirement applies to all the displayed output conditions jointly.
+\end{document}

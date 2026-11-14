@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Smooth Composite Minimization}
+We minimize $F=f+\psi$ on a real Hilbert space $E$, where $f:E\to\mathbb{R}$ is convex and continuously differentiable, and $\psi:E\to\mathbb{R}$ is convex and $M$-Lipschitz, with $M\geq0$. The function $f$ is $(L_0,L_1)$-smooth, with $L_0,L_1>0$. A given point $x^0\in E$ satisfies $\|x^0-x^\star\|\leq R$ for some global minimizer $x^\star$ of $F$, where $R>0$. The oracle returns exact gradients, regularizer values, and proximal points. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ satisfying $F(\bar{x})-F(x^\star)\leq\varepsilon$ almost surely under $P$, the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} F(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product $\langle\cdot,\cdot\rangle$ on $E$. The algorithm receives only $E$, $L_0$, $L_1$, $M$, and $x^0$; the radius $R$ and tolerance $\varepsilon$ may enter the oracle-call budget but are not algorithm inputs.
+
+Our assumptions:
+\begin{assumption}[Convexity and Lipschitz regularizer]
+For every $x,y\in E$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq(1-t)f(x)+tf(y),\\
+\psi((1-t)x+ty)&\leq(1-t)\psi(x)+t\psi(y).
+\end{aligned}
+\]
+Moreover, for all $x,y\in E$,
+\[
+|\psi(x)-\psi(y)|\leq M\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and $\nabla f:E\to E$ is continuous. For every $x,y\in E$ and $S\in\mathbb{R}$, the implication
+\[
+\begin{aligned}
+&\|\nabla f(x+\theta(y-x))\|\leq S
+\quad\text{for all }\theta\in[0,1]\\
+&\qquad\Longrightarrow\quad
+\|\nabla f(x)-\nabla f(y)\|
+\leq (L_0+L_1S)\|x-y\|
+\end{aligned}
+\]
+holds.
+\end{assumption}
+
+\begin{assumption}[Exact proximal minimization]
+There is a map $T:\mathbb{R}\times E\times E\to E$ such that, for every $a>0$ and $z,v\in E$,
+\[
+T(a,z,v)\in\operatorname*{arg\,min}_{u\in E}
+\left\{
+\frac{\|u-z\|^2}{2a}
++\langle v,u-z\rangle+\psi(u)
+\right\}.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in E$ such that
+\[
+\begin{aligned}
+F(x^\star)&\leq F(x) &&\text{for every }x\in E,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+The oracle returns $\nabla f(x)$ at $x$. It also returns $\psi(x)$ for a value query at $x$, and $T(a,z,v)$ for a proximal query $(a,z,v)\in\mathbb{R}\times E\times E$. Each query counts as one call toward a shared oracle-call budget. All point queries may be made anywhere in $E$.
+
+After the allotted calls, the output must satisfy
+\[
+F(\bar{x})-F(x^\star)\leq\varepsilon
+\quad P\text{-a.s.}
+\]
+The minimizer in this requirement is fixed independently of the algorithm's randomness.
+\end{document}

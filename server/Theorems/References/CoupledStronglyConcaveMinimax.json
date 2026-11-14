@@ -1,0 +1,119 @@
+{
+  "setup": "LongTails.Setups.CoupledStronglyConcaveMinimax",
+  "searched_at": "2026-11-14T08:44:19.290104+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(2 + \\left\\lceil 4 \\cdot \\sqrt{\\frac{1 + \\mu + Lf + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot LJ + 2 \\cdot J}{\\mu}} \\right\\rceil_{+} \\cdot \\left\\lceil \\frac{\\log\\left(2 + \\frac{24 \\cdot \\left(1 + \\mu + Lf + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot LJ + 2 \\cdot J\\right) \\cdot DY \\cdot \\left(1 + \\varepsilon\\right) \\cdot \\left(2 + \\sqrt{constraints} + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right)}{\\varepsilon}\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\frac{576 \\cdot \\left(1 + \\mu + Lf + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot LJ + 2 \\cdot J\\right)^{2} \\cdot \\left(Gx \\cdot DX + Gy \\cdot DY + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot C\\right) \\cdot \\left(1 + \\varepsilon\\right)^{2} \\cdot \\left(2 + \\sqrt{constraints} + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right)^{2}}{\\mu \\cdot \\varepsilon^{2}} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.CoupledStronglyConcaveMinimax.spec.Params → ℕ",
+        "value": "fun p =>\n  (2 +\n      ⌈4 * √((1 + p.μ + p.Lf + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.LJ + 2 * p.J) / p.μ)⌉₊ *\n        ⌈Real.log\n              (2 +\n                24 * (1 + p.μ + p.Lf + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.LJ + 2 * p.J) * p.DY * (1 + p.ε) *\n                    (2 + √↑p.constraints + 2 * p.Z * (p.Gy + 1) / p.δ) /\n                  p.ε) /\n            Real.log 2⌉₊) *\n    (1 +\n      ⌈576 * (1 + p.μ + p.Lf + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.LJ + 2 * p.J) ^ 2 *\n                (p.Gx * p.DX + p.Gy * p.DY + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.C) *\n              (1 + p.ε) ^ 2 *\n            (2 + √↑p.constraints + 2 * p.Z * (p.Gy + 1) / p.δ) ^ 2 /\n          (p.μ * p.ε ^ 2)⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(2 + \\left\\lceil 4 \\cdot \\sqrt{\\frac{1 + \\mu + Lf + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot LJ + 2 \\cdot J}{\\mu}} \\right\\rceil_{+} \\cdot \\left\\lceil \\frac{\\log\\left(2 + \\frac{24 \\cdot \\left(1 + \\mu + Lf + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot LJ + 2 \\cdot J\\right) \\cdot DY \\cdot \\left(1 + \\varepsilon\\right) \\cdot \\left(2 + \\sqrt{constraints} + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right)}{\\varepsilon}\\right)}{\\log\\left(2\\right)} \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\frac{576 \\cdot \\left(1 + \\mu + Lf + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot LJ + 2 \\cdot J\\right)^{2} \\cdot \\left(Gx \\cdot DX + Gy \\cdot DY + \\left(1 + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right) \\cdot C\\right) \\cdot \\left(1 + \\varepsilon\\right)^{2} \\cdot \\left(2 + \\sqrt{constraints} + \\frac{2 \\cdot Z \\cdot \\left(Gy + 1\\right)}{\\delta}\\right)^{2}}{\\mu \\cdot \\varepsilon^{2}} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.CoupledStronglyConcaveMinimax.spec.Params → ℕ",
+          "value": "fun p =>\n  (2 +\n      ⌈4 * √((1 + p.μ + p.Lf + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.LJ + 2 * p.J) / p.μ)⌉₊ *\n        ⌈Real.log\n              (2 +\n                24 * (1 + p.μ + p.Lf + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.LJ + 2 * p.J) * p.DY * (1 + p.ε) *\n                    (2 + √↑p.constraints + 2 * p.Z * (p.Gy + 1) / p.δ) /\n                  p.ε) /\n            Real.log 2⌉₊) *\n    (1 +\n      ⌈576 * (1 + p.μ + p.Lf + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.LJ + 2 * p.J) ^ 2 *\n                (p.Gx * p.DX + p.Gy * p.DY + (1 + 2 * p.Z * (p.Gy + 1) / p.δ) * p.C) *\n              (1 + p.ε) ^ 2 *\n            (2 + √↑p.constraints + 2 * p.Z * (p.Gy + 1) / p.δ) ^ 2 /\n          (p.μ * p.ε ^ 2)⌉₊)"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.CoupledMinimaxCappedKkt",
+      "namespace": "LongTails.Setups.CoupledStronglyConcaveMinimax",
+      "setup": "LongTails.Setups.CoupledStronglyConcaveMinimax",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CoupledStronglyConcaveMinimax.spec\n  OracleTemplate.CoupledMinimaxCappedKkt.budget",
+      "theorem": "OracleTemplate.CoupledMinimaxCappedKkt.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CoupledMinimaxCappedKkt",
+      "theorem": "OracleTemplate.CoupledMinimaxCappedKkt.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective and coupled constraints may be nonconvex in x. No convexity assumption is imposed in the minimization variable.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Assumptions imposes strongly_concave and convex_constraints only in y."
+      },
+      {
+        "label": "saddle_point",
+        "details": "Coupled constrained nonconvex–strongly-concave minimax formulation: minimize over x∈X and maximize f(x,y) over y∈Y subject to c(x,y)≤0. For every fixed x, f(x,·) is μ-strongly concave and each c_i(x,·) is convex; μ>0.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Assumptions.strongly_concave, Assumptions.convex_constraints, Valid.μ_pos, and KKT."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A query z∈X×Y returns the exact full joint gradient ∇f(z). Replies are exact for every history and oracle seed at domain queries.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Assumptions.gradient, exactReply, and spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same query returns the exact objective value f(z).",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Reply.value, exactReply, and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Each bundled oracle call also returns the full constraint vector c(z) and its exact Jacobian Dc(z). All Params fields—including domains, starting points, dimensions, bounds, μ, δ, Z, and ε—are public; the instance functions are hidden.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Reply.constraints, Reply.jacobian, Assumptions.derivative, exactReply, spec.Public, and spec.publicInput."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "X⊆ℝ^nx and Y⊆ℝ^ny are nonempty compact convex sets with Euclidean geometry and diameter bounds DX and DY. Constraint vectors use the Euclidean norm in ℝ^constraints.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: XSpace, YSpace, Weights, Joint, and Valid.compactX, compactY, convexX, convexY, startX, startY, diameterX, diameterY."
+      },
+      {
+        "label": "other",
+        "details": "Uniform qualification at every z∈X×Y: there exists a y-direction d with ‖d‖≤Z, ⟨n,d⟩≤0 for every n∈N_Y(y), and Dc_i(z)[0,d]≤−δ for every strictly violated constraint c_i(z)>0; Z,δ>0. Also ∇f is Lf-Lipschitz, Dc is LJ-Lipschitz, ‖Dc‖≤J, ‖∇_x f‖≤Gx, ‖∇_y f‖≤Gy, and ‖c‖≤C throughout the domain. These bounds are nonnegative.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Assumptions.qualification, gradient_lipschitz, jacobian_lipschitz, jacobian_bound, gradientX_bound, gradientY_bound, constraint_bound; Valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The returned point must satisfy ‖[c(x,y)]_+‖₂≤ε, together with exact membership in X×Y and nonnegative multipliers.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: KKT."
+      },
+      {
+        "label": "almost_sure",
+        "details": "All KKT requirements hold jointly almost surely under the output law. Convergence uses the product of the algorithm and oracle seed laws with a fixed oracle budget.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "Output (x,y,λ) must have x∈X, y∈Y, λ≥0, and ∑_i|λ_i c_i(x,y)|≤ε. Writing g=∇f−Dc*λ, there must exist n_x∈N_X(x), n_y∈N_Y(y) with ‖g_x+n_x‖≤ε and ‖g_y−n_y‖≤ε. These are unsquared normal-cone stationarity residuals at the returned point; ε>0.",
+        "evidence": "LongTails/Setups/CoupledStronglyConcaveMinimax.lean: Output, Normal, KKT, and Valid.ε_pos."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines nonlinear constraints coupling the minimization and maximization variables with a uniform qualification on strictly violated constraints and an output requiring stationarity, feasibility, and absolute componentwise complementarity."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.CoupledMinimaxCappedKkt.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CoupledMinimaxCappedKkt",
+          "theorem": "OracleTemplate.CoupledMinimaxCappedKkt.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Sublevel Gradient Domination with Stochastic Gradients}
+We consider minimizing a possibly nonconvex differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. Its gradient is $L$-Lipschitz, with $L>0$, and $f^\star=\inf_{x\in E}f(x)$ is finite. Given $x^0\in E$, assume $f(x)-f^\star\leq\tau\|\nabla f(x)\|^\alpha$ whenever $f(x)\leq f(x^0)$, where $\tau>0$ and $1\leq\alpha<2$. The oracle returns an unbiased stochastic gradient with variance at most $\sigma^2$, where $\sigma\geq0$, using independent, identically distributed samples. For $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with integrable objective gap and $\mathbb{E}_{P}[f(\bar{x})-f^\star]\leq\varepsilon$, where $P$ is the joint law of algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. The algorithm receives $E$, $L$, $\tau$, $\alpha$, $\sigma$, an initial-gap bound $\Delta\geq0$, the tolerance $\varepsilon$, and the given point $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere on $E$, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Sublevel gradient domination]
+The function $f$ is bounded below, and its initial sublevel set satisfies
+\[
+\begin{aligned}
+f(x)-f^\star&\leq\tau\|\nabla f(x)\|^\alpha
+&&\text{whenever }f(x)\leq f(x^0),\\
+f(x^0)-f^\star&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased gradients with bounded variance]
+Let $\Omega$ be a measurable sample space and $\nu$ a probability measure on $\Omega$. There is a jointly measurable map $g:E\times\Omega\to E$ such that, for every fixed $x\in E$, $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}
+\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+The samples $(\xi_k)_{k\geq0}$ have a joint probability law $Q$ on $\Omega^{\mathbb{N}}$. Each coordinate is measurable, the coordinates are mutually independent, and each has distribution $\nu$. At query $x_k\in E$, the oracle returns $g(x_k,\xi_k)$. The algorithm's randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output must have an integrable objective gap under $P$ and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f^\star\bigr]\leq\varepsilon.
+\]
+\end{document}

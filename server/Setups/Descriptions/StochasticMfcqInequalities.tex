@@ -1,0 +1,119 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Inequality-Constrained Optimization}
+We consider minimizing a possibly nonconvex differentiable function $f:E\to\mathbb{R}$ subject to differentiable inequalities $c_i(x)\leq0$, $i=1,\ldots,m$, on a finite-dimensional real inner product space $E$. Gradients are globally Lipschitz and bounded on the feasible set, which satisfies a uniform constraint qualification near active constraints; a given feasible starting point has bounded objective gap. Each oracle call returns stochastic objective gradients, constraint values, and constraint gradients at two points using a shared sample, with independent samples across calls, unbiasedness, bounded variance, and mean-square Lipschitz continuity on feasible points. For $\varepsilon>0$ and $\rho\in(0,1)$, the goal is a feasible output $\bar{x}$ with multipliers $\bar{\lambda}\geq0$ satisfying $\|\nabla f(\bar{x})+\sum_{i=1}^m\bar{\lambda}_i\nabla c_i(\bar{x})\|\leq\varepsilon$ and $\sum_{i=1}^m|\bar{\lambda}_ic_i(\bar{x})|\leq\varepsilon$ with probability at least $1-\rho$.
+
+Write $c=(c_1,\ldots,c_m):E\to\mathbb{R}^m$ and define the feasible set $\mathcal F=\{x\in E:c_i(x)\leq0\text{ for all }i\}$. The problem is
+\[
+\min_{x\in\mathcal F} f(x).
+\]
+Let $J(x)=(\nabla c_i(x))_{i=1}^m\in E^m$, with transpose action
+\[
+J(x)^\top\lambda=\sum_{i=1}^m\lambda_i\nabla c_i(x).
+\]
+The norm on $E$ is induced by its inner product; $\mathbb{R}^m$ and $E^m$ carry their Euclidean product norms. For triples in $\mathcal V=E\times\mathbb{R}^m\times E^m$, use
+\[
+\|(a,b,C)\|_{\mathcal V}^2
+=\|a\|^2+\|b\|^2+\sum_{i=1}^m\|C_i\|^2.
+\]
+The parameters satisfy
+\[
+\begin{aligned}
+&m\in\mathbb{N},\quad m\geq1,\quad H\geq1,\quad \sigma,L\geq0,\\
+&0<\mu\leq H,\quad \tau>0,\quad \Delta\geq0,\quad
+\varepsilon>0,\quad 0<\rho<1.
+\end{aligned}
+\]
+The algorithm receives $E$, the measurable sample space $\Omega$, $m$, $H$, $\sigma$, $L$, $\mu$, $\tau$, $\Delta$, $\varepsilon$, $\rho$, and the starting point $x^0\in E$.
+
+Our assumptions:
+\begin{assumption}[Differentiability and gradient bounds]
+The functions $f$ and $c_i$, $i=1,\ldots,m$, are Fr\'echet differentiable everywhere. For every $x\in\mathcal F$ and every $i$,
+\[
+\|\nabla f(x)\|\leq H,
+\qquad \|\nabla c_i(x)\|\leq H.
+\]
+For every $x,y\in E$ and every $i$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq H\|x-y\|,\\
+\|\nabla c_i(x)-\nabla c_i(y)\|&\leq H\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Uniform band constraint qualification]
+For every $x\in\mathcal F$, there exists $z\in E$ with $\|z\|\leq1$ such that, simultaneously for all $i$,
+\[
+ c_i(x)\geq-\tau
+ \quad\Longrightarrow\quad
+ \langle\nabla c_i(x),z\rangle\leq-\mu.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial feasibility and objective gap]
+The given point $x^0$ belongs to $\mathcal F$, and
+\[
+ f(x^0)-f(x)\leq\Delta,
+ \qquad x\in\mathcal F.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic primitive estimates]
+There is a probability measure $\nu$ on $\Omega$ and jointly measurable maps
+\[
+\begin{aligned}
+ g &:E\times\Omega\to E,\\
+ v &:E\times\Omega\to\mathbb{R}^m,\\
+ D &:E\times\Omega\to E^m.
+\end{aligned}
+\]
+Define $S(x,\xi)=(g(x,\xi),v(x,\xi),D(x,\xi))$ and $s(x)=(\nabla f(x),c(x),J(x))$. For every $x\in\mathcal F$, the three components of $S(x,\cdot)$ are Bochner integrable under $\nu$, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}[v(x,\xi)]&=c(x),\\
+\mathbb{E}_{\xi\sim\nu}[D(x,\xi)]&=J(x).
+\end{aligned}
+\]
+The squared error is integrable and satisfies
+\[
+\mathbb{E}_{\xi\sim\nu}
+ \bigl[\|S(x,\xi)-s(x)\|_{\mathcal V}^2\bigr]
+\leq\sigma^2,
+\qquad x\in\mathcal F.
+\]
+For every $x,y\in\mathcal F$, the squared difference below is integrable, and
+\[
+\mathbb{E}_{\xi\sim\nu}
+ \bigl[\|S(x,\xi)-S(y,\xi)\|_{\mathcal V}^2\bigr]
+\leq L^2\|x-y\|^2.
+\]
+\end{assumption}
+
+At call $k$, a query is any pair $(x,y)\in E\times E$. The oracle returns
+\[
+\bigl(S(x,\xi_k),S(y,\xi_k)\bigr),
+\]
+using the same sample for both points and all components. The measurable samples $(\xi_k)_{k\geq0}$ are mutually independent with common distribution $\nu$, and are independent of the algorithm's randomness. One such paired reply counts as one oracle call. The moment conditions above apply to feasible query points.
+
+After the allotted calls, the algorithm must return a measurable pair $(\bar{x},\bar{\lambda})\in E\times\mathbb{R}^m$ satisfying
+\[
+P\!\left\{
+\begin{gathered}
+\bar{x}\in\mathcal F,\qquad \bar{\lambda}_i\geq0
+\quad(i=1,\ldots,m),\\
+\|\nabla f(\bar{x})+J(\bar{x})^\top\bar{\lambda}\|
+\leq\varepsilon,\\
+\displaystyle\sum_{i=1}^m
+ |\bar{\lambda}_i c_i(\bar{x})|\leq\varepsilon
+\end{gathered}
+\right\}\geq1-\rho,
+\]
+where $P$ is the joint law of the oracle samples and the algorithm's randomness.
+\end{document}

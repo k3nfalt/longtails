@@ -23,7 +23,7 @@ AssistiveMmlHandler(RegisterHTMLHandler(adaptor));
 const output = new CHTML({fontURL: 'mathjax-fonts'});
 const document = mathjax.document(fragments.map(([value, key]) => `<div>${value[key]}</div>`).join(''), {
   InputJax: new TeX({packages: AllPackages.filter(name => !['autoload', 'require', 'noerrors', 'noundefined'].includes(name)),
-    macros: {allowbreak: ''},
+    macros: {allowbreak: '', relax: ''},
     formatError: (_jax, error) => { throw error; }}),
   OutputJax: output,
   compileError: (_document, math, error) => { throw new Error(`Invalid TeX: ${math.math}`, {cause: error}); },

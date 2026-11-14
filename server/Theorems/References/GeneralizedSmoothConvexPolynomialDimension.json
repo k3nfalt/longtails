@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension",
+  "searched_at": "2026-11-14T08:44:15.784204+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{L1 \\cdot R}{4096 \\cdot \\log\\left(2 + L1 \\cdot R\\right)} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension.spec.Params → ℕ",
+        "value": "fun p => ⌊p.L1 * p.R / (4096 * Real.log (2 + p.L1 * p.R))⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{L1 \\cdot R}{4096 \\cdot \\log\\left(2 + L1 \\cdot R\\right)} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension.spec.Params → ℕ",
+          "value": "fun p => ⌊p.L1 * p.R / (4096 * Real.log (2 + p.L1 * p.R))⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound",
+      "namespace": "LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension",
+      "setup": "LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.GeneralizedSmoothConvexPolynomialDimension.spec\n  LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound.budget",
+      "theorem": "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound",
+      "theorem": "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained convex minimization of f: ℝ^d → ℝ, with an attained global minimum and some minimizer xstar satisfying ‖x0 − xstar‖ ≤ R.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: spec.admissible and Params.toRadiusOnly; LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "One oracle returns ∇f(x) at any queried x ∈ ℝ^d. Every history and oracle seed must return the exact gradient; function values are not supplied. Algorithms may be randomized and have unrestricted query points and outputs.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible, HasGradientAt clause; LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: spec.Query, spec.Reply; LongTails/Template.lean: Algorithm, Setup.allowedAlgorithm, executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is differentiable everywhere and ‖D(∇f)(x)‖ ≤ L0 + L1‖∇f(x)‖ globally, with L0,L1 > 0. No global constant bound on the Hessian or gradient is assumed.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible, Differentiable and fderiv clauses; LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space ℝ^d with d ≥ ⌈17592186044416(1 + L1R)^5⌉.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: Params, spec.Instance, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d,L0,L1,x0,R,ε are public. R > 0 bounds distance to a minimizer; no initial objective-gap bound is supplied. The parameter regime requires L1R ≥ 1048576.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: Params, spec.Public, spec.publicInput, spec.valid; LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Output any point X ∈ ℝ^d with integrable objective gap and E[f(X) − f(xstar)] ≤ ε for a global minimizer xstar. The accuracy regime is L0/L1² ≤ ε ≤ L0R²/16, with ε > 0.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: spec.successful, spec.Output, spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over algorithm and oracle seeds; no almost-sure or high-probability accuracy requirement is imposed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexPolynomialDimension.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines convex generalized smoothness and radius-only initialization information with a prescribed large-L1R accuracy regime and an explicit polynomial dimension threshold."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound",
+          "theorem": "LongTails.Theorems.PolynomialDimensionGeneralizedSmoothLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

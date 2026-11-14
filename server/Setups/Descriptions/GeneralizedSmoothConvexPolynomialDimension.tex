@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Smoothness in Polynomial Dimension}
+We consider minimizing a convex function $f:\mathbb{R}^d\to\mathbb{R}$ in a dimension $d\in\mathbb{N}$ subject to a polynomial lower bound. The function $f$ is $(L_0,L_1)$-smooth, with $L_0,L_1>0$: its differentiable gradient satisfies $\|\nabla^2 f(x)\|_{\mathrm{op}}\leq L_0+L_1\|\nabla f(x)\|$ at every $x\in\mathbb{R}^d$. A given point $x^0$ lies within distance $R>0$ of a global minimizer $x^\star$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}$ with $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives $d$, $L_0$, $L_1$, $x^0$, $R$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The positive parameters satisfy
+\[
+\begin{aligned}
+L_1R&\geq 1048576,\\
+\frac{L_0}{L_1^2}&\leq\varepsilon
+\leq\frac{L_0R^2}{16},\\
+d&\geq\left\lceil 17592186044416(1+L_1R)^5\right\rceil.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Convexity]
+For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+t f(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, its gradient is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in\mathbb{R}^d.
+\]
+Here $\nabla^2 f(x)$ is a linear operator from $\mathbb{R}^d$ to $\mathbb{R}^d$.
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x)
+&&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must have an integrable objective gap and satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{P}\!\left[\left|f(\bar{x})-f(x^\star)\right|\right]&<\infty,\\
+\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]&\leq\varepsilon.
+\end{aligned}
+\]
+The minimizer is fixed independently of the algorithm's randomness; all global minimizers have the same objective value.
+\end{document}

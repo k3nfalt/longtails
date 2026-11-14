@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticGeneralizedMirror.lean}{StochasticGeneralizedMirror}.}\label{tab:StochasticGeneralizedMirror}
+\parbox{\linewidth}{\footnotesize Minimize $F=f+\psi$ over convex measurable $Q$ in a finite-dimensional normed space. The globally convex differentiable $f$ has continuous derivative and satisfies $\|df(x)-df(y)\|_*\le (L_0+L_1\sup_{z\in[x,y]}\|df(z)\|_*)\|x-y\|$ on the whole space. The measurable $\psi$ is convex on $Q$. A differentiable mirror map on open convex $U$ satisfies $D_h(u,z)\ge\|u-z\|^2/2$ for $u\in Q$, $z\in Q\cap U$; measurable exact composite Bregman-prox updates stay in $Q\cap U$, and $x_0\in Q\cap U$. A minimizer $x^*\in Q$ satisfies $2D_h(x^*,x_0)\le R^2$, $F(x_0)-F(x^*)\le\Delta$, $\|df(x^*)\|_*\le G$. Jointly measurable stochastic gradients use IID samples with law $\mu$ under probability $P$, with integrable gradients and central moments, $\int g(x,\omega)\,d\mu=df(x)$ and $\int\|g(x,\omega)-df(x)\|_*^\alpha\,d\mu\le\sigma^\alpha$ on $Q$. Here $L_0,R,\Delta,\varepsilon>0$, $L_1,G,\sigma\ge0$, $1<\alpha\le2$, $0<\delta<1$. All displayed parameters are supplied to \textbf{(1)}. Target: the constructed algorithm's \texttt{lastIterate} satisfies $P\{x\notin Q\text{ or }F(x)-F(x^*)>\varepsilon\}\le\delta$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.325\linewidth}>{\raggedright\arraybackslash}p{0.245\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticGeneralizedMirrorAccelerated.lean}{Stochastic\allowbreak Generalized\allowbreak Mirror\allowbreak Accelerated} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticGeneralizedMirrorAccelerated.md}{(review)}
+& $\mathcal{O}\!\left(S[1+\log(S/\delta)]^2\right)$ total stochastic-gradient and exact Bregman-prox calls, including pilot batches.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Clip-SSTM \citep{fvRadiusElKadi2026v2}, Thm.~2, Rem.~1; derived sufficient budget
+& $\mathcal{O}\!\left(S_E[1+\log(S_E/\delta)]^2\right)$ gradient calls. Euclidean, $Q=E$, $\psi=0$, $G=0$, $L_1>0$.
+& \textbf{(1)}: Scope extends to arbitrary norms, composite objectives and boundary minimizers. Matches polynomial rate structure on the Euclidean unconstrained overlap, up to logarithms.
+& \\
+\midrule
+\textbf{(3)} \citep{sgmRepositoryComposite2026}, repository overlap
+& $\mathcal{O}\!\left(2^{128/(\alpha-1)} S_C\, C_C^{\,2+1/(\alpha-1)}\right)$ total gradient and Euclidean-prox calls; Hilbert geometry.
+& \textbf{(1)}: General norms; confidence-log exponent $2$ instead of $2+1/(\alpha-1)$; removes exponential prefactor from nonstatistical terms. Entropy-simplex example ($\sigma=0$, $\varepsilon=d^{-1}$, $R^2=2\log d$, $G=2\log d$, fixed $\delta$): $\mathcal{O}(\sqrt d\log^{7/2}d)$ versus Euclidean upper-bound curvature term $\Omega(d\log d)$.
+& \textbf{(1)}: Finite dimension; updates need $G$, previously budget-only. Transient logarithms incomparable; $\sqrt{L_1\sigma R^2/\varepsilon}$ was already dominated. \\
+\midrule
+\textbf{(4)} Clipped accelerated SMD \citep{sgmNguyenNeurips2023}, Thm.~D.1(1)
+& $\begin{aligned}\mathcal{O}\!\bigl(\gamma[&1+\sqrt{L_0R^2/\varepsilon}\\&+624^{1/(\alpha-1)}B]\bigr)\end{aligned}$ gradient/prox calls. Known horizon; $L_1=0$, $\psi=0$, $df(x^*)=0$.
+& \textbf{(1)}: Scope extends to $L_1>0$, composite objectives and constrained minimizers with $df(x^*)\ne0$.
+& \textbf{(1)}: Extra logarithmic overhead and initial-gap transient; needs $\Delta,G$ in addition. \\
+\midrule
+\textbf{(5)} Clipped accelerated SMD \citep{sgmNguyenNeurips2023}, Thm.~D.1(2)
+& $\mathcal{O}(N)$ gradient/prox calls; sufficient horizon\newline
+$\begin{aligned}N&\ge\gamma\left(1+\sqrt{L_0R^2/\varepsilon}\right),\\
+\frac{N}{(1+\log N)^{2/(\alpha-1)}}&\ge1248^{1/(\alpha-1)}\gamma B.
+\end{aligned}$\newline
+$L_1=0$, $\psi=0$, $df(x^*)=0$.
+& \textbf{(1)}: Scope extends to generalized smoothness, composite objectives and arbitrary constrained minimizers.
+& \textbf{(1)}: Requires a preset horizon; \textbf{(5)} permits unknown $T$. Needs $\Delta,G$ in addition. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $D_h(u,z)=h(u)-h(z)-dh(z)[u-z]$; $\|\cdot\|_*$ is the dual norm; $B=(\sigma R/\varepsilon)^{\alpha/(\alpha-1)}$; $\gamma=1+\log(1/\delta)$; $N\ge1$ is a sufficient horizon. $S=1+(1+L_1R)[1+\log(1+\Delta/\varepsilon)]+\sqrt{(L_0+L_1G)R^2/\varepsilon}+256^{1/(\alpha-1)}B$. $S_E=1+(1+L_1R)[1+\log(1+L_1R)+\log(1+\Delta/(L_0R^2))]+\sqrt{L_0R^2/\varepsilon}+512^{1/(\alpha-1)}B$. $S_C=1+\sqrt{(L_0+L_1\sigma+L_1G)R^2/\varepsilon}+(1+L_1R)\log(2+(1+L_1R)\sqrt{\Delta/(L_0R^2)})+B$; $C_C=\log((8+L_1R+(L_0+L_1\sigma+L_1G)R^2/\varepsilon+\Delta/(L_0R^2)+\sigma R/\varepsilon)/\delta)$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

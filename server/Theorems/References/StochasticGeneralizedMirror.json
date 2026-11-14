@@ -1,0 +1,129 @@
+{
+  "setup": "LongTails.Setups.StochasticGeneralizedMirror",
+  "searched_at": "2026-11-14T08:44:22.933195+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 8589934592 \\cdot \\left(1 + \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(8 + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) + \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + 256^{\\frac{1}{\\alpha - 1}} \\cdot \\left(\\frac{\\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right) \\cdot \\left(\\log\\left(\\frac{8589934592 \\cdot \\left(1 + \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(8 + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) + \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + 256^{\\frac{1}{\\alpha - 1}} \\cdot \\left(\\frac{\\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)}{\\delta}\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticGeneralizedMirror.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈8589934592 *\n        (1 + (1 + q.L1 * q.R) * Real.log (8 + 8 * q.Δ / q.ε) + √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n          256 ^ (q.α - 1)⁻¹ * (q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) *\n      Real.log\n          (8589934592 *\n              (1 + (1 + q.L1 * q.R) * Real.log (8 + 8 * q.Δ / q.ε) + √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n                256 ^ (q.α - 1)⁻¹ * (q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) /\n            q.δ) ^\n        2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 8589934592 \\cdot \\left(1 + \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(8 + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) + \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + 256^{\\frac{1}{\\alpha - 1}} \\cdot \\left(\\frac{\\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right) \\cdot \\left(\\log\\left(\\frac{8589934592 \\cdot \\left(1 + \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(8 + \\frac{8 \\cdot \\Delta}{\\varepsilon}\\right) + \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}} + 256^{\\frac{1}{\\alpha - 1}} \\cdot \\left(\\frac{\\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)}{\\delta}\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticGeneralizedMirror.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈8589934592 *\n        (1 + (1 + q.L1 * q.R) * Real.log (8 + 8 * q.Δ / q.ε) + √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n          256 ^ (q.α - 1)⁻¹ * (q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) *\n      Real.log\n          (8589934592 *\n              (1 + (1 + q.L1 * q.R) * Real.log (8 + 8 * q.Δ / q.ε) + √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n                256 ^ (q.α - 1)⁻¹ * (q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) /\n            q.δ) ^\n        2⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated",
+      "namespace": "LongTails.Setups.StochasticGeneralizedMirror",
+      "setup": "LongTails.Setups.StochasticGeneralizedMirror",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticGeneralizedMirror.spec\n  LongTails.Theorems.StochasticGeneralizedMirrorAccelerated.budget",
+      "theorem": "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated",
+      "theorem": "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F=f+ψ over a convex measurable set Q; f is convex and continuously differentiable on E, and ψ is convex on Q. A minimizer exists.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: objective; spec.admissible convexity and minimizer clauses."
+      },
+      {
+        "label": "composite",
+        "details": "The objective combines a differentiable function f with a possibly nonsmooth convex term ψ, handled through an exact composite Bregman proximal oracle.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Instance, objective, proxObjective; spec.admissible proximal minimization clause."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A gradient query at x∈Q returns a dual vector g(x,ξ), with E[g(x,ξ)]=df(x). Seeds are independent and identically distributed. Only gradient and proximal queries are available.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Query; spec.admissible oracle and unbiasedness clauses. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "proximal",
+        "details": "For a>0, z∈Q∩U and dual vector v, the oracle returns an exact minimizer over Q of a(v(u−z)+ψ(u))+D_h(u,z), lying in Q∩U. Gradient and proximal calls share one fixed total oracle budget.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Query.prox, proxObjective; spec.admissible proximal clause. LongTails/Template.lean: Setup.numOracles, executeWithTrace, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Public L0>0 and L1≥0 satisfy ‖df(x)−df(y)‖≤(L0+L1 M)‖x−y‖ whenever ‖df‖≤M along the segment from x to y. No global Lipschitz gradient bound is assumed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Public.L0, Public.L1; spec.valid and spec.admissible segment smoothness clause."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "Public σ≥0 and 1<α≤2 bound the central dual-norm moment: E‖g(x,ξ)−df(x)‖^α≤σ^α for every x∈Q. Finite variance is not required when α<2.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Public.σ, Public.α; spec.valid and spec.admissible moment clauses."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "E has an arbitrary norm, with gradients in its continuous dual. The differentiable mirror function h satisfies D_h(u,z)≥‖u−z‖²/2 for z∈Q∩U and u∈Q; U is open and convex. No bounded domain or upper bound on Bregman divergence is imposed.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Public, Dual, divergence; spec.admissible geometry clauses."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real normed space with its Borel measurable structure; no inner-product structure is required.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Public.finiteE, Public.normedE, Public.linearE, Public.borelE."
+      },
+      {
+        "label": "other",
+        "details": "All numerical parameters and x0 are public. A common minimizer x⋆ satisfies D_h(x⋆,x0)≤R²/2, F(x0)−F(x⋆)≤Δ and ‖df(x⋆)‖≤G, with R,Δ>0 and G≥0. The functions, feasible set, mirror function and minimizer are hidden instance data.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: Public, Instance; spec.publicInput, spec.valid and spec.admissible initialization clause."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable output x with F(x)−F(x⋆)≤ε, where ε>0 and x⋆ minimizes F over Q. No particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The output must belong to Q on the success event.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: spec.successful failure event output∉Q."
+      },
+      {
+        "label": "high_probability",
+        "details": "For public 0<δ<1, P{x∉Q or F(x)−F(x⋆)>ε}≤δ, over the joint algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/StochasticGeneralizedMirror.lean: spec.valid, spec.successful. LongTails/Template.lean: Convergence joint probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines gradient-dependent generalized smoothness, finite central α-moment noise, composite Bregman proximal geometry in an arbitrary finite-dimensional norm, and a high-probability feasible objective-gap guarantee."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated",
+          "theorem": "LongTails.Theorems.StochasticGeneralizedMirrorAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

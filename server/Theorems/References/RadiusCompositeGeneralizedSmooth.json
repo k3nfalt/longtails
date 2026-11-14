@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.RadiusCompositeGeneralizedSmooth",
+  "searched_at": "2026-11-14T08:44:44.242774+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 32768 \\cdot \\left(\\left(1 + L1 \\cdot R\\right)^{\\frac{4}{3}} + \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}}\\right) \\cdot \\left(\\log\\left(128 \\cdot \\left(1 + L1 \\cdot R + \\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.RadiusCompositeGeneralizedSmooth.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈32768 * ((1 + q.L1 * q.R) ^ (4 / 3) + √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε)) *\n      Real.log (128 * (1 + q.L1 * q.R + (q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε)) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 32768 \\cdot \\left(\\left(1 + L1 \\cdot R\\right)^{\\frac{4}{3}} + \\sqrt{\\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}}\\right) \\cdot \\left(\\log\\left(128 \\cdot \\left(1 + L1 \\cdot R + \\frac{\\left(L0 + L1 \\cdot G\\right) \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.RadiusCompositeGeneralizedSmooth.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈32768 * ((1 + q.L1 * q.R) ^ (4 / 3) + √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε)) *\n      Real.log (128 * (1 + q.L1 * q.R + (q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε)) ^ 2⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.RadiusCompositeAccelerated",
+      "namespace": "LongTails.Setups.RadiusCompositeGeneralizedSmooth",
+      "setup": "LongTails.Setups.RadiusCompositeGeneralizedSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.RadiusCompositeGeneralizedSmooth.spec\n  OracleTemplate.RadiusCompositeAccelerated.budget",
+      "theorem": "OracleTemplate.RadiusCompositeAccelerated.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RadiusCompositeAccelerated",
+      "theorem": "OracleTemplate.RadiusCompositeAccelerated.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize F=f+ψ over convex Q in a real Hilbert space. The function f is convex and continuously differentiable on the whole space; ψ is convex on Q. A minimizer exists.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: Public; objective; spec.admissible."
+      },
+      {
+        "label": "composite",
+        "details": "The objective includes a possibly nonsmooth convex term ψ and a convex constraint set Q, accessed together through an exact proximal minimization oracle.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: Instance; objective; proxObjective; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "A gradient query at any x returns ∇f(x) exactly, independently of history and oracle seed. No function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: Query.gradient; spec.admissible."
+      },
+      {
+        "label": "proximal",
+        "details": "For every a>0 and z,v, returns an exact minimizer over Q of ‖u−z‖²/(2a)+⟨v,u−z⟩+ψ(u). Gradient and proximal queries share one fixed total call budget.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: Query.prox; proxObjective; spec.admissible. LongTails/Template.lean: Setup.numOracles; executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every segment [x,y] on which ‖∇f‖≤M, ‖∇f(x)−∇f(y)‖≤(L0+L1 M)‖x−y‖. Public parameters satisfy L0>0 and L1≥0; no global Lipschitz gradient bound is required.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: Public.L0; Public.L1; spec.valid; spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "Public x0∈Q and R>0 satisfy ‖x0−x★‖≤R for some composite minimizer with ‖∇f(x★)‖≤G. The parameter G≥0 is hidden from the algorithm, although the budget depends on it. No initial objective-gap bound or bounded feasible set is assumed. The ambient real Hilbert space may be infinite-dimensional.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: Public; Params.G; spec.publicInput; spec.valid; spec.admissible. LongTails/Template.lean: Convergence.makeAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "For ε>0, the output satisfies F(output)−F(x★)≤ε relative to a minimizer x★∈Q.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: objective; spec.valid; spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The returned point must belong to Q.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound hold almost surely under the joint algorithm and oracle seed law.",
+        "evidence": "LongTails/Setups/RadiusCompositeGeneralizedSmooth.lean: spec.successful. LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Convex composite optimization with gradient-dependent smoothness, a radius-only initialization guarantee, and a hidden gradient bound at a composite minimizer is a meaningful variant of the classical globally smooth formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.RadiusCompositeAccelerated.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RadiusCompositeAccelerated",
+          "theorem": "OracleTemplate.RadiusCompositeAccelerated.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

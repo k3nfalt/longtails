@@ -1,0 +1,143 @@
+{
+  "setup": "LongTails.Setups.StretchedExponentialMarkovConvex",
+  "searched_at": "2026-11-14T08:47:18.750570+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\tau}{32} \\cdot \\left(\\frac{\\sigma \\cdot R}{8 \\cdot \\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(\\frac{\\alpha \\cdot \\log\\left(\\frac{\\sigma \\cdot R}{8 \\cdot \\varepsilon}\\right)}{2 \\cdot \\left(\\alpha - 1\\right)}\\right)^{\\frac{1}{\\gamma}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StretchedExponentialMarkovConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌊p.τ / 32 * (p.σ * p.R / (8 * p.ε)) ^ (p.α / (p.α - 1)) *\n      (p.α * Real.log (p.σ * p.R / (8 * p.ε)) / (2 * (p.α - 1))) ^ p.γ⁻¹⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\tau}{32} \\cdot \\left(\\frac{\\sigma \\cdot R}{8 \\cdot \\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\cdot \\left(\\frac{\\alpha \\cdot \\log\\left(\\frac{\\sigma \\cdot R}{8 \\cdot \\varepsilon}\\right)}{2 \\cdot \\left(\\alpha - 1\\right)}\\right)^{\\frac{1}{\\gamma}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StretchedExponentialMarkovConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌊p.τ / 32 * (p.σ * p.R / (8 * p.ε)) ^ (p.α / (p.α - 1)) *\n      (p.α * Real.log (p.σ * p.R / (8 * p.ε)) / (2 * (p.α - 1))) ^ p.γ⁻¹⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound",
+      "namespace": "LongTails.Setups.StretchedExponentialMarkovConvex",
+      "setup": "LongTails.Setups.StretchedExponentialMarkovConvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.StretchedExponentialMarkovConvex.spec\n  LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound.budget",
+      "theorem": "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{\\varepsilon}} + \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\right\\rceil_{+} \\cdot \\left\\lceil \\exp\\left(1\\right) \\cdot \\tau \\cdot \\left(\\frac{\\log\\left(\\frac{256 \\cdot L \\cdot R^{2}}{\\varepsilon} + 64 \\cdot \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)}{\\gamma}\\right)^{\\frac{1}{\\gamma}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StretchedExponentialMarkovConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈√(32 * p.L * p.R ^ 2 / p.ε) + (256 * p.σ * p.R / p.ε) ^ (p.α / (p.α - 1))⌉₊ *\n    ⌈Real.exp 1 * p.τ *\n        (Real.log (256 * p.L * p.R ^ 2 / p.ε + 64 * (256 * p.σ * p.R / p.ε) ^ (p.α / (p.α - 1))) / p.γ) ^ p.γ⁻¹⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\sqrt{\\frac{32 \\cdot L \\cdot R^{2}}{\\varepsilon}} + \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}} \\right\\rceil_{+} \\cdot \\left\\lceil \\exp\\left(1\\right) \\cdot \\tau \\cdot \\left(\\frac{\\log\\left(\\frac{256 \\cdot L \\cdot R^{2}}{\\varepsilon} + 64 \\cdot \\left(\\frac{256 \\cdot \\sigma \\cdot R}{\\varepsilon}\\right)^{\\frac{\\alpha}{\\alpha - 1}}\\right)}{\\gamma}\\right)^{\\frac{1}{\\gamma}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StretchedExponentialMarkovConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈√(32 * p.L * p.R ^ 2 / p.ε) + (256 * p.σ * p.R / p.ε) ^ (p.α / (p.α - 1))⌉₊ *\n    ⌈Real.exp 1 * p.τ *\n        (Real.log (256 * p.L * p.R ^ 2 / p.ε + 64 * (256 * p.σ * p.R / p.ε) ^ (p.α / (p.α - 1))) / p.γ) ^ p.γ⁻¹⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound",
+      "namespace": "LongTails.Setups.StretchedExponentialMarkovConvex",
+      "setup": "LongTails.Setups.StretchedExponentialMarkovConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StretchedExponentialMarkovConvex.spec\n  LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound.budget",
+      "theorem": "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound",
+      "theorem": "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound",
+      "theorem": "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f on R^d with L-Lipschitz gradient. A global minimizer xstar exists with ||x0-xstar||₂ ≤ R; strong convexity is not required.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: spec.admissible, ConvexOn, HasGradientAt, gradient Lipschitz bound, and minimizer clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query x returns g(x,Z_k), advancing one exogenous stationary Markov trajectory per call. For every fixed x, Eπ[g(x,Z)] = ∇f(x). Conditional unbiasedness given the adaptive query history is not assumed. Replies contain gradient vectors; the Markov state, kernel, invariant law, and oracle map are not public inputs. All entries of Params are public.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: Params, spec.Public, spec.publicInput, and spec.admissible oracle and stationary-unbiasedness clauses; LongTails/Template.lean: Oracle.answer and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "markov_dependence",
+        "details": "The real-valued chain starts from its invariant probability π. With d_t(z) = sup over measurable A of |κ^t(z,A)-π(A)|, each d_t is π-integrable and Eπ[d_t(Z)] ≤ exp(-(t/τ)^γ) for every integer t ≥ 0, where τ ≥ 1 and 0 < γ ≤ 1. Mixing is averaged under π, rather than uniform over initial states. Advancing past discarded observations still consumes oracle calls.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: spec.valid and spec.admissible path-law, invariance, and mixing clauses; LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean: pathLaw and mixingDistance; LongTails/Template.lean: _run and executeWithTrace."
+      },
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every fixed x, Eπ[||g(x,Z)-∇f(x)||₂^α] ≤ σ^α, with the stated integrability, σ > 0, and 1 < α ≤ 2. The bound is under the invariant law; no conditional moment bound or uniform bound over Markov states is imposed. Infinite variance is permitted when α < 2.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: spec.valid and spec.admissible integrability and central α-moment clauses."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The optimization space is EuclideanSpace R (Fin d), with d > 0 and its Euclidean norm. The latent Markov state space is R.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: Params, Space, spec.valid, and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "All numerical parameters and x0 are public. The required regime is L,R,σ,ε > 0, 4ε ≤ LR², 32ε ≤ σR, and LR²/ε ≤ (σR/ε)^(α/(α-1)). There is no additional algorithm restriction beyond the template's default allowedAlgorithm.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: Params, spec.Public, spec.publicInput, and spec.valid; LongTails/Template.lean: Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable R^d-valued output with integrable objective gap and E[f(output)-f(xstar)] ≤ ε for some global minimizer xstar. No last-iterate or feasibility restriction is imposed.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The ε guarantee holds in expectation over the algorithm's randomness and the stationary Markov oracle trajectory.",
+        "evidence": "LongTails/Setups/StretchedExponentialMarkovConvex.lean: spec.successful; LongTails/Template.lean: Convergence and its product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth convex optimization is classical, but this formulation combines stationary-only heavy-tail moment control with averaged stretched-exponential Markov mixing and counts every trajectory advance within the oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound.result",
+        "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound",
+          "theorem": "LongTails.Theorems.StretchedExponentialMarkovConvexLowerBound.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound",
+          "theorem": "LongTails.Theorems.StretchedExponentialMarkovConvexUpperBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

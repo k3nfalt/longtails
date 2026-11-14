@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Variance-Only Second-Order Stationarity}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ on a positive-dimensional finite-dimensional real inner product space $E$. The function is twice continuously differentiable, with $L$-Lipschitz gradient and $\rho$-Lipschitz Hessian, where $L,\rho>0$. A given point $x^0\in E$ satisfies $f(x^0)-\inf_{x\in E}f(x)\leq\Delta$, where $\Delta\geq0$. The oracle returns unbiased stochastic gradients from independent, identically distributed samples, with variance at most $\sigma^2$, where $\sigma\geq0$. For $\varepsilon>0$ and $\delta\in(0,1)$ satisfying $\rho\varepsilon\leq L^2$, the goal is a measurable output $\bar{x}\in E$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ and $\langle v,\nabla^2 f(\bar{x})v\rangle\geq-\sqrt{\rho\varepsilon}\|v\|^2$ for every $v\in E$, with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The Hessian $\nabla^2 f(x):E\to E$ is the derivative of the gradient. The algorithm receives $E$, the measurable sample space $\Omega$, $L$, $\rho$, $\sigma$, $\Delta$, $\varepsilon$, $\delta$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ belongs to $C^2(E;\mathbb{R})$, and, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}&\leq\rho\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The given starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta,
+\qquad x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+There are a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. The samples $(\xi_k)_{k\geq0}$ are measurable, mutually independent random variables with common law $\nu$ under a joint probability law $Q$ on $\Omega^{\mathbb{N}}$. At its $k$th query $x\in E$, the oracle returns $g(x,\xi_k)$.
+
+For every fixed $x\in E$, the map $g(x,\cdot)$ is Bochner integrable and $\|g(x,\cdot)-\nabla f(x)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+Any algorithm randomness is independent of the sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the algorithm must return a measurable output $\bar{x}$ such that
+\[
+P\!\left(
+\begin{gathered}
+\|\nabla f(\bar{x})\|\leq\varepsilon,\\
+\langle v,\nabla^2 f(\bar{x})v\rangle
+\geq-\sqrt{\rho\varepsilon}\|v\|^2
+\quad\text{for every }v\in E
+\end{gathered}
+\right)\geq1-\delta,
+\]
+where $P$ is the joint law of the algorithm randomness and the sample sequence with law $Q$.
+\end{document}

@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.StochasticMfcqInequalities",
+  "searched_at": "2026-11-14T08:45:28.571413+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 3500 \\cdot \\left(\\frac{1600 \\cdot H^{2} \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\left(\\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}\\right)^{2}} + \\left(2 + \\frac{3200 \\cdot H^{3} \\cdot \\Delta}{\\mu^{2} \\cdot \\left(\\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}\\right)^{2}}\\right) \\cdot \\left(1 + \\frac{40 \\cdot \\sigma \\cdot L}{\\mu \\cdot \\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}}\\right)\\right) \\right\\rceil_{+} \\cdot \\left(1 + \\left\\lceil \\frac{\\log\\left(\\frac{2 + \\frac{3200 \\cdot H^{3} \\cdot \\Delta}{\\mu^{2} \\cdot \\left(\\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}\\right)^{2}}}{\\rho}\\right)}{\\log\\left(4\\right)} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticMfcqInequalities.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈3500 *\n        (1600 * p.H ^ 2 * p.σ ^ 2 / (p.μ ^ 2 * min p.ε (min 1 p.τ) ^ 2) +\n          (2 + 3200 * p.H ^ 3 * p.Δ / (p.μ ^ 2 * min p.ε (min 1 p.τ) ^ 2)) *\n            (1 + 40 * p.σ * p.L / (p.μ * min p.ε (min 1 p.τ))))⌉₊ *\n    (1 + ⌈Real.log ((2 + 3200 * p.H ^ 3 * p.Δ / (p.μ ^ 2 * min p.ε (min 1 p.τ) ^ 2)) / p.ρ) / Real.log 4⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 3500 \\cdot \\left(\\frac{1600 \\cdot H^{2} \\cdot \\sigma^{2}}{\\mu^{2} \\cdot \\left(\\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}\\right)^{2}} + \\left(2 + \\frac{3200 \\cdot H^{3} \\cdot \\Delta}{\\mu^{2} \\cdot \\left(\\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}\\right)^{2}}\\right) \\cdot \\left(1 + \\frac{40 \\cdot \\sigma \\cdot L}{\\mu \\cdot \\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}}\\right)\\right) \\right\\rceil_{+} \\cdot \\left(1 + \\left\\lceil \\frac{\\log\\left(\\frac{2 + \\frac{3200 \\cdot H^{3} \\cdot \\Delta}{\\mu^{2} \\cdot \\left(\\min\\left\\{ \\varepsilon, \\min\\left\\{ 1, \\tau \\right\\} \\right\\}\\right)^{2}}}{\\rho}\\right)}{\\log\\left(4\\right)} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticMfcqInequalities.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈3500 *\n        (1600 * p.H ^ 2 * p.σ ^ 2 / (p.μ ^ 2 * min p.ε (min 1 p.τ) ^ 2) +\n          (2 + 3200 * p.H ^ 3 * p.Δ / (p.μ ^ 2 * min p.ε (min 1 p.τ) ^ 2)) *\n            (1 + 40 * p.σ * p.L / (p.μ * min p.ε (min 1 p.τ))))⌉₊ *\n    (1 + ⌈Real.log ((2 + 3200 * p.H ^ 3 * p.Δ / (p.μ ^ 2 * min p.ε (min 1 p.τ) ^ 2)) / p.ρ) / Real.log 4⌉₊)"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.SafeStochasticMfcqKkt",
+      "namespace": "LongTails.Setups.StochasticMfcqInequalities",
+      "setup": "LongTails.Setups.StochasticMfcqInequalities",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticMfcqInequalities.spec\n  LongTails.Theorems.SafeStochasticMfcqKkt.budget",
+      "theorem": "LongTails.Theorems.SafeStochasticMfcqKkt.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SafeStochasticMfcqKkt",
+      "theorem": "LongTails.Theorems.SafeStochasticMfcqKkt.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Minimize a differentiable objective f subject to m>0 differentiable inequalities c_i(x)≤0. Both objective and constraints may be nonconvex. The feasible initial point satisfies f(x0)−f(x)≤Δ for every feasible x.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: Problem, Regularity.hasGradient, constraintGradient, initialFeasible, initialGap; spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Unbiased stochastic objective gradients and constraint gradients at feasible points. Each call returns the complete objective-gradient, constraint-value, and Jacobian tuples at two selected points using the same random sample; samples are IID across calls.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: Primitive, OracleConditions.gradientMean, jacobianMean; spec.Query, Reply, admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "function_value",
+        "details": "Unbiased noisy values of all constraints, bundled with derivative observations. Objective values are not supplied. Oracle guarantees apply only at feasible query points.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: Primitive, OracleConditions.valueMean, integrable; spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "At every feasible x, E[‖g(x)−∇f(x)‖²+‖v(x)−c(x)‖²+‖D(x)−J(x)‖²]≤σ². Only second moments are required; no exponential-tail assumption is imposed.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: OracleConditions.varianceIntegrable, variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure; constraints and Jacobians use Euclidean product norms.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: Params.finiteE, innerE, borelE; Constraint, Jacobian."
+      },
+      {
+        "label": "other",
+        "details": "Uniform band MFCQ: every feasible x admits ‖z‖≤1 with ⟨J_i(x),z⟩≤−μ whenever c_i(x)≥−τ. Objective and individual constraint gradients are globally H-Lipschitz and bounded by H on the feasible set. Same-sample oracle differences satisfy E[‖g(x)−g(y)‖²+‖v(x)−v(y)‖²+‖D(x)−D(y)‖²]≤L²‖x−y‖² for feasible x,y. All Params are public, including x0,H,σ,L,μ,τ,Δ,ε,ρ; the instance functions and sampling law are hidden. Validity requires H≥1, 0<μ≤H, τ>0, σ,L,Δ≥0, ε>0, and 0<ρ<1.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: Regularity.bandMfcq, gradientBound, jacobianBound, gradientLipschitz, jacobianLipschitz; OracleConditions.meanSquaredSmooth; spec.Public, publicInput, valid, admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The output must satisfy c_i(x)≤0 for every constraint, with zero feasibility tolerance. No separate requirement on the feasibility of every intermediate iterate is stated.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: feasible, accurate; spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "The measurable output satisfies all primal-dual accuracy conditions jointly with probability at least 1−ρ, under the product of algorithm and oracle randomness, using a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: spec.successful. LongTails/Template.lean: Convergence, executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "Output an explicit primal-dual pair (x,λ) with λ_i≥0, Lagrangian-gradient norm ‖∇f(x)+Σ_i λ_i J_i(x)‖≤ε, and aggregate complementarity Σ_i|λ_i c_i(x)|≤ε. The stationarity criterion uses the norm, not its square.",
+        "evidence": "LongTails/Setups/StochasticMfcqInequalities.lean: accurate, transposeAction; spec.Output."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines nonlinear nonconvex inequality constraints with noisy constraint values and derivatives, shared-sample two-point feedback, uniform band MFCQ, and high-probability exactly feasible primal-dual KKT output."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SafeStochasticMfcqKkt.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SafeStochasticMfcqKkt",
+          "theorem": "LongTails.Theorems.SafeStochasticMfcqKkt.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}
