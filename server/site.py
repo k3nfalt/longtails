@@ -217,7 +217,7 @@ def write_site(root, rendered, fonts, site_url=None):
                 "contribution": setup["contribution"],
                 "formulaLength": len(re.sub(r"\s", "", formula_text)) or 1_000_000,
                 "searchText": " ".join(
-                    dict.fromkeys(search_text(setup).replace("_", " ").lower().split())
+                    search_text(setup).replace("_", " ").lower().split()
                 ),
             }
         )
