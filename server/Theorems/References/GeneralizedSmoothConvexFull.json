@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothConvexFull",
+  "searched_at": "2026-11-14T10:02:31.678071+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\frac{L1 \\cdot R}{\\log\\left(2 + L1 \\cdot R\\right)}}{8388608} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothConvexFull.spec.Params → ℕ",
+        "value": "fun p => ⌊(√(p.L0 * p.R ^ 2 / p.ε) + p.L1 * p.R / Real.log (2 + p.L1 * p.R)) / 8388608⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\frac{L1 \\cdot R}{\\log\\left(2 + L1 \\cdot R\\right)}}{8388608} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedSmoothConvexFull.spec.Params → ℕ",
+          "value": "fun p => ⌊(√(p.L0 * p.R ^ 2 / p.ε) + p.L1 * p.R / Real.log (2 + p.L1 * p.R)) / 8388608⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound",
+      "namespace": "LongTails.Setups.GeneralizedSmoothConvexFull",
+      "setup": "LongTails.Setups.GeneralizedSmoothConvexFull",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.GeneralizedSmoothConvexFull.spec\n  LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.budget",
+      "theorem": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound",
+      "theorem": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.result",
+      "references": "- Mikhail Rudomanov, Ivan Fomin, Alexander V. Gasnikov, and Fedor S. Stonyakin. [Descending Everest with First-Order Oracles: Oracle Complexity of Convex Optimization under $(L_0,L_1)$-Smoothness](https://arxiv.org/html/2610.21461v1). 2026 (preprint v1, 15 October). Complexity: $1+N=\\Omega\\!\\left(1+\\sqrt{L_0R^2/\\varepsilon}+L_1R/\\sqrt{\\log(2+L_1R)}\\right)$ necessary exact value-and-gradient oracle calls for arbitrary deterministic methods achieving $f(\\hat x)-f^*\\le\\varepsilon$, in the worst case over Euclidean dimensions; $L_0,L_1,R>0$ and $\\varepsilon\\le L_0R^2$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a convex function f: ℝ^d → ℝ, with a global minimizer xstar satisfying ‖x0 − xstar‖ ≤ R.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexFull.lean: spec.Instance and spec.admissible; LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "One oracle returns ∇f(x) at arbitrary query points. Every history and seed must yield the exact gradient; function values are not returned. Algorithms may be randomized and have unrestricted query and output rules.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible, HasGradientAt clause; LongTails/Setups/GeneralizedSmoothConvexFull.lean: spec.Query and spec.Reply; LongTails/Template.lean: Algorithm and Setup.allowedAlgorithm."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient map is differentiable everywhere and satisfies ‖D(∇f)(x)‖ ≤ L0 + L1‖∇f(x)‖ globally. Here L0 > 0 and L1 ≥ 0; no global constant bound on the Hessian is imposed.",
+        "evidence": "LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible, Differentiable and fderiv clauses; LongTails/Setups/GeneralizedSmoothConvexFull.lean: spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝ^d, with d ≥ ⌈17592186044416(1 + L1R + √(L0R²/ε))^5⌉.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexFull.lean: Params.x0, spec.Instance, and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d, L0, L1, x0, R, ε are public; the objective is hidden. R > 0 and 0 < ε ≤ L0R²/16. A minimizer lies within distance R of x0, without a separately supplied initial objective-gap bound.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexFull.lean: Params, spec.Public, spec.publicInput, and spec.valid; LongTails/Setups/RadiusOnlyGeneralizedSmoothConvex.lean: spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return an arbitrary point xhat ∈ ℝ^d with integrable objective gap f(xhat) − f(xstar), where xstar is a global minimizer, and expected gap at most ε.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexFull.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The requirement is E[f(xhat) − f(xstar)] ≤ ε under the execution law, allowing algorithm randomization. It is not an almost-sure accuracy requirement.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexFull.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Convex exact-gradient optimization with gradient-dependent curvature and an explicit parameter-dependent high-dimensional regime."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound",
+          "theorem": "LongTails.Theorems.FullGeneralizedSmoothConvexLowerBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

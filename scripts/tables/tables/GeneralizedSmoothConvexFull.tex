@@ -1,0 +1,26 @@
+\begin{table}[tp]
+\centering
+\caption{Lower bounds (necessary oracle budgets) for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedSmoothConvexFull.lean}{GeneralizedSmoothConvexFull}.}\label{tab:GeneralizedSmoothConvexFull}
+\parbox{\linewidth}{\footnotesize Convex $f:\mathbb{R}^d\to\mathbb{R}$ has a differentiable gradient with $\|\nabla^2 f(x)\|\le L_0+L_1\|\nabla f(x)\|$ and a minimizer $x^\star$ satisfying $\|x^0-x^\star\|\le R$. Public parameters satisfy $L_0,R,\varepsilon>0$, $L_1\ge0$, $\varepsilon\le L_0R^2/16$, and $d\ge\lceil 2^{44}(1+L_1R+\sqrt{L_0R^2/\varepsilon})^5\rceil$. Arbitrary adaptive randomized algorithms receive exact gradients. The target is integrable expected objective error $\int [f(\hat x(\omega))-f(x^\star)]\,dP(\omega)\le\varepsilon$, where $P$ is the algorithm's seed law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FullGeneralizedSmoothConvexLowerBound.lean}{Full\allowbreak Generalized\allowbreak Smooth\allowbreak Convex\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FullGeneralizedSmoothConvexLowerBound.md}{(review)} & Lower bound: $1+N=\Omega\!\left(1+\sqrt{L_0R^2/\varepsilon}+\frac{L_1R}{\log(2+L_1R)}\right)$ gradient calls; randomized, fixed budgets. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{mirrorEverestV2}, Thm.~4.10 & Lower bound: $1+N=\Omega\!\left(1+\sqrt{L_0R^2/\varepsilon}+\frac{L_1R}{\sqrt{\log(2+L_1R)}}\right)$ value--gradient calls; deterministic; $\varepsilon\le L_0R^2$. & \textbf{(1)}: Scope: randomized instead of deterministic hardness for expected accuracy, retaining arbitrary queries and outputs. & \textbf{(1)}: Initialization term is weaker by $\sqrt{\log(2+L_1R)}$ when $\sqrt{L_0R^2/\varepsilon}\le L_1R/\log(2+L_1R)$. Gradient-only hardness; larger dimension requirement and worse constant. \\
+\midrule
+\textbf{(3)} Classical smooth lower bound \citep{gscFullGarg2021}, Secs.~1--2; $L_1=0$, ball-domain model & Lower bound: $N=\Omega\!\left(\sqrt{L_0R^2/\varepsilon}\right)$ value--gradient calls; randomized, high dimension. & \textbf{(1)}: Scope: extends to $L_1>0$, adding $L_1R/\log(2+L_1R)$; matches classical smooth accuracy scaling at $L_1=0$. & \textbf{(1)}: Gradient-only hardness. Ball-domain and unrestricted-query models differ; full oracle-complexity bounds are not directly comparable. \\
+\midrule
+\textbf{(4)} \citep{gscFullEverestIIv1}, Thm.~7.1; finite sums & Lower bound: $\Omega(T_0/\log^2N_0)$ expected component value--gradient calls. Requires $n\ge2$, $\delta>0$, $L_1^2R^2\delta/\varepsilon\ge3$, $\Delta\ge2\varepsilon$; convex $C^2$ components bounded below, $\|\nabla^2 f_i\|\le L_{0,i}+L_1\|\nabla f_i\|$, $n^{-1}\sum_iL_{0,i}\le L_0$. & \textbf{(1)}: Single-function randomized hardness at fixed budgets. Rates not comparable: no established $n=1$ reduction; identical components have $\delta=0$, outside \textbf{(4)}'s range. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N$: oracle-call budget; $\Omega$: necessary-budget lower bound, with universal constants suppressed. In \textbf{(4)}, $f=n^{-1}\sum_i f_i$, $\Delta\ge f(x^0)-f(x^\star)$, $\delta\ge f(x^\star)-n^{-1}\sum_i\inf f_i$; $T_0=n(1+(L_1R)^{2/3})+\sqrt{n(L_0+L_1^2\delta)R^2/\varepsilon+n(L_1R)^2}$ and $N_0=4+n+(L_0+L_1^2\delta)R^2/\varepsilon+(L_1R)^2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

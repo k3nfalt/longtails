@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Smooth Convex Minimization}
+We consider minimizing a convex function $f:\mathbb{R}^d\to\mathbb{R}$ in dimension $d\in\mathbb{N}$. The function $f$ is $(L_0,L_1)$-smooth, meaning its differentiable gradient satisfies $\|\nabla^2 f(x)\|_{\mathrm{op}}\leq L_0+L_1\|\nabla f(x)\|$ everywhere, with $L_0>0$ and $L_1\geq0$. A given point $x^0\in\mathbb{R}^d$ lies within distance $R>0$ of a global minimizer $x^\star$. The oracle returns $\nabla f(x)$ at $x$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable objective gap and $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm and its induced operator norm. The parameters obey
+\[
+\begin{aligned}
+&L_0>0,\qquad L_1\geq0,\qquad R>0,\\
+&0<\varepsilon\leq\frac{L_0R^2}{16},\\
+&d\geq\left\lceil
+17592186044416\left(1+L_1R+\sqrt{\frac{L_0R^2}{\varepsilon}}\right)^5
+\right\rceil.
+\end{aligned}
+\]
+The algorithm receives $d$, $L_0$, $L_1$, $x^0$, $R$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Convexity]
+For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+The function $f$ is differentiable everywhere, its gradient is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in\mathbb{R}^d.
+\]
+Here $\nabla^2 f(x):\mathbb{R}^d\to\mathbb{R}^d$ is the derivative of the gradient.
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output must have an integrable objective gap under $P$ and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}
