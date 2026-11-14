@@ -1,5 +1,4 @@
 const fs = require('node:fs');
-const path = require('node:path');
 const {mathjax} = require('mathjax-full/js/mathjax.js');
 const {TeX} = require('mathjax-full/js/input/tex.js');
 const {CHTML} = require('mathjax-full/js/output/chtml.js');
@@ -39,7 +38,5 @@ adaptor.childNodes(body).forEach((node, index) => {
   const [value, key] = fragments[index];
   value[key] = adaptor.innerHTML(node);
 });
-const fontDirectory = path.join(path.dirname(require.resolve('mathjax-full/package.json')), 'es5/output/chtml/fonts/woff-v2');
-const css = adaptor.textContent(output.styleSheet(document)).replace(/url\("mathjax-fonts\/([^"/]+)"\)/g, (_match, filename) =>
-  `url(data:font/woff;base64,${fs.readFileSync(path.join(fontDirectory, filename)).toString('base64')})`);
+const css = adaptor.textContent(output.styleSheet(document));
 process.stdout.write(JSON.stringify({data, css}));

@@ -4,8 +4,11 @@
   <meta charset="utf-8">
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>__PROJECT_NAME__</title>
-  <link rel="icon" type="image/png" href="data:image/png;base64,__ICON_DATA__">
+  <title>LongTails — Results in mathematical optimization</title>
+  <meta name="description" content="Explore formally verified optimization results, assumptions, oracle complexity bounds, and Lean proofs in LongTails.">
+  <link rel="canonical" href="__SITE_URL__">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <link rel="icon" type="image/png" href="assets/mini-logo.png">
   <style>
     __FONT_FACES__
     __MATH_CSS__
@@ -94,7 +97,7 @@
 </head>
 <body>
   <div class="masthead">
-  <header class="site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="data:image/png;base64,__LOGO_DATA__" width="1254" height="1254" alt=""></a></h1><a id="github-link" class="github-link" href="#"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>Details on GitHub</a><h3 class="site-tagline">Discovering new results in mathematical optimization</h3></header>
+  <header class="site-header"><h1><a class="title-link" href="#">__PROJECT_NAME__<img class="site-logo" src="assets/logo.png" width="1254" height="1254" alt=""></a></h1><a id="github-link" class="github-link" href="__REPOSITORY_URL__"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>Details on GitHub</a><h3 class="site-tagline">Discovering new results in mathematical optimization</h3></header>
   </div>
     <section class="history floating-history" aria-label="Theorem history" hidden>
       <div>
@@ -115,12 +118,11 @@
       </div>
     </form>
     <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
-    <div class="layout"><section id="setups" aria-label="Setup collection"></section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
+    <div class="layout"><section id="setups" aria-label="Setup collection">__STATIC_CATALOG__</section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
     <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
     </div>
     <section class="framework detail" id="framework" hidden><a class="back" href="#">← All setups</a><div class="eyebrow">Shared definitions</div><h2>The oracle framework</h2><p>Every setup uses the same definitions of an algorithm, an oracle, and convergence.</p><div id="framework-source"></div></section>
   </main>
-  <script id="catalog-data" type="application/json">__CATALOG_DATA__</script>
   <script>
     const Fuse = (() => {
       const module = {exports: {}};
@@ -129,7 +131,19 @@
     })();
   </script>
   <script>
-    const data = JSON.parse(document.getElementById('catalog-data').textContent);
+    async function startCatalog() {
+    const response = await fetch('assets/catalog.json');
+    if (!response.ok) throw new Error('Cannot load catalog');
+    const data = await response.json();
+    const loaded = new Map();
+    async function loadSetup(setup) {
+      if (!loaded.has(setup.id)) {
+        const response = await fetch('data/' + encodeURIComponent(setup.id) + '.json');
+        if (!response.ok) throw new Error('Cannot load setup ' + setup.id);
+        loaded.set(setup.id, await response.json());
+      }
+      return loaded.get(setup.id);
+    }
     document.getElementById('github-link').href = data.repository_url + '/blob/main/README.md';
     const make = (tag, text, className) => {
       const element = document.createElement(tag);
@@ -251,7 +265,8 @@
         const entry = make('div', undefined, 'budget');
         const filename = theorem.module.split('.').pop() + '.lean';
         const title = make('div', undefined, 'budget-name');
-        title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
+        const resultLink = make('a', filename);resultLink.href = theorem.url;
+        title.append(resultLink, ' ', sourceLink(theorem.module.replaceAll('.', '/') + '.lean', '(Lean proof)'));
         const kind = theorem.kind || (theorem.statement.includes('OracleTemplate.NonConvergence ') ? 'lower' : theorem.statement.includes('OracleTemplate.OnlineConvergence ') ? 'online' : 'upper');
         if (kind === 'online') title.append(' — Online guarantee');
         const score = theorem.contribution;
@@ -312,28 +327,15 @@
       }
       return section;
     }
-    function catalogLabel(value) {
-      return ({pl: 'PL', classical: 'Classical', non_standard: 'Non-standard',
-        needs_review: 'Needs review', exported_theorem: 'Yes',
-        missing_theorem: 'No', match: 'Matching prior result',
-        related: 'Related prior result', unresolved_comparison: 'No qualifying prior result verified',
-        not_assessed: 'Not assessed'}[value] || String(value || 'Unknown').replaceAll('_', ' '));
-    }
     function setupAnchor(setup) {
-      const link = make('a', undefined, 'setup-anchor');link.href = '#' + setup.id;
+      const link = make('a', undefined, 'setup-anchor');link.href = setup.url;
       link.title = 'Link to this setup';link.setAttribute('aria-label', 'Link to ' + setup.title);
       link.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7 .3l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7-.3l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
       return link;
     }
-    const formulaLengths = new Map(data.setups.map(setup => {
-      const text = htmlText(setup.theorems.map(theorem => theorem.formulaHtml || '').join(''));
-      return [setup.id, text.replace(/\s/g, '').length || Infinity];
-    }));
     const sortedSetups = [...data.setups].sort((a, b) =>
       (b.contribution ?? -1) - (a.contribution ?? -1) ||
-      formulaLengths.get(a.id) - formulaLengths.get(b.id) ||
-      a.title.localeCompare(b.title));
-    for (const setup of sortedSetups) setup.searchText = searchText(setup).replace(/_/g, ' ').toLowerCase();
+      a.formulaLength - b.formulaLength || a.title.localeCompare(b.title));
     function setupCard(setup) {
       const card = make('article');card.id = setup.id;
       const body = make('div', undefined, 'card-body');
@@ -349,19 +351,6 @@
       return {setup, card};
     }
     document.getElementById('framework-source').append(sourceView('LongTails/Template.lean', data.template));
-    function htmlText(html) {
-      const body = new DOMParser().parseFromString(html, 'text/html').body;
-      body.querySelectorAll('.math[data-tex]').forEach(node => node.replaceWith(node.dataset.tex));
-      body.querySelectorAll('annotation, annotation-xml').forEach(node => node.remove());
-      return body.textContent;
-    }
-    function searchText(value, key = '') {
-      if (value == null) return '';
-      if (typeof value === 'object') return Object.entries(value).map(([key, item]) => searchText(item, key)).join(' ');
-      if (key.endsWith('Html')) return htmlText(value);
-      if (key === 'label' || key === 'status') return value + ' ' + catalogLabel(value);
-      return String(value);
-    }
     const searchOptions = {
       useTokenSearch: true,
       tokenMatch: 'all',
@@ -426,15 +415,21 @@
       const matches = matchingSetups(document.getElementById('filter-search').value);
       return sortedSetups.filter(setup => matches.has(setup));
     }
-    function applyFilters() {
+    let renderVersion = 0;
+    async function applyFilters() {
+      const version = ++renderVersion;
       clearTimeout(filterTimer);
       clearSearchHighlights();
       const query = document.getElementById('filter-search').value;
       const matches = filteredSetups();
       const pageCount = Math.max(1, Math.ceil(matches.length / pageSize));
-      currentPage = Math.min(currentPage, pageCount - 1);
-      cards = matches.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map(setupCard);
+      currentPage = Math.max(0, Math.min(currentPage, pageCount - 1));
+      const visible = matches.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+      const setups = await Promise.all(visible.map(loadSetup));
+      if (version !== renderVersion) return false;
+      cards = setups.map(setupCard);
       document.getElementById('setups').replaceChildren(...cards.map(({card}) => card));
+      document.getElementById('catalog-error')?.remove();
       if (query.trim()) {
         for (const {setup, card} of cards) {
           pendingHighlights.set(card, {setup, query});
@@ -449,11 +444,12 @@
       document.querySelectorAll('[data-page-step]').forEach(button => {
         button.disabled = Number(button.dataset.pageStep) < 0 ? currentPage === 0 : currentPage === pageCount - 1;
       });
+      return true;
     }
     document.querySelectorAll('[data-page-step]').forEach(button => {
       button.addEventListener('click', () => {
         currentPage += Number(button.dataset.pageStep);
-        applyFilters();
+        applyFilters().catch(showError);
         document.getElementById('filters').scrollIntoView();
       });
     });
@@ -462,10 +458,11 @@
       currentPage = 0;
       clearTimeout(filterTimer);
       clearSearchHighlights();
+      renderVersion++;
       if (event.target.id === 'filter-search' && event.target.value.trim()) {
-        filterTimer = setTimeout(applyFilters, 120);
+        filterTimer = setTimeout(() => applyFilters().catch(showError), 120);
       } else {
-        applyFilters();
+        applyFilters().catch(showError);
       }
     });
     filters.addEventListener('submit', event => event.preventDefault());
@@ -479,7 +476,7 @@
         if (query.trim() && entry) highlightMatches(card, entry.setup, query);
       });
     }, true);
-    function route() {
+    async function route() {
       const [id, section] = location.hash.slice(1).split('/');
       document.getElementById('catalog').hidden = id === 'framework';
       document.getElementById('framework').hidden = id !== 'framework';
@@ -491,17 +488,30 @@
           matches = sortedSetups;
         }
         currentPage = Math.floor(matches.indexOf(setup) / pageSize);
-        applyFilters();
-        const entry = cards.find(entry => entry.setup === setup);
+        if (!await applyFilters()) return;
+        const entry = cards.find(entry => entry.setup.id === setup.id);
         const comparison = section === 'comparison' && entry.card.querySelector('.comparison');
         if (comparison) comparison.open = true;
         (comparison || entry.card).scrollIntoView();
       } else {
-        applyFilters();
+        await applyFilters();
         window.scrollTo(0, 0);
       }
     }
-    window.addEventListener('hashchange', route);route();
+    window.addEventListener('hashchange', () => route().catch(showError));
+    await route();
+    }
+    function showError(error) {
+      console.error(error);
+      let message = document.getElementById('catalog-error');
+      if (!message) {
+        message = document.createElement('p');message.id = 'catalog-error';
+        message.setAttribute('role', 'alert');
+        document.getElementById('catalog').prepend(message);
+      }
+      message.textContent = 'The interactive catalog could not load. Reload to retry, or browse the setup pages below.';
+    }
+    startCatalog().catch(showError);
   </script>
 </body>
 </html>

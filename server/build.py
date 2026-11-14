@@ -1,16 +1,15 @@
 import argparse
-import base64
 import io
 import json
 import subprocess
 import sys
 import tarfile
 from datetime import date, datetime, timezone
-from html import escape
 from pathlib import Path
 from urllib.parse import urlsplit
 
 from server.generation_commits import verified_output
+from server.site import write_site
 
 ROOT = Path(__file__).resolve().parent
 project_name = "LongTails"
@@ -43,14 +42,11 @@ def font_css():
         ("texgyretermes-bolditalic.otf", "TeX Gyre Termes", 700, "italic"),
         ("latinmodern-math.otf", "Latin Modern Math", 400, "normal"),
     ):
-        encoded = base64.b64encode((ROOT / "fonts" / filename).read_bytes()).decode(
-            "ascii"
-        )
         extension = Path(filename).suffix[1:]
         format = "truetype" if extension == "ttf" else "opentype"
         faces.append(
             f'@font-face{{font-family:"{family}";font-weight:{weight};'
-            f'font-style:{style};src:url(data:font/{extension};base64,{encoded}) format("{format}");}}'
+            f'font-style:{style};src:url(fonts/{filename}) format("{format}");}}'
         )
     return "\n".join(faces)
 
@@ -315,6 +311,7 @@ def render(
     generate_descriptions=False,
     reviews_dir=None,
     tables_dir=None,
+    site_url=None,
 ):
     ignored_setups = json.loads(
         (ROOT / "ignore_settings.json").read_text(encoding="utf-8")
@@ -430,27 +427,7 @@ def render(
             check=True,
         ).stdout
     )
-    payload = json.dumps(rendered["data"], ensure_ascii=False).replace("<", "\\u003c")
-    return (
-        (ROOT / "template.html")
-        .read_text(encoding="utf-8")
-        .replace("__PROJECT_NAME__", escape(project_name))
-        .replace("__CATALOG_DATA__", payload)
-        .replace(
-            "__FUSE_JS__",
-            (ROOT / "vendor/fuse-7.5.0.min.cjs").read_text(encoding="utf-8"),
-        )
-        .replace("__FONT_FACES__", font_css())
-        .replace("__MATH_CSS__", rendered["css"])
-        .replace(
-            "__LOGO_DATA__",
-            base64.b64encode((ROOT / "logo.png").read_bytes()).decode("ascii"),
-        )
-        .replace(
-            "__ICON_DATA__",
-            base64.b64encode((ROOT / "mini-logo.png").read_bytes()).decode("ascii"),
-        )
-    )
+    return write_site(ROOT, rendered, font_css(), site_url)
 
 
 if __name__ == "__main__":
@@ -489,12 +466,15 @@ if __name__ == "__main__":
         type=Path,
         help="Generated table directory containing tables/ and results_table.bib (optional).",
     )
+    parser.add_argument(
+        "--site-url", help="Published site URL (default: GitHub Pages URL from origin)."
+    )
     args = parser.parse_args()
     if args.render_only and (args.generate_descriptions or args.regenerate_all):
         parser.error("--render-only cannot be combined with generation flags")
     if args.jobs < 1:
         parser.error("jobs must be at least 1")
-    page = render(
+    target = render(
         args.regenerate_all,
         args.jobs,
         args.model,
@@ -502,7 +482,6 @@ if __name__ == "__main__":
         generate_descriptions=args.generate_descriptions,
         reviews_dir=args.reviews_dir,
         tables_dir=args.tables_dir,
+        site_url=args.site_url,
     )
-    target = ROOT / "index.html"
-    target.write_text(page, encoding="utf-8")
     print(f"Built {target}")

@@ -17,7 +17,11 @@ python3 -m server.build
 
 To rebuild using existing metadata and descriptions without Lean extraction or
 content generation, run `python3 -m server.build --render-only`. Both modes
-render equations and embed their fonts into the page; visitors do not run MathJax.
+render equations at build time; visitors do not run MathJax. The complete static
+website is written to `server/public/`, including crawlable setup/result pages,
+shared assets, and `sitemap.xml`. Publish that whole directory, not only
+`index.html`. Canonical URLs default to the GitHub Pages URL inferred from origin;
+use `--site-url https://example.org/longtails/` to override it.
 
 This extracts Lean theorem metadata and renders the website without running Codex.
 Existing setup descriptions and reference reports are reused. Missing setup

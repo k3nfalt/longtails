@@ -1,29 +1,18 @@
 import argparse
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
-from urllib.parse import urlsplit
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent / "public"
 
 
-class Handler(BaseHTTPRequestHandler):
-    def respond(self, code, body, content_type="application/json"):
-        self.send_response(code)
-        self.send_header("Content-Type", content_type)
-        self.send_header("Content-Length", str(len(body)))
+class Handler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def end_headers(self):
         self.send_header("Cache-Control", "no-store")
         self.send_header("Referrer-Policy", "no-referrer")
-        self.end_headers()
-        self.wfile.write(body)
-
-    def do_GET(self):
-        url = urlsplit(self.path)
-        if url.path not in ("/", "/index.html"):
-            self.respond(404, b'"Not found"')
-            return
-        self.respond(
-            200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8"
-        )
+        super().end_headers()
 
     def log_message(self, format, *args):
         pass
