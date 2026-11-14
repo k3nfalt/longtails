@@ -37,7 +37,20 @@ def title(html, fallback):
 
 def search_text(value, key=""):
     if isinstance(value, dict):
-        return " ".join(search_text(item, key) for key, item in value.items())
+        labels = ""
+        if "module" in value and "statement" in value:
+            kind = value.get("kind")
+            if kind == "lower" or (
+                not kind and "OracleTemplate.NonConvergence " in value["statement"]
+            ):
+                labels = " Proved Lower Bounds"
+            else:
+                labels = " Proved Complexities"
+            if kind == "online" or (
+                not kind and "OracleTemplate.OnlineConvergence " in value["statement"]
+            ):
+                labels += " Online guarantee"
+        return " ".join(search_text(item, key) for key, item in value.items()) + labels
     if isinstance(value, list):
         return " ".join(search_text(item) for item in value)
     if value is None:
