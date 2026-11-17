@@ -912,7 +912,7 @@ lemma quantized_batch_control {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω
     exact div_le_div_of_nonneg_right hV (Nat.cast_nonneg _)
 
 lemma worker_quantized_control (cfg : Config p) (P : Measure (Samples p))
-    [IsProbabilityMeasure P] (μ : Fin p.n → ProbabilityMeasure p.Ω)
+    (μ : Fin p.n → ProbabilityMeasure p.Ω)
     (hIID : ∀ i, LongTails.Setups.StochasticGeneralizedSmoothAndConvex.IID
       (fun k (samples : Samples p) => samples i k) (μ i : Measure _) P)
     (g : Fin p.n → Point p → p.Ω → Point p) (f : Point p → ℝ)

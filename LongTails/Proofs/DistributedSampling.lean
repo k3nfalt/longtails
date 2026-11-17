@@ -10,7 +10,7 @@ open LongTails.Setups.StochasticGeneralizedSmoothAndConvex (IID)
 open LongTails.Algorithms.DistributedBatchedSgd
 
 lemma worker_batch_law (p : Params) (cfg : Config p) (P : Measure (Samples p))
-    [IsProbabilityMeasure P] (μ : Fin p.n → ProbabilityMeasure p.Ω)
+    (μ : Fin p.n → ProbabilityMeasure p.Ω)
     (hIID : ∀ i, IID (fun k (samples : Samples p) => samples i k) (μ i : Measure _) P)
     (k : ℕ) (i : Fin p.n) :
     HasLaw (fun samples : Samples p => fun j : Fin (cfg.batch i) =>
@@ -23,7 +23,7 @@ lemma worker_batch_law (p : Params) (cfg : Config p) (P : Measure (Samples p))
     (fun j : Fin (cfg.batch i) => ((hIID i).measurable (k * cfg.batch i + j.val)).aemeasurable)
   simpa only [(hIID i).marginal] using h
 
-lemma joint_stream_law (p : Params) (P : Measure (Samples p)) [IsProbabilityMeasure P]
+lemma joint_stream_law (p : Params) (P : Measure (Samples p))
     (μ : Fin p.n → ProbabilityMeasure p.Ω)
     (hworkers : iIndepFun (fun i (samples : Samples p) => samples i) P)
     (hIID : ∀ i, IID (fun k (samples : Samples p) => samples i k) (μ i : Measure _) P) :
@@ -55,7 +55,7 @@ def tail (p : Params) (cfg : Config p) (k : ℕ) (samples : Samples p) : Samples
   fun i j => samples i (k * cfg.batch i + j)
 
 lemma tail_preserving (p : Params) (cfg : Config p) (P : Measure (Samples p))
-    [IsProbabilityMeasure P] (μ : Fin p.n → ProbabilityMeasure p.Ω)
+    (μ : Fin p.n → ProbabilityMeasure p.Ω)
     (hworkers : iIndepFun (fun i (samples : Samples p) => samples i) P)
     (hIID : ∀ i, IID (fun k (samples : Samples p) => samples i k) (μ i : Measure _) P)
     (k : ℕ) : MeasurePreserving (tail p cfg k) P P := by
