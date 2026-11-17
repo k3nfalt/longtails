@@ -177,10 +177,14 @@ def write_site(root, rendered, fonts, site_url=None):
                 else "Proved result"
             )
             body += f'<section class="budgets"><h2>{heading}</h2>'
-            body += (
-                theorem.get("formulaHtml")
-                or "<p>See the formal statement and Lean proof for the budget.</p>"
-            )
+            if formula := theorem.get("formulaHtml"):
+                body += (
+                    '<div class="budget-formula" tabindex="0" aria-label="Proved budget formula">'
+                    + formula
+                    + "</div>"
+                )
+            else:
+                body += "<p>See the formal statement and Lean proof for the budget.</p>"
             body += f"<pre><code>{statement}</code></pre>"
             if not theorem.get("formulaHtml"):
                 for budget in theorem.get("budgets", [theorem.get("budget", {})]):

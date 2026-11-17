@@ -49,6 +49,7 @@ class TheoremDescriptionTests(unittest.TestCase):
 
     def test_timed_website(self):
         timed = self.rows["DistributedBatchedSgd"].copy()
+        timed["formulaHtml"] = '<p><span class="math display">time budget</span></p>'
         self.assertIn("Elapsed-time upper bound", search_text(timed))
         legacy = {key: value for key, value in timed.items() if key != "kind"}
         self.assertIn("Elapsed-time upper bound", search_text(legacy))
@@ -81,6 +82,12 @@ class TheoremDescriptionTests(unittest.TestCase):
             write_site(root, {"data": data, "css": ""}, "")
             page = root / "public/results/DistributedBatchedSgd/index.html"
             self.assertIn("Proved elapsed-time upper bound", page.read_text())
+            self.assertIn(
+                '<div class="budget-formula" tabindex="0" aria-label="Proved budget formula">'
+                + timed["formulaHtml"]
+                + "</div>",
+                page.read_text(),
+            )
             catalog = json.loads((root / "public/assets/catalog.json").read_text())
             self.assertIn(
                 "elapsed-time upper bound", catalog["setups"][0]["searchText"]

@@ -78,7 +78,7 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``Nat.sqrt => return .ofString ("\\left\\lfloor\\sqrt{" ++
       (← latexPP args.back!).latex.1 ++ "}\\right\\rfloor")
-  | ``Nat.log2 => return .ofString ("\\operatorname{log2}\\left(" ++
+  | ``Nat.log2 => return .ofString ("\\log_{2}\\left(" ++
       (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``sInf =>
     let range := args.back!

@@ -52,7 +52,7 @@ set_option hygiene false in
 run_cmd liftTermElabM do
   let value ← elabTerm (← `(fun (m : ℕ) => Nat.log2 (m ^ 3 + 4))) none
   let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
-  unless result == "\\operatorname{log2}\\left(m^{3} + 4\\right)" do
+  unless result == "\\log_{2}\\left(m^{3} + 4\\right)" do
     throwError "Unexpected natural logarithm base two: {result}"
 
 set_option hygiene false in
