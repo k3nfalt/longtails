@@ -57,6 +57,7 @@ run_cmd do
       ("budget", toJson entry.budgetName.toString),
       ("online", toJson entry.online),
       ("lower", toJson entry.lower),
+      ("timed", toJson entry.timed),
       ("bound_type", toJson boundType.pretty)]
   (← IO.getStdout).putStrLn (Json.arr rows).compress
 """
@@ -83,7 +84,12 @@ def generate(rows, work):
         source = work / Path(*name.split(".")).with_suffix(".lean")
         source.parent.mkdir(parents=True, exist_ok=True)
         setup_module = row["setup"].removesuffix(".spec")
-        if row["online"]:
+        namespace = "OracleTemplate"
+        if row["timed"]:
+            namespace = "DistributedTemplate"
+            convergence = "TimedConvergence"
+            bound_type = row["bound_type"]
+        elif row["online"]:
             convergence = "OnlineConvergence"
             bound_type = row["bound_type"]
         else:
@@ -94,7 +100,7 @@ def generate(rows, work):
         )
         source.write_text(f"""{template_import}import {setup_module}
 noncomputable def {row["budget"]} : {bound_type} := by sorry
-theorem {row["theorem"]} : OracleTemplate.{convergence} {row["setup"]} {row["budget"]} := by sorry
+theorem {row["theorem"]} : {namespace}.{convergence} {row["setup"]} {row["budget"]} := by sorry
 """)
         config = source.with_suffix(".json")
         config.write_text(

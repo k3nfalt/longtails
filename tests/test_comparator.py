@@ -55,6 +55,7 @@ class ChallengeGenerationTests(unittest.TestCase):
             "budget": "LongTails.Theorems.Lower.budget",
             "online": False,
             "lower": True,
+            "timed": False,
         }
         with tempfile.TemporaryDirectory() as directory:
             (config,) = generate([row], Path(directory))
@@ -62,6 +63,24 @@ class ChallengeGenerationTests(unittest.TestCase):
             self.assertIn("import LongTails.TemplateLowerBound", source)
             self.assertIn("OracleTemplate.NonConvergence", source)
             self.assertNotIn("OracleTemplate.Convergence", source)
+
+    def test_timed_challenge(self):
+        row = {
+            "module": "LongTails.Theorems.Timed",
+            "theorem": "LongTails.Theorems.Timed.result",
+            "setup": "LongTails.Setups.ComparatorTest.spec",
+            "budget": "LongTails.Theorems.Timed.budget",
+            "online": False,
+            "lower": False,
+            "timed": True,
+            "bound_type": "Unit → DistributedTemplate.Time",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            (config,) = generate([row], Path(directory))
+            source = config.with_suffix(".lean").read_text()
+            self.assertIn("DistributedTemplate.TimedConvergence", source)
+            self.assertIn("Unit → DistributedTemplate.Time", source)
+            self.assertNotIn("Fin S.numOracles", source)
 
 
 class ComparatorTests(unittest.TestCase):
@@ -88,6 +107,7 @@ class ComparatorTests(unittest.TestCase):
             "LongTails/Template.lean",
             "LongTails/TemplateOnline.lean",
             "LongTails/TemplateLowerBound.lean",
+            "LongTails/TemplateDistributed.lean",
         ):
             shutil.copy2(ROOT / name, cls.root / name)
         (cls.root / "LongTails/Setups/ComparatorTest.lean").write_text(SETUP)
@@ -157,6 +177,69 @@ end LongTails.Theorems.{name}
         else:
             self.assertNotEqual(result.returncode, 0, result.stdout)
             self.assertIn(rejection, result.stdout)
+
+    def test_timed_rejections(self):
+        setup = """import LongTails.TemplateDistributed
+namespace LongTails.Setups.ComparatorTimedTest
+open DistributedTemplate
+abbrev spec : Setup where
+  Params := Unit
+  Public := Unit
+  numWorkers _ := 1
+  Instance _ := Unit
+  ComputeQuery _ := Unit
+  ComputeReply _ := Unit
+  CommReply _ := Unit
+  Output _ := Unit
+  publicInput := id
+  valid _ := True
+  admissible _ _ _ := True
+  successful _ _ _ _ := True
+end LongTails.Setups.ComparatorTimedTest
+"""
+        (self.root / "LongTails/Setups/ComparatorTimedTest.lean").write_text(setup)
+        for name, budget, statement, proof, rejection in (
+            (
+                "TimedMissingProof",
+                "fun _ => 0",
+                "TimedConvergence spec budget",
+                "by sorry",
+                "Illegal axiom detected: 'sorryAx'",
+            ),
+            (
+                "TimedMissingBudget",
+                "by sorry",
+                "TimedConvergence spec budget",
+                "by sorry",
+                "Illegal axiom detected: 'sorryAx'",
+            ),
+            (
+                "TimedExtraHypothesis",
+                "fun _ => 0",
+                "False → TimedConvergence spec budget",
+                "by intro h; exact h.elim",
+                "without extra hypotheses",
+            ),
+        ):
+            with self.subTest(name=name):
+                source = f"""import LongTails.Setups.ComparatorTimedTest
+namespace LongTails.Theorems.{name}
+open DistributedTemplate LongTails.Setups.ComparatorTimedTest
+noncomputable def budget : Unit → Time := {budget}
+theorem result : {statement} := {proof}
+end LongTails.Theorems.{name}
+"""
+                (self.root / f"LongTails/Theorems/{name}.lean").write_text(source)
+                result = subprocess.run(
+                    [sys.executable, "run_comparator.py", f"{name}.lean"],
+                    cwd=self.root,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    timeout=300,
+                )
+                self.assertNotEqual(result.returncode, 0, result.stdout)
+                self.assertIn(rejection, result.stdout)
 
     def test_lower_bound_rejections(self):
         for name, statement, proof, rejection in (
