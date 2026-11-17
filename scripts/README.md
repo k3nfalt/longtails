@@ -26,6 +26,17 @@ separate worktrees, retain the files, and report their locations without committ
 pushing, or requiring GitHub bot credentials. Use `--delivery pr` for the existing
 bot-authenticated PR workflow. These options also work through `run_prompt_tmux.py research`.
 
+Use `--serialize-compilation` to keep research parallel while serializing Lake and
+Lean commands across opted-in runs and their worktrees:
+
+```sh
+python3 scripts/run_research_prompt.py --serialize-compilation
+```
+
+This also works through `run_prompt_tmux.py research`. All participating runs must
+enable the option and preserve the inherited compiler wrappers; direct toolchain
+paths bypass the lock. Lake can still parallelize jobs within a single invocation.
+
 PR delivery automatically sets the repository's `core.hooksPath` to `infra/hooks`
 to record startup metadata in commits. Local delivery leaves the existing hook
 configuration untouched; it does not uninstall previously configured hooks.

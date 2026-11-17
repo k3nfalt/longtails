@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
+import contextlib
 import json
 import os
+import shlex
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -22,6 +26,11 @@ def main(argv=None):
     )
     parser.add_argument(
         "--dangerous", action="store_true", help="Enable unrestricted agent execution."
+    )
+    parser.add_argument(
+        "--serialize-compilation",
+        action="store_true",
+        help="Share a compilation lock with other opted-in research runs and their worktrees.",
     )
     parser.add_argument(
         "proposal",
@@ -127,6 +136,15 @@ def main(argv=None):
         prompt += "\n\n" + (scripts / "prompts" / "research_pr_delivery.md").read_text(
             encoding="utf-8"
         )
+    if args.serialize_compilation:
+        prompt += (
+            "\n\nCompilation locking is enabled. Keep research parallel, but use the "
+            "inherited lake/lean wrappers for all compilation and verification. "
+            "Preserve PATH and LONGTAILS_COMPILATION_LOCK in both agents and their "
+            "subprocesses. If a shell resets PATH, prepend $LONGTAILS_COMPILER_BIN "
+            "before running build, lint, Comparator, or direct lake/lean commands. "
+            "Do not bypass the wrappers with absolute toolchain paths.\n"
+        )
     command = {
         "omp": ["omp"] + (["--yolo"] if args.dangerous else []),
         "claude": ["claude"]
@@ -169,52 +187,90 @@ def main(argv=None):
     main_root = Path(
         os.fsdecode(worktrees.split(b"\nHEAD ", 1)[0]).removeprefix("worktree ")
     )
-    prepared = subprocess.run(
-        ["./build.sh"],
-        cwd=main_root,
-        check=False,
-    )
-    if prepared.returncode:
-        return prepared.returncode
-    environment = os.environ.copy()
-    environment["LONGTAILS_STARTUP"] = json.dumps(
-        {
-            "agent": args.agent,
-            "model": environment.get("LONGTAILS_MODEL") or None,
-            "vendor": environment.get("LONGTAILS_VENDOR") or None,
-            "proposal": str(args.proposal) if args.proposal is not None else None,
-            "direction": args.direction,
-            "research_direction": args.research_direction,
-            "requirements": args.requirements,
-        },
-        ensure_ascii=False,
-    )
-    if args.delivery == "pr":
-        try:
-            subprocess.run(
-                [
-                    "git",
-                    "config",
-                    "--local",
-                    "core.hooksPath",
-                    str(scripts.parent / "infra/hooks"),
-                ],
-                cwd=scripts.parent,
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+    with contextlib.ExitStack() as cleanup:
+        environment = os.environ.copy()
+        if args.serialize_compilation:
+            common_dir = subprocess.check_output(
+                ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                cwd=main_root,
+                text=True,
+            ).strip()
+            environment["LONGTAILS_COMPILATION_LOCK"] = str(
+                Path(common_dir) / "longtails-compilation.lock"
             )
-        except OSError:
-            pass
-    try:
-        return subprocess.run(
-            [*command, *agent_args, prompt],
+            compiler_bin = Path(
+                cleanup.enter_context(
+                    tempfile.TemporaryDirectory(prefix="longtails-compilers-")
+                )
+            )
+            for tool in ("lake", "lean"):
+                executable = shutil.which(tool)
+                if executable is None:
+                    parser.error(f"{tool} was not found in PATH")
+                wrapper = compiler_bin / tool
+                wrapper.write_text(
+                    "#!/bin/sh\nexec "
+                    + shlex.join(
+                        [
+                            sys.executable,
+                            str(scripts.parent / "infra/compilation_lock.py"),
+                            executable,
+                        ]
+                    )
+                    + ' "$@"\n'
+                )
+                wrapper.chmod(0o700)
+            environment["LONGTAILS_COMPILER_BIN"] = str(compiler_bin)
+            environment["PATH"] = (
+                str(compiler_bin) + os.pathsep + environment.get("PATH", "")
+            )
+        prepared = subprocess.run(
+            ["./build.sh"],
             cwd=main_root,
             env=environment,
             check=False,
-        ).returncode
-    except FileNotFoundError:
-        parser.error(f"{args.agent} was not found in PATH")
+        )
+        if prepared.returncode:
+            return prepared.returncode
+        environment["LONGTAILS_STARTUP"] = json.dumps(
+            {
+                "agent": args.agent,
+                "model": environment.get("LONGTAILS_MODEL") or None,
+                "vendor": environment.get("LONGTAILS_VENDOR") or None,
+                "proposal": str(args.proposal) if args.proposal is not None else None,
+                "direction": args.direction,
+                "research_direction": args.research_direction,
+                "requirements": args.requirements,
+                "serialize_compilation": args.serialize_compilation,
+            },
+            ensure_ascii=False,
+        )
+        if args.delivery == "pr":
+            try:
+                subprocess.run(
+                    [
+                        "git",
+                        "config",
+                        "--local",
+                        "core.hooksPath",
+                        str(scripts.parent / "infra/hooks"),
+                    ],
+                    cwd=scripts.parent,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+            except OSError:
+                pass
+        try:
+            return subprocess.run(
+                [*command, *agent_args, prompt],
+                cwd=main_root,
+                env=environment,
+                check=False,
+            ).returncode
+        except FileNotFoundError:
+            parser.error(f"{args.agent} was not found in PATH")
 
 
 if __name__ == "__main__":

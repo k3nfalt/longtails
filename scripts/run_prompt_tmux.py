@@ -18,6 +18,7 @@ def main(argv=None):
   research:  [PROPOSAL.md] [--direction {1,2,3,4,5}]
              [--research-direction WORD [WORD ...]] (quote multi-word phrases)
              [--requirements TEXT [TEXT ...]] (mandatory; quote each requirement)
+             [--serialize-compilation] (share a compilation lock across research runs)
              --direction requires a proposal file.
   Put extra agent arguments after --.
 
