@@ -166,8 +166,10 @@ alpha-moment condition and the averaged polynomial total-variation mixing bound,
 including its convention. Stationary unbiasedness is not conditional unbiasedness
 at adaptively chosen points. For multiple oracles, name each mathematically and describe its separately counted
 calls, without Lean oracle IDs. For stochastic access, preserve independence of
-algorithm randomness from oracle randomness. Template.lean gives
-semantics only; omit states, seed types and execution machinery. Check every
+algorithm randomness from oracle randomness. For distributed setups, state the worker topology, computation times, latency,
+per-bit communication costs, concurrency, and sampling dependence.
+Time budgets measure elapsed time, not oracle-call counts. The imported
+template files give semantics only; omit states, seed types and execution machinery. Check every
 source condition before returning the description. Check that every LaTeX display
 and environment is closed. Include no generation notes, verification disclaimers,
 or LaTeX comments in the document.

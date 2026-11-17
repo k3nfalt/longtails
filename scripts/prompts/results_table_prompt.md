@@ -60,6 +60,8 @@ GROUPING AND CONTENT
   admissibility restrictions and uncertainty affecting a claim. Do not assert
   uniform dominance from a conditional gain. Account for relationships between
   parameters before declaring one displayed term asymptotically worse.
+  Prefer compact formulas equivalent up to universal constants; do not simplify
+  by worsening parameter dependence, even by a logarithmic factor.
 - Prioritize new oracle-complexity guarantees and meaningful problem setups when
   explaining significance. Artificially fixing a method does not make a weaker
   result competitive. An occasional significant exception is a new proof that GD
@@ -281,4 +283,6 @@ sorts tables. Check before saving: exact theorem coverage; assumptions below
 caption; notation below table; explicit extra assumptions where needed; consistent
 four-column headers; advantages/disadvantages only in prior-work rows; brief explicit comparisons; valid links/citations; faithful formulas; no redundant commentary.
 
-The supplied result kind is `upper`, `lower`, or `online`, determined from its Lean proposition. Keep all result files and review links in the existing paths. Explicitly label lower-bound rows as lower bounds (necessary budgets), and compare them only with applicable lower bounds; a larger necessary budget is stronger. Label upper bounds as sufficient budgets. Do not rank a necessary budget as if it were an algorithm cost. When both occur in one setup table, use separate labeled upper/lower sections and state the remaining gap only under matching assumptions, oracle models, and accuracy criteria. Online bounds retain their stated online criterion.
+The supplied result kind is `upper`, `lower`, `online`, or `timed`, determined from its Lean proposition. Keep all result files and review links in the existing paths. Explicitly label lower-bound rows as lower bounds (necessary budgets), and compare them only with applicable lower bounds; a larger necessary budget is stronger. Label upper bounds as sufficient budgets. Do not rank a necessary budget as if it were an algorithm cost. When both occur in one setup table, use separate labeled upper/lower sections and state the remaining gap only under matching assumptions, oracle models, and accuracy criteria. Online bounds retain their stated online criterion.
+
+For `timed` results, label the bound as an elapsed-time upper bound. Preserve worker computation times, network topology, latency, per-bit transmission costs, concurrency, and the accuracy criterion. Compare against time bounds under matching models; do not relabel oracle-call or round counts as elapsed time without deriving the conversion.

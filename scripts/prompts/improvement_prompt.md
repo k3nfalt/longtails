@@ -20,7 +20,7 @@ Use exactly two agents: a Researcher and an independent Reviewer. Determine whet
 
 Inspect the repository, its instructions, the existing result, and its proof dependencies before starting. Understand the current assumptions, algorithm, guarantee, and oracle-cost accounting.
 
-All research changes must be inside `LongTails/`, except necessary dependency additions in `lakefile.toml` and `lake-manifest.json`. `LongTails.lean` is generated automatically by build and lint; do not commit it. Never modify `LongTails/Template.lean`. Treat existing core definitions, oracle interfaces, assumptions, verification infrastructure, and existing theorem statements as frozen. Preserve the original result.
+All research changes must be inside `LongTails/`, except necessary dependency additions in `lakefile.toml` and `lake-manifest.json`. `LongTails.lean` is generated automatically by build and lint; do not commit it. Never modify `LongTails/Template.lean`, `LongTails/TemplateOnline.lean`, `LongTails/TemplateLowerBound.lean`, or `LongTails/TemplateDistributed.lean`. Treat existing core definitions, oracle interfaces, assumptions, verification infrastructure, and existing theorem statements as frozen. Preserve the original result.
 
 Deliver only:
 - New setup definitions, if the improvement requires them.
@@ -62,6 +62,8 @@ Search current literature and read relevant primary papers. Check whether the pr
 Present a concrete proof strategy and its main unresolved obstacles to the Reviewer before extensive formalization.
 
 If feasible, develop the mathematical proof and formalize it. Handle parameter ranges, randomness, expectations, stopping rules, and oracle-call accounting explicitly.
+
+Prefer compact, readable final formulas among bounds equivalent up to universal constant factors throughout the stated parameter range. Looser universal constants are acceptable for clarity; worse asymptotic parameter dependence is not, even an extra logarithmic factor. Apply this to the Lean budget itself, not just its presentation, and prove that it still gives the claimed guarantee.
 
 Do not hide a worse dependence elsewhere, strengthen assumptions silently, change the accuracy criterion, or introduce a stronger oracle while presenting the result as an unconditional improvement.
 
@@ -121,3 +123,5 @@ Finish with:
 - Verification results, changed file paths, and the pushed research commit ID, PR URL, or why submission was blocked or no commit was justified.
 
 Lower bounds are also supported in `LongTails/Theorems` as `NonConvergence spec budget`. Follow `AGENTS.md`: inspect the quantified algorithm class, every valid parameter choice, dimension restrictions, and a hard-instance construction independent of the realized random seed. Compare necessary budgets against prior lower bounds and state the gap to upper bounds; a larger necessary budget is stronger. A lower-bound contribution does not require a new solving algorithm. Keep the requested research scope and do not substitute a lower bound for an explicitly requested algorithm without agreement.
+
+Distributed elapsed-time upper bounds are supported using `LongTails/TemplateDistributed.lean` and `result : DistributedTemplate.TimedConvergence spec budget`. Follow the distributed-model requirements in `AGENTS.md`: use a scalar `Params → DistributedTemplate.Time` budget, account for computation and communication, and prove finite-event execution and accuracy under the stated network and sampling model. Compare elapsed time under matching latency, bandwidth, concurrency, and oracle assumptions; do not substitute it for an oracle-call bound. Keep the requested research scope. No distributed lower-bound template is currently provided.

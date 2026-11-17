@@ -29,3 +29,8 @@ bot-authenticated PR workflow. These options also work through `run_prompt_tmux.
 PR delivery automatically sets the repository's `core.hooksPath` to `infra/hooks`
 to record startup metadata in commits. Local delivery leaves the existing hook
 configuration untouched; it does not uninstall previously configured hooks.
+
+Research, review, and comparison prompts support distributed elapsed-time upper
+bounds via `TemplateDistributed` / `TimedConvergence`; see the distributed rules
+in [AGENTS.md](../AGENTS.md). Result-table inputs mark these as `kind: "timed"`,
+so comparisons preserve the network model and time units.

@@ -382,7 +382,7 @@ def generate_setup(setup, rows, output, model=None, regenerate_all=False):
     ]
     prompt = (
         PROMPT
-        + "\nFor results marked lower, the budget is necessary, not sufficient. Match against lower-bound theorems for the same oracle, algorithm class, and accuracy criterion. A larger necessary budget is stronger. Upper bounds may provide context but cannot be a matching lower-bound reference. For online results, compare the stated online guarantee. These rules override upper-bound comparison instructions elsewhere in this prompt.\n"
+        + "\nFor results marked lower, the budget is necessary, not sufficient. Match against lower-bound theorems for the same oracle, algorithm class, and accuracy criterion. A larger necessary budget is stronger. Upper bounds may provide context but cannot be a matching lower-bound reference. For online results, compare the stated online guarantee. For timed results, the scalar budget is an elapsed-time upper bound. Match computation times, topology, latency, per-bit costs, concurrency, sampling, and accuracy; do not compare query or round counts as if they were time bounds without deriving the conversion. These rules override upper-bound comparison instructions elsewhere in this prompt.\n"
         + "\nPROVED RESULTS:\n"
         + json.dumps(budgets, ensure_ascii=False)
     )

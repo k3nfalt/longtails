@@ -25,6 +25,10 @@ private def symbol (s : String) : String :=
   | .lit (.natVal n) => return .atomString (toString n)
   | _ => failure
 
+@[latex_pp const] def clockBitsPrinter : LatexPrinter
+  | e@(.const `DistributedTemplate.clockBits _) => do latexPP (← whnf e)
+  | _ => failure
+
 @[latex_pp mdata] def metadataPrinter : LatexPrinter
   | .mdata _ e => latexPP e
   | _ => failure
@@ -76,6 +80,15 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args.back!).latex.1 ++ "}\\right\\rfloor")
   | ``Nat.log2 => return .ofString ("\\operatorname{log2}\\left(" ++
       (← latexPP args.back!).latex.1 ++ "\\right)")
+  | ``sInf =>
+    let range := args.back!
+    guard (range.isAppOfArity ``Set.range 3)
+    let fn ← ensureLam range.getAppArgs.back! none
+    guard (fn.bindingDomain!.isAppOfArity ``Fin 1)
+    let bound ← latexPP fn.bindingDomain!.getAppArgs.back!
+    withBindingBodyUnusedName fn fun index body => do
+      return .ofString ("\\inf_{0\\le " ++ symbol index.toString ++ "<" ++
+        bound.latex.1 ++ "}\\left(" ++ (← latexPP body).latex.1 ++ "\\right)")
   | ``Finset.sum | ``Finset.prod =>
     guard (args[args.size - 2]!.getAppFn.constName! == ``Finset.univ)
     let fn ← ensureLam args.back! none

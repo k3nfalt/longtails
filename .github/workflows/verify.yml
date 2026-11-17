@@ -48,8 +48,8 @@ jobs:
       - name: Lint
         run: ./lint.sh 2>&1 | tee lint.log
 
-      - name: Test comparator rejection checks
-        run: python3 -m unittest discover -s tests -p 'test_comparator.py' -v 2>&1 | tee comparator-tests.log
+      - name: Test repository tooling
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tee comparator-tests.log
 
       - name: Audit convergence results and budgets
         env:

@@ -50,6 +50,11 @@ def search_text(value, key=""):
                 not kind and "OracleTemplate.OnlineConvergence " in value["statement"]
             ):
                 labels += " Online guarantee"
+            if kind == "timed" or (
+                not kind
+                and "DistributedTemplate.TimedConvergence " in value["statement"]
+            ):
+                labels += " Elapsed-time upper bound"
         return " ".join(search_text(item, key) for key, item in value.items()) + labels
     if isinstance(value, list):
         return " ".join(search_text(item) for item in value)
@@ -166,7 +171,12 @@ def write_site(root, rendered, fonts, site_url=None):
             prefix = "../" * (len(Path(theorem["url"]).parts))
             body = f'<p><a href="{prefix}{setup["url"]}">{escape(setup_title)}</a> · {proof_link(theorem)}</p>'
             body += '<div class="description">' + setup["descriptionHtml"] + "</div>"
-            body += '<section class="budgets"><h2>Proved result</h2>'
+            heading = (
+                "Proved elapsed-time upper bound"
+                if theorem.get("kind") == "timed"
+                else "Proved result"
+            )
+            body += f'<section class="budgets"><h2>{heading}</h2>'
             body += (
                 theorem.get("formulaHtml")
                 or "<p>See the formal statement and Lean proof for the budget.</p>"
