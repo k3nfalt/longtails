@@ -14,6 +14,7 @@
         "value": "fun p =>\n  ⌈256 * Real.log (100 / p.δ) +\n        67108864 *\n          √(p.L * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) / p.ε *\n              (Real.log (100 / p.δ) + Real.log (2 + p.L * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) / p.ε))) +\n      4 * (Real.log (2 * ↑p.d) + Real.log (100 / p.δ)) * (274877906944 * p.σ / p.ε) ^ (p.p / (p.p - 1))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdaptiveEntropicHeavyTailConvex",
     "namespace": "LongTails.Setups.AdaptiveHeavyTailSimplex",
     "setup": "LongTails.Setups.AdaptiveHeavyTailSimplex",
@@ -35,6 +36,7 @@
         "value": "fun p => 6 * p.T + 4 * p.N"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdaptivePairedZerothOrderConfidence",
     "namespace": "LongTails.Setups.AdaptivePairedZerothOrder",
     "setup": "LongTails.Setups.AdaptivePairedZerothOrder",
@@ -56,6 +58,7 @@
         "value": "fun p => ⌈p.L / p.μ * Real.log (1 + 2 * p.Δ / p.ε)⌉₊ * (p.d + 2)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.DriftCorrectedGD",
     "namespace": "LongTails.Setups.AffineDriftPL",
     "setup": "LongTails.Setups.AffineDriftPL",
@@ -77,6 +80,7 @@
         "value": "fun q =>\n  (1 + ⌈(131072 * (q.σ1 + (∑ i, q.σ0 i) / q.ε)) ^ (q.p / (q.p - 1))⌉₊) *\n    (1 + ⌈4294967296 * q.Δ * (q.L0 + q.L1 * q.ε) / q.ε ^ 2⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FixedMemoryAdamAffineHeavyTails",
     "namespace": "LongTails.Setups.AffineHeavyTailedAdam",
     "setup": "LongTails.Setups.AffineHeavyTailedAdam",
@@ -98,6 +102,7 @@
         "value": "fun p =>\n  ⌈2 ^ (256 * (p.α / (p.α - 1))) *\n        ((1 + p.σ) ^ (p.α / (p.α - 1)) * (4 + p.L * p.R ^ 2 / p.ε) ^ (p.α / (3 * p.α - 2)) +\n          (p.σ0 * (4 / (p.L * p.R) + p.R / p.ε)) ^ (p.α / (p.α - 1))) *\n      Real.log (20 + p.α / (p.α - 1) + p.L * p.R ^ 2 / p.ε + p.δ⁻¹) ^ (p.α / (p.α - 1) + 1)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AffineMomentAcceleration",
     "namespace": "LongTails.Setups.AffineMomentConvex",
     "setup": "LongTails.Setups.AffineMomentConvex",
@@ -119,6 +124,7 @@
         "value": "fun p =>\n  ⌈Real.exp\n          (2 ^ 32 * (p.α / (p.α - 1)) ^ 4 *\n              (1 + √(Real.log (4 + p.L * p.R ^ 2 / p.ε + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1)) + p.δ⁻¹))) *\n            Real.log\n              (2 + p.α / (p.α - 1) +\n                Real.log (4 + p.L * p.R ^ 2 / p.ε + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1)) + p.δ⁻¹))) *\n        ((1 + p.σ) ^ (p.α / (p.α - 1)) * √(p.L * p.R ^ 2 / p.ε) + 1 + (p.σ0 * p.R / p.ε) ^ (p.α / (p.α - 1))) /\n      p.δ⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RecursiveAffineMomentAcceleration",
     "namespace": "LongTails.Setups.AffineMomentConvex",
     "setup": "LongTails.Setups.AffineMomentConvex",
@@ -140,6 +146,7 @@
         "value": "fun q =>\n  ⌈16 + 131 * q.Γ ^ 2 + 5 * q.Γ ^ 4 + 516 * q.Λ ^ 2 / q.ε ^ 2 + 64 * (q.L + q.Lbar) * (1 + 3 * q.Γ) * q.Δ / q.ε ^ 2 +\n        384 * (q.L + q.Lbar) * q.Λ * q.Δ / q.ε ^ 3⌉₊ +\n    2"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RecursiveMomentumAffineVariance",
     "namespace": "LongTails.Setups.AffineVarianceMeanSquaredSmooth",
     "setup": "LongTails.Setups.AffineVarianceMeanSquaredSmooth",
@@ -162,6 +169,7 @@
         "value": "fun p =>\n  (⌈2 ^ 19 * p.Δ * √(p.ρ * p.ε) / p.ε ^ 2⌉₊ + 1) *\n    ((⌈6 * √(1 + p.δ / √(p.ρ * p.ε)) * Real.log (8 + 8 * p.δ / √(p.ρ * p.ε))⌉₊ + 1) *\n      ((⌈15 * Real.log (400 * (1 + (p.L + p.δ) / √(p.ρ * p.ε)))⌉₊ + 1) *\n          (⌈(p.L / p.δ + 6) *\n                Real.log (2 ^ 110 * (1 + (p.L + p.δ) / √(p.ρ * p.ε)) ^ 10 * (1 + p.Δ * √(p.ρ * p.ε) / p.ε ^ 2))⌉₊ +\n            3) +\n        1))"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AuxiliarySimilarityAcceleration",
     "namespace": "LongTails.Setups.AuxiliarySimilarityNonconvex",
     "setup": "LongTails.Setups.AuxiliarySimilarityNonconvex",
@@ -183,6 +191,7 @@
         "value": "fun p => (⌈64 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MuonNoiseSeparation",
     "namespace": "LongTails.Setups.BatchedSpectralSmooth",
     "setup": "LongTails.Setups.BatchedSpectralSmooth",
@@ -204,6 +213,7 @@
         "value": "fun q => 2 * ⌈180 * q.γ ^ 4 * q.δ ^ 4 * (max q.Lx q.Ly + q.Lxy) ^ 2 * q.R ^ 2 / ((q.γ - 1) ^ 3 * q.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AlexGdaConvexConcave",
     "namespace": "LongTails.Setups.BlockSmoothConvexConcave",
     "setup": "LongTails.Setups.BlockSmoothConvexConcave",
@@ -225,6 +235,7 @@
         "value": "fun p => 4 * ⌈(11 * p.R * (p.L * p.R + p.M) / p.ε) ^ (4 / 3)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ArrowHurwiczBoundedSaddle",
     "namespace": "LongTails.Setups.BoundedCompositeSaddle",
     "setup": "LongTails.Setups.BoundedCompositeSaddle",
@@ -246,6 +257,7 @@
         "value": "fun p => 4 * ⌈200 * p.R * (p.L * p.R + p.M) / p.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ArrowHurwiczUniformRate",
     "namespace": "LongTails.Setups.BoundedCompositeSaddle",
     "setup": "LongTails.Setups.BoundedCompositeSaddle",
@@ -267,6 +279,7 @@
         "value": "fun P => 2 * ∏ j, (P.hi j - P.lo j + 1).toNat - 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LpBranchAndBoundMilp",
     "namespace": "LongTails.Setups.BoundedMixedIntegerLinear",
     "setup": "LongTails.Setups.BoundedMixedIntegerLinear",
@@ -288,6 +301,7 @@
         "value": "fun q => max 1 ⌈25 * q.H ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BoundedScalarConvex",
     "namespace": "LongTails.Setups.BoundedScalarConvex",
     "setup": "LongTails.Setups.BoundedScalarConvex",
@@ -309,6 +323,7 @@
         "value": "fun p =>\n  ⌈2 ^ 40 * (1 + ↑p.m / ↑p.s + (1 + √↑p.m * √√↑p.m / ↑p.s) * √(p.δ / p.μ)) * (1 + Real.log (2 + ↑p.m + p.δ / p.μ)) *\n      (1 + Real.log (2 + p.Δ / p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CappedHessianSimilarAccelerated",
     "namespace": "LongTails.Setups.CappedHessianSimilarConvex",
     "setup": "LongTails.Setups.CappedHessianSimilarConvex",
@@ -330,6 +345,7 @@
         "value": "fun q =>\n  (Nat.clog 2 ⌈8 * √(1 + 2 * q.ρ) * (q.B + q.B / √q.ρ) / q.ε⌉₊ + 2) ^ 2 *\n    (⌈2 ^ 16 * (1 + 2 * q.ρ) * (q.G ^ 2 * q.R ^ 2 + q.B ^ 2 * (1 + q.ρ⁻¹)) / q.ε ^ 2⌉₊ + 144)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ChiSquareBracketedDro",
     "namespace": "LongTails.Setups.ChiSquareConstrainedDro",
     "setup": "LongTails.Setups.ChiSquareConstrainedDro",
@@ -351,6 +367,7 @@
         "value": "fun p => (p.samples + 1) * (⌈128 * p.upper ^ 2 / p.lower ^ 2 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)⌉₊ + 3)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ClusteredConvolutionalPerceptronAcceleration",
     "namespace": "LongTails.Setups.ClusteredConvolutionalPerceptron",
     "setup": "LongTails.Setups.ClusteredConvolutionalPerceptron",
@@ -372,6 +389,7 @@
         "value": "fun q =>\n  ⌈(4 * q.L * q.R / ((1 + q.ρ * q.L) * q.ε) + 2) * (3 + 8 * (2 + 2 * q.ρ * q.L) * Real.log (22 + 20 * q.ρ * q.L)) +\n      324 * (1 + 2 * q.ρ * q.L) ^ 2 * (2 + 2 * q.ρ * q.L) ^ 3 * Real.log (11 + 10 * q.ρ * q.L) * q.L₂ * q.R *\n          (4 + Real.log (1 + 4 * q.L * q.R / q.ε)) ^ 2 /\n        q.L⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdjointAcceleratedCohypomonotone",
     "namespace": "LongTails.Setups.CohypomonotoneAdjoint",
     "setup": "LongTails.Setups.CohypomonotoneAdjoint",
@@ -393,6 +411,7 @@
         "value": "fun q =>\n  ⌈(4 * q.L * q.R / ((1 + q.ρ * q.L) * q.ε) + 2) * (5 + 8 * (2 + 2 * q.ρ * q.L) ^ 2 * Real.log (11 + 10 * q.ρ * q.L)) +\n      128 * (1 + 2 * q.ρ * q.L) ^ 2 * (2 + 2 * q.ρ * q.L) ^ 2 * q.L₂ * q.R *\n          (4 + Real.log (1 + 4 * q.L * q.R / q.ε)) ^ 2 /\n        q.L⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdjointAnchoredCohypomonotone",
     "namespace": "LongTails.Setups.CohypomonotoneAdjoint",
     "setup": "LongTails.Setups.CohypomonotoneAdjoint",
@@ -414,6 +433,7 @@
         "value": "fun q =>\n  2 + (2 * ⌈2 / (1 - q.ρ * q.L) * Real.log (16 / (1 - q.ρ * q.L))⌉₊ + 3) * ⌈16 * q.L * q.R / ((1 - q.ρ * q.L) * q.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MultiStepAnchoredCohypomonotone",
     "namespace": "LongTails.Setups.CohypomonotoneInclusion",
     "setup": "LongTails.Setups.CohypomonotoneInclusion",
@@ -435,6 +455,7 @@
         "value": "fun p =>\n  ⌈100000000000000 * ((1 + p.ρ * p.H * p.R) ^ 2 + (1 + p.H * p.R ^ 2 / p.ε) ^ (2 / 5)) *\n      (1 + Real.log (2 + p.ρ * p.H * p.R + p.H * p.R ^ 2 / p.ε)) ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CohypomonotoneNewtonAcceleration",
     "namespace": "LongTails.Setups.CohypomonotoneNewton",
     "setup": "LongTails.Setups.CohypomonotoneNewton",
@@ -456,6 +477,7 @@
         "value": "fun p =>\n  (⌊400 * p.Δ * √p.ρ / p.ε ^ (3 / 2)⌋₊ + 1) *\n    ⌈250000 * (↑(Module.finrank ℝ p.E) + 1) * √(2 * p.L / √(p.ρ * p.ε) + 4) *\n        Real.log (2 + ↑(Module.finrank ℝ p.E) + p.L / √(p.ρ * p.ε) + √(2 * p.L * p.Δ) / p.ε) ^ 3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ComparisonTrustAccelerated",
     "namespace": "LongTails.Setups.ComparisonHessianLipschitz",
     "setup": "LongTails.Setups.ComparisonHessianLipschitz",
@@ -464,19 +486,20 @@
   },
   {
     "budget": {
-      "latex": "\\left(\\left\\lceil 6 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right) \\cdot \\left(3 \\cdot n + 7 \\cdot \\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right)^{2}\\right)\\right)",
+      "latex": "\\left(\\left\\lceil 6 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(12 \\cdot \\log_{2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right) \\cdot \\left(3 \\cdot n + 7 \\cdot \\left(12 \\cdot \\log_{2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right)^{2}\\right)\\right)",
       "oracle": 0,
       "type": "LongTails.Setups.ComparisonSmoothConvex.spec.Params → ℕ",
       "value": "fun p =>\n  (⌈6 * √(p.L * p.R ^ 2 / p.ε)⌉₊ + 1) *\n    ((12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) *\n      (3 * p.n + 7 * (12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) ^ 2))"
     },
     "budgets": [
       {
-        "latex": "\\left(\\left\\lceil 6 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right) \\cdot \\left(3 \\cdot n + 7 \\cdot \\left(12 \\cdot \\operatorname{log2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right)^{2}\\right)\\right)",
+        "latex": "\\left(\\left\\lceil 6 \\cdot \\sqrt{\\frac{L \\cdot R^{2}}{\\varepsilon}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(12 \\cdot \\log_{2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right) \\cdot \\left(3 \\cdot n + 7 \\cdot \\left(12 \\cdot \\log_{2}\\left(n \\cdot \\left\\lceil \\frac{L \\cdot R^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) + 96\\right)^{2}\\right)\\right)",
         "oracle": 0,
         "type": "LongTails.Setups.ComparisonSmoothConvex.spec.Params → ℕ",
         "value": "fun p =>\n  (⌈6 * √(p.L * p.R ^ 2 / p.ε)⌉₊ + 1) *\n    ((12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) *\n      (3 * p.n + 7 * (12 * (p.n * ⌈p.L * p.R ^ 2 / p.ε⌉₊).log2 + 96) ^ 2))"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ComparisonOrthConvex",
     "namespace": "LongTails.Setups.ComparisonSmoothConvex",
     "setup": "LongTails.Setups.ComparisonSmoothConvex",
@@ -498,6 +521,7 @@
         "value": "fun p => 108 * (p.n + ⌈√(↑p.n * p.L / p.μ)⌉₊) * Nat.clog 2 ⌈14 * p.Δ / p.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.KatyushaCompositeStronglyConvex",
     "namespace": "LongTails.Setups.CompositeFiniteSumStronglyConvex",
     "setup": "LongTails.Setups.CompositeFiniteSumStronglyConvex",
@@ -519,6 +543,7 @@
         "value": "fun p =>\n  ⌈8192 * (1 + p.R * √(p.H0 / p.ε + p.H1)) * Real.log (4 + p.R ^ 2 * (p.H0 / p.ε + p.H1)) * Real.log (2 + p.Δ / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CompositeGapAccelerated",
     "namespace": "LongTails.Setups.CompositeGapSmooth",
     "setup": "LongTails.Setups.CompositeGapSmooth",
@@ -540,6 +565,7 @@
         "value": "fun q =>\n  3 *\n    ⌈4 + 61 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n            (35 + 1067 * q.L1 * q.R) *\n              Real.log\n                (1 +\n                  (12 + 400 * q.L1 * q.R) *\n                    (1 + (√((q.L0 + q.L1 * q.G) * q.h0))⁻¹ + q.L1 * √(q.Δ / (q.L0 + q.L1 * q.G)))) +\n          4 * Real.log (5 / 2 + q.h0⁻¹ * ((q.L0 + q.L1 * q.G)⁻¹ * 16⁻¹) + 22 * q.L1 ^ 2 * q.Δ / (q.L0 + q.L1 * q.G)) +\n        2 *\n          Real.log\n            (2 *\n              ((1 + q.h0 * (40 * (q.L0 + q.L1 * q.G) + 400 * q.L1 ^ 2 * q.Δ)) *\n                (8 * (1 + 32 * q.L1 * q.R) ^ 2 + 200 * q.L1 ^ 2 * q.R ^ 2)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BacktrackingCompositeGeneralized",
     "namespace": "LongTails.Setups.CompositeGeneralizedParameterFree",
     "setup": "LongTails.Setups.CompositeGeneralizedParameterFree",
@@ -561,6 +587,7 @@
         "value": "fun q =>\n  3 *\n    ⌈10 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n        (6 + 128 * q.L1 * q.R) * Real.log (2 + (3 + 96 * q.L1 * q.R) * √(q.Δ / (q.L0 * q.R ^ 2)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CompositeGeneralizedAccelerated",
     "namespace": "LongTails.Setups.CompositeGeneralizedSmooth",
     "setup": "LongTails.Setups.CompositeGeneralizedSmooth",
@@ -571,24 +598,25 @@
     "budget": null,
     "budgets": [
       {
-        "latex": "549755813888 \\cdot m \\cdot \\left(3 + \\operatorname{log2}\\left(m^{3} + 4\\right)\\right)^{4} \\cdot \\left(3 + \\operatorname{log2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
+        "latex": "549755813888 \\cdot m \\cdot \\left(3 + \\log_{2}\\left(m^{3} + 4\\right)\\right)^{4} \\cdot \\left(3 + \\log_{2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
         "oracle": 0,
         "type": "LongTails.Setups.CompositeLipschitzHessian.spec.Params → ℕ",
         "value": "fun p =>\n  549755813888 * p.m * (3 + (p.m ^ 3 + 4).log2) ^ 4 * (3 + (2 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (4 / 7)⌉₊).log2) *\n    (1 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (2 / 7)⌉₊)"
       },
       {
-        "latex": "4160 \\cdot \\left(3 + \\operatorname{log2}\\left(m^{3} + 4\\right)\\right) \\cdot \\left(3 + \\operatorname{log2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
+        "latex": "4160 \\cdot \\left(3 + \\log_{2}\\left(m^{3} + 4\\right)\\right) \\cdot \\left(3 + \\log_{2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
         "oracle": 1,
         "type": "LongTails.Setups.CompositeLipschitzHessian.spec.Params → ℕ",
         "value": "fun p =>\n  4160 * (3 + (p.m ^ 3 + 4).log2) * (3 + (2 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (4 / 7)⌉₊).log2) *\n    (1 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (2 / 7)⌉₊)"
       },
       {
-        "latex": "549755813888 \\cdot m \\cdot \\left(3 + \\operatorname{log2}\\left(m^{3} + 4\\right)\\right)^{4} \\cdot \\left(3 + \\operatorname{log2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
+        "latex": "549755813888 \\cdot m \\cdot \\left(3 + \\log_{2}\\left(m^{3} + 4\\right)\\right)^{4} \\cdot \\left(3 + \\log_{2}\\left(2 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{4}{7}} \\right\\rceil_{+}\\right)\\right) \\cdot \\left(1 + \\left\\lceil \\left(\\frac{H \\cdot R^{3}}{m^{3} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}} \\right\\rceil_{+}\\right)",
         "oracle": 2,
         "type": "LongTails.Setups.CompositeLipschitzHessian.spec.Params → ℕ",
         "value": "fun p =>\n  549755813888 * p.m * (3 + (p.m ^ 3 + 4).log2) ^ 4 * (3 + (2 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (4 / 7)⌉₊).log2) *\n    (1 + ⌈(p.H * p.R ^ 3 / (↑p.m ^ 3 * p.ε)) ^ (2 / 7)⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CompositeLazyCubicAcceleration",
     "namespace": "LongTails.Setups.CompositeLipschitzHessian",
     "setup": "LongTails.Setups.CompositeLipschitzHessian",
@@ -610,6 +638,7 @@
         "value": "fun q =>\n  (q.B + 1) *\n    ⌈(64 * q.κ * q.G ^ 2 * q.R ^ 2 * (1 + Real.exp (q.c1 - q.c0) * q.ε) +\n            32 * min (2 * Real.exp (q.c1 - q.c0) * q.σ ^ 2) (Real.exp (2 * (q.c1 - q.c0)) * q.G ^ 2) * q.R ^ 2 *\n                (1 + q.ε) /\n              ↑q.B +\n          8 * ↑q.n * Real.exp (q.c1 - q.c0) * (1 + 64 * (1 + (q.c1 - q.c0)) * (q.κ - 1)) * (1 + q.ε) / ↑q.B) /\n        q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ScentCompositionalEntropicRisk",
     "namespace": "LongTails.Setups.CompositionalEntropicRisk",
     "setup": "LongTails.Setups.CompositionalEntropicRisk",
@@ -631,6 +660,7 @@
         "value": "fun p =>\n  ⌈(2 * Real.log (2 / p.δ) + 2) *\n      (70 +\n            (2 ^ 29 * ↑p.problem.m ^ 2 * p.problem.H ^ 10 * p.problem.Δ +\n                2 ^ 44 * ↑p.problem.m ^ 4 * p.problem.H ^ 18 * p.problem.σ ^ 2) /\n              p.problem.ε ^ 2 +\n          2 ^ 48 * ↑p.problem.m ^ 4 * p.problem.H ^ 19 * p.problem.Δ * p.problem.σ / p.problem.ε ^ 3 +\n        (8 * Real.log (2 / p.δ) + 2) *\n          (2 + 2 ^ 40 * ↑p.problem.m ^ 4 * p.problem.H ^ 18 * p.problem.σ ^ 2 / p.problem.ε ^ 2))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ConfidentSurjectiveStochasticInequalityKkt",
     "namespace": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities",
     "setup": "LongTails.Setups.ConfidentStochasticSurjectiveInequalities",
@@ -652,6 +682,7 @@
         "value": "fun p =>\n  p.n *\n    ⌈1 +\n        32768 * (1 + Real.log ↑p.n) * (p.Lmax * p.ε + p.σ ^ 2) * p.R ^ 2 *\n            (1 + Real.log (↑p.n + 2 + (p.Lmax * p.ε + p.σ ^ 2) * p.R ^ 2 / p.ε ^ 2)) /\n          (↑p.n * p.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ReshuffledConstantStepLastIterate",
     "namespace": "LongTails.Setups.ConstantStepReshuffledSmoothConvex",
     "setup": "LongTails.Setups.ConstantStepReshuffledSmoothConvex",
@@ -674,6 +705,7 @@
         "value": "fun q =>\n  ⌈16 * (q.L0 + q.L1 * q.G) * (1 + 8 * q.L1 * q.R) * q.R / q.ε +\n        (132 * q.L1 * q.R * (1 + q.L1 * q.R) + 4) * Real.log (2 + 8 * q.R * (q.L0 + 2 * q.L1 * q.G0) / q.ε)⌉₊ +\n    1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ConstrainedGeneralizedMonotone",
     "namespace": "LongTails.Setups.ConstrainedGeneralizedMonotone",
     "setup": "LongTails.Setups.ConstrainedGeneralizedMonotone",
@@ -695,6 +727,7 @@
         "value": "fun p =>\n  4 *\n    (1 + ⌈16 * p.L / p.μ * Real.log (1 + 32 * p.ρ * p.B / p.μ ^ 2)⌉₊ +\n      (2 + ⌈384 * p.Δ * √p.ρ * (p.L / p.μ) ^ (3 / 4) / (p.ε * √p.ε)⌉₊ +\n          ⌈2048 * p.ρ * √(p.L / p.μ) * p.Δ / (p.μ * p.ε) + 8 * √(p.ρ * p.ε) / p.μ⌉₊) *\n        (2 + ⌈2 * Real.log (33 + 512 * p.L * p.μ / (p.ρ * p.ε))⌉₊))"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ConstrainedMinimaxCubic",
     "namespace": "LongTails.Setups.ConstrainedMinimaxSecondOrder",
     "setup": "LongTails.Setups.ConstrainedMinimaxSecondOrder",
@@ -716,6 +749,7 @@
         "value": "fun p =>\n  2 * p.n +\n    ⌈2560 * (↑p.n + √(p.L / p.μ) / p.γ + (↑p.n * p.δ / p.μ) ^ (2 / 3) / p.γ ^ (4 / 3)) *\n        Real.log (1 + 2 * p.Δ / (p.γ * p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MovementSimilarQuasar",
     "namespace": "LongTails.Setups.ContinuizedSimilarQuasar",
     "setup": "LongTails.Setups.ContinuizedSimilarQuasar",
@@ -737,6 +771,7 @@
         "value": "fun p =>\n  (p.n + max 1 ⌈8 * √(p.L / p.μ) / p.γ + 4096 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2)⌉₊) *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ContinuizedSimilarQuasar",
     "namespace": "LongTails.Setups.ContinuizedSimilarQuasar",
     "setup": "LongTails.Setups.ContinuizedSimilarQuasar",
@@ -758,6 +793,7 @@
         "value": "fun p =>\n  ⌈min ((p.R / p.t) ^ 2) (p.R / p.t * √(min 2⁻¹ (max 0 (1 - p.ε / p.Δ)) ^ 2 + max 0 (Real.log (p.Δ / (2 * p.ε))) / 2))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BallProximalSharpProfile",
     "namespace": "LongTails.Setups.ConvexBallProximal",
     "setup": "LongTails.Setups.ConvexBallProximal",
@@ -779,6 +815,7 @@
         "value": "fun p => ⌈min ((p.R / p.t) ^ 2) (p.R / p.t * (√(max 0 (Real.log (p.Δ / p.ε))) / √2))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BallProximalGaussian",
     "namespace": "LongTails.Setups.ConvexBallProximal",
     "setup": "LongTails.Setups.ConvexBallProximal",
@@ -800,6 +837,7 @@
         "value": "fun p => (2 * ∑ i, max 1 ⌈√(p.L i / p.μ)⌉₊) * Nat.clog 2 ⌈2 * p.Δ / p.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedCoordinateStronglyConvex",
     "namespace": "LongTails.Setups.CoordinateSmoothStronglyConvex",
     "setup": "LongTails.Setups.CoordinateSmoothStronglyConvex",
@@ -843,6 +881,7 @@
         "value": "fun q => ⌈2 ^ 32 * (↑q.d + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2) * (1 + Real.log (16 * ↑q.d * (1 + q.L * q.R / q.ε))) ^ 5⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CovarianceSoftCutConvex",
     "namespace": "LongTails.Setups.CovarianceBoundedConvex",
     "setup": "LongTails.Setups.CovarianceBoundedConvex",
@@ -864,6 +903,7 @@
         "value": "fun q =>\n  ⌈2 ^ 40 *\n      (Real.log (2 ^ 56 * (1 + q.L * q.R ^ 2 / q.ε + q.R ^ 2 * q.σ ^ 2 / q.ε ^ 2) / q.δ ^ 2) ^ 2 +\n          √(q.L * q.R ^ 2 / q.ε) *\n            Real.log (2 ^ 56 * (1 + q.L * q.R ^ 2 / q.ε + q.R ^ 2 * q.σ ^ 2 / q.ε ^ 2) / q.δ ^ 2) +\n        q.R ^ 2 * (q.σ ^ 2 + q.s ^ 2 * Real.log (3 / q.δ)) / q.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CovarianceAcceleratedHighProbability",
     "namespace": "LongTails.Setups.CovarianceSmoothConvex",
     "setup": "LongTails.Setups.CovarianceSmoothConvex",
@@ -885,6 +925,7 @@
         "value": "fun q => ⌈4 * q.Lg * q.Δ / q.ε ^ 2 + 8 * q.Lξ * q.σ ^ 2 * q.Δ / q.ε ^ 4⌉₊ + 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CurvatureAlignedSgdNonconvex",
     "namespace": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
     "setup": "LongTails.Setups.CurvatureAlignedNoiseNonconvex",
@@ -906,6 +947,7 @@
         "value": "fun p => (p.count + 1) * ⌈256 / p.κ ^ 4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CyclicFullWidthPerceptronAcceleration",
     "namespace": "LongTails.Setups.CyclicFullWidthPerceptron",
     "setup": "LongTails.Setups.CyclicFullWidthPerceptron",
@@ -927,6 +969,7 @@
         "value": "fun p =>\n  (p.samples + 1) *\n    (⌈2 ^ 140 * p.upper ^ 10 / (p.derivativeMargin ^ 8 * p.lower ^ 10) * (1 + Real.log (p.upper / p.contrast))⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.DerivativeConvolutionalPerceptronAcceleration",
     "namespace": "LongTails.Setups.DerivativeConvolutionalPerceptron",
     "setup": "LongTails.Setups.DerivativeConvolutionalPerceptron",
@@ -948,6 +991,7 @@
         "value": "fun q =>\n  2 *\n    (q.d + 1 + ⌈Real.logb 2 (q.Δ / q.ε)⌉₊ * ⌈24 * (√q.μ)⁻¹ + Real.logb 2 ↑q.d + 2⌉₊ +\n      (q.d * ⌈-Real.logb 2 q.μ⌉₊ + 1) * ⌈110 * ↑q.d ^ 2 * (1 + Real.log (2 * ↑q.d)) ^ 2 * (√q.μ)⁻¹⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.OnlineMetricAccelerated",
     "namespace": "LongTails.Setups.DiagonalSmoothStronglyConvex",
     "setup": "LongTails.Setups.DiagonalSmoothStronglyConvex",
@@ -969,6 +1013,7 @@
         "value": "fun q =>\n  q.d + 1 + ⌈21 * (√2 / √q.μ) * (Real.log (1 + q.Δ / (q.μ ^ 2 * q.ε)) + (↑q.d + 1) * (3 + -Real.logb 2 q.μ) ^ 4)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BlackBoxDiagonalAcceleration",
     "namespace": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox",
     "setup": "LongTails.Setups.DiagonalSmoothStronglyConvexBlackBox",
@@ -977,13 +1022,13 @@
   },
   {
     "budget": {
-      "latex": "262144 \\cdot \\left(1 + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right) \\cdot \\left(\\inf_{0\\le i<n}\\left(h\\left(i\\right) + \\frac{1 + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}}{\\left(\\sum_{j=0}^{n-1} \\begin{cases} \\frac{1}{h\\left(j\\right)} & h\\left(j\\right) \\leq h\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}\\right) + l + b \\cdot \\left(d \\cdot \\left(1 + \\operatorname{log2}\\left(2 + d + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right) + 64\\right)\\right)",
+      "latex": "262144 \\cdot \\left(1 + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right) \\cdot \\left(\\inf_{0\\le i<n}\\left(h\\left(i\\right) + \\frac{1 + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}}{\\left(\\sum_{j=0}^{n-1} \\begin{cases} \\frac{1}{h\\left(j\\right)} & h\\left(j\\right) \\leq h\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}\\right) + l + b \\cdot \\left(d \\cdot \\left(1 + \\log_{2}\\left(2 + d + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right) + 64\\right)\\right)",
       "type": "LongTails.Setups.DistributedSmoothNonconvex.Params → DistributedTemplate.Time",
       "value": "fun p =>\n  262144 * ↑(1 + ⌈p.L * p.Δ / p.ε⌉₊) *\n    (sInf (Set.range fun i => p.h i + ↑(1 + ⌈p.σ ^ 2 / p.ε⌉₊) / ∑ j, if p.h j ≤ p.h i then (p.h j)⁻¹ else 0) + p.l +\n      p.b * ↑(p.d * (1 + (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊).log2) + DistributedTemplate.clockBits))"
     },
     "budgets": [
       {
-        "latex": "262144 \\cdot \\left(1 + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right) \\cdot \\left(\\inf_{0\\le i<n}\\left(h\\left(i\\right) + \\frac{1 + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}}{\\left(\\sum_{j=0}^{n-1} \\begin{cases} \\frac{1}{h\\left(j\\right)} & h\\left(j\\right) \\leq h\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}\\right) + l + b \\cdot \\left(d \\cdot \\left(1 + \\operatorname{log2}\\left(2 + d + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right) + 64\\right)\\right)",
+        "latex": "262144 \\cdot \\left(1 + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right) \\cdot \\left(\\inf_{0\\le i<n}\\left(h\\left(i\\right) + \\frac{1 + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}}{\\left(\\sum_{j=0}^{n-1} \\begin{cases} \\frac{1}{h\\left(j\\right)} & h\\left(j\\right) \\leq h\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}\\right) + l + b \\cdot \\left(d \\cdot \\left(1 + \\log_{2}\\left(2 + d + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right) + 64\\right)\\right)",
         "type": "LongTails.Setups.DistributedSmoothNonconvex.Params → DistributedTemplate.Time",
         "value": "fun p =>\n  262144 * ↑(1 + ⌈p.L * p.Δ / p.ε⌉₊) *\n    (sInf (Set.range fun i => p.h i + ↑(1 + ⌈p.σ ^ 2 / p.ε⌉₊) / ∑ j, if p.h j ≤ p.h i then (p.h j)⁻¹ else 0) + p.l +\n      p.b * ↑(p.d * (1 + (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊).log2) + DistributedTemplate.clockBits))"
       }
@@ -1010,6 +1055,7 @@
         "value": "fun q => 2 * ⌈√(2 * q.R ^ 2 / (q.lam * q.γ * q.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedDouglasRachfordConvex",
     "namespace": "LongTails.Setups.DouglasRachfordSmoothConvex",
     "setup": "LongTails.Setups.DouglasRachfordSmoothConvex",
@@ -1053,6 +1099,7 @@
         "value": "fun q =>\n  ⌈(192 * (4 * q.A * q.Δ + q.C) + 80 * q.L * q.Δ) / q.ε ^ 2 + 384 * q.A / q.L +\n        1600 * q.L * q.Δ * √(4 * q.A * q.Δ + 2 * q.A * q.ε ^ 2 / q.L + q.C) / q.ε ^ 3⌉₊ +\n    3"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NormalizedStormExpectedSmoothness",
     "namespace": "LongTails.Setups.ExpectedSmoothnessNonconvex",
     "setup": "LongTails.Setups.ExpectedSmoothnessNonconvex",
@@ -1074,6 +1121,7 @@
         "value": "fun p =>\n  ⌈16777216 * (1 + p.R * √(p.H0 / p.ε + p.H1)) * Real.log (4 + p.R ^ 2 * (p.H0 / p.ε + p.H1)) ^ 2 *\n      Real.log (2 + p.Δ / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FeasibleGapAccelerated",
     "namespace": "LongTails.Setups.FeasibleHessianGapComposite",
     "setup": "LongTails.Setups.FeasibleHessianGapComposite",
@@ -1095,6 +1143,7 @@
         "value": "fun p =>\n  ⌈100000000000000 * ↑↑p.input.count ^ 3 * (p.input.upper / p.input.lower) ^ 2 / p.input.derivativeMargin ^ 3 *\n        Real.log (24000000 * p.input.upper ^ 2 / (p.input.derivativeMargin ^ 2 * p.input.contrast ^ 2)) *\n      (1 + -Real.log p.failure)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FiniteScaleConvolutionalSgd",
     "namespace": "LongTails.Setups.FiniteScaleConvolutionalSgd",
     "setup": "LongTails.Setups.FiniteScaleConvolutionalSgd",
@@ -1116,6 +1165,7 @@
         "value": "fun p =>\n  1099511627776 * p.n * (1 + ⌈(p.L * p.R ^ 2 / (↑p.n * p.ε)) ^ 3⁻¹⌉₊) *\n    (1 + Nat.log 2 (2 + p.d + p.n + ⌈p.L * p.R ^ 2 / p.ε⌉₊)) ^ 4"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FiniteSumNondualConvex",
     "namespace": "LongTails.Setups.FiniteSumNondualSmoothConvex",
     "setup": "LongTails.Setups.FiniteSumNondualSmoothConvex",
@@ -1137,6 +1187,7 @@
         "value": "fun q => 3 * q.n * (Nat.clog 2 (Nat.clog 2 q.n) + ⌈√(32 * q.L * q.R ^ 2 / (↑q.n * q.ε))⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedFiniteSumConvex",
     "namespace": "LongTails.Setups.FiniteSumSmoothAndConvex",
     "setup": "LongTails.Setups.FiniteSumSmoothAndConvex",
@@ -1158,6 +1209,7 @@
         "value": "fun q => q.n * Nat.clog 2 ⌈17 * q.L * q.R ^ 2 / (2 * q.ε)⌉₊ + ⌈68 * q.L * q.R ^ 2 / q.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SvrgConvex",
     "namespace": "LongTails.Setups.FiniteSumSmoothAndConvex",
     "setup": "LongTails.Setups.FiniteSumSmoothAndConvex",
@@ -1179,6 +1231,7 @@
         "value": "fun p => 5 * p.n + ⌈20 * √↑p.n * p.L * p.Δ / p.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RecursiveGradientNonconvex",
     "namespace": "LongTails.Setups.FiniteSumSmoothNonconvex",
     "setup": "LongTails.Setups.FiniteSumSmoothNonconvex",
@@ -1222,6 +1275,7 @@
         "value": "fun p =>\n  108 * (min p.n ⌈128 * p.ρ⌉₊ + ⌈√(min ↑p.n ↑⌈128 * p.ρ⌉₊ * p.L / p.μ)⌉₊) * Nat.clog 2 ⌈7168 * (1 + p.L / p.μ)⌉₊ *\n    Nat.clog 2 ⌈p.L * p.R ^ 2 / p.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StrongGrowthFiniteSumAcceleration",
     "namespace": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex",
     "setup": "LongTails.Setups.FiniteSumStrongGrowthStronglyConvex",
@@ -1243,6 +1297,7 @@
         "value": "fun p =>\n  274877906944 * (p.n + ⌈(↑p.n ^ 4 * p.L * p.R ^ 4 / p.ε) ^ 5⁻¹⌉₊) *\n    (1 + ⌈Real.log (2 + ↑p.n + p.G * p.R / p.ε + p.H * p.R ^ 2 / p.ε + p.L * p.R ^ 4 / p.ε)⌉₊) ^ 2"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HessianOnlyFiniteSumThirdSmooth",
     "namespace": "LongTails.Setups.FiniteSumThirdSmoothConvex",
     "setup": "LongTails.Setups.FiniteSumThirdSmoothConvex",
@@ -1264,6 +1319,7 @@
         "value": "fun p =>\n  ⌈4398046511104 * Real.log (2 / (1 - p.ρ * p.L)) / (1 - p.ρ * p.L) *\n      min (↑p.n * (1 + p.L ^ 2 * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)))\n        ((↑p.n + p.Λ ^ 2 / p.L ^ 2 + (√↑p.n * p.Λ * p.L + p.Λ ^ 2) * p.R ^ 2 / ((1 - p.ρ * p.L) ^ 2 * p.ε ^ 2)) /\n          (1 - p.ρ * p.L) ^ 3)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.VarianceReducedWeakMintyInclusion",
     "namespace": "LongTails.Setups.FiniteSumWeakMintyInclusion",
     "setup": "LongTails.Setups.FiniteSumWeakMintyInclusion",
@@ -1285,6 +1341,7 @@
         "value": "fun p =>\n  ⌈2 ^ 70 * (1 + p.L1 * p.R + √(p.L0 * p.R ^ 2 / p.ε) + p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n      Real.log (Real.exp 1 * (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.σ * p.R / p.ε) / p.δ) ^ 3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FiniteVarianceGeneralizedRadiusAcceleratedConvex",
     "namespace": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
     "setup": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
@@ -1306,6 +1363,7 @@
         "value": "fun p =>\n  ⌈2 ^ 21 *\n            (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                Real.log (4 + 4 * p.Δ / p.ε) +\n              (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) +\n          2 ^ 40 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) * Real.log (Real.exp 1 / p.δ) +\n        2 ^ 48 *\n                Real.log\n                  (Real.exp 1 *\n                      (1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                          p.L1 * p.R +\n                        Real.log (4 + 4 * p.Δ / p.ε)) /\n                    p.δ) *\n              (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n            Real.log (Real.exp 1 / p.δ) ^ 2 /\n          √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) +\n      2 ^ 21 *\n            Real.log\n              (Real.exp 1 *\n                  (1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                      p.L1 * p.R +\n                    Real.log (4 + 4 * p.Δ / p.ε)) /\n                p.δ) *\n          (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n              Real.log (4 + 4 * p.Δ / p.ε) +\n            (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) /\n        Real.log\n          (Real.exp 1 +\n            (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                    Real.log (4 + 4 * p.Δ / p.ε) +\n                  (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) *\n                √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) /\n              (2 ^ 26 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) * Real.log (Real.exp 1 / p.δ) ^ 2 +\n                (1 + √(p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                        Real.log (4 + 4 * p.Δ / p.ε) +\n                      (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) *\n                    √(1 + (p.L0 * p.R ^ 2 / p.ε + Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2))) *\n                  Real.exp\n                    (-(28 *\n                        Real.log\n                          (Real.exp 1 *\n                              (1 +\n                                    (p.L0 * p.R ^ 2 / p.ε +\n                                      Real.log (Real.exp 1 / p.δ) ^ 2 * (p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2)) +\n                                  p.L1 * p.R +\n                                Real.log (4 + 4 * p.Δ / p.ε)) /\n                            p.δ)))))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdaptiveRobustGeneralizedAcceleratedConvex",
     "namespace": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
     "setup": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
@@ -1327,6 +1385,7 @@
         "value": "fun p =>\n  ⌈(2 ^ 22 *\n          (1 + √(p.L0 * p.R ^ 2 / p.ε) + Real.log (4 + 4 * p.Δ / p.ε) +\n            (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)) +\n        2 ^ 47 * p.σ ^ 2 * p.R ^ 2 * Real.log (Real.exp 1 / p.δ) ^ 2 / p.ε ^ 2) *\n      Real.log (Real.exp 1 * (1 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + Real.log (4 + 4 * p.Δ / p.ε)) / p.δ)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FiniteVarianceGeneralizedAcceleratedConvex",
     "namespace": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
     "setup": "LongTails.Setups.FiniteVarianceGeneralizedSmoothAndConvex",
@@ -1348,6 +1407,7 @@
         "value": "fun p =>\n  if 2 * p.L * p.Δ ≤ p.ε ^ 2 then 0\n  else\n    ⌈2 ^ 45 * (1 + p.s ^ 2 / p.ε ^ 2) *\n        (1 + p.L * p.Δ / p.ε ^ 2 +\n          √(1 + p.L * p.Δ / p.ε ^ 2) *\n            Real.log (2 ^ 56 * (1 + p.s ^ 2 / p.ε ^ 2) * (1 + p.L * p.Δ / p.ε ^ 2) / p.δ) ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FiniteVarianceMuonHighProbability",
     "namespace": "LongTails.Setups.FiniteVarianceSpectralSmooth",
     "setup": "LongTails.Setups.FiniteVarianceSpectralSmooth",
@@ -1392,6 +1452,7 @@
         "value": "fun q =>\n  ⌈2 ^ 350 *\n        ((q.L0 + q.L1 * q.G + q.v) * q.R * (1 + q.L1 * q.R) ^ 2 / q.ε + (1 + q.L1 * q.R) ^ 4 +\n          q.σ ^ 2 * (1 + q.L1 * q.R) / q.ε ^ 2) *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G) * q.R * (1 + q.L1 * q.R) ^ 2 / q.ε + (1 + q.L1 * q.R) ^ 4) / q.δ)) ^ 5⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GapNoiseConstrainedGeneralizedMonotone",
     "namespace": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone",
     "setup": "LongTails.Setups.GapNoiseConstrainedGeneralizedMonotone",
@@ -1413,6 +1474,7 @@
         "value": "fun p =>\n  ⌈134217728 * (1 + -Real.log p.δ) * ((1 + p.R * √p.H1) * Real.log (1 + p.Δ / p.ε) + p.R * √(p.H0 / p.ε))⌉₊ * ⌈p.ρ⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GapSmoothStrongGrowthHighProbability",
     "namespace": "LongTails.Setups.GapSmoothStrongGrowth",
     "setup": "LongTails.Setups.GapSmoothStrongGrowth",
@@ -1434,6 +1496,7 @@
         "value": "fun q =>\n  max 1\n    ⌈(2 + 3 * ↑q.d + 8 * Real.log (48 * q.L / q.μ)) * (26 * q.L * q.R / √(q.μ * q.ε) + 32 * ↑q.d * q.L / (q.μ * q.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ReparameterizedGaussianVI",
     "namespace": "LongTails.Setups.GaussianVariationalInference",
     "setup": "LongTails.Setups.GaussianVariationalInference",
@@ -1455,6 +1518,7 @@
         "value": "fun p =>\n  ⌈(1 + 8 * Real.log ↑↑p.components) * (p.upper / p.lower) ^ 2 *\n        (2 * Real.log (1 + p.radius ^ 2 / p.lower) +\n          4 * ↑↑p.components * min ↑↑p.components ↑↑p.dimension * p.upper / p.accuracy)⌉₊ +\n    1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GeneralCovarianceReverseFisherGD",
     "namespace": "LongTails.Setups.GeneralCovarianceReverseFisher",
     "setup": "LongTails.Setups.GeneralCovarianceReverseFisher",
@@ -1476,6 +1540,7 @@
         "value": "fun p =>\n  ⌈2 ^ (100 * (p.p / (p.p - 1)) + 100) * (1 + p.p / (p.p - 1)) *\n        (1 +\n            Real.log\n              (2 + (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε) / p.ε +\n                  p.Δ *\n                      (p.L0 + p.σh + (p.L1 + p.αh) * (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε) +\n                        p.ε / (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε)) /\n                    p.ε ^ 2 +\n                (1 + (p.σg + p.αg * (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε)) / p.ε))) ^\n          (p.p / (p.p - 1) + 1) *\n      ((1 + (p.σg + p.αg * (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε)) / p.ε) ^ (p.p / (p.p - 1)) +\n        p.Δ *\n                (p.L0 + p.σh + (p.L1 + p.αh) * (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε) +\n                  p.ε / (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε)) /\n              p.ε ^ 2 *\n            (1 + (p.σg + p.αg * (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε)) / p.ε) ^ (p.p / (p.p - 1) / p.q) *\n          (1 + p.σg / (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε) + p.αg) ^ (p.p / (p.p - 1)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GuardedAffineHessianTransport",
     "namespace": "LongTails.Setups.GeneralizedAffineHessianVector",
     "setup": "LongTails.Setups.GeneralizedAffineHessianVector",
@@ -1497,6 +1562,7 @@
         "value": "fun p =>\n  ⌈2 ^ (32 * (p.p / (p.p - 1)) + 16 * p.q / (p.q - 1) + 64) * (p.p / (p.p - 1) + 1) *\n        (1 +\n          Real.log\n            (2 + (1 + p.σg / p.ε + p.αg) + p.Δ * (p.L0 + p.σh + (p.L1 + p.αh) * (p.ε + p.σg / (1 + p.αg))) / p.ε ^ 2 +\n              (√(p.L0 * p.Δ) + p.L1 * p.Δ + p.ε + p.σg) / p.ε)) *\n      ((1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1)) +\n        p.Δ * (p.L0 + p.σh + (p.L1 + p.αh) * (p.ε + p.σg / (1 + p.αg))) / p.ε ^ 2 *\n          ((1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1) / p.q) +\n            (1 + p.αg) ^ 2 * (1 + p.σg / p.ε + p.αg) ^ (p.p / (p.p - 1) - 2)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HystereticAffineHessianTransport",
     "namespace": "LongTails.Setups.GeneralizedAffineHessianVector",
     "setup": "LongTails.Setups.GeneralizedAffineHessianVector",
@@ -1518,6 +1584,7 @@
         "value": "fun q => 2 * (⌈11 * q.L0 * q.R / q.ε + (27 * q.L1 * q.R + 4) * Real.log (1 + 8 * (q.L0 + q.L1 * q.G) * q.R / q.ε)⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AnchoredGeneralizedMonotone",
     "namespace": "LongTails.Setups.GeneralizedLipschitzMonotone",
     "setup": "LongTails.Setups.GeneralizedLipschitzMonotone",
@@ -1539,6 +1606,7 @@
         "value": "fun q =>\n  ⌈2 ^ 100 * (↑q.d + 1) ^ 2 * (1 + q.L0 + q.L1) ^ 10 * (1 + q.σ ^ 2) * (1 + q.Δ) ^ 12 / ((1 - q.β) ^ 4 * q.ε ^ 4) +\n      2 / (1 - q.β)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ExpectedGeneralizedSmoothAdam",
     "namespace": "LongTails.Setups.GeneralizedSmoothAdam",
     "setup": "LongTails.Setups.GeneralizedSmoothAdam",
@@ -1560,6 +1628,7 @@
         "value": "fun q =>\n  if q.Δ ≤ q.ε then 0\n  else\n    2 *\n      ⌈4096 *\n          (1 + √(q.L0 * q.R ^ 2 / q.ε) +\n            min (↑⌈(q.L1 * q.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * q.Δ / q.ε))\n              (Real.log (4 + 4 * q.Δ / q.ε) + (q.L1 * q.R * Real.log (4 + 4 * q.Δ / q.ε)) ^ (2 / 3)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GeneralizedSelfNormalizedConvex",
     "namespace": "LongTails.Setups.GeneralizedSmoothAndConvex",
     "setup": "LongTails.Setups.GeneralizedSmoothAndConvex",
@@ -1581,6 +1650,7 @@
         "value": "fun q =>\n  if q.Δ ≤ q.ε then 0\n  else 2 * ⌈4096 * (1 + √(q.L0 * q.R ^ 2 / q.ε) + ↑⌈(q.L1 * q.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * q.Δ / q.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GeneralizedAcceleratedConvex",
     "namespace": "LongTails.Setups.GeneralizedSmoothAndConvex",
     "setup": "LongTails.Setups.GeneralizedSmoothAndConvex",
@@ -1646,6 +1716,7 @@
         "value": "fun p =>\n  ⌈16777216 *\n      (↑p.n * (1 + p.L1 * p.R) * Real.log (2 + p.Δ / p.ε) ^ 2 +\n        √(↑p.n * (p.L0 + p.L1 * p.G) * p.R ^ 2 / p.ε) * Real.log (2 + p.Δ / p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LocalFiniteSumAcceleration",
     "namespace": "LongTails.Setups.GeneralizedSmoothFiniteSum",
     "setup": "LongTails.Setups.GeneralizedSmoothFiniteSum",
@@ -1667,6 +1738,7 @@
         "value": "fun q =>\n  2 *\n    ⌈5 + 4 * √(32 * q.L0 * q.R ^ 2 / q.ε) +\n        26 * (1 + q.L1 * q.R) *\n          Real.log\n            (1 +\n              (2 + 13 * q.L1 * q.R) ^ 2 *\n                (2 + q.h0⁻¹ * (q.L0⁻¹ * 64⁻¹) + 16 * q.L0 * q.h0 + 5 * q.L1 ^ 2 * q.Δ / (4 * q.L0) +\n                  80 * q.L1 ^ 2 * q.Δ * q.h0))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BacktrackingGeneralizedAccelerated",
     "namespace": "LongTails.Setups.GeneralizedSmoothParameterFree",
     "setup": "LongTails.Setups.GeneralizedSmoothParameterFree",
@@ -1711,6 +1783,7 @@
         "value": "fun p =>\n  ⌈Real.log (1 + p.L₁ * p.G₀ / (↑p.m * p.L₀)) / Real.log (4 / 3)⌉₊ +\n    (⌈54000 * p.Δ * (√p.L₀ / √↑p.m) / (p.ε * √p.ε) + 30000 * p.Δ * (√p.L₁ / √↑p.m) / p.ε⌉₊ + 146)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.EnergyHessianReuse",
     "namespace": "LongTails.Setups.GradientDependentHessian",
     "setup": "LongTails.Setups.GradientDependentHessian",
@@ -1732,6 +1805,7 @@
         "value": "fun q =>\n  ⌈65536 * (1 + ↑(Nat.clog 2 ⌈4 / q.δ⌉₊)) *\n        (1 + √(q.L0 * q.R ^ 2 / q.ε) + q.L1 * q.R * (1 + ↑(Nat.clog 2 ⌈8 * q.Δ / q.ε⌉₊))) /\n      q.γ⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GradientOnlyQuasarHighProbability",
     "namespace": "LongTails.Setups.GradientOnlyGeneralizedQuasar",
     "setup": "LongTails.Setups.GradientOnlyGeneralizedQuasar",
@@ -1753,6 +1827,7 @@
         "value": "fun p =>\n  (⌊2048 * p.Δ * p.L₃ ^ 3⁻¹ / p.ε ^ (4 / 3)⌋₊ + 1) *\n    (97 *\n        ⌈√(p.L₁ / (p.L₃ ^ 3⁻¹ * p.ε ^ (2 / 3)) + 4) *\n            Real.log (1 + 200 * (p.L₁ + 4 * p.L₃ ^ 3⁻¹ * p.ε ^ (2 / 3)) * p.Δ / p.ε ^ 2)⌉₊ +\n      290)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GradientOnlyThirdOrderAcceleration",
     "namespace": "LongTails.Setups.GradientOnlyThirdOrderNonconvex",
     "setup": "LongTails.Setups.GradientOnlyThirdOrderNonconvex",
@@ -1774,6 +1849,7 @@
         "value": "fun q => 1 + ⌈400000000 * q.Δ * q.L / q.ε ^ 2 * (1000000000000 + (100000 * q.σ / q.ε) ^ (q.α / (q.α - 1)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdamHeavyTailedFixedMomentum",
     "namespace": "LongTails.Setups.HeavyTailedAdam",
     "setup": "LongTails.Setups.HeavyTailedAdam",
@@ -1795,6 +1871,7 @@
         "value": "fun p =>\n  ⌈2 ^ (64 * (p.p / (p.p - 1)) ^ 2) *\n      ((1 + p.σg / p.ε) ^ (p.p / (p.p - 1)) +\n        (1 + p.Δ * (p.L + √(p.ρ * p.ε)) / p.ε ^ 2) *\n          (1 + (1 + p.σg / p.ε) ^ (p.p - 1)⁻¹ * (p.σh / (p.L + √(p.ρ * p.ε)) + p.ρ * p.ε / (p.L + √(p.ρ * p.ε)) ^ 2) +\n                  (p.σh / (p.L + √(p.ρ * p.ε)) + p.ρ * p.ε / (p.L + √(p.ρ * p.ε)) ^ 2) ^ (p.p / (p.p - 1)) +\n                Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) * Real.log (2 + ↑p.d) *\n                  ((p.L + √(p.ρ * p.ε)) / √(p.ρ * p.ε)) +\n              Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) * Real.log (2 + ↑p.d) ^ (p.p / (p.p - 1)) *\n                (p.σh / √(p.ρ * p.ε)) ^ (p.p / (p.p - 1)) +\n            Real.log (2 + (p.L + √(p.ρ * p.ε)) ^ 2 / (p.ρ * p.ε)) ^ 2 *\n              (1 + (p.σh / √(p.ρ * p.ε)) ^ (p.p / (p.p - 1)))))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.DirectionalHeavyTailedSecondOrder",
     "namespace": "LongTails.Setups.HeavyTailedHessianVector",
     "setup": "LongTails.Setups.HeavyTailedHessianVector",
@@ -1816,6 +1893,7 @@
         "value": "fun q =>\n  max 1 ⌈√(32 * q.L * q.R ^ 2 / q.ε) + (256 * q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))⌉₊ *\n    max 1 ⌈q.τ * (256 * q.L * q.R ^ 2 / q.ε + 64 * (256 * q.σ * q.R / q.ε) ^ (q.α / (q.α - 1))) ^ q.β⁻¹⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedHeavyTailedMarkovConvex",
     "namespace": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex",
     "setup": "LongTails.Setups.HeavyTailedMarkovSmoothAndConvex",
@@ -1837,6 +1915,7 @@
         "value": "fun q =>\n  ⌈(2 ^ 80 * (q.p / (q.p - 1))) ^ (q.p / (q.p - 1) + 2) *\n        (1 +\n            Real.log\n              (2 + q.L / q.μ + q.δ⁻¹ + q.L * q.Δ / q.ε ^ 2 + (q.L / q.μ * (q.σ / q.ε)) ^ (q.p / (q.p - 1)) +\n                Real.log (2 + (q.L / q.μ) ^ 3 * q.L * (q.Δ + q.G ^ 2 / q.μ) / q.ε ^ 2))) ^\n          (2 * (q.p / (q.p - 1)) + 3) *\n      (√(q.L / q.μ) *\n          (1 + q.L * q.Δ / q.ε ^ 2 + Real.log (2 + (q.L / q.μ) ^ 3 * q.L * (q.Δ + q.G ^ 2 / q.μ) / q.ε ^ 2)) +\n        (q.L * q.Δ / q.ε ^ 2 * (q.L / q.μ) ^ (q.p / (q.p - 1) / 2) + (q.L / q.μ) ^ (q.p / (q.p - 1))) *\n          (q.σ / q.ε) ^ (q.p / (q.p - 1)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HeavyTailedNcscAccelerated",
     "namespace": "LongTails.Setups.HeavyTailedNcsc",
     "setup": "LongTails.Setups.HeavyTailedNcsc",
@@ -1858,6 +1937,7 @@
         "value": "fun p =>\n  ⌈44 * (p.L / p.μ) * √(p.Δ / p.ε) + 1024 * p.σ ^ 2 * (p.L / p.μ + Real.log (3 / p.δ)) / (p.μ * p.ε) +\n      ((64 * (p.L / p.μ) ^ 2 * (p.ν / p.σ) ^ 2 * Real.log (3 / p.δ)) ^ p.q * (3 / p.δ) ^ 2) ^ (p.q - 2)⁻¹⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HeavyTailedPLLastIterate",
     "namespace": "LongTails.Setups.HeavyTailedPL",
     "setup": "LongTails.Setups.HeavyTailedPL",
@@ -1879,6 +1959,7 @@
         "value": "fun q =>\n  65 *\n    (⌈512 *\n            ((q.L / q.μ) ^ (5 / 4) +\n              (2 ^ (128 / q.p + 27) * q.σ ^ 2 * (q.ε⁻¹ * q.μ⁻¹ + (q.L / q.μ) ^ (5 / 2) * q.ρ ^ 2 / q.μ ^ 4)) ^\n                (q.p / (2 * (q.p - 1)))) *\n          (Real.log (1 + 48 * √(q.L / q.μ) * q.Δ / q.ε) + 1)⌉₊ +\n      1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.KappaFreeHeavyTailedPLHessian",
     "namespace": "LongTails.Setups.HeavyTailedPLHessian",
     "setup": "LongTails.Setups.HeavyTailedPLHessian",
@@ -1900,6 +1981,7 @@
         "value": "fun q =>\n  130 * ⌈128 * √(max 1 (q.L * q.R ^ 2 / q.ε))⌉₊ +\n    2 * ⌈(17179869184 * q.ρ) ^ (q.p - 1)⁻¹⌉₊ * (130 + ⌈2 * Real.log (max 1 (q.L * q.R ^ 2 / q.ε))⌉₊) *\n      ⌈128 * max 1 (q.L * q.R ^ 2 / q.ε) ^ (q.p / (3 * q.p - 2))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SplitRobustHeavyTailedAcceleration",
     "namespace": "LongTails.Setups.HeavyTailedStrongGrowthConvex",
     "setup": "LongTails.Setups.HeavyTailedStrongGrowthConvex",
@@ -1921,6 +2003,7 @@
         "value": "fun q => ⌈2 ^ 20 * 132 ^ (q.p / (q.p - 1)) * q.L * ↑q.d * q.Δ / q.ε ^ 2 * (1 + (q.σ / q.ε) ^ (q.p / (q.p - 1)))⌉₊ + 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ClippedSpsaHeavyTailed",
     "namespace": "LongTails.Setups.HeavyTailedTwoPointZerothOrder",
     "setup": "LongTails.Setups.HeavyTailedTwoPointZerothOrder",
@@ -1942,6 +2025,7 @@
         "value": "fun p =>\n  3 *\n    ⌈1000000000000000000 * (1 + (p.σg * p.D / p.ε) ^ 2 + √(p.σh * p.D ^ 2 / p.ε) + (p.ρ * p.D ^ 3 / p.ε) ^ (2 / 7)) *\n        (1 +\n            Real.log\n              ((1 + p.σh / (p.ρ * p.D)) *\n                (1 + (p.σg * p.D / p.ε) ^ 2 + √(p.σh * p.D ^ 2 / p.ε) + (p.ρ * p.D ^ 3 / p.ε) ^ (2 / 7)))) ^\n          2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HessianAdaptiveCubic",
     "namespace": "LongTails.Setups.HessianAdaptiveStochasticConvex",
     "setup": "LongTails.Setups.HessianAdaptiveStochasticConvex",
@@ -1963,6 +2047,7 @@
         "value": "fun p =>\n  ⌈1000 * Real.logb 2 (2 + p.L ^ 2 / (p.ρ * p.ε)) * (p.ρ * p.ε / p.L ^ 2) ^ 9⁻¹ * p.L * p.Δ / p.ε ^ 2 +\n        (p.L ^ 2 / (p.ρ * p.ε)) ^ 9⁻¹ +\n      2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FractalChebyshevGdStationarity",
     "namespace": "LongTails.Setups.HessianLipschitzGradientStationarity",
     "setup": "LongTails.Setups.HessianLipschitzGradientStationarity",
@@ -1985,6 +2070,7 @@
         "value": "fun p => ⌈2 ^ 44 * (1 + p.Δ * √p.H / (p.m ^ (2 / 3) * p.ε * √p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MonotoneHessianSecondOrder",
     "namespace": "LongTails.Setups.HessianLipschitzSecondOrder",
     "setup": "LongTails.Setups.HessianLipschitzSecondOrder",
@@ -2006,6 +2092,7 @@
         "value": "fun p =>\n  if p.Δ ≤ p.ε then 0\n  else\n    ⌈10 ^ 9 * (√(p.L / p.μ) * (1 + p.M * p.D / p.μ ^ 2) + p.D / √(p.μ * p.ε) + 1) *\n        Real.log (2 + p.Δ / p.ε + p.M ^ 2 * p.Δ / p.μ ^ 3)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NonlinearTemporalAcceleration",
     "namespace": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy",
     "setup": "LongTails.Setups.HessianLipschitzTemporalDiscrepancy",
@@ -2028,6 +2115,7 @@
         "value": "fun p =>\n  ⌈2 ^ 17 * (1 + (p.pub.M * p.pub.D) ^ (2 / 3)) *\n      Real.log (3 + p.pub.M * p.pub.D + p.pub.M * p.Λ * (p.pub.D + p.pub.M⁻¹) ^ 2 / p.pub.ε) ^ 3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HessianStableSkewNewton",
     "namespace": "LongTails.Setups.HessianStableSkewMonotone",
     "setup": "LongTails.Setups.HessianStableSkewMonotone",
@@ -2049,6 +2137,7 @@
         "value": "fun q =>\n  ⌈10 ^ 84 *\n        (1 +\n            (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n              q.ε ^ 4 +\n          (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n              ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n            q.ε ^ 2) *\n      Real.log\n          (10 ^ 84 * (1 + q.σBody) *\n            (1 +\n                (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L) *\n                    (↑q.bodyDim * q.δ + q.σBody + √↑q.headDim * q.σHead) ^ 2 /\n                  q.ε ^ 4 +\n              (1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L +\n                  ↑q.headDim * (1 + 2 * q.L * q.Δ + ↑q.headDim * q.σHead ^ 2) *\n                    √(1 + (↑q.bodyDim + ↑q.headDim) ^ 2 * (q.L + q.M) ^ 2 * q.Δ / q.L)) /\n                q.ε ^ 2)) ^\n        4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HeterogeneousAdamFirstMoment",
     "namespace": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
     "setup": "LongTails.Setups.HeterogeneousSymmetricFirstMoment",
@@ -2070,6 +2159,7 @@
         "value": "fun P =>\n  min (2 * ∏ j, (P.hi j - P.lo j + 1).toNat - 1)\n    (1 + 4 * P.p * (LongTails.Setups.HiddenMixedIntegerLinear.goodPoints P).card)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BestBoundHiddenMilp",
     "namespace": "LongTails.Setups.HiddenMixedIntegerLinear",
     "setup": "LongTails.Setups.HiddenMixedIntegerLinear",
@@ -2091,6 +2181,7 @@
         "value": "fun p => ⌈2097152 * √((p.μ + p.s) * (p.L + p.μ + p.s)) / p.μ * Real.log (2 + p.s / p.μ) * Real.log (2 + p.R / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HiddenPotentialOracleComplexity",
     "namespace": "LongTails.Setups.HiddenPotentialStronglyMonotone",
     "setup": "LongTails.Setups.HiddenPotentialStronglyMonotone",
@@ -2158,6 +2249,7 @@
         "value": "fun p =>\n  ⌈2 ^ 40 * (p.L * (p.L / p.μ) ^ 3 / p.ε) ^ 4⁻¹ * (1 + p.Δ * √(p.L * (p.L / p.μ) ^ 4 / p.ε ^ 3)) *\n      Real.log (2 * (p.L / p.μ) * (1 + p.L / p.ε) * (1 + p.Δ / p.ε) * (1 + p.G / p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.BilevelFirstOrderCurvature",
     "namespace": "LongTails.Setups.HigherSmoothBilevel",
     "setup": "LongTails.Setups.HigherSmoothBilevel",
@@ -2179,6 +2271,7 @@
         "value": "fun q =>\n  ⌈40 * (16 * q.L * q.R / q.ε + 2 * (8 * q.H * q.R ^ q.α / q.ε) ^ q.α⁻¹ + Real.logb 2 (q.R / q.r0) + 2) *\n      Real.log ((32 * q.L * q.R / q.ε + 4 * (8 * q.H * q.R ^ q.α / q.ε) ^ q.α⁻¹ + 4) * q.R / q.r0)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.UniversalHolderMonotone",
     "namespace": "LongTails.Setups.HolderMonotone",
     "setup": "LongTails.Setups.HolderMonotone",
@@ -2200,6 +2293,7 @@
         "value": "fun p =>\n  ⌈(8 * √(p.L / (p.μ * (1 - p.α))) + 32 * p.α ^ 2 * p.L / (p.μ * (1 - p.α))) * Real.log (1 + 2 * p.L * p.R ^ 2 / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedInexactStronglyConvex",
     "namespace": "LongTails.Setups.InexactGradientStronglyConvex",
     "setup": "LongTails.Setups.InexactGradientStronglyConvex",
@@ -2221,6 +2315,7 @@
         "value": "fun p => ⌈4194304 * (1 + (p.M * p.R ^ 2 / p.ε) ^ (2 / 5) + p.δ * p.R / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.OptimalInexactJacobianMonotone",
     "namespace": "LongTails.Setups.InexactJacobianMonotone",
     "setup": "LongTails.Setups.InexactJacobianMonotone",
@@ -2242,6 +2337,7 @@
         "value": "fun q => q.m * ⌈↑q.m ^ 3 * q.L * q.R ^ 2 / q.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CyclicGradientInterpolation",
     "namespace": "LongTails.Setups.InterpolatedFiniteSum",
     "setup": "LongTails.Setups.InterpolatedFiniteSum",
@@ -2263,6 +2359,7 @@
         "value": "fun p =>\n  ⌈1073741824 * (↑p.n * (1 + p.L1 ^ 2 * p.R ^ 2) + √(↑p.n * p.L0 * p.R ^ 2 / p.ε)) *\n      Real.log (2 + ↑p.n + p.L0 * p.R ^ 2 / p.ε + p.L1 ^ 2 * p.R ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedInterpolatedGeneralizedFiniteSum",
     "namespace": "LongTails.Setups.InterpolatedGeneralizedFiniteSum",
     "setup": "LongTails.Setups.InterpolatedGeneralizedFiniteSum",
@@ -2284,6 +2381,7 @@
         "value": "fun p =>\n  (p.samples + 1) *\n    ⌈200000 * (p.upper / p.lower) ^ 2 / p.derivativeMargin ^ 3 *\n        Real.log (128 * ↑p.kernel * p.upper ^ 2 / (p.derivativeMargin * p.contrast) ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.KernelConvolutionalPerceptronAcceleration",
     "namespace": "LongTails.Setups.KernelConvolutionalPerceptron",
     "setup": "LongTails.Setups.KernelConvolutionalPerceptron",
@@ -2305,6 +2403,7 @@
         "value": "fun p =>\n  ⌈2 ^ 36 * (1 + (p.L0 * p.R ^ 2 / p.ε) ^ 3⁻¹ + (p.L1 * p.R) ^ (2 / 3)) *\n      (1 + Real.log (2 * ↑p.d) + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R)) ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.KnownValueNondualGeneralizedRate",
     "namespace": "LongTails.Setups.KnownValueNondualGeneralizedConvex",
     "setup": "LongTails.Setups.KnownValueNondualGeneralizedConvex",
@@ -2326,6 +2425,7 @@
         "value": "fun p => 3 * (⌈√(10 * p.L * p.R ^ 2 / p.ε)⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SplitBroxKnownValue",
     "namespace": "LongTails.Setups.KnownValueSmoothConvexLocalLinear",
     "setup": "LongTails.Setups.KnownValueSmoothConvexLocalLinear",
@@ -2347,6 +2447,7 @@
         "value": "fun q => ⌈35 * (q.Lh / (q.μ * q.c1 * (1 - q.c2))) * √(q.Lh * q.L * q.R ^ 2 / (q.μ * q.c1 * (1 - q.c2) * q.ε))⌉₊ + 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LinearPredictorBFGS",
     "namespace": "LongTails.Setups.LinearPredictorBFGS",
     "setup": "LongTails.Setups.LinearPredictorBFGS",
@@ -2391,6 +2492,7 @@
         "value": "fun p => ⌈20000 * (1 + √(p.L * p.D ^ 2 / (↑p.m * p.ε))) * (1 + Real.log (2 + ↑p.m * p.L * p.D ^ 2 / p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CachedJacobian",
     "namespace": "LongTails.Setups.LipschitzJacobianMonotone",
     "setup": "LongTails.Setups.LipschitzJacobianMonotone",
@@ -2412,6 +2514,7 @@
         "value": "fun q =>\n  ⌈300000 * (√(q.L * q.R ^ 2 / q.ε) + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2) *\n      Real.log (300000 * (2 + q.L * q.R ^ 2 / q.ε + q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2)) ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HiddenConvexAcceleratedStochastic",
     "namespace": "LongTails.Setups.LocalHiddenConvexStochastic",
     "setup": "LongTails.Setups.LocalHiddenConvexStochastic",
@@ -2433,6 +2536,7 @@
         "value": "fun p =>\n  128 * ⌈64 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)⌉₊ *\n      (⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ + 1) +\n    (2 ^ ⌈Real.log (1 + 512 * p.ρ * p.R ^ 2 / (p.μ * p.s ^ 2)) / Real.log (1 + √2)⌉₊ - 1) *\n      ⌈Real.log (1 + 32 * p.ρ * p.R ^ 4 / p.ε) / Real.log 4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SilverLoraLocalConvergence",
     "namespace": "LongTails.Setups.LocalSmoothStronglyConvexLora",
     "setup": "LongTails.Setups.LocalSmoothStronglyConvexLora",
@@ -2454,6 +2558,7 @@
         "value": "fun p => ⌈2 * √(p.L / p.μ) * Real.log (1 + 2 * p.Δ / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LocalStrongAimingNesterov",
     "namespace": "LongTails.Setups.LocalStrongAiming",
     "setup": "LongTails.Setups.LocalStrongAiming",
@@ -2475,6 +2580,7 @@
         "value": "fun p =>\n  ⌈34359738368 * (p.upper / p.lower) ^ 4 * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2) ^ 2 *\n        (↑p.samples + 1 + p.upper / p.lower * Real.log (16 * p.upper ^ 2 / p.contrast ^ 2)) /\n      p.derivativeMargin ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ManySampleConvolutionalPerceptronAcceleration",
     "namespace": "LongTails.Setups.ManySampleConvolutionalPerceptron",
     "setup": "LongTails.Setups.ManySampleConvolutionalPerceptron",
@@ -2496,6 +2602,7 @@
         "value": "fun q => ⌈10000000000000000 * q.L * q.R ^ 2 / (q.α * q.ε)⌉₊ + 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MarkovQuadraticLastIterate",
     "namespace": "LongTails.Setups.MarkovQuadraticInterpolation",
     "setup": "LongTails.Setups.MarkovQuadraticInterpolation",
@@ -2517,6 +2624,7 @@
         "value": "fun q =>\n  ⌈800 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n      (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Δ * q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹) / q.ε ^ 3)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.DyadicVarianceReductionHolder",
     "namespace": "LongTails.Setups.MeanSquaredHolderNonconvex",
     "setup": "LongTails.Setups.MeanSquaredHolderNonconvex",
@@ -2538,6 +2646,7 @@
         "value": "fun p =>\n  ⌈2 * p.L / p.μ *\n        Real.log\n          (2 +\n            8 * (↑(Module.finrank ℝ p.E) + 1) ^ 2 * (4 * p.L ^ 2 / p.μ ^ 2) ^ Module.finrank ℝ p.E * p.M * p.L * p.R /\n              p.μ ^ 2)⌉₊ +\n    2 * Module.finrank ℝ p.E * ⌈Real.log (1 + Real.log (1 + p.L ^ 2 * p.R ^ 2 / (p.μ * p.ε))) / Real.log 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SpectralGradientQuadraticConvergence",
     "namespace": "LongTails.Setups.MinimizerRegularHessian",
     "setup": "LongTails.Setups.MinimizerRegularHessian",
@@ -2559,6 +2668,7 @@
         "value": "fun p => 3 * ⌈24576 * (1 + √(2 * p.L0 * p.D / p.ε) + (1 + 2 * p.L1 * √p.D) * Real.log (2 + 2 * p.Δ / p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.DynamicMirrorGeneralizedAcceleration",
     "namespace": "LongTails.Setups.MirrorGeneralizedSmooth",
     "setup": "LongTails.Setups.MirrorGeneralizedSmooth",
@@ -2580,6 +2690,7 @@
         "value": "fun q =>\n  if 2 * q.L * q.Δ ≤ q.ε ^ 2 then 0\n  else\n    16777216 *\n      ⌈1 + (1 + q.r) * q.L * q.Δ / q.ε ^ 2 + q.σ ^ 2 / q.ε ^ 2 +\n          min (q.M * q.σ * q.Δ / q.ε ^ 3) (q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MixedRelativeSmoothNonconvex",
     "namespace": "LongTails.Setups.MixedRelativeSmoothNonconvex",
     "setup": "LongTails.Setups.MixedRelativeSmoothNonconvex",
@@ -2601,6 +2712,7 @@
         "value": "fun q => ⌈100 * q.G ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊ + ⌈4 * (q.β / (1 - q.β)) ^ 2 * (1 + -Real.log (1 - q.β))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ConstantMomentumLastIterate",
     "namespace": "LongTails.Setups.MomentumLipschitzConvex",
     "setup": "LongTails.Setups.MomentumLipschitzConvex",
@@ -2622,6 +2734,7 @@
         "value": "fun p => (⌈128 * (1 - p.β) * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈(32 * p.L * p.Δ / p.ε ^ 2 + 16) / (1 - p.β)⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MuonMomentumSeparation",
     "namespace": "LongTails.Setups.MomentumSpectralSmooth",
     "setup": "LongTails.Setups.MomentumSpectralSmooth",
@@ -2643,6 +2756,7 @@
         "value": "fun p =>\n  ⌈16777216 * p.L / min p.μ p.ν * √((min p.μ p.ν + p.δ) / (p.μ + p.ν + p.δ)) * Real.log (2 + p.D ^ 2 / p.ε) *\n      Real.log (2 + 524288 * p.L ^ 2 * p.D ^ 2 / (min p.μ p.ν ^ 2 * p.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NearZeroSumOwnGradients",
     "namespace": "LongTails.Setups.NearZeroSumGames",
     "setup": "LongTails.Setups.NearZeroSumGames",
@@ -2664,6 +2778,7 @@
         "value": "fun p =>\n  ⌈100000 * ↑↑p.input.count *\n          ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2 +\n            ‖p.input.start‖ ^ 2 / (p.input.noiseScale ^ 2 * (↑p.input.dimension + 1))) *\n        (2 / p.failure) ^\n          (5 *\n            Real.exp\n              (25000 * (↑p.input.dimension + 1) ^ 2 *\n                ((↑↑p.input.count + 1) ^ 2 * (p.input.radius / p.input.margin) ^ 2) ^ 2)) /\n      p.failure⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NoisyBatchQuadraticPerceptronGlobal",
     "namespace": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
     "setup": "LongTails.Setups.NoisyBatchQuadraticPerceptron",
@@ -2685,6 +2800,7 @@
         "value": "fun p => 2 + 2 * ⌈400 * p.data.L ^ 2 * p.D / (p.data.μ * p.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NonEuclideanWeakMintyExtragradient",
     "namespace": "LongTails.Setups.NonEuclideanWeakMinty",
     "setup": "LongTails.Setups.NonEuclideanWeakMinty",
@@ -2706,6 +2822,7 @@
         "value": "fun p =>\n  ⌈10000000000 * (1 + p.L / p.μ + p.Δ * √p.ρ * (p.L / p.μ) ^ (3 / 4) / p.ε ^ (3 / 2) + p.Δ * p.ρ ^ 2 / p.μ ^ 3) *\n      Real.log (2 + p.L / p.μ + p.ρ ^ 2 * (p.Δ + p.D) / p.μ ^ 3 + p.ρ * p.ε / p.μ ^ 2 + p.μ ^ 2 / (p.ρ * p.ε)) ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.EnvelopeCubicNonconvexPL",
     "namespace": "LongTails.Setups.NonconvexPLSecondOrder",
     "setup": "LongTails.Setups.NonconvexPLSecondOrder",
@@ -2727,6 +2844,7 @@
         "value": "fun p =>\n  ⌈10000000000 * ((1 + 64 * p.LJ * p.R / p.μ) * (p.Lc / p.μ + p.G ^ 2 * p.Lc ^ 3 * p.R ^ 2 / (p.μ ^ 3 * p.ε ^ 2))) *\n      Real.log\n          (10000000000 *\n            (2 + (1 + 64 * p.LJ * p.R / p.μ) * (p.Lc / p.μ + p.G ^ 2 * p.Lc ^ 3 * p.R ^ 2 / (p.μ ^ 3 * p.ε ^ 2)))) ^\n        3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NonsmoothHiddenConvexStochastic",
     "namespace": "LongTails.Setups.NonsmoothHiddenConvex",
     "setup": "LongTails.Setups.NonsmoothHiddenConvex",
@@ -2748,6 +2866,7 @@
         "value": "fun p => 2 * ⌈(2 * p.L / p.μ + 2 * p.L ^ 2 * p.ρ / (p.μ * √(p.μ * p.ε))) * Real.log (1 + p.Δ / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NormalizedSamStronglyConvex",
     "namespace": "LongTails.Setups.NormalizedSamStronglyConvex",
     "setup": "LongTails.Setups.NormalizedSamStronglyConvex",
@@ -2767,6 +2886,7 @@
         "value": "fun p T => p.D * p.G * √↑T"
       }
     ],
+    "kind": "online",
     "module": "LongTails.Theorems.OnlineGradientDescent",
     "namespace": "LongTails.Setups.OnlineConvexBoundedGradient",
     "setup": "LongTails.Setups.OnlineConvexBoundedGradient",
@@ -2788,6 +2908,7 @@
         "value": "fun p =>\n  ⌈512 * (↑p.data.d + 1) ^ 2 *\n        (Real.log (128 * ↑p.data.K * (↑p.data.d + 1) / (p.data.ε * p.data.δ)) +\n          ↑p.data.d * Real.log (8 + 4096 * p.data.R * (↑p.data.d + 1) ^ 2 * (1 + p.data.G) / p.data.ε)) *\n      ∑ i, (max (p.gaps i) p.data.ε ^ 2)⁻¹⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SparseCertificateGroupDro",
     "namespace": "LongTails.Setups.OptimumGapGroupDro",
     "setup": "LongTails.Setups.OptimumGapGroupDro",
@@ -2809,6 +2930,7 @@
         "value": "fun q =>\n  ⌈32 *\n              (16 * q.L + 14 * q.L * √√(q.L / q.μ) + 28311552 * q.K * √(q.L / q.μ) * q.L * q.σ ^ 2 * q.ρ ^ 2 / q.μ ^ 4 +\n                64 * q.σ ^ 2 / q.ε) /\n            q.μ *\n          (Real.log (1 + 6 * √(q.L / q.μ) * q.Δ / q.ε) + 1) +\n        512 * q.σ ^ 2 / (q.μ * q.ε)⌉₊ +\n    1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.KappaFreeSgdPLHessian",
     "namespace": "LongTails.Setups.PLHessianLipschitzKurtosis",
     "setup": "LongTails.Setups.PLHessianLipschitzKurtosis",
@@ -2830,6 +2952,7 @@
         "value": "fun q =>\n  ⌈80 *\n        (2 +\n            Real.logb 2\n              (8000 * q.L * q.Δ / q.ε ^ 2 +\n                              q.L * q.Δ * q.σ ^ (q.p / (q.p - 1)) * (80 / q.ε) ^ ((3 * q.p - 2) / (q.p - 1)) +\n                            q.σ ^ ((5 * q.p - 2) / (2 * q.p - 2)) * (q.L * q.Δ) ^ (-(q.p / (2 * q.p - 2))) *\n                              (60 / q.ε) ^ ((3 * q.p - 2) / (2 * q.p - 2)) +\n                          (q.σ ^ 2 / (q.L * q.Δ)) ^ (q.p / (2 * q.p - 2)) +\n                        √(3 * q.L / q.Δ) +\n                      (q.Δ / (3 * q.L)) ^ 3⁻¹ +\n                    6 ^ (q.p - 1)⁻¹ * (5 * q.σ / q.ε) ^ (q.p / (q.p - 1)) +\n                  1 +\n                (64 * (1 + 5 * q.σ / q.ε) ^ q.p * ((22 + 2 * q.p * Real.logb 2 (1 + 5 * q.σ / q.ε)) / (q.p - 1)) ^ 4) ^\n                  (q.p - 1)⁻¹)) ^\n          2 *\n      (8000 * q.L * q.Δ / q.ε ^ 2 + q.L * q.Δ * q.σ ^ (q.p / (q.p - 1)) * (80 / q.ε) ^ ((3 * q.p - 2) / (q.p - 1)) +\n                    q.σ ^ ((5 * q.p - 2) / (2 * q.p - 2)) * (q.L * q.Δ) ^ (-(q.p / (2 * q.p - 2))) *\n                      (60 / q.ε) ^ ((3 * q.p - 2) / (2 * q.p - 2)) +\n                  (q.σ ^ 2 / (q.L * q.Δ)) ^ (q.p / (2 * q.p - 2)) +\n                √(3 * q.L / q.Δ) +\n              (q.Δ / (3 * q.L)) ^ 3⁻¹ +\n            6 ^ (q.p - 1)⁻¹ * (5 * q.σ / q.ε) ^ (q.p / (q.p - 1)) +\n          1 +\n        (64 * (1 + 5 * q.σ / q.ε) ^ q.p * ((22 + 2 * q.p * Real.logb 2 (1 + 5 * q.σ / q.ε)) / (q.p - 1)) ^ 4) ^\n          (q.p - 1)⁻¹)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ParameterFreeHeavyTailedNsgdm",
     "namespace": "LongTails.Setups.ParameterFreeHeavyTailedSmooth",
     "setup": "LongTails.Setups.ParameterFreeHeavyTailedSmooth",
@@ -2896,6 +3019,7 @@
         "value": "fun q =>\n  ⌈(1536 * max 1 (32 ^ ((q.data.p - 2) / 2) / q.data.c) * q.data.L * q.R ^ 2 / q.ε) ^ (q.data.p / (q.data.p + 2)) +\n        4224 * q.data.L * q.data.α ^ 2 * q.R ^ 2 / q.ε⌉₊ +\n    1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.PowerGeometryRelativeErrorAcceleration",
     "namespace": "LongTails.Setups.PowerGeometryRelativeErrorConvex",
     "setup": "LongTails.Setups.PowerGeometryRelativeErrorConvex",
@@ -2917,6 +3041,7 @@
         "value": "fun p =>\n  p.n *\n    ⌈(64 * p.L / p.μ + 128 * p.L * √p.L * p.G / (↑p.n * p.μ ^ 2 * √p.ε) +\n          8 * (p.L ^ 3 * p.G ^ 2 / (↑p.n * p.μ ^ 4 * p.ε)) ^ 3⁻¹) *\n        Real.log (1 + p.L * p.R ^ 2 / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RandomReshufflingQuadratic",
     "namespace": "LongTails.Setups.QuadraticFiniteSum",
     "setup": "LongTails.Setups.QuadraticFiniteSum",
@@ -2938,6 +3063,7 @@
         "value": "fun p => 2 * max 1 ⌈√(p.L / p.μ) * Real.log (1 + 8 * p.Δ / p.ε) + 8 * p.D / √(p.μ * p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.TemporalAcceleratedQuadratic",
     "namespace": "LongTails.Setups.QuadraticTemporalDiscrepancy",
     "setup": "LongTails.Setups.QuadraticTemporalDiscrepancy",
@@ -2959,6 +3085,7 @@
         "value": "fun q =>\n  (1 +\n      ⌈4 * √(q.L * q.R ^ 2 / q.ε) +\n          32768 * (√↑q.d * q.R * (2 * q.L * q.R + q.r) / q.ε + 8 * ↑q.d * q.M * q.R ^ 2 / q.ε ^ 2) ^ 2⌉₊) *\n    (1 +\n      ⌈Real.log (1 + 512 * (√↑q.d * q.R * (2 * q.L * q.R + q.r) / q.ε + 8 * ↑q.d * q.M * q.R ^ 2 / q.ε ^ 2)) /\n          Real.log 2⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.QuantileRemainderMinimaxConvex",
     "namespace": "LongTails.Setups.QuantileSymmetricRemainderConvex",
     "setup": "LongTails.Setups.QuantileSymmetricRemainderConvex",
@@ -2980,6 +3107,7 @@
         "value": "fun p => 2 * max 1 ⌈(6 * p.L * p.D ^ 2 / p.τ ^ 2 + 2 * p.Γ / p.τ) / p.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.QuasarAmortizedLMO",
     "namespace": "LongTails.Setups.QuasarAmortizedLMO",
     "setup": "LongTails.Setups.QuasarAmortizedLMO",
@@ -2988,19 +3116,20 @@
   },
   {
     "budget": {
-      "latex": "\\left\\lceil \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon}\\right)^{\\frac{3}{8}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{log2}\\left(\\left\\lceil \\frac{27 \\cdot \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon} + 1\\right)^{2} \\cdot \\left(\\frac{L_0}{H \\cdot R} + 32768\\right)}{\\gamma^{2}} \\right\\rceil_{+}\\right) + 3\\right) + 1",
+      "latex": "\\left\\lceil \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon}\\right)^{\\frac{3}{8}} \\right\\rceil_{+} \\cdot \\left(\\log_{2}\\left(\\left\\lceil \\frac{27 \\cdot \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon} + 1\\right)^{2} \\cdot \\left(\\frac{L_0}{H \\cdot R} + 32768\\right)}{\\gamma^{2}} \\right\\rceil_{+}\\right) + 3\\right) + 1",
       "oracle": 0,
       "type": "LongTails.Setups.QuasarConvexHessianLipschitz.spec.Params → ℕ",
       "value": "fun p =>\n  ⌈(8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε)) ^ (3 / 8)⌉₊ *\n      (⌈27 * (8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε) + 1) ^ 2 * (p.L₀ / (p.H * p.R) + 32768) / p.γ ^ 2⌉₊.log2 + 3) +\n    1"
     },
     "budgets": [
       {
-        "latex": "\\left\\lceil \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon}\\right)^{\\frac{3}{8}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{log2}\\left(\\left\\lceil \\frac{27 \\cdot \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon} + 1\\right)^{2} \\cdot \\left(\\frac{L_0}{H \\cdot R} + 32768\\right)}{\\gamma^{2}} \\right\\rceil_{+}\\right) + 3\\right) + 1",
+        "latex": "\\left\\lceil \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon}\\right)^{\\frac{3}{8}} \\right\\rceil_{+} \\cdot \\left(\\log_{2}\\left(\\left\\lceil \\frac{27 \\cdot \\left(\\frac{8388608 \\cdot H \\cdot R^{3}}{\\gamma^{4} \\cdot \\varepsilon} + 1\\right)^{2} \\cdot \\left(\\frac{L_0}{H \\cdot R} + 32768\\right)}{\\gamma^{2}} \\right\\rceil_{+}\\right) + 3\\right) + 1",
         "oracle": 0,
         "type": "LongTails.Setups.QuasarConvexHessianLipschitz.spec.Params → ℕ",
         "value": "fun p =>\n  ⌈(8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε)) ^ (3 / 8)⌉₊ *\n      (⌈27 * (8388608 * p.H * p.R ^ 3 / (p.γ ^ 4 * p.ε) + 1) ^ 2 * (p.L₀ / (p.H * p.R) + 32768) / p.γ ^ 2⌉₊.log2 + 3) +\n    1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.QuasarAcceleratedCubicNewton",
     "namespace": "LongTails.Setups.QuasarConvexHessianLipschitz",
     "setup": "LongTails.Setups.QuasarConvexHessianLipschitz",
@@ -3022,6 +3151,7 @@
         "value": "fun p => max 1 ⌈p.R ^ 2 * (p.M ^ 2 + 2 * p.M * p.B) / (p.τ ^ 2 * p.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.QuasarSignedBias",
     "namespace": "LongTails.Setups.QuasarSignedBias",
     "setup": "LongTails.Setups.QuasarSignedBias",
@@ -3065,6 +3195,7 @@
         "value": "fun q => 2 * ⌈2 ^ 15 * (1 + q.L0 * q.R / q.ε + (q.L1 * q.R) ^ (4 / 3))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RadiusGeneralizedMonotone",
     "namespace": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone",
     "setup": "LongTails.Setups.RadiusGeneralizedLipschitzMonotone",
@@ -3086,6 +3217,7 @@
         "value": "fun q => ⌈64 * √(q.L0 * q.R ^ 2 / q.ε) + 32768 * (1 + q.L1 * q.R) * Real.log (2 + q.L1 * q.R)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RadiusFreeGeneralizedAccelerated",
     "namespace": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex",
     "setup": "LongTails.Setups.RadiusOnlyGeneralizedSmoothConvex",
@@ -3107,6 +3239,7 @@
         "value": "fun p =>\n  ⌈4 * √(2 + p.L * p.R ^ 2 / p.ε) *\n      Real.exp (32 * (1 + √(Real.log (2 + p.L * p.R ^ 2 / p.ε))) * Real.log (32 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RecursiveRelativeErrorConvex",
     "namespace": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
     "setup": "LongTails.Setups.RecursiveRelativeErrorSmoothConvex",
@@ -3128,6 +3261,7 @@
         "value": "fun q => ⌈20000 * q.B ^ 2 * (↑q.m + ↑q.n) ^ 4 / q.ε ^ 2⌉₊ + 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RegretMatchingPotential",
     "namespace": "LongTails.Setups.RegretMatchingPotential",
     "setup": "LongTails.Setups.RegretMatchingPotential",
@@ -3149,6 +3283,7 @@
         "value": "fun p => ⌈4 * p.L / (3 * p.μ) * Real.log (1 + p.Δ / p.ε)⌉₊ * max 1 ⌈2 * p.D⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.DiscrepancyBatchedGD",
     "namespace": "LongTails.Setups.RelativeDiscrepancyPL",
     "setup": "LongTails.Setups.RelativeDiscrepancyPL",
@@ -3170,6 +3305,7 @@
         "value": "fun q =>\n  ⌈2 ^ 66 * (1 + Real.log (((q.r + q.ε) ^ 2 + q.L * q.Δ) / q.ε ^ 2)) *\n      (((q.r + q.ε) ^ 2 + q.L * q.Δ) / q.ε ^ 2 + min (q.κ * q.ε) q.L * (q.r + q.ε) ^ 2 * q.Δ / q.ε ^ 4)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FairRelativeEnergyNonconvex",
     "namespace": "LongTails.Setups.RelativeEnergySymmetricNonconvex",
     "setup": "LongTails.Setups.RelativeEnergySymmetricNonconvex",
@@ -3191,6 +3327,7 @@
         "value": "fun p => ⌈7 * √(p.L * p.R ^ 2 / ((1 - p.α) * p.ε)) + 11 * p.α ^ 2 * p.L * p.R ^ 2 / ((1 - p.α) * p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedRelativeErrorConvex",
     "namespace": "LongTails.Setups.RelativeErrorSmoothConvex",
     "setup": "LongTails.Setups.RelativeErrorSmoothConvex",
@@ -3212,6 +3349,7 @@
         "value": "fun p =>\n  ⌈2 ^ 60 *\n      (√(p.L0 * p.R ^ 2 / p.ε) + p.α ^ 2 * (p.L0 * p.R ^ 2 / p.ε) +\n          (1 + p.L1 * p.R) * (1 + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.Δ / (p.L0 * p.R ^ 2))) +\n        p.α ^ 2 * (p.L1 * p.R) ^ 2 *\n          (1 + Real.log (2 + p.L0 * p.R ^ 2 / p.ε + p.L1 * p.R + p.Δ / (p.L0 * p.R ^ 2))) ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RelativeErrorGeneralizedAcceleration",
     "namespace": "LongTails.Setups.RelativeGeneralizedSmoothConvex",
     "setup": "LongTails.Setups.RelativeGeneralizedSmoothConvex",
@@ -3233,6 +3371,7 @@
         "value": "fun p =>\n  max 1 ⌈32 * √(p.L / (p.μ * (1 - p.δ))) / p.γ + 128 * p.δ ^ 2 * p.L / (p.γ ^ 2 * p.μ * (1 - p.δ))⌉₊ *\n    max 1 (Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedRelativeQuasar",
     "namespace": "LongTails.Setups.RelativeGradientStrongQuasar",
     "setup": "LongTails.Setups.RelativeGradientStrongQuasar",
@@ -3254,6 +3393,7 @@
         "value": "fun p => p.n * ⌈384 * √(p.Lavg * p.Lmax) * p.R ^ 2 / p.ε + 30 * p.σ * p.R ^ 2 * √(p.Lavg / (↑p.n * p.ε ^ 3))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ReshuffledLinearDecayLastIterate",
     "namespace": "LongTails.Setups.ReshuffledSmoothConvex",
     "setup": "LongTails.Setups.ReshuffledSmoothConvex",
@@ -3275,6 +3415,7 @@
         "value": "fun q =>\n  ⌈256 * q.Δ *\n            (8 * q.Lv +\n              64 *\n                  (2 * q.Lh * q.σu ^ 2 +\n                        (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                          ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                            q.σu * q.σv) +\n                      (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                        (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                    2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv) /\n                q.ε ^ 2) /\n          q.ε ^ 2 +\n        Real.log\n              (3 + q.Lv ^ 2 / q.μ ^ 2 +\n                4 * q.Lv ^ 2 *\n                    (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                      8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n                  (q.μ ^ 3 *\n                    (q.Lv * q.ε ^ 2 +\n                      8 *\n                        (2 * q.Lh * q.σu ^ 2 +\n                              (q.Γ * q.Lh + 2 * q.LJ * q.G) *\n                                ((1792 * (q.Γ * q.Lh + 2 * q.LJ * q.G) / q.μ + 224 * q.Γ) * (q.σu ^ 2 + q.σv ^ 2) +\n                                  q.σu * q.σv) +\n                            (2 * q.G * q.ρJ + 2 * q.LJ * q.Lh + q.Γ * q.ρh + q.G * q.LJ ^ 2) * q.σu *\n                              (14 * (q.σu ^ 2 + q.σv ^ 2) / q.Lv + q.σu ^ 2 / q.μ + q.Γ * q.G * q.σu / q.Lv) +\n                          2 * q.LJ ^ 2 * q.σu ^ 4 / q.Lv)))) ^\n            2 *\n          (16 * q.Lv / q.μ +\n            512 *\n                (2 * q.G * q.ρh * q.σu ^ 2 + q.μ ^ 2 * q.σu ^ 2 + 4 * q.Lv ^ 2 * q.σv ^ 2 +\n                  8 * q.Lv * q.LJ ^ 2 * q.σu ^ 4 / q.μ) /\n              (q.μ ^ 2 * q.ε ^ 2)) +\n      1⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AnnealedSgdRiverValley",
     "namespace": "LongTails.Setups.RiverValleyHillNoise",
     "setup": "LongTails.Setups.RiverValleyHillNoise",
@@ -3296,6 +3437,7 @@
         "value": "fun q => 2 * ⌈72 * q.L * q.R ^ 2 / q.ε + 900 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2 + 6 * q.Δ / q.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ProximalLinearDecayLastIterate",
     "namespace": "LongTails.Setups.SampledCompositeSmoothConvex",
     "setup": "LongTails.Setups.SampledCompositeSmoothConvex",
@@ -3317,6 +3459,7 @@
         "value": "fun q => ⌈48 * q.L * q.R ^ 2 / q.ε + 324 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LinearDecaySgdLastIterate",
     "namespace": "LongTails.Setups.SampledSmoothConvex",
     "setup": "LongTails.Setups.SampledSmoothConvex",
@@ -3338,6 +3481,7 @@
         "value": "fun q =>\n  ⌈2 ^ (200 / (q.p - 1)) * (1 + q.ν⁻¹) *\n      (1 + q.H ^ (1 + q.ν)⁻¹ * q.Δ ^ (q.ν / (1 + q.ν)) / q.ε +\n        (q.σ / q.ε) ^ (q.p / (q.p - 1)) * Real.log (2 + q.H ^ (1 + q.ν)⁻¹ * q.Δ ^ (q.ν / (1 + q.ν)) / q.ε))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ScalarHolderHeavyTailStationarity",
     "namespace": "LongTails.Setups.ScalarHolderStochastic",
     "setup": "LongTails.Setups.ScalarHolderStochastic",
@@ -3359,6 +3503,7 @@
         "value": "fun p => (⌈16 * p.s ^ 2 / p.ε ^ 2⌉₊ + 1) * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MuonWidthSeparation",
     "namespace": "LongTails.Setups.ScheduledMomentumComparison",
     "setup": "LongTails.Setups.ScheduledMomentumComparison",
@@ -3380,6 +3525,7 @@
         "value": "fun q =>\n  ⌈2 ^ 21 * (↑q.d + 1) * (q.Δ + 1) *\n            ((q.Δ + 1) / (q.c1 ^ 3 * min q.c1 (1 - q.c2) ^ 2) + (↑q.d + 1) / (q.c1 * min q.c1 (1 - q.c2) ^ 4)) +\n          10 * q.Φ0 / min q.c1 (1 - q.c2) ^ 2 +\n        4 * Real.log (64 + 2 / q.ε) / min q.c1 (1 - q.c2)⌉₊ +\n    2"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SelfConcordantBFGS",
     "namespace": "LongTails.Setups.SelfConcordantBFGS",
     "setup": "LongTails.Setups.SelfConcordantBFGS",
@@ -3401,6 +3547,7 @@
         "value": "fun p =>\n  ⌈32768 * (33 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε))) ^ 16 *\n        (1 + Real.log (33 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))) *\n      (2 + p.L * p.R ^ 2 / p.ε) ^\n        (2⁻¹ +\n          Real.log (16384 * (1 + Real.log (33 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε))))) /\n            (32 * Real.log (32 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε)))))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.NearAcceleratedPolylogPrecisionRelativeErrorConvex",
     "namespace": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
     "setup": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
@@ -3422,6 +3569,7 @@
         "value": "fun p => ⌈8 * (33 * (1 + Real.log (2 + p.L * p.R ^ 2 / p.ε))) ^ 20 * (2 + p.L * p.R ^ 2 / p.ε) ^ (5 / 8)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.PolylogPrecisionRelativeErrorConvex",
     "namespace": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
     "setup": "LongTails.Setups.SharpRelativeErrorSmoothConvex",
@@ -3443,6 +3591,7 @@
         "value": "fun p =>\n  (p.n +\n      ⌈2 * √(p.L / p.μ) / p.γ *\n          Real.log (1 + (48 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2) + p.γ * p.ε / (16 * (p.γ * p.ε + 2 * p.Δ)))⁻¹)⌉₊) *\n    ⌈Real.log (1 + 2 * p.Δ / (p.γ * p.ε)) /\n        Real.log ((48 * p.δ ^ 2 / (p.γ ^ 3 * p.μ ^ 2) + p.γ * p.ε / (16 * (p.γ * p.ε + 2 * p.Δ)))⁻¹ * 2⁻¹)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CachedSimilarQuasar",
     "namespace": "LongTails.Setups.SimilarFiniteSumQuasar",
     "setup": "LongTails.Setups.SimilarFiniteSumQuasar",
@@ -3471,6 +3620,7 @@
         "value": "fun q =>\n  8 *\n      ⌈20 * √((q.L0 + q.L1 * q.G) * q.R ^ 2 / q.ε) +\n          (6 + 320 * q.L1 * q.R) * Real.log (2 + (3 + 240 * q.L1 * q.R) * √(q.Δ / (q.L0 * q.R ^ 2)))⌉₊ +\n    ⌈768 * q.M ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GeneralizedGradientSliding",
     "namespace": "LongTails.Setups.SlidingGeneralizedSmooth",
     "setup": "LongTails.Setups.SlidingGeneralizedSmooth",
@@ -3492,6 +3642,7 @@
         "value": "fun q => max 1 ⌈√(2 * q.L * q.R ^ 2 / q.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedConvex",
     "namespace": "LongTails.Setups.SmoothAndConvex",
     "setup": "LongTails.Setups.SmoothAndConvex",
@@ -3513,6 +3664,7 @@
         "value": "fun q => max 1 ⌈q.L * q.R ^ 2 / (2 * q.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GdConvex",
     "namespace": "LongTails.Setups.SmoothAndConvex",
     "setup": "LongTails.Setups.SmoothAndConvex",
@@ -3556,6 +3708,7 @@
         "value": "fun q => max 1 ⌈√(2 * q.L * q.R ^ 2 / q.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedConvexExpected",
     "namespace": "LongTails.Setups.SmoothAndConvexExpected",
     "setup": "LongTails.Setups.SmoothAndConvexExpected",
@@ -3577,6 +3730,7 @@
         "value": "fun q => 2 * max 1 ⌈2 * q.L * q.D ^ 2 / q.ε⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SmoothConvexConcave",
     "namespace": "LongTails.Setups.SmoothConvexConcave",
     "setup": "LongTails.Setups.SmoothConvexConcave",
@@ -3598,6 +3752,7 @@
         "value": "fun p =>\n  ⌈2 * (1 + 2 * p.L / p.μ) ^ (Real.log 2 / Real.log (1 + √2)) * (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) *\n      (Real.logb 2 (1 + 2 * p.L / p.μ) + Real.logb 2 (Real.logb 2 (1 + p.L * p.R ^ 2 / p.ε) + 1) + 3)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.UniversalSilverQuadraticGrowth",
     "namespace": "LongTails.Setups.SmoothConvexQuadraticGrowth",
     "setup": "LongTails.Setups.SmoothConvexQuadraticGrowth",
@@ -3619,6 +3774,7 @@
         "value": "fun p =>\n  ⌈16 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) *\n          Real.log (1 + (15 * p.R ^ 2 + 45 * p.V ^ 2 * (2 * p.L / p.μ + 99 * p.σ ^ 2 / (p.μ ^ 2 * p.ε)) ^ 2) / p.ε)⌉₊ +\n      p.H +\n    1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.VelocityTrackingSmoothDrift",
     "namespace": "LongTails.Setups.SmoothDriftStronglyConvex",
     "setup": "LongTails.Setups.SmoothDriftStronglyConvex",
@@ -3662,6 +3818,7 @@
         "value": "fun p =>\n  (1 + Nat.clog 2 ⌈p.δ⁻¹⌉₊) *\n    ⌈2000000000000000000000 * (1 + ↑(Nat.clog 2 ⌈2 + ↑p.m + p.G * p.R / p.ε + p.L * p.R ^ 2 / p.ε⌉₊)) ^ 7 *\n        (↑p.m + ↑p.m * (p.L * p.R ^ 2 / p.ε) ^ 3⁻¹ + ↑p.m ^ (3 / 4) * √(p.L * p.R ^ 2 / p.ε) +\n            ↑p.m ^ (6 / 7) * (p.G * p.L * p.R ^ 3 / p.ε ^ 2) ^ (2 / 7) +\n          p.G * p.R / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AffineSoftmaxFiniteMaximum",
     "namespace": "LongTails.Setups.SmoothFiniteMaximum",
     "setup": "LongTails.Setups.SmoothFiniteMaximum",
@@ -3683,6 +3840,7 @@
         "value": "fun p =>\n  ⌈262144 * (8 + Real.logb 2 (2 + p.L * p.Δ / p.ε ^ 2)) ^ (4 / 3) *\n      (p.Δ * p.L ^ (2 / 3) * p.ρ ^ 6⁻¹ / p.ε ^ (11 / 6) + √(p.L * p.Δ) / p.ε +\n          p.L ^ (11 / 17) * p.Δ ^ (15 / 17) * p.ρ ^ (2 / 17) / p.ε ^ (28 / 17) +\n        1)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RecoveryFractalGdStationarity",
     "namespace": "LongTails.Setups.SmoothHessianLipschitzGd",
     "setup": "LongTails.Setups.SmoothHessianLipschitzGd",
@@ -3704,6 +3862,7 @@
         "value": "fun p => ⌈90 * p.L * p.Δ * (p.ρ * p.ε / p.L ^ 2) ^ 22⁻¹ / p.ε ^ 2⌉₊ + ⌈400 * (p.L * p.Δ / p.ε ^ 2) ^ (4 / 5)⌉₊ + 8"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AdaptiveSilverHessianLipschitz",
     "namespace": "LongTails.Setups.SmoothHessianLipschitzGd",
     "setup": "LongTails.Setups.SmoothHessianLipschitzGd",
@@ -3725,6 +3884,7 @@
         "value": "fun p => max 1 ⌈2 * p.L * p.Δ / p.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GdNonconvex",
     "namespace": "LongTails.Setups.SmoothNonconvex",
     "setup": "LongTails.Setups.SmoothNonconvex",
@@ -3746,6 +3906,7 @@
         "value": "fun p => ⌈p.L / p.μ * Real.log (1 + p.Δ / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.GdPL",
     "namespace": "LongTails.Setups.SmoothPL",
     "setup": "LongTails.Setups.SmoothPL",
@@ -3767,6 +3928,7 @@
         "value": "fun p => ⌈32 * p.L * (p.ρ / p.L) ^ (3 / 20) * p.Δ / p.ε ^ 2⌉₊ + ⌈13 * (p.L * p.Δ / p.ε ^ 2) ^ (4 / 5)⌉₊ + 3"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.WeaklyConvexSilver",
     "namespace": "LongTails.Setups.SmoothWeaklyConvex",
     "setup": "LongTails.Setups.SmoothWeaklyConvex",
@@ -3788,6 +3950,7 @@
         "value": "fun p => 65 * (⌈8 * p.L * p.Δ / p.ε ^ 2⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MuonAdamSgdSeparation",
     "namespace": "LongTails.Setups.SpectralSmoothAdamComparison",
     "setup": "LongTails.Setups.SpectralSmoothAdamComparison",
@@ -3809,6 +3972,7 @@
         "value": "fun q =>\n  ⌈2 ^ 51 * (↑q.m + 1 + (q.vTop + ↑q.m * q.vRest) * q.R ^ 2 / q.ε ^ 2) *\n      (1 + Real.log (16 * (↑q.m + 1) * (1 + q.G * q.R / q.ε))) ^ 5⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SpikedSubGaussianSoftCutConvex",
     "namespace": "LongTails.Setups.SpikedSubGaussianConvex",
     "setup": "LongTails.Setups.SpikedSubGaussianConvex",
@@ -3830,6 +3994,7 @@
         "value": "fun q =>\n  ⌈2 ^ 53 / (1 - 2 * q.ρ * q.L) ^ 8 * (1 + q.L * q.R / q.ε + q.σ ^ 2 / q.ε ^ 2) *\n      (1 + Real.log (2 + q.L * q.R / q.ε) + Real.log (2 / (1 - 2 * q.ρ * q.L))) ^ 4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RegularizedProxExtragradientCohypomonotone",
     "namespace": "LongTails.Setups.StochasticCohypomonotoneInclusion",
     "setup": "LongTails.Setups.StochasticCohypomonotoneInclusion",
@@ -3851,6 +4016,7 @@
         "value": "fun p =>\n  ⌈2 ^ (128 + 128 / (p.α - 1)) *\n        (1 + √((p.L0 + 192 * p.L1 * p.σ + p.L1 * p.G) * p.R ^ 2 / p.ε) +\n            (1 + p.L1 * p.R) * Real.log (2 + (1 + p.L1 * p.R) * √(p.Δ / (p.L0 * p.R ^ 2))) +\n          (p.σ * p.R / p.ε) ^ (p.α / (p.α - 1))) *\n      Real.log\n          ((8 + p.L1 * p.R + (p.L0 + 192 * p.L1 * p.σ + p.L1 * p.G) * p.R ^ 2 / p.ε + p.Δ / (p.L0 * p.R ^ 2) +\n              p.σ * p.R / p.ε) /\n            p.δ) ^\n        (2 + (p.α - 1)⁻¹)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticCompositeGeneralizedAccelerated",
     "namespace": "LongTails.Setups.StochasticCompositeGeneralizedSmooth",
     "setup": "LongTails.Setups.StochasticCompositeGeneralizedSmooth",
@@ -3872,6 +4038,7 @@
         "value": "fun q =>\n  ⌈10 ^ 6 * (q.L * q.Δ / q.ε ^ 2 + (1 + q.σ ^ 2 / q.ε ^ 2) * q.Δ * √(q.ρ * q.ε) / q.ε ^ 2 + q.σ ^ 2 / q.ε ^ 2 + 1)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CompositeImplicitTransport",
     "namespace": "LongTails.Setups.StochasticCompositeHessianLipschitz",
     "setup": "LongTails.Setups.StochasticCompositeHessianLipschitz",
@@ -3894,6 +4061,7 @@
         "value": "fun q =>\n  ⌈2 ^ 128 * ((q.L0 + q.L1 * q.G) * (1 + q.L1 * q.R) ^ 2 * q.R / q.ε + (1 + q.L1 * q.R) ^ 4 + q.σ ^ 2 / q.ε ^ 2) *\n        (1 + Real.log (2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε)) ^ 3 *\n      (1 + Real.log ((2 + (q.L0 + q.L1 * q.G + q.L1 * q.ε) * (1 + q.L1 * q.R) * q.R / q.ε) / q.δ))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticConstrainedGeneralizedMonotone",
     "namespace": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
     "setup": "LongTails.Setups.StochasticConstrainedGeneralizedMonotone",
@@ -3916,6 +4084,7 @@
         "value": "fun q =>\n  ⌈2 ^ 96 * (2 + ↑⌈8 * Real.log (8 / q.δ)⌉₊) * (1 + ↑(Nat.clog 2 ⌈2 + q.L * q.D ^ 2 / (q.γ ^ 2 * q.ε)⌉₊)) ^ 2 *\n      (1 + √(q.L * q.D ^ 2 / q.ε) / q.γ + q.σ ^ 2 * q.D ^ 2 / (q.γ ^ 2 * q.ε ^ 2))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticConstrainedQuasarHighProbability",
     "namespace": "LongTails.Setups.StochasticConstrainedQuasar",
     "setup": "LongTails.Setups.StochasticConstrainedQuasar",
@@ -3937,6 +4106,7 @@
         "value": "fun q => 3 + ⌈4 * √(q.L * q.R ^ 2 / q.ε) + 65536 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticChebyshevQuadratic",
     "namespace": "LongTails.Setups.StochasticConvexQuadratic",
     "setup": "LongTails.Setups.StochasticConvexQuadratic",
@@ -3958,6 +4128,7 @@
         "value": "fun q =>\n  ⌈(Real.logb 2 (1 + q.D / q.ε) + 4) *\n      (16 + 20 * q.D / q.ε + 2048 * q.K * q.σ ^ 2 * (Real.logb 2 (1 + q.D / q.ε) + 4) ^ 2 / q.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RecursiveAnchorKmSmoothBanach",
     "namespace": "LongTails.Setups.StochasticFixedPointSmoothBanach",
     "setup": "LongTails.Setups.StochasticFixedPointSmoothBanach",
@@ -3979,6 +4150,7 @@
         "value": "fun q =>\n  ⌈2 ^ 66 * ((1 + q.R * q.G1) ^ 3 + (1 + q.R * q.G1) ^ 2 * (q.R * q.G0 / q.ε) + (q.R * q.G0 / q.ε) ^ 2) *\n      (1 + Real.log (2 + q.R * q.G1 + q.R * q.G0 / q.ε)) ^ 3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticGeneralizedLipschitzConvex",
     "namespace": "LongTails.Setups.StochasticGeneralizedLipschitzConvex",
     "setup": "LongTails.Setups.StochasticGeneralizedLipschitzConvex",
@@ -4022,6 +4194,7 @@
         "value": "fun p =>\n  ⌈2 ^ 60 * (1 + p.L0 * p.R / p.ε + (p.L1 * p.R) ^ 2 + p.σ ^ 2 / p.ε ^ 2) *\n        (1 + Real.log (2 + p.L0 * p.R / p.ε + p.L1 * p.R)) ^ 3 *\n      (1 + Real.log ((2 + p.L0 * p.R / p.ε + p.L1 * p.R) / p.δ))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticGeneralizedMonotone",
     "namespace": "LongTails.Setups.StochasticGeneralizedMonotone",
     "setup": "LongTails.Setups.StochasticGeneralizedMonotone",
@@ -4043,6 +4216,7 @@
         "value": "fun p =>\n  if p.Δ ≤ p.ε then 0\n  else\n    2 *\n        ⌈16384 *\n            (1 + √(p.L0 * p.R ^ 2 / p.ε) +\n              min (↑⌈(p.L1 * p.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * p.Δ / p.ε))\n                (Real.log (4 + 4 * p.Δ / p.ε) + (p.L1 * p.R * Real.log (4 + 4 * p.Δ / p.ε)) ^ (2 / 3)))⌉₊ +\n      ⌈1073741824 * p.σ ^ 2 * p.R ^ 2 * Real.log (Real.exp 1 / p.δ) / p.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticGeneralizedAcceleratedConvex",
     "namespace": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex",
     "setup": "LongTails.Setups.StochasticGeneralizedSmoothAndConvex",
@@ -4064,6 +4238,7 @@
         "value": "fun q =>\n  ⌈10 ^ 6 * (1 + q.L / q.μ) ^ 2 * (1 + q.σ ^ 2 / q.ε ^ 2) * (1 + q.ρ * q.ε * (1 + q.L / q.μ) / q.L ^ 2) *\n      ((1 + q.L / q.μ) * q.Δ / q.ε * √(40 * q.ρ * (1 + q.L / q.μ) / q.ε + q.L ^ 2 / (q.ε ^ 2 + 20 * q.σ ^ 2)) + 1 +\n          q.σ / q.ε +\n        Real.log (1 + q.G ^ 2 / q.μ ^ 2 * (40 * q.ρ * (1 + q.L / q.μ) / q.ε + q.L ^ 2 / (q.ε ^ 2 + 20 * q.σ ^ 2))))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HessianNcscImplicitTransport",
     "namespace": "LongTails.Setups.StochasticHessianNcsc",
     "setup": "LongTails.Setups.StochasticHessianNcsc",
@@ -4085,6 +4260,7 @@
         "value": "fun q => ⌈2 ^ 22 * (1 + q.L * q.R / q.ε + (q.σ / q.ε) ^ 2 * Real.log (2 + q.L * q.R / q.ε) ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.InertialMonotoneResidual",
     "namespace": "LongTails.Setups.StochasticLipschitzMonotone",
     "setup": "LongTails.Setups.StochasticLipschitzMonotone",
@@ -4107,6 +4283,7 @@
         "value": "fun p =>\n  ⌈2 ^ 80 *\n        (1 + (p.M₁ * p.R ^ 2) ^ 3⁻¹ + (p.R / p.ρ) ^ (2 / 3) + (p.M₀ * p.R ^ 3 / p.ε) ^ (2 / 7) +\n          √(p.δ * p.R ^ 2 / p.ε)) *\n      Real.log\n          (2 + p.Δ / p.ε + p.δ * p.R ^ 2 / p.ε + p.M₀ * p.R ^ 3 / p.ε + p.M₁ * p.R ^ 2 + (p.R / p.ρ) ^ 2 + p.β⁻¹ +\n            p.σ ^ 2 * p.R ^ 2 / p.ε ^ 2) ^\n        3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticLocalHessianAccelerated",
     "namespace": "LongTails.Setups.StochasticLocalHessianConvex",
     "setup": "LongTails.Setups.StochasticLocalHessianConvex",
@@ -4150,6 +4327,7 @@
         "value": "fun q =>\n  ⌈512 * (1 + q.D / q.ε + (65536 * q.K * (q.σ / q.ε) ^ q.exponent) ^ (q.exponent - 1)⁻¹) *\n      (3 + Real.logb 2 (1 + 16 * q.D / q.ε)) ^ (2 + q.exponent / (q.exponent - 1))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.PowerSmoothAnchoring",
     "namespace": "LongTails.Setups.StochasticPowerSmoothFixedPoint",
     "setup": "LongTails.Setups.StochasticPowerSmoothFixedPoint",
@@ -4171,6 +4349,7 @@
         "value": "fun p =>\n  ⌈10 ^ 47 *\n      ((((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 38 +\n                (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 48 * p.σ ^ 2 +\n              (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 60 * p.σ / p.ε) *\n            (1 + Real.log ((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) / p.ε)) +\n          (2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) ^ 14 * p.σ ^ 2 *\n            (1 + Real.log ((2 + p.Lf + p.Lc + p.LJ + p.ν + p.ν⁻¹ + p.Δ + p.C0 + p.Lnoise) / p.ε)) ^ 2) /\n        p.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticRegularEqualityKkt",
     "namespace": "LongTails.Setups.StochasticRegularEqualities",
     "setup": "LongTails.Setups.StochasticRegularEqualities",
@@ -4192,6 +4371,7 @@
         "value": "fun q => max 1 ⌈√(16 * q.L * q.R ^ 2 / q.ε) + 64 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedStochasticConvex",
     "namespace": "LongTails.Setups.StochasticSmoothAndConvex",
     "setup": "LongTails.Setups.StochasticSmoothAndConvex",
@@ -4213,6 +4393,7 @@
         "value": "fun q => max 1 ⌈4 * q.L * q.R ^ 2 / q.ε + 4 * q.σ ^ 2 * q.R ^ 2 / q.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SgdConvex",
     "namespace": "LongTails.Setups.StochasticSmoothAndConvex",
     "setup": "LongTails.Setups.StochasticSmoothAndConvex",
@@ -4234,6 +4415,7 @@
         "value": "fun q => ⌈2 ^ 20 * (1 + q.R / q.ε + q.C * q.σ ^ 2 / q.ε ^ 2) * (1 + Real.log (1 + 16 * q.R / q.ε)) ^ 4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticSmoothBanachFixedPoint",
     "namespace": "LongTails.Setups.StochasticSmoothBanachFixedPoint",
     "setup": "LongTails.Setups.StochasticSmoothBanachFixedPoint",
@@ -4255,6 +4437,7 @@
         "value": "fun p =>\n  ⌈69 + (2 ^ 29 * ↑p.m ^ 2 * p.H ^ 10 * p.Δ + 2 ^ 44 * ↑p.m ^ 4 * p.H ^ 18 * p.σ ^ 2) / p.ε ^ 2 +\n      2 ^ 48 * ↑p.m ^ 4 * p.H ^ 19 * p.Δ * p.σ / p.ε ^ 3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SurjectiveStochasticInequalityKkt",
     "namespace": "LongTails.Setups.StochasticSurjectiveInequalities",
     "setup": "LongTails.Setups.StochasticSurjectiveInequalities",
@@ -4276,6 +4459,7 @@
         "value": "fun p =>\n  ⌈2 ^ 100 * (1 + √(p.σh * p.R ^ 2 / p.ε) + (p.L₃ * p.R ^ 4 / p.ε) ^ 5⁻¹ + p.σg ^ 2 * p.R ^ 2 / p.ε ^ 2) *\n      (1 + Real.log (2 + p.Δ / p.ε + p.σh * p.R ^ 2 / p.ε + p.L₃ * p.R ^ 4 / p.ε)) ^ 4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SymmetricThirdOrder",
     "namespace": "LongTails.Setups.StochasticThirdDerivativeConvex",
     "setup": "LongTails.Setups.StochasticThirdDerivativeConvex",
@@ -4297,6 +4481,7 @@
         "value": "fun p =>\n  4 *\n      ⌈2 ^ 18 * p.L ^ 2 / (p.μx * p.μy) * (3 + 2 ^ 24 * p.L * p.σ ^ 2 / (p.μx * p.μy * p.ε)) *\n          (2 + Real.log (1 + p.Δ / p.ε))⌉₊ +\n    2"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StochasticTwoSidedPLSmoothedAgda",
     "namespace": "LongTails.Setups.StochasticTwoSidedPL",
     "setup": "LongTails.Setups.StochasticTwoSidedPL",
@@ -4362,6 +4547,7 @@
         "value": "fun p =>\n  ⌈10 ^ 20 * p.κ * (↑(Module.finrank ℝ p.E) + 1)⌉₊ * (Nat.log 2 (3 * (⌈16000 * √p.ρ * p.Δ / (p.ε * √p.ε)⌉₊ + 1)) + 1) *\n    (⌈16000 * √p.ρ * p.Δ / (p.ε * √p.ε)⌉₊ + 1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CoupledCubicStrongGrowth",
     "namespace": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder",
     "setup": "LongTails.Setups.StrongGrowthFiniteSumSecondOrder",
@@ -4383,6 +4569,7 @@
         "value": "fun q =>\n  (⌈Real.log (1 + 8 * √(2 * q.L * q.Δ) / q.ε)⌉₊ + 1) * (⌈268435456 * q.Δ * √q.ρ / (q.ε * √q.ε)⌉₊ + 1) *\n      (⌈√q.L / √√(q.ρ * q.ε)⌉₊ + 1 +\n        (8 +\n          ⌈2 *\n              Real.log\n                (1 +\n                  8 * (Real.log (1 + 8 * √(2 * q.L * q.Δ) / q.ε) + 2) * (268435456 * q.Δ * √q.ρ / (q.ε * √q.ε) + 2) *\n                      (√(8 * q.L * q.Δ + q.L * q.ε * √(q.ε / q.ρ) + q.ε ^ 2) + q.L * √(q.ε / q.ρ)) /\n                    q.ε)⌉₊)) *\n    ⌈800 * q.κ⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.StrongGrowthRestartedAgd",
     "namespace": "LongTails.Setups.StrongGrowthHessianLipschitz",
     "setup": "LongTails.Setups.StrongGrowthHessianLipschitz",
@@ -4404,6 +4591,7 @@
         "value": "fun q => ⌈√(2 * q.Lbar * q.R ^ 2 / ((1 + q.Γ) * q.ε))⌉₊ * ⌈(1 + q.Γ) ^ 2 * (4810 + 3200 * Real.log (1 + q.Γ))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ProximalStormStrongGrowth",
     "namespace": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex",
     "setup": "LongTails.Setups.StrongGrowthMeanSquaredSmoothConvex",
@@ -4469,6 +4657,7 @@
         "value": "fun q =>\n  3 *\n    ⌈14400 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n        (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.Λ * q.σ * q.Δ / q.ε ^ 3)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.MedianFirstMomentNonconvex",
     "namespace": "LongTails.Setups.SymmetricFirstMomentNonconvex",
     "setup": "LongTails.Setups.SymmetricFirstMomentNonconvex",
@@ -4490,6 +4679,7 @@
         "value": "fun p =>\n  ⌈1000000000000000 * (1 + p.upper) * (1 + p.lower ^ 2) / max (p.lower ^ 2) p.accuracy *\n      Real.log (1000000000000000 * ↑↑p.dimension * (1 + p.upper) / (p.failure * p.accuracy))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.SymmetricReverseFisherGlobalGD",
     "namespace": "LongTails.Setups.SymmetricGaussianReverseFisher",
     "setup": "LongTails.Setups.SymmetricGaussianReverseFisher",
@@ -4511,6 +4701,7 @@
         "value": "fun q =>\n  ⌈2 ^ 20 * (1 + q.L * q.R / q.ε) *\n        (64 * (q.α / (q.α - 1)) ^ 2 * (1 + Real.log (1 + q.L * q.R / q.ε + q.σ / q.ε))) ^ 2 +\n      2 ^ (20 / (q.α - 1)) * (q.σ / q.ε) ^ (q.α / (q.α - 1)) *\n        (64 * (q.α / (q.α - 1)) ^ 2 * (1 + Real.log (1 + q.L * q.R / q.ε + q.σ / q.ε))) ^ (2 * q.α / (q.α - 1))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.TailObliviousRootFinding",
     "namespace": "LongTails.Setups.TailObliviousMonotoneRootFinding",
     "setup": "LongTails.Setups.TailObliviousMonotoneRootFinding",
@@ -4532,6 +4723,7 @@
         "value": "fun p => 2 * max 1 ⌈2 ^ 40 * (p.B * p.R ^ 2 + p.G ^ 2 / p.B) ^ 2 * Real.log (8 / p.δ) ^ 2 / p.ε ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ClippedBgLastIterate",
     "namespace": "LongTails.Setups.TerminalClippingConvex",
     "setup": "LongTails.Setups.TerminalClippingConvex",
@@ -4554,6 +4746,7 @@
         "value": "fun p => ⌈2 ^ 62 * (1 + p.Δ ^ (3 / 4) * p.L₃ ^ 4⁻¹ / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LazyQuarticHessianTradeoff",
     "namespace": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
     "setup": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
@@ -4576,6 +4769,7 @@
         "value": "fun p =>\n  ⌈2 ^ 30 * (1 + p.Δ * p.L₃ ^ 3⁻¹ / p.ε ^ (4 / 3) + Real.log (2 + p.H₀ * p.Δ / p.ε ^ 2 + p.L₃ * p.Δ ^ 3 / p.ε ^ 4))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LogFreeSecondOrderThirdSmooth",
     "namespace": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
     "setup": "LongTails.Setups.ThirdDerivativeSmoothNonconvex",
@@ -4597,6 +4791,7 @@
         "value": "fun p =>\n  ⌈24 * (p.radius * Real.log p.ratio / p.slowLower + 1) * (p.radius / p.gain + 1) ^ 2 *\n      (3 + 2 * p.couplingUpper * Real.log p.ratio / p.slowLower +\n        Real.log (p.size * (p.wedgeLower⁻¹ + 8 * p.radius ^ 3 / (p.couplingLower ^ 3 * p.depthLower))))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.TwoSampleQuadraticPerceptronAcceleration",
     "namespace": "LongTails.Setups.TwoSampleQuadraticPerceptron",
     "setup": "LongTails.Setups.TwoSampleQuadraticPerceptron",
@@ -4618,6 +4813,7 @@
         "value": "fun p =>\n  (p.samples + 1) * ⌈2 ^ 24 * (p.upper / p.lower) ^ 2 * (1 + Real.log (1 + p.lower / p.contrast)) / p.margin ^ 3⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.TwoSidedConvolutionalPerceptronAcceleration",
     "namespace": "LongTails.Setups.TwoSidedConvolutionalPerceptron",
     "setup": "LongTails.Setups.TwoSidedConvolutionalPerceptron",
@@ -4639,6 +4835,7 @@
         "value": "fun p =>\n  ⌈(p.G + p.ρ) ^ 2 * (p.α + p.β) ^ 2 / (4 * (p.μ - p.ρ) ^ 2 * p.α * p.β) * Real.log (1 + p.G ^ 2 * p.R ^ 2 / p.ε ^ 2)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.RobustPolyak",
     "namespace": "LongTails.Setups.UncalibratedSharp",
     "setup": "LongTails.Setups.UncalibratedSharp",
@@ -4649,7 +4846,7 @@
     "budget": null,
     "budgets": [
       {
-        "latex": "32768 \\cdot \\left(m + 1\\right) \\cdot \\left(\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\operatorname{log2}\\left(m \\cdot \\left(\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1\\right)\\right) + 1\\right)^{2}",
+        "latex": "32768 \\cdot \\left(m + 1\\right) \\cdot \\left(\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\log_{2}\\left(m \\cdot \\left(\\left\\lceil \\left(\\frac{L \\cdot D^{2}}{m \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rceil_{+} + 1\\right)\\right) + 1\\right)^{2}",
         "oracle": 0,
         "type": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone.spec.Params → ℕ",
         "value": "fun p =>\n  32768 * (p.m + 1) * (⌈(p.L * p.D ^ 2 / (↑p.m * p.ε)) ^ (2 / 5)⌉₊ + 1) *\n    ((p.m * (⌈(p.L * p.D ^ 2 / (↑p.m * p.ε)) ^ (2 / 5)⌉₊ + 1)).log2 + 1) ^ 2"
@@ -4661,6 +4858,7 @@
         "value": "fun p => ⌈(p.L * p.D ^ 2 / (↑p.m * p.ε)) ^ (2 / 5)⌉₊ + 1"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.LazyAnchoredExtraProximal",
     "namespace": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone",
     "setup": "LongTails.Setups.UnconstrainedLipschitzJacobianMonotone",
@@ -4683,6 +4881,7 @@
         "value": "fun p => ⌈2 ^ 21 * (1 + (p.L * p.D ^ 3 / p.ε) ^ 4⁻¹) * Real.log (2 + p.H₀ * p.D / p.ε + p.L * p.D ^ 3 / p.ε) ^ 2⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.HomotopyNewtonMonotone",
     "namespace": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone",
     "setup": "LongTails.Setups.UnconstrainedLipschitzSecondDerivativeMonotone",
@@ -4704,6 +4903,7 @@
         "value": "fun p => ⌈400 * √(p.L * p.R ^ 2 / p.ε) + 40 * Real.logb 2 (2 + (p.Δ + p.L * p.R ^ 2) / p.ε)⌉₊ + 300"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.CertifiedLevelBroxUnknownValue",
     "namespace": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
     "setup": "LongTails.Setups.UnknownValueSmoothConvexLocalLinear",
@@ -4725,6 +4925,7 @@
         "value": "fun p =>\n  ⌈10 ^ 16 / max (p.lower ^ 2) p.accuracy *\n      Real.log (10 ^ 20 * ↑↑p.dimension * (1 + p.centre) / (p.failure * p.accuracy))⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.UntiedReverseFisherGlobalGD",
     "namespace": "LongTails.Setups.UntiedGaussianReverseFisher",
     "setup": "LongTails.Setups.UntiedGaussianReverseFisher",
@@ -4768,6 +4969,7 @@
         "value": "fun p => 2 + 3 * ⌈2 * p.R * √(p.L / p.ε)⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.WassersteinAcceleratedProximal",
     "namespace": "LongTails.Setups.WassersteinSmoothComposite",
     "setup": "LongTails.Setups.WassersteinSmoothComposite",
@@ -4789,6 +4991,7 @@
         "value": "fun q => ⌈1048576 * (1 + q.L₂ * q.R ^ 2 / q.ε) * Real.log (2 / (1 - q.ρ * q.L₁ / 2)) / (1 - q.ρ * q.L₁ / 2) ^ 5⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.FullRangeSecondOrderWeakMinty",
     "namespace": "LongTails.Setups.WeakMintySecondOrder",
     "setup": "LongTails.Setups.WeakMintySecondOrder",
@@ -4810,6 +5013,7 @@
         "value": "fun q =>\n  2 *\n    ⌈288 * q.ρ * q.Δ * (q.G ^ 2 + q.σ ^ q.α * (4 * q.G + 4 * q.σ * (4 * q.σ / q.ε) ^ (q.α - 1)⁻¹) ^ (2 - q.α)) /\n        q.ε ^ 4⌉₊"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.WeaklyConvexClippedSubgradient",
     "namespace": "LongTails.Setups.WeaklyConvexHeavyTailed",
     "setup": "LongTails.Setups.WeaklyConvexHeavyTailed",
@@ -4831,6 +5035,7 @@
         "value": "fun q =>\n  ⌈-Real.logb 2 q.δ⌉₊ *\n    (4 *\n        ⌈510 * √(↑q.d * (q.r + 1) * q.L0 * q.R ^ 2 / q.ε) +\n            1300 * (q.r + 1 + q.L1 * q.R * (√↑q.d * √(q.r + 1))) * Real.log (Real.exp 1 + 8 * q.Δ / q.ε)⌉₊ +\n      1)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.ZerothOrderMatrixGeneralizedAccelerated",
     "namespace": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth",
     "setup": "LongTails.Setups.ZerothOrderMatrixGeneralizedSmooth",
@@ -4852,6 +5057,7 @@
         "value": "fun q =>\n  max 1\n      ⌈64 * ↑q.d * √(q.L * q.R ^ 2 / q.ε) + 512 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ / q.ε ^ 2 +\n            256 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ ^ 2 / q.ε ^ 3 +\n          1⌉₊ *\n    2"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedTwoPointZerothOrderConvex",
     "namespace": "LongTails.Setups.ZerothOrderSmoothAndConvex",
     "setup": "LongTails.Setups.ZerothOrderSmoothAndConvex",
@@ -4873,6 +5079,7 @@
         "value": "fun q =>\n  max 1\n      ⌈128 * √(q.L * q.R ^ 2 / q.ε) + 32768 * q.L * ↑q.d * q.R ^ 2 * q.σ / q.ε ^ 2 +\n            8192 * q.L * ↑q.d ^ 2 * q.R ^ 2 * q.σ ^ 2 / q.ε ^ 3 +\n          1⌉₊ *\n    (2 * q.d)"
       }
     ],
+    "kind": "upper",
     "module": "LongTails.Theorems.AcceleratedZerothOrderConvex",
     "namespace": "LongTails.Setups.ZerothOrderSmoothAndConvex",
     "setup": "LongTails.Setups.ZerothOrderSmoothAndConvex",
