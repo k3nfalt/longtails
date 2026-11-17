@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Monotone Root Finding with Jacobians}
+We consider finding a zero of a differentiable monotone map $F:\mathbb{R}^d\to\mathbb{R}^d$, where $d$ is a nonnegative integer and the space has its Euclidean inner product and norm. Its Jacobian $J_F$ is globally $L$-Lipschitz, with $L>0$, and a given point $x^0$ lies within distance $R>0$ of a zero $x^\star$. The oracle returns $(F(x),J_F(x))$ at $x$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $\mathbb{E}_P[\|F(\bar{x})\|]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The root-finding problem is
+\[
+\text{find }x\in\mathbb{R}^d\text{ such that }F(x)=0.
+\]
+The algorithm receives $d$, $x^0$, $L$, $R$, and $\varepsilon$. Write $J_F(x)$ for the Fr\'echet derivative of $F$ at $x$, a linear operator from $\mathbb{R}^d$ to itself; $\|\cdot\|_{\mathrm{op}}$ denotes its induced operator norm.
+
+Our assumptions:
+\begin{assumption}[Parameter regime]
+The positive parameters $L$, $R$, and $\varepsilon$, and the dimension $d$, satisfy
+\[
+\begin{aligned}
+4096\varepsilon &\leq LR^2,\\
+d &\geq 4096\left(
+\left\lfloor\left(\frac{LR^2}{4096\varepsilon}\right)^{2/5}\right\rfloor+2
+\right)^5.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Monotonicity and Jacobian regularity]
+The map $F$ is Fr\'echet differentiable everywhere, and for every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\langle F(x)-F(y),x-y\rangle &\geq 0,\\
+\|J_F(x)-J_F(y)\|_{\mathrm{op}} &\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Nearby zero]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+F(x^\star)=0,
+\qquad
+\|x^0-x^\star\|\leq R.
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$, and each oracle call returns both the exact map value and the exact Jacobian. After the allotted calls, the output must have an integrable residual norm and satisfy
+\[
+\mathbb{E}_P\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

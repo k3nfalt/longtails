@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Smooth Nonconvex Optimization}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer. Its gradient is $L$-Lipschitz for $L>0$, and a given point $x^0$ satisfies $f(x^0)-f_{\mathrm{low}}\leq\Delta$ for a global lower bound $f_{\mathrm{low}}$ and $\Delta\geq0$. A star network has $n\geq1$ computing workers and a coordinator. Each worker returns unbiased stochastic gradients with variance at most $\sigma^2$, where $\sigma\geq0$, using independent samples across workers and calls. Computation and bit communication take time. For $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $\mathbb{E}_{P}\|\nabla f(\bar{x})\|^2\leq\varepsilon$, where $P$ is the law of sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+with the Euclidean norm $\|\cdot\|$. Worker $i\in\{1,\ldots,n\}$ has computation time $h_i>0$. Communication has latency $\ell\geq0$ and time per bit $b\geq0$. The algorithm receives $d,n$, a measurable sample space $\Omega$, $(h_i)_{i=1}^n$, $\ell,b,L,\Delta,\sigma,\varepsilon$, and $x^0\in\mathbb{R}^d$. The objective, stochastic-gradient maps, and sampling distributions are accessed through the oracles.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f(x)&\geq f_{\mathrm{low}} &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients]
+For each worker $i$, there are a probability measure $\mu_i$ on $\Omega$ and a jointly measurable map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$. For every $x\in\mathbb{R}^d$, the map $g_i(x,\cdot)$ is Bochner integrable, its squared error is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\mu_i}[g_i(x,Z)]&=\nabla f(x),\\
+\mathbb{E}_{Z\sim\mu_i}\bigl[\|g_i(x,Z)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent sampling]
+Let $Q$ be the joint law of sample streams $(\xi_{i,k})_{i=1,\ldots,n;\,k\geq0}$ taking values in $\Omega$. Each coordinate $\xi_{i,k}$ is measurable. For each $i$, the sequence $(\xi_{i,k})_{k\geq0}$ is independent and identically distributed with marginal law $\mu_i$. The entire streams $(\xi_{i,k})_{k\geq0}$ are independent across workers. Algorithm randomness is independent of these streams.
+\end{assumption}
+
+\begin{assumption}[Computation and communication]
+The network consists of coordinator $0$ and workers $1,\ldots,n$, with communication only between the coordinator and a worker. Queries may use any point of $\mathbb{R}^d$. An accepted evaluation at worker $i$ and point $x$ takes time $h_i$ and returns
+\[
+\bigl(x,g_i(x,\xi_{i,k})\bigr),
+\]
+where $k$ is the number of evaluations previously completed by that worker. Each worker can have at most one pending evaluation; further evaluation requests while it is busy are ignored. A pending evaluation may be aborted, in which case it produces no reply and consumes no sample. The coordinator performs no gradient evaluations.
+
+Messages are finite bit strings. A payload of $m\geq0$ bits sent along a directed coordinator--worker link takes time
+\[
+\ell+b(m+64),
+\]
+including a fixed $64$-bit overhead. The receiver obtains the sender's identity and transmitted bits. Each directed link can carry at most one pending message; further submissions on that directed link are ignored until delivery. Distinct directed links can operate concurrently, including opposite directions of the same link. Computations at different workers and communication can also proceed concurrently.
+\end{assumption}
+
+The resource budget is an elapsed-time deadline $T\geq0$. The algorithm must have only finitely many events up to every deadline $t\leq T$, almost surely under $P$, the joint law specified above. Its output $\bar{x}\in\mathbb{R}^d$ is taken from a designated node at time $T$. It must be measurable, $\|\nabla f(\bar{x})\|^2$ must be integrable under $P$, and the accuracy requirement is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|^2\bigr]\leq\varepsilon.
+\]
+\end{document}

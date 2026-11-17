@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.ExpectedInterpolatedGeneralizedFiniteSum",
+  "searched_at": "2026-11-17T13:15:15.010412+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{n + \\sqrt{\\frac{n \\cdot L0 \\cdot R^{2}}{\\varepsilon}} + \\sqrt{n} \\cdot L1 \\cdot R + n \\cdot \\left(L1 \\cdot R\\right)^{\\frac{2}{3}}}{1000000000 \\cdot \\left(1 + \\log\\left(2 + n + L1 \\cdot R + \\frac{L0 \\cdot R^{2}}{\\varepsilon}\\right)\\right)^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ExpectedInterpolatedGeneralizedFiniteSum.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌊(↑p.n + √(↑p.n * p.L0 * p.R ^ 2 / p.ε) + √↑p.n * p.L1 * p.R + ↑p.n * (p.L1 * p.R) ^ (2 / 3)) /\n      (1000000000 * (1 + Real.log (2 + ↑p.n + p.L1 * p.R + p.L0 * p.R ^ 2 / p.ε)) ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{n + \\sqrt{\\frac{n \\cdot L0 \\cdot R^{2}}{\\varepsilon}} + \\sqrt{n} \\cdot L1 \\cdot R + n \\cdot \\left(L1 \\cdot R\\right)^{\\frac{2}{3}}}{1000000000 \\cdot \\left(1 + \\log\\left(2 + n + L1 \\cdot R + \\frac{L0 \\cdot R^{2}}{\\varepsilon}\\right)\\right)^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ExpectedInterpolatedGeneralizedFiniteSum.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌊(↑p.n + √(↑p.n * p.L0 * p.R ^ 2 / p.ε) + √↑p.n * p.L1 * p.R + ↑p.n * (p.L1 * p.R) ^ (2 / 3)) /\n      (1000000000 * (1 + Real.log (2 + ↑p.n + p.L1 * p.R + p.L0 * p.R ^ 2 / p.ε)) ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound",
+      "namespace": "LongTails.Setups.ExpectedInterpolatedGeneralizedFiniteSum",
+      "setup": "LongTails.Setups.ExpectedInterpolatedGeneralizedFiniteSum",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.ExpectedInterpolatedGeneralizedFiniteSum.spec\n  LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound.budget",
+      "theorem": "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound",
+      "theorem": "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Every component f_i is convex on all of R^d; consequently F(x) = (1/n)∑_i f_i(x) is convex. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: spec.admissible, component ConvexOn condition; objective."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is the average of n components, with n ≥ 2.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: objective; spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "A query chooses any component i and point x and receives the exact gradient ∇f_i(x). Answers are independent of history and oracle seeds. Each component query counts as one oracle call; randomized adaptive algorithms are unrestricted.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: spec.Query, spec.Reply, spec.admissible oracle.answer equality. LongTails/Template.lean: Algorithm; Setup.allowedAlgorithm; executeWithTrace."
+      },
+      {
+        "label": "function_value",
+        "details": "The same component query also returns the exact value f_i(x), jointly with its gradient.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: spec.Reply; spec.admissible oracle.answer equality."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Each component has a differentiable gradient satisfying ‖D(∇f_i)(x)‖ ≤ L0 + L1‖∇f_i(x)‖ globally, with L0 > 0 and L1 ≥ 0. This is a componentwise condition.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: spec.admissible gradient differentiability and fderiv bound; spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean R^d, with d ≥ ⌈2^80(1 + n + L1 R + L0 R²/ε)^24⌉.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: Point; spec.valid dimension restriction."
+      },
+      {
+        "label": "other",
+        "details": "Interpolation: there exists a common global minimizer xstar of every component, with ‖xstar‖ ≤ R and F(0) − F(xstar) ≤ Δ. All parameters d, n, L0, L1, R, Δ, ε are public; the component functions and minimizer are hidden. The regime requires R > 0, ε > 0, 2ε ≤ Δ, and 4nε ≤ L0 R².",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: Params; spec.Public, spec.publicInput, spec.Instance, spec.valid, spec.admissible common-minimizer condition."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The algorithm outputs a point xhat in R^d. For a common component minimizer xstar, the objective gap must be integrable and satisfy E[F(xhat) − F(xstar)] ≤ ε. No last-iterate or queried-point restriction is imposed.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: spec.Output; spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over algorithm and oracle seeds; exact oracle answers make oracle randomness immaterial. The supplied lower-bound budget counts a fixed cap on component value-and-gradient queries.",
+        "evidence": "LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean: spec.successful; spec.admissible oracle equality. LongTails/Template.lean: Algorithm.law; executeWithTrace; Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This meaningful variant combines convex finite sums and exact component queries with componentwise gradient-dependent smoothness, a common component minimizer, and a prescribed large-dimension regime."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound",
+          "theorem": "LongTails.Theorems.ExpectedInterpolatedGeneralizedFiniteSumLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

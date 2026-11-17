@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Interpolated Generalized Smooth Finite Sums}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on Euclidean space $\mathbb{R}^d$, where $n\geq2$ is the number of components and $d$ is the dimension. Each $f_i:\mathbb{R}^d\to\mathbb{R}$ is convex and $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1\geq0$, and has a differentiable gradient. The components share a minimizer $x^\star$ satisfying $\|x^\star\|\leq R$ and $F(0)-F(x^\star)\leq\Delta$, where $R>0$ and $\Delta>0$. At a queried pair $(i,x)$, the oracle returns $(f_i(x),\nabla f_i(x))$. For $\varepsilon>0$, the goal is an output $\bar{x}$ with integrable objective gap satisfying $\mathbb{E}_P[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} F(x).
+\]
+We use the Euclidean norm and its induced operator norms, denoted by $\|\cdot\|$ and $\|\cdot\|_{\mathrm{op}}$, respectively. The algorithm receives all parameters $d,n,L_0,L_1,R,\Delta,\varepsilon$; the component functions are accessed through the oracle. The parameter regime is
+\[
+\begin{aligned}
+&n,d\in\mathbb{N},\qquad n\geq2,\qquad L_0>0,\qquad L_1\geq0,\qquad R>0,\qquad \varepsilon>0,\\
+&2\varepsilon\leq\Delta,\qquad 4n\varepsilon\leq L_0R^2,\\
+&d\geq\left\lceil 2^{80}\left(1+n+L_1R+\frac{L_0R^2}{\varepsilon}\right)^{24}\right\rceil.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Component convexity]
+For every $i\in\{1,\ldots,n\}$, $x,y\in\mathbb{R}^d$, and $t\in[0,1]$,
+\[
+f_i((1-t)x+ty)\leq(1-t)f_i(x)+tf_i(y).
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized smoothness]
+Each $f_i$ is differentiable everywhere, and $\nabla f_i:\mathbb{R}^d\to\mathbb{R}^d$ is Fr\'echet differentiable everywhere. Its Hessian satisfies
+\[
+\|\nabla^2 f_i(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f_i(x)\|,
+\qquad i\in\{1,\ldots,n\},\quad x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Interpolation and reference bounds]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f_i(x^\star)&\leq f_i(x)
+&&\text{for every }i\in\{1,\ldots,n\},\ x\in\mathbb{R}^d,\\
+\|x^\star\|&\leq R,\\
+F(0)-F(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+The origin is a reference point for these bounds, rather than a prescribed algorithm initialization.
+\end{assumption}
+
+Each oracle call selects any component $i\in\{1,\ldots,n\}$ and any point $x\in\mathbb{R}^d$ and returns the exact pair $(f_i(x),\nabla f_i(x))$. After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must satisfy
+\[
+\begin{aligned}
+\mathbb{E}_P\bigl[|F(\bar{x})-F(x^\star)|\bigr]&<\infty,\\
+\mathbb{E}_P\bigl[F(\bar{x})-F(x^\star)\bigr]&\leq\varepsilon.
+\end{aligned}
+\]
+Here $x^\star$ is a fixed common minimizer of the components; all such minimizers have the same value of $F$.
+\end{document}

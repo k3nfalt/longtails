@@ -1,0 +1,51 @@
+{
+  "setup": "LongTails.Setups.StarNetwork",
+  "searched_at": "2026-11-17T13:14:37.979432+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [],
+  "results": [],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "unknown",
+        "details": "Generic distributed computation infrastructure. No objective, feasible set, convexity, smoothness, or optimization problem is specified; Input and Output are arbitrary types.",
+        "evidence": "LongTails/Setups/StarNetwork.lean: computation, system."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Timed evaluation oracle with cancellation and bit-message communication. Worker i returns compute i input seed used after computeTime i; node 0 performs no evaluations. The evaluation function and seed distribution are arbitrary. No gradient interpretation, error bound, unbiasedness, variance bound, or independence is imposed. All workers initialize with the same oracle seed, so dependence across workers and evaluations is unrestricted.",
+        "evidence": "LongTails/Setups/StarNetwork.lean: ComputeQuery, computation, communication, system; LongTails/TemplateDistributed.lean: Oracle.initial."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Star topology with coordinator 0 and n compute workers, allowing n=0. Worker-specific computation times, common latency, and common time per bit are nonnegative and may vanish. Each worker has at most one pending evaluation; new evaluations while busy are ignored, and abort clears pending work. Each directed coordinator–worker link holds at most one pending message; different links can operate concurrently. A transmitted message of b bits takes latency + timePerBit·b. The execution template appends 64 bits to every algorithm message and exposes 64-bit clock readings through algorithm-supplied clock and timer functions. No instantiated publicInput specifies which network parameters an algorithm knows.",
+        "evidence": "LongTails/Setups/StarNetwork.lean: Network, ComputationState, CommunicationState, computation, communication; LongTails/TemplateDistributed.lean: Time, clockBits, ClockReading, Algorithm.clock, Algorithm.timer, step, Setup.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "unknown",
+        "details": "No successful predicate is instantiated, and no epsilon criterion, output requirement, probability guarantee, or elapsed-time budget is supplied. The generic TimedConvergence definition does not itself specify an accuracy criterion.",
+        "evidence": "LongTails/Setups/StarNetwork.lean: system; LongTails/TemplateDistributed.lean: Setup.successful, TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "needs_review",
+      "reason": "The source specifies a timed star-network oracle interface but does not instantiate a problem, admissibility conditions, parameter visibility, or success criterion. These are needed to classify a complete problem formulation."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "missing_theorem",
+      "theorems": [],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "not_assessed",
+      "results": []
+    }
+  }
+}
