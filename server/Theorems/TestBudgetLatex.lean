@@ -1,6 +1,13 @@
 import BudgetLatex
+import LongTails.TemplateDistributed
 
 open Lean Elab Command Term
+
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(DistributedTemplate.clockBits)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "64" do
+    throwError "Unexpected clock width: {result}"
 
 set_option hygiene false in
 run_cmd liftTermElabM do

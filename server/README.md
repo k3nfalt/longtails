@@ -28,6 +28,13 @@ Existing setup descriptions and reference reports are reused. Missing setup
 descriptions are shown as “Description not generated.”; missing reference reports
 are left unassessed.
 
+The metadata extractor supports oracle-call upper and lower bounds, online
+guarantees, and `DistributedTemplate.TimedConvergence`. Timed results use
+`kind: "timed"` and one scalar elapsed-time budget, without an oracle index.
+The website labels these as elapsed-time upper bounds. Reference and comparison
+generation must preserve computation times, network topology, message sizes,
+latency, bandwidth costs, and concurrency assumptions when comparing them.
+
 To use Codex to generate only missing descriptions and reference reports:
 
 ```sh

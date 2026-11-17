@@ -27,7 +27,9 @@ project preferences; newer explicit user requests take precedence.
 - Each file in `LongTails/Theorems/` must contain exactly one main theorem:
   `result : Convergence spec budget` for an upper bound,
   `result : NonConvergence spec budget` for a lower bound, or
-  `result : OnlineConvergence spec bound` for an online guarantee. Put distinct mathematical cases in
+  `result : OnlineConvergence spec bound` for an online guarantee, or
+  `result : DistributedTemplate.TimedConvergence spec budget` for a distributed
+  elapsed-time upper bound. Put distinct mathematical cases in
   separate files. Proof modules use lemmas for supporting results; do not add redundant public convergence/rate
   wrappers or drop a mathematical case merely to reduce the theorem count.
 - A contribution may contain one main result or a paired upper and lower bound
@@ -76,9 +78,12 @@ project preferences; newer explicit user requests take precedence.
   preserves the rate. Keep supporting algebra in proof modules.
 - In `LongTails/Theorems/`, write each public `budget` definition as one explicit,
   human-readable line in the setup parameters, without local tuning variables.
-  Simplify nested fractions, products, and rounding where possible; a universal
-  constant-factor increase of an upper-bound budget is acceptable when it
-  preserves the parameter rates. For lower bounds, prove failure at the stated
+  Prefer compact, readable formulas among bounds equivalent up to universal
+  constant factors throughout the stated parameter range. Simplify nested
+  fractions, products, and rounding; looser universal constants are acceptable
+  when they make the formula clearer. Do not worsen asymptotic dependence on
+  any parameter for readability, even by a logarithmic factor, or hide such a
+  loss in soft-O notation. For lower bounds, prove failure at the stated
   budget; increasing it requires a proof. Connect the bound to execution, retaining
   all oracle calls and required terms. Keep the supporting algebra in proof modules.
 - Seek the strongest rate justified by the exact setup, and check the primary
@@ -105,7 +110,20 @@ project preferences; newer explicit user requests take precedence.
   `P.map (ξ k) = p`. Derive any product-measure representation internally from
   independence; do not prescribe `P` as a product measure. For Markov or other
   dependent sampling, state the appropriate dependence assumptions instead of IID.
-- Use `execute` from `LongTails/Template.lean` to run oracle algorithms.
+- Use `OracleTemplate.execute` from `LongTails/Template.lean` for oracle-call
+  bounds and `DistributedTemplate.execute` from
+  `LongTails/TemplateDistributed.lean` for elapsed-time bounds.
+- Distributed results use `DistributedTemplate.Setup` and a public
+  `budget : Params → DistributedTemplate.Time`, where `Time = NNReal`.
+  State the worker topology, computation times, communication latency and
+  per-bit costs, concurrency restrictions, and sampling dependence in the setup.
+  Use the template's event-driven algorithm and computation/communication
+  oracles. Prove almost-sure `FiniteEvents` at every deadline up to the
+  budget, and success of the actual execution under `DistributedTemplate.law`.
+  A bound on idealized rounds alone is insufficient. Compare elapsed time only
+  under matching network and oracle models; do not present it as a query count.
+  `TimedConvergence` is an upper bound; no distributed lower-bound template is
+  currently provided.
 - Express minimizer-based accuracy relative to `xstar`, using the setup's
   minimizer assumption. State clearly whether the result
   concerns a last iterate, an average across iterations, or some iterate.

@@ -45,7 +45,13 @@ python3 run_comparator.py YourTheorem.lean
 
 Upper and lower bounds both live in `LongTails/Theorems`. For example, audit a lower
 bound with `python3 run_comparator.py SmoothConvexExpectedLowerBound.lean`. The
-inspector distinguishes `Convergence`, `NonConvergence`, and `OnlineConvergence`.
+inspector distinguishes `Convergence`, `NonConvergence`, `OnlineConvergence`, and
+`DistributedTemplate.TimedConvergence`. Timed results have a nonnegative real
+elapsed-time budget rather than a per-oracle natural-number budget. For example:
+
+```sh
+python3 run_comparator.py DistributedBatchedSgd.lean
+```
 
 To audit all theorems with four parallel workers, run `python3 run_comparator.py -j 4`.
 The script builds the selected modules first, then runs the audits in parallel.

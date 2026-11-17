@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.GapGeneralizedSmoothConvex",
+  "searched_at": "2026-11-17T13:15:49.418677+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\min\\left\\{ \\frac{L1 \\cdot R}{1 + \\log\\left(2 + L1 \\cdot R\\right)}, \\left(\\frac{L1 \\cdot R \\cdot \\log\\left(\\frac{\\Delta}{8 \\cdot \\varepsilon}\\right)}{1 + \\log\\left(2 + L1 \\cdot R\\right)}\\right)^{\\frac{2}{3}} \\right\\}}{16777216} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GapGeneralizedSmoothConvex.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌊(√(p.L0 * p.R ^ 2 / p.ε) +\n        min (p.L1 * p.R / (1 + Real.log (2 + p.L1 * p.R)))\n          ((p.L1 * p.R * Real.log (p.Δ / (8 * p.ε)) / (1 + Real.log (2 + p.L1 * p.R))) ^ (2 / 3))) /\n      16777216⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\min\\left\\{ \\frac{L1 \\cdot R}{1 + \\log\\left(2 + L1 \\cdot R\\right)}, \\left(\\frac{L1 \\cdot R \\cdot \\log\\left(\\frac{\\Delta}{8 \\cdot \\varepsilon}\\right)}{1 + \\log\\left(2 + L1 \\cdot R\\right)}\\right)^{\\frac{2}{3}} \\right\\}}{16777216} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GapGeneralizedSmoothConvex.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌊(√(p.L0 * p.R ^ 2 / p.ε) +\n        min (p.L1 * p.R / (1 + Real.log (2 + p.L1 * p.R)))\n          ((p.L1 * p.R * Real.log (p.Δ / (8 * p.ε)) / (1 + Real.log (2 + p.L1 * p.R))) ^ (2 / 3))) /\n      16777216⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound",
+      "namespace": "LongTails.Setups.GapGeneralizedSmoothConvex",
+      "setup": "LongTails.Setups.GapGeneralizedSmoothConvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.GapGeneralizedSmoothConvex.spec\n  LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound.budget",
+      "theorem": "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound",
+      "theorem": "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a convex function f: ℝ^d → ℝ with an attained global minimum.",
+        "evidence": "LongTails/Setups/GapGeneralizedSmoothConvex.lean: spec.Instance and spec.admissible; LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible, ConvexOn and minimizer clauses."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns ∇f(x), without function values or oracle error. The gradient identity holds for every history and oracle seed, so replies at a fixed point cannot vary with either. Algorithms may be randomized and query arbitrary points; cost counts individual gradient queries.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible, HasGradientAt clause; LongTails/Setups/GapGeneralizedSmoothConvex.lean: spec.Query and spec.Reply; LongTails/Template.lean: Algorithm, executeWithTrace, and Setup.allowedAlgorithm."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is differentiable everywhere and satisfies ‖D(∇f)(x)‖ ≤ L0 + L1‖∇f(x)‖ globally, with L0 > 0 and L1 ≥ 0. Continuity of the Hessian is not explicitly required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible, Differentiable and fderiv clauses; LongTails/Setups/GapGeneralizedSmoothConvex.lean: spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on ℝ^d, with d ≥ ⌈2^80(1 + L1 R + √(L0 R²/ε))^10⌉.",
+        "evidence": "LongTails/Setups/GapGeneralizedSmoothConvex.lean: Params.d, Params.toGeneralized, and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "There exists a common minimizer xstar satisfying ‖x0 − xstar‖ ≤ R and f(x0) − f(xstar) ≤ Δ. All parameters d, L0, L1, x0, R, Δ, ε are public. Validity requires R > 0, ε > 0, ε ≤ L0 R²/16, and Δ ≥ 16ε.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible, final existential clause; LongTails/Setups/GapGeneralizedSmoothConvex.lean: Params, spec.Public, spec.publicInput, and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Output an arbitrary point xhat ∈ ℝ^d with integrable objective gap and E[f(xhat) − f(xstar)] ≤ ε for a global minimizer xstar. The output need not be a queried point or a specified iterate.",
+        "evidence": "LongTails/Setups/GapGeneralizedSmoothConvex.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee is in expectation over the joint algorithm and oracle seed law; no almost-sure or high-probability accuracy requirement is imposed.",
+        "evidence": "LongTails/Setups/GapGeneralizedSmoothConvex.lean: spec.successful, integral inequality; LongTails/Template.lean: Convergence, product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This variant combines gradient-dependent curvature with public radius and initial-gap bounds and an explicit large-dimension restriction, beyond the classical globally Lipschitz-gradient convex benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound",
+          "theorem": "LongTails.Theorems.GapGeneralizedSmoothConvexLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

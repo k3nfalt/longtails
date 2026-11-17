@@ -1,0 +1,63 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Star Network Oracle Model}
+We consider distributed computation on a star with hub $0$ and $n\geq 0$ workers, indexed by $i=1,\ldots,n$. Inputs and outputs belong to arbitrary sets $\mathcal{X}$ and $\mathcal{Y}$. Worker $i$ returns $C_i(x,Z,k)\in\mathcal{Y}$ for input $x\in\mathcal{X}$, shared random seed $Z\sim P$, and completed-computation count $k\geq 0$, after time $c_i\geq 0$. A message of $b$ transmitted bits takes $\ell+\beta b$, where $\ell,\beta\geq 0$. Computations and directed links each admit one pending request. This model specifies oracle access and elapsed-time costs; it does not specify an optimization objective or accuracy requirement.
+
+The hub communicates directly with every worker. Computation is available only at the workers. Time takes values in $\mathbb{R}_{\geq 0}$. The network parameters are
+\[
+n\in\mathbb{Z}_{\geq 0},\qquad
+(c_1,\ldots,c_n)\in\mathbb{R}_{\geq 0}^{n},\qquad
+\ell,\beta\in\mathbb{R}_{\geq 0}.
+\]
+Let $\mathcal{S}$ be a measurable seed space with probability law $P$. The computation maps are
+\[
+C_i:\mathcal{X}\times\mathcal{S}\times\mathbb{Z}_{\geq 0}
+\longrightarrow\mathcal{Y},
+\qquad i=1,\ldots,n.
+\]
+The model does not distinguish algorithm inputs from hidden parameters.
+
+Our assumptions:
+\begin{assumption}[Worker computation]
+Initially, each worker is idle and its completed-computation count is zero. An evaluation submitted to idle worker $i$ at time $t$ with input $x$ becomes available at time
+\[
+t+c_i.
+\]
+When this evaluation is delivered, the oracle returns the pair
+\[
+\bigl(x,C_i(x,Z,k)\bigr),
+\]
+where $k$ is that worker's count immediately before delivery. Delivery clears the pending evaluation and increments the count by one. An evaluation submitted while another evaluation is pending at the same worker is ignored. An abort request clears the pending evaluation without changing the count. The hub produces no computation replies.
+\end{assumption}
+
+\begin{assumption}[Communication and concurrency]
+Messages are finite binary strings. A transmission from node $u$ to node $v$ is accepted only on a directed hub--worker link, that is,
+\[
+(u=0\ \text{and}\ v\neq 0)
+\quad\text{or}\quad
+(u\neq 0\ \text{and}\ v=0).
+\]
+Each directed link holds at most one pending message; another submission on that link is ignored until the pending message is delivered. Distinct directed links operate concurrently, including the two directions of a hub--worker connection. Worker computations can also proceed concurrently with one another and with communication.
+
+For a message submitted at time $t$ with transmitted string $m$, its delivery time is
+\[
+t+\ell+\beta |m|,
+\]
+where $|m|$ is its bit length. When used through the distributed execution interface, a payload of $b$ bits is extended by $64$ zero bits, so its communication time is
+\[
+\ell+\beta(b+64).
+\]
+A delivered message identifies its source and contains the transmitted string. Among pending messages, delivery selects one with the earliest delivery time, provided that time has been reached, and then frees its directed link.
+\end{assumption}
+
+\begin{assumption}[Shared randomness]
+A single seed $Z\sim P$ is drawn and shared by all workers throughout the computation. Worker $i$ uses $C_i(x,Z,k)$ on its $k$th completed evaluation, counting from zero. Consequently, replies may depend across workers and across successive evaluations through the same seed. Any algorithm randomness is independent of $Z$.
+\end{assumption}
+
+Resource budgets in this model measure elapsed time, accounting for computation delays, communication latency, and transmitted bits. No particular distributed method, output rule, optimization task, or numerical success criterion is specified by this network model.
+\end{document}

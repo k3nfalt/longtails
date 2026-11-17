@@ -29,7 +29,8 @@ private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
     withLetDecl name type value fun x => do
       return current ++ (← statementBudgets (body.instantiate1 x))
   | _ =>
-    if type.isAppOfArity `OracleTemplate.OnlineConvergence 2 then
+    if type.isAppOfArity `OracleTemplate.OnlineConvergence 2 ||
+        type.isAppOfArity `DistributedTemplate.TimedConvergence 2 then
       let .const name levels := type.getAppArgs.back!
         | throwError "Expected a bound definition"
       let .defnInfo info ← getConstInfo name | throwError "Expected a bound definition"
@@ -81,7 +82,7 @@ run_cmd do
         ("namespace", toJson entry.setupName.getPrefix.toString),
         ("module", toJson entry.moduleName.toString),
         ("theorem", toJson entry.theoremName.toString),
-        ("kind", toJson (if entry.lower then "lower" else if entry.online then "online" else "upper")),
+        ("kind", toJson (if entry.lower then "lower" else if entry.online then "online" else if entry.timed then "timed" else "upper")),
         ("statement", toJson (← ppExpr info.type).pretty),
         ("budget", if found.size == 1 then found[0]! else Json.null),
         ("budgets", toJson found)]

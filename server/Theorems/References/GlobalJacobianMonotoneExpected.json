@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.GlobalJacobianMonotoneExpected",
+  "searched_at": "2026-11-17T13:15:43.972274+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\left(\\frac{L \\cdot R^{2}}{4096 \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GlobalJacobianMonotoneExpected.spec.Params → ℕ",
+        "value": "fun p => ⌊(p.L * p.R ^ 2 / (4096 * p.ε)) ^ (2 / 5)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\left(\\frac{L \\cdot R^{2}}{4096 \\cdot \\varepsilon}\\right)^{\\frac{2}{5}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GlobalJacobianMonotoneExpected.spec.Params → ℕ",
+          "value": "fun p => ⌊(p.L * p.R ^ 2 / (4096 * p.ε)) ^ (2 / 5)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound",
+      "namespace": "LongTails.Setups.GlobalJacobianMonotoneExpected",
+      "setup": "LongTails.Setups.GlobalJacobianMonotoneExpected",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.GlobalJacobianMonotoneExpected.spec\n  LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound.budget",
+      "theorem": "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound",
+      "theorem": "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained monotone equation F(x)=0 on ℝ^d. F is differentiable and globally monotone; a zero xstar exists with ‖x0−xstar‖≤R. No scalar potential or strong monotonicity is assumed.",
+        "evidence": "LongTails/Setups/GlobalJacobianMonotoneExpected.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One exact oracle call at any x∈ℝ^d returns both F(x) and its complete Jacobian DF(x). Replies have no error or randomness, regardless of history or seed. Query norms are unrestricted. The parameters d, x0, L, R, ε are public; F is hidden.",
+        "evidence": "LongTails/Setups/GlobalJacobianMonotoneExpected.lean: spec.Query, spec.Reply, spec.publicInput, and the oracle equality in spec.admissible; LongTails/Template.lean: Setup.allowedAlgorithm."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on ℝ^d. Writing B=⌊(LR²/(4096ε))^(2/5)⌋, validity requires d≥4096(B+2)^5.",
+        "evidence": "LongTails/Setups/GlobalJacobianMonotoneExpected.lean: Params.d, spec.Instance, and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz Jacobian in operator norm: ‖DF(x)−DF(y)‖≤L‖x−y‖. A solution lies within the known radius R of x0. Parameters satisfy L,R,ε>0 and 4096ε≤LR². No bound on ‖DF(x)‖ or on query locations is supplied.",
+        "evidence": "LongTails/Setups/GlobalJacobianMonotoneExpected.lean: spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The guarantee is an expectation over the execution law. Algorithms may randomize, although the oracle replies are exact. No almost-sure or high-probability accuracy requirement is imposed.",
+        "evidence": "LongTails/Setups/GlobalJacobianMonotoneExpected.lean: spec.successful; LongTails/Template.lean: Algorithm.law and Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Output a point X∈ℝ^d whose unsquared operator residual satisfies E‖F(X)‖≤ε; the residual must be integrable. The output need not be a queried point.",
+        "evidence": "LongTails/Setups/GlobalJacobianMonotoneExpected.lean: spec.Output and spec.successful; LongTails/Template.lean: Algorithm.output."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "A standard higher-order oracle formulation for smooth monotone equations, using a known initial-distance bound and expected residual accuracy. The dimension and accuracy restrictions specify a lower-bound regime."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound",
+          "theorem": "LongTails.Theorems.RandomizedGlobalJacobianMonotoneLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

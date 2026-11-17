@@ -1,0 +1,155 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalConstrainedQuasar",
+  "searched_at": "2026-11-17T13:17:01.907591+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L \\cdot D^{2}}{\\varepsilon}}}{10000 \\cdot \\gamma} + \\frac{-\\left(\\sigma^{2} \\cdot D^{2} \\cdot \\log\\left(\\delta\\right)\\right)}{8192 \\cdot \\gamma^{2} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalConstrainedQuasar.spec.Params → ℕ",
+          "value": "fun q => ⌊√(q.L * q.D ^ 2 / q.ε) / (10000 * q.γ) + -(q.σ ^ 2 * q.D ^ 2 * Real.log q.δ) / (8192 * q.γ ^ 2 * q.ε ^ 2)⌋₊"
+        },
+        {
+          "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{L \\cdot D^{2}}{\\varepsilon}}}{10000 \\cdot \\gamma} + \\frac{-\\left(\\sigma^{2} \\cdot D^{2} \\cdot \\log\\left(\\delta\\right)\\right)}{8192 \\cdot \\gamma^{2} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.HighDimensionalConstrainedQuasar.spec.Params → ℕ",
+          "value": "fun q => ⌊√(q.L * q.D ^ 2 / q.ε) / (10000 * q.γ) + -(q.σ ^ 2 * q.D ^ 2 * Real.log q.δ) / (8192 * q.γ ^ 2 * q.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalConstrainedQuasar",
+      "setup": "LongTails.Setups.HighDimensionalConstrainedQuasar",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalConstrainedQuasar.spec\n  LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound.budget",
+      "theorem": "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound.result"
+    },
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{96} \\cdot \\left(2 + \\left\\lceil 8 \\cdot \\log\\left(\\frac{8}{\\delta}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil 2 + \\frac{L \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon} \\right\\rceil_{+}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{\\sqrt{\\frac{L \\cdot D^{2}}{\\varepsilon}}}{\\gamma} + \\frac{\\sigma^{2} \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalConstrainedQuasar.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 96 * (2 + ↑⌈8 * Real.log (8 / q.δ)⌉₊) * (1 + ↑(Nat.clog 2 ⌈2 + q.L * q.D ^ 2 / (q.γ ^ 2 * q.ε)⌉₊)) ^ 2 *\n      (1 + √(q.L * q.D ^ 2 / q.ε) / q.γ + q.σ ^ 2 * q.D ^ 2 / (q.γ ^ 2 * q.ε ^ 2))⌉₊"
+        },
+        {
+          "latex": "\\left\\lceil 2^{96} \\cdot \\left(2 + \\left\\lceil 8 \\cdot \\log\\left(\\frac{8}{\\delta}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\operatorname{clog}_{2}\\left(\\left\\lceil 2 + \\frac{L \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon} \\right\\rceil_{+}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{\\sqrt{\\frac{L \\cdot D^{2}}{\\varepsilon}}}{\\gamma} + \\frac{\\sigma^{2} \\cdot D^{2}}{\\gamma^{2} \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 1,
+          "type": "LongTails.Setups.HighDimensionalConstrainedQuasar.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 96 * (2 + ↑⌈8 * Real.log (8 / q.δ)⌉₊) * (1 + ↑(Nat.clog 2 ⌈2 + q.L * q.D ^ 2 / (q.γ ^ 2 * q.ε)⌉₊)) ^ 2 *\n      (1 + √(q.L * q.D ^ 2 / q.ε) / q.γ + q.σ ^ 2 * q.D ^ 2 / (q.γ ^ 2 * q.ε ^ 2))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound",
+      "namespace": "LongTails.Setups.HighDimensionalConstrainedQuasar",
+      "setup": "LongTails.Setups.HighDimensionalConstrainedQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HighDimensionalConstrainedQuasar.spec\n  LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound.budget",
+      "theorem": "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound",
+      "theorem": "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound",
+      "theorem": "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective may be nonconvex: the assumptions impose quasar convexity relative to xstar, without requiring convexity of f.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "Minimize f over a compact convex set X of diameter at most D, containing x0 and a constrained minimizer xstar. On X, f is differentiable, its gradient is L-Lipschitz, and γ(f(x)−f(xstar)) ≤ ⟨∇f(x),x−xstar⟩, with 0<γ≤1.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible; LongTails/Setups/HighDimensionalConstrainedQuasar.lean: spec.admissible and spec.valid."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Oracle 0 returns g(x,ξ). For x∈X, E[g(x,ξ)]=∇f(x) and E‖g(x,ξ)−∇f(x)‖²≤σ². Seeds are IID with a hidden common law on Bool. No function values or sample identities are returned; oracle behavior outside X has no gradient-accuracy requirement.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible; LongTails/Setups/HighDimensionalConstrainedQuasar.lean: Params.toStochastic; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "proximal",
+        "details": "Oracle 1 returns the exact Euclidean projection onto X, characterized by proj(z)∈X and ⟨z−proj(z),w−proj(z)⟩≤0 for every w∈X. Gradient and projection calls have separately enforced fixed budgets.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible; LongTails/Template.lean: executeWithTrace and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The centered gradient error has uniformly bounded second moment σ² on X. No exponential-tail bound, sample-gradient smoothness, or bound on the uncentered gradient second moment is required.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝ^d. Define K=floor(√(LD²/ε)/(10000γ)+σ²D² log(1/δ)/(8192γ²ε²)). Validity requires d≥2^34(K+1)^5.",
+        "evidence": "LongTails/Setups/HighDimensionalConstrainedQuasar.lean: Params, Params.toStochastic, and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d,x0,L,D,γ,σ,ε,δ are public; f,X,xstar and the oracle representation and law are hidden. Validity requires L,D,ε>0, σ≥0, 0<γ≤1, 0<δ≤1/4, 10^8ε≤LD², and either σ=0 or 64γε≤σD. The sampling space is specifically Bool, with no supplied lower bound on either atom's probability.",
+        "evidence": "LongTails/Setups/HighDimensionalConstrainedQuasar.lean: Params.toStochastic, spec.Public, spec.publicInput, and spec.valid; LongTails/Setups/StochasticConstrainedQuasar.lean: Instance and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable output xhat satisfying f(xhat)−f(xstar)≤ε on the success event; no particular iterate or averaging rule is required.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The same success event requires xhat∈X.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "P[xhat∈X and f(xhat)−f(xstar)≤ε]≥1−δ. Probability includes both algorithm randomness and oracle randomness.",
+        "evidence": "LongTails/Setups/StochasticConstrainedQuasar.lean: spec.successful; LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The constrained stochastic quasar formulation includes a specifically Boolean sampling space, a large parameter-dependent dimension threshold, and a separated zero-noise/nonzero-noise validity regime."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound.result",
+        "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound",
+          "theorem": "LongTails.Theorems.HighDimensionalConstrainedQuasarLowerBound.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound",
+          "theorem": "LongTails.Theorems.HighDimensionalConstrainedQuasarUpperBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

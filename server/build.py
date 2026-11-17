@@ -417,6 +417,9 @@ def render(
         "template": (ROOT.parent / "LongTails/Template.lean").read_text(
             encoding="utf-8"
         ),
+        "distributedTemplate": (
+            ROOT.parent / "LongTails/TemplateDistributed.lean"
+        ).read_text(encoding="utf-8"),
     }
     rendered = json.loads(
         subprocess.run(

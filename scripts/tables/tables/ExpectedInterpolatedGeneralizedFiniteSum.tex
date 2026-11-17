@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Lower bounds (necessary budgets) for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ExpectedInterpolatedGeneralizedFiniteSum.lean}{ExpectedInterpolatedGeneralizedFiniteSum}.}\label{tab:ExpectedInterpolatedGeneralizedFiniteSum}
+\parbox{\linewidth}{\footnotesize $F=n^{-1}\sum_{i=1}^n f_i$ on $\mathbb R^d$, with convex components having differentiable gradients and $\|\nabla^2 f_i(x)\|\le L_0+L_1\|\nabla f_i(x)\|$. A common minimizer $x^\star$ satisfies $\|x^\star\|\le R$ and $F(0)-F(x^\star)\le\Delta$. Parameters satisfy $L_0,R,\varepsilon>0$, $L_1\ge0$, $n\ge2$, $\Delta\ge2\varepsilon$, $L_0R^2/\varepsilon\ge4n$, and $d\ge\lceil2^{80}(1+n+L_1R+L_0R^2/\varepsilon)^{24}\rceil$. The target is an integrable gap with $\int [F(\hat x(\omega))-F(x^\star)]\,dP(\omega)\le\varepsilon$, where $P$ is the algorithm's seed law. Hardness holds against every randomized adaptive algorithm using exact component value/gradient pairs, at every fixed budget through the stated threshold; the instance is independent of the realized seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ExpectedInterpolatedGeneralizedFiniteSumLowerBound.lean}{Expected\allowbreak Interpolated\allowbreak Generalized\allowbreak Finite\allowbreak Sum\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ExpectedInterpolatedGeneralizedFiniteSumLowerBound.md}{(review)}
+& Necessary: $\displaystyle\Omega\!\left(\frac{n(1+q^{2/3})+\sqrt n(\sqrt H+q)}{\log^2(2+n+q+H)}\right)$ component calls.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[Thm.~7.1, v2]{polynomialEverestIIV2}
+& Necessary: $\displaystyle\Omega\!\left(\frac{n(1+q^{2/3})+\sqrt{n[H+q^2(1+\delta/\varepsilon)]}}{\log^2(2+n+H+q^2(1+\delta/\varepsilon))}\right)$ value/gradient calls. Requires $q>0$, $\delta\ge3\varepsilon/q^2$; no interpolation guarantee.
+& \textbf{(1)}: Scope: all four terms persist at $\delta=0$; matches \textbf{(2)} at $\delta=3\varepsilon/q^2$, and includes $L_1=0$.
+& \textbf{(1)} requires $H\ge4n$ and the explicit large polynomial dimension; fixed-budget hardness rather than expected-stopping-time hardness. \\
+\midrule
+\textbf{(3)} \citep[Thm.~7, v3]{eigfsWoodworthSrebroV3}. Smooth convex components on a radius-$R$ ball; $L_1=0$, without interpolation.
+& Necessary: $\Omega(n+\sqrt{nH})$ component value/gradient/prox calls, in sufficiently large dimension.
+& \textbf{(1)}: Scope: hardness with a common minimizer; adds the $L_1>0$ terms.
+& At $L_1=0$, \textbf{(1)} loses $\log^2(2+n+H)$, excludes prox queries, and requires $H\ge4n$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $n$: component count; $H=L_0R^2/\varepsilon$; $q=L_1R$; $\delta$: upper bound on $\min F-n^{-1}\sum_i\inf f_i$; $\Omega$: necessary calls, up to universal factors. A component call returns the value and gradient together; \textbf{(3)} additionally permits a component proximal evaluation.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

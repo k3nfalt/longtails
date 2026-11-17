@@ -1,0 +1,112 @@
+{
+  "setup": "LongTails.Setups.DistributedSmoothNonconvex",
+  "searched_at": "2026-11-17T13:15:41.461441+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "262144 \\cdot \\left(1 + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right) \\cdot \\left(\\inf_{0\\le i<n}\\left(h\\left(i\\right) + \\frac{1 + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}}{\\left(\\sum_{j=0}^{n-1} \\begin{cases} \\frac{1}{h\\left(j\\right)} & h\\left(j\\right) \\leq h\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}\\right) + l + b \\cdot \\left(d \\cdot \\left(1 + \\operatorname{log2}\\left(2 + d + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right) + 64\\right)\\right)",
+        "type": "LongTails.Setups.DistributedSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  262144 * ↑(1 + ⌈p.L * p.Δ / p.ε⌉₊) *\n    (sInf (Set.range fun i => p.h i + ↑(1 + ⌈p.σ ^ 2 / p.ε⌉₊) / ∑ j, if p.h j ≤ p.h i then (p.h j)⁻¹ else 0) + p.l +\n      p.b * ↑(p.d * (1 + (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊).log2) + DistributedTemplate.clockBits))"
+      },
+      "budgets": [
+        {
+          "latex": "262144 \\cdot \\left(1 + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right) \\cdot \\left(\\inf_{0\\le i<n}\\left(h\\left(i\\right) + \\frac{1 + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}}{\\left(\\sum_{j=0}^{n-1} \\begin{cases} \\frac{1}{h\\left(j\\right)} & h\\left(j\\right) \\leq h\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}\\right) + l + b \\cdot \\left(d \\cdot \\left(1 + \\operatorname{log2}\\left(2 + d + \\left\\lceil \\frac{L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right)\\right) + 64\\right)\\right)",
+          "type": "LongTails.Setups.DistributedSmoothNonconvex.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  262144 * ↑(1 + ⌈p.L * p.Δ / p.ε⌉₊) *\n    (sInf (Set.range fun i => p.h i + ↑(1 + ⌈p.σ ^ 2 / p.ε⌉₊) / ∑ j, if p.h j ≤ p.h i then (p.h j)⁻¹ else 0) + p.l +\n      p.b * ↑(p.d * (1 + (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊).log2) + DistributedTemplate.clockBits))"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedBatchedSgd",
+      "namespace": "LongTails.Setups.DistributedSmoothNonconvex",
+      "setup": "LongTails.Setups.DistributedSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedSmoothNonconvex.spec\n  LongTails.Theorems.DistributedBatchedSgd.budget",
+      "theorem": "LongTails.Theorems.DistributedBatchedSgd.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistributedBatchedSgd",
+      "theorem": "LongTails.Theorems.DistributedBatchedSgd.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f on R^d, permitting nonconvexity, with globally L-Lipschitz gradient. A global lower bound a exists with f(x0)-a ≤ Δ. Parameters satisfy L>0 and Δ≥0; no minimizer attainment is required.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: Point; spec.valid; spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Worker i evaluates g_i(x,ξ), with E[g_i(x,ξ)]=∇f(x) and E[‖g_i(x,ξ)-∇f(x)‖²]≤σ². Worker distributions may differ, but all estimate the same objective gradient. Samples are IID within each worker, and entire sample streams are independent across workers.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: system; spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      },
+      {
+        "label": "other",
+        "details": "Timed distributed oracle with n computing workers and one server. Worker i requires h_i>0 time per completed gradient evaluation; pending computations can be aborted. Communication uses finite bit strings on directed server–worker links, with message duration l+b·s for s transmitted bits. Distinct links can operate concurrently; each directed link permits one pending message. Every algorithm message receives an additional 64-bit clock overhead.",
+        "evidence": "LongTails/Setups/StarNetwork.lean: Network; computation; communication. LongTails/TemplateDistributed.lean: clockBits; step."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-moment bound E[‖g_i(x,ξ)-∇f(x)‖²]≤σ² for every worker and query point, with σ≥0. No light-tail or almost-sure noise bound is imposed.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: spec.valid; spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on R^d, where d is a public natural-number parameter.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: Params.d; Point."
+      },
+      {
+        "label": "other",
+        "details": "Known heterogeneous computation times and a star network with latency l≥0 and time per bit b≥0. All Params are public, including d,n,h,l,b,L,Δ,σ,ε,x0 and the sample space; f, gradient maps and probability laws are supplied through the hidden instance and admissible oracle.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: Params; spec.Public; spec.publicInput; spec.Instance; spec.admissible. LongTails/TemplateDistributed.lean: Time. LongTails/Setups/StarNetwork.lean: communication."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "Return a measurable point X∈R^d with integrable ‖∇f(X)‖² and E[‖∇f(X)‖²]≤ε, where ε>0.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: spec.Output; spec.valid; spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over the product of algorithm and oracle randomness at the prescribed fixed elapsed-time deadline.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: spec.successful. LongTails/TemplateDistributed.lean: law; execute; TimedConvergence."
+      },
+      {
+        "label": "other",
+        "details": "Execution must have finitely many events almost surely for every deadline up to the stated elapsed-time budget; output is taken from the algorithm's designated root.",
+        "evidence": "LongTails/TemplateDistributed.lean: FiniteEvents; execute; TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The objective and stochastic-gradient assumptions are classical, while the setup additionally specifies heterogeneous computation times, concurrent star-network communication, finite-bit messages, latency, per-bit costs and finite-clock execution semantics."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistributedBatchedSgd.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistributedBatchedSgd",
+          "theorem": "LongTails.Theorems.DistributedBatchedSgd.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

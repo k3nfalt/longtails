@@ -124,7 +124,7 @@
     <div class="layout"><p id="catalog-loading" role="status">Loading results…</p><section id="setups" aria-label="Setup collection">__STATIC_CATALOG__</section><p id="empty-results" class="empty-results" hidden>No setups match your search.</p></div>
     <nav class="pagination" aria-label="Setup pages"><button type="button" data-page-step="-1">Previous</button><span class="page-status" role="status" aria-live="polite"></span><button type="button" data-page-step="1">Next</button></nav>
     </div>
-    <section class="framework detail" id="framework" hidden><a class="back" href="#">← All setups</a><div class="eyebrow">Shared definitions</div><h2>The oracle framework</h2><p>Every setup uses the same definitions of an algorithm, an oracle, and convergence.</p><div id="framework-source"></div></section>
+    <section class="framework detail" id="framework" hidden><a class="back" href="#">← All setups</a><div class="eyebrow">Shared definitions</div><h2>The oracle framework</h2><p>Oracle-call bounds count queries. Distributed elapsed-time bounds account for computation and communication through the setup's network model.</p><div id="framework-source"></div></section>
   </main>
   <script>
     const Fuse = (() => {
@@ -268,8 +268,9 @@
         const filename = theorem.module.split('.').pop() + '.lean';
         const title = make('div', undefined, 'budget-name');
         title.append(sourceLink(theorem.module.replaceAll('.', '/') + '.lean', filename));
-        const kind = theorem.kind || (theorem.statement.includes('OracleTemplate.NonConvergence ') ? 'lower' : theorem.statement.includes('OracleTemplate.OnlineConvergence ') ? 'online' : 'upper');
+        const kind = theorem.kind || (theorem.statement.includes('OracleTemplate.NonConvergence ') ? 'lower' : theorem.statement.includes('OracleTemplate.OnlineConvergence ') ? 'online' : theorem.statement.includes('DistributedTemplate.TimedConvergence ') ? 'timed' : 'upper');
         if (kind === 'online') title.append(' — Online guarantee');
+        if (kind === 'timed') title.append(' — Elapsed-time upper bound');
         const score = theorem.contribution;
         const rating = make('span', score == null ? 'Not rated' : '★'.repeat(score) + '☆'.repeat(3 - score), 'result-rating');
         rating.setAttribute('aria-label', score == null ? 'Contribution not rated' : `Contribution: ${score} out of 3 stars`);
@@ -352,6 +353,7 @@
       return {setup, card};
     }
     document.getElementById('framework-source').append(sourceView('LongTails/Template.lean', data.template));
+    document.getElementById('framework-source').append(sourceView('LongTails/TemplateDistributed.lean', data.distributedTemplate));
     const searchOptions = {
       useTokenSearch: true,
       tokenMatch: 'all',
