@@ -14,7 +14,7 @@ open LongTails.Setups.StochasticGeneralizedSmoothAndConvex
 
 structure Params where
   d : ℕ
-  n : ℕ
+  n : ℕ+
   Ω : Type
   [measurableΩ : MeasurableSpace Ω]
   h : Fin n → Time
@@ -44,14 +44,14 @@ noncomputable def system (p : Params) (g : Fin p.n → Point p → p.Ω → Poin
 noncomputable def spec : Setup where
   Params := Params
   Public := Params
-  numWorkers p := ⟨p.n + 1, Nat.succ_pos p.n⟩
+  numWorkers p := p.n + 1
   Instance p := Point p → ℝ
   ComputeQuery := ComputeQuery
   ComputeReply := ComputeReply
   CommReply := CommReply
   Output p := Point p
   publicInput := id
-  valid p := 0 < p.n ∧ (∀ i, 0 < p.h i) ∧ 0 < p.L ∧
+  valid p := (∀ i, 0 < p.h i) ∧ 0 < p.L ∧
     0 ≤ p.Δ ∧ 0 ≤ p.σ ∧ 0 < p.ε
   admissible p f O :=
     (∀ x, HasGradientAt f (gradient f x) x) ∧

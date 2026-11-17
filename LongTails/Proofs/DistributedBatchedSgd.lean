@@ -44,14 +44,14 @@ lemma parallel_batch_capacity {ι : Type*} [Fintype ι]
       Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
         (fun _ _ _ => Nat.cast_nonneg _)
 
-lemma batchTime_minimizes (hn : 0 < p.n) :
+lemma batchTime_minimizes :
     ∃ i : Fin p.n, batchTime p = candidateTime p i ∧
       ∀ j : Fin p.n, batchTime p ≤ candidateTime p j := by
   classical
   cases h : (List.finRange p.n).argmin (candidateTime p) with
   | none =>
       have hempty := List.argmin_eq_none.mp h
-      have hmem : (⟨0, hn⟩ : Fin p.n) ∈ List.finRange p.n := by simp
+      have hmem : (⟨0, p.n.pos⟩ : Fin p.n) ∈ List.finRange p.n := by simp
       simp [hempty] at hmem
   | some i =>
       refine ⟨i, by simp only [batchTime, h, Option.map_some, Option.getD_some], ?_⟩
@@ -92,9 +92,9 @@ lemma candidate_has_capacity (hh : ∀ i, 0 < p.h i) (i : Fin p.n) :
     rw [ht]
     linarith [le_max_right (p.h i : ℝ) ((targetBatch p : ℝ) / (throughput p i : ℝ))]
 
-lemma configured_batch_large (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) :
+lemma configured_batch_large (hh : ∀ i, 0 < p.h i) :
     targetBatch p ≤ totalBatch p (config p) := by
-  obtain ⟨i, hi, _⟩ := batchTime_minimizes hn
+  obtain ⟨i, hi, _⟩ := batchTime_minimizes (p := p)
   have h := candidate_has_capacity hh i
   rw [← hi] at h
   exact_mod_cast h
@@ -138,10 +138,10 @@ lemma configured_computation_time (hh : ∀ i, 0 < p.h i) :
     computationTime p (config p) ≤ batchTime p :=
   computationTime_le (config p) (batchTime p) (configured_worker_time hh)
 
-lemma configured_time_bound (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) (i : Fin p.n) :
+lemma configured_time_bound (hh : ∀ i, 0 < p.h i) (i : Fin p.n) :
     timeBudget p (config p) ≤ (iterations p : ℕ) *
       (candidateTime p i + 2 * (p.l + p.b * (p.d * (config p).width + DistributedTemplate.clockBits : ℕ))) := by
-  obtain ⟨_, _, hmin⟩ := batchTime_minimizes hn
+  obtain ⟨_, _, hmin⟩ := batchTime_minimizes (p := p)
   have hc := (configured_computation_time hh).trans (hmin i)
   unfold timeBudget roundTime
   simp only [config, add_zero]
@@ -194,9 +194,9 @@ lemma configured_iterations (hε : 0 < p.ε) :
     exact_mod_cast (le_max_right 1 ⌈16 * p.L * p.Δ / p.ε⌉₊)
   exact (div_le_iff₀ hε).mp (hc.trans hm)
 
-lemma configured_variance (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) (hε : 0 < p.ε) :
+lemma configured_variance (hh : ∀ i, 0 < p.h i) (hε : 0 < p.ε) :
     4 * p.σ ^ 2 / totalBatch p (config p) ≤ p.ε / 64 := by
-  have hbatch := configured_batch_large hn hh
+  have hbatch := configured_batch_large hh
   have hpos : 0 < totalBatch p (config p) := by
     have hone : 1 ≤ targetBatch p := le_max_left _ _
     omega
@@ -207,7 +207,7 @@ lemma configured_variance (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) (hε : 0 < p.ε
   apply (div_le_iff₀ (by exact_mod_cast hpos : (0 : ℝ) < totalBatch p (config p))).mpr
   nlinarith
 
-lemma configured_tuning (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
+lemma configured_tuning (hh : ∀ i, 0 < p.h i)
     (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε) :
     let K : ℕ := iterations p
     let M : ℝ := (2 ^ ((config p).width : ℕ) - 1 : ℕ)
@@ -225,7 +225,7 @@ lemma configured_tuning (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
     exact_mod_cast levels_pos (config p)
   have hM2 : 0 < M ^ 2 := sq_pos_of_pos hM
   have hB : (totalBatch p (config p) : ℝ) ≠ 0 := by
-    have hlarge := configured_batch_large hn hh
+    have hlarge := configured_batch_large hh
     have htarget : 1 ≤ targetBatch p := le_max_left _ _
     have hpos : 0 < totalBatch p (config p) := by omega
     exact_mod_cast (Nat.ne_of_gt hpos)
@@ -252,7 +252,7 @@ lemma configured_tuning (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
       field_simp [ne_of_gt hL, ne_of_gt hε, ne_of_gt hM, hB]
       ring
     rw [heq]
-    have hvar := configured_variance hn hh hε
+    have hvar := configured_variance hh hε
     have hscaled := mul_le_mul_of_nonneg_left hquant hε.le
     linarith
   · have hi := configured_iterations hε
@@ -1185,7 +1185,7 @@ lemma configured_output_accuracy (P : Measure (Samples p)) [IsProbabilityMeasure
     (g : Fin p.n → Point p → p.Ω → Point p) (f : Point p → ℝ)
     (hsg : ∀ i, LongTails.Setups.StochasticSmoothAndConvex.IsStochasticGradient
       (Point p) p.Ω (μ i) f (g i) p.σ)
-    (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε)
+    (hh : ∀ i, 0 < p.h i) (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε)
     (hg : ∀ x, HasGradientAt f (gradient f x) x)
     (hlip : ∀ x y, ‖gradient f x - gradient f y‖ ≤ p.L * ‖x - y‖)
     (lower : ℝ) (hlower : ∀ x, lower ≤ f x) (hgap : f p.x0 - lower ≤ p.Δ) :
@@ -1194,10 +1194,10 @@ lemma configured_output_accuracy (P : Measure (Samples p)) [IsProbabilityMeasure
       Integrable (fun seed => ‖gradient f (output p (config p) g seed)‖ ^ 2) Q ∧
       (∫ seed, ‖gradient f (output p (config p) g seed)‖ ^ 2 ∂Q) ≤ p.ε := by
   have hB : 0 < totalBatch p (config p) := by
-    have hlarge := configured_batch_large hn hh
+    have hlarge := configured_batch_large hh
     have htarget : 1 ≤ targetBatch p := le_max_left _ _
     omega
-  obtain ⟨hsmall, hbase, hbudget⟩ := configured_tuning hn hh hL hΔ hε
+  obtain ⟨hsmall, hbase, hbudget⟩ := configured_tuning hh hL hΔ hε
   exact output_accuracy_of_tuning (config p) P μ hworkers hIID g f hsg hL hΔ hε hB
     hg hlip lower hlower hgap hsmall hbase hbudget
 

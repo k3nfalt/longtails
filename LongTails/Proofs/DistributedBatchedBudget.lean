@@ -81,14 +81,14 @@ lemma width_le (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε) :
   change Nat.size ⌈Real.sqrt q⌉₊ + 1 ≤ 32 + 4 * Nat.log2 s
   omega
 
-lemma computation_le (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) :
+lemma computation_le (hh : ∀ i, 0 < p.h i) :
     computationTime p (config p) ≤ 512 * sInf (Set.range (fun i : Fin p.n =>
       p.h i + (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) / throughput p i)) := by
-  let : Nonempty (Fin p.n) := ⟨⟨0, hn⟩⟩
+  let : Nonempty (Fin p.n) := ⟨⟨0, p.n.pos⟩⟩
   let f := fun i : Fin p.n => p.h i + (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) / throughput p i
   have hb : (targetBatch p : Time) ≤ 256 * (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) := by
     exact_mod_cast batch_le (p := p)
-  obtain ⟨_, _, hmin⟩ := DistributedBatchedSgd.batchTime_minimizes (p := p) hn
+  obtain ⟨_, _, hmin⟩ := DistributedBatchedSgd.batchTime_minimizes (p := p)
   have hall (i : Fin p.n) : computationTime p (config p) ≤ 512 * f i := by
     have hterm : max (p.h i) ((targetBatch p : Time) / throughput p i) ≤ 256 * f i := by
       apply max_le
@@ -107,7 +107,7 @@ lemma computation_le (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i) :
     exact (div_le_iff₀ (by norm_num : (0 : Time) < 512)).mpr (by simpa [mul_comm] using hall i)
   exact (div_le_iff₀ (by norm_num : (0 : Time) < 512)).mp hi |>.trans_eq (mul_comm _ _)
 
-lemma budget_le (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
+lemma budget_le (hh : ∀ i, 0 < p.h i)
     (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε) :
     timeBudget p (config p) ≤ 8192 * (1 + ⌈p.L * p.Δ / p.ε⌉₊ : ℕ) *
       (sInf (Set.range (fun i : Fin p.n => p.h i + (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) / throughput p i)) +
@@ -120,7 +120,7 @@ lemma budget_le (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
     dsimp [c]
     gcongr
     exact width_le hL hΔ hε
-  have ht := computation_le hn hh
+  have ht := computation_le hh
   calc
     timeBudget p (config p) = (iterations p : ℕ) * (computationTime p (config p) + 2 * (p.l + p.b * (p.d * (config p).width + clockBits : ℕ))) := by
       simp only [timeBudget, show (config p).slack = 0 from rfl, add_zero]
@@ -130,12 +130,12 @@ lemma budget_le (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
       norm_num
     _ = _ := by dsimp [τ, c]; ring
 
-lemma simple_budget_le (hn : 0 < p.n) (hh : ∀ i, 0 < p.h i)
+lemma simple_budget_le (hh : ∀ i, 0 < p.h i)
     (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε) :
     timeBudget p (config p) ≤ 262144 * (1 + ⌈p.L * p.Δ / p.ε⌉₊ : ℕ) *
       (sInf (Set.range (fun i : Fin p.n => p.h i + (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) / throughput p i)) +
         p.l + p.b * (p.d * (1 + Nat.log2 (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊)) + clockBits : ℕ)) := by
-  apply (budget_le hn hh hL hΔ hε).trans
+  apply (budget_le hh hL hΔ hε).trans
   let τ := sInf (Set.range (fun i : Fin p.n => p.h i + (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) / throughput p i))
   let w := Nat.log2 (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊)
   have hw : 32 + 4 * w ≤ 32 * (1 + w) := by omega

@@ -18,13 +18,13 @@ theorem result : TimedConvergence LongTails.Setups.DistributedSmoothNonconvex.sp
   refine ⟨fun p => algorithm p (withBudget p (budget p)), ?_⟩
   intro p hp
   change Params at p
-  obtain ⟨hn, hh, hL, hΔ, _, hε⟩ := hp
+  obtain ⟨hh, hL, hΔ, _, hε⟩ := hp
   refine ⟨trivial, ?_⟩
   intro f O hO
   change Point p → ℝ at f
   obtain ⟨hg, hlip, ⟨lower, hlower, hgap⟩, g, μ, P, rfl, hworkers, horacle⟩ := hO
   have hB : 0 < totalBatch p (config p) := by
-    have hlarge := LongTails.Proofs.DistributedBatchedSgd.configured_batch_large hn hh
+    have hlarge := LongTails.Proofs.DistributedBatchedSgd.configured_batch_large hh
     have hone : 1 ≤ targetBatch p := le_max_left _ _
     omega
   have hactive : (active p (config p)).Nonempty := by
@@ -32,7 +32,7 @@ theorem result : TimedConvergence LongTails.Setups.DistributedSmoothNonconvex.sp
     exact ⟨i, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩⟩
   have hbudget : timeBudget p (withBudget p (budget p)) = budget p :=
     LongTails.Proofs.DistributedBatchedBudget.withBudget_time _
-      (LongTails.Proofs.DistributedBatchedBudget.simple_budget_le hn hh hL hΔ hε)
+      (LongTails.Proofs.DistributedBatchedBudget.simple_budget_le hh hL hΔ hε)
   refine ⟨Filter.Eventually.of_forall (fun seed => ?_), ?_⟩
   · change FiniteEvents (system p g P) (algorithm p (withBudget p (budget p))) (budget p) (seed.1, seed.2)
     have hfinite := LongTails.Proofs.DistributedBatchedExecution.finiteEvents
@@ -47,7 +47,7 @@ theorem result : TimedConvergence LongTails.Setups.DistributedSmoothNonconvex.sp
       rw [hbudget] at hex
       exact hex.trans (LongTails.Proofs.DistributedBatchedBudget.withBudget_output _ g seed)
     have hacc := LongTails.Proofs.DistributedBatchedSgd.configured_output_accuracy (p := p) (P : Measure (Samples p)) μ hworkers
-      (fun i => (horacle i).1) g f (fun i => (horacle i).2) hn hh hL hΔ hε hg hlip lower hlower hgap
+      (fun i => (horacle i).1) g f (fun i => (horacle i).2) hh hL hΔ hε hg hlip lower hlower hgap
     change Measurable _ ∧ Integrable _ _ ∧ _ ≤ p.ε
     change Measurable _ ∧ Integrable _ ((PMF.uniformOfFintype (Fin (config p).iterations)).toMeasure.prod (P : Measure (Samples p))) ∧ _ ≤ p.ε
     erw [he]
