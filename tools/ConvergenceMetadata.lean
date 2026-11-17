@@ -11,6 +11,7 @@ structure Entry where
   budgetName : Name
   online : Bool
   lower : Bool
+  timed : Bool
 
 def inspect : MetaM (Array Entry) := do
   let env ← getEnv
@@ -25,7 +26,8 @@ def inspect : MetaM (Array Entry) := do
       let isConvergence ← forallTelescope theoremInfo.type fun _ body =>
         pure (body.isAppOfArity `OracleTemplate.Convergence 2 ||
           body.isAppOfArity `OracleTemplate.OnlineConvergence 2 ||
-          body.isAppOfArity `OracleTemplate.NonConvergence 2)
+          body.isAppOfArity `OracleTemplate.NonConvergence 2 ||
+          body.isAppOfArity `DistributedTemplate.TimedConvergence 2)
       if isConvergence then found := found.push theoremInfo
     unless found.size == 1 do
       throwError "{moduleName}: expected exactly one public result, found {found.size}"
@@ -34,8 +36,9 @@ def inspect : MetaM (Array Entry) := do
       throwError "{moduleName}: public result must be named result"
     let online := theoremInfo.type.isAppOfArity `OracleTemplate.OnlineConvergence 2
     let lower := theoremInfo.type.isAppOfArity `OracleTemplate.NonConvergence 2
-    unless lower || online || theoremInfo.type.isAppOfArity `OracleTemplate.Convergence 2 do
-      throwError "{moduleName}: result must have type Convergence setup budget or OnlineConvergence setup bound or NonConvergence setup budget without extra hypotheses"
+    let timed := theoremInfo.type.isAppOfArity `DistributedTemplate.TimedConvergence 2
+    unless timed || lower || online || theoremInfo.type.isAppOfArity `OracleTemplate.Convergence 2 do
+      throwError "{moduleName}: result must have type Convergence setup budget or OnlineConvergence setup bound or NonConvergence setup budget or TimedConvergence setup budget without extra hypotheses"
     let args := theoremInfo.type.getAppArgs
     let .const setupName _ := args[0]! |
       throwError "{moduleName}: expected a named setup spec"
@@ -52,7 +55,7 @@ def inspect : MetaM (Array Entry) := do
       throwError "{moduleName}: expected {parameterName} in the result namespace"
     let .defnInfo _ ← getConstInfo budgetName |
       throwError "{moduleName}: budget must be a definition"
-    entries := entries.push ⟨moduleName, theoremInfo.name, setupName, budgetName, online, lower⟩
+    entries := entries.push ⟨moduleName, theoremInfo.name, setupName, budgetName, online, lower, timed⟩
   return entries
 
 end ConvergenceMetadata
