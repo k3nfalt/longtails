@@ -1,0 +1,37 @@
+# Novelty assessment: MarkovSmoothNonconvex
+
+[`result`](../../LongTails/Theorems/MarkovSmoothNonconvex.lean) builds a normalized, thinned-minibatch method ([algorithm](../../LongTails/Algorithms/MarkovNormalizedBatch.lean), [proof](../../LongTails/Proofs/MarkovNormalizedRate.lean)). The guarantee: for every `L`-smooth `f` on `ℝ^d` with `f(x₀) − inf f ≤ Δ`, queried through one stationary trajectory of a real Borel Markov chain ([setup](../../LongTails/Setups/MarkovSmoothNonconvex.lean)), the starting iterate of an epoch chosen uniformly at random satisfies `E‖∇f(X)‖ ≤ ε` after a deterministic number of calls. The chain satisfies `∫‖Pᵗ(z,·)−π‖_TV dπ(z) ≤ 2e^{−t/τ}`; the estimator is jointly measurable, unbiased under `π`, and has variance at most `σ²` under `π` at every fixed `x`.
+
+**Budget.** With `ε, L > 0`, `τ ≥ 1` and `σ, Δ ≥ 0`, the budget `(⌊2048LΔ/ε²⌋+1)(⌊256σ²/ε²⌋+1)(⌊τ log(32+8192σ²/ε²)⌋+1)` simplifies to
+
+  **O( (1 + LΔ/ε²) (1 + σ²/ε²) τ log(2 + σ²/ε²) )** oracle calls.
+
+Here `L` is the smoothness constant, `Δ` the initial gap, `σ²` the stationary variance, `τ` the stationary-average (β-mixing) decay scale and `ε` the target accuracy. All parameters are known to the method.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Standard reduction (derived here). The `NB` retained samples at spacing `h` are coupled with i.i.d. draws via the β-mixing blocking lemma (Yu 1994, *Ann. Probab.*, Cor. 2.7), at total-variation cost `≤ NB·β(h)`. Normalized steps keep `‖∇f(x_j)‖ ≤ √(2LΔ)+NLη`, so the failure cost is bounded. Then the i.i.d. normalized-minibatch analysis applies. Same setup, oracle and criterion. | `O((1+LΔ/ε²)(1+σ²/ε²) τ log(2+LΔ/ε²+σ²/ε²))` → `O((1+LΔ/ε²)(1+σ²/ε²) τ log(2+σ²/ε²))` | Removes `log(LΔ/ε²)` from the spacing. Gain factor `log(2+D+S)/log(2+S)` with `D=LΔ/ε²`, `S=σ²/ε²`. It is unbounded only when `D ≫ (2+S)^c` for every constant `c`. Example: `σ=ε`, `D→∞` gives `τD log D → τD`. Same order when `S ≥ D^c`. | None | None | None. Same method family and output. |
+| Beznosikov et al., [NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/file/8c3e38ce55a0fa44bc325bc6fdb7f4e5-Paper-Conference.pdf), Thm 3 / Cor 2 (prior). *Special case:* uniformly geometrically ergodic chains (A3) and noise bounded for every sample (A4). | `Õ(τ(LΔ/ε² + LΔσ²/ε⁴))`, expected calls (random MLMC batches; logs through `log M` not resolved) → `O((1+LΔ/ε²)(1+σ²/ε²) τ log(2+σ²/ε²))` | None at the polynomial level. The log comparison is unresolved. | Uniform (worst-start) mixing → stationary-average mixing. Samplewise `‖g−∇f‖² ≤ σ²` → variance under `π` only. Newly covered: chains with rare long excursions, and noise that is unbounded on rare states. On the overlap, their `τ` maps to `O(τ)` here. | Random call count → deterministic count | Weaker criterion: `E‖∇f‖ ≤ ε` versus their `E‖∇f‖² ≤ ε²`. Loses their relative-noise term `δ²‖∇f‖²` (`δ>0`). |
+| Sun–Wei, [ICML 2025](https://proceedings.mlr.press/v267/sun25u.html), Thm 4.4 (MaC-SAGE, prior). *Special case:* finite state space, each component `f(·;s)` `L`-smooth, samplewise noise bound, hitting time `≤ τ_hit`. | `E min_t‖∇F(x_t)‖² ≲ ε²` after `O(τ_hit LΔ/ε²) + Õ(max{τ_hit,τ_mix}σ²/ε²)` samples → `O((1+LΔ/ε²)(1+σ²/ε²) τ log(2+σ²/ε²))` | Not comparable: different parameters (`τ_hit` versus the average-mixing `τ`). Where `τ_hit ≈ τ` it is additive rather than multiplicative and strictly better. | Finite-sum chain with component smoothness → general Borel chain, smooth `f` only | Best-iterate (not identifiable) → randomly selected, computable output | None beyond the criterion difference (first versus second moment). |
+| Sun–Wei, [NeurIPS 2025](https://proceedings.neurips.cc/paper_files/paper/2025/file/1cdbce34681a3aaa0154b300706743d8-Paper-Conference.pdf), Thm 4.4 (MaC-SPIDER, prior). *Special case:* finite states plus mean-squared smoothness `L̄`. Same stationary-variance assumption 2.3. | `O(τ_mix L̄Δ(1+max{σ,σ²})/(√π_min ε³))` for `E‖∇F‖ ≤ 7ε` → this result | Not comparable. Theirs has a better `ε` exponent but depends on `π_min`. | Mean-squared smoothness + finite states → plain smoothness on a Borel space. Their footnote 2 only *conjectures* a smooth-case bound under Assumption 2.3. | None | None |
+
+**Reduction check and new mechanism.** Composing standard tools (blocking coupling, bounded normalized-step gradients, the i.i.d. normalized-minibatch bound) already gives the full setup with one extra `log(LΔ/ε²)` (I derived this; I did not find it stated in a paper). The new mechanism replaces samples one at a time within each batch's alignment statistic and controls the covariance between the gradient norm and the residual mixing ([MarkovBatchAlignment](../../LongTails/Proofs/MarkovBatchAlignment.lean)). This keeps the spacing independent of the number of epochs. Proof ancestry, not competitors: normalized-SGD alignment inequalities (e.g., Cutkosky–Mehta 2020) and the β-mixing coefficient of a stationary chain `β(t)=∫‖Pᵗ(z,·)−π‖dπ`.
+
+**Search coverage.** Searched 2026-11-18 UTC: Markov/β-mixing nonconvex SGD (Beznosikov et al. 2023; Sun–Wei 2025 ×2; Dorfman–Levy ICML 2022, whose nonconvex result needs bounded gradients; Even ICML 2023; Ma et al. 2022, which is convex only) and 2026 arXiv. I did not verify arXiv 2607.25785 (variance-reduced conditional gradient, Markovian sampling; bounded noise per its abstract). The exact hidden logarithms in Beznosikov et al. Cor. 2 remain unverified because of PDF extraction. The companion note matches the Lean statement. It omits Sun–Wei's ICML MaC-SAGE bound and presents the coupling reduction only as a proof-design remark, not as a competing bound. The result was introduced in commit `8d1d2181` (2026-11-19 +0300), after all the cited work.
+
+**Conclusion**
+
+**The polynomial rate is what a standard coupling reduction already gives; the theorem's own gain is one logarithmic factor, plus coverage that goes beyond the published Markov-SGD theorems.**
+
+The strongest published baseline is Beznosikov et al. (NeurIPS 2023): `Õ(τ·LΔ(1+σ²/ε²)/ε²)` calls. It requires uniform worst-start mixing and noise bounded for every sample. This theorem needs only stationary-average mixing and stationary variance. That class strictly contains theirs, adding chains with rare, long excursions and noise that is unbounded on rare states. It pays with a weaker criterion: expected norm instead of expected squared norm.
+
+That broader class, however, is reachable by routine means: couple the thinned samples with i.i.d. ones and run normalized minibatch SGD. Writing `D = LΔ/ε²` and `S = σ²/ε²`:
+
+  reduction `O((1+D)(1+S) τ log(2+D+S))` → this result `O((1+D)(1+S) τ log(2+S))`.
+
+The gain is real only when `D` is super-polynomially larger than `S`; for example, at `σ ≈ ε` the cost improves from `τD log D` to `τD`. The companion lower bound (a separate theorem) shows that the remaining `log(σ/ε)` cannot be removed in a high-dimensional regime. No priority competitor was found, but unverified preprints remain.
+
+What can be claimed: a removal of `log(LΔ/ε²)`, achieved with a new mechanism, for smooth nonconvex stationarity under β-mixing Markov noise with stationary-only variance. That is a modest refinement of a reduction-level rate.
+
+**Verdict: LIMITED OR INCREMENTAL NOVELTY**
+**Confidence: medium**
