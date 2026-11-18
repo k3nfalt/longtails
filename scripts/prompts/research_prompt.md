@@ -169,6 +169,8 @@ Do not declare completion after literature screening, candidate selection, a Rev
 
 7. Acceptance and delivery
 
+Before finishing, both the Researcher and Reviewer must revisit the formula-simplification requirement above and the result-presentation examples in `scripts/negative_examples.md`, and check the final Lean budget against them. Prefer a compact, explicit formula; looser universal constants are acceptable for clarity, but worse asymptotic parameter dependence is not, even by a logarithmic factor. If no simple closed form preserves the rate, retain the clearest faithful representation and explain why it is needed. Resolve any remaining formula-simplification issues before declaring completion.
+
 Approve only when correctness, faithful formalization, substantive novelty, natural motivation, and an evidence-based acceptance recommendation are all supported. Each is a separate mandatory condition.
 
 Before delivery, the Reviewer must:

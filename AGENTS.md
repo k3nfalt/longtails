@@ -86,6 +86,9 @@ project preferences; newer explicit user requests take precedence.
   loss in soft-O notation. For lower bounds, prove failure at the stated
   budget; increasing it requires a proof. Connect the bound to execution, retaining
   all oracle calls and required terms. Keep the supporting algebra in proof modules.
+- Exception to the closed-form presentation requirement: when no simple closed
+  form preserves the rate, use a clearly defined implicit or recursive budget
+  and explain why it is needed.
 - Seek the strongest rate justified by the exact setup, and check the primary
   literature before choosing a target rate. Compare assumptions, algorithm
   variants, accuracy criteria, and oracle costs; do not transfer a rate that
