@@ -313,13 +313,17 @@ def render(
     tables_dir=None,
     site_url=None,
 ):
-    ignored_setups = json.loads(
-        (ROOT / "ignore_settings.json").read_text(encoding="utf-8")
-    )["setups"]
+    ignored = json.loads((ROOT / "ignore_settings.json").read_text(encoding="utf-8"))
+    ignored_setups = ignored["setups"]
     if not isinstance(ignored_setups, list) or any(
         not isinstance(name, str) for name in ignored_setups
     ):
         raise ValueError("ignore_settings.json: setups must be a list of names")
+    ignored_theorems = ignored.get("theorems", [])
+    if not isinstance(ignored_theorems, list) or any(
+        not isinstance(name, str) for name in ignored_theorems
+    ):
+        raise ValueError("ignore_settings.json: theorems must be a list of names")
     reviews_dir = review_directory(reviews_dir) if reviews_dir is not None else None
     comparisons = load_comparison_tables(tables_dir)
     ratings = load_ratings(
@@ -345,6 +349,9 @@ def render(
             command += ["--jobs", str(jobs)]
         subprocess.run(command, cwd=ROOT.parent, check=True)
     theorems = json.loads((ROOT / "theorems.json").read_text(encoding="utf-8"))
+    theorems = [
+        row for row in theorems if row["module"].split(".")[-1] not in ignored_theorems
+    ]
     catalogs = {}
     references = load_references(catalogs)
     theorems.sort(key=lambda row: (row["module"], row["theorem"]))
