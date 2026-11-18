@@ -1,0 +1,33 @@
+# A matching lower bound for stationarity from Markov gradients
+
+For a smooth nonconvex objective, let $D=L\Delta/\varepsilon^2$, $S=(\sigma/\varepsilon)^2$ and $r=\sigma/\varepsilon$. Every randomized adaptive algorithm can fail at every integer budget from zero through
+\[
+ \left\lfloor\frac{D\tau S\log r}{2^{65}}\right\rfloor .
+\]
+The failure concerns the expected gradient norm of the returned point under the algorithm's independent seed and the stationary oracle trajectory. The matching algorithm takes $O(D\tau S\log r)$ calls on the lower-bound regime. All calls advance the same chain by one step. [Lower theorem](MarkovSmoothNonconvexLowerBound.lean) · [Upper theorem and algorithm](MarkovSmoothNonconvex.md)
+
+## Problem and parameter range
+
+The objective on $\mathbb R^d$ has $L$-Lipschitz gradient and gap at the public initial point at most $\Delta$. Each query receives a jointly measurable vector estimate with the correct stationary mean and centered stationary variance at most $\sigma^2$. The hidden real Borel chain starts in its invariant distribution. Its stationary average total variation distance to equilibrium at lag $t$ is at most $2\exp(-t/\tau)$. Each parameter and the initial point are public. Arbitrary query points, randomization, memory and output selection are permitted. [Oracle specification](../Setups/MarkovSmoothNonconvex.lean)
+
+The lower theorem requires $L,\varepsilon>0$, $\tau\ge1$, $D\ge2^{26}$, $r\ge2^{16}$ and
+\[
+ d\ge 2^{40}(1+D)^4(1+\tau S\log r).
+\]
+The dimension permits a counting argument over all the queries and the final output. Its exponent and the numerical thresholds are sufficient for this construction. For example, with $L=\Delta=\sigma=\tau=1$ and $\varepsilon=2^{-16}$, any sufficiently large integer dimension gives a positive lower budget. Taking $\sigma=\sqrt{\varepsilon}$ instead and letting $\varepsilon$ tend to zero gives matching order $\varepsilon^{-3}\log(1/\varepsilon)$ even as $\sigma^2/(L\Delta)$ tends to zero. The upper theorem allows arbitrary finite dimension and nonnegative variance. [Lower parameter specification](../Setups/HighDimensionalMarkovSmoothNonconvex.lean) · [Scale estimates and nonempty regime](../Proofs/MarkovFrontierScales.lean)
+
+## Why rare episodes multiply the optimization difficulty
+
+Start with a nonlinear smooth zero-chain of length proportional to $D$ embedded in hidden coordinates. Learning its first coordinate still leaves a sequence of interacting unknown coordinates. At each query split the gradient into a part readable from the accessible coordinates and a frontier vector of norm at most $1740\varepsilon$. Mask only the frontier. When its gate opens, scale that vector by the inverse stationary probability of the open gate. This preserves the stationary mean and controls variance independently of the chain length. [Estimator and admissibility](../Proofs/MarkovFrontierOracle.lean)
+
+The Markov chain usually sits at zero. Rare excursions descend a countdown of even length $H=2\lfloor\tau\log(1/q)/4\rfloor$, with stationary excursion mass $q=2(2048\varepsilon/\sigma)^2$. Each half has stationary mass $q/2$. The parity of the frontier chooses which half can reveal it. Repeatedly changing queries during the same half can reveal at most one new hidden coordinate unless the algorithm guesses a hidden coordinate. The stationary rate of entries into the two halves combined is $2q/H$. The estimate also allows an excursion already under way at initialization. Long episodes can therefore be compatible with fast *average* mixing. In particular, this lower bound gives no corresponding logarithmic loss at the same value of a worst-start mixing-time parameter. [Phase counting](../Proofs/MarkovFrontierOccupancy.lean) · [Response simulation](../Proofs/MarkovFrontierHiding.lean)
+
+For any fixed seed and data path, simulate the algorithm using only the revealed prefix. A counting bound over random embeddings controls accidental large hidden coordinates, including at the returned point. Too few phase entries then leave a gradient norm of at least $3\varepsilon$ for a sufficiently large fraction of embeddings. Integrating this bound selects one fixed hard embedding for the algorithm and budget. It is independent of both realized seeds. The argument includes stationary starts, zero queries and the displayed endpoint. [Hiding argument](../Proofs/MarkovFrontierHiding.lean) · [Execution and averaging](../Proofs/MarkovFrontierLower.lean)
+
+## Closest comparisons
+
+The independent bounded-variance lower bound of Arjevani et al. uses a probabilistic zero-chain. In a correlated stream, one rare open gate can stay open for many queries. Applying the independent construction with a persistent gate could therefore reveal much of the chain in one visit. Alternating which half can disclose the next frontier prevents that shortcut. A two-objective countdown testing bound for convex optimization already forces the rare-event cost $\tau S\log S$ in a variance-dominated regime. It contains no sequence of $D$ successive optimization barriers. The two precedents alone do not establish their product against unrestricted algorithms. [Arjevani et al., Theorem 1](https://arxiv.org/abs/1912.02365v2) · [Convex countdown result](StretchedExponentialMarkovConvexLowerBound.md)
+
+Sun and Wei's NeurIPS Theorem 3.1 gives a hitting-time lower bound for zero-respecting algorithms with a noise term proportional to $\tau_{\rm hit}\sigma^2\min(c_1\sigma^2,c_2L\Delta)/\varepsilon^4$. Their alternating construction in Appendix B.2 incurs a variance term proportional to chain length times $\varepsilon^2$. Masking only the frontier avoids that term here. Their earlier ICML paper also treats a countable Markov state space and a hitting-time class. The public parameters give neither an upper bound on hitting time nor a positive lower bound on stationary atom masses. The additional $\log r$ conclusion concerns the stationary-average envelope, and the scope gain against arbitrary algorithms uses a polynomial dimension condition. Section 2 of the NeurIPS paper describes component gradients. Our lower estimator can be nonconservative, leaving restricted component-gradient models open. [ICML 2025 proceedings](https://proceedings.mlr.press/v267/sun25u.html) · [NeurIPS 2025, Theorem 3.1 and Appendix B](https://proceedings.neurips.cc/paper_files/paper/2025/file/1cdbce34681a3aaa0154b300706743d8-Paper-Conference.pdf)
+
+Both theorem statements use expected norm accuracy. They give no high-probability guarantee or expected squared-norm upper bound. The minimax conclusion concerns general unbiased vector estimators in the displayed high-dimensional regime. [Upper algorithm](../Algorithms/MarkovNormalizedBatch.lean)
