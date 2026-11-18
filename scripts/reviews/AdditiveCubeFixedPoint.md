@@ -1,0 +1,32 @@
+# AdditiveCubeFixedPoint: novelty assessment
+
+For every 1-Lipschitz (sup-norm) self-map $T$ of $[-R,R]^d$ observed through fresh IID additive noise $T(x)+Z$ with $\mathbb E Z=0$ and $\mathbb E\|Z\|_\infty^2\le\sigma^2$, the constructed multi-phase anchored method returns a clipped last iterate $X$ in the cube with $\mathbb E\|T(X)-X\|_\infty\le\varepsilon$ ([theorem](../../LongTails/Theorems/AdditiveCubeFixedPoint.lean), [setup](../../LongTails/Setups/AdditiveCubeFixedPoint.lean), [algorithm](../../LongTails/Algorithms/AdditiveCubeAnchoring.lean)).
+
+**Proved complexity.** Here $d$ is the dimension, $R$ the cube radius, $\sigma^2$ the bound on the second moment of the sup-norm noise, and $\varepsilon$ the target expected residual. The budget is $0$ calls if $R\le\varepsilon$; otherwise it is $\lceil 4096(R/\varepsilon)(1+2^{21}\log(2d)\,\sigma^2/\varepsilon^2)\rceil$. In order notation,
+$$N=O\!\Big(\mathbf 1[R>\varepsilon]\Big(\frac R\varepsilon+\frac{R\,\sigma^2\log(2d)}{\varepsilon^3}\Big)\Big).$$
+The updates and the stopping budget use the known values of $d,R,\sigma,\varepsilon$. The theorem was introduced in commit `8d8a7ab6` on 2026-11-19.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Lee, *Optimal Oracle Complexity of Dual Halpern Iteration in Normed Spaces*, [arXiv:2610.26484v1](https://arxiv.org/abs/2610.26484) (19 Oct 2026, preprint, prior), Thm 3, $p=\infty$, applied to $F=T\circ\mathrm{clip}$ with the output clipped | $O(R/\varepsilon+R\sigma^2\log(2d)/\varepsilon^3)$ → $O(R/\varepsilon+R\sigma^2\log(2d)/\varepsilon^3)$ | None: same order | None. Lee allows any unbiased oracle with bounded sup-norm variance at every query, which contains fresh additive noise; the cube case follows by the reduction below. | None. Both output a (clipped) last iterate under the same expected-residual criterion, and both need $R,\sigma,\varepsilon$ and $d$. | The selected result is narrower (additive noise on a cube only). Its gain is the trivial zero-call case $R\le\varepsilon$, where Lee assumes $\varepsilon\le\kappa$. |
+| Diakonikolas–Guzmán–Martínez-Rubio, [arXiv:2609.09524v1](https://arxiv.org/abs/2609.09524) (8 Sep 2026, preprint, prior), Thm 5 / Cor 6 ($p=\infty$, compact domain of diameter $D=2R$) | $\tilde O\big(\sigma^2\log d\,/\varepsilon^3+1/\varepsilon\big)\cdot\log(1/\delta)$ on the unit ball, with polylog$(R/\varepsilon)$ factors → $O(R/\varepsilon+R\sigma^2\log(2d)/\varepsilon^3)$ | Not comparable (criteria differ). Ignoring that, it saves only the $\log(R/\varepsilon)$ factors, which Lee already removed. | None. Their class (a self-map of a compact convex set with an unbiased bounded-variance oracle) contains this one. | They give probability $\ge1-\delta$; the selected result gives an expectation. Lee is the stronger expectation baseline. | Their high-probability guarantee is stronger in confidence. |
+| Bravo–Contreras, [arXiv:2403.12338](https://arxiv.org/abs/2403.12338) (2024), stochastic Halpern with minibatches | $\tilde O(\varepsilon^{-5})$ → $O(\varepsilon^{-3})$ in $\varepsilon$ | Better by $\varepsilon^{-2}$, but this gain was already obtained by both rows above | None | None | None |
+
+**Reduction check.** $F=T\circ\mathrm{clip}$ is sup-norm nonexpansive on $\mathbb R^d$ and has a fixed point $x^\*$ in the cube (Brouwer). The oracle $T(\mathrm{clip}\,x)+Z$ satisfies Lee's Assumption 2. With $x^0=0$, the initial distance satisfies $\kappa\le R$; using $R$ as the distance bound is an inference, since Lee's proof appears to use $\kappa$ only as an upper bound. For $y=\mathrm{clip}(x^N)$ we have $T(y)=F(x^N)$, which lies in the cube, so $\|T(y)-y\|=\|\mathrm{clip}F(x^N)-\mathrm{clip}\,x^N\|\le\|F(x^N)-x^N\|$.
+
+So the selected bound is a standard corollary of Lee's Thm 3. The companion note says this itself. The selected algorithm (increasing anchor strength with re-anchoring, and batch sizes that quadruple per phase) follows the anchoring of DGM Algorithm 2, but with plain batch means and a log-sum-exp sup-norm batch bound. That bound is the $p=\infty$ sampling constant $C_\infty=O(\sqrt{\log 2d})$ that Lee also uses. This is proof ancestry, not a new complexity. I found no new mechanism needed for the upper bound.
+
+**Search coverage (2026-11-18/19).** I searched arXiv for stochastic Halpern, anchoring, and nonexpansive fixed points in normed spaces. I read Lee Thms 2–3 and Fact 1 and DGM Thm 5 / Cor 6 (from PDF text extraction, which garbled the exact log powers). I checked Shehu, [arXiv:2610.00295](https://arxiv.org/abs/2610.00295), which covers only 2-uniformly smooth spaces and so excludes $\ell_\infty$, and Tamizholi–Chandak–Singh, [arXiv:2611.13846](https://arxiv.org/abs/2611.13846), which covers the Euclidean case and is not an oracle-complexity result. I did not read DGM Thms 11 and 13. The companion note's claims (agreement with Lee, extra logs in DGM) match what I verified. The note puts the novelty in the separate [lower-bound theorem](../../LongTails/Theorems/AdditiveCubeFixedPointLowerBound.lean), which I did not assess here.
+
+**Conclusion**
+
+**No: this is another analysis of an already-known upper bound.** The strongest baseline is Lee's Theorem 3 for dual Halpern iteration in $\ell_\infty^d$. That theorem allows any unbiased oracle with bounded variance. Applied to $T\circ\mathrm{clip}$, with the output clipped, it gives exactly the selected order:
+
+$$\text{Lee (19 Oct 2026)}:\ O\Big(\frac R\varepsilon+\frac{R\sigma^2\log(2d)}{\varepsilon^3}\Big)\quad\text{vs.}\quad\text{selected}:\ O\Big(\frac R\varepsilon+\frac{R\sigma^2\log(2d)}{\varepsilon^3}\Big).$$
+
+Both guarantees bound the expected sup-norm residual of a clipped last iterate, and both need $R,\sigma,\varepsilon,d$. The selected class (fresh additive noise on a cube) is a special case of Lee's. No parameter regime gives a gain beyond the trivial zero-call case $R\le\varepsilon$. The high-probability result of Diakonikolas–Guzmán–Martínez-Rubio, which predates the theorem, already had the same rate up to logarithms.
+
+What is established is a formal Lean proof of this bound for a different anchored batch-mean method; its order is unchanged. The upper bound supports the companion lower bound, which is where any novelty in the pair lies.
+
+**Verdict: ALREADY KNOWN OR STANDARD COROLLARY**
+**Confidence: high**
