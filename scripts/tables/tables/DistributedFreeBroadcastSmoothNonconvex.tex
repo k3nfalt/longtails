@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient elapsed-time bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean}{DistributedFreeBroadcastSmoothNonconvex}.}\label{tab:DistributedFreeBroadcastSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize $F=n^{-1}\sum_{i=1}^n f_i$ on $\mathbb R^d$, with differentiable $f_i$, $L$-Lipschitz $\nabla F$, and $n^{-1}\sum_i\|\nabla f_i(x)-\nabla f_i(y)\|^2\le\widehat L^2\|x-y\|^2$. A global lower bound $F_{\rm low}$ satisfies $F(x_0)-F_{\rm low}\le\Delta$, and $\|\nabla f_i(x_0)\|\le G$. Here $d,n\ge1$, $L,\widehat L,\varepsilon>0$, $\Delta,G\ge0$. Exact local gradients take $h_i>0$ time. The star has dedicated concurrent uplinks costing $\ell+bB$ per $B$-bit packet, $\ell,b\ge0$, and free server broadcasts; one pending computation per worker and one packet per directed link, with computation and communication allowed concurrently. Our constructions use free shared randomness and uncharged arithmetic/coding, with known setup parameters. Target: $\int\|\nabla F(x_{\rm out}(\omega))\|^2\,dP(\omega)\le\varepsilon^2$, under the algorithm's execution law $P$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DashaFreeBroadcastDeterministic.lean}{Dasha\allowbreak Free\allowbreak Broadcast\allowbreak Deterministic} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DashaFreeBroadcastDeterministic.md}{(review)}
+& Elapsed-time upper bound, optimized deadline; a sufficient bound is
+$\displaystyle\mathcal{O}\!\left(\begin{gathered}\min_{1\le k\le d}\left\{K_k\bigl[H+bk(1+\log K_k\right.\\ \left.{}+\log\log C)\bigr]\right\}\\
+{}+bd\log\!\left(2+\frac{Gd}{\varepsilon\sqrt n}\right)\end{gathered}\right)$.
+& & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DashaFreeBroadcastDeterministicSimplified.lean}{Dasha\allowbreak Free\allowbreak Broadcast\allowbreak Deterministic\allowbreak Simplified} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DashaFreeBroadcastDeterministicSimplified.md}{(review)}
+& Closed-form elapsed-time upper bound:
+for $n\ge2$,
+$\displaystyle\mathcal{O}\!\bigl(RH+bQ\!\left[1+\frac{\Delta(\lambda+d\min\{\lambda,\widehat L/\sqrt n\})}{\varepsilon^2}\right]$\newline
+$\displaystyle{}+bd\Phi\bigr)$;
+for $n=1$,
+$\displaystyle\mathcal{O}\!\left(\begin{gathered}R[H+bd(1+\log R\\{}+\log(1+\log d))]\end{gathered}\right)$.
+Upper-bounds \textbf{(1)}'s deadline, with a larger universal prefactor.
+& & \\
+\midrule[1.2pt]
+\textbf{(3)} DASHA \citep{dfbTyurinRichtarik2022v2}, Thm.~6.1, Cor.~6.2. Derived bound: mean-square form.
+& Sufficient $\mathcal{O}(nN_k)$ total local-gradient calls; $\mathcal{O}(N_k)$ rounds and $\mathcal{O}(d+kN_k)$ exact-real coordinates uploaded per worker, $1\le k\le d$. No finite-bit elapsed-time bound.
+& \textbf{(1)}, \textbf{(2)}: Matches known rounds. Formalization: finite-bit messages and verified elapsed time; no established rate improvement or comparable bit-level time bound.
+& \textbf{(1)}, \textbf{(2)}: Needs $G$ for packet ranges. Pathwise range growth incurs logarithmic bit costs; elapsed times and exact-real coordinate counts are not comparable. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\lambda=\min\{L,\widehat L\}$, $H=\max_i h_i+\ell+b$, $R=1+\lambda\Delta/\varepsilon^2$;
+$K_k=1+\Delta(\lambda+\widehat Ld/(k\sqrt n))/\varepsilon^2$;
+$C=2+d+\sqrt n\widehat L/\lambda+Gd/(\varepsilon\sqrt n)$.
+$Q=1+\log(1+\Delta(\lambda+\widehat L/\sqrt n)/\varepsilon^2)+\log(1+\log(nd))$,
+$J=1+\log(1+\log(dR))$,
+$\Phi=\min\{G\sqrt{QJ}/(\varepsilon\sqrt n),\ J+\log(1+G^2Q/(n\varepsilon^2)),\ 1+\log(ndR)\}$.
+For \textbf{(3)}, $\omega_k=d/k-1$ and
+$N_k=1+\Delta[\lambda+\widehat L\sqrt{\omega_k(2\omega_k+1)/n}]/\varepsilon^2$; initialization is included. Logs are natural; $k$ is an integer.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

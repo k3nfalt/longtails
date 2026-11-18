@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Nonconvex Optimization with ABC Noise}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d$ is a positive integer, with finite infimum $f_\star$ and an $L$-Lipschitz gradient, where $L>0$. The oracle returns $g(x,\xi)$ at $x$, using independent real samples $\xi$ with a common probability law. Its replies are unbiased and satisfy $\mathbb{E}\|g(x,\xi)-\nabla f(x)\|^2\leq 2A(f(x)-f_\star)+B\|\nabla f(x)\|^2+C$, where $A,B,C\geq0$. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, with expectation over oracle samples and independent algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+Throughout, $\|\cdot\|$ denotes the Euclidean norm. A starting point $x^0\in\mathbb{R}^d$ and an initial-gap bound $\Delta\in\mathbb{R}$ are given. The algorithm receives $d,L,A,B,C,\Delta,\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Parameter and dimension regime]
+The parameters satisfy
+\[
+\begin{aligned}
+&d\in\mathbb{N},\qquad L>0,\qquad A,B,C\geq0,\qquad \varepsilon>0,\\
+&2^{26}\varepsilon^2\leq L\Delta,\\
+&d\geq 2^{40}\left(1+\frac{L\Delta}{\varepsilon^2}
+\left(1+B+\frac{A\Delta+C}{\varepsilon^2}\right)\right)^4.
+\end{aligned}
+\]
+In particular, these conditions imply $\Delta>0$ and $d>0$.
+\end{assumption}
+
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+Its infimum $f_\star$ is finite, and
+\[
+\begin{aligned}
+f_\star&=\inf_{x\in\mathbb{R}^d}f(x)\in\mathbb{R},\\
+f(x^0)-f_\star&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[IID stochastic gradients with ABC noise]
+There exist a probability measure $\nu$ on $\mathbb{R}$ and a jointly measurable map
+$g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$.
+At call $k$, a query $x\in\mathbb{R}^d$ receives $g(x,\xi_k)$, where $(\xi_k)_{k\geq0}$ is a sequence of measurable, mutually independent random variables with common law $\nu$. This sequence is independent of the algorithm's randomness.
+For every fixed $x\in\mathbb{R}^d$, the vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable for $\xi\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
+&\leq 2A\bigl(f(x)-f_\star\bigr)\\
+&\quad+B\|\nabla f(x)\|^2+C.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. Let $P$ denote the joint law of the oracle samples and the independent algorithm randomness. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm must be $P$-integrable, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

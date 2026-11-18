@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with H\"older Noise}
+We consider a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ with $L$-Lipschitz gradient, where $d\geq1$ and $L>0$. A given point $x^0$ satisfies $f(x^0)-\inf_x f(x)\leq\Delta$, where $\Delta\geq0$. Each oracle call at $(x,y)$ returns $(g(x,\xi),g(y,\xi))$ using a fresh independent binary sample $\xi$. The estimator $g$ is unbiased, with variance at most $\sigma^2$ and centered increments of mean square at most $M\|x-y\|^{2\nu}$, where $\sigma,M\geq0$, $0<\nu\leq1$, and $\|\cdot\|$ is the Euclidean norm. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying $\mathbb{E}_{P}\|\nabla f(\bar{x})\|\leq\varepsilon$, where $P$ is the joint law of sampling and independent algorithm randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives $d,L,M,\nu,\sigma,\Delta,\varepsilon$, and $x^0\in\mathbb{R}^d$. We restrict these parameters further to
+\[
+\begin{aligned}
+64\varepsilon^2&\leq L\Delta,\\
+d&\geq\left\lceil
+2^{30}\left(1+\frac{L\Delta}{\varepsilon^2}\right)^3
+\left(1+\frac{\sigma^2}{\varepsilon^2}\right)
+\right\rceil.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable everywhere. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f(x)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Unbiased gradients and H\"older noise]
+There exist a probability distribution $p$ on $\{0,1\}$ and a jointly measurable map $g:\mathbb{R}^d\times\{0,1\}\to\mathbb{R}^d$. Define the centered error by
+\[
+e(x,\xi)=g(x,\xi)-\nabla f(x).
+\]
+For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim p}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim p}\|e(x,\xi)\|^2&\leq\sigma^2,\\
+\mathbb{E}_{\xi\sim p}\|e(x,\xi)-e(y,\xi)\|^2
+&\leq M\|x-y\|^{2\nu}.
+\end{aligned}
+\]
+Here $g(x,\cdot)$ is Bochner integrable, and both squared norms in these expectations are integrable under $p$.
+\end{assumption}
+
+The sample sequence $(\xi_k)_{k\geq0}$ consists of measurable, mutually independent random variables with common law $p$, independent of the algorithm's randomness. On call $k$, the algorithm may query any pair $(x_k,y_k)\in\mathbb{R}^d\times\mathbb{R}^d$, based on its randomness and previous replies. The oracle returns
+\[
+\bigl(g(x_k,\xi_k),\ g(y_k,\xi_k)\bigr).
+\]
+Thus the two replies share a sample, and each such pair counts as one oracle call.
+
+After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable, its gradient norm must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

@@ -1,0 +1,94 @@
+{
+  "setup": "LongTails.Setups.AbcNoiseNonconvex",
+  "searched_at": "2026-11-18T15:50:28.546216+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{144 \\cdot L \\cdot \\Delta \\cdot \\left(1 + B + \\frac{A \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{C}{\\varepsilon^{2}}\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.AbcNoiseNonconvex.spec.Params → ℕ",
+        "value": "fun q => ⌈144 * q.L * q.Δ * (1 + q.B + q.A * q.Δ / q.ε ^ 2 + q.C / q.ε ^ 2) / q.ε ^ 2⌉₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{144 \\cdot L \\cdot \\Delta \\cdot \\left(1 + B + \\frac{A \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{C}{\\varepsilon^{2}}\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.AbcNoiseNonconvex.spec.Params → ℕ",
+          "value": "fun q => ⌈144 * q.L * q.Δ * (1 + q.B + q.A * q.Δ / q.ε ^ 2 + q.C / q.ε ^ 2) / q.ε ^ 2⌉₊ + 1"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.AbcNoiseSgdUpperBound",
+      "namespace": "LongTails.Setups.AbcNoiseNonconvex",
+      "setup": "LongTails.Setups.AbcNoiseNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AbcNoiseNonconvex.spec LongTails.Theorems.AbcNoiseSgdUpperBound.budget",
+      "theorem": "LongTails.Theorems.AbcNoiseSgdUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AbcNoiseSgdUpperBound",
+      "theorem": "LongTails.Theorems.AbcNoiseSgdUpperBound.result",
+      "references": "- Ahmed Khaled and Peter Richtárik. [Better Theory for SGD in the Nonconvex World](https://arxiv.org/pdf/2002.03329v3). 2020 (preprint v3). Complexity: $O\\!\\left(1+\\frac{L\\Delta}{\\varepsilon^2}\\max\\left\\{1+B,\\frac{A\\Delta}{\\varepsilon^2},\\frac{C}{\\varepsilon^2}\\right\\}\\right)$ stochastic-gradient oracle calls with a fixed budget, using SGD, for $\\mathbb E\\|\\nabla f(x_{\\mathrm{out}})\\|\\le\\varepsilon$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on a second-countable real Hilbert space E. The gradient is globally L-Lipschitz, L>0. A finite infimum fstar exists, need not be attained, and f(x0)-fstar≤Δ with Δ≥0. Convexity is not required.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: Params; spec.valid; spec.admissible gradient, smoothness, infimum, and initial-gap conditions."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns g(x,ω) using a fresh IID sample. The jointly measurable oracle is unbiased: E[g(x,ω)]=∇f(x). Gradient replies are integrable and centered squared errors are integrable. One call supplies one gradient estimate; function values and same-sample paired evaluations are not supplied.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.admissible IID, oracle answer, measurability, unbiasedness, and integrability conditions; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "ABC variance model: E‖g(x,ω)-∇f(x)‖²≤2A(f(x)-fstar)+B‖∇f(x)‖²+C for every x, with A,B,C≥0. This permits variance to grow with the objective gap and gradient norm; no uniform variance bound or exponential-tail condition is imposed. Equivalently, E‖g(x,ω)‖²≤2A(f(x)-fstar)+(1+B)‖∇f(x)‖²+C. All Params, including L,A,B,C,Δ,ε,x0, are public; fstar and the oracle distribution are existential instance data.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: Params; spec.Public; spec.publicInput; spec.valid; spec.admissible variance inequality and existential witnesses."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output is a point in E satisfying E‖∇f(output)‖≤ε, ε>0. The criterion uses the first power of the norm. The output must be measurable and its gradient norm integrable; no last-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.Output; spec.valid; spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The gradient-norm bound averages over the joint law of algorithm randomness and IID oracle randomness, under a fixed cap on oracle calls.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace, and _run."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Smooth nonconvex stochastic optimization with unbiased IID gradients, the established ABC variance condition, and expected first-order stationarity is a standard formulation. The Hilbert-space ambient setting broadens the usual finite-dimensional statement."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AbcNoiseSgdUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AbcNoiseSgdUpperBound",
+          "theorem": "LongTails.Theorems.AbcNoiseSgdUpperBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

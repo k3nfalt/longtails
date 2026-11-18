@@ -1,0 +1,48 @@
+\begin{table}[tp]
+\centering
+\caption{Stationarity under pointwise Hessian growth: \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/PointwiseHessianStationarity.lean}{PointwiseHessianStationarity}.}\label{tab:PointwiseHessianStationarity}
+\parbox{\linewidth}{\footnotesize
+$f:\mathbb{R}^d\to\mathbb{R}$ is $C^3$, with $\|D^3f(x)\|\le L_0+L_1\|\nabla f(x)\|$, $f(0)-\inf f\le\Delta$, and $\|\nabla f(0)\|\le G$.
+Here $L_0,L_1\ge0$, $L_0+L_1>0$, $\Delta,\varepsilon>0$, $G\ge16\varepsilon$, $S\ge2^{39}$, and $d\ge2^{140}(1+\lceil S\rceil)^4$; $S$ is defined below.
+Each query returns exact $(f,\nabla f,\nabla^2f)$; the setup imposes no algorithm restriction. The target is measurable $X$ with integrable gradient norm and $\int\|\nabla f(X(\omega))\|\,dP(\omega)\le\varepsilon$, for the algorithm's seed law $P$.
+The paired bounds match in their polynomial terms; the additive logarithm in \textbf{(2)} is not matched by \textbf{(1)}.
+}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PointwiseHessianStationarityLowerBound.lean}{Pointwise\allowbreak Hessian\allowbreak Stationarity\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PointwiseHessianStationarityLowerBound.md}{(review)}\par
+\textit{Lower bound}
+& Necessary: $\Omega(S)$ joint calls. Failure for every randomized adaptive algorithm at every integer budget $b\le\lfloor S/2^{39}\rfloor$; instance independent of the realized seed.
+& & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/PointwiseHessianStationarity.lean}{Pointwise\allowbreak Hessian\allowbreak Stationarity} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/PointwiseHessianStationarity.md}{(review)}\par
+\textit{Upper bound}
+& Sufficient joint calls:\par
+$\mathcal{O}\!\left(S+\log\!\left(2+\frac{L_1G}{L_0+L_1\varepsilon}\right)\right)$.
+& & \\
+\midrule[1.2pt]
+\textbf{(3)} \citep{sncCarmon2020v3}, Theorem~2, $p=2$\par
+\textit{Lower bound; Lipschitz-Hessian subclass}
+& Necessary: $\Omega(\Delta\sqrt{L_0}\,\varepsilon^{-3/2})$, $L_0>0$. Randomized algorithms, even with all derivatives; $d\gtrsim1+T^2\log(2+T)$.
+& \textbf{(1)}: Necessary budget increases by $\sqrt{1+L_1\varepsilon/L_0}$; polynomial gain when $L_1\varepsilon\gg L_0$. Scope: also covers $L_0=0$.
+& \textbf{(1)}: Requires dimension of order $S^4$, rather than $T^2\log(2+T)$; also needs $G\ge16\varepsilon$ and $S\ge2^{39}$. \\
+\midrule
+\textbf{(4)} Cubic Newton \citep{gdhFang2026v1}, Corollary~1\par
+\textit{Upper bound; pointwise condition}
+& Sufficient joint calls, including backtracking:\par
+$\mathcal{O}\!\left(S+\log\!\left(2+\frac{L_1G}{L_0+L_1^{3/2}\Delta}\right)\right)$.
+Use $\sigma_{\rm init}=L_0+L_1\varepsilon$, $\delta=\sqrt{L_0\varepsilon}+\sqrt{L_1}\varepsilon$; for $L_0=0$, substitute $L'_0=L_1\varepsilon$.
+& \textbf{(2)}: Matches known polynomial rate, with a different additive logarithm; formalizes the transfer to a joint oracle.
+& \textbf{(2)}: Needs $L_0,L_1,\Delta,G,\varepsilon$; larger leading constant. Loses the $\nabla^2f\succeq-\delta I$ guarantee and parameter-free updates; restricted to the stated $G,S,d$ regime. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $S=\Delta\sqrt{L_0+L_1\varepsilon}\,\varepsilon^{-3/2}\asymp\Delta\sqrt{L_0}\,\varepsilon^{-3/2}+\Delta\sqrt{L_1}\,\varepsilon^{-1}$; $T=\Delta\sqrt{L_0}\,\varepsilon^{-3/2}$. $D^3f$ denotes the third derivative with operator norm; $\nabla^2f$ is the Hessian; $\delta$ is curvature tolerance; $\sigma_{\rm init}$ is the initial cubic regularization parameter. $\mathcal{O}$ and $\Omega$ suppress universal constants; $\gtrsim$ and $\asymp$ are comparisons up to universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

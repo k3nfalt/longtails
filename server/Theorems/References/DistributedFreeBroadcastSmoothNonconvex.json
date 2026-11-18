@@ -1,0 +1,139 @@
+{
+  "setup": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex",
+  "searched_at": "2026-11-18T15:50:30.893474+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & \\min\\left\\{ 2 \\cdot \\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta, G^{2} \\right\\} \\leq \\varepsilon^{2} \\\\ \\left(\\min_{c\\in \\operatorname{SearchSpace}\\left(\\operatorname{effectiveParameters}\\left(p\\right)\\right)} \\operatorname{iterationCount}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b\\right) + b \\cdot \\left(\\operatorname{initialPayload}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) + \\left(\\operatorname{iterationCount}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) - 1\\right) \\cdot \\operatorname{roundPayload}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right)\\right)\\right) & \\mathrm{otherwise} \\end{cases}",
+        "type": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  if min (2 * min p.L p.Lhat * p.Δ) (p.G ^ 2) ≤ p.ε ^ 2 then 0\n  else\n    Finset.univ.inf' ⋯ fun c =>\n      ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.iterationCount\n              (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c) *\n          (Finset.univ.sup p.h + p.l + 64 * p.b) +\n        p.b *\n          (↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.initialPayload\n                (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c) +\n            ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.iterationCount\n                    (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c -\n                  1) *\n              ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.roundPayload\n                  (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c))"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & \\min\\left\\{ 2 \\cdot \\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta, G^{2} \\right\\} \\leq \\varepsilon^{2} \\\\ \\left(\\min_{c\\in \\operatorname{SearchSpace}\\left(\\operatorname{effectiveParameters}\\left(p\\right)\\right)} \\operatorname{iterationCount}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b\\right) + b \\cdot \\left(\\operatorname{initialPayload}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) + \\left(\\operatorname{iterationCount}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) - 1\\right) \\cdot \\operatorname{roundPayload}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right)\\right)\\right) & \\mathrm{otherwise} \\end{cases}",
+          "type": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  if min (2 * min p.L p.Lhat * p.Δ) (p.G ^ 2) ≤ p.ε ^ 2 then 0\n  else\n    Finset.univ.inf' ⋯ fun c =>\n      ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.iterationCount\n              (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c) *\n          (Finset.univ.sup p.h + p.l + 64 * p.b) +\n        p.b *\n          (↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.initialPayload\n                (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c) +\n            ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.iterationCount\n                    (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c -\n                  1) *\n              ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.roundPayload\n                  (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c))"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DashaFreeBroadcastDeterministic",
+      "namespace": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex",
+      "setup": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.spec\n  LongTails.Theorems.DashaFreeBroadcastDeterministic.budget",
+      "theorem": "LongTails.Theorems.DashaFreeBroadcastDeterministic.result"
+    },
+    {
+      "budget": {
+        "latex": "2^{22} \\cdot \\begin{cases} 0 & \\min\\left\\{ 2 \\cdot \\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta, G^{2} \\right\\} \\leq \\varepsilon^{2} \\\\ \\begin{cases} \\max\\left\\{ 1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}, 0 \\right\\} \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b + b \\cdot d \\cdot \\max\\left\\{ 2 + \\log\\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(d\\right)\\right), 0 \\right\\}\\right) & n = 1 \\\\ \\max\\left\\{ 1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}, 0 \\right\\} \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b\\right) + b \\cdot \\max\\left\\{ \\left(2 + \\log\\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + \\frac{Lhat}{\\sqrt{n}}\\right)}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(n \\cdot d\\right)\\right)\\right) \\cdot \\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + d \\cdot \\min\\left\\{ \\min\\left\\{ L, Lhat \\right\\}, \\frac{Lhat}{\\sqrt{n}} \\right\\}\\right)}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{G}{\\varepsilon \\cdot \\sqrt{n}} \\cdot \\sqrt{\\left(2 + \\log\\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + \\frac{Lhat}{\\sqrt{n}}\\right)}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(n \\cdot d\\right)\\right)\\right) \\cdot \\left(1 + \\log\\left(1 + \\log\\left(d \\cdot \\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)\\right)\\right)}, \\min\\left\\{ 1 + \\log\\left(1 + \\log\\left(d \\cdot \\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)\\right) + \\log\\left(1 + \\frac{G^{2} \\cdot \\left(2 + \\log\\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + \\frac{Lhat}{\\sqrt{n}}\\right)}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(n \\cdot d\\right)\\right)\\right)}{n \\cdot \\varepsilon^{2}}\\right), 1 + \\log\\left(n \\cdot d \\cdot \\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right) \\right\\} \\right\\}, 0 \\right\\} & \\mathrm{otherwise} \\end{cases} & \\mathrm{otherwise} \\end{cases}",
+        "type": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  2 ^ 22 *\n    if min (2 * min p.L p.Lhat * p.Δ) (p.G ^ 2) ≤ p.ε ^ 2 then 0\n    else\n      if p.n = 1 then\n        (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2).toNNReal *\n          (Finset.univ.sup p.h + p.l + 64 * p.b +\n            p.b * ↑↑p.d * (2 + Real.log (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2) + Real.log (1 + Real.log ↑↑p.d)).toNNReal)\n      else\n        (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2).toNNReal * (Finset.univ.sup p.h + p.l + 64 * p.b) +\n          p.b *\n            ((2 + Real.log (1 + p.Δ * (min p.L p.Lhat + p.Lhat / √↑↑p.n) / p.ε ^ 2) +\n                    Real.log (1 + Real.log (↑↑p.n * ↑↑p.d))) *\n                  (1 + p.Δ * (min p.L p.Lhat + ↑↑p.d * min (min p.L p.Lhat) (p.Lhat / √↑↑p.n)) / p.ε ^ 2) +\n                ↑↑p.d *\n                  min\n                    (p.G / (p.ε * √↑↑p.n) *\n                      √((2 + Real.log (1 + p.Δ * (min p.L p.Lhat + p.Lhat / √↑↑p.n) / p.ε ^ 2) +\n                            Real.log (1 + Real.log (↑↑p.n * ↑↑p.d))) *\n                          (1 + Real.log (1 + Real.log (↑↑p.d * (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2))))))\n                    (min\n                      (1 + Real.log (1 + Real.log (↑↑p.d * (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2))) +\n                        Real.log\n                          (1 +\n                            p.G ^ 2 *\n                                (2 + Real.log (1 + p.Δ * (min p.L p.Lhat + p.Lhat / √↑↑p.n) / p.ε ^ 2) +\n                                  Real.log (1 + Real.log (↑↑p.n * ↑↑p.d))) /\n                              (↑↑p.n * p.ε ^ 2)))\n                      (1 + Real.log (↑↑p.n * ↑↑p.d * (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2))))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "2^{22} \\cdot \\begin{cases} 0 & \\min\\left\\{ 2 \\cdot \\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta, G^{2} \\right\\} \\leq \\varepsilon^{2} \\\\ \\begin{cases} \\max\\left\\{ 1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}, 0 \\right\\} \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b + b \\cdot d \\cdot \\max\\left\\{ 2 + \\log\\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(d\\right)\\right), 0 \\right\\}\\right) & n = 1 \\\\ \\max\\left\\{ 1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}, 0 \\right\\} \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b\\right) + b \\cdot \\max\\left\\{ \\left(2 + \\log\\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + \\frac{Lhat}{\\sqrt{n}}\\right)}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(n \\cdot d\\right)\\right)\\right) \\cdot \\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + d \\cdot \\min\\left\\{ \\min\\left\\{ L, Lhat \\right\\}, \\frac{Lhat}{\\sqrt{n}} \\right\\}\\right)}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{G}{\\varepsilon \\cdot \\sqrt{n}} \\cdot \\sqrt{\\left(2 + \\log\\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + \\frac{Lhat}{\\sqrt{n}}\\right)}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(n \\cdot d\\right)\\right)\\right) \\cdot \\left(1 + \\log\\left(1 + \\log\\left(d \\cdot \\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)\\right)\\right)}, \\min\\left\\{ 1 + \\log\\left(1 + \\log\\left(d \\cdot \\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)\\right) + \\log\\left(1 + \\frac{G^{2} \\cdot \\left(2 + \\log\\left(1 + \\frac{\\Delta \\cdot \\left(\\min\\left\\{ L, Lhat \\right\\} + \\frac{Lhat}{\\sqrt{n}}\\right)}{\\varepsilon^{2}}\\right) + \\log\\left(1 + \\log\\left(n \\cdot d\\right)\\right)\\right)}{n \\cdot \\varepsilon^{2}}\\right), 1 + \\log\\left(n \\cdot d \\cdot \\left(1 + \\frac{\\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right) \\right\\} \\right\\}, 0 \\right\\} & \\mathrm{otherwise} \\end{cases} & \\mathrm{otherwise} \\end{cases}",
+          "type": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  2 ^ 22 *\n    if min (2 * min p.L p.Lhat * p.Δ) (p.G ^ 2) ≤ p.ε ^ 2 then 0\n    else\n      if p.n = 1 then\n        (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2).toNNReal *\n          (Finset.univ.sup p.h + p.l + 64 * p.b +\n            p.b * ↑↑p.d * (2 + Real.log (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2) + Real.log (1 + Real.log ↑↑p.d)).toNNReal)\n      else\n        (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2).toNNReal * (Finset.univ.sup p.h + p.l + 64 * p.b) +\n          p.b *\n            ((2 + Real.log (1 + p.Δ * (min p.L p.Lhat + p.Lhat / √↑↑p.n) / p.ε ^ 2) +\n                    Real.log (1 + Real.log (↑↑p.n * ↑↑p.d))) *\n                  (1 + p.Δ * (min p.L p.Lhat + ↑↑p.d * min (min p.L p.Lhat) (p.Lhat / √↑↑p.n)) / p.ε ^ 2) +\n                ↑↑p.d *\n                  min\n                    (p.G / (p.ε * √↑↑p.n) *\n                      √((2 + Real.log (1 + p.Δ * (min p.L p.Lhat + p.Lhat / √↑↑p.n) / p.ε ^ 2) +\n                            Real.log (1 + Real.log (↑↑p.n * ↑↑p.d))) *\n                          (1 + Real.log (1 + Real.log (↑↑p.d * (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2))))))\n                    (min\n                      (1 + Real.log (1 + Real.log (↑↑p.d * (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2))) +\n                        Real.log\n                          (1 +\n                            p.G ^ 2 *\n                                (2 + Real.log (1 + p.Δ * (min p.L p.Lhat + p.Lhat / √↑↑p.n) / p.ε ^ 2) +\n                                  Real.log (1 + Real.log (↑↑p.n * ↑↑p.d))) /\n                              (↑↑p.n * p.ε ^ 2)))\n                      (1 + Real.log (↑↑p.n * ↑↑p.d * (1 + min p.L p.Lhat * p.Δ / p.ε ^ 2))))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified",
+      "namespace": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex",
+      "setup": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.spec\n  LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified.budget",
+      "theorem": "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DashaFreeBroadcastDeterministic",
+      "theorem": "LongTails.Theorems.DashaFreeBroadcastDeterministic.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified",
+      "theorem": "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable, globally lower-bounded objective F on R^d. Nonconvex objectives and components are permitted. The initial gap satisfies F(x0) − lower ≤ Δ.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: Point, spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x) = (1/n) Σ_i f_i(x), with n ≥ 1 components distributed across n workers.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: Functions, objective; LongTails/Setups/FiniteSumSmoothAndConvex.lean: objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Gradient evaluations return exact derivatives without stochastic noise; the system seed has a Dirac law.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: system, spec.admissible."
+      },
+      {
+        "label": "component_gradient",
+        "details": "Worker i evaluates ∇f_i(x) at a requested point in time h_i > 0. Each worker has at most one pending computation, which can be aborted. The server has no computation oracle.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: system; LongTails/Setups/StarNetwork.lean: ComputeQuery, computation."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean R^d, with d ≥ 1.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: Params.d, Point."
+      },
+      {
+        "label": "other",
+        "details": "Public parameters include n, d, x0, h_i, l, b, L, Lhat, Δ, G, and ε; component functions are the hidden instance. Here L,Lhat,ε > 0 and Δ,G ≥ 0. Smoothness requires ||∇F(x)−∇F(y)|| ≤ L||x−y|| and (1/n)Σ_i ||∇f_i(x)−∇f_i(y)||² ≤ Lhat²||x−y||². Only initial component gradients are bounded: ||∇f_i(x0)|| ≤ G. Communication uses a star with concurrent independent directed links and one pending message per link. Server-to-worker messages take zero time; a worker uplink carrying m payload bits takes l+b(m+64), including the mandatory 64-bit header, where l,b ≥ 0. Budgets measure elapsed time and algorithms receive 64-bit clock readings.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: Params, communication, spec.Public, spec.publicInput, spec.valid, spec.admissible; LongTails/Setups/StarNetwork.lean: communication; LongTails/TemplateDistributed.lean: Time, clockBits, Algorithm, step, TimedConvergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "Return a measurable point-valued output X with integrable squared Euclidean gradient norm satisfying E[||∇F(X)||²] ≤ ε². No particular iterate-selection rule is required.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: spec.Output, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Stationarity is required in expectation under the execution law. Algorithmic randomization is permitted despite the deterministic gradient oracle.",
+        "evidence": "LongTails/Setups/DistributedFreeBroadcastSmoothNonconvex.lean: spec.successful; LongTails/TemplateDistributed.lean: Algorithm.law, law, TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth nonconvex finite-sum objective is standard, but the elapsed-time formulation combines heterogeneous computation times, free server broadcasts, finite-bit uplinks with latency and headers, and finite clock readings."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DashaFreeBroadcastDeterministic.result",
+        "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DashaFreeBroadcastDeterministic",
+          "theorem": "LongTails.Theorems.DashaFreeBroadcastDeterministic.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified",
+          "theorem": "LongTails.Theorems.DashaFreeBroadcastDeterministicSimplified.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

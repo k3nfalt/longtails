@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Nonconvex Optimization with Free Broadcast}
+We consider minimizing $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$ on $\mathbb{R}^d$, where $n,d\geq1$ are integers and the differentiable functions $f_i:\mathbb{R}^d\to\mathbb{R}$ may be nonconvex. The gradient of $F$ is $L$-Lipschitz, and component gradients are root-mean-square Lipschitz with constant $\widehat L$, where $L,\widehat L>0$. At a given point $x^0$, component gradient norms are bounded by $G\geq0$, and the gap above a global lower bound is at most $\Delta\geq0$. Worker $i$ returns $\nabla f_i(x)$ at $x$ on a star network with heterogeneous computation times and free coordinator broadcasts. For $\varepsilon>0$, the goal is $\mathbb{E}_{P}\|\nabla F(\bar{x})\|^2\leq\varepsilon^2$, where $\bar{x}$ is the output and $P$ is the law of algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} F(x).
+\]
+All vector norms are Euclidean. There are $n$ computing workers and one coordinator. Worker $i$ has computation time $h_i>0$; worker-to-coordinator communication has latency $\ell\geq0$ and time per bit $b\geq0$. The algorithm receives $d,n,(h_i)_{i=1}^n,\ell,b,L,\widehat L,\Delta,G,\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+Each $f_i$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla F(x)-\nabla F(y)\|
+&\leq L\|x-y\|,\\
+\frac{1}{n}\sum_{i=1}^n
+\|\nabla f_i(x)-\nabla f_i(y)\|^2
+&\leq \widehat L^2\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial bounds]
+There exists $F_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+F(x)&\geq F_{\mathrm{low}}
+&&\text{for every }x\in\mathbb{R}^d,\\
+F(x^0)-F_{\mathrm{low}}&\leq\Delta,\\
+\|\nabla f_i(x^0)\|&\leq G
+&&\text{for }i=1,\ldots,n.
+\end{aligned}
+\]
+\end{assumption}
+
+A gradient query at worker $i$ may use any $x\in\mathbb{R}^d$. If accepted at time $t$, it returns the queried point and the exact gradient $\nabla f_i(x)$ at time $t+h_i$. Each worker processes at most one gradient query at a time; further queries while it is occupied are ignored. A pending computation may be canceled. Computations at different workers may proceed concurrently, and the coordinator performs no gradient computations.
+
+Communication uses finite binary messages along the star edges. A message with $m$ payload bits carries an additional $64$ bits. Its transmission delay is
+\[
+\begin{cases}
+0, & \text{from the coordinator to a worker},\\
+\ell+b(m+64), & \text{from a worker to the coordinator}.
+\end{cases}
+\]
+A broadcast consists of messages from the coordinator to the intended workers, each with zero delay. Each directed edge holds at most one pending message; a further submission on that edge is ignored until delivery. Different directed edges, including opposite directions of the same edge, operate concurrently. Communication may overlap computation, and workers exchange messages through the coordinator.
+
+For an elapsed-time budget $T\geq0$, the algorithm returns a measurable output $\bar{x}\in\mathbb{R}^d$ at a designated output node. Almost surely under $P$, only finitely many computation, communication, and local scheduling events may occur up to each deadline $t\leq T$. The squared gradient norm must be integrable, and the accuracy requirement is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla F(\bar{x})\|^2\bigr]
+\leq\varepsilon^2.
+\]
+The budget measures elapsed time, including computation and communication delays.
+\end{document}

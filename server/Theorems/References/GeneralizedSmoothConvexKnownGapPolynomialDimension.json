@@ -1,0 +1,138 @@
+{
+  "setup": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension",
+  "searched_at": "2026-11-18T15:50:33.122915+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\max\\left\\{ \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}}}{8192}, \\frac{\\min\\left\\{ \\left(L1 \\cdot R \\cdot \\log\\left(\\frac{\\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}, L1 \\cdot R \\right\\}}{2048 \\cdot \\log\\left(2 + L1 \\cdot R\\right)} \\right\\} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌊max (√(p.L0 * p.R ^ 2 / p.ε) / 8192)\n      (min ((p.L1 * p.R * Real.log (p.Δ / p.ε)) ^ (2 / 3)) (p.L1 * p.R) / (2048 * Real.log (2 + p.L1 * p.R)))⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\max\\left\\{ \\frac{\\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}}}{8192}, \\frac{\\min\\left\\{ \\left(L1 \\cdot R \\cdot \\log\\left(\\frac{\\Delta}{\\varepsilon}\\right)\\right)^{\\frac{2}{3}}, L1 \\cdot R \\right\\}}{2048 \\cdot \\log\\left(2 + L1 \\cdot R\\right)} \\right\\} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌊max (√(p.L0 * p.R ^ 2 / p.ε) / 8192)\n      (min ((p.L1 * p.R * Real.log (p.Δ / p.ε)) ^ (2 / 3)) (p.L1 * p.R) / (2048 * Real.log (2 + p.L1 * p.R)))⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound",
+      "namespace": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension",
+      "setup": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension.spec\n  LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound.budget",
+      "theorem": "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound.result"
+    },
+    {
+      "budget": {
+        "latex": "\\min\\left\\{ 2 \\cdot \\left\\lceil 4096 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}, \\left\\lceil 64 \\cdot \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + 32768 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(2 + L1 \\cdot R\\right) \\right\\rceil_{+} \\right\\}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension.spec.Params → ℕ",
+        "value": "fun p =>\n  min (2 * ⌈4096 * (1 + √(p.L0 * p.R ^ 2 / p.ε) + ↑⌈(p.L1 * p.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * p.Δ / p.ε))⌉₊)\n    ⌈64 * √(p.L0 * p.R ^ 2 / p.ε) + 32768 * (1 + p.L1 * p.R) * Real.log (2 + p.L1 * p.R)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\min\\left\\{ 2 \\cdot \\left\\lceil 4096 \\cdot \\left(1 + \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + \\left\\lceil \\left(L1 \\cdot R\\right)^{\\frac{2}{3}} \\right\\rceil_{+} \\cdot \\log\\left(4 + \\frac{4 \\cdot \\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}, \\left\\lceil 64 \\cdot \\sqrt{\\frac{L0 \\cdot R^{2}}{\\varepsilon}} + 32768 \\cdot \\left(1 + L1 \\cdot R\\right) \\cdot \\log\\left(2 + L1 \\cdot R\\right) \\right\\rceil_{+} \\right\\}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension.spec.Params → ℕ",
+          "value": "fun p =>\n  min (2 * ⌈4096 * (1 + √(p.L0 * p.R ^ 2 / p.ε) + ↑⌈(p.L1 * p.R) ^ (2 / 3)⌉₊ * Real.log (4 + 4 * p.Δ / p.ε))⌉₊)\n    ⌈64 * √(p.L0 * p.R ^ 2 / p.ε) + 32768 * (1 + p.L1 * p.R) * Real.log (2 + p.L1 * p.R)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound",
+      "namespace": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension",
+      "setup": "LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedSmoothConvexKnownGapPolynomialDimension.spec\n  LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound.budget",
+      "theorem": "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound",
+      "theorem": "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound",
+      "theorem": "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a differentiable convex function f: ℝᵈ → ℝ. A global minimizer x★ exists with ‖x0−x★‖≤R and f(x0)−f(x★)≤Δ. Strong convexity is not required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: spec.Instance, spec.admissible, Params.toGeneralized; LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query x returns exactly ∇f(x), for every history and oracle seed. Function values are not supplied. Algorithms may randomize and use arbitrary adaptive query points.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible, HasGradientAt condition; LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: spec.Query and spec.Reply; LongTails/Template.lean: Algorithm, Setup.allowedAlgorithm."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is differentiable everywhere and satisfies ‖D(∇f)(x)‖≤L0+L1‖∇f(x)‖ globally, with L0,L1>0. A globally Lipschitz gradient is not required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible, Differentiable and fderiv conditions; LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on ℝᵈ. Writing a=√(L0R²/ε) and b=L1R, the dimension must satisfy d≥⌈2⁴⁶(1+b+a)⁶⌉.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: Params.x0, spec.Instance, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d,L0,L1,x0,R,Δ,ε are public; f is accessed through the oracle. Known radius and initial-gap bounds hold for a common minimizer. The parameter regime requires R,ε>0, L0R²≥16ε, b=L1R≥2²⁰, and Δ≥ε max{(2+b)²,√(L0R²/ε)}.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: Params, spec.Public, spec.publicInput, spec.valid, spec.admissible; LongTails/Setups/GeneralizedSmoothAndConvex.lean: spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point x̂∈ℝᵈ whose objective gap relative to a global minimizer is integrable and satisfies E[f(x̂)−f(x★)]≤ε. No last-iterate or queried-point output restriction is imposed.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: spec.Output and spec.successful; LongTails/Template.lean: Algorithm.output."
+      },
+      {
+        "label": "expected",
+        "details": "Accuracy is in expectation over the algorithm and oracle seed laws, under a fixed cap on total gradient queries. No almost-sure objective-gap guarantee is required.",
+        "evidence": "LongTails/Setups/GeneralizedSmoothConvexKnownGapPolynomialDimension.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace, _run."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Convex optimization with exact gradients is standard, but this setup combines gradient-dependent curvature, a public initial-gap bound, and explicit parameter-dependent polynomial dimension and accuracy restrictions."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound.result",
+        "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound",
+          "theorem": "LongTails.Theorems.KnownGapGeneralizedSmoothLowerBound.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound",
+          "theorem": "LongTails.Theorems.KnownGapGeneralizedSmoothUpperBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

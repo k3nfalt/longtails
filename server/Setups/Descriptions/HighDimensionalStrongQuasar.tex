@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Strong Quasar Minimization}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ with an $L$-Lipschitz gradient, where $d$ is the dimension and $L>0$. The function is strongly quasar-convex toward a global minimizer $x^\star$, with parameters $\mu>0$ and $0<\gamma\leq 1/256$. A given starting point $x^0\in\mathbb{R}^d$ satisfies $f(x^0)-f(x^\star)\leq\Delta$, where $\Delta\geq0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable objective gap satisfying $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean inner product $\langle\cdot,\cdot\rangle$ and its induced norm $\|\cdot\|$. The algorithm receives $d$, $L$, $x^0$, $\mu$, $\gamma$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Parameter and dimension regime]
+The dimension $d$ is a nonnegative integer. In addition to the parameter ranges above, define $\kappa=L/\mu$ and require
+\[
+\begin{aligned}
+870400\mu&\leq L,\\
+4\mu&\leq\gamma^2 L,\\
+1000\gamma\sqrt{\kappa}\,\varepsilon&\leq\Delta,\\
+\left(\frac{\sqrt{\kappa}}{\gamma}\right)^5
+\left(\frac{\Delta}{1000\gamma\sqrt{\kappa}\,\varepsilon}\right)^3
+&\leq d.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Strong quasar convexity and initial gap]
+There exists a global minimizer $x^\star\in\mathbb{R}^d$ satisfying the stated initial objective-gap bound such that, for every $x\in\mathbb{R}^d$,
+\[
+ f(x)-f(x^\star)
+ \leq \frac{1}{\gamma}\langle\nabla f(x),x-x^\star\rangle
+ -\frac{\mu}{2}\|x-x^\star\|^2.
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output must have an integrable objective gap under $P$ and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

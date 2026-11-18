@@ -1,0 +1,32 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient stochastic-gradient budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AbcNoiseNonconvex.lean}{AbcNoiseNonconvex}.}\label{tab:AbcNoiseNonconvex}
+\parbox{\linewidth}{\footnotesize A differentiable, possibly nonconvex function $f$ on a separable real Hilbert space with its Borel measurable structure has $L$-Lipschitz gradient, finite infimum $f_*$, and $f(x_0)-f_*\le\Delta$. Samples are IID with probability law $p$; the jointly measurable oracle satisfies $\int g(x,\omega)\,dp(\omega)=\nabla f(x)$ and $\int\|g(x,\omega)-\nabla f(x)\|^2\,dp(\omega)\le 2A(f(x)-f_*)+B\|\nabla f(x)\|^2+C$, with integrable oracle values and squared errors. Here $L,\varepsilon>0$ and $A,B,C,\Delta\ge0$. The target is $\int\|\nabla f(x_{\rm out}(\omega))\|\,dP(\omega)\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AbcNoiseSgdUpperBound.lean}{Abc\allowbreak Noise\allowbreak Sgd\allowbreak Upper\allowbreak Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AbcNoiseSgdUpperBound.md}{(review)}
+& $\mathcal{O}\!\left(1+\frac{L\Delta(1+B)}{\varepsilon^2}+\frac{L\Delta(A\Delta+C)}{\varepsilon^4}\right)$; constant-step SGD, uniformly sampled iterate.
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} SGD \citep{avmKhaledRichtarik2020v3}, Cor.~1 and Lemma~2; $E=\mathbb R^d$.
+& $\mathcal{O}\!\left(1+\frac{L\Delta(1+B)}{\varepsilon^2}+\frac{L\Delta(A\Delta+C)}{\varepsilon^4}\right)$; $B_{\rm paper}=1+B$.
+& \textbf{(1)}: Matches known rate and tuning knowledge; Hilbert-space formalization. Uniform sampling already follows from Lemma~2 at constant cost.
+& \textbf{(1)}: Larger displayed constants on the $(1+B)$ and $C$ terms. \\
+\midrule
+\textbf{(3)} RSG \citep{canGhadimiLan2013}, Cor.~2.2; special case $E=\mathbb R^d$, $A=B=0$, $C=\sigma^2$.
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$.
+& \textbf{(1)}: Scope: ABC noise instead of bounded variance, already covered by \textbf{(2)}. Matches known rate on $A=B=0$.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $P$ is the execution probability law, including output randomization; $x_{\rm out}$ is the returned point; $\sigma^2=C$ in \textbf{(3)}. Costs count individual stochastic-gradient calls; $\mathcal{O}$ hides only universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

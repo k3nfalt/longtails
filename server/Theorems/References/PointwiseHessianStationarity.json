@@ -1,0 +1,148 @@
+{
+  "setup": "LongTails.Setups.PointwiseHessianStationarity",
+  "searched_at": "2026-11-18T15:53:25.253687+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{100000 \\cdot \\Delta \\cdot \\sqrt{L_0 + L_1 \\cdot \\varepsilon}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 2 \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{L_1 \\cdot G}{L_0 + L_1 \\cdot \\varepsilon}\\right)}{\\log\\left(\\frac{4}{3}\\right)} \\right\\rceil_{+} + 200",
+        "oracle": 0,
+        "type": "LongTails.Setups.PointwiseHessianStationarity.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈100000 * p.Δ * √(p.L₀ + p.L₁ * p.ε) / (p.ε * √p.ε)⌉₊ +\n      2 * ⌈Real.log (1 + p.L₁ * p.G / (p.L₀ + p.L₁ * p.ε)) / Real.log (4 / 3)⌉₊ +\n    200"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{100000 \\cdot \\Delta \\cdot \\sqrt{L_0 + L_1 \\cdot \\varepsilon}}{\\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rceil_{+} + 2 \\cdot \\left\\lceil \\frac{\\log\\left(1 + \\frac{L_1 \\cdot G}{L_0 + L_1 \\cdot \\varepsilon}\\right)}{\\log\\left(\\frac{4}{3}\\right)} \\right\\rceil_{+} + 200",
+          "oracle": 0,
+          "type": "LongTails.Setups.PointwiseHessianStationarity.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈100000 * p.Δ * √(p.L₀ + p.L₁ * p.ε) / (p.ε * √p.ε)⌉₊ +\n      2 * ⌈Real.log (1 + p.L₁ * p.G / (p.L₀ + p.L₁ * p.ε)) / Real.log (4 / 3)⌉₊ +\n    200"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.PointwiseHessianStationarity",
+      "namespace": "LongTails.Setups.PointwiseHessianStationarity",
+      "setup": "LongTails.Setups.PointwiseHessianStationarity",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.PointwiseHessianStationarity.spec\n  LongTails.Theorems.PointwiseHessianStationarity.budget",
+      "theorem": "LongTails.Theorems.PointwiseHessianStationarity.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\Delta \\cdot \\sqrt{L_0 + L_1 \\cdot \\varepsilon}}{2^{39} \\cdot \\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.PointwiseHessianStationarity.spec.Params → ℕ",
+        "value": "fun p => ⌊p.Δ * √(p.L₀ + p.L₁ * p.ε) / (2 ^ 39 * p.ε * √p.ε)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\Delta \\cdot \\sqrt{L_0 + L_1 \\cdot \\varepsilon}}{2^{39} \\cdot \\varepsilon \\cdot \\sqrt{\\varepsilon}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.PointwiseHessianStationarity.spec.Params → ℕ",
+          "value": "fun p => ⌊p.Δ * √(p.L₀ + p.L₁ * p.ε) / (2 ^ 39 * p.ε * √p.ε)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.PointwiseHessianStationarityLowerBound",
+      "namespace": "LongTails.Setups.PointwiseHessianStationarity",
+      "setup": "LongTails.Setups.PointwiseHessianStationarity",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.PointwiseHessianStationarity.spec\n  LongTails.Theorems.PointwiseHessianStationarityLowerBound.budget",
+      "theorem": "LongTails.Theorems.PointwiseHessianStationarityLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PointwiseHessianStationarity",
+      "theorem": "LongTails.Theorems.PointwiseHessianStationarity.result",
+      "references": "- Shaoying Fang, Naoki Marumo, Akiko Takeda. [Parameter-Free Cubic-Regularized Newton Method: Sharp Complexity and Generalized Smoothness](https://arxiv.org/html/2607.10741v1). 2026, preprint v1. Complexity: $O(1+\\Delta\\sqrt{M}\\,\\varepsilon^{-3/2}+\\Delta\\sqrt{L_1}\\,\\varepsilon^{-1}+\\log(1+L_1G/A))$ exact function-value/gradient/Hessian oracle calls, including initialization and rejected trials, for deterministic $\\|\\nabla f(x)\\|\\le\\varepsilon$, using backtracking cubic-regularized Newton; $M=L_0+L_1\\varepsilon$, $A=M+L_1^{3/2}\\Delta$, and initial regularization $\\sigma_{\\mathrm{init}}=A$.",
+      "match_status": "match"
+    },
+    {
+      "module": "LongTails.Theorems.PointwiseHessianStationarityLowerBound",
+      "theorem": "LongTails.Theorems.PointwiseHessianStationarityLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained optimization of a C³ function f: ℝᵈ → ℝ. Nonconvex objectives are permitted; f(0)−inf f≤Δ.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: Point, broadSpec.Instance, broadSpec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "The gradient is exact at every queried point, independently of history and oracle seed.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: broadSpec.admissible oracle-answer equality."
+      },
+      {
+        "label": "function_value",
+        "details": "Each query returns the exact function value together with the gradient and full Hessian.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: Reply and broadSpec.admissible oracle-answer equality."
+      },
+      {
+        "label": "other",
+        "details": "Exact full-Hessian oracle: one bundled call returns (f(x),∇f(x),∇²f(x)); there is no oracle error.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: Reply and broadSpec.admissible; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "Pointwise third-derivative bound ‖D²(∇f)(x)‖≤L₀+L₁‖∇f(x)‖ for every x, using induced operator norms. L₀,L₁≥0 and L₀+L₁>0; no global Hessian-norm bound is imposed.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: broadSpec.valid and broadSpec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space ℝᵈ. Writing Q=Δ√(L₀+L₁ε)/ε^(3/2), validity requires Q≥2³⁹ and d≥2¹⁴⁰(1+⌈Q⌉₊)⁴.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: Point and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d,L₀,L₁,Δ,G,ε are public. The unknown objective satisfies f(0)−f(x)≤Δ for every x and ‖∇f(0)‖≤G, with Δ,ε>0 and G≥16ε. Algorithms have no additional structural restriction.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: Params, broadSpec.Public, broadSpec.publicInput, broadSpec.admissible, spec.valid; LongTails/Template.lean: Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output is a point X satisfying E[‖∇f(X)‖]≤ε, with the norm to the first power. The output must be measurable and its gradient norm integrable.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: broadSpec.Output and broadSpec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the algorithm and oracle seed laws. Exact oracle replies leave algorithmic randomization possible; oracle execution uses a fixed call budget.",
+        "evidence": "LongTails/Setups/PointwiseHessianStationarity.lean: broadSpec.successful; LongTails/Template.lean: Algorithm.law, Convergence, executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation uses a gradient-dependent pointwise third-derivative bound and explicit large-dimension parameter restrictions within an exact second-order oracle stationarity problem."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PointwiseHessianStationarity.result",
+        "LongTails.Theorems.PointwiseHessianStationarityLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PointwiseHessianStationarity",
+          "theorem": "LongTails.Theorems.PointwiseHessianStationarity.result",
+          "match_status": "match"
+        },
+        {
+          "module": "LongTails.Theorems.PointwiseHessianStationarityLowerBound",
+          "theorem": "LongTails.Theorems.PointwiseHessianStationarityLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

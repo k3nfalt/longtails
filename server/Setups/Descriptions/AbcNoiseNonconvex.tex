@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with ABC Noise}
+We consider a differentiable, possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$, with $L$-Lipschitz gradient for $L>0$ and finite infimum $f_\star$. A given point $x^0\in E$ satisfies $f(x^0)-f_\star\leq\Delta$, where $\Delta\geq0$. At $x$, the oracle returns an unbiased vector $g(x,\xi)$ using fresh independent samples $\xi$ with common law $\nu$; its noise second moment is at most $2A(f(x)-f_\star)+B\|\nabla f(x)\|^2+C$, where $A,B,C\geq0$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with $\mathbb{E}_P\|\nabla f(\bar{x})\|\leq\varepsilon$, where $P$ is the joint law of oracle and independent algorithm randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+The norm $\|\cdot\|$ is induced by the inner product on $E$. Let $\Omega$ be a measurable sample space. The algorithm receives $E$, $\Omega$, $L>0$, $A,B,C,\Delta\geq0$, $\varepsilon>0$, and $x^0$; the objective and its oracle distribution are accessed through oracle replies.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere, and
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Finite infimum and initial gap]
+There exists $f_\star\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f_\star&=\inf_{x\in E} f(x),\\
+f(x^0)-f_\star&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Independent unbiased oracle with ABC noise]
+There exist a probability measure $\nu$ on $\Omega$ and a jointly measurable map $g:E\times\Omega\to E$. For every $x\in E$, the vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable under $\xi\sim\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]
+&\leq 2A\bigl(f(x)-f_\star\bigr)\\
+&\quad+B\|\nabla f(x)\|^2+C.
+\end{aligned}
+\]
+The sample sequence $(\xi_k)_{k\geq0}$ has a joint probability law $Q$ on $\Omega^{\mathbb{N}}$: its coordinate maps are measurable, mutually independent, and each has law $\nu$. At the $k$th query $x\in E$, the oracle returns $g(x,\xi_k)$. Algorithm randomness is independent of this sample sequence.
+\end{assumption}
+
+Queries may be made at any point of $E$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable under $P$, and it must satisfy
+\[
+\mathbb{E}_P\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}
