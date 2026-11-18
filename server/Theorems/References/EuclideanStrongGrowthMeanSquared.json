@@ -1,0 +1,138 @@
+{
+  "setup": "LongTails.Setups.EuclideanStrongGrowthMeanSquared",
+  "searched_at": "2026-11-18T15:51:40.479435+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{\\left(1 + \\Gamma^{2}\\right) \\cdot \\sqrt{1 + \\Gamma^{2}} \\cdot Lbar \\cdot R^{2}}{\\varepsilon}}}{8192} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.EuclideanStrongGrowthMeanSquared.spec.Params → ℕ",
+        "value": "fun q => ⌊√((1 + q.Γ ^ 2) * √(1 + q.Γ ^ 2) * q.Lbar * q.R ^ 2 / q.ε) / 8192⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\sqrt{\\frac{\\left(1 + \\Gamma^{2}\\right) \\cdot \\sqrt{1 + \\Gamma^{2}} \\cdot Lbar \\cdot R^{2}}{\\varepsilon}}}{8192} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.EuclideanStrongGrowthMeanSquared.spec.Params → ℕ",
+          "value": "fun q => ⌊√((1 + q.Γ ^ 2) * √(1 + q.Γ ^ 2) * q.Lbar * q.R ^ 2 / q.ε) / 8192⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound",
+      "namespace": "LongTails.Setups.EuclideanStrongGrowthMeanSquared",
+      "setup": "LongTails.Setups.EuclideanStrongGrowthMeanSquared",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.EuclideanStrongGrowthMeanSquared.spec\n  LongTails.Theorems.StrongGrowthMeanSquaredLowerBound.budget",
+      "theorem": "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\sqrt{\\frac{2 \\cdot Lbar \\cdot R^{2}}{\\left(1 + \\Gamma\\right) \\cdot \\varepsilon}} \\right\\rceil_{+} \\cdot \\left\\lceil \\left(1 + \\Gamma\\right)^{2} \\cdot \\left(4810 + 3200 \\cdot \\log\\left(1 + \\Gamma\\right)\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.EuclideanStrongGrowthMeanSquared.spec.Params → ℕ",
+        "value": "fun q => ⌈√(2 * q.Lbar * q.R ^ 2 / ((1 + q.Γ) * q.ε))⌉₊ * ⌈(1 + q.Γ) ^ 2 * (4810 + 3200 * Real.log (1 + q.Γ))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\sqrt{\\frac{2 \\cdot Lbar \\cdot R^{2}}{\\left(1 + \\Gamma\\right) \\cdot \\varepsilon}} \\right\\rceil_{+} \\cdot \\left\\lceil \\left(1 + \\Gamma\\right)^{2} \\cdot \\left(4810 + 3200 \\cdot \\log\\left(1 + \\Gamma\\right)\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.EuclideanStrongGrowthMeanSquared.spec.Params → ℕ",
+          "value": "fun q => ⌈√(2 * q.Lbar * q.R ^ 2 / ((1 + q.Γ) * q.ε))⌉₊ * ⌈(1 + q.Γ) ^ 2 * (4810 + 3200 * Real.log (1 + q.Γ))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound",
+      "namespace": "LongTails.Setups.EuclideanStrongGrowthMeanSquared",
+      "setup": "LongTails.Setups.EuclideanStrongGrowthMeanSquared",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.EuclideanStrongGrowthMeanSquared.spec\n  LongTails.Theorems.StrongGrowthMeanSquaredUpperBound.budget",
+      "theorem": "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound",
+      "theorem": "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound",
+      "theorem": "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained differentiable convex minimization on ℝ^d. A minimizer x⋆ exists with ‖x0−x⋆‖≤R. No strong convexity or convexity of individual sample maps is required.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.admissible; LongTails/Setups/EuclideanStrongGrowthMeanSquared.lean: Params.toBase and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call queries (x,y) and returns (g(x,ξ),g(y,ξ)) using the same sample. Samples are fresh IID across calls, and E[g(x,ξ)]=∇f(x). Each budget unit counts one paired call, containing two gradient evaluations. All Params are public; f, g and the sampling distribution are hidden.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.Query, spec.Reply, spec.admissible and publicInput; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace; LongTails/Setups/EuclideanStrongGrowthMeanSquared.lean: spec.Public and publicInput."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "relative_error",
+        "details": "Unbiased multiplicative noise satisfies E‖g(x,ξ)−∇f(x)‖²≤Γ²‖∇f(x)‖² for every x. This is an integrated second-moment condition, without a pointwise relative-error or exponential-tail bound.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.admissible, unbiasedness and variance conjuncts."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The space is Euclidean ℝ^d. Public parameters satisfy Lbar>0, Γ≥0, R>0, ε>0, 67108864√(1+Γ²)ε≤Lbar R², and d≥(Lbar R²/(√(1+Γ²)ε))³. The sample space contains two distinct points with measurable singletons.",
+        "evidence": "LongTails/Setups/EuclideanStrongGrowthMeanSquared.lean: Params, Params.toBase and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Mean-squared smoothness holds under the same sample: E‖g(x,ξ)−g(y,ξ)‖²≤Lbar²‖x−y‖². The oracle is jointly measurable and all stated first and second moments are integrable. Individual sample maps need not be gradients or individually Lipschitz.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.admissible, measurability, integrability and gradient-difference conjuncts."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a measurable point X∈ℝ^d with integrable objective gap and E[f(X)−f(x⋆)]≤ε for a global minimizer x⋆. No particular iterate or averaging rule is prescribed.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.successful; LongTails/Setups/EuclideanStrongGrowthMeanSquared.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The objective-gap guarantee averages over the algorithm's private randomness and the IID oracle sequence, within a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/StrongGrowthMeanSquaredSmoothConvex.lean: spec.successful; LongTails/Template.lean: Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "A structured stochastic convex formulation combining multiplicative second-moment noise, mean-squared smoothness, same-sample paired queries, and explicit dimension–accuracy restrictions."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound.result",
+        "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound",
+          "theorem": "LongTails.Theorems.StrongGrowthMeanSquaredLowerBound.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound",
+          "theorem": "LongTails.Theorems.StrongGrowthMeanSquaredUpperBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

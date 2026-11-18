@@ -1,0 +1,49 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Euclidean Weak Minty Root Finding}
+We consider finding a zero of an $L$-Lipschitz map $F:\mathbb{R}^d\to\mathbb{R}^d$, where $d\geq257$ and $L>0$. A given point $x^0$ lies within Euclidean distance $R>0$ of a zero $x^\star$ satisfying the weak Minty condition $\langle F(x),x-x^\star\rangle\geq-\rho\|F(x)\|^2$ for every $x$, with $0\leq\rho\leq1/(20L)$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$ with $28\varepsilon\leq LR$, the goal is an output $\bar{x}$ with integrable residual norm and $\mathbb{E}_{P}\|F(\bar{x})\|\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The root-finding problem is to find $x\in\mathbb{R}^d$ such that
+\[
+F(x)=0.
+\]
+Throughout, $\langle\cdot,\cdot\rangle$ and $\|\cdot\|$ denote the standard Euclidean inner product and norm. The algorithm receives $d,L,\rho,x^0,R$, and $\varepsilon$, with parameter ranges
+\[
+\begin{aligned}
+&d\in\mathbb{N},\qquad d\geq257,\qquad L>0,\\
+&0\leq\rho\leq\frac{1}{20L},\qquad R>0,\\
+&\varepsilon>0,\qquad 28\varepsilon\leq LR.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Lipschitz continuity]
+For every $x,y\in\mathbb{R}^d$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty condition and initial distance]
+There exists $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+F(x^\star)&=0,\\
+\|x^\star-x^0\|&\leq R,\\
+\langle F(x),x-x^\star\rangle
+&\geq-\rho\|F(x)\|^2
+\qquad\text{for every }x\in\mathbb{R}^d.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must have integrable residual norm under $P$ and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

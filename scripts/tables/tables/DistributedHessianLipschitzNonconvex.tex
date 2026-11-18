@@ -1,0 +1,111 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds (sufficient budgets) for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedHessianLipschitzNonconvex.lean}{DistributedHessianLipschitzNonconvex}.}\label{tab:DistributedHessianLipschitzNonconvex}
+\parbox{\linewidth}{\footnotesize A common objective $f:\mathbb R^d\to\mathbb R$ has an $L$-Lipschitz gradient, differentiable gradient and $Q$-Lipschitz Hessian, with $f\ge f_{\rm low}$ and $f(x_0)-f_{\rm low}\le\Delta$. Here $L,\varepsilon,h_i>0$ and $Q,\Delta,\sigma,\ell,b\ge0$. The $n\ge1$ workers have jointly measurable, integrable unbiased gradient oracles of variance at most $\sigma^2$, IID samples within each worker and independent worker streams. A star network permits parallel worker computation and independent directed links, with one pending query per worker and one packet per directed link; an $m$-bit packet takes $\ell+bm$. Our constructed normalized methods return a selected coordinator iterate $X$ with $\int\|\nabla f(X(\omega))\|\,dP_{\rm exec}(\omega)\le\varepsilon$, where $P_{\rm exec}$ is the actual execution law; finite-event execution holds almost surely. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedCurvatureNormalized.lean}{Distributed\allowbreak Curvature\allowbreak Normalized} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedCurvatureNormalized.md}{(review)}
+& Fixed elapsed-time deadline:
+$\mathcal{O}\!\left(A\left[\begin{aligned}
+&\ell+H(1+\tfrac{\sigma^2}{n\varepsilon^2})+b(\lambda_u+\lambda_s)\\
+&+\tfrac{db\lambda_u}{n}+\tfrac{db\lambda_s}{\sqrt n}\\ &
+ +(\tfrac{d^3b^3\lambda_u\lambda_s^2}{n})^{1/3}\\
+&+\sqrt{\tfrac{dH\sigma^2b\lambda_u}{n\varepsilon^2}}\\ &
+ +db\lambda_s\min\{1,\tfrac{\sqrt{Q\varepsilon}}L\}
+\end{aligned}\right]\right)$
+& & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedCurvatureNormalizedSimple.lean}{Distributed\allowbreak Curvature\allowbreak Normalized\allowbreak Simple} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedCurvatureNormalizedSimple.md}{(review)}
+& Fixed elapsed-time deadline:
+$\mathcal{O}\!\left(A\left[\begin{aligned}
+&\ell+H(1+\tfrac{\sigma^2}{n\varepsilon^2})\\
+&+b(\lambda_s+\lambda_u)(1+\tfrac d{n^{1/3}})\\
+&+db\lambda_s\min\{1,\tfrac{\sqrt{Q\varepsilon}}L\}\\ &
+ +\sqrt{\tfrac{dH\sigma^2b\lambda_u}{n\varepsilon^2}}
+\end{aligned}\right]\right)$.
+Same algorithm and order as \textbf{(1)}; deadline up to $2048$ times looser.
+& & \\
+
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d$: dimension; $n$: workers; $h_i$: gradient computation time; $H=\max_i h_i$; $\ell$: packet latency; $b$: time per bit; $\Delta$: initial gap bound; $\sigma^2$: variance bound; $A=1+L\Delta/\varepsilon^2$;
+$\lambda_s=1+\log(1+A\sqrt d)$;
+$\lambda_u=1+\log(1+(d^2A+d\min\{\sigma^2/\varepsilon^2,n\})/\sqrt n)$;
+$\Lambda=1+\log(2+d+L\Delta/\varepsilon^2+\sigma^2/\varepsilon^2)$.
+For \textbf{(3)}, \textbf{(4)}, $\kappa,\tau$: downlink/uplink time per real coordinate (no packet latency or finite-bit encoding); price comparison uses $\kappa=b\lambda_s$, $\tau=b\lambda_u$.
+In \textbf{(3)}, $L_{\max}=\max\{L,L_A,L_B\}$ and $L_A,L_B$ satisfy
+$\|n^{-1}\sum_i[\nabla f(x+u_i)-\nabla f(x)]\|^2\le L_A^2n^{-1}\sum_i\|u_i\|^2+L_B^2\|n^{-1}\sum_i u_i\|^2$ for all $x,u_i$;
+$(L_A,L_B)=(L,0)$ is always valid. $\log$: natural logarithm; $\asymp$: equality up to universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
+\begin{table}[tp]
+\centering
+\caption{DistributedHessianLipschitzNonconvex (continued).}
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule[1.2pt]
+\textbf{(3)} Inkheart SGD \citep{dhlnBegunovTyurin2026v2}, Thm.~2.2.
+& Expected elapsed time:
+$\mathcal{O}\!\left(\begin{aligned}
+&\tfrac{L_{\max}\Delta}{\varepsilon^2}\left[H(1+\tfrac{\sigma^2}{n\varepsilon^2})+\kappa+\tau\right.\\
+&\quad+\tfrac{d\tau}n+\tfrac{d\kappa}{\sqrt n}\\ &\quad
+ +(\tfrac{d^3\tau\kappa^2}n)^{1/3}\\
+&\left.\quad+\sqrt{\tfrac{dH\sigma^2\tau}{n\varepsilon^2}}\right]
+ +\tfrac{d\kappa L_A\Delta}{\varepsilon^2}
+\end{aligned}\right)$.
+Common objective; uniform compute bound $H$; per-coordinate communication prices; $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$.
+& \textbf{(1)}, \textbf{(2)}: For $L_A\asymp L$, downlink factor $\sqrt{Q\varepsilon}/L$ when $\sqrt{Q\varepsilon}<L$, at matched coordinate prices. Fixed deadlines; latency and bits charged. With fixed positive $L,Q,\Delta,\sigma,H,b,\kappa,\tau$, $\ell=0$, $d\asymp\varepsilon^{-7/4}$, $n\asymp\varepsilon^{-3/2}$:
+$\mathcal{O}(\varepsilon^{-15/4})\to\mathcal{O}(\varepsilon^{-13/4}\log(1/\varepsilon))$ for the norm target.
+& \textbf{(1)}, \textbf{(2)} require finite $Q$, guarantee norm rather than squared norm, and charge bit-width logarithms and latency. Downlink advantage can reverse when $L_A\lesssim\sqrt{Q\varepsilon}$. \\
+\midrule
+\textbf{(4)} Synchronous minibatch SGD \citep{dhlnBegunovTyurin2026v2}, eq.~(2).
+& Elapsed-time upper bound:
+$\mathcal{O}\!\left(\tfrac{L\Delta}{\varepsilon^2}
+ [d(\kappa+\tau)+H(1+\tfrac{\sigma^2}{n\varepsilon^2})]\right)$.
+Uniform compute bound $H$; coordinate prices; $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$; no Hessian regularity required.
+& \textbf{(1)}, \textbf{(2)}: At $\kappa=b\lambda_s$, $\tau=b\lambda_u$, communication dependence becomes $b(\lambda_s+\lambda_u)(1+d/n^{1/3})+db\lambda_s\min\{1,\sqrt{Q\varepsilon}/L\}$. Gain for large $n$ and $\sqrt{Q\varepsilon}\ll L$ when communication dominates.
+& \textbf{(1)}, \textbf{(2)} require $Q$-Lipschitz Hessians and give the weaker norm criterion. Bit costs and packet latency are additional to this coordinate-cost model. \\
+\midrule
+\textbf{(5)} DistributedBatchedSgd \citep{dhlnBatchedRepository}.
+& Fixed elapsed-time deadline:
+$\mathcal{O}\!\left(A\left[\begin{aligned}
+&\min_i\left\{h_i+
+ \tfrac{1+\sigma^2/\varepsilon^2}{\sum_{j:h_j\le h_i}h_j^{-1}}\right\}\\
+&+\ell+b(1+d\Lambda)
+\end{aligned}\right]\right)$.
+Same bit-cost star model; smooth-only scope; $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$.
+& \textbf{(1)}, \textbf{(2)}: $bd\Lambda$ becomes $b(\lambda_s+\lambda_u)(1+d/n^{1/3})+db\lambda_s\min\{1,\sqrt{Q\varepsilon}/L\}$. Savings when $n\gg1$ and $\sqrt{Q\varepsilon}\ll L$, subject to compute/noise terms.
+& \textbf{(1)}, \textbf{(2)} require $Q$, give norm rather than squared-norm accuracy, and use $H=\max_i h_i$ instead of selecting fast workers; stragglers can worsen time. \\
+\midrule
+\textbf{(6)} Serial NIGT \citep{shncscCutkosky2020}, Thm.~3; local-output restriction.
+& Serial computation time:
+$\mathcal{O}(H\varepsilon^{-7/2})$ for fixed positive $L,Q,\Delta,\sigma$, as $\varepsilon\downarrow0$; one fresh stochastic gradient per step. Expected norm target; network transmission is excluded.
+& \textbf{(1)}, \textbf{(2)}: Total distributed time $\mathcal{O}(\varepsilon^{-13/4}\log(1/\varepsilon))$ in \textbf{(3)}'s example beats this serial computation bound, despite charging communication.
+& \textbf{(1)}, \textbf{(2)} are dimension-dependent; for fixed positive remaining parameters, $d\gtrsim\varepsilon^{-2}$ can favor \textbf{(6)}'s serial computation. Full network time is not supplied by \textbf{(6)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $d$: dimension; $n$: workers; $h_i$: gradient computation time; $H=\max_i h_i$; $\ell$: packet latency; $b$: time per bit; $\Delta$: initial gap bound; $\sigma^2$: variance bound; $A=1+L\Delta/\varepsilon^2$;
+$\lambda_s=1+\log(1+A\sqrt d)$;
+$\lambda_u=1+\log(1+(d^2A+d\min\{\sigma^2/\varepsilon^2,n\})/\sqrt n)$;
+$\Lambda=1+\log(2+d+L\Delta/\varepsilon^2+\sigma^2/\varepsilon^2)$.
+For \textbf{(3)}, \textbf{(4)}, $\kappa,\tau$: downlink/uplink time per real coordinate (no packet latency or finite-bit encoding); price comparison uses $\kappa=b\lambda_s$, $\tau=b\lambda_u$.
+In \textbf{(3)}, $L_{\max}=\max\{L,L_A,L_B\}$ and $L_A,L_B$ satisfy
+$\|n^{-1}\sum_i[\nabla f(x+u_i)-\nabla f(x)]\|^2\le L_A^2n^{-1}\sum_i\|u_i\|^2+L_B^2\|n^{-1}\sum_i u_i\|^2$ for all $x,u_i$;
+$(L_A,L_B)=(L,0)$ is always valid. $\log$: natural logarithm; $\asymp$: equality up to universal factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,76 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary and sufficient exact-gradient budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalStrongQuasar.lean}{HighDimensionalStrongQuasar}.}\label{tab:HighDimensionalStrongQuasar}
+\parbox{\linewidth}{\footnotesize
+Differentiable $f:\mathbb{R}^d\to\mathbb{R}$ has $L$-Lipschitz gradient and a global minimizer $x_\star$ satisfying
+$f(x_\star)\ge f(x)+\gamma^{-1}\langle\nabla f(x),x_\star-x\rangle+\frac{\mu}{2}\|x-x_\star\|^2$ for every $x$, with $f(x_0)-f(x_\star)\le\Delta$.
+Parameters satisfy $L,\mu,\varepsilon>0$, $0<\gamma\le1/256$, $\kappa\ge870400$, $\gamma^2\kappa\ge4$, $\Delta\ge1000\gamma\sqrt\kappa\,\varepsilon$, and $d\ge(\sqrt\kappa/\gamma)^5[\Delta/(1000\gamma\sqrt\kappa\,\varepsilon)]^3$.
+The oracle returns exact gradients. The target is integrable expected gap $\int[f(x_{\rm out}(\omega))-f(x_\star)]\,dP(\omega)\le\varepsilon$, with $P$ the algorithm's seed law.
+Under this same model, \textbf{(1)} and \textbf{(2)} match up to constants when $\varepsilon\le\Delta/(10^6\gamma\kappa)$; for $q\ge2$ otherwise, their ratio is at most $\mathcal{O}(\log\kappa)$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{Lower bound (necessary)}\newline
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HighDimensionalStrongQuasarLowerBound.lean}{High\allowbreak{}Dimensional\allowbreak{}Strong\allowbreak{}Quasar\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HighDimensionalStrongQuasarLowerBound.md}{(review)} & $\Omega\!\left(\frac{\sqrt\kappa}{\gamma}\log\frac{\Delta}{1000\gamma\sqrt\kappa\,\varepsilon}\right)$ gradient calls, $q\ge2$.
+Arbitrary randomized algorithms and outputs. & & \\
+\midrule
+\textbf{Upper bound (sufficient)}\newline
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HighDimensionalStrongQuasarUpperBound.lean}{High\allowbreak{}Dimensional\allowbreak{}Strong\allowbreak{}Quasar\allowbreak{}Upper\allowbreak{}Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HighDimensionalStrongQuasarUpperBound.md}{(review)} & $\mathcal{O}\!\left(\frac{\sqrt\kappa}{\gamma}\log\!\left(1+\frac{\Delta}{\gamma\varepsilon}\right)\right)$ gradient calls; fixed-call expected gap. & & \\
+\midrule[1.2pt]
+\textbf{Prior lower bound (necessary)}\newline
+\textbf{(3)} \citep{hdsqHinderV3Verified}, Remark 4 proof, App.~E.3
+& $\Omega\!\left(\max\!\left\{\frac{\sqrt\kappa}{\gamma},\sqrt{\frac\kappa\gamma}\log\frac\Delta\varepsilon\right\}\right)$ gradient calls; deterministic algorithms. The proof gives this bound; the remark states a stronger product.
+& \textbf{(1)}: randomized hardness; necessary budget gains $\Theta(\min\{\gamma^{-1/2},\log(\Delta/(\gamma\varepsilon))\})$ when $\varepsilon\le\Delta/(10^6\gamma\kappa)$.
+For $\gamma=\kappa^{-1/4}$, $\varepsilon=\Delta\kappa^{-c}$, $c\ge2$, gain $\Theta(\min\{\kappa^{1/8},c\log\kappa\})$.
+& \textbf{(1)} needs the stated small-$\gamma$, large-$\kappa$, high-dimension regime; constants about $10^6$ looser. \\
+
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\Delta$ is the initial-gap bound; $\varepsilon$ is target accuracy; $q=\Delta/(1000\gamma\sqrt\kappa\,\varepsilon)$; $P$ is the seed probability measure. In \textbf{(7)}, $c_0>1$ is a confidence parameter and the corollary uses $c=1/2$. In \textbf{(6)}, $T_k$ is the $k$th unit-rate Poisson jump time and $V=f(x_0)-f(x_\star)+\mu\|x_0-x_\star\|^2/2\le(1+\gamma^{-1})\Delta$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
+\begin{table}[tp]
+\centering
+\caption{HighDimensionalStrongQuasar (continued).}
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{Prior upper bounds (sufficient)}\newline
+\textbf{(4)} \citep{hdsqRelativeRepository}, $\delta=0$
+& $\mathcal{O}\!\left(\frac{\sqrt\kappa}{\gamma}\log\!\left(1+\frac\Delta{\gamma\varepsilon}\right)\right)$ gradient calls on the common setup; identical algorithm and budget.
+& \textbf{(2)}: Matches known rate.
+& \textbf{(2)} restricts the earlier finite-dimensional, relative-error result to exact gradients and the stated parameter/dimension regime. \\
+\midrule
+\textbf{(5)} \citep{hdsqHinderV3Verified}, Theorem 1
+& $\mathcal{O}\!\left(\frac{\sqrt\kappa}{\gamma}\log\frac\kappa\gamma\,\log\!\left(1+\frac\Delta{\gamma\varepsilon}\right)\right)$ total function and gradient evaluations; deterministic gap $\le\varepsilon$.
+& \textbf{(2)} removes $\log(\kappa/\gamma)$ in cost for the shared expected-gap target and needs no function values; already achieved by \textbf{(4)}.
+& \textbf{(2)} gives only expected accuracy, needs $L$ and exact $\gamma$ rather than a lower bound, and imposes the stated regime. \\
+\midrule
+\textbf{(6)} \citep{hdsqWangV1Verified}, Theorem 2
+& $\mathcal{O}\!\left(\frac{\sqrt\kappa}{\gamma}\log\!\left(1+\frac\Delta{\gamma\varepsilon}\right)\right)$ gradient-call scale; time-weighted guarantee $\mathbb{E}[e^{\gamma T_k/\sqrt\kappa}(f(x_k)-f(x_\star))]\le V$.
+& \textbf{(2)} matches the rate scale; fixed-call expected gap already appears in \textbf{(4)}.
+& \textbf{(2)} has larger constants and the stated parameter/dimension restrictions. \\
+\midrule
+\textbf{(7)} \citep{hdsqWangV1Verified}, Corollary 2
+& $\mathcal{O}\!\left(\frac{\sqrt\kappa}{\gamma}\log\!\left(1+\frac{c_0\Delta}{\gamma\varepsilon}\right)\right)$ gradient calls; gap $\le\varepsilon$ with probability at least $1-4/k-1/c_0$, for $c_0>1$ and $k$ calls.
+& \textbf{(2)} matches the rate scale at fixed confidence, with fixed-call expected accuracy.
+& \textbf{(2)} does not supply this explicit probability guarantee; its parameter/dimension regime is narrower. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$; $\Delta$ is the initial-gap bound; $\varepsilon$ is target accuracy; $q=\Delta/(1000\gamma\sqrt\kappa\,\varepsilon)$; $P$ is the seed probability measure. In \textbf{(7)}, $c_0>1$ is a confidence parameter and the corollary uses $c=1/2$. In \textbf{(6)}, $T_k$ is the $k$th unit-rate Poisson jump time and $V=f(x_0)-f(x_\star)+\mu\|x_0-x_\star\|^2/2\le(1+\gamma^{-1})\Delta$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

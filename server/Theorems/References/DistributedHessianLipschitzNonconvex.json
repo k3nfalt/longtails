@@ -1,0 +1,134 @@
+{
+  "setup": "LongTails.Setups.DistributedHessianLipschitzNonconvex",
+  "searched_at": "2026-11-18T15:50:38.375991+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 33554432 \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\left(l + \\max\\left\\{ \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right), \\max\\left\\{ b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right), \\max\\left\\{ b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right), \\max\\left\\{ \\frac{d \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)}{n}, \\max\\left\\{ \\frac{d \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)}{\\sqrt{n}}, \\max\\left\\{ \\left(\\frac{d^{3} \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right) \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)^{2}}{n}\\right)^{\\frac{1}{3}}, \\max\\left\\{ \\frac{\\sigma^{2} \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right)}{n \\cdot \\varepsilon^{2}}, \\max\\left\\{ \\sqrt{\\frac{d \\cdot \\sigma^{2} \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)}{n \\cdot \\varepsilon^{2}}}, d \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right) \\cdot \\min\\left\\{ 1, \\frac{\\sqrt{Q \\cdot \\varepsilon}}{L} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\}\\right), 0 \\right\\}",
+        "type": "LongTails.Setups.DistributedHessianLipschitzNonconvex.Params → NNReal",
+        "value": "fun p =>\n  (33554432 * (1 + p.L * p.Δ / p.ε ^ 2) *\n      (↑p.l +\n        max (↑(Finset.univ.sup p.h))\n          (max\n            (↑p.b *\n              ↑(⌈1048576 *\n                        (1 +\n                          (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                            √↑↑p.n)⌉₊.size +\n                  66))\n            (max (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66))\n              (max\n                (↑p.d *\n                    (↑p.b *\n                      ↑(⌈1048576 *\n                                (1 +\n                                  (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                                    √↑↑p.n)⌉₊.size +\n                          66)) /\n                  ↑↑p.n)\n                (max (↑p.d * (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66)) / √↑↑p.n)\n                  (max\n                    ((↑p.d ^ 3 *\n                            (↑p.b *\n                              ↑(⌈1048576 *\n                                        (1 +\n                                          (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) +\n                                              ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                                            √↑↑p.n)⌉₊.size +\n                                  66)) *\n                          (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66)) ^ 2 /\n                        ↑↑p.n) ^\n                      (1 / 3))\n                    (max (p.σ ^ 2 * ↑(Finset.univ.sup p.h) / (↑↑p.n * p.ε ^ 2))\n                      (max\n                        (√(↑p.d * p.σ ^ 2 * ↑(Finset.univ.sup p.h) *\n                              (↑p.b *\n                                ↑(⌈1048576 *\n                                          (1 +\n                                            (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) +\n                                                ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                                              √↑↑p.n)⌉₊.size +\n                                    66)) /\n                            (↑↑p.n * p.ε ^ 2)))\n                        (↑p.d * (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66)) *\n                          min 1 (√(p.Q * p.ε) / p.L))))))))))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 33554432 \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\left(l + \\max\\left\\{ \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right), \\max\\left\\{ b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right), \\max\\left\\{ b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right), \\max\\left\\{ \\frac{d \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)}{n}, \\max\\left\\{ \\frac{d \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)}{\\sqrt{n}}, \\max\\left\\{ \\left(\\frac{d^{3} \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right) \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)^{2}}{n}\\right)^{\\frac{1}{3}}, \\max\\left\\{ \\frac{\\sigma^{2} \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right)}{n \\cdot \\varepsilon^{2}}, \\max\\left\\{ \\sqrt{\\frac{d \\cdot \\sigma^{2} \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right)}{n \\cdot \\varepsilon^{2}}}, d \\cdot \\left(b \\cdot \\left(\\left\\lceil\\log_{2}\\left(\\left\\lceil 1048576 \\cdot \\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+} + 66\\right)\\right) \\cdot \\min\\left\\{ 1, \\frac{\\sqrt{Q \\cdot \\varepsilon}}{L} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\} \\right\\}\\right), 0 \\right\\}",
+          "type": "LongTails.Setups.DistributedHessianLipschitzNonconvex.Params → NNReal",
+          "value": "fun p =>\n  (33554432 * (1 + p.L * p.Δ / p.ε ^ 2) *\n      (↑p.l +\n        max (↑(Finset.univ.sup p.h))\n          (max\n            (↑p.b *\n              ↑(⌈1048576 *\n                        (1 +\n                          (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                            √↑↑p.n)⌉₊.size +\n                  66))\n            (max (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66))\n              (max\n                (↑p.d *\n                    (↑p.b *\n                      ↑(⌈1048576 *\n                                (1 +\n                                  (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                                    √↑↑p.n)⌉₊.size +\n                          66)) /\n                  ↑↑p.n)\n                (max (↑p.d * (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66)) / √↑↑p.n)\n                  (max\n                    ((↑p.d ^ 3 *\n                            (↑p.b *\n                              ↑(⌈1048576 *\n                                        (1 +\n                                          (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) +\n                                              ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                                            √↑↑p.n)⌉₊.size +\n                                  66)) *\n                          (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66)) ^ 2 /\n                        ↑↑p.n) ^\n                      (1 / 3))\n                    (max (p.σ ^ 2 * ↑(Finset.univ.sup p.h) / (↑↑p.n * p.ε ^ 2))\n                      (max\n                        (√(↑p.d * p.σ ^ 2 * ↑(Finset.univ.sup p.h) *\n                              (↑p.b *\n                                ↑(⌈1048576 *\n                                          (1 +\n                                            (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) +\n                                                ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) /\n                                              √↑↑p.n)⌉₊.size +\n                                    66)) /\n                            (↑↑p.n * p.ε ^ 2)))\n                        (↑p.d * (↑p.b * ↑(⌈1048576 * (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)⌉₊.size + 66)) *\n                          min 1 (√(p.Q * p.ε) / p.L))))))))))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedCurvatureNormalized",
+      "namespace": "LongTails.Setups.DistributedHessianLipschitzNonconvex",
+      "setup": "LongTails.Setups.DistributedHessianLipschitzNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedHessianLipschitzNonconvex.spec\n  LongTails.Theorems.DistributedCurvatureNormalized.budget",
+      "theorem": "LongTails.Theorems.DistributedCurvatureNormalized.result"
+    },
+    {
+      "budget": {
+        "latex": "\\max\\left\\{ 2^{32} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\left(l + \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) \\cdot \\left(1 + \\frac{\\sigma^{2}}{n \\cdot \\varepsilon^{2}}\\right) + b \\cdot \\left(2 + \\log\\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) + \\log\\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right)\\right) \\cdot \\left(1 + \\frac{d}{n^{\\frac{1}{3}}}\\right) + d \\cdot b \\cdot \\left(1 + \\log\\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right)\\right) \\cdot \\min\\left\\{ 1, \\frac{\\sqrt{Q \\cdot \\varepsilon}}{L} \\right\\} + \\sqrt{\\frac{d \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) \\cdot \\sigma^{2} \\cdot b \\cdot \\left(1 + \\log\\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right)\\right)}{n \\cdot \\varepsilon^{2}}}\\right), 0 \\right\\}",
+        "type": "LongTails.Setups.DistributedHessianLipschitzNonconvex.Params → NNReal",
+        "value": "fun p =>\n  (2 ^ 32 * (1 + p.L * p.Δ / p.ε ^ 2) *\n      (↑p.l + ↑(Finset.univ.sup p.h) * (1 + p.σ ^ 2 / (↑↑p.n * p.ε ^ 2)) +\n            ↑p.b *\n                (2 + Real.log (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d) +\n                  Real.log\n                    (1 + (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) / √↑↑p.n)) *\n              (1 + ↑p.d / ↑↑p.n ^ (1 / 3)) +\n          ↑p.d * ↑p.b * (1 + Real.log (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)) * min 1 (√(p.Q * p.ε) / p.L) +\n        √(↑p.d * ↑(Finset.univ.sup p.h) * p.σ ^ 2 * ↑p.b *\n              (1 +\n                Real.log (1 + (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) / √↑↑p.n)) /\n            (↑↑p.n * p.ε ^ 2)))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "\\max\\left\\{ 2^{32} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\left(l + \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) \\cdot \\left(1 + \\frac{\\sigma^{2}}{n \\cdot \\varepsilon^{2}}\\right) + b \\cdot \\left(2 + \\log\\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right) + \\log\\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right)\\right) \\cdot \\left(1 + \\frac{d}{n^{\\frac{1}{3}}}\\right) + d \\cdot b \\cdot \\left(1 + \\log\\left(1 + \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) \\cdot \\sqrt{d}\\right)\\right) \\cdot \\min\\left\\{ 1, \\frac{\\sqrt{Q \\cdot \\varepsilon}}{L} \\right\\} + \\sqrt{\\frac{d \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) \\cdot \\sigma^{2} \\cdot b \\cdot \\left(1 + \\log\\left(1 + \\frac{d^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}\\right) + d \\cdot \\min\\left\\{ \\frac{\\sigma^{2}}{\\varepsilon^{2}}, n \\right\\}}{\\sqrt{n}}\\right)\\right)}{n \\cdot \\varepsilon^{2}}}\\right), 0 \\right\\}",
+          "type": "LongTails.Setups.DistributedHessianLipschitzNonconvex.Params → NNReal",
+          "value": "fun p =>\n  (2 ^ 32 * (1 + p.L * p.Δ / p.ε ^ 2) *\n      (↑p.l + ↑(Finset.univ.sup p.h) * (1 + p.σ ^ 2 / (↑↑p.n * p.ε ^ 2)) +\n            ↑p.b *\n                (2 + Real.log (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d) +\n                  Real.log\n                    (1 + (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) / √↑↑p.n)) *\n              (1 + ↑p.d / ↑↑p.n ^ (1 / 3)) +\n          ↑p.d * ↑p.b * (1 + Real.log (1 + (1 + p.L * p.Δ / p.ε ^ 2) * √↑p.d)) * min 1 (√(p.Q * p.ε) / p.L) +\n        √(↑p.d * ↑(Finset.univ.sup p.h) * p.σ ^ 2 * ↑p.b *\n              (1 +\n                Real.log (1 + (↑p.d ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + ↑p.d * min (p.σ ^ 2 / p.ε ^ 2) ↑↑p.n) / √↑↑p.n)) /\n            (↑↑p.n * p.ε ^ 2)))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedCurvatureNormalizedSimple",
+      "namespace": "LongTails.Setups.DistributedHessianLipschitzNonconvex",
+      "setup": "LongTails.Setups.DistributedHessianLipschitzNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedHessianLipschitzNonconvex.spec\n  LongTails.Theorems.DistributedCurvatureNormalizedSimple.budget",
+      "theorem": "LongTails.Theorems.DistributedCurvatureNormalizedSimple.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistributedCurvatureNormalized",
+      "theorem": "LongTails.Theorems.DistributedCurvatureNormalized.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.DistributedCurvatureNormalizedSimple",
+      "theorem": "LongTails.Theorems.DistributedCurvatureNormalizedSimple.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of f: ℝ^d → ℝ, permitting nonconvex objectives. The gradient is globally L-Lipschitz, and a global lower bound satisfies f(x0) − lower ≤ Δ. Parameters require L > 0 and Δ ≥ 0.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: spec.admissible and spec.valid; LongTails/Setups/DistributedHessianLipschitzNonconvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Worker i evaluates g_i(x, ξ), with E[g_i(x, ξ)] = ∇f(x) and E‖g_i(x, ξ) − ∇f(x)‖² ≤ σ². Worker distributions may differ. Samples are IID within each worker and independent across worker streams. Replies contain the queried point and stochastic gradient; no Hessian or function-value oracle is supplied.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: system and spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient; LongTails/Setups/StarNetwork.lean: ComputeQuery and ComputeReply."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Uniform second-moment noise bound σ² at every query point, with σ ≥ 0. No exponential-tail or samplewise smoothness condition is imposed.",
+        "evidence": "LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.variance_integrable and variance; LongTails/Setups/DistributedSmoothNonconvex.lean: spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace ℝ (Fin d), with d a natural number.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean: Params.d and Point."
+      },
+      {
+        "label": "other",
+        "details": "The gradient is differentiable and its derivative satisfies ‖D∇f(x) − D∇f(y)‖ ≤ Q‖x − y‖ globally, with Q ≥ 0. All parameters, including Q, L, Δ, σ, ε, x0 and network costs, are public.\nElapsed-time model with one server and n ≥ 1 workers in a star network. Worker i needs h_i > 0 time per gradient and has at most one pending computation. Each directed server–worker link has at most one pending message; distinct links operate concurrently. A message takes l + b times its transmitted bit length, including a 64-bit execution-added suffix. Algorithms use 64-bit clock readings, may abort computations, and must have almost surely finitely many events through the deadline.",
+        "evidence": "LongTails/Setups/DistributedHessianLipschitzNonconvex.lean: Params.Q and spec fields Public, publicInput, valid, admissible.\nLongTails/Setups/StarNetwork.lean: computation and communication; LongTails/TemplateDistributed.lean: clockBits, Algorithm, step, FiniteEvents and TimedConvergence; LongTails/Setups/DistributedSmoothNonconvex.lean: Params and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output is a measurable ℝ^d-valued random point with integrable gradient norm satisfying E‖∇f(output)‖ ≤ ε, where ε > 0. The norm is not squared.",
+        "evidence": "LongTails/Setups/DistributedHessianLipschitzNonconvex.lean: spec.successful; LongTails/Setups/DistributedSmoothNonconvex.lean: spec.valid."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the product of the algorithm seed law and oracle seed law, for the server-designated output at the fixed elapsed-time deadline.",
+        "evidence": "LongTails/TemplateDistributed.lean: law, execute and TimedConvergence; LongTails/Setups/DistributedHessianLipschitzNonconvex.lean: spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Smooth stochastic nonconvex stationarity with a Lipschitz Hessian is established, but this setup specifies a detailed elapsed-time benchmark with concurrent star links, finite bitstrings, latency, per-bit costs, and finite clock readings."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistributedCurvatureNormalized.result",
+        "LongTails.Theorems.DistributedCurvatureNormalizedSimple.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistributedCurvatureNormalized",
+          "theorem": "LongTails.Theorems.DistributedCurvatureNormalized.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.DistributedCurvatureNormalizedSimple",
+          "theorem": "LongTails.Theorems.DistributedCurvatureNormalizedSimple.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

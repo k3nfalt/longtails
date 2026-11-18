@@ -4,6 +4,9 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Data.Nat.Log
 import Mathlib.Data.Nat.Sqrt
+import Mathlib.Data.Nat.Size
+import Mathlib.Basic.NNReal.Defs
+import Mathlib.Data.Finset.Lattice.Fold
 import Mathlib.Data.PNat.Defs
 import Mathlib.Algebra.BigOperators.Group.Finset.Defs
 import Mathlib.LinearAlgebra.Dimension.Finrank
@@ -48,7 +51,25 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
   let b ← latexPP args.back!
   return (sized a).protectRight bp ++ LatexData.binOp op assoc bp ++ (sized b).protectLeft bp
 
+private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
+  let name := e.getAppFn.constName!
+  guard ((`LongTails.Theorems).isPrefixOf name)
+  let kinds ← getParamKinds e
+  let mut arguments := #[]
+  for arg in e.getAppArgs, kind in kinds do
+    if kind.isRegularExplicit && !(← isProof arg) then
+      arguments := arguments.push (← latexPP arg).latex.1
+  return .atomString ("\\operatorname{" ++ name.getString! ++ "}" ++
+    (if arguments.isEmpty then "" else "\\left(" ++ String.intercalate ", " arguments.toList ++ "\\right)"))
+
+@[latex_pp const] def namedConstantPrinter : LatexPrinter := namedApplication
+
 @[latex_pp app] def applicationPrinter : LatexPrinter := fun e => do
+  if e.getAppFn.isFVar then
+    let mut result := (← latexPP e.getAppFn).latex.1
+    for arg in e.getAppArgs do
+      result := result ++ "\\left(" ++ (← latexPP arg).latex.1 ++ "\\right)"
+    return .atomString result
   let name := e.getAppFn.constName!
   let args := e.getAppArgs
   match name with
@@ -58,6 +79,10 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args[4]!).latex.1 ++ " & \\mathrm{otherwise} \\end{cases}")
   | ``OfNat.ofNat => latexPP args[1]!
   | ``Nat.cast | ``NatCast.natCast | ``PNat.val => latexPP args.back!
+  | ``NNReal.toReal => latexPP args.back!
+  | ``Real.toNNReal =>
+    return .ofString ("\\max\\left\\{ " ++ (← latexPP args.back!).latex.1 ++ ", 0 \\right\\}")
+  | ``Eq => binary args " = " 50 .none
   | ``LE.le => binary args " \\leq " 50 .none
   | ``HAdd.hAdd => binary args " + " 65 .left
   | ``HSub.hSub => binary args " - " 65 .left
@@ -80,6 +105,25 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
       (← latexPP args.back!).latex.1 ++ "}\\right\\rfloor")
   | ``Nat.log2 => return .ofString ("\\log_{2}\\left(" ++
       (← latexPP args.back!).latex.1 ++ "\\right)")
+  | ``Nat.size => return .ofString ("\\left\\lceil\\log_{2}\\left(" ++
+      (← latexPP args.back!).latex.1 ++ " + 1\\right)\\right\\rceil_{+}")
+  | ``Finset.sup | ``Finset.inf' =>
+    let offset := if name == ``Finset.sup then 2 else 3
+    guard (args[args.size - offset]!.getAppFn.constName! == ``Finset.univ)
+    let fn ← ensureLam args.back! none
+    let domain := fn.bindingDomain!
+    let op := if name == ``Finset.sup then "\\max" else "\\min"
+    let bound ← if domain.isAppOfArity ``Fin 1 then
+        pure (some (← latexPP domain.getAppArgs.back!).latex.1)
+      else pure none
+    let domainLatex ← if bound.isNone then pure (← latexPP domain).latex.1 else pure ""
+    withBindingBodyUnusedName fn fun index body => do
+      let index := symbol index.toString
+      let range := match bound with
+        | some n => "0\\le " ++ index ++ "<" ++ n
+        | none => index ++ "\\in " ++ domainLatex
+      return .ofString ("\\left(" ++ op ++ "_{" ++ range ++ "} " ++
+        (← latexPP body).latex.1 ++ "\\right)")
   | ``sInf =>
     let range := args.back!
     guard (range.isAppOfArity ``Set.range 3)
@@ -122,9 +166,10 @@ private def binary (args : Array Expr) (op : String) (bp : Nat)
     return .ofString (op ++ "\\left\\{ " ++ (← latexPP args[args.size - 2]!).latex.1 ++
       ", " ++ (← latexPP args.back!).latex.1 ++ " \\right\\}")
   | _ =>
+    if (`LongTails.Theorems).isPrefixOf name then return ← namedApplication e
     let some projection ← getProjectionFnInfo? name | failure
     let structName := projection.ctorName.getPrefix
-    guard (structName.getString! == "Params" || structName.getString! == "Public")
+    guard (structName.getString!.endsWith "Params" || structName.getString! == "Public")
     let mut parameter := args[projection.numParams]!
     while !parameter.isFVar do
       let parentName := parameter.getAppFn.constName!

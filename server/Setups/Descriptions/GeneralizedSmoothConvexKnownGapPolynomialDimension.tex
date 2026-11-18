@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Known-Gap Generalized Smooth Convex Minimization}
+We consider minimizing a differentiable convex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d$ is a positive integer. The function $f$ is $(L_0,L_1)$-smooth, with $L_0>0$ and $L_1>0$: its differentiable gradient satisfies $\|\nabla^2 f(x)\|_{\mathrm{op}}\leq L_0+L_1\|\nabla f(x)\|$ everywhere. A given point $x^0$ satisfies $\|x^0-x^\star\|\leq R$ and $f(x^0)-f(x^\star)\leq\Delta$ for a global minimizer $x^\star$, with $R,\Delta>0$. The oracle returns $\nabla f(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}$ with integrable objective gap satisfying $\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $P$ is the law of the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm on $\mathbb{R}^d$ and its induced operator norm on linear maps. The algorithm receives $d,L_0,L_1,x^0,R,\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Parameter regime and dimension]
+The parameters satisfy
+\[
+\begin{aligned}
+L_0&>0, & L_1&>0, & R&>0, & \varepsilon&>0,\\
+16\varepsilon&\leq L_0R^2,
+& L_1R&\geq 2^{20},
+\end{aligned}
+\]
+and
+\[
+\begin{aligned}
+\Delta&\geq\varepsilon(2+L_1R)^2,\\
+\Delta&\geq\varepsilon\sqrt{\frac{L_0R^2}{\varepsilon}},\\
+d&\geq\left\lceil
+2^{46}\left(1+L_1R+\sqrt{\frac{L_0R^2}{\varepsilon}}\right)^6
+\right\rceil.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Convexity and generalized smoothness]
+The function $f$ is differentiable everywhere, and, for every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+f((1-t)x+ty)\leq(1-t)f(x)+tf(y).
+\]
+Its gradient is Fr\'echet differentiable everywhere and satisfies
+\[
+\|\nabla^2 f(x)\|_{\mathrm{op}}
+\leq L_0+L_1\|\nabla f(x)\|,
+\qquad x\in\mathbb{R}^d.
+\]
+Here $\nabla^2 f(x)$ is a linear operator from $\mathbb{R}^d$ to $\mathbb{R}^d$.
+\end{assumption}
+
+\begin{assumption}[Initial distance and objective gap]
+There exists a global minimizer $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^\star)&\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+\|x^0-x^\star\|&\leq R,\\
+f(x^0)-f(x^\star)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted gradient calls, the output $\bar{x}\in\mathbb{R}^d$ must have an integrable objective gap under $P$ and satisfy
+\[
+\mathbb{E}_{P}\bigl[f(\bar{x})-f(x^\star)\bigr]
+\leq\varepsilon.
+\]
+\end{document}

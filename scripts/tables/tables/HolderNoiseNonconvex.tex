@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HolderNoiseNonconvex.lean}{HolderNoiseNonconvex}.}\label{tab:HolderNoiseNonconvex}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space with its Borel measurable structure, $f$ is differentiable with $L$-Lipschitz gradient and $f(x_0)-f(x)\le\Delta$ for every $x$. Here $L,\varepsilon>0$, $M,\sigma,\Delta\ge0$, and $0<\nu\le1$. The jointly measurable oracle $g$ uses IID samples with law $p$, satisfies $\int g(x,\omega)\,dp(\omega)=\nabla f(x)$, and, with $e(x,\omega)=g(x,\omega)-\nabla f(x)$, satisfies $\int\|e(x,\omega)\|^2\,dp(\omega)\le\sigma^2$ and $\int\|e(x,\omega)-e(y,\omega)\|^2\,dp(\omega)\le M\|x-y\|^{2\nu}$, with the stated integrands integrable. One call returns gradients at two points using one shared sample. Target: a measurable output with integrable gradient norm and $\int\|\nabla f(x_{\rm out}(\omega))\|\,dP(\omega)\le\varepsilon$, where $P$ is the sampling law. The setup imposes no algorithm restriction.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HolderNoiseMinimaxUpper.lean}{Holder\allowbreak Noise\allowbreak Minimax\allowbreak Upper} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HolderNoiseMinimaxUpper.md}{(review)}
+& $\begin{aligned}
+\mathcal{O}\Big(\min\Big\{&1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4},\\
+&\ell^2\Big[1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{\Delta}{\varepsilon^3}\max\Big\{\\
+&\quad M(L/\varepsilon)^{1-2\nu},\\
+&\quad M^{1/(2\nu)}\sigma^{2-1/\nu}\Big\}\Big]\Big\}\Big)
+\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} SGD/RSG \citep{rvGhadimiLan2013v1}, Cor.~2.2; finite-dimensional specialization
+& $\mathcal{O}\!\left(1+\frac{L\Delta}{\varepsilon^2}+\frac{L\Delta\sigma^2}{\varepsilon^4}\right)$; single-point calls, squared-norm accuracy converted by Jensen
+& \textbf{(1)}: Noise term reduced by $\rho^a/\ell^2$; total gain requires $\rho^a\gg\ell^2$ and $L\Delta\sigma^2/\varepsilon^4\gg\ell^2[1+(L\Delta+\sigma^2)/\varepsilon^2]$. At $L=M=\sigma=\Delta=1$: $\mathcal{O}(\varepsilon^{-4})$ becomes $\mathcal{O}(\varepsilon^{-7/2}\ell^2)$ for $\nu=1/4$, or $\mathcal{O}(\varepsilon^{-3}\ell^2)$ for $\nu\ge1/2$, as $\varepsilon\to0$.
+& \textbf{(1)} needs centered H\"older regularity and paired same-sample access; guarantees expected norm rather than the stronger squared-norm criterion. \\
+\midrule
+\textbf{(3)} NSGD-MVR \citep{mshFradin2026v2}, Thm.~4.2, $p=q=2$; $\nu=1$, $E=\mathbb{R}^d$
+& $\begin{gathered}\mathcal{O}\!\left(1+\frac{\sigma^2+(L+\sqrt M)\Delta}{\varepsilon^2}\right.\\
+\left.{}+\frac{\sqrt M\Delta\sigma}{\varepsilon^3}\right)\end{gathered}$; paired calls including initialization
+& \textbf{(1)}: Scope extends the distance exponent from $\nu=1$ to $0<\nu<1$; at $\nu=1$, polynomial orders match up to logarithms.
+& \textbf{(1)} incurs an $\ell^2$ overhead at $\nu=1$. \\
+\midrule
+\textbf{(4)} \citep{hnDyadicRepository2026}; raw H\"older increments, $1/2\le\nu\le1$
+& $\mathcal{O}\!\left(\ell^2\left[1+\frac{L\Delta+\sigma^2}{\varepsilon^2}+\frac{\Delta M^{1/(2\nu)}\sigma^{2-1/\nu}}{\varepsilon^3}\right]\right)$
+& \textbf{(1)}: Scope extends to centered noise and $0<\nu<1/2$, admitting quadratic means. On the common class, no worse order; cheaper when the SGD cap wins.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\ell=1+\log(2+L\Delta/\varepsilon^2)$; $\rho=\sigma^2L^{2\nu}/(M\varepsilon^{2\nu})$ for $M,\sigma>0$; $a=\min\{1,1/(2\nu)\}$. $L$: population smoothness; $\Delta$: initial gap bound; $\sigma^2$: noise variance bound; $(M,\nu)$: centered-noise regularity; $\varepsilon$: stationarity tolerance. For $\sigma=0$, use the first branch of \textbf{(1)}. Raw increments in \textbf{(4)} mean $\int\|g(x,\omega)-g(y,\omega)\|^2\,dp(\omega)\le M\|x-y\|^{2\nu}$. Paired and single-point call counts differ by at most a universal factor on their common oracle model; batches are included. All displayed costs are sufficient budgets.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Hessian-Lipschitz Nonconvex Optimization}
+We consider minimizing a nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$, where $d\geq0$ is an integer, using stochastic gradients on a star network. The gradient is $L$-Lipschitz and the Hessian is $Q$-Lipschitz, with $L>0$ and $Q\geq0$. A given point $x^0$ satisfies $f(x^0)-f_{\mathrm{low}}\leq\Delta$, where $f_{\mathrm{low}}$ is a global lower bound and $\Delta\geq0$. Workers return unbiased gradient estimates with variance at most $\sigma^2$, where $\sigma\geq0$, using independent sample streams. Computation and bit communication incur specified elapsed times. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying $\mathbb{E}_{P}\|\nabla f(\bar{x})\|\leq\varepsilon$, where $P$ is the joint law of sampling and independent algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm on $\mathbb{R}^d$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$ on linear maps. The network consists of a coordinator and $n\geq1$ workers. Worker $i\in\{1,\ldots,n\}$ has computation time $h_i>0$; communication has latency $\ell\geq0$ and time per bit $b\geq0$. The algorithm receives $d,n,x^0,L,Q,\Delta,\sigma,\varepsilon$, the times $(h_i)_{i=1}^n,\ell,b$, and the measurable sample space $\Omega$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, its gradient is differentiable everywhere, and, for all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}&\leq Q\|x-y\|.
+\end{aligned}
+\]
+There exists $f_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+f(x)&\geq f_{\mathrm{low}} &&\text{for all }x\in\mathbb{R}^d,\\
+f(x^0)-f_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients and sampling]
+For each worker $i$, there are a probability measure $\mu_i$ on $\Omega$ and a jointly measurable map
+\[
+g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d.
+\]
+For every $x\in\mathbb{R}^d$, the map $g_i(x,\cdot)$ is Bochner integrable under $\mu_i$, its squared error is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu_i}[g_i(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\mu_i}
+ [\|g_i(x,\xi)-\nabla f(x)\|^2]&\leq\sigma^2.
+\end{aligned}
+\]
+Under a joint sampling law $\nu$, worker $i$ has measurable samples $(\xi_{i,k})_{k\geq0}$ that are independent and identically distributed with law $\mu_i$. The entire streams $(\xi_{i,k})_{k\geq0}$ are independent across workers. Sampling is independent of the algorithm's randomness. The functions $g_i$, measures $\mu_i$, and joint law $\nu$ are not algorithm inputs.
+\end{assumption}
+
+\begin{assumption}[Computation and communication]
+A worker may query any $x\in\mathbb{R}^d$. An accepted query at worker $i$ completes after $h_i$ units of time and returns the queried point together with $g_i(x,\xi_{i,k})$, where $k$ counts that worker's previously completed queries. Each worker has at most one pending computation: further computation requests while it is busy are ignored. A pending computation may be aborted without consuming a sample. The coordinator performs no gradient computations.
+
+Communication is available only between the coordinator and a worker, in either direction. A message with an $m$-bit payload is delivered, together with its sender's identity, after
+\[
+\ell+b(m+64)
+\]
+units of time; the additional $64$ bits are included in the transmitted message. Each directed link admits at most one pending message, and submissions on an occupied directed link are ignored. Distinct directed links operate concurrently, including opposite directions of the same edge, and communication may overlap computation.
+\end{assumption}
+
+For an elapsed-time budget $T\geq0$, the algorithm must complete only finitely many events almost surely at every deadline in $[0,T]$. Its output $\bar{x}\in\mathbb{R}^d$ is taken from a designated network node at time $T$. It must be measurable, with $\|\nabla f(\bar{x})\|$ integrable under $P$, and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+The budget measures elapsed time, including computation and communication.
+\end{document}

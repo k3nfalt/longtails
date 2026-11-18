@@ -25,6 +25,8 @@ structure Params where
   dimension : ℕ+
   hi : Fin dimension → ℤ
   lo : Fin dimension → ℤ
+structure LowerParams where
+  L : ℝ
 
 set_option hygiene false in
 run_cmd liftTermElabM do
@@ -40,6 +42,55 @@ run_cmd liftTermElabM do
   unless result == "dimension" do
     throwError "Unexpected positive natural parameter: {result}"
 end BudgetLatexTests
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (p : BudgetLatexTests.LowerParams) => p.L)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "L" do
+    throwError "Unexpected lower-bound parameter: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (x : ℝ) => (Real.toNNReal x : ℝ))) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\max\\left\\{ x, 0 \\right\\}" do
+    throwError "Unexpected nonnegative real conversion: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (n : ℕ) => Nat.size n)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\left\\lceil\\log_{2}\\left(n + 1\\right)\\right\\rceil_{+}" do
+    throwError "Unexpected bit length: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (n : ℕ) => if n = 1 then (0 : ℕ) else 2)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\begin{cases} 0 & n = 1 \\\\ 2 & \\mathrm{otherwise} \\end{cases}" do
+    throwError "Unexpected equality condition: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (n : ℕ) (h : Fin n → NNReal) => Finset.univ.sup h)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right)" do
+    throwError "Unexpected finite maximum: {result}"
+
+namespace LongTails.Theorems.BudgetLatexTests
+abbrev SearchSpace (n : ℕ) := Fin (n + 1)
+def count (n : ℕ) (c : SearchSpace n) : ℕ := n + c.val
+end LongTails.Theorems.BudgetLatexTests
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (n : ℕ) => Finset.univ.inf' Finset.univ_nonempty
+    (fun c : LongTails.Theorems.BudgetLatexTests.SearchSpace n =>
+      LongTails.Theorems.BudgetLatexTests.count n c))) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\left(\\min_{c\\in \\operatorname{SearchSpace}\\left(n\\right)} \\operatorname{count}\\left(n, c\\right)\\right)" do
+    throwError "Unexpected finite search budget: {result}"
 
 set_option hygiene false in
 run_cmd liftTermElabM do

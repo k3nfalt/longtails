@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalAbcNoiseNonconvex",
+  "searched_at": "2026-11-18T15:49:06.464268+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + B + \\frac{A \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{C}{\\varepsilon^{2}}\\right)}{2^{53} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalAbcNoiseNonconvex.spec.Params → ℕ",
+        "value": "fun q => ⌊q.L * q.Δ * (1 + q.B + q.A * q.Δ / q.ε ^ 2 + q.C / q.ε ^ 2) / (2 ^ 53 * q.ε ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + B + \\frac{A \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{C}{\\varepsilon^{2}}\\right)}{2^{53} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalAbcNoiseNonconvex.spec.Params → ℕ",
+          "value": "fun q => ⌊q.L * q.Δ * (1 + q.B + q.A * q.Δ / q.ε ^ 2 + q.C / q.ε ^ 2) / (2 ^ 53 * q.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.AbcNoiseLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalAbcNoiseNonconvex",
+      "setup": "LongTails.Setups.HighDimensionalAbcNoiseNonconvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalAbcNoiseNonconvex.spec\n  LongTails.Theorems.AbcNoiseLowerBound.budget",
+      "theorem": "LongTails.Theorems.AbcNoiseLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AbcNoiseLowerBound",
+      "theorem": "LongTails.Theorems.AbcNoiseLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization on ℝ^d permits nonconvex differentiable objectives with L-Lipschitz gradient, finite infimum f⋆, and f(x0)−f⋆≤Δ. Attainment of the infimum is not required.",
+        "evidence": "LongTails/Setups/HighDimensionalAbcNoiseNonconvex.lean: toGeneral and spec.admissible; LongTails/Setups/AbcNoiseNonconvex.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns g(x,ω) using a fresh IID sample ω∈ℝ. The jointly measurable oracle is unbiased: E[g(x,ω)]=∇f(x). Queries may adapt to previous replies; samples cannot be reused through the supplied interface.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.admissible, oracle equality and unbiasedness; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Algorithm and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on ℝ^d. Let H=LΔ(1+B+AΔ/ε²+C/ε²)/ε². Valid parameters satisfy L>0, A,B,C≥0, ε>0, 2^26 ε²≤LΔ, and d≥2^40(1+H)^4.",
+        "evidence": "LongTails/Setups/HighDimensionalAbcNoiseNonconvex.lean: Params, toGeneral and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "ABC variance condition: E‖g(x,ω)−∇f(x)‖²≤2A(f(x)−f⋆)+B‖∇f(x)‖²+C for every x, with finite second moments. No uniform variance bound or exponential-tail condition is imposed. All parameters d,L,A,B,C,Δ,ε,x0 are public; f and the oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.admissible, variance integrability and inequality; LongTails/Setups/HighDimensionalAbcNoiseNonconvex.lean: Params, spec.Public and spec.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point X∈ℝ^d with integrable gradient norm and E‖∇f(X)‖≤ε. This is the first power of the norm; the output need not be a queried point.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.successful; LongTails/Template.lean: Algorithm.output."
+      },
+      {
+        "label": "expected",
+        "details": "The expectation includes the algorithm's random seed and the independent IID oracle sample sequence.",
+        "evidence": "LongTails/Setups/AbcNoiseNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence, product probability measure."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines smooth nonconvex optimization under ABC variance with an explicit parameter-dependent dimension lower bound and a restricted accuracy regime for a lower-bound benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AbcNoiseLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AbcNoiseLowerBound",
+          "theorem": "LongTails.Theorems.AbcNoiseLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

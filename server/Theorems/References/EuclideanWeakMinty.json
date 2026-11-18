@@ -1,0 +1,133 @@
+{
+  "setup": "LongTails.Setups.EuclideanWeakMinty",
+  "searched_at": "2026-11-18T15:50:03.389771+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 + 2 \\cdot \\left\\lceil \\frac{200 \\cdot L^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.EuclideanWeakMinty.spec.Params → ℕ",
+        "value": "fun p => 2 + 2 * ⌈200 * p.L ^ 2 * p.R ^ 2 / p.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 + 2 \\cdot \\left\\lceil \\frac{200 \\cdot L^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.EuclideanWeakMinty.spec.Params → ℕ",
+          "value": "fun p => 2 + 2 * ⌈200 * p.L ^ 2 * p.R ^ 2 / p.ε ^ 2⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.EuclideanWeakMintyExtragradient",
+      "namespace": "LongTails.Setups.EuclideanWeakMinty",
+      "setup": "LongTails.Setups.EuclideanWeakMinty",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.EuclideanWeakMinty.spec\n  LongTails.Theorems.EuclideanWeakMintyExtragradient.budget",
+      "theorem": "LongTails.Theorems.EuclideanWeakMintyExtragradient.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\min\\left\\{ \\left(\\frac{L \\cdot R}{28 \\cdot \\varepsilon}\\right)^{2}, \\left(\\frac{d}{257}\\right)^{\\frac{1}{3}} \\right\\} \\right\\rfloor_{+} - 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.EuclideanWeakMinty.spec.Params → ℕ",
+        "value": "fun p => ⌊min ((p.L * p.R / (28 * p.ε)) ^ 2) ((↑p.d / 257) ^ 3⁻¹)⌋₊ - 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\min\\left\\{ \\left(\\frac{L \\cdot R}{28 \\cdot \\varepsilon}\\right)^{2}, \\left(\\frac{d}{257}\\right)^{\\frac{1}{3}} \\right\\} \\right\\rfloor_{+} - 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.EuclideanWeakMinty.spec.Params → ℕ",
+          "value": "fun p => ⌊min ((p.L * p.R / (28 * p.ε)) ^ 2) ((↑p.d / 257) ^ 3⁻¹)⌋₊ - 1"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.EuclideanWeakMintyLowerBound",
+      "namespace": "LongTails.Setups.EuclideanWeakMinty",
+      "setup": "LongTails.Setups.EuclideanWeakMinty",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.EuclideanWeakMinty.spec\n  LongTails.Theorems.EuclideanWeakMintyLowerBound.budget",
+      "theorem": "LongTails.Theorems.EuclideanWeakMintyLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.EuclideanWeakMintyExtragradient",
+      "theorem": "LongTails.Theorems.EuclideanWeakMintyExtragradient.result",
+      "references": "- Jelena Diakonikolas, Constantinos Daskalakis, Michael I. Jordan. [Efficient Methods for Structured Nonconvex-Nonconcave Min-Max Optimization](https://proceedings.mlr.press/v130/diakonikolas21a/diakonikolas21a.pdf). 2021 (preprint 2020). Complexity: $O(1+L^2R^2/((1-8L\\rho)\\varepsilon^2))$ exact operator evaluations using EG+, with a fixed budget ensuring $\\mathbb E\\|F(\\hat x)\\|\\le\\varepsilon$, for $0\\le\\rho<1/(8L)$.",
+      "match_status": "match"
+    },
+    {
+      "module": "LongTails.Theorems.EuclideanWeakMintyLowerBound",
+      "theorem": "LongTails.Theorems.EuclideanWeakMintyLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained zero-finding for a possibly nonmonotone L-Lipschitz operator F: ℝ^d → ℝ^d satisfying a weak Minty inequality. No objective function or saddle representation is required.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean: spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Exact full operator evaluation F(x) at any queried x. Replies have no error or dependence on history or oracle randomness. All parameters d, L, ρ, x0, R, ε are public; F and the witnessing solution are hidden.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean: Params, spec.Public, spec.publicInput, spec.Query, spec.Reply, and first conjunct of spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on ℝ^d with d ≥ 257.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean: spec.Instance and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Globally L-Lipschitz F with L > 0. There exists xstar with F(xstar)=0, ‖xstar−x0‖≤R, and ⟨F(x),x−xstar⟩≥−ρ‖F(x)‖² for every x. Parameters satisfy 0≤ρ≤1/(20L), ε>0, and 28ε≤LR.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean: spec.valid and second and third conjuncts of spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The guarantee averages over algorithm and oracle seeds; exact oracle replies do not require the algorithm to be deterministic.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean: spec.successful; LongTails/Template.lean: Convergence and Algorithm.law."
+      },
+      {
+        "label": "other",
+        "details": "Return a point xhat whose operator residual norm is integrable and satisfies E‖F(xhat)‖≤ε; the norm is not squared. No last-iterate requirement is imposed.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean: spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The weak Minty inequality permits nonmonotone operators through a residual-dependent negative inner-product bound, giving a structured variant of classical monotone variational inequalities."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.EuclideanWeakMintyExtragradient.result",
+        "LongTails.Theorems.EuclideanWeakMintyLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.EuclideanWeakMintyExtragradient",
+          "theorem": "LongTails.Theorems.EuclideanWeakMintyExtragradient.result",
+          "match_status": "match"
+        },
+        {
+          "module": "LongTails.Theorems.EuclideanWeakMintyLowerBound",
+          "theorem": "LongTails.Theorems.EuclideanWeakMintyLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

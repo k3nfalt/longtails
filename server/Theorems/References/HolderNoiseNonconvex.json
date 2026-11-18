@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HolderNoiseNonconvex",
+  "searched_at": "2026-11-18T15:50:48.592680+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\min\\left\\{ 600 \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}}\\right), 3200 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Delta}{\\varepsilon^{3}} \\cdot \\max\\left\\{ M \\cdot \\left(\\frac{L}{\\varepsilon}\\right)^{1 - 2 \\cdot \\nu}, M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}} \\right\\}\\right) \\right\\} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HolderNoiseNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈min (600 * (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4))\n      (3200 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n        (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 +\n          q.Δ / q.ε ^ 3 * max (q.M * (q.L / q.ε) ^ (1 - 2 * q.ν)) (q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹))))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\min\\left\\{ 600 \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}}\\right), 3200 \\cdot \\left(1 + \\log_{2}\\left(2 + \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}}\\right)\\right)^{2} \\cdot \\left(1 + \\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\frac{\\Delta}{\\varepsilon^{3}} \\cdot \\max\\left\\{ M \\cdot \\left(\\frac{L}{\\varepsilon}\\right)^{1 - 2 \\cdot \\nu}, M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}} \\right\\}\\right) \\right\\} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HolderNoiseNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈min (600 * (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 + q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4))\n      (3200 * (1 + Real.logb 2 (2 + 16 * q.L * q.Δ / q.ε ^ 2)) ^ 2 *\n        (1 + (q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 +\n          q.Δ / q.ε ^ 3 * max (q.M * (q.L / q.ε) ^ (1 - 2 * q.ν)) (q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹))))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.HolderNoiseMinimaxUpper",
+      "namespace": "LongTails.Setups.HolderNoiseNonconvex",
+      "setup": "LongTails.Setups.HolderNoiseNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HolderNoiseNonconvex.spec OracleTemplate.HolderNoiseMinimaxUpper.budget",
+      "theorem": "OracleTemplate.HolderNoiseMinimaxUpper.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HolderNoiseMinimaxUpper",
+      "theorem": "OracleTemplate.HolderNoiseMinimaxUpper.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives on a real separable Hilbert space, permitting nonconvexity, with L-Lipschitz gradients and f(x0)−inf f≤Δ. Parameters satisfy L>0 and Δ≥0; attainment of the infimum is unnecessary.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: Params; spec.valid; spec.admissible gradient and initial-gap conditions."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call at a chosen pair (x,y) returns (g(x,ω),g(y,ω)) using the same sample. Samples are IID across calls, and E[g(x,ω)]=∇f(x). Each paired reply counts as one oracle call. All Params, including L,M,ν,σ,Δ,ε,x0, are public; f,g and the sampling laws are hidden.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.Public, publicInput, Query, Reply and admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: executeWithTrace and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "Centered noise differences satisfy E‖(g(x,ω)−g(y,ω))−(∇f(x)−∇f(y))‖²≤M‖x−y‖^(2ν), where M≥0 and 0<ν≤1. This controls shared-sample noise increments separately from objective smoothness.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.valid and final two conditions of spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "Uniform finite variance E‖g(x,ω)−∇f(x)‖²≤σ², with σ≥0. No higher-moment or exponential-tail bound is imposed.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.valid and spec.admissible variance integrability and bound."
+      },
+      {
+        "label": "other",
+        "details": "The ambient space is a complete real inner-product space with its Borel measurable structure and second-countable topology; finite dimension is not required.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: Params.normedE, innerE, completeE, measurableE, borelE and countableE."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return an E-valued measurable output X with integrable gradient norm and E‖∇f(X)‖≤ε, where ε>0. The criterion uses the unsquared norm.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.Output, valid and successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation is over the algorithm's randomness and the IID oracle stream, under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence and execute."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The standard smooth nonconvex stationarity problem is augmented with shared-sample paired queries and a separate mean-square Hölder condition on centered noise increments throughout 0<ν≤1."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HolderNoiseMinimaxUpper.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HolderNoiseMinimaxUpper",
+          "theorem": "OracleTemplate.HolderNoiseMinimaxUpper.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

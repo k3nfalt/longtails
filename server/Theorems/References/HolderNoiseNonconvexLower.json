@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.HolderNoiseNonconvexLower",
+  "searched_at": "2026-11-18T15:51:41.212950+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\min\\left\\{ \\frac{L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}}, \\frac{\\Delta}{\\varepsilon^{3}} \\cdot \\max\\left\\{ M \\cdot \\left(\\frac{L}{\\varepsilon}\\right)^{1 - 2 \\cdot \\nu}, M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}} \\right\\} \\right\\}}{2^{80}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HolderNoiseNonconvexLower.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌊((q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 +\n        min (q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4)\n          (q.Δ / q.ε ^ 3 * max (q.M * (q.L / q.ε) ^ (1 - 2 * q.ν)) (q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹)))) /\n      2 ^ 80⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\frac{L \\cdot \\Delta + \\sigma^{2}}{\\varepsilon^{2}} + \\min\\left\\{ \\frac{L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}}, \\frac{\\Delta}{\\varepsilon^{3}} \\cdot \\max\\left\\{ M \\cdot \\left(\\frac{L}{\\varepsilon}\\right)^{1 - 2 \\cdot \\nu}, M^{\\frac{1}{\\nu} \\cdot \\frac{1}{2}} \\cdot \\sigma^{2 - \\frac{1}{\\nu}} \\right\\} \\right\\}}{2^{80}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HolderNoiseNonconvexLower.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌊((q.L * q.Δ + q.σ ^ 2) / q.ε ^ 2 +\n        min (q.L * q.Δ * q.σ ^ 2 / q.ε ^ 4)\n          (q.Δ / q.ε ^ 3 * max (q.M * (q.L / q.ε) ^ (1 - 2 * q.ν)) (q.M ^ (q.ν⁻¹ * 2⁻¹) * q.σ ^ (2 - q.ν⁻¹)))) /\n      2 ^ 80⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.HolderNoiseMinimaxLowerBound",
+      "namespace": "LongTails.Setups.HolderNoiseNonconvexLower",
+      "setup": "LongTails.Setups.HolderNoiseNonconvexLower",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HolderNoiseNonconvexLower.spec\n  OracleTemplate.HolderNoiseMinimaxLowerBound.budget",
+      "theorem": "OracleTemplate.HolderNoiseMinimaxLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HolderNoiseMinimaxLowerBound",
+      "theorem": "OracleTemplate.HolderNoiseMinimaxLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained differentiable objectives f: ℝ^d → ℝ with L-Lipschitz gradient and f(x0)−inf f≤Δ. Convexity is not required. All parameters d,L,M,ν,σ,Δ,ε,x0 are public; the objective and oracle distribution are hidden.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.admissible; LongTails/Setups/HolderNoiseNonconvexLower.lean: LowerParams, spec.Public, spec.publicInput."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call queries a pair (x,y) and returns (g(x,ξ),g(y,ξ)) using the same sample ξ∈Bool. Samples are IID across calls. The estimator is unbiased at every point. Each paired response counts as one oracle call; neither function values nor the sample itself are returned.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvexLower.lean: LowerParams.toParams, spec.Query, spec.Reply; LongTails/Setups/HolderNoiseNonconvex.lean: spec.admissible oracle equality and unbiasedness; LongTails/Template.lean: executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "Centered noise increments satisfy E‖[g(x,ξ)−∇f(x)]−[g(y,ξ)−∇f(y)]‖²≤M‖x−y‖^(2ν) globally, where M≥0 and 0<ν≤1. This condition concerns noise increments rather than Hölder smoothness of the objective gradient.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.valid and final condition of spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every x, E‖g(x,ξ)−∇f(x)‖²≤σ², with σ≥0.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.valid and spec.admissible variance conditions."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean space ℝ^d, with 64ε²≤LΔ and d≥⌈2³⁰(1+LΔ/ε²)³(1+σ²/ε²)⌉; L>0 and ε>0.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvexLower.lean: LowerParams.toParams and spec.valid; LongTails/Setups/HolderNoiseNonconvex.lean: spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The sample space is restricted to Bool, with an unspecified probability distribution. Algorithms may be randomized and adapt queries to prior replies; no additional algorithm restriction is specified.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvexLower.lean: LowerParams.toParams and spec; LongTails/Template.lean: Algorithm and Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point X∈ℝ^d with integrable gradient norm satisfying E‖∇f(X)‖≤ε. The criterion uses the first power of the norm and does not require X to be a queried point.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.successful; LongTails/Setups/HolderNoiseNonconvexLower.lean: spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "Expectation includes algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/HolderNoiseNonconvex.lean: spec.successful; LongTails/Template.lean: Convergence product probability law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The stationarity benchmark is standard, but this formulation combines a shared-sample paired oracle, globally Hölder-controlled centered noise increments, a binary sample space, and an explicit high-dimensional lower-bound regime."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.HolderNoiseMinimaxLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HolderNoiseMinimaxLowerBound",
+          "theorem": "OracleTemplate.HolderNoiseMinimaxLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

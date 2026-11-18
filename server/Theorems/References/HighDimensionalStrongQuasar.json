@@ -1,0 +1,138 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalStrongQuasar",
+  "searched_at": "2026-11-18T15:50:24.445068+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\frac{\\left\\lfloor \\frac{\\sqrt{\\frac{L}{\\mu}}}{8000 \\cdot \\gamma} \\right\\rfloor_{+} \\cdot \\operatorname{Nat.log}_{2}\\left(\\left\\lfloor \\frac{\\Delta}{1000 \\cdot \\gamma \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\varepsilon} \\right\\rfloor_{+}\\right)}{2}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalStrongQuasar.spec.Params → ℕ",
+        "value": "fun p => ⌊√(p.L / p.μ) / (8000 * p.γ)⌋₊ * Nat.log 2 ⌊p.Δ / (1000 * p.γ * √(p.L / p.μ) * p.ε)⌋₊ / 2"
+      },
+      "budgets": [
+        {
+          "latex": "\\frac{\\left\\lfloor \\frac{\\sqrt{\\frac{L}{\\mu}}}{8000 \\cdot \\gamma} \\right\\rfloor_{+} \\cdot \\operatorname{Nat.log}_{2}\\left(\\left\\lfloor \\frac{\\Delta}{1000 \\cdot \\gamma \\cdot \\sqrt{\\frac{L}{\\mu}} \\cdot \\varepsilon} \\right\\rfloor_{+}\\right)}{2}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalStrongQuasar.spec.Params → ℕ",
+          "value": "fun p => ⌊√(p.L / p.μ) / (8000 * p.γ)⌋₊ * Nat.log 2 ⌊p.Δ / (1000 * p.γ * √(p.L / p.μ) * p.ε)⌋₊ / 2"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalStrongQuasar",
+      "setup": "LongTails.Setups.HighDimensionalStrongQuasar",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalStrongQuasar.spec\n  LongTails.Theorems.HighDimensionalStrongQuasarLowerBound.budget",
+      "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{32 \\cdot \\sqrt{\\frac{L}{\\mu}}}{\\gamma} \\right\\rceil_{+} \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalStrongQuasar.spec.Params → ℕ",
+        "value": "fun p => ⌈32 * √(p.L / p.μ) / p.γ⌉₊ * Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{32 \\cdot \\sqrt{\\frac{L}{\\mu}}}{\\gamma} \\right\\rceil_{+} \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil 1 + \\frac{2 \\cdot \\Delta}{\\gamma \\cdot \\varepsilon} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalStrongQuasar.spec.Params → ℕ",
+          "value": "fun p => ⌈32 * √(p.L / p.μ) / p.γ⌉₊ * Nat.clog 2 ⌈1 + 2 * p.Δ / (p.γ * p.ε)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound",
+      "namespace": "LongTails.Setups.HighDimensionalStrongQuasar",
+      "setup": "LongTails.Setups.HighDimensionalStrongQuasar",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HighDimensionalStrongQuasar.spec\n  LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.budget",
+      "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound",
+      "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound",
+      "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.result",
+      "references": "- Jun-Kun Wang and Andre Wibisono. [Continuized Acceleration for Quasar Convex Functions in Non-Convex Optimization](https://arxiv.org/html/2302.07851v1). 2023, ICLR; preprint v1. Complexity: $O(\\gamma^{-1}\\sqrt{L/\\mu}\\log(1+\\Delta/(\\gamma\\varepsilon)))$ expected exact-gradient oracle calls for $\\mathbb E[f(X)-f^*]\\le\\varepsilon$, using continuized Nesterov acceleration stopped at a fixed continuous time.\n- Julien Hermant, Jean-François Aujol, Charles Dossal, and Aude Rondepierre. [Study of the behaviour of Nesterov Accelerated Gradient in a non convex setting: the strongly quasar convex case](https://arxiv.org/html/2405.19809v2). 2024 preprint; version used: v2, 2025. Complexity: $O(\\gamma^{-1}\\sqrt{L/\\mu}\\log(1+\\Delta/(\\gamma\\varepsilon)))$ fixed exact-gradient oracle calls for $f(x_N)-f^*\\le\\varepsilon$, using Nesterov accelerated gradient, provided $f(y)\\ge f(x)+\\langle\\nabla f(x),y-x\\rangle-\\frac{\\gamma\\sqrt{\\mu L}}2\\|y-x\\|^2$ for all $x,y$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The admissible class permits nonconvex objectives; convexity and strong convexity are not required.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.admissible, as used by LongTails/Setups/HighDimensionalStrongQuasar.lean: spec.admissible."
+      },
+      {
+        "label": "quasar",
+        "details": "Unconstrained minimization of a differentiable, globally L-smooth, (γ,μ)-strongly quasar-convex function on ℝ^d: there exists a global minimizer x* such that f(x)+(1/γ)⟨∇f(x),x*−x⟩+(μ/2)‖x*−x‖²≤f(x*) for every x. Initially f(x0)−f(x*)≤Δ.",
+        "evidence": "LongTails/Setups/HighDimensionalStrongQuasar.lean: Params.toRelative and spec.admissible; LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "One oracle returns ∇f(x) at any queried x∈ℝ^d. The supplied relative-error parameter is δ=0, so replies are exact, measurable, and independent of history and oracle seeds. Function values are not returned.",
+        "evidence": "LongTails/Setups/HighDimensionalStrongQuasar.lean: Params.toRelative, spec.Query and spec.Reply; LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Euclidean geometry on ℝ^d, with d≥(√(L/μ)/γ)^5[Δ/(1000γ√(L/μ)ε)]³.",
+        "evidence": "LongTails/Setups/HighDimensionalStrongQuasar.lean: Params.x0, spec.Instance and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "All parameters d,L,x0,μ,γ,Δ,ε are public; f and its minimizer are hidden. Restrictions are L,μ,ε>0, 0<γ≤1/256, 870400μ≤L, 4μ≤γ²L, and Δ≥1000γ√(L/μ)ε. The gradient is globally L-Lipschitz. Algorithms may be randomized and adaptive, with no additional algorithm restriction.",
+        "evidence": "LongTails/Setups/HighDimensionalStrongQuasar.lean: Params, spec.Public, spec.publicInput and spec.valid; LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.admissible; LongTails/Template.lean: Algorithm and Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a point X∈ℝ^d whose objective gap f(X)−f(x*) is integrable and has expectation at most ε for a global minimizer x*. The output need not be a queried point.",
+        "evidence": "LongTails/Setups/HighDimensionalStrongQuasar.lean: spec.Output and spec.successful; LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.successful; LongTails/Template.lean: Algorithm.output."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee is E[f(X)−f(x*)]≤ε over algorithm and oracle seeds under a fixed maximum number of oracle calls. Exact replies eliminate oracle randomness, but algorithm randomness remains permitted.",
+        "evidence": "LongTails/Setups/RelativeGradientStrongQuasar.lean: spec.successful; LongTails/Template.lean: Convergence, executeWithTrace and Algorithm.law."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Strongly quasar-convex exact-gradient optimization is an established formulation, but this setup imposes unusually specific parameter regimes and a dimension threshold depending jointly on conditioning, quasar convexity, initialization, and accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound.result",
+        "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound",
+          "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarLowerBound.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound",
+          "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}
