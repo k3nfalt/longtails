@@ -78,9 +78,9 @@ project preferences; newer explicit user requests take precedence.
 - In `LongTails/Theorems/`, put the full formula inside the public `budget` body.
   Keep simple budgets on one line. When a derived quantity makes the bound
   easier to read or needs an implicit definition, define it with a local `let`.
-  Use short mathematical names for budget bindings and setup fields used in
-  formulas. Use `I` for the weighted sum in PR #208 and `p.h i` for worker
-  computation time. Avoid names such as `information` and `p.computeTime i`.
+  Give fields short names directly in `Params` (e.g., `p.h i` for worker computation time).
+  Avoid `abbrev` aliases for long field names.
+  Keep budget bindings short too (e.g., `I` for the weighted sum).
   Order these bindings by dependency and end with the budget expression.
   Keep readable sums, products, and maxima inline even when they recur.
   Prefer compact, readable formulas among bounds equivalent up to universal
