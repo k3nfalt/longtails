@@ -63,6 +63,8 @@ Present a concrete proof strategy and its main unresolved obstacles to the Revie
 
 If feasible, develop the mathematical proof and formalize it. Handle parameter ranges, randomness, expectations, stopping rules, and oracle-call accounting explicitly.
 
+Put the complete formula inside the body of the public `budget`. For example, in `noncomputable def budget : (let S := spec; S.Params → Fin S.numOracles → ℕ) := fun p _ => ...`, replace `...` with the bound in setup parameters. Keep readable sums, maxima, and products inline even when they recur. Use a local `let` only when it makes the whole bound easier to read or specifies an implicit quantity. Put these bindings in dependency order before the final formula. Apply the same rule to channel-dependent and elapsed-time budgets using their existing signatures. See the PR #208 example in `scripts/negative_examples.md`.
+
 Prefer compact, readable final formulas among bounds equivalent up to universal constant factors throughout the stated parameter range. Looser universal constants are acceptable for clarity; worse asymptotic parameter dependence is not, even an extra logarithmic factor. Apply this to the Lean budget itself, not just its presentation, and prove that it still gives the claimed guarantee.
 
 Do not hide a worse dependence elsewhere, strengthen assumptions silently, change the accuracy criterion, or introduce a stronger oracle while presenting the result as an unconditional improvement.

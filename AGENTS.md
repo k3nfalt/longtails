@@ -72,12 +72,14 @@ project preferences; newer explicit user requests take precedence.
   initial objective gap, and `K` for the iteration count. Reuse those names
   instead of repeating long expressions. Do not leave tuning choices unspecified.
 - Derive explicit formulas for all tuning parameters and budgets from the proved
-  convergence bound. Write each `let` budget declaration on one line, with an
-  explicit formula rather than an opaque helper or an unspecified constant.
+  convergence bound. Give each budget explicitly in the setup parameters.
   Prefer one readable budget formula to a collection of tuning cases when it
   preserves the rate. Keep supporting algebra in proof modules.
-- In `LongTails/Theorems/`, write each public `budget` definition as one explicit,
-  human-readable line in the setup parameters, without local tuning variables.
+- In `LongTails/Theorems/`, put the full formula inside the public `budget` body.
+  Keep simple budgets on one line. When a derived quantity makes the bound
+  easier to read or needs an implicit definition, define it with a local `let`.
+  Order these bindings by dependency and end with the budget expression.
+  Keep readable sums, products, and maxima inline even when they recur.
   Prefer compact, readable formulas among bounds equivalent up to universal
   constant factors throughout the stated parameter range. Simplify nested
   fractions, products, and rounding; looser universal constants are acceptable
