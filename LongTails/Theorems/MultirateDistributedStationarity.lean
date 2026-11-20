@@ -15,7 +15,8 @@ noncomputable def budget (p : Params) : Time :=
   let q := p.Δ / δ ^ 2
   let R := 1 + ⌈2 * q * (∑ i, p.L i) / p.n⌉₊
   let C := p.l + p.b * (64 + p.d * (11 + Nat.log2 ((p.n : ℕ) * (p.d + 1)) + Nat.log2 R) : ℕ)
-  (32 * ((Finset.univ.sup p.h : Time) + (∑ i, p.σ i ^ 2 * (p.h i : ℝ)) / (p.n * δ) ^ 2 +
+  let I := ((Finset.univ.sup p.h : Time) : ℝ) + (∑ i, p.σ i ^ 2 * (p.h i : ℝ)) / (p.n * δ) ^ 2
+  (32 * (I +
     (R : ℝ) * (C : ℝ) + q * ((∑ i, p.L i * (p.h i : ℝ)) / p.n +
       (∑ i, p.σ i * √(p.L i * (p.h i : ℝ))) ^ 2 / ((p.n : ℝ) ^ 3 * δ ^ 2))) : ℝ).toNNReal
 
