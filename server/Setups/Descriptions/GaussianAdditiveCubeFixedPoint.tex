@@ -1,0 +1,43 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Cube Fixed Points with Gaussian Noise}
+We seek an approximate fixed point of a map $T:C\to C$ on the cube $C=[-R,R]^d\subset\mathbb{R}^d$ of radius $R>0$ and dimension $d\geq 1$. The map is nonexpansive in the supremum norm $\|\cdot\|_\infty$. At each query $x\in C$, the oracle returns $T(x)$ plus fresh centered Gaussian noise with independent coordinates of equal variance and bounded expected squared supremum norm. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in C$ satisfying $\mathbb{E}\|T(\bar{x})-\bar{x}\|_\infty\leq\varepsilon$, with expectation over the algorithm and oracle randomness.
+
+The fixed-point problem is to find
+\[
+x\in C\quad\text{such that}\quad T(x)=x.
+\]
+The algorithm receives $d$, $R$, the noise bound $\sigma\geq 0$, and $\varepsilon$. We consider the parameter range
+\[
+128\varepsilon\leq R,\qquad
+\left\lceil R/\varepsilon\right\rceil\leq d.
+\]
+
+Our assumptions:
+\begin{assumption}[Nonexpansiveness]
+For all $x,y\in C$,
+\[
+\|T(x)-T(y)\|_\infty\leq\|x-y\|_\infty.
+\]
+\end{assumption}
+
+\begin{assumption}[Additive Gaussian noise]
+At call $k=0,1,\ldots$, a query $x_k\in C$ yields the reply $T(x_k)+Z_k\in\mathbb{R}^d$. For some fixed variance $v\geq 0$, the coordinates $(Z_{k,i})_{k\geq 0,\,1\leq i\leq d}$ are mutually independent with common law $\mathcal{N}(0,v)$. The noise sequence is independent of the algorithm's randomness. Each $Z_k$ is Bochner integrable, its squared supremum norm is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}[Z_k]&=0,\\
+\mathbb{E}\bigl[\|Z_k\|_\infty^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The algorithm uses measurable initialization, query, and output rules, and its update is jointly measurable in the current state and reply. After the allotted calls, its cube-valued output must have an integrable fixed-point residual satisfying
+\[
+\mathbb{E}\bigl[\|T(\bar{x})-\bar{x}\|_\infty\bigr]\leq\varepsilon.
+\]
+\end{document}

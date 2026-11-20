@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Stationarity with Markov Gradients}
+We seek an approximately stationary point of a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d$. Its gradient is Lipschitz, and the gap from a given starting point to the finite infimum is bounded. Each query returns a stochastic gradient evaluated at the current state of a stationary real-valued Markov chain. At each fixed query point, the reply is unbiased under the stationary law and has bounded variance. The chain mixes exponentially in stationary-average total variation. For a tolerance $\varepsilon>0$, the output $\bar{x}$ must satisfy $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, averaging over the chain and the algorithm's independent randomness.
+
+Write $f_\star$ for the value of the optimization problem
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+All norms are Euclidean. The algorithm receives the dimension $d\in\{0,1,\ldots\}$, the starting point $x^0\in\mathbb{R}^d$, the smoothness constant $L>0$, the initial gap bound $\Delta\geq 0$, the noise bound $\sigma\geq 0$, the mixing parameter $\tau\geq 1$, and the tolerance $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable throughout $\mathbb{R}^d$, and for all $x,y\in\mathbb{R}^d$,
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|.
+\]
+The infimum $f_\star$ is finite and satisfies $f(x^0)-f_\star\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Stationarity and average mixing]
+The oracle uses a single Markov chain $(Z_k)_{k\geq 0}$ on $\mathbb{R}$ with transition kernel $\kappa$ and initial law $\pi$. For every Borel set $A\subseteq\mathbb{R}$, the law $\pi$ satisfies
+\[
+\mathbb{E}_{Z\sim\pi}[\kappa(Z,A)]=\pi(A).
+\]
+For each integer $t\geq 0$, let $\kappa^t$ denote the $t$-step kernel and define its total variation distance from stationarity by
+\[
+D_t(z)=\sup_{A\in\mathcal{B}(\mathbb{R})}\bigl|\kappa^t(z,A)-\pi(A)\bigr|,
+\]
+where $\mathcal{B}(\mathbb{R})$ is the Borel $\sigma$-algebra. The function $D_t$ is $\pi$-integrable and satisfies
+\[
+\mathbb{E}_{Z\sim\pi}[D_t(Z)]\leq 2\exp(-t/\tau).
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients under the stationary law]
+On call $k$, indexed from zero, a query at any $x\in\mathbb{R}^d$ returns $g(x,Z_k)$, where $g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$ is jointly measurable. For every fixed $x$, the map $g(x,\cdot)$ is Bochner integrable under $\pi$, the squared error $\|g(x,\cdot)-\nabla f(x)\|^2$ is $\pi$-integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\pi}[g(x,Z)] &= \nabla f(x),\\
+\mathbb{E}_{Z\sim\pi}\bigl[\|g(x,Z)-\nabla f(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable, with integrable gradient norm satisfying
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

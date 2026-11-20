@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for stationarity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedMeanSquaredSmooth.lean}{distributed mean-squared smoothness}.}\label{tab:DistributedMeanSquaredSmooth}
+\parbox{\linewidth}{\footnotesize The differentiable objective $f:\mathbb R^d\to\mathbb R$ satisfies $f(x_0)-\inf f\le\Delta$. Worker streams are independent, with IID samples of law $\mu_i$ within worker $i$. Its jointly measurable oracle satisfies $\mathbb E_{\mu_i}g_i(x,\xi)=\nabla f(x)$, $\mathbb E_{\mu_i}\|g_i(x,\xi)-\nabla f(x)\|^2\le\sigma^2$, and $\mathbb E_{\mu_i}\|g_i(x,\xi)-g_i(y,\xi)\|^2\le L^2\|x-y\|^2$. On the coordinator star, worker $i$ takes $2h_i>0$ per same-sample pair. A $q$-bit message takes $\ell+bq$. Each worker handles one computation and each directed link one message at a time; distinct links and computations can overlap. The target is $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$ under the execution law, with almost surely finitely many events through the deadline.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MultilevelPipelineStationarity.lean}{Multilevel\allowbreak Pipeline\allowbreak Stationarity} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MultilevelPipelineStationarity.md}{(review)}
+& $\begin{aligned}&\mathcal{O}\!\bigg(T_c(1+S)\\[-2pt]&\quad +(1+K)\max_{0\le j\le J}\frac{T_c(m_j)}{2^j}\bigg)\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Rennala MVR \citep[Thm.~5.2]{dmssRennalaMVRv1}
+& $\mathcal{O}\!\left((K+\sqrt S)T_h(\sqrt S)+T_h(S)\right)$
+& \textbf{(1)}: For $\ell=b=0$, $h_i=\sqrt i$, $n\ge4S$, $K\ge\sqrt S$, $S>1$, with a common sample law and the same smoothness bound $L$, $\mathcal{O}(K\sqrt{\log(2+S)})$ versus $\mathcal{O}(KS^{1/4})$ for \textbf{(2)}. Concurrent anchor batches also support paid links and worker-specific noise laws.
+& \textbf{(1)} needs known fixed $h_i$ and has larger constants. With free links, equal $h_i$, $n\le\sqrt S$, $K\ge\sqrt S$, its bound loses a $\sqrt{\log(2+S)}$ factor. \textbf{(2)} assumes a common law, free links, $S>1$, $2K>1$. \\
+\midrule
+\textbf{(3)} Batched SGD \citep{dhlnBatchedRepository}
+& $\mathcal{O}\!\left((1+K)[T_h(1+S)+C]\right)$
+& \textbf{(1)}: Under the worker times, links and sampling conditions of \textbf{(2)}, $\mathcal{O}(K\sqrt{\log(2+S)})$ versus $\mathcal{O}(K\sqrt S)$ for \textbf{(3)}.
+& \textbf{(1)} needs same-sample smoothness and a round trip per sample. For $n=1$, $b=0$, $\ell\ge Sh_1$, $K\ge\sqrt S\ge1$, its deadline is at least order $K\ell\sqrt S$ versus $\mathcal{O}(K\ell)$ for \textbf{(3)}. \\
+\midrule
+\textbf{(4)} Rennala SGD \citep[Thm.~7.5]{dmssRennalaSGD2023}
+& $\mathcal{O}\!\left((1+K)T_h(1+S)\right)$
+& \textbf{(1)}: Under the worker times, links and sampling conditions of \textbf{(2)}, $\mathcal{O}(K\sqrt{\log(2+S)})$ versus $\mathcal{O}(K\sqrt S)$ for \textbf{(4)}. \textbf{(1)} also allows paid links.
+& \textbf{(1)} requires same-sample gradient pairs and mean-squared smoothness. With free links, \textbf{(4)} uses single gradients and smoothness of $f$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $K=L\Delta/\varepsilon^2$, $S=\sigma^2/\varepsilon^2$, $C=\ell+b[1+d\log(2+d+K+S)]$, $c_i=h_i+C$.
+For increasing rearrangement $u_{(i)}$, $T_u(m)=\min_{1\le k\le n}(m+k)/\sum_{i=1}^k u_{(i)}^{-1}$.
+$J=\left\lfloor\min\{\log_2(1+K),\log_4[(1+S)/(1+\log(1+S))]\}\right\rfloor$,
+$m_j=(1+J)4^j+\mathbf 1_{\{j=J\}}S$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

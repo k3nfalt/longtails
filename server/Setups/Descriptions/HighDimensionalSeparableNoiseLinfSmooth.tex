@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Stationarity with Separable Noise}
+We seek a stationary point of a differentiable, possibly nonconvex objective $f:\mathbb{R}^d\to\mathbb{R}$ in high dimension $d$. Its gradient is $L$-Lipschitz from $\ell_\infty$ to $\ell_1$, with $L>0$, and the given starting point $x^0$ lies at most $\Delta$ above the finite infimum in objective value. At each query, the oracle uses a fresh independent real sample to return an unbiased gradient estimate whose coordinate standard deviations sum to at most $S\geq 0$. For tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|_1\leq\varepsilon$ over algorithm and oracle randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives $d,L,S,\Delta,\varepsilon$ and $x^0\in\mathbb{R}^d$. The dimension $d\in\mathbb{N}$ and the real parameters satisfy
+\[
+\begin{aligned}
+2^{30}\varepsilon^2 &\leq L\Delta,\\
+d &\geq 2^{168}\left(1+\frac{L\Delta}{\varepsilon^2}
+\left(1+\frac{S^2}{\varepsilon^2}\right)\right)^{16}.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere. Its Euclidean gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|_1\leq L\|x-y\|_\infty,
+\qquad x,y\in\mathbb{R}^d.
+\]
+The infimum $f_\star=\inf_{x\in\mathbb{R}^d} f(x)$ is finite and satisfies $f(x^0)-f_\star\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients with separable noise]
+On call $k$, a query at any $x\in\mathbb{R}^d$ returns $g(x,\xi_k)$, where $g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$ is jointly measurable. The real random variables $(\xi_k)_{k\geq 0}$ are independent with common law $\nu$, and the sequence is independent of the algorithm's randomness. For $\xi\sim\nu$ and each fixed $x$, the vector $g(x,\xi)$ is Bochner integrable. Writing $e_i(x,\xi)=g_i(x,\xi)-\partial_i f(x)$, each $e_i(x,\xi)^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= \nabla f(x),\\
+\sum_{i=1}^d \sqrt{\mathbb{E}_{\xi\sim\nu}[e_i(x,\xi)^2]} &\leq S.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable under the joint law of the algorithm's randomness and the oracle samples. Its gradient norm $\|\nabla f(\bar{x})\|_1$ must be integrable under this law and satisfy
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|_1\bigr]\leq\varepsilon.
+\]
+\end{document}

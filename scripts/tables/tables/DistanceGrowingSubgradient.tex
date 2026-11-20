@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistanceGrowingSubgradient.lean}{convex minimization with distance-growing subgradient moments}.}\label{tab:DistanceGrowingSubgradient}
+\parbox{\linewidth}{\footnotesize Let \(X\subseteq\mathbb R^d\) be closed and convex, \(f\) measurable and convex on \(X\), and \(x_0,x^\star\in X\) with \(x^\star\) minimizing \(f\) on \(X\) and \(\|x_0-x^\star\|\le R\). Each call returns an exact projection onto \(X\) or a jointly measurable sample \(g(x,\xi)\) with fresh IID noise. On \(X\), \(\mathbb E g(x,\xi)\in\partial_X f(x)\) and \(\mathbb E\|g(x,\xi)\|^2\le G^2+B^2\|x-x_0\|^2\). Given \(x_0\), \(B,G\ge0\), \(R,\varepsilon>0\), and \(0<\delta<1\), return a feasible \(\hat x\) with \(\Pr\{f(\hat x)-f(x^\star)>\varepsilon\}\le\delta\).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistanceGrowingSubgradientUpperBound.lean}{Distance\allowbreak Growing\allowbreak Subgradient\allowbreak Upper\allowbreak Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistanceGrowingSubgradientUpperBound.md}{(review)}
+& \(0\) if \(GR\le\varepsilon\), otherwise \(\mathcal{O}(R^2(G^2+B^2R^2)\ell/\varepsilon^2)\) & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound \citep[Thm.~2(iii), Cor.~1]{dgsParletta2024}
+& \(\mathcal{O}(R^2(G^2+B^2R^2)\ell/\varepsilon^2)\)
+& \textbf{(1)} formalizes the matched rate. On \(K\), the second moment is at most \(v\). Use confidence parameter \(\min\{\delta,2/e\}\) in \textbf{(2)}. & \\
+\midrule
+\textbf{(3)} Derived bound \citep[Thm.~3]{tcLZ2023v3}
+& \(\mathcal{O}(R^2 v\ell^2/\varepsilon^2)\)
+& \textbf{(1)} reduces \(\ell^2\) to \(\ell\) against \textbf{(3)} localized to \(K\) with known horizon and variance bound \(v\). & \\
+\midrule
+\textbf{(4)} Derived bound \citep[Cor.~3.4]{tcAMW2026v3}
+& \(\mathcal{O}(R^2 v/(\varepsilon^2\delta^2))\) by Markov's inequality, tuning with \(\max\{B,G/R\}\)
+& \textbf{(1)} gives a direct high-probability guarantee. The confidence factor drops from \(\delta^{-2}\) for the expected-gap conversion in \textbf{(4)} to \(\ell\).
+& \textbf{(1)} uses \(R\) for the ball projection. When \(BR\ge G\), the updates in \textbf{(4)} need only \(B\). \\
+\midrule
+\textbf{(5)} Last-iterate clipping \citep{dgsClippedBgRepository}
+& \(\mathcal{O}\!\left(1+\dfrac{(BR^2+G^2/B)^2\ell^2}{\varepsilon^2}\right)\), \(B,G>0\)
+& \textbf{(1)} saves a factor \(\ell\) for the shared objective-gap target and allows \(B=0\) or \(G=0\). For \(0<BR\ll G\), \(\mathcal{O}(R^2G^2\ell/\varepsilon^2)\) replaces \(\mathcal{O}(G^4\ell^2/(B^2\varepsilon^2))\).
+& \textbf{(1)} guarantees accuracy for a uniform average. \textbf{(5)} guarantees it for the last iterate. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} \(v=G^2+B^2R^2\), \(\ell=1+\log(1/\delta)\), \(K=X\cap\{x:\|x-x_0\|\le R\}\). Cost counts sampled subgradients and projections onto \(X\). Rate comparisons use \(GR>\varepsilon\).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean}{smooth nonconvex optimization with heterogeneous workers and finite-bit links}.}\label{tab:BandwidthHeterogeneousSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $F=n^{-1}\sum_i f_i$ has $L$-Lipschitz gradient and $F(x_0)-\inf F\le\Delta$. The $f_i$ are differentiable and their gradients may differ arbitrarily. Jointly measurable local oracles are unbiased with variance at most $\sigma^2$. Samples are IID within each worker and independent across workers. Worker $i$ processes one batch at a time at $h_i>0$ per sample. Each ordered pair has a separate FIFO link. Links operate concurrently with each other and with computation. A $B$-bit packet including its header takes $\ell+bB$ time. For $n\ge1$, $L,\varepsilon>0$ and $\Delta,\sigma,\ell,b\ge0$, the target is a measurable output $X$ with $\mathbb E\|\nabla F(X)\|^2\le\varepsilon^2$ under the execution law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FiniteBitLeon.lean}{Finite\allowbreak Bit\allowbreak Leon} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FiniteBitLeon.md}{(review)}
+& $\mathcal{O}\bigl(K[C+\ell+b(1+m\log(2+nd))]\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: full-range modulus \citep{bhFiniteBitNote}
+& $\mathcal{O}\bigl(K[C+\ell+b(1+m\log(2+nd+K))]\bigr)$
+& \textbf{(1)}: Multiscale anchors remove $K$ from the packet-size logarithm. For $\sigma=c\varepsilon$ and other parameters fixed and positive ($n\ge2$, $d\ge1$), total time falls from $\mathcal{O}(\varepsilon^{-2}\log(1/\varepsilon))$ to $\mathcal{O}(\varepsilon^{-2})$ as $\varepsilon\to0$. Sampling or latency can mask the gain.
+& \textbf{(1)} stores leaf iterates and maintains a tree of anchors. \\
+\midrule
+\textbf{(3)} Leon SGD \citep[Thm.~1.7]{bhTyurinLeonV1}
+& $\mathcal{O}\bigl(K[C+\tau d/(n-1)]\bigr)$ on a complete graph, $n\ge2$, with zero latency and exact real coordinates.
+& \textbf{(1)} preserves the sampling-time dependence using finite binary packets and accounts for latency. The different transmission units preclude a total-time comparison.
+& \textbf{(1)} requires a complete multiport network and has large constants. \textbf{(3)} allows general connected bidirectional graphs. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $K=1+L\Delta/\varepsilon^2$, $C=\max_i h_i+\sigma^2\sum_i h_i/(n^2\varepsilon^2)$, $m=\lceil d/n\rceil$. In \textbf{(3)}, $\tau$ is the time per exact real coordinate on each link.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

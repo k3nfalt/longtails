@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Full-Range Cohypomonotone Inclusions}
+We seek a zero of $F+A$ on a finite-dimensional real inner product space $E$. The map $F:E\to E$ is $L$-Lipschitz with $L>0$, the set-valued operator $A:E\rightrightarrows E$ is monotone, and $F+A$ is $\rho$-cohypomonotone with $0\leq\rho<1/L$. A given point $x^0\in E$ lies within distance $R\geq0$ of a solution. The oracle provides unbiased estimates of $F$ with bounded variance using independent, identically distributed samples, or exact resolvent values of $A$ at positive step sizes. For $\varepsilon>0$, the goal is a measurable pair $(\bar{x},\bar{a})$ with $\bar{a}\in A(\bar{x})$ for every realization and $\mathbb{E}\|F(\bar{x})+\bar{a}\|\leq\varepsilon$, averaging over oracle and algorithm randomness.
+
+In terms of a point $x^\star$ and a vector $a^\star$, the inclusion is to find
+\[
+x^\star\in E,\qquad a^\star\in A(x^\star),\qquad F(x^\star)+a^\star=0.
+\]
+The algorithm receives $E$, the measurable sample space $\Omega$, the starting point $x^0$, and the parameters $L,\rho,R,\sigma,\varepsilon$, where $\sigma\geq0$ bounds the root mean squared oracle error.
+
+Our assumptions:
+\begin{assumption}[Operator inequalities]
+For all $x,y\in E$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+For every $a\in A(x)$ and $b\in A(y)$, write $u=F(x)+a$ and $v=F(y)+b$. Monotonicity of $A$ and cohypomonotonicity of $F+A$ mean that
+\[
+\begin{aligned}
+\langle a-b,x-y\rangle &\geq 0,\\
+\langle u-v,x-y\rangle &\geq -\rho\|u-v\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance]
+There exists a solution $x^\star$ of the inclusion such that $\|x^0-x^\star\|\leq R$.
+\end{assumption}
+
+\begin{assumption}[Stochastic evaluations and resolvent access]
+At call $k$, a query $x\in E$ returns $g(x,\xi_k)$, where $g:E\times\Omega\to E$ is jointly measurable. The samples $(\xi_k)_{k\geq0}$ are independent random variables with common law $\nu$ on $\Omega$, and the sequence is independent of the algorithm's randomness. For each $x\in E$ and $\xi\sim\nu$, the vector $g(x,\xi)$ is Bochner integrable, the squared error $\|g(x,\xi)-F(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+Alternatively, a query $(\gamma,z)\in\mathbb{R}\times E$ returns $J_\gamma(z)\in E$. For every $\gamma>0$ and $z\in E$, this reply satisfies the resolvent identity
+\[
+\frac{z-J_\gamma(z)}{\gamma}\in A\bigl(J_\gamma(z)\bigr).
+\]
+Both query types draw on the same call budget.
+\end{assumption}
+
+After the allotted calls, the output $(\bar{x},\bar{a})\in E\times E$ must be measurable and satisfy $\bar{a}\in A(\bar{x})$ for every realization. Under the joint law $P$ of the samples and the algorithm's randomness, the residual norm must be integrable and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})+\bar{a}\|\bigr]\leq\varepsilon.
+\]
+\end{document}

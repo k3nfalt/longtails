@@ -1,0 +1,49 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Stationarity with Corrupted First-Order Queries}
+We seek a stationary point to tolerance $\varepsilon>0$ for a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in high dimension $d$. Its gradient is $L$-Lipschitz for $L>0$, and the value at a given starting point is within $\Delta>0$ of a global lower bound. Except for at most $k$ corrupted replies, each query returns an approximate function value and the value of a fixed, uniformly accurate gradient approximation, where $k$ is a nonnegative integer. The goal is an output $\bar{x}\in\mathbb{R}^d$ whose Euclidean gradient norm exceeds $\varepsilon$ with probability at most $\delta\in[0,1/4]$.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives $d$, $L$, $\Delta$, $\varepsilon$, $k$, $\delta$, and the starting point $x^0\in\mathbb{R}^d$. The dimension $d$ is a positive integer, and the parameters satisfy
+\[
+\begin{aligned}
+L\Delta &\geq 2^{26}\varepsilon^2,\\
+d &\geq 2^{32}\left(\left\lfloor\frac{L\Delta}{2^{25}\varepsilon^2}\right\rfloor+1\right)^4.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere. With $\|\cdot\|$ denoting the Euclidean norm, its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,\qquad x,y\in\mathbb{R}^d.
+\]
+There exists $\ell\in\mathbb{R}$ such that $f(x)\geq\ell$ for every $x\in\mathbb{R}^d$ and $f(x^0)-\ell\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Corrupted first-order replies]
+There exists a fixed map $g:\mathbb{R}^d\to\mathbb{R}^d$ satisfying
+\[
+\|g(x)-\nabla f(x)\|\leq\frac{\varepsilon}{8},\qquad x\in\mathbb{R}^d.
+\]
+At any query point $x\in\mathbb{R}^d$, the oracle returns a pair $(v,w)\in\mathbb{R}\times\mathbb{R}^d$. A reply is accurate if both conditions hold:
+\[
+|v-f(x)|\leq\frac{\varepsilon^2}{128L},\qquad w=g(x).
+\]
+Replies may depend on previous queries and replies. For every finite query sequence and every choice of oracle randomness along it, at most $k$ replies fail the accuracy conditions.
+\end{assumption}
+
+After the allotted calls, the output $\bar{x}$ must satisfy
+\[
+P\bigl(\|\nabla f(\bar{x})\|>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the independent algorithm and oracle randomness.
+\end{document}

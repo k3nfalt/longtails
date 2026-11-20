@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stationarity for Nonnegative Smooth Sample Losses}
+We seek a stationary point of a possibly nonconvex objective $f:E\to\mathbb{R}$ on a finite-dimensional Euclidean space $E$. The objective is the expectation of nonnegative sample losses with $L$-Lipschitz gradients, where $L>0$, and $f(0)\leq\Delta$ for a given $\Delta>0$. Each oracle call returns the gradients of one fresh, independently sampled loss at both queried points. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}[\|\nabla f(\bar{x})\|]\leq\varepsilon$, with expectation over the oracle samples and the algorithm's independent randomness.
+
+The parameters satisfy $2^{32}\varepsilon\leq\sqrt{L\Delta}$. For a nonnegative integer $r$ specifying the extra width, set
+\[
+\begin{aligned}
+n&=\left\lfloor\frac{\sqrt{L\Delta}}{2^{32}\varepsilon}\right\rfloor,\\
+m&=[512(n+1)]^2,\\
+d&=2^{21}(2n^3+1)n m^2+r+1.
+\end{aligned}
+\]
+The optimization problem is
+\[
+\inf_{x\in E} f(x),
+\]
+where $E=(\mathbb{R}^{m\times d})^n$ carries the Euclidean norm $\|x\|^2=\sum_{j=1}^n\|x_j\|_{\mathrm F}^2$, with $\|\cdot\|_{\mathrm F}$ the Frobenius norm. The algorithm receives $E$, the sample space $\Omega=\{1,\ldots,m\}$, the starting point $x^0=0$, and the parameters $L,\Delta,\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Sample loss regularity]
+For each $\omega\in\Omega$, the loss $\ell_\omega:E\to\mathbb{R}$ is differentiable. Writing $g(x,\omega)=\nabla\ell_\omega(x)$, we require for every $x,y\in E$ and $\omega\in\Omega$ that
+\[
+\begin{aligned}
+\ell_\omega(x)&\geq 0,\\
+\|g(x,\omega)-g(y,\omega)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+The map $(x,\omega)\mapsto g(x,\omega)$ is jointly measurable.
+\end{assumption}
+
+\begin{assumption}[Population objective and initial value]
+There is a probability distribution $\nu$ on $\Omega$ such that $\omega\mapsto\ell_\omega(x)$ is $\nu$-integrable for every $x\in E$, and
+\[
+\begin{aligned}
+f(x)&=\mathbb{E}_{\omega\sim\nu}[\ell_\omega(x)] &&\text{for every }x\in E,\\
+f(x^0)&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+On call $k$, the algorithm may query any pair $(x,y)\in E\times E$ and receives $(g(x,\xi_k),g(y,\xi_k))$. The samples $(\xi_k)_{k\geq 1}$ are independent random variables with common law $\nu$, and the sample sequence is independent of the algorithm's randomness. After the allotted calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable, and
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

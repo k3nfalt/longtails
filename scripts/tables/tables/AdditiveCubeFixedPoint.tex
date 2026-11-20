@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle-call budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AdditiveCubeFixedPoint.lean}{fixed-point residuals on a cube with additive noise}.}\label{tab:AdditiveCubeFixedPoint}
+\parbox{\linewidth}{\footnotesize Let $T:C\to C$ be nonexpansive in the sup norm on $C=[-R,R]^d$. A measurable policy knows $d\ge1$, $R,\varepsilon>0$ and $\sigma\ge0$. Each query at $x\in C$ returns $T(x)+Z$, with fresh IID noise satisfying $\mathbb E Z=0$ and $\mathbb E\|Z\|_\infty^2\le\sigma^2$. The target is a measurable $X\in C$ with $\mathbb E\|T(X)-X\|_\infty\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdditiveCubeFixedPoint.lean}{Additive\allowbreak Cube\allowbreak Fixed\allowbreak Point} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdditiveCubeFixedPoint.md}{(review)}
+& $\mathcal{O}\!\left(\mathbf1_{\{R>\varepsilon\}}\frac R\varepsilon\bigl(1+\frac{\sigma^2\log(2d)}{\varepsilon^2}\bigr)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Dual Halpern \citep[Thm.~3]{sfpLee2026v1}, derived bound
+& $\mathcal{O}\!\left(\frac R\varepsilon\bigl(1+\frac{\sigma^2\log(2d)}{\varepsilon^2}\bigr)\right)$ for $\varepsilon\le R$
+& \textbf{(1)} formalizes the rate of \textbf{(2)} for a different anchored batch-mean method. Apply \textbf{(2)} to $T\circ\mathrm{clip}_C$ from $0$, bound initial distance by $R$, and clip the output.
+& \textbf{(1)} requires additive noise on a cube. \textbf{(2)} allows query-dependent unbiased noise with bounded variance. \\
+\midrule
+\textbf{(3)} Recursive anchoring \citep[Cor.~6]{sfpDgm2026v1}, $p=\infty$
+& $\begin{aligned}
+\mathcal{O}\!\Bigl(&\tfrac R\varepsilon(1+\log s)\bigl(s+\log(1/\delta)\bigr)\\
+&{}\cdot\bigl(1+s^2\tfrac{\sigma^2\log(2d)}{\varepsilon^2}\bigr)\Bigr)
+\end{aligned}$ for $\varepsilon\le R$
+& \textbf{(1)} avoids the accuracy logarithms for expected residual. \textbf{(3)} controls a residual quantile, so the costs are incomparable.
+& \textbf{(3)} guarantees residual $\le\varepsilon$ with probability $1-\delta$ or higher and allows unbiased, query-dependent noise on compact convex domains with a Lipschitz retraction. \\
+\midrule
+\textbf{(4)} Minibatch Halpern \citep[arXiv v4, Cor.~3.5]{acfBravoContreras2026}, derived bound
+& $\mathcal{O}\!\left([u(1+\log u)]^5\right)$ for $\varepsilon<R$
+& \textbf{(1)} reduces the accuracy dependence from $\mathcal{O}(\varepsilon^{-5}\log^5(1/\varepsilon))$ to $\mathcal{O}(\varepsilon^{-3})$ for fixed $d,R,\sigma>0$ as $\varepsilon\to0$. \textbf{(2)} already attains this rate.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\mathrm{clip}_C$ denotes coordinatewise clipping to $C$. $s=1+\log(R/\varepsilon)$, $\delta\in(0,1)$ is the failure probability, and $u=\max\{R,\sqrt d\,\sigma\}/\varepsilon$ uses $\mathbb E\|Z\|_2^2\le d\sigma^2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

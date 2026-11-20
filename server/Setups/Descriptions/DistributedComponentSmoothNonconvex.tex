@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Nonconvex Finite-Sum Optimization}
+We seek a stationary point of a possibly nonconvex objective $F$ on $d$-dimensional Euclidean space $\mathbb{R}^d$. Each worker contributes one component to the average $F$. Each component has a Lipschitz gradient, and the initial objective gap to a global lower bound is bounded. Workers compute at heterogeneous speeds and communicate over directed links. Each worker's oracle returns batches of unbiased local gradient estimates with bounded variance, using independent samples within and across workers. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $\mathbb{E}[\|\nabla F(\bar{x})\|^2]\leq\varepsilon^2$ over sampling and algorithm randomness.
+
+Index the $n\geq 1$ workers by $i=1,\ldots,n$, and write $f_i:\mathbb{R}^d\to\mathbb{R}$ for their components, where $d$ is a nonnegative integer. With $F(x)=\frac{1}{n}\sum_{i=1}^n f_i(x)$, the optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} F(x).
+\]
+The algorithm receives $d$, $n$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the bounds $(L_i,\sigma_i)_{i=1}^n$ and $\Delta$, the tolerance $\varepsilon$, and the timing parameters $(h_i)_{i=1}^n$, $\ell$, and $b$.
+
+Our assumptions:
+\begin{assumption}[Component smoothness and initial gap]
+Each $f_i$ is differentiable, and for all $x,y\in\mathbb{R}^d$ its gradient satisfies
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|\leq L_i\|x-y\|,
+\qquad L_i\geq 0,
+\]
+where $\|\cdot\|$ is the Euclidean norm. There is a lower bound $a\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+a &\leq F(x) &&\text{for every }x\in\mathbb{R}^d,\\
+F(x^0)-a &\leq \Delta &&\text{with }\Delta\geq 0.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Local stochastic gradients]
+Worker $i$ has a stream $(\xi_{i,k})_{k\geq 0}$ of measurable, independent samples with common law $\mu_i$ on $\Omega$. The worker streams are mutually independent, and the algorithm's randomness is independent of the entire sample array. The map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For every $x\in\mathbb{R}^d$ and $\xi\sim\mu_i$, the vector $g_i(x,\xi)$ is Bochner integrable, its squared error is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu_i}[g_i(x,\xi)] &= \nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\mu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr] &\leq \sigma_i^2,
+\end{aligned}
+\]
+where $\sigma_i\geq 0$.
+\end{assumption}
+
+\paragraph{Computation and communication.}
+A computation query at worker $i$ specifies a point $x\in\mathbb{R}^d$ and a positive integer batch size $m$. If $k$ samples have already been used, the worker returns the ordered batch
+\[
+\bigl(g_i(x,\xi_{i,k+j})\bigr)_{j=0}^{m-1}
+\]
+after time $m h_i$, where $h_i>0$ is its time per sample. Each worker processes one batch at a time and ignores further computation requests while a batch is pending. Different workers can compute concurrently.
+
+Every ordered pair of workers, including a worker paired with itself, has a directed link. A message with $q\geq 0$ payload bits is padded with $64$ zero bits. If submitted at time $t$, it finishes at
+\[
+\max\{t,t_{\mathrm{prev}}\}+\ell+b(q+64),
+\]
+where $t_{\mathrm{prev}}$ is the previous finish time on that link, initially zero, $\ell\geq 0$ is the latency, and $b\geq 0$ is the time per transmitted bit. The recipient receives the sender's identity and the padded bit string. Each link serves messages in submission order. Distinct links can operate concurrently, and communication can overlap computation.
+
+\paragraph{Elapsed time and accuracy.}
+For an elapsed-time budget $T\geq 0$, almost surely the algorithm must process only finitely many events for every deadline $s\in[0,T]$. At time $T$, a root worker designated by the algorithm must produce a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable squared gradient norm satisfying
+\[
+\mathbb{E}\bigl[\|\nabla F(\bar{x})\|^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}

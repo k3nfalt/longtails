@@ -1,0 +1,117 @@
+{
+  "setup": "LongTails.Setups.DistributedWeakInterpolation",
+  "searched_at": "2026-11-20T09:46:12.081044+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{S \\cdot \\varepsilon} + \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right)}{S} \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right)}{S} + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot \\left(\\max_{0\\le i<n} u\\left(i\\right)\\right)}{\\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right)}\\right)^{2}}{\\varepsilon} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad c = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\left(\\sum_{i=0}^{n-1} \\min\\left\\{ L\\left(i\\right), t \\cdot h\\left(i\\right) \\right\\}\\right) = n \\cdot \\mu \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} u\\left(i\\right) = \\min\\left\\{ L\\left(i\\right), c \\cdot h\\left(i\\right) \\right\\} \\\\ &\\phantom{\\text{where}\\quad} S = \\left(\\sum_{i=0}^{n-1} \\frac{u\\left(i\\right)}{h\\left(i\\right)} \\cdot u\\left(i\\right)\\right)\\end{aligned}",
+        "type": "LongTails.Setups.DistributedWeakInterpolation.Params → NNReal",
+        "value": "fun p =>\n  have c := if h : ∃ t, 0 ≤ t ∧ ∑ i, min (p.L i) (t * ↑(p.h i)) = ↑↑p.n * p.μ then h.choose else 0;\n  have u := fun i => min (p.L i) (c * ↑(p.h i));\n  have S := ∑ i, u i / ↑(p.h i) * u i;\n  (2048 *\n      (p.σ ^ 2 / (S * p.ε) +\n        ((2 * ∑ i, (↑(p.h i))⁻¹) * Finset.univ.sup' ⋯ fun i => u i * p.L i) / S * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l +\n            ↑p.b *\n              (64 +\n                1024 * ↑p.d *\n                  ↑⌈2 + ↑p.d + ((2 * ∑ i, (↑(p.h i))⁻¹) * Finset.univ.sup' ⋯ fun i => u i * p.L i) / S +\n                          (p.R ^ 2 + (p.σ * Finset.univ.sup' ⋯ u / Finset.univ.sup' ⋯ fun i => u i * p.L i) ^ 2) /\n                            p.ε⌉₊.size)))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{S \\cdot \\varepsilon} + \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right)}{S} \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right)}{S} + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot \\left(\\max_{0\\le i<n} u\\left(i\\right)\\right)}{\\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right)}\\right)^{2}}{\\varepsilon} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad c = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\left(\\sum_{i=0}^{n-1} \\min\\left\\{ L\\left(i\\right), t \\cdot h\\left(i\\right) \\right\\}\\right) = n \\cdot \\mu \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} u\\left(i\\right) = \\min\\left\\{ L\\left(i\\right), c \\cdot h\\left(i\\right) \\right\\} \\\\ &\\phantom{\\text{where}\\quad} S = \\left(\\sum_{i=0}^{n-1} \\frac{u\\left(i\\right)}{h\\left(i\\right)} \\cdot u\\left(i\\right)\\right)\\end{aligned}",
+          "type": "LongTails.Setups.DistributedWeakInterpolation.Params → NNReal",
+          "value": "fun p =>\n  have c := if h : ∃ t, 0 ≤ t ∧ ∑ i, min (p.L i) (t * ↑(p.h i)) = ↑↑p.n * p.μ then h.choose else 0;\n  have u := fun i => min (p.L i) (c * ↑(p.h i));\n  have S := ∑ i, u i / ↑(p.h i) * u i;\n  (2048 *\n      (p.σ ^ 2 / (S * p.ε) +\n        ((2 * ∑ i, (↑(p.h i))⁻¹) * Finset.univ.sup' ⋯ fun i => u i * p.L i) / S * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l +\n            ↑p.b *\n              (64 +\n                1024 * ↑p.d *\n                  ↑⌈2 + ↑p.d + ((2 * ∑ i, (↑(p.h i))⁻¹) * Finset.univ.sup' ⋯ fun i => u i * p.L i) / S +\n                          (p.R ^ 2 + (p.σ * Finset.univ.sup' ⋯ u / Finset.univ.sup' ⋯ fun i => u i * p.L i) ^ 2) /\n                            p.ε⌉₊.size)))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedWeightedInterpolation",
+      "namespace": "LongTails.Setups.DistributedWeakInterpolation",
+      "setup": "LongTails.Setups.DistributedWeakInterpolation",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedWeakInterpolation.spec\n  LongTails.Theorems.DistributedWeightedInterpolation.budget",
+      "theorem": "LongTails.Theorems.DistributedWeightedInterpolation.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistributedWeightedInterpolation",
+      "theorem": "LongTails.Theorems.DistributedWeightedInterpolation.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Each worker objective fᵢ is differentiable and convex on ℝᵈ, with an Lᵢ-Lipschitz gradient. The average objective is therefore convex.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, spec.admissible and objective"
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is F(x) = (1/n)∑ᵢ fᵢ(x) for n ≥ 1 workers. Their common minimizer set X = ⋂ᵢ argmin fᵢ is nonempty and equals argmin F.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, Params.n, objective, solutions and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A completed query at worker i returns gᵢ(x,ξ), a jointly measurable estimate with mean ∇fᵢ(x). Each worker consumes its own IID sample stream in completion order. Streams are independent across workers and their laws νᵢ may differ.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, system and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID; LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient; LongTails/Setups/StarNetwork.lean, computation"
+      },
+      {
+        "label": "other",
+        "details": "The timed oracle has a central node and n computing leaves. Each leaf can have one gradient query pending, takes hᵢ > 0 per completed query, and supports cancellation. Each directed star link can carry one message at a time. Distinct links and worker computations can operate concurrently. A k-bit payload costs l + b(k + 64) time, including the clock overhead, with l,b ≥ 0.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, system, spec.numWorkers and spec.valid; LongTails/Setups/StarNetwork.lean, computation and communication; LongTails/TemplateDistributed.lean, Time, clockBits and step"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every worker i and query point x, E‖gᵢ(x,ξ) − ∇fᵢ(x)‖² ≤ σ² with σ ≥ 0. This uniform bound permits positive variance at a common minimizer.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, spec.valid and spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.variance_integrable and IsStochasticGradient.variance"
+      },
+      {
+        "label": "quadratic_growth",
+        "details": "For every x, F(x) − min F ≥ (μ/2) dist(x,X)², with μ > 0 and nμ ≤ ∑ᵢ Lᵢ. The growth condition applies to the average objective and allows multiple common minimizers.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, objective, solutions, spec.valid and spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, gradient replies and the output lie in Euclidean ℝᵈ, with d a public natural number.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, Params.d, Point, spec.ComputeQuery, spec.ComputeReply and spec.Output"
+      },
+      {
+        "label": "other",
+        "details": "Weak interpolation holds at the level of worker objectives. Some z minimizes every fᵢ and satisfies ‖x₀ − z‖ ≤ R, while individual minimizer sets may be larger than their intersection. All Params fields are public, including x₀, R ≥ 0, ε > 0, σ, μ, each Lᵢ ≥ 0, and the network timings. The functions, common minimizer, gradient mappings and sampling laws are instance or oracle data.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, Params, solutions, spec.Public, spec.publicInput, spec.Instance, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The output is a single point read from the algorithm's designated root at the prescribed elapsed-time deadline. Its error is the squared Euclidean distance to the common minimizer set X.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, solutions, spec.Output and spec.successful; LongTails/TemplateDistributed.lean, execute and TimedConvergence"
+      },
+      {
+        "label": "expected",
+        "details": "The output must be measurable, its squared distance to X integrable, and E[dist(output,X)²] ≤ ε under the joint algorithm and oracle law. Execution must also have finitely many events almost surely through the deadline.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, spec.successful; LongTails/TemplateDistributed.lean, law, FiniteEvents and TimedConvergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines shared minimizers and quadratic growth of the average with noisy worker gradients, heterogeneous computation times, and concurrent star links that charge latency and time per bit. It evaluates expected squared distance to the common solution set at a fixed elapsed-time deadline."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistributedWeightedInterpolation.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistributedWeightedInterpolation",
+          "theorem": "LongTails.Theorems.DistributedWeightedInterpolation.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

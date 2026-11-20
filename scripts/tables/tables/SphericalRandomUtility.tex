@@ -1,0 +1,48 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient and necessary comparison budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SphericalRandomUtility.lean}{spherical random utility}.}\label{tab:SphericalRandomUtility}
+\parbox{\linewidth}{\footnotesize Let $f$ be convex on the closed Euclidean ball $Q$ of radius $R>0$ centered at zero in dimension $d\ge2$. Each query $(x,y)\in Q^2$ uses one fresh IID draw $Z$ from an unknown spherically symmetric law and returns the jointly measurable bit $\mathbf{1}\{u_Z(x)\ge u_Z(y)\}$, where $u_Z(x)=f(x)+\langle Z,x\rangle$. With probability at least $1/2$, $u_Z$ is $B$-Lipschitz throughout $Q$. For $B>0$ and $0<\varepsilon\le BR/16$, the target is a feasible $\hat x$ with integrable gap and $\mathbb E[f(\hat x)-\min_Q f]\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SphericalPreferenceDescent.lean}{Spherical\allowbreak Preference\allowbreak Descent} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SphericalPreferenceDescent.md}{(review)}
+& \textit{Upper bound (sufficient)}\newline $\mathcal{O}(d(BR/\varepsilon)^2)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SphericalPreferenceLowerBound.lean}{Spherical\allowbreak Preference\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SphericalPreferenceLowerBound.md}{(review)}
+& \textit{Lower bound (necessary)}\newline $\Omega(d(BR/\varepsilon)^2)$ for randomized adaptive algorithms & & \\
+\midrule[1.2pt]
+\textbf{(3)} \citep[Thm.~2(a)]{sruKovalev2026v1} Gaussian probit, convex
+& \textit{Upper bound (sufficient)}\newline $\mathcal{O}(1+(Cd\sigma R/\varepsilon)^2)$
+& \textbf{(1)}: Unknown spherical laws, including atoms and infinite means. No $M$, $\sigma$ or link calibration. On the Gaussian ball, take $B=M+\sigma\sqrt d$. Matches \textbf{(3)} for $\sigma\ge M$. For $t=M/\sigma>1$, the budget improves by a factor $\gtrsim t^2\min\{d,t^2\}$. At $t=\sqrt d$, \textbf{(1)} costs $\mathcal{O}(d(MR/\varepsilon)^2)$ versus at least order $d^3(MR/\varepsilon)^2$ in \textbf{(3)}'s budget.
+& \textbf{(1)} needs a fixed horizon and a single envelope $B$. It covers balls only. \textbf{(3)} is anytime on convex bodies between concentric balls. \\
+\midrule
+\textbf{(4)} \citep[Thm.~2(a)]{sruKovalev2026v1} Gaussian probit, strongly convex
+& \textit{Upper bound (sufficient)}\newline $\mathcal{O}\!\left(1+\min\!\left\{\left(\frac{Cd\sigma R}{\varepsilon}\right)^2,\frac{Cd^2\sigma^2}{\mu\varepsilon}\right\}\right)$
+& \textbf{(1)} also covers nonsmooth convex objectives without positive curvature or Gaussian noise.
+& \textbf{(1)} retains $\varepsilon^{-2}$ dependence when $0<\mu\le M/(8R)$, where \textbf{(4)} also gives an $\varepsilon^{-1}$ bound. \\
+\midrule
+\textbf{(5)} \citep[Thm.~2(b)]{sruKovalev2026v1} Gaussian probit on the ball
+& \textit{Lower bound (necessary)}\newline $\Omega(d(BR/\varepsilon)^2)$ for $\varepsilon<BR/200$, with $M=B/2$, $\sigma=B/(4\sqrt d)$
+& \textbf{(2)} formalizes the same order and extends it to $BR/200\le\varepsilon\le BR/16$, giving $\Omega(d)$ throughout that band for $d\ge2048$. The full spherical class has matching upper and lower orders in \textbf{(1)}, \textbf{(2)}.
+& \textbf{(2)} has a roughly $3.3$ times smaller lower-bound coefficient for $\varepsilon<BR/200$. \\
+\midrule
+\textbf{(6)} \citep[Thm.~2]{sruLu2026v3} Online dueling
+& No comparable expected-gap budget
+& \textbf{(1)}, \textbf{(6)}: Rates are not comparable. \textbf{(6)} bounds query regret using an objective-gap link with known slope at zero. \textbf{(1)} compares utility differences whose noise scales with $\|x-y\|$.
+& \\
+\midrule
+\textbf{(7)} \citep{sruSaha2021} Noisy dueling
+& No comparable spherical-noise budget
+& \textbf{(1)}, \textbf{(7)}: Rates are not comparable under general spherical noise. \textbf{(7)} assumes smoothness and a constant probability of reversing the true preference.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $M$ is a Lipschitz bound for $f$, $\sigma>0$ the Gaussian standard deviation per coordinate, and $\mu$ the strong convexity modulus. $C=C(M/\sigma)$ is the probit factor in Appendix~B.1 of the paper cited in \textbf{(3)}, with $C(t)\ge\max\{1,t^2\}$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

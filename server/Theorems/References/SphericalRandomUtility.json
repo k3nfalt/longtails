@@ -1,0 +1,138 @@
+{
+  "setup": "LongTails.Setups.SphericalRandomUtility",
+  "searched_at": "2026-11-20T09:48:52.775552+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil d \\cdot \\left(\\frac{672 \\cdot B \\cdot R}{\\varepsilon}\\right)^{2} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SphericalRandomUtility.spec.Params → ℕ",
+        "value": "fun p => ⌈↑p.d * (672 * p.B * ↑p.R / p.ε) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil d \\cdot \\left(\\frac{672 \\cdot B \\cdot R}{\\varepsilon}\\right)^{2} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SphericalRandomUtility.spec.Params → ℕ",
+          "value": "fun p => ⌈↑p.d * (672 * p.B * ↑p.R / p.ε) ^ 2⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.SphericalPreferenceDescent",
+      "namespace": "LongTails.Setups.SphericalRandomUtility",
+      "setup": "LongTails.Setups.SphericalRandomUtility",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SphericalRandomUtility.spec\n  LongTails.Theorems.SphericalPreferenceDescent.budget",
+      "theorem": "LongTails.Theorems.SphericalPreferenceDescent.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{d \\cdot \\left(\\frac{B \\cdot R}{\\varepsilon}\\right)^{2}}{524288} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SphericalRandomUtility.spec.Params → ℕ",
+        "value": "fun p => ⌊↑p.d * (p.B * ↑p.R / p.ε) ^ 2 / 524288⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{d \\cdot \\left(\\frac{B \\cdot R}{\\varepsilon}\\right)^{2}}{524288} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SphericalRandomUtility.spec.Params → ℕ",
+          "value": "fun p => ⌊↑p.d * (p.B * ↑p.R / p.ε) ^ 2 / 524288⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.SphericalPreferenceLowerBound",
+      "namespace": "LongTails.Setups.SphericalRandomUtility",
+      "setup": "LongTails.Setups.SphericalRandomUtility",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.SphericalRandomUtility.spec\n  LongTails.Theorems.SphericalPreferenceLowerBound.budget",
+      "theorem": "LongTails.Theorems.SphericalPreferenceLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SphericalPreferenceDescent",
+      "theorem": "LongTails.Theorems.SphericalPreferenceDescent.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.SphericalPreferenceLowerBound",
+      "theorem": "LongTails.Theorems.SphericalPreferenceLowerBound.result",
+      "references": "- John C. Duchi, Michael I. Jordan, Martin J. Wainwright, and Andre Wibisono. [Finite Sample Convergence Rates of Zero-Order Stochastic Optimization Methods](https://proceedings.neurips.cc/paper/2012/file/e555ebe0ce426f7f9b2bef0706315e0c-Paper.pdf). 2012. Complexity: $\\Omega(dG^2R^2/\\varepsilon^2)$ adaptive same-sample paired-value calls for expected gap $\\varepsilon<cGR$, where $c>0$ is universal. On the Gaussian linear hard instances, $G$ bounds the root-mean-square sample slope norm. Taking $G=B/\\sqrt{2}$ ensures the required half-mass condition, and each value pair yields its comparison bit.\n- Evgeniy Kovalev, Fedor Stonyakin, and Alexander Gasnikov. [Nonsmooth Convex and Strongly Convex Optimization from Noisy Comparisons](https://arxiv.org/html/2611.19611v1). 2026 (arXiv v1). Complexity: $\\Omega(d^2\\sigma^2R^2/\\varepsilon^2)$ adaptive binary comparisons for expected gap $\\varepsilon<cMR$, where $M$ is the objective Lipschitz bound, $Z\\sim N(0,\\sigma^2 I_d)$, and $c>0$ is universal. On the radius-$R$ ball, $M=B/2$ and $\\sigma=B/(2\\sqrt{2d})$ give admissible instances and $\\Omega(dB^2R^2/\\varepsilon^2)$ comparisons.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a real-valued function convex on the closed Euclidean ball of radius R centered at zero. Convexity is required only on the feasible ball, and the objective may be nonsmooth.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, Feasible and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "A query selects two feasible points x and y. The oracle returns one bit, true exactly when f(y)+⟨Z,y⟩ ≤ f(x)+⟨Z,x⟩. Both utilities use the same hidden draw Z, so the noise in their difference is ⟨Z,x−y⟩. Ties return true. The algorithm receives only the bit and may choose the next pair adaptively.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, sampleUtility, comparePair, spec.Query, spec.Reply and spec.admissible. LongTails/Template.lean, Algorithm.query and Algorithm.update."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "With probability at least 1/2 over Z, the entire sample utility x ↦ f(x)+⟨Z,x⟩ is B-Lipschitz on the feasible ball, simultaneously for all pairs. This quantile condition permits perturbation laws with infinite moments.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, good, sampleUtility and the half-mass condition in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝᵈ with d ≥ 2. The public parameters are d, R, B and ε, with R > 0, B > 0 and 0 < ε ≤ BR/16.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, Point, Params, Feasible, spec.publicInput and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The hidden perturbation law is invariant under every orthogonal transformation. Successive query perturbations are independent with this same marginal law. The comparison map is jointly measurable in the queried pair and the perturbation.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, Spherical and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID.measurable, IID.independent and IID.marginal."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Return a feasible point x̂. The gap is f(x̂)−f(x⋆), where x⋆ attains the minimum of f on the same closed ball.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The output gap must be integrable and satisfy E[f(x̂)−f(x⋆)] ≤ ε. The expectation includes the algorithm seed and the independent oracle sequence under a fixed cap on comparison calls.",
+        "evidence": "LongTails/Setups/SphericalRandomUtility.lean, spec.successful. LongTails/Template.lean, Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Each comparison uses a shared spherical random linear perturbation. Its effect scales with the displacement between the queried points, and its size is controlled through a half-mass Lipschitz condition on whole sample utilities."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SphericalPreferenceDescent.result",
+        "LongTails.Theorems.SphericalPreferenceLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SphericalPreferenceDescent",
+          "theorem": "LongTails.Theorems.SphericalPreferenceDescent.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.SphericalPreferenceLowerBound",
+          "theorem": "LongTails.Theorems.SphericalPreferenceLowerBound.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

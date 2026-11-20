@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary stochastic gradient calls for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalSeparableNoiseLinfSmooth.lean}{high-dimensional $\ell_\infty$-smooth optimization with separable noise}.}\label{tab:HighDimensionalSeparableNoiseLinfSmooth}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $f(x_0)-\inf f\le\Delta$ and $\|\nabla f(x)-\nabla f(y)\|_1\le L\|x-y\|_\infty$. Each gradient query uses a fresh IID real sample. The jointly measurable reply $g(x,\xi)$ is unbiased with finite coordinate variances and $\sum_i\sqrt{\operatorname{Var}(g_i(x,\xi))}\le S$ at every $x$. For $L,\varepsilon>0$, $S\ge0$, $A=L\Delta/\varepsilon^2\ge2^{30}$ and $d\ge2^{168}[1+A(1+S^2/\varepsilon^2)]^{16}$, the target is $\mathbb E\|\nabla f(\hat x)\|_1\le\varepsilon$ for a measurable output of a randomized gradient-only algorithm.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SeparableNoiseLinfSmoothLowerBound.lean}{Separable\allowbreak Noise\allowbreak Linf\allowbreak Smooth\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SeparableNoiseLinfSmoothLowerBound.md}{(review)}
+& Lower bound: $\Omega\!\left(A(1+S^2/\varepsilon^2)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} SignSGD \citep[Thm.~2]{bssTaoYuZhang2026v1}
+& Lower bound: $\Omega\!\left(A(1+\|\boldsymbol\sigma\|_1^2/\varepsilon^2)\right)$ samples, counting every batch member. Best iterate in expectation: $\mathbb E\min_{t<T}\|\nabla f(x_t)\|_1$.
+& \textbf{(1)} extends hardness to every randomized method and arbitrary output. Under the stated dimension and gap conditions, minibatch SignSGD attains the pointwise-noise minimax rate up to constants.
+& \textbf{(2)} uses fixed coordinate caps $\sqrt{\operatorname{Var}(g_i(x,\xi))}\le\sigma_i$ in any dimension. \textbf{(1)} leaves all-method hardness under these caps open and requires $A\ge2^{30}$. \\
+\midrule
+\textbf{(3)} Euclidean stationarity \citep[Thm.~3, Eq.~(23)]{hdabcArjevaniV2}
+& Lower bound: $\Omega(A\sigma^2/\varepsilon^2)$ single-point value-and-gradient queries for $\sigma>0$, $\varepsilon\le c\sqrt{L\Delta}$.
+& \textbf{(1)} transfers Euclidean hardness to $\ell_1$ stationarity with separable noise. Direct norm conversion can inflate smoothness by $D$ and noise scale by $\sqrt D$ in dimension $D$.
+& \textbf{(1)} covers gradient-only access and requires a larger dimension. \textbf{(3)} allows exact values with each noisy gradient. The geometries preclude direct rate comparison. \\
+\midrule
+\textbf{(4)} Matrix stationarity \citep[Thm.~3.1]{hdslZhangLinV4}
+& Lower bound at $p=2$: $\Omega(r A u^2)$ for randomized gradient-only methods.
+& \textbf{(1)} treats vector separable noise. \textbf{(4)} uses spectral-to-nuclear smoothness and nuclear-norm noise and stationarity. Rates are incomparable.
+& \textbf{(1)} requires finite variances. \textbf{(4)} covers $1<p\le2$. At $p=2$, $\varepsilon\le c\min(\sqrt{L\Delta},\sigma)$ and $M\ge C A\log[(2+A)(2+u)]$. \\
+\midrule
+\textbf{(5)} Matrix stationarity \citep[Thm.~3.7]{fvssHubler2026v1}
+& Lower bound at $p=2$: $\Omega(r u^2)$ for randomized methods, $r\ge2$.
+& \textbf{(1)}, \textbf{(5)}: rates are incomparable under separable vector noise and nuclear-norm matrix noise.
+& \textbf{(5)} also covers $1<p<2$ for $\varepsilon<\min(\sigma/4,\sqrt{L\Delta}/2)$. \\
+\midrule
+\textbf{(6)} Matrix stationarity \citep[Thm.~E.9]{fvssHubler2026v1}
+& Lower bound at $p=2$: $\Omega(r A u^2)$ for zero-respecting methods, $M/r\ge A$.
+& \textbf{(1)} covers unrestricted randomized methods in vector geometry. The matrix rate in \textbf{(6)} is incomparable.
+& \textbf{(6)} also covers $1<p<2$ for $\varepsilon\le\min(\sigma,\sqrt{L\Delta})/300$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=L\Delta/\varepsilon^2$, $u=\sigma/\varepsilon$. In \textbf{(3)}, $\sigma^2$ bounds mean squared Euclidean noise. In \textbf{(4)}--\textbf{(6)}, $r=\min(m,n)$ and $M=\max(m,n)$ for $m\times n$ matrices, and $\sigma$ bounds the $L^p$ norm of the nuclear norm of the noise. $c,C>0$ denote universal constants at $p=2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

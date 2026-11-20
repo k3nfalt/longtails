@@ -1,0 +1,39 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedWeakInterpolation.lean}{distributed weak interpolation}.}\label{tab:DistributedWeakInterpolation}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, the $n$ convex, $L_i$-smooth worker objectives have a common minimizer set $S=\bigcap_i\arg\min f_i\ne\varnothing$. Their average $f$ satisfies $f(x)-\min f\ge\mu\operatorname{dist}(x,S)^2/2$, with $0<n\mu\le\sum_i L_i$ and $\operatorname{dist}(x_0,S)\le R$. Gradients are unbiased with variance at most $\sigma^2$, sampled IID within workers and independently across workers. On the coordinator star, one gradient at worker $i$ takes $h_i>0$ seconds and a $k$-bit message takes $\ell+bk$ seconds. Workers and links operate concurrently, with one pending call per worker and one message per directed link. The target is $\mathbb E_P\operatorname{dist}(x_{\rm out},S)^2\le\varepsilon$, $\varepsilon>0$. Times are compared at $\ell=b=0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedWeightedInterpolation.lean}{Distributed\allowbreak Weighted\allowbreak Interpolation} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedWeightedInterpolation.md}{(review)}
+& $\mathcal{O}\!\left(\frac{\sigma^2}{I\varepsilon}+\kappa q(H+\ell+bB)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Malenia SGD \citep[Thm.~F.2]{dwiTyurin2026v1}
+& $\mathcal{O}\!\left(q\left[\frac{H\bar L}{\mu}+\frac{\sigma^2\sum_i h_i}{(n\mu)^2\varepsilon}\right]\right)$
+& \textbf{(1)} removes $q$ from the noise term and gains a further factor $G=I\sum_i h_i/(n\mu)^2\ge1$. $G>1$ exactly when some $n\mu h_i>L_i\sum_jh_j$; $G=\Theta(s)$ in the two-worker example of \textbf{(3)}.
+& \textbf{(1)} needs a common minimizer, individual $L_i$ and exact $h_i$. With equal $L_i$ and no binding cap, startup can cost up to $H/\min_i h_i$ times more. \\
+\midrule
+\textbf{(3)} Derived bound: Malenia SGD on a subset \citep[Thm.~F.2]{dwiTyurin2026v1}
+& $\mathcal{O}\!\left(q\min_{T:\,a_T>0}\left[\frac{H_T\sum_{i\in T}L_i}{a_T}+\frac{\sigma^2\sum_{i\in T}h_i}{\varepsilon a_T^2}\right]\right)$
+& \textbf{(1)} gains $\Theta(\log N)$ in the noise coefficient before counting $q$, even over the best subset, for $n=2N$, $L_i=1$, $\mu=1/2$, $h=(\underbrace{1,\ldots,1}_{N},1,\ldots,N)$.
+& For $h=(1,s)$, $L=(2\mu,\mu/s)$, $s\ge2$, $T=\{1\}$ already attains $\mathcal{O}(q[1+v])$ versus $\mathcal{O}(sq+v)$ for \textbf{(1)}. \\
+\midrule
+\textbf{(4)} Rennala SGD \citep[Thm.~3.8]{dwiTyurin2026v1}
+& $\mathcal{O}\!\left(q\min_{1\le m\le n}\frac{m L_{\max}/\mu+\sigma^2/(\mu^2\varepsilon)}{\sum_{j=1}^m 1/h_{(j)}}\right)$
+& \textbf{(1)} allows intersecting minimizer sets and growth only for the average. \textbf{(4)} requires identical minimizer sets and the Polyak--\L{}ojasiewicz condition with constant $\mu$ at every worker.
+& For $L_i=L$ and $\mu<L/(2n)$, \textbf{(1)} has arithmetic-mean noise dependence. On this overlap \textbf{(4)} exploits the harmonic mean of the selected worker times. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $q=\log(2+R^2/\varepsilon)$, $v=\sigma^2/(\mu^2\varepsilon)$, $H=\max_i h_i$, $\bar L=n^{-1}\sum_i L_i$, $L_{\max}=\max_i L_i$.
+Choose $c\ge0$ so that $u_i=\min\{L_i,ch_i\}$ sum to $n\mu$.
+$I=\sum_i u_i^2/h_i$, $M=\max_i(u_i L_i)$, $\kappa=(M/I)\sum_i h_i^{-1}$,
+$B=1+d\log\!\left(2+d+\kappa+[R^2+(\sigma\max_i u_i/M)^2]/\varepsilon\right)$.
+For a worker subset $T$, $a_T=n\mu-\sum_{i\notin T}L_i$ and $H_T=\max_{i\in T}h_i$. Worker times $h_{(j)}$ are in increasing order.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

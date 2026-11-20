@@ -1,0 +1,143 @@
+{
+  "setup": "LongTails.Setups.MarkovSmoothNonconvex",
+  "searched_at": "2026-11-20T09:50:45.889125+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\frac{32768 \\cdot L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}} \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil \\tau \\cdot \\log\\left(\\frac{8192 \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.MarkovSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => (⌈32768 * p.L * p.Δ * p.σ ^ 2 / p.ε ^ 4⌉₊ + 1) * ⌈p.τ * Real.log (8192 * p.σ ^ 2 / p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{32768 \\cdot L \\cdot \\Delta \\cdot \\sigma^{2}}{\\varepsilon^{4}} \\right\\rceil_{+} + 1\\right) \\cdot \\left\\lceil \\tau \\cdot \\log\\left(\\frac{8192 \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.MarkovSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => (⌈32768 * p.L * p.Δ * p.σ ^ 2 / p.ε ^ 4⌉₊ + 1) * ⌈p.τ * Real.log (8192 * p.σ ^ 2 / p.ε ^ 2)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.MarkovNonconvexStationarity",
+      "namespace": "LongTails.Setups.MarkovSmoothNonconvex",
+      "setup": "LongTails.Setups.MarkovSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.MarkovSmoothNonconvex.spec\n  LongTails.Theorems.MarkovNonconvexStationarity.budget",
+      "theorem": "LongTails.Theorems.MarkovNonconvexStationarity.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\tau \\cdot L \\cdot \\Delta \\cdot \\sigma^{2}}{2^{56} \\cdot \\varepsilon^{4}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.MarkovSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌊p.τ * p.L * p.Δ * p.σ ^ 2 / (2 ^ 56 * p.ε ^ 4)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\tau \\cdot L \\cdot \\Delta \\cdot \\sigma^{2}}{2^{56} \\cdot \\varepsilon^{4}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.MarkovSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => ⌊p.τ * p.L * p.Δ * p.σ ^ 2 / (2 ^ 56 * p.ε ^ 4)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.MarkovNonconvexStationarityLowerBound",
+      "namespace": "LongTails.Setups.MarkovSmoothNonconvex",
+      "setup": "LongTails.Setups.MarkovSmoothNonconvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.MarkovSmoothNonconvex.spec\n  LongTails.Theorems.MarkovNonconvexStationarityLowerBound.budget",
+      "theorem": "LongTails.Theorems.MarkovNonconvexStationarityLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MarkovNonconvexStationarity",
+      "theorem": "LongTails.Theorems.MarkovNonconvexStationarity.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.MarkovNonconvexStationarityLowerBound",
+      "theorem": "LongTails.Theorems.MarkovNonconvexStationarityLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective is differentiable on all of ℝᵈ, has a globally L-Lipschitz gradient, and satisfies f(x₀) − inf f ≤ Δ. These conditions permit nonconvex objectives and do not require the infimum to be attained.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, Space, spec.Instance, and the three objective conditions in spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "On call t the algorithm queries xₜ and receives only g(xₜ,Zₜ). Each call consumes the next state of a single hidden trajectory, including calls whose replies the algorithm discards. The public input is (d,L,Δ,σ,τ,ε,x₀). The objective, state space, transition kernel, stationary law, and gradient estimator are hidden.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, Params, spec.publicInput, spec.Query, spec.Reply, and spec.admissible; LongTails/Template.lean, Oracle.answer and executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "markov_dependence",
+        "details": "The chain starts from its invariant law π and evolves under a fixed kernel κ independently of the queries. For every state z and integer t ≥ 0, the total variation distance between κᵗ(z,·) and π is at most 2 exp(−t/τ), with τ ≥ 1.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, spec.valid and spec.admissible; LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean, pathLaw and mixingDistance"
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every fixed x, the jointly measurable estimator satisfies Eπ[g(x,Z)] = ∇f(x) and Eπ‖g(x,Z) − ∇f(x)‖² ≤ σ². Both expectations use the stationary law. At an adaptive query, the conditional mean and variance given past replies may differ from these fixed-query moments.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, measurability, integrability, mean, and centered second-moment clauses in spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries and outputs lie in Euclidean ℝᵈ, with d ≥ 2⁴⁰(1 + τLΔσ²/ε⁴)⁴.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, Params.d, Space, and spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "The parameter regime requires L > 0, ε > 0, σ ≥ 4096ε, and LΔ ≥ 2²⁶ε². It allows both σ² < LΔ and σ² > LΔ.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, spec.valid"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns one measurable point X in ℝᵈ. The criterion uses the first power of the Euclidean norm of the true gradient at X. Any measurable output point is eligible.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, spec.Output and spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "‖∇f(X)‖ must be integrable and satisfy E‖∇f(X)‖ ≤ ε. The expectation is over the algorithm's private random seed and the stationary Markov trajectory, drawn independently.",
+        "evidence": "LongTails/Setups/MarkovSmoothNonconvex.lean, spec.successful; LongTails/Template.lean, Convergence and its product measure"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The distinguishing feature is adaptive gradient access along one hidden, uniformly mixing Markov trajectory with only fixed-query stationary moment bounds. The dimension, noise, and initial-gap restrictions further specify the benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MarkovNonconvexStationarity.result",
+        "LongTails.Theorems.MarkovNonconvexStationarityLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MarkovNonconvexStationarity",
+          "theorem": "LongTails.Theorems.MarkovNonconvexStationarity.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.MarkovNonconvexStationarityLowerBound",
+          "theorem": "LongTails.Theorems.MarkovNonconvexStationarityLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

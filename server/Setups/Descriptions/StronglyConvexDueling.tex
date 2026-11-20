@@ -1,0 +1,49 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Strongly Convex Minimization with Comparisons}
+We minimize a continuously differentiable function $f:\mathbb{R}^d\to\mathbb{R}$ over the closed Euclidean unit ball $B$ in dimension $d\geq 1$. On $B$, $f$ is strongly convex and Lipschitz with Lipschitz gradient. For each query $x,y\in B$, the oracle uses a fresh independent sample to return a sign in $\{-1,1\}$ with mean $\rho(f(x)-f(y))$, where $\rho$ is an unknown odd, nondecreasing function with local derivative bounds. Given $\varepsilon>0$, the goal is a feasible output $\bar{x}\in B$ with $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where $x^\star$ minimizes $f$ on $B$ and the expectation includes algorithm and oracle randomness.
+
+With $\|\cdot\|$ denoting the Euclidean norm, the constrained problem is
+\[
+\min_{x\in B} f(x),\qquad B=\{x\in\mathbb{R}^d:\|x\|\leq 1\}.
+\]
+The algorithm receives the dimension $d$, the objective constants $\mu,L,G>0$, the transfer parameters $r,c,M>0$ and $k\in\{0,1,2,\ldots\}$, and the tolerance $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Objective regularity and strong convexity]
+The function $f$ is continuously differentiable on $\mathbb{R}^d$. For every $x,y\in B$, it satisfies
+\[
+\begin{aligned}
+|f(y)-f(x)| &\leq G\|y-x\|,\\
+\|\nabla f(y)-\nabla f(x)\| &\leq L\|y-x\|,\\
+f(y)-f(x) &\geq \langle\nabla f(x),y-x\rangle
+                 +\frac{\mu}{2}\|y-x\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Comparison transfer]
+The transfer function $\rho:\mathbb{R}\to[-1,1]$ is continuously differentiable, odd, and nondecreasing. Its derivative satisfies
+\[
+c|t|^k\leq \rho'(t)\leq M,\qquad |t|\leq r,
+\]
+where $|t|^0=1$ for every $t$.
+\end{assumption}
+
+\begin{assumption}[Pairwise comparison oracle]
+Let $Z_1,Z_2,\ldots$ be independent random variables with common law $\nu$ on a measurable space $\mathcal{Z}$, independent of the algorithm's randomness. On call $j$ with ordered pair $(x,y)\in B\times B$, the oracle returns the bit $g(x,y,Z_j)$ encoded as a sign, where $g:B\times B\times\mathcal{Z}\to\{-1,1\}$ is jointly measurable. For every $x,y\in B$,
+\[
+\mathbb{E}_{Z\sim\nu}[g(x,y,Z)]=\rho(f(x)-f(y)).
+\]
+\end{assumption}
+
+After the allotted comparisons, the output $\bar{x}$ must be a measurable $B$-valued random variable. For a minimizer $x^\star\in B$, the gap $f(\bar{x})-f(x^\star)$ must be integrable under the joint law of the algorithm's randomness and the oracle samples and satisfy
+\[
+\mathbb{E}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

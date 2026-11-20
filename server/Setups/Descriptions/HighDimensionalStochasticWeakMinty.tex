@@ -1,0 +1,53 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Stochastic Weak Minty Problems}
+We seek a zero of a Lipschitz operator $F:\mathbb{R}^d\to\mathbb{R}^d$ in high dimension $d$. A zero $x^\star$ lies within a prescribed radius of the given starting point $x^0$ and satisfies the weak Minty inequality $\langle F(x),x-x^\star\rangle\geq-\rho\|F(x)\|^2$ for every $x\in\mathbb{R}^d$, with $\rho\geq 0$. At each query $x$, the oracle uses a fresh independent sample to return an unbiased estimate of $F(x)$ with uniformly bounded variance. For tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with $\mathbb{E}\|F(\bar{x})\|\leq\varepsilon$, averaging over algorithm and oracle randomness.
+
+In terms of the Euclidean residual, the problem is
+\[
+\min_{x\in\mathbb{R}^d}\|F(x)\|.
+\]
+The algorithm receives $d\in\mathbb{N}$, the Lipschitz constant $L>0$, the weak Minty parameter $\rho\in[0,1/(20L)]$, the noise bound $\sigma\geq 0$, the radius $R\geq 0$, the tolerance $\varepsilon>0$, and $x^0\in\mathbb{R}^d$. We consider the parameter regime
+\[
+\begin{aligned}
+2^{10}\varepsilon &\leq LR,\\
+L^6R^6(\varepsilon^2+\sigma^2) &\leq \varepsilon^8 d.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Lipschitz continuity]
+For every $x,y\in\mathbb{R}^d$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty condition and initial distance]
+There exists $x^\star\in\mathbb{R}^d$ with $F(x^\star)=0$ and $\|x^0-x^\star\|\leq R$ such that
+\[
+\langle F(x),x-x^\star\rangle\geq-\rho\|F(x)\|^2
+\qquad\text{for every }x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic operator oracle]
+The oracle samples $(\xi_k)_{k\geq 0}$ are independent real-valued random variables with common law $\mu$, and the sequence is independent of the algorithm's randomness. On call $k$, a query at any $x\in\mathbb{R}^d$ receives $g(x,\xi_k)$, where $g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$ is jointly measurable. For each $x$ and $\xi\sim\mu$, the vector $g(x,\xi)$ is Bochner integrable, the squared error $\|g(x,\xi)-F(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)] &= F(x),\\
+\mathbb{E}_{\xi\sim\mu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the residual norm of the output $\bar{x}$ must be integrable under the joint law $P$ of the algorithm's randomness and the oracle samples, and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

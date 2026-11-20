@@ -1,0 +1,112 @@
+{
+  "setup": "LongTails.Setups.DistributedComponentSmoothNonconvex",
+  "searched_at": "2026-11-20T09:46:23.025605+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 32 \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\frac{\\left(\\sum_{i=0}^{n-1} \\sigma\\left(i\\right)^{2} \\cdot h\\left(i\\right)\\right)}{\\left(n \\cdot \\delta\\right)^{2}} + R \\cdot C + q \\cdot \\left(\\frac{\\left(\\sum_{i=0}^{n-1} L\\left(i\\right) \\cdot h\\left(i\\right)\\right)}{n} + \\frac{\\left(\\left(\\sum_{i=0}^{n-1} \\sigma\\left(i\\right) \\cdot \\sqrt{L\\left(i\\right) \\cdot h\\left(i\\right)}\\right)\\right)^{2}}{n^{3} \\cdot \\delta^{2}}\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad \\delta = \\frac{\\varepsilon}{512} \\\\ &\\phantom{\\text{where}\\quad} q = \\frac{\\Delta}{\\delta^{2}} \\\\ &\\phantom{\\text{where}\\quad} R = 1 + \\left\\lceil \\frac{2 \\cdot q \\cdot \\left(\\sum_{i=0}^{n-1} L\\left(i\\right)\\right)}{n} \\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} C = l + b \\cdot \\left(64 + d \\cdot \\left(11 + \\log_{2}\\left(n \\cdot \\left(d + 1\\right)\\right) + \\log_{2}\\left(R\\right)\\right)\\right)\\end{aligned}",
+        "type": "LongTails.Setups.DistributedComponentSmoothNonconvex.Params → NNReal",
+        "value": "fun p =>\n  have δ := p.ε / 512;\n  have q := p.Δ / δ ^ 2;\n  have R := 1 + ⌈(2 * q * ∑ i, p.L i) / ↑↑p.n⌉₊;\n  have C := p.l + p.b * ↑(64 + p.d * (11 + (↑p.n * (p.d + 1)).log2 + R.log2));\n  (32 *\n      (↑(Finset.univ.sup p.h) + (∑ i, p.σ i ^ 2 * ↑(p.h i)) / (↑↑p.n * δ) ^ 2 + ↑R * ↑C +\n        q * ((∑ i, p.L i * ↑(p.h i)) / ↑↑p.n + (∑ i, p.σ i * √(p.L i * ↑(p.h i))) ^ 2 / (↑↑p.n ^ 3 * δ ^ 2)))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &\\max\\left\\{ 32 \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\frac{\\left(\\sum_{i=0}^{n-1} \\sigma\\left(i\\right)^{2} \\cdot h\\left(i\\right)\\right)}{\\left(n \\cdot \\delta\\right)^{2}} + R \\cdot C + q \\cdot \\left(\\frac{\\left(\\sum_{i=0}^{n-1} L\\left(i\\right) \\cdot h\\left(i\\right)\\right)}{n} + \\frac{\\left(\\left(\\sum_{i=0}^{n-1} \\sigma\\left(i\\right) \\cdot \\sqrt{L\\left(i\\right) \\cdot h\\left(i\\right)}\\right)\\right)^{2}}{n^{3} \\cdot \\delta^{2}}\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad \\delta = \\frac{\\varepsilon}{512} \\\\ &\\phantom{\\text{where}\\quad} q = \\frac{\\Delta}{\\delta^{2}} \\\\ &\\phantom{\\text{where}\\quad} R = 1 + \\left\\lceil \\frac{2 \\cdot q \\cdot \\left(\\sum_{i=0}^{n-1} L\\left(i\\right)\\right)}{n} \\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} C = l + b \\cdot \\left(64 + d \\cdot \\left(11 + \\log_{2}\\left(n \\cdot \\left(d + 1\\right)\\right) + \\log_{2}\\left(R\\right)\\right)\\right)\\end{aligned}",
+          "type": "LongTails.Setups.DistributedComponentSmoothNonconvex.Params → NNReal",
+          "value": "fun p =>\n  have δ := p.ε / 512;\n  have q := p.Δ / δ ^ 2;\n  have R := 1 + ⌈(2 * q * ∑ i, p.L i) / ↑↑p.n⌉₊;\n  have C := p.l + p.b * ↑(64 + p.d * (11 + (↑p.n * (p.d + 1)).log2 + R.log2));\n  (32 *\n      (↑(Finset.univ.sup p.h) + (∑ i, p.σ i ^ 2 * ↑(p.h i)) / (↑↑p.n * δ) ^ 2 + ↑R * ↑C +\n        q * ((∑ i, p.L i * ↑(p.h i)) / ↑↑p.n + (∑ i, p.σ i * √(p.L i * ↑(p.h i))) ^ 2 / (↑↑p.n ^ 3 * δ ^ 2)))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.MultirateDistributedStationarity",
+      "namespace": "LongTails.Setups.DistributedComponentSmoothNonconvex",
+      "setup": "LongTails.Setups.DistributedComponentSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedComponentSmoothNonconvex.spec\n  LongTails.Theorems.MultirateDistributedStationarity.budget",
+      "theorem": "LongTails.Theorems.MultirateDistributedStationarity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MultirateDistributedStationarity",
+      "theorem": "LongTails.Theorems.MultirateDistributedStationarity.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Each component fᵢ has an Lᵢ-Lipschitz gradient, with Lᵢ ≥ 0. Components and their average may be nonconvex. The average F is bounded below by some a with F(x₀) − a ≤ Δ.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, spec.valid and spec.admissible"
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x) = (1/n)∑ᵢ fᵢ(x), with n ≥ 1 and one component per worker. The average (1/n)∑ᵢ Lᵢ bounds the smoothness of F.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, smoothness and spec.admissible. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, objective. LongTails/Setups/FiniteSumSmoothAndConvex.lean, objective"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "At every x, the jointly measurable oracle gᵢ satisfies E[gᵢ(x,ξ)] = ∇fᵢ(x). Each worker consumes consecutive fresh samples from its own IID stream with law μᵢ. The streams are independent across workers.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, computation"
+      },
+      {
+        "label": "component_gradient",
+        "details": "Worker i can query its own component fᵢ at a point x. A query specifies a positive batch size m and returns a list of m local gradient samples at x.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, spec.ComputeQuery and spec.admissible. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, ComputeQuery, ComputeReply and computation"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Each worker has its own public bound σᵢ ≥ 0. At every x, E‖gᵢ(x,ξ) − ∇fᵢ(x)‖² ≤ σᵢ². The bound concerns noise around the local component gradient.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, Params, spec.valid and spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.variance"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The query and output space is Euclidean ℝᵈ, with public dimension d.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, Params.d, Point and spec.Output. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, Point. LongTails/Setups/DistributedSmoothNonconvex.lean, Point"
+      },
+      {
+        "label": "other",
+        "details": "A batch of m samples occupies worker i for m hᵢ time, with hᵢ > 0 and one pending batch per worker. Workers can compute concurrently with one another and with communication. Each ordered pair has its own FIFO link. Sending k payload bits takes l + b(k + 64) time once the link is available, with l,b ≥ 0. All setup parameters, including x₀, Δ, ε and the worker-specific hᵢ, Lᵢ, σᵢ, are public. The component functions, oracle maps and sampling laws are hidden.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, Params, spec.publicInput, spec.valid and spec.admissible. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, computation and communication. LongTails/TemplateDistributed.lean, Time, clockBits and step"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The designated root returns a measurable point X by the stated elapsed-time deadline. The criterion uses the squared Euclidean norm of the gradient of the full average F at X.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, spec.successful. LongTails/TemplateDistributed.lean, execute and TimedConvergence"
+      },
+      {
+        "label": "expected",
+        "details": "‖∇F(X)‖² must be integrable and E‖∇F(X)‖² ≤ ε² for ε > 0. The expectation uses the product law of the algorithm seed and the oracle streams. The elapsed-time budget is fixed.",
+        "evidence": "LongTails/Setups/DistributedComponentSmoothNonconvex.lean, spec.valid and spec.successful. LongTails/TemplateDistributed.lean, law and TimedConvergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The stationarity problem couples worker-specific smoothness and noise bounds with unequal sampling times and concurrent, bit-priced communication. Success is measured at a root worker under a fixed elapsed-time deadline."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MultirateDistributedStationarity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MultirateDistributedStationarity",
+          "theorem": "LongTails.Theorems.MultirateDistributedStationarity.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

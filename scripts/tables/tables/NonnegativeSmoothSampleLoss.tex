@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for expected stationarity with \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/NonnegativeSmoothSampleLoss.lean}{nonnegative smooth sample losses}.}\label{tab:NonnegativeSmoothSampleLoss}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, $F(x)=\mathbb E_\xi\ell_\xi(x)$ with $\ell_\xi(x)\ge0$ integrable for each $x$. Sample gradients are jointly measurable and $L$-Lipschitz in $x$ for every sample, with $L>0$ and $F(x_0)\le\Delta$. Each pair call evaluates two gradients at queried points using one fresh IID sample. The target is a measurable $X$ with $\mathbb E\|\nabla F(X)\|\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/NonnegativeSampleStationarity.lean}{Nonnegative\allowbreak Sample\allowbreak Stationarity} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/NonnegativeSampleStationarity.md}{(review)}
+& $\mathcal{O}(1+(L\Delta/\varepsilon^2)^{3/2})$ pair calls, including the initial batch. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Normalized STORM \citep{nsslRepoStorm2026}
+& $\mathcal{O}(1+(L\Delta/\varepsilon^2)^{3/2})$ pair calls on the shared class.
+& \textbf{(1)}: Matches the known rate and tuning. The sample-level formalization derives $\mathbb E\|\nabla\ell_\xi(x)\|^2\le 2LF(x)$.
+& \textbf{(1)} requires nonnegative smooth losses. \textbf{(2)} allows mean-square smooth gradients with variance bounded by an affine function of the objective gap. \\
+\midrule
+\textbf{(3)} SGD \citep[Cor.~1]{avmKhaledRichtarik2020v3}
+& $\mathcal{O}(1+(L\Delta/\varepsilon^2)^2)$ single gradients. Derived bound.
+& \textbf{(1)}: For $R\ge1$, the gradient budget improves by a factor of order $\sqrt R$, as in \textbf{(2)}. For $R\le1$, the orders match.
+& \textbf{(1)} needs same-sample pairs. \textbf{(3)} queries one point per sample and bounds the minimum expected squared gradient norm across iterates. \\
+\midrule
+\textbf{(4)} SPIDER \citep[Thm.~4]{avmChenEtAl2023v2}
+& $\mathcal{O}\!\left(\begin{aligned}
+ &R(1+\Gamma^2)+\Lambda^2/\varepsilon^2\\[-2pt]
+ &{}+R(1+\Gamma)\Lambda/\varepsilon
+\end{aligned}\right)$ gradient evaluations. Derived bound for small $\varepsilon$ at fixed parameters, $L\Delta>0$.
+& \textbf{(1)} covers samples violating the affine variance bound required by \textbf{(4)}. On the overlap, its $\varepsilon^{-3}$ coefficient is smaller when $(1+\Gamma)\Lambda\gg\sqrt{L\Delta}$.
+& \textbf{(1)} requires nonnegative smooth losses even on affine-variance problems. On the overlap its leading term is worse when $(1+\Gamma)\Lambda\ll\sqrt{L\Delta}$; at $\Lambda=0$, \textbf{(4)} needs $\mathcal{O}(R(1+\Gamma^2))$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $R=L\Delta/\varepsilon^2$. The affine variance parameters $\Gamma,\Lambda\ge0$ satisfy $\mathbb E\|\nabla\ell_\xi(x)-\nabla F(x)\|^2\le\Gamma^2\|\nabla F(x)\|^2+\Lambda^2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

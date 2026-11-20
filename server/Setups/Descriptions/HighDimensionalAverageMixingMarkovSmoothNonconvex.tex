@@ -1,0 +1,68 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Nonconvex Optimization with Markov Noise}
+We seek a stationary point of a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in high dimension $d$. The gradient is Lipschitz, and the gap from a given starting point to the finite infimum is bounded. Each query returns a gradient estimate driven by the next state of a stationary real-valued Markov chain whose total variation distance to stationarity decays exponentially on average. At each fixed query point, the estimate is unbiased under the stationary law and has bounded variance. For $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$ over chain and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+where $\|\cdot\|$ denotes the Euclidean norm. The algorithm receives the dimension $d\in\mathbb{N}$, the starting point $x^0\in\mathbb{R}^d$, the gradient Lipschitz bound $L>0$, the initial gap bound $\Delta$, the noise scale $\sigma$, the mixing parameter $\tau\geq 1$, and the tolerance $\varepsilon>0$. We consider the parameter regime
+\[
+2^{26}\varepsilon^2\leq L\Delta,
+\qquad 2^{16}\varepsilon\leq\sigma.
+\]
+Writing $r=\sigma/\varepsilon$, the dimension requirement is
+\[
+d\geq 2^{40}\left(1+\frac{L\Delta}{\varepsilon^2}\right)^4
+\left(1+\tau r^2\log r\right).
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, and $f_\star=\inf_{x\in\mathbb{R}^d}f(x)$ is finite. For all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,\\
+f(x^0)-f_\star&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stationarity and average mixing]
+The chain $(Z_k)_{k\geq 0}$ starts with law $\pi$ on $\mathbb{R}$ and has Markov transition kernel $\kappa$. The law $\pi$ is invariant, so for every Borel set $A\subseteq\mathbb{R}$,
+\[
+\mathbb{E}_{Z\sim\pi}[\kappa(Z,A)]=\pi(A).
+\]
+For each integer $t\geq 0$, define the total variation distance after $t$ transitions from $z$ by
+\[
+D_t(z)=\sup_{A\in\mathcal{B}(\mathbb{R})}
+\bigl|\kappa^t(z,A)-\pi(A)\bigr|.
+\]
+The function $D_t$ is $\pi$-integrable and satisfies
+\[
+\mathbb{E}_{Z\sim\pi}[D_t(Z)]\leq 2\exp(-t/\tau).
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+At call $k=0,1,\ldots$, a query at any $x\in\mathbb{R}^d$ returns $g(x,Z_k)$, where $g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$ is jointly measurable. For each fixed $x$, the map $g(x,\cdot)$ is Bochner integrable under $\pi$, the squared error $\|g(x,\cdot)-\nabla f(x)\|^2$ is $\pi$-integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\pi}[g(x,Z)]&=\nabla f(x),\\
+\mathbb{E}_{Z\sim\pi}\bigl[\|g(x,Z)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the algorithm must return a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable gradient norm satisfying
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+The expectation is over the Markov chain and the algorithm's internal randomness, which are independent.
+\end{document}

@@ -1,0 +1,44 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedAggregateSmoothNonconvex.lean}{distributed stationarity with a smooth aggregate}.}\label{tab:DistributedAggregateSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize The $n\ge1$ differentiable functions $f_i$ on $\mathbb R^d$ have an $L$-smooth average $F=n^{-1}\sum_i f_i$ with $F(x_0)-\inf F\le\Delta$. Component smoothness, gradient magnitudes and worker disagreement are unrestricted. Worker $i$ takes $h_i>0$ per unbiased gradient sample of $f_i$, with variance at most $\sigma_i^2$ and a jointly measurable oracle. Samples are IID within workers and independent across workers. On the dedicated star, each worker and each directed hub--worker link handles one request at a time, concurrently across resources. A $q$-bit transmission takes $\ell+bq$. The hub targets $\mathbb E\|\nabla F(X)\|\le\varepsilon$ under the execution law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MultiscaleAggregateStationarity.lean}{Multiscale\allowbreak Aggregate\allowbreak Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MultiscaleAggregateStationarity.md}{(review)}
+& $\mathcal{O}\bigl(K[C+\ell+bB(nd)]\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound using single-modulus summation \citep{dasnBonawitz2019}
+& $\mathcal{O}\bigl(K[C+\ell+bB(ndK)]\bigr)$
+& \textbf{(1)}: Dyadic anchors remove $K$ from the packet logarithm. For $d\ge1$, $K\gg nd$ and $bB(nd)\gtrsim C+\ell$, the time bound improves by a factor of order $\log K/\log(2+nd)$. With fixed hardware and positive noise, computation dominates as $\varepsilon\to0$.
+& \\
+\midrule
+\textbf{(3)} Amelie SGD \citep[Cor.~2]{dasnAmelie2024}
+& $\mathcal{O}\bigl(K[C+\tau]\bigr)$, common $\sigma_i=\sigma$
+& \textbf{(1)}: Matches the computation term with common $\sigma$ and sends finite packets despite unbounded disagreement. \textbf{(3)} prices a real vector, so its time has no specified bit equivalent.
+& \textbf{(1)} requires fixed star service times. \textbf{(3)} allows general networks with time-varying speeds under service-time bounds and guarantees $\mathbb E\|\nabla F(X)\|^2\le\varepsilon^2$. \\
+\midrule
+\textbf{(4)} Leon SGD \citep[Thm.~1.7]{dasnLeon2026}
+& $\mathcal{O}\bigl(K[C+d/\bar w_1]\bigr)$, common $\sigma_i=\sigma$, symmetric bandwidths, zero latency
+& \textbf{(1)}: Charges for transmitted bits and message latency. \textbf{(4)} measures bandwidth in real coordinates, so the elapsed-time rates are incomparable in bit units.
+& \textbf{(1)} requires a star. \textbf{(4)} covers general bandwidth graphs and guarantees $\mathbb E\|\nabla F(X)\|^2\le\varepsilon^2$. \\
+\midrule
+\textbf{(5)} Distributed\allowbreak Batched\allowbreak Sgd \citep{dhlnBatchedRepository} (homogeneous)
+& $\begin{aligned}
+\mathcal{O}\Bigl(K\Bigl[&\min_{1\le m\le n}\Bigl(h_m+
+ \tfrac{s}{\sum_{j\le m}1/h_j}\Bigr)+\ell\\
+ &{}+bB(d+K+s)\Bigr]\Bigr)
+\end{aligned}$
+& \textbf{(1)} allows distinct $f_i$ with only $F$ smooth. On the overlap $f_i=F$, $\sigma_i=\sigma$, its packet logarithm is smaller when $nd\ll K+s$.
+& \textbf{(1)} waits for every worker. One slow worker can make its compute term arbitrarily worse. \textbf{(5)} also guarantees $\mathbb E\|\nabla F(X)\|^2\le\varepsilon^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $K=1+L\Delta/\varepsilon^2$, $C=\max_i h_i+\sum_i h_i\sigma_i^2/(n^2\varepsilon^2)$, $B(u)=1+d\log(2+u)$, $s=\sigma^2/\varepsilon^2$. In \textbf{(3)}, $\tau$ is the maximum shortest-path time for a real vector. In \textbf{(4)}, $\bar w_1$ is the minimum cut capacity in coordinates per unit time. In \textbf{(5)}, $h_1\le\cdots\le h_n$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

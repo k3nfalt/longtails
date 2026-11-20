@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.StochasticWeakMinty",
+  "searched_at": "2026-11-20T09:49:04.260916+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{19} \\cdot \\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticWeakMinty.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 19 * (1 + q.L ^ 2 * q.R ^ 2 / q.ε ^ 2) * (1 + q.σ ^ 2 / q.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{19} \\cdot \\left(1 + \\frac{L^{2} \\cdot R^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticWeakMinty.spec.Params → ℕ",
+          "value": "fun q => ⌈2 ^ 19 * (1 + q.L ^ 2 * q.R ^ 2 / q.ε ^ 2) * (1 + q.σ ^ 2 / q.ε ^ 2)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.StochasticWeakMintyExtragradient",
+      "namespace": "LongTails.Setups.StochasticWeakMinty",
+      "setup": "LongTails.Setups.StochasticWeakMinty",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticWeakMinty.spec\n  LongTails.Theorems.StochasticWeakMintyExtragradient.budget",
+      "theorem": "LongTails.Theorems.StochasticWeakMintyExtragradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticWeakMintyExtragradient",
+      "theorem": "LongTails.Theorems.StochasticWeakMintyExtragradient.result",
+      "references": "- Jelena Diakonikolas, Constantinos Daskalakis, Michael I. Jordan. [Efficient Methods for Structured Nonconvex-Nonconcave Min-Max Optimization](https://proceedings.mlr.press/v130/diakonikolas21a.html). 2021. Complexity: $O((1+LR^2/(h\\varepsilon^2))(1+\\sigma^2/(Lh\\varepsilon^2)))$ stochastic operator calls for mini-batched Extragradient+ to return a uniformly sampled iterate with $\\mathbb E\\|F(X)\\|\\le\\varepsilon$ in $\\mathbb R^d$, where $h=1/(4\\sqrt{2}L)-2\\rho>0$.\n- Sayantan Choudhury, Eduard Gorbunov, Nicolas Loizou. [Single-Call Stochastic Extragradient Methods for Structured Non-monotone Variational Inequalities: Improved Analysis under Weaker Conditions](https://papers.neurips.cc/paper_files/paper/2023/hash/ccf02786d28730e8311676ffa842e216-Abstract-Conference.html). 2023. Complexity: $O((1+L^2R^2/\\varepsilon^2)(1+\\sigma^2/\\varepsilon^2))$ sampled operator calls for mini-batched stochastic past extragradient to achieve $\\min_{k<K}\\mathbb E\\|F(\\hat x_k)\\|^2\\le\\varepsilon^2$ in $\\mathbb R^d$ under uniform variance $\\sigma^2$ and $\\rho L\\le 1/20$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained operator zero-finding on a second-countable real Hilbert space E. The hidden instance is a globally L-Lipschitz map F from E to E with a weak Minty zero.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, Params and spec.Instance, spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each query x returns one stochastic operator value g(x,ξ) using a fresh i.i.d. seed, with mean F(x). The reply contains only the vector. The space data, x₀, L, ρ, σ, R and ε are public. The operator, solution witness, sampling law and oracle map are hidden.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.publicInput, spec.Query, spec.Reply and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The jointly measurable oracle map satisfies E‖g(x,ξ)−F(x)‖²≤σ² uniformly over x, with σ≥0. The Lipschitz bound is imposed on the mean operator F.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.valid and spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "There exists x⋆ with F(x⋆)=0 and ‖x⋆−x₀‖≤R such that ⟨F(x),x−x⋆⟩≥−ρ‖F(x)‖² for every x. The parameters satisfy L>0, R≥0 and 0≤ρ≤1/(20L).",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "E‖F(X)‖≤ε for public ε>0, with expectation over the algorithm seed and the independent oracle seed sequence.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.valid and spec.successful. LongTails/Template.lean, Convergence"
+      },
+      {
+        "label": "other",
+        "details": "Return one point X in E whose operator residual ‖F(X)‖ is integrable. The criterion uses the first power of the Hilbert norm.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.Output and spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The weak Minty inequality permits a negative inner product with the displacement from a designated zero, controlled by the squared operator residual. This allows structured nonmonotone operators under stochastic point queries."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StochasticWeakMintyExtragradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticWeakMintyExtragradient",
+          "theorem": "LongTails.Theorems.StochasticWeakMintyExtragradient.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

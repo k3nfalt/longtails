@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth",
+  "searched_at": "2026-11-20T09:47:00.437721+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{S^{2}}{\\varepsilon^{2}}\\right)}{2^{60} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth.spec.Params → ℕ",
+        "value": "fun q => ⌊q.L * q.Δ * (1 + q.S ^ 2 / q.ε ^ 2) / (2 ^ 60 * q.ε ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{S^{2}}{\\varepsilon^{2}}\\right)}{2^{60} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth.spec.Params → ℕ",
+          "value": "fun q => ⌊q.L * q.Δ * (1 + q.S ^ 2 / q.ε ^ 2) / (2 ^ 60 * q.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth",
+      "setup": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth.spec\n  LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.budget",
+      "theorem": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound",
+      "theorem": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.result",
+      "references": "- Ruichen Jiang, Devyani Maladkar, and Aryan Mokhtari. [Provable Complexity Improvement of AdaGrad over SGD: Upper and Lower Bounds in Stochastic Non-Convex Optimization](https://proceedings.mlr.press/v291/jiang25c.html). 2025 (COLT). Complexity: $\\Omega(L\\Delta/\\varepsilon^2+L\\Delta S^2/\\varepsilon^4)$ stochastic gradient calls for constant-step SGD in the one-dimensional specialization, for $\\mathbb E[\\min_{t\\le T}|f'(x_t)|]\\le\\varepsilon$ and $\\varepsilon<c\\sqrt{L\\Delta}$ with universal $c>0$.\n- Hongyi Tao, Dingzhi Yu, and Lijun Zhang. [When and Why SignSGD Outperforms SGD: A Theoretical Study Based on ℓ₁-norm Lower Bounds](https://arxiv.org/html/2605.06615v1). 2026 (arXiv v1). Complexity: $\\Omega(L\\Delta/\\varepsilon^2+L\\Delta S^2/\\varepsilon^4)$ individual stochastic gradient calls for constant-step minibatch SignSGD to attain $\\mathbb E[\\min_{0\\le t<T}\\|\\nabla f(x_t)\\|_1]\\le\\varepsilon$, with $S=\\sum_i\\sigma_i$ for coordinate standard-deviation bounds $\\sigma_i$ and $BT$ calls for $T$ steps of batch size $B$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective may be any differentiable function on ℝᵈ satisfying the stated gradient smoothness bound and having a finite infimum f⋆ with f(x₀)−f⋆ ≤ Δ. The infimum need not be attained.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.admissible (gradient, lower bound, approximation of fstar, and initial gap)."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns one full vector g(x,ξ) with mean ∇f(x). The oracle uses a fresh i.i.d. real seed on each call. The algorithm receives the vector alone and may query adaptively using its own independent randomness. The public inputs are d, L, S, Δ, ε, and x₀. The objective, oracle map, seed law, and infimum are hidden.",
+        "evidence": "LongTails/Setups/HighDimensionalSeparableNoiseLinfSmooth.lean, Params, toGeneral, and spec.publicInput; LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID; LongTails/Template.lean, Algorithm, Setup.allowedAlgorithm, and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "At every x, the sum of coordinate standard deviations satisfies ∑ᵢ (𝔼[(gᵢ(x,ξ)−∂ᵢf(x))²])¹ᐟ² ≤ S. The sum is taken at the same x before imposing the uniform bound. Coordinates within a reply may be dependent.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.admissible (coordinate second-moment integrability and sum of square roots)."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The gradient is L-Lipschitz from the primal ℓ∞ norm to the dual ℓ₁ norm: ‖∇f(x)−∇f(y)‖₁ ≤ L‖x−y‖∞ for all x,y.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.admissible (coordinate displacement bound and sum of absolute gradient differences)."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain is ℝᵈ with L>0, S≥0, ε>0, and 2³⁰ε² ≤ LΔ. Writing K=(LΔ/ε²)(1+S²/ε²), the dimension must satisfy d ≥ 2¹⁶⁸(1+K)¹⁶.",
+        "evidence": "LongTails/Setups/HighDimensionalSeparableNoiseLinfSmooth.lean, Params, spec.Instance, and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns one measurable point X in ℝᵈ. Its stationarity measure is the unsquared ℓ₁ norm ‖∇f(X)‖₁ = ∑ᵢ |∂ᵢf(X)|. The output may be any point computed from the final state.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.successful; LongTails/Template.lean, Algorithm.output and execute."
+      },
+      {
+        "label": "expected",
+        "details": "The gradient norm at the output must be integrable and satisfy 𝔼‖∇f(X)‖₁ ≤ ε under the joint law of the algorithm and oracle seeds.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.successful; LongTails/Template.lean, Convergence (product measure)."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup pairs ℓ∞-to-ℓ₁ gradient smoothness with a pointwise budget on the sum of coordinate noise standard deviations. It measures stationarity in the dual ℓ₁ norm and imposes an explicit dimension threshold tied to accuracy and noise."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound",
+          "theorem": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

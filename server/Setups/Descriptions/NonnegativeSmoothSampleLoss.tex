@@ -1,0 +1,40 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stationarity for Nonnegative Smooth Sample Losses}
+We consider minimizing a possibly nonconvex expected loss $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Every sample loss is nonnegative and has an $L$-Lipschitz gradient, where $L>0$. A given starting point $x^0\in E$ satisfies $f(x^0)\leq\Delta$ for a bound $\Delta\geq 0$. Each oracle call returns the sample gradients at two queried points using a single fresh independent sample. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ satisfying $\mathbb{E}[\|\nabla f(\bar{x})\|]\leq\varepsilon$, with expectation over the algorithm and oracle randomness.
+
+Let $(\Omega,\mathcal{F})$ be the sample space, $p$ a probability law on it, and $\ell(x,\omega)$ the loss at $x\in E$ for sample $\omega\in\Omega$. The optimization problem is
+\[
+\inf_{x\in E} f(x),
+\qquad f(x)=\mathbb{E}_{\omega\sim p}[\ell(x,\omega)].
+\]
+The algorithm receives $E$ with its Borel structure, $(\Omega,\mathcal{F})$, $x^0$, $L$, $\Delta$, and $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Sample losses]
+For every $x\in E$, the function $\ell(x,\cdot)$ is $p$-integrable. For every $\omega\in\Omega$, the function $\ell(\cdot,\omega)$ is differentiable on $E$. Its gradient $g(x,\omega)=\nabla_x\ell(x,\omega)$ is jointly measurable in $(x,\omega)$. For all $x,y\in E$ and $\omega\in\Omega$,
+\[
+\begin{aligned}
+\ell(x,\omega)&\geq 0,\\
+\|g(x,\omega)-g(y,\omega)\|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Paired gradient queries]
+The oracle samples $(\xi_k)_{k\geq 0}$ are independent random variables with common law $p$. The sample sequence is independent of the algorithm's randomness. On call $k$, a query $(x,y)\in E\times E$ receives the reply
+\[
+\bigl(g(x,\xi_k),g(y,\xi_k)\bigr).
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm must be integrable, and
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

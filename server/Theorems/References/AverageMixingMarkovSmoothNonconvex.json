@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.AverageMixingMarkovSmoothNonconvex",
+  "searched_at": "2026-11-20T09:47:42.023194+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lfloor \\frac{2048 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left(\\left(\\left\\lfloor \\frac{256 \\cdot \\sigma^{2}}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left(\\left\\lfloor \\tau \\cdot \\log\\left(32 + \\frac{8192 \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rfloor_{+} + 1\\right)\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.AverageMixingMarkovSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p =>\n  (⌊2048 * p.L * p.Δ / p.ε ^ 2⌋₊ + 1) *\n    ((⌊256 * p.σ ^ 2 / p.ε ^ 2⌋₊ + 1) * (⌊p.τ * Real.log (32 + 8192 * p.σ ^ 2 / p.ε ^ 2)⌋₊ + 1))"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lfloor \\frac{2048 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left(\\left(\\left\\lfloor \\frac{256 \\cdot \\sigma^{2}}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1\\right) \\cdot \\left(\\left\\lfloor \\tau \\cdot \\log\\left(32 + \\frac{8192 \\cdot \\sigma^{2}}{\\varepsilon^{2}}\\right) \\right\\rfloor_{+} + 1\\right)\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.AverageMixingMarkovSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p =>\n  (⌊2048 * p.L * p.Δ / p.ε ^ 2⌋₊ + 1) *\n    ((⌊256 * p.σ ^ 2 / p.ε ^ 2⌋₊ + 1) * (⌊p.τ * Real.log (32 + 8192 * p.σ ^ 2 / p.ε ^ 2)⌋₊ + 1))"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex",
+      "namespace": "LongTails.Setups.AverageMixingMarkovSmoothNonconvex",
+      "setup": "LongTails.Setups.AverageMixingMarkovSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AverageMixingMarkovSmoothNonconvex.spec\n  LongTails.Theorems.AverageMixingMarkovSmoothNonconvex.budget",
+      "theorem": "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex",
+      "theorem": "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable function on ℝᵈ with L-Lipschitz gradient, finite infimum f⋆, and f(x₀) − f⋆ ≤ Δ. The assumptions permit nonconvex objectives and unattained infima.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, Space and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "At call k, a query x receives only g(x,Zₖ) from a single stationary Markov trajectory. Each call advances the trajectory by one state, including calls whose replies are discarded. The public inputs are d, L, Δ, σ, τ, ε, and x₀, with L, ε > 0, Δ, σ ≥ 0, and τ ≥ 1. The response map, chain states, transition kernel, stationary law, and objective infimum are hidden.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, Params and spec.{publicInput,valid,Query,Reply,admissible}. LongTails/Template.lean, executeWithTrace and _run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "markov_dependence",
+        "details": "The real-valued chain starts in its invariant law π. At every integer lag t ≥ 0, E_{Z∼π}[‖κᵗ(Z,·) − π‖TV] ≤ 2 exp(−t/τ). The total variation distance is averaged over stationary starting states.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, spec.admissible. LongTails/Setups/HeavyTailedMarkovSmoothAndConvex.lean, pathLaw and mixingDistance."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every fixed x, Eπ[g(x,Z)] = ∇f(x) and Eπ[‖g(x,Z) − ∇f(x)‖²] ≤ σ². These stationary moment bounds allow unbounded errors and conditional bias at adaptive queries.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, replies, and outputs lie in ℝᵈ with the Euclidean inner product and norm. The dimension d is public.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, Params.d, Space, and spec.{Query,Reply,Output,publicInput}."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return a measurable point X in ℝᵈ with integrable gradient norm satisfying E[‖∇f(X)‖] ≤ ε. Any output meeting the criterion is admissible.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The expectation is over the algorithm seed and the stationary oracle trajectory under their product law. The oracle-call budget is fixed in advance from the public parameters.",
+        "evidence": "LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean, spec.successful. LongTails/Template.lean, Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The gradient oracle follows one dependent trajectory. Both its mixing bound and its gradient-error moment bound are measured under the stationary law, while the algorithm can choose queries from past replies."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex",
+          "theorem": "LongTails.Theorems.AverageMixingMarkovSmoothNonconvex.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

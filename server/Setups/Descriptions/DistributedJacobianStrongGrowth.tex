@@ -1,0 +1,69 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Root Finding under Strong Growth}
+We seek a zero $x^\star$ of a Lipschitz map $F:\mathbb{R}^d\to\mathbb{R}^d$ in dimension $d\geq1$. The map has a Lipschitz Jacobian and satisfies $\langle F(x),x-x^\star\rangle\geq\mu\|x-x^\star\|^2$ at every point $x$, for some $\mu>0$. Workers communicate over a rooted tree. At $x$, each worker uses a fresh independent sample to return an unbiased estimate of $F(x)$ with second moment at most $\rho\|F(x)\|^2$, where $\rho\geq1$. Given a starting point within known distance of the zero and a tolerance $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $\mathbb{E}\|\bar{x}-x^\star\|^2\leq\varepsilon^2$ by an elapsed-time deadline, averaging over algorithm and oracle randomness.
+
+Write $E=\mathbb{R}^d$ with its Euclidean inner product and norm. The equation to be solved is
+\[
+F(x)=0,\qquad x\in E.
+\]
+Let $V=\{0,\ldots,n-1\}$ be the set of workers, where $n\geq1$ is an integer. The algorithm receives $d$, $n$, the nonempty measurable sample space $\Omega$, the tree root $r$, parent map $p$, depth function $s$ and height bound $h$, the timing parameters $\tau,\ell,\beta$, the constants $L,\mu,\rho,M,R$, the tolerance $\varepsilon$, and the starting point $x^0\in E$.
+
+Our assumptions:
+\begin{assumption}[Operator and Jacobian regularity]
+The map $F$ is Fr\'echet differentiable on $E$. Its Jacobian $J(x):E\to E$ and the map itself satisfy, for every $x,y\in E$,
+\[
+\begin{aligned}
+\|F(x)-F(y)\| &\leq L\|x-y\|,\\
+\|J(x)-J(y)\|_{\mathrm{op}} &\leq M\|x-y\|,
+\end{aligned}
+\]
+where $0<\mu\leq L$, $M\geq0$, and $\|\cdot\|_{\mathrm{op}}$ is the induced operator norm.
+\end{assumption}
+
+\begin{assumption}[Growth about the solution]
+There is a zero $x^\star\in E$ such that, for a radius $R>0$,
+\[
+\begin{aligned}
+\|x^0-x^\star\| &\leq R,\\
+\langle F(x),x-x^\star\rangle &\geq \mu\|x-x^\star\|^2 \qquad (x\in E).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Sampling and strong growth]
+Let $(\xi_j)_{j\geq0}$ be measurable, mutually independent samples with common probability law $\nu$ on $\Omega$, independent of the algorithm's randomness. On its $(k+1)$st completed query, for $k\geq0$, worker $i\in V$ returns $g_i(x,\xi_{nk+i})$ at the queried point $x\in E$. Each $g_i:E\times\Omega\to E$ is jointly measurable. For each $i$ and $x$, $g_i(x,\cdot)$ is Bochner integrable and $\|g_i(x,\cdot)\|^2$ is integrable under $\nu$, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g_i(x,\xi)] &= F(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g_i(x,\xi)\|^2\bigr] &\leq \rho\|F(x)\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Tree topology and timing]
+The root $r\in V$, parent map $p:V\to V$, depth function $s:V\to\{0,1,\ldots\}$, and integer $h\geq0$ satisfy
+\[
+\begin{aligned}
+p(r)&=r, & s(r)&=0,\\
+s(i)&=s(p(i))+1 &&(i\ne r),\\
+s(i)&\leq h &&(i\in V).
+\end{aligned}
+\]
+Each worker can have one computation pending. A query accepted at time $t$ is ready at $t+\tau$, where $\tau>0$. Messages travel in either direction between a nonroot worker and its parent. For a payload of $b$ bits, the communication oracle appends $64$ zero bits, so a message accepted at time $t$ is ready at
+\[
+t+\ell+\beta(b+64),
+\]
+where $\ell\geq0$ is the latency and $\beta\geq0$ is the time per transmitted bit. The recipient receives the sender's identity and the transmitted bit string. Each directed edge can have one message pending. Submissions to a busy worker's computation oracle, to a busy directed edge, or to a nonneighbor are ignored. Computations on distinct workers and transmissions on distinct directed edges can overlap, including transmissions in opposite directions and communication during computation.
+\end{assumption}
+
+For an elapsed-time budget $T\geq0$, the algorithm must almost surely process only finitely many events at every deadline $t\in[0,T]$. At time $T$, its designated output worker must produce a measurable point $\bar{x}\in E$ with integrable squared error satisfying
+\[
+\mathbb{E}\bigl[\|\bar{x}-x^\star\|^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}

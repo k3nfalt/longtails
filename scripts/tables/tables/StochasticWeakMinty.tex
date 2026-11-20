@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StochasticWeakMinty.lean}{stochastic weak Minty root finding}}\label{tab:StochasticWeakMinty}
+\parbox{\linewidth}{\footnotesize On a separable real Hilbert space, $F$ is $L$-Lipschitz ($L>0$) and has a zero $x_\star$ with $\|x_0-x_\star\|\le R$. For every $x$, $\langle F(x),x-x_\star\rangle\ge-\rho\|F(x)\|^2$, where $0\le\rho\le 1/(20L)$. The jointly measurable oracle uses IID samples $\xi$, with $\mathbb E_\xi g(x,\xi)=F(x)$ and $\mathbb E_\xi\|g(x,\xi)-F(x)\|^2\le\sigma^2$. The target is $\mathbb E\|F(\hat x)\|\le\varepsilon$, for $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/StochasticWeakMintyExtragradient.lean}{Stochastic\allowbreak Weak\allowbreak Minty\allowbreak Extragradient} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/StochasticWeakMintyExtragradient.md}{(review)}
+& $\mathcal{O}\!\left(\left(1+\frac{L^2R^2}{\varepsilon^2}\right)\left(1+\frac{\sigma^2}{\varepsilon^2}\right)\right)$ calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} EG+ \citep[Thm.~4.5(i)]{newmDDJ2021v2}
+& $\mathcal{O}\!\left(\left(1+\frac{L^2R^2}{s\varepsilon^2}\right)\left(1+\frac{\sigma^2}{s\varepsilon^2}\right)\right)$ calls in $\mathbb R^d$
+& \textbf{(1)} formalizes the known rate for ordinary extragradient on separable Hilbert spaces. On the shared $\rho$ range, $s$ is bounded below by a universal constant.
+& \textbf{(1)} requires $\rho L\le 1/20$. \textbf{(2)} allows $\rho L<1/(8\sqrt2)$ and certifies a mean-square residual bound for the random output. \\
+\midrule
+\textbf{(3)} Past extragradient \citep[Thm.~4.5]{swmCGL2023}
+& $\mathcal{O}(\varepsilon^{-4})$ component calls for $\min_{k<K}\mathbb E\|F(\hat x_k)\|^2\le\varepsilon^2$, with other parameters fixed.
+& \textbf{(1)} returns a random iterate. \textbf{(3)} bounds the best index without identifying it and assumes finite-sum sampling with the expected residual condition. Rates across these noise models are incomparable.
+& \textbf{(1)} needs uniform variance control and two fresh batches per full step. \textbf{(3)} uses one batch per step, measures noise at $x_\star$, and allows $\rho L<1/2$. \\
+\midrule
+\textbf{(4)} Minibatching \citep[Thm.~2.1]{swmAK2026v1}
+& $\widetilde{\mathcal{O}}(\varepsilon^{-4})$ calls with increasing batches
+& \textbf{(1)} matches the polynomial accuracy dependence without logarithms, using a constant batch size on the unconstrained, bounded-variance overlap in $\mathbb R^d$.
+& \textbf{(1)} requires uniform variance and an unconstrained domain. \textbf{(4)} allows constraints, variance up to $B^2\|x-x_0\|^2+\sigma^2$, and $\rho L<72/(360+205\sqrt6)$. \\
+\midrule
+\textbf{(5)} Multilevel Monte Carlo \citep[Thm.~3.1]{swmAK2026v1}
+& $\widetilde{\mathcal{O}}(\varepsilon^{-4})$ calls in expectation
+& \textbf{(1)} gives a deterministic call budget with the same polynomial accuracy dependence and no logarithms on the unconstrained, bounded-variance overlap in $\mathbb R^d$.
+& \textbf{(1)} requires $\rho L\le1/20$ and uniform variance. \textbf{(5)} allows $\rho L<1$, constraints, and variance up to $B^2\|x-x_0\|^2+\sigma^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $s=1-8\sqrt2\,L\rho$. $K$ counts iterations. $B$ controls variance growth. $\widetilde{\mathcal{O}}$ suppresses logarithmic factors in $1/\varepsilon$ with other parameters fixed as $\varepsilon\downarrow0$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

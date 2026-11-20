@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.InterpolatedDistanceGrowingSubgradient",
+  "searched_at": "2026-11-20T09:46:39.848692+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{-\\left(R^{2} \\cdot \\left(G^{2} + B^{2} \\cdot R^{2}\\right) \\cdot \\log\\left(\\delta\\right)\\right)}{2^{28} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.InterpolatedDistanceGrowingSubgradient.spec.Params → ℕ",
+        "value": "fun p => ⌊-(p.R ^ 2 * (p.G ^ 2 + p.B ^ 2 * p.R ^ 2) * Real.log p.δ) / (2 ^ 28 * p.ε ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{-\\left(R^{2} \\cdot \\left(G^{2} + B^{2} \\cdot R^{2}\\right) \\cdot \\log\\left(\\delta\\right)\\right)}{2^{28} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.InterpolatedDistanceGrowingSubgradient.spec.Params → ℕ",
+          "value": "fun p => ⌊-(p.R ^ 2 * (p.G ^ 2 + p.B ^ 2 * p.R ^ 2) * Real.log p.δ) / (2 ^ 28 * p.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.DistanceGrowingSubgradientLowerBound",
+      "namespace": "LongTails.Setups.InterpolatedDistanceGrowingSubgradient",
+      "setup": "LongTails.Setups.InterpolatedDistanceGrowingSubgradient",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.InterpolatedDistanceGrowingSubgradient.spec\n  LongTails.Theorems.DistanceGrowingSubgradientLowerBound.budget",
+      "theorem": "LongTails.Theorems.DistanceGrowingSubgradientLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistanceGrowingSubgradientLowerBound",
+      "theorem": "LongTails.Theorems.DistanceGrowingSubgradientLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a convex population objective f over all of ℝᵈ. At every oracle step k, f is the pointwise expectation of integrable convex C∞ sample losses. All sample losses share a global minimizer u with ‖x₀−u‖≤R.",
+        "evidence": "LongTails/Setups/InterpolatedDistanceGrowingSubgradient.lean, Interpolates and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A query at x returns one sample gradient g(x,ξ) using a fresh i.i.d. seed. Its mean belongs to ∂f(x). Every sample returns the same vector g₀ at x₀ and zero at u. The algorithm receives the gradient vector. The sample loss, seed, sampling law, u, and g₀ are outside the public input.",
+        "evidence": "LongTails/Setups/InterpolatedDistanceGrowingSubgradient.lean, Interpolates; LongTails/Setups/DistanceGrowingSubgradient.lean, spec.publicInput and spec.admissible; LongTails/Setups/TerminalClippingConvex.lean, Public and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      },
+      {
+        "label": "other",
+        "details": "The same oracle also accepts a projection query. Euclidean projection onto the whole space returns the query point. Each gradient or projection query uses one call from the same fixed budget. The setup permits arbitrary adaptive randomized algorithms.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, Query and spec.admissible; LongTails/Setups/InterpolatedDistanceGrowingSubgradient.lean, Interpolates; LongTails/Setups/DistanceGrowingSubgradient.lean, spec; LongTails/Template.lean, Setup.allowedAlgorithm, Algorithm and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "The raw second moment satisfies E‖g(x,ξ)‖²≤G²+B²‖x−x₀‖² for every x. This permits heavy tails and bounds the second moment in terms of distance from the public starting point.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, spec.admissible, inherited through LongTails/Setups/DistanceGrowingSubgradient.lean and LongTails/Setups/InterpolatedDistanceGrowingSubgradient.lean, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain is the full Euclidean space ℝᵈ for every public dimension d≥2.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, Vector and Public; LongTails/Setups/InterpolatedDistanceGrowingSubgradient.lean, Interpolates and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "Interpolation and exact agreement at initialization hold simultaneously for every step and every seed. The C∞ condition on sample losses specifies no uniform Lipschitz constant for their gradients. The public parameters are d, x₀, B, G, R, ε, and δ, with B≥0, G,R,ε>0, 65536ε≤GR, and 0<δ≤1/8.",
+        "evidence": "LongTails/Setups/InterpolatedDistanceGrowingSubgradient.lean, Interpolates and spec.valid; LongTails/Setups/DistanceGrowingSubgradient.lean, spec.publicInput; LongTails/Setups/TerminalClippingConvex.lean, Public."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The terminal output x̂ must be measurable and feasible for every realization. Its target is f(x̂)−f(x⋆)≤ε for a global minimizer x⋆. The algorithm may output any point computed from its state.",
+        "evidence": "LongTails/Setups/DistanceGrowingSubgradient.lean, spec.successful; LongTails/Setups/TerminalClippingConvex.lean, spec.successful; LongTails/Template.lean, Algorithm.output and execute."
+      },
+      {
+        "label": "high_probability",
+        "details": "Under the product law of the algorithm seed and the oracle seed sequence, Pr[f(x̂)−f(x⋆)>ε]≤δ.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, spec.successful; LongTails/Setups/DistanceGrowingSubgradient.lean, spec.successful; LongTails/Template.lean, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "Every sample gradient agrees at the public starting point and vanishes at a shared hidden minimizer, while its second moment elsewhere can grow quadratically with distance from the starting point."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistanceGrowingSubgradientLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistanceGrowingSubgradientLowerBound",
+          "theorem": "LongTails.Theorems.DistanceGrowingSubgradientLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

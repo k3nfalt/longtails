@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary stochastic-gradient calls for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalAverageMixingMarkovSmoothNonconvex.lean}{nonconvex stationarity under stationary-averaged Markov mixing}.}\label{tab:HighDimensionalAverageMixingMarkovSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize Let $f:\mathbb R^d\to\mathbb R$ have $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. Each call returns $g(x,Z_t)$ at the next state of one stationary real-valued chain with kernel $P$ and law $\pi$, where $\int\|P^t(z,\cdot)-\pi\|_{\rm TV}\,d\pi(z)\le 2e^{-t/\tau}$ for every $t$. The jointly measurable oracle satisfies $\mathbb E_\pi g(x,Z)=\nabla f(x)$ and $\mathbb E_\pi\|g(x,Z)-\nabla f(x)\|^2\le\sigma^2$ for every $x$. The target is $\mathbb E\|\nabla f(\hat x)\|\le\varepsilon$ for a measurable output of any randomized adaptive algorithm. In \textbf{(1)}, $L,\varepsilon>0$, $\tau\ge1$, $A\ge2^{26}$, $r\ge2^{16}$ and $d\ge2^{40}(1+A)^4(1+\tau r^2\log r)$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AverageMixingMarkovSmoothNonconvexLowerBound.lean}{Average\allowbreak Mixing\allowbreak Markov\allowbreak Smooth\allowbreak Nonconvex\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AverageMixingMarkovSmoothNonconvexLowerBound.md}{(review)}
+& $\Omega\!\left(\dfrac{\tau L\Delta\sigma^2}{\varepsilon^4}\log r\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Uniform mixing \citep{hdamUniformLower}
+& $\Omega(\tau A r^2)$
+& \textbf{(1)} strengthens the bound inherited from \textbf{(2)} by $\log r$ under averaged mixing, matching the upper bound there. The dimension threshold falls from $2^{40}(1+\tau A r^2)^4$.
+& \textbf{(1)} requires $r\ge2^{16}$ versus $2^{12}$ in \textbf{(2)}. Its hard chain lacks uniform mixing at scale $\tau$. The lower-bound prefactor falls from $2^{-56}$ to $2^{-65}$. \\
+\midrule
+\textbf{(3)} IID, bounded variance \citep[Thm.~3]{hnnlArjevani2023V2}
+& $\Omega(A r^2)$
+& \textbf{(1)} raises the IID lower bound inherited by the averaged-mixing class by a factor $\tau\log r$ throughout the common high-noise, high-dimensional regime.
+& \textbf{(3)} also covers arbitrarily small positive $\sigma$ for $\varepsilon\le c\sqrt{L\Delta}$. \\
+\midrule
+\textbf{(4)} IID, bounded error \citep[Thm.~4.1]{hnnlJin2026V1}
+& $\Omega\!\left(A(1+r^2)\right)$
+& \textbf{(1)} gives a $\tau\log r$ larger lower bound for averaged mixing with stationary variance control, where $\varepsilon\le2^{-20}\min\{\sigma,\sqrt{L\Delta}\}$ and dimension suffices for \textbf{(1)}, \textbf{(4)}.
+& \textbf{(4)} establishes hardness even with almost surely $\sigma$-bounded error. The hard oracle in \textbf{(1)} exceeds this bound. \\
+\midrule
+\textbf{(5)} Finite chain, hitting-time bound, zero-respecting methods \citep[Thm.~3.1]{hdamSunWei2025}
+& $\Omega\!\bigl(\tau_h[A+r^2\min\{r^2,A\}]\bigr)$
+& \textbf{(1)} covers unrestricted adaptive queries and outputs. At the hard cycles' mixing scale $\tau\asymp\tau_h^2$, the gain is $\sqrt{\tau}\log r$ for $r^2\ge A$. For $r^2<A$, the noise term grows from $\sqrt{\tau}\,r^4$ to $\tau A r^2\log r$.
+& \textbf{(1)} requires higher dimension. The hard-cycle conversion does not compare the hitting-time and averaged-mixing classes in general. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=L\Delta/\varepsilon^2$, $r=\sigma/\varepsilon$, $\tau_h$ bounds the maximum expected state-to-state hitting time, $c>0$ is universal. $\Omega$ denotes a lower bound on necessary calls (one chain sample per call).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

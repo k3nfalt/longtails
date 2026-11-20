@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.SeparableNoiseLinfSmooth",
+  "searched_at": "2026-11-20T09:50:06.944154+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{16 \\cdot S^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.SeparableNoiseLinfSmooth.spec.Params → ℕ",
+        "value": "fun q => (⌈8 * q.L * q.Δ / q.ε ^ 2⌉₊ + 1) * (⌈16 * q.S ^ 2 / q.ε ^ 2⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lceil \\frac{8 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left\\lceil \\frac{16 \\cdot S^{2}}{\\varepsilon^{2}} \\right\\rceil_{+} + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.SeparableNoiseLinfSmooth.spec.Params → ℕ",
+          "value": "fun q => (⌈8 * q.L * q.Δ / q.ε ^ 2⌉₊ + 1) * (⌈16 * q.S ^ 2 / q.ε ^ 2⌉₊ + 1)"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.MinibatchSignSgdUpperBound",
+      "namespace": "LongTails.Setups.SeparableNoiseLinfSmooth",
+      "setup": "LongTails.Setups.SeparableNoiseLinfSmooth",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SeparableNoiseLinfSmooth.spec\n  LongTails.Theorems.MinibatchSignSgdUpperBound.budget",
+      "theorem": "LongTails.Theorems.MinibatchSignSgdUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MinibatchSignSgdUpperBound",
+      "theorem": "LongTails.Theorems.MinibatchSignSgdUpperBound.result",
+      "references": "- Jeremy Bernstein, Yu-Xiang Wang, Kamyar Azizzadenesheli, and Animashree Anandkumar. [signSGD: Compressed Optimisation for Non-Convex Problems](https://proceedings.mlr.press/v80/bernstein18a.html). 2018. Complexity: $O(B(1+\\Delta/(\\eta\\varepsilon)))$ stochastic-gradient calls for minibatch signSGD when $\\eta L_\\Sigma/2+2S_\\Sigma/\\sqrt B\\le\\varepsilon/2$, where $\\eta>0$ is the step size, $B\\ge1$ is the integer batch size, $L_\\Sigma=\\sum_i L_i$ sums the diagonal quadratic-majorant coefficients, and $S_\\Sigma=\\sum_i\\sigma_i$ sums uniform coordinate noise standard-deviation bounds.\n- Hongyi Tao, Dingzhi Yu, and Lijun Zhang. [When and Why SignSGD Outperforms SGD: A Theoretical Study Based on ℓ₁-norm Lower Bounds](https://arxiv.org/html/2605.06615v1). 2026, arXiv preprint v1. Complexity: $O((1+L\\Delta/\\varepsilon^2)(1+\\|\\boldsymbol\\sigma\\|_1^2/\\varepsilon^2))$ stochastic-gradient calls for minibatch SignSGD and a uniformly sampled iterate, where $\\sigma_i$ uniformly bounds the noise standard deviation in coordinate $i$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective is differentiable on all of ℝᵈ and may be nonconvex. It has finite infimum f⋆ and satisfies f(x₀) − f⋆ ≤ Δ. The infimum need not be attained.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns the full vector g(x,ω) with mean ∇f(x). Calls use fresh i.i.d. seeds, including repeated calls at the same point. The public input gives d, the measurable seed space Ω, x₀, L > 0, S ≥ 0, Δ ≥ 0, and ε > 0. The objective, oracle map, sampling law, and infimum are hidden.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, Params and spec.publicInput, spec.valid, spec.Query, spec.Reply, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "Writing σᵢ(x) = (E|gᵢ(x,ω) − ∇ᵢf(x)|²)¹ᐟ², the bound is supₓ ∑ᵢ σᵢ(x) ≤ S. The coordinate noise profile can vary with x, and coordinates within one reply may be dependent.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.admissible coordinate second-moment integrability and sum-of-square-roots bound"
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The gradient satisfies ‖∇f(x) − ∇f(y)‖₁ ≤ L‖x − y‖∞ globally. The same dual ℓ₁ norm measures stationarity.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.admissible gradient-difference bound and spec.successful"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, gradient replies, and outputs belong to ℝᵈ with public finite dimension d.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, Params.d and spec.Query, spec.Reply, spec.Output"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return one measurable point X with integrable ‖∇f(X)‖₁. The criterion uses the first power of the full gradient’s ℓ₁ norm.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.Output and spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "E‖∇f(X)‖₁ ≤ ε under the product law of the algorithm seed and the oracle seed sequence, subject to the fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/SeparableNoiseLinfSmooth.lean, spec.successful. LongTails/Template.lean, OracleTemplate.Convergence and executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup pairs ℓ∞-to-ℓ₁ smoothness and expected ℓ₁ stationarity with a pointwise budget on the sum of coordinate noise standard deviations. That budget allows the noisy coordinates to change with the query point."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MinibatchSignSgdUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MinibatchSignSgdUpperBound",
+          "theorem": "LongTails.Theorems.MinibatchSignSgdUpperBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

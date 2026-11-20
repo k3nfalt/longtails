@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.NonnegativeSmoothSampleLossEuclidean",
+  "searched_at": "2026-11-20T09:48:46.591329+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left(\\left\\lfloor \\frac{\\sqrt{L \\cdot \\Delta}}{2^{32} \\cdot \\varepsilon} \\right\\rfloor_{+}\\right)^{3}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NonnegativeSmoothSampleLossEuclidean.spec.Params → ℕ",
+        "value": "fun q => ⌊√(q.L * q.Δ) / (2 ^ 32 * q.ε)⌋₊ ^ 3"
+      },
+      "budgets": [
+        {
+          "latex": "\\left(\\left\\lfloor \\frac{\\sqrt{L \\cdot \\Delta}}{2^{32} \\cdot \\varepsilon} \\right\\rfloor_{+}\\right)^{3}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NonnegativeSmoothSampleLossEuclidean.spec.Params → ℕ",
+          "value": "fun q => ⌊√(q.L * q.Δ) / (2 ^ 32 * q.ε)⌋₊ ^ 3"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.NonnegativeSampleStationarityLowerBound",
+      "namespace": "LongTails.Setups.NonnegativeSmoothSampleLossEuclidean",
+      "setup": "LongTails.Setups.NonnegativeSmoothSampleLossEuclidean",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.NonnegativeSmoothSampleLossEuclidean.spec\n  LongTails.Theorems.NonnegativeSampleStationarityLowerBound.budget",
+      "theorem": "LongTails.Theorems.NonnegativeSampleStationarityLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NonnegativeSampleStationarityLowerBound",
+      "theorem": "LongTails.Theorems.NonnegativeSampleStationarityLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective is the expectation of differentiable, nonnegative sample losses with globally L-Lipschitz gradients. Both the losses and their expectation may be nonconvex.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.admissible"
+      },
+      {
+        "label": "finite_sum",
+        "details": "The sample space has m elements, so the objective is a finite weighted sum f(x) = Σᵢ pᵢℓᵢ(x). The weights form a hidden probability distribution and may be nonuniform.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLossEuclidean.lean, parameters.Ω and rows; LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call submits two points (x,y) and returns (∇ℓᵢ(x),∇ℓᵢ(y)) for the same hidden index i. Each call draws a fresh independent index from p. The algorithm receives only the two gradients and may choose its next pair adaptively.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.Query, spec.Reply and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID; LongTails/Template.lean, Algorithm.query and Algorithm.update"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "With n = ⌊√(LΔ)/(2³²ε)⌋ and m = [512(n+1)]², the public space is Euclidean of dimension nmd, where d = 2²¹(2n³+1)nm² + extraWidth + 1 and extraWidth is any natural number.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLossEuclidean.lean, Params.extraWidth, stages, rows, width, Block, Space and parameters"
+      },
+      {
+        "label": "other",
+        "details": "Every sample loss is globally nonnegative and individually L-smooth, and the absolute initial population loss satisfies f(0) ≤ Δ. Together these imply Eᵢ‖∇ℓᵢ(x)‖² ≤ 2L f(x). The public inputs include L, Δ, ε, the spaces, and x₀ = 0. The sample losses and sampling law are hidden. The regime is L, Δ, ε > 0 with 2³²ε ≤ √(LΔ).",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLossEuclidean.lean, parameters, spec.publicInput and spec.valid; LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns one measurable point X in the public Euclidean space. Its population gradient norm must be integrable and satisfy E‖∇f(X)‖ ≤ ε. X may be any output of the final algorithm state.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.Output and spec.successful; LongTails/Template.lean, Algorithm.output"
+      },
+      {
+        "label": "expected",
+        "details": "The expectation uses the product of the algorithm's seed law and the oracle's sample-sequence law. The lower bound concerns a fixed budget: for every randomized adaptive algorithm and every budget of at most n³ paired calls, some admissible instance and oracle violate the success criterion.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.successful; LongTails/TemplateLowerBound.lean, NonConvergence; LongTails/Template.lean, Setup.allowedAlgorithm; supplied result budget"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The benchmark couples two gradient evaluations through one hidden sample and controls their second moment through samplewise nonnegativity, individual smoothness, and an absolute initial loss bound. It also prescribes the sample count and Euclidean dimension as functions of the requested accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.NonnegativeSampleStationarityLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NonnegativeSampleStationarityLowerBound",
+          "theorem": "LongTails.Theorems.NonnegativeSampleStationarityLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

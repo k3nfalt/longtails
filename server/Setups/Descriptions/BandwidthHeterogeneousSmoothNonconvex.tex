@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Bandwidth-Limited Distributed Nonconvex Optimization}
+We seek a stationary point of a possibly nonconvex objective $f$ on $\mathbb{R}^d$, where $d\geq 0$ is the dimension. The objective averages differentiable worker functions, has a Lipschitz gradient, and admits a lower bound with a prescribed gap from the initial value. Each worker returns a batch of unbiased local gradient estimates with bounded variance, using independent samples within and across workers. Workers have heterogeneous computation times and communicate over directed links with latency and per-bit costs. For tolerance $\varepsilon>0$, the goal is an output $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|^2\leq\varepsilon^2$, averaging over sampling and algorithm randomness.
+
+With $n\geq 1$ workers and local functions $f_i:\mathbb{R}^d\to\mathbb{R}$, the optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\qquad f(x)=\frac{1}{n}\sum_{i=1}^n f_i(x).
+\]
+All norms are Euclidean. The algorithm receives $d$, $n$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the smoothness constant $L>0$, the initial gap bound $\Delta\geq 0$, the noise bound $\sigma\geq 0$, the tolerance $\varepsilon$, the worker computation times $h_i>0$, the link latency $\ell\geq 0$, and the transmission time per bit $b\geq 0$.
+
+Our assumptions:
+\begin{assumption}[Aggregate smoothness and initial gap]
+Each $f_i$ is differentiable on $\mathbb{R}^d$. There exists $a\in\mathbb{R}$ such that, for all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|,\\
+a &\leq f(x),\\
+f(x^0)-a &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Local stochastic gradients]
+Worker $i$ has a sequence $(\xi_{i,k})_{k\geq 0}$ of independent measurable samples with common law $\mu_i$ on $\Omega$. The worker sequences are mutually independent, and the algorithm's randomness is independent of the entire sample array. Each map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For every $x\in\mathbb{R}^d$ and $\xi\sim\mu_i$, the vector $g_i(x,\xi)$ is Bochner integrable, its squared error is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu_i}[g_i(x,\xi)] &= \nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\mu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+An idle worker $i$ accepts a query consisting of a point $x\in\mathbb{R}^d$ and an integer batch size $m\geq 1$. After $m h_i$ units of time it returns the ordered list
+\[
+\bigl(g_i(x,\xi_{i,k}),\ldots,g_i(x,\xi_{i,k+m-1})\bigr),
+\]
+where $k$ is the number of samples already used by that worker. A worker ignores further computation requests while its batch is pending. Different workers may compute concurrently.
+
+Every ordered pair of workers, including a worker paired with itself, has a directed link. Messages on each link are queued in submission order. A message submitted at time $t$ with a payload of $q\geq 0$ bits is ready for delivery at time
+\[
+\max\{t,c\}+\ell+b(q+64),
+\]
+where $c$ is the completion time of the preceding message on that link, or zero for the first message. The receiver obtains the sender's identity and the payload followed by the $64$ zero bits included in the transmission cost. Distinct directed links may transmit concurrently, and communication may overlap computation.
+
+For an elapsed-time budget $T\geq 0$, almost surely every deadline $s\in[0,T]$ must be reached with only finitely many events through that deadline. At time $T$, the algorithm's designated root worker must produce a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable squared gradient norm satisfying
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}

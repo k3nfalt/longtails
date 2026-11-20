@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.GaussianAdditiveCubeFixedPoint",
+  "searched_at": "2026-11-20T09:46:05.162807+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\left(1 + \\frac{\\left(\\frac{\\sigma}{\\varepsilon}\\right)^{2}}{2 + \\log\\left(d\\right)}\\right) \\cdot \\max\\left\\{ 1, \\frac{\\frac{R}{\\varepsilon}}{1 + \\log\\left(2 + \\frac{R + \\sigma}{\\varepsilon}\\right)} \\right\\}}{67108864} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.GaussianAdditiveCubeFixedPoint.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌊(1 + (p.σ / p.ε) ^ 2 / (2 + Real.log ↑p.d)) * max 1 (↑p.R / p.ε / (1 + Real.log (2 + (↑p.R + p.σ) / p.ε))) /\n      67108864⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\left(1 + \\frac{\\left(\\frac{\\sigma}{\\varepsilon}\\right)^{2}}{2 + \\log\\left(d\\right)}\\right) \\cdot \\max\\left\\{ 1, \\frac{\\frac{R}{\\varepsilon}}{1 + \\log\\left(2 + \\frac{R + \\sigma}{\\varepsilon}\\right)} \\right\\}}{67108864} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.GaussianAdditiveCubeFixedPoint.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌊(1 + (p.σ / p.ε) ^ 2 / (2 + Real.log ↑p.d)) * max 1 (↑p.R / p.ε / (1 + Real.log (2 + (↑p.R + p.σ) / p.ε))) /\n      67108864⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.AdditiveCubeFixedPointLowerBound",
+      "namespace": "LongTails.Setups.GaussianAdditiveCubeFixedPoint",
+      "setup": "LongTails.Setups.GaussianAdditiveCubeFixedPoint",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.GaussianAdditiveCubeFixedPoint.spec\n  LongTails.Theorems.AdditiveCubeFixedPointLowerBound.budget",
+      "theorem": "LongTails.Theorems.AdditiveCubeFixedPointLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdditiveCubeFixedPointLowerBound",
+      "theorem": "LongTails.Theorems.AdditiveCubeFixedPointLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Find an approximate fixed point of an unknown self-map T of the cube [−R,R]^d, where T is 1-Lipschitz in the supremum norm.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, Point, Cube, spec.Instance, spec.admissible, and spec.successful."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each query x in the cube returns one full vector T(x) + Z in ℝ^d. The noise vectors are independent across calls, independent of the query history, and each has independent N(0,v) coordinates. The common coordinate variance v ≥ 0 and the map T are hidden. The algorithm receives d, R, σ, and ε.",
+        "evidence": "LongTails/Setups/GaussianAdditiveCubeFixedPoint.lean, gaussianOracle.law, gaussianOracle.answer, and spec.admissible. LongTails/Setups/AdditiveCubeFixedPoint.lean, Params, spec.publicInput, spec.Query, and spec.Reply."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The public noise bound controls the entire vector through E‖Z‖∞² = E[maxᵢ |Zᵢ|²] ≤ σ². Thus the admissible common Gaussian coordinate variance v is constrained by the dimension as well as by σ.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, spec.admissible. LongTails/Setups/GaussianAdditiveCubeFixedPoint.lean, gaussianOracle.law and spec.admissible."
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The domain is a closed ℓ∞ ball. The same supremum norm measures nonexpansiveness, noise magnitude, and the output residual.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, Point, Cube, spec.admissible, and spec.successful."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The public parameters satisfy d ∈ ℕ, d > 0, R > 0, σ ≥ 0, ε > 0, 128ε ≤ R, and ⌈R/ε⌉ ≤ d.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, Params and spec.valid. LongTails/Setups/GaussianAdditiveCubeFixedPoint.lean, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The lower bound concerns adaptive, possibly randomized policies with measurable initialization, query, update, and output functions under a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, measurablePolicy and spec.allowedAlgorithm. LongTails/Template.lean, Algorithm and executeWithTrace."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "E‖T(X) − X‖∞ ≤ ε, with expectation over both the algorithm's random seed and the independent oracle noise sequence.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, spec.successful. LongTails/Template.lean, Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Return a measurable cube-valued output X whose fixed-point residual ‖T(X) − X‖∞ is integrable. The residual uses the first power of the norm.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean, spec.Output and spec.successful."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup restricts stochastic nonexpansive fixed-point queries to additive isotropic Gaussian noise with a supremum-norm second-moment bound, and ties the cube dimension to R/ε."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AdditiveCubeFixedPointLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdditiveCubeFixedPointLowerBound",
+          "theorem": "LongTails.Theorems.AdditiveCubeFixedPointLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

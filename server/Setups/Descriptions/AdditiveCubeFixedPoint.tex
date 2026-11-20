@@ -1,0 +1,39 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Noisy Fixed Points on a Cube}
+We seek an approximate fixed point of a map $T:C\to C$ on the cube $C=[-R,R]^d\subset\mathbb{R}^d$, where $d$ is a positive integer and $R>0$. The map is nonexpansive in the maximum norm $\|\cdot\|_\infty$. At each query $x\in C$, the oracle returns $T(x)$ plus an independent draw of centered additive noise with bounded second moment in this norm. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in C$ satisfying $\mathbb{E}[\|T(\bar{x})-\bar{x}\|_\infty]\leq\varepsilon$, averaging over oracle and algorithm randomness.
+
+The fixed-point problem is
+\[
+\text{find } x\in C \text{ such that } T(x)=x.
+\]
+The algorithm receives $d$, $R$, $\varepsilon$, and the noise bound $\sigma\geq 0$ specified below.
+
+Our assumptions:
+\begin{assumption}[Nonexpansiveness]
+For every $x,y\in C$,
+\[
+\|T(x)-T(y)\|_\infty\leq\|x-y\|_\infty.
+\]
+\end{assumption}
+
+\begin{assumption}[Additive noise]
+At query $x_k\in C$, the oracle returns $T(x_k)+Z_k\in\mathbb{R}^d$. The noise vectors $(Z_k)_{k\geq 0}$ are independent random variables with common law $\mu$ on $\mathbb{R}^d$, and the sequence is independent of the algorithm's randomness. For $Z\sim\mu$, the vector $Z$ is Bochner integrable, $\|Z\|_\infty^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}[Z]&=0,\\
+\mathbb{E}[\|Z\|_\infty^2]&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The algorithm uses a measurable initialization, query rule, and output rule, with an update jointly measurable in its current state and the oracle reply. After the allotted calls, its output $\bar{x}$ must be a measurable $C$-valued random vector with integrable residual satisfying
+\[
+\mathbb{E}\bigl[\|T(\bar{x})-\bar{x}\|_\infty\bigr]\leq\varepsilon.
+\]
+\end{document}

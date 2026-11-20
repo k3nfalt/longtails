@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle calls for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GaussianAdditiveCubeFixedPoint.lean}{fixed points on a cube with additive Gaussian noise}}\label{tab:GaussianAdditiveCubeFixedPoint}
+\parbox{\linewidth}{\footnotesize Let $C=[-R,R]^d$, $R\ge128\varepsilon>0$, $d\ge\lceil R/\varepsilon\rceil$, and $\sigma\ge0$. The map $T:C\to C$ is nonexpansive in $\ell_\infty$. Each query returns $T(x)+Z$ with independent draws $Z\sim\mathcal N(0,vI_d)$ and $\mathbb E\|Z\|_\infty^2\le\sigma^2$. A measurable adaptive randomized algorithm must return $\hat x\in C$ with $\mathbb E\|T(\hat x)-\hat x\|_\infty\le\varepsilon$, averaging over oracle and algorithm randomness.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AdditiveCubeFixedPointLowerBound.lean}{Additive\allowbreak Cube\allowbreak Fixed\allowbreak Point\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AdditiveCubeFixedPointLowerBound.md}{(review)}
+& Lower bound: $\displaystyle\Omega\!\left(\frac{R}{\varepsilon L}\left(1+\frac{\sigma^2}{\varepsilon^2\log d}\right)\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[Thm.~11]{psDgm2026v1}, exact oracle ($v=0$)
+& Lower bound: $\Omega(R/\varepsilon)$. Failure probability $\ge1/4$ gives the expected-residual bound after constant rescaling.
+& \textbf{(1)} strengthens the Gaussian-class lower bound by a factor of order $\sigma^2/(\varepsilon^2 L\log d)$ when $\sigma^2\gg\varepsilon^2 L\log d$.
+& \textbf{(1)} loses a factor $L$ when $\sigma^2\lesssim\varepsilon^2\log d$. It needs $d\ge\lceil R/\varepsilon\rceil$; \textbf{(2)} needs $d\ge\lfloor R/(8\varepsilon)\rfloor$ at residual threshold $\varepsilon$. \\
+\midrule
+\textbf{(3)} \citep[Thm.~13, Rem.~14]{psDgm2026v1}, query-dependent Bernoulli oracle
+& Lower bound: $\Omega(R/\varepsilon+R\sigma^2/\varepsilon^3)$ on the Bernoulli family. Failure probability $\ge1/8$.
+& \textbf{(1)} proves hardness even for fixed additive Gaussian noise, $v=\sigma^2/[4(2+\log d)]$. A Gaussian change of measure replaces the information masking in \textbf{(3)}.
+& On their respective noise families, the noise term in \textbf{(1)} is smaller by $L\log d$. The Bernoulli bound in \textbf{(3)} does not apply to Gaussian noise. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L=\min\{R/\varepsilon,\log((R+\sigma)/\varepsilon)\}$; $\log$ is natural.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

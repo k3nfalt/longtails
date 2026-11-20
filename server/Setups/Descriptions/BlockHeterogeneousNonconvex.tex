@@ -1,0 +1,44 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Optimization with Heterogeneous Blocks}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d$. Its linearization error admits a quadratic bound with a separate coefficient for each coordinate block, and its value at a given starting point lies within a prescribed gap of a global lower bound. At each query, the oracle uses a fresh independent sample to return an unbiased gradient estimate with blockwise variance bounds. For a tolerance $\varepsilon>0$, the goal is a point $\bar{x}\in\mathbb{R}^d$ at which the expected sum of the Euclidean norms of the gradient blocks is at most $\varepsilon$.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+For nonnegative integers $d$ and $B$, write $[n]=\{1,\ldots,n\}$ with $[0]=\varnothing$. A map $b:[d]\to[B]$ assigns each coordinate to a block. For $j\in[B]$, let $\Pi_j$ be the orthogonal projection onto the coordinates in $b^{-1}(j)$, which may be empty. The algorithm receives $d$, $B$, $b$, the measurable sample space $\Omega$, the block parameters $(L_j,\sigma_j)_{j\in[B]}$ with $L_j>0$ and $\sigma_j\geq0$, the gap bound $\Delta\geq0$, the tolerance $\varepsilon$, and the starting point $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Block smoothness]
+The function $f$ is differentiable everywhere, and for every $x,y\in\mathbb{R}^d$,
+\[
+\bigl|f(y)-f(x)-\langle\nabla f(x),y-x\rangle\bigr|
+\leq \frac{1}{2}\sum_{j\in[B]}L_j\|\Pi_j(y-x)\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $\ell\in\mathbb{R}$ such that $f(x)\geq\ell$ for every $x\in\mathbb{R}^d$ and $f(x^0)-\ell\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients with blockwise variance bounds]
+On call $k$ at any $x\in\mathbb{R}^d$, the oracle returns $g(x,\xi_k)$, where $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. The samples $(\xi_k)_{k\geq0}$ are independent measurable random variables with common law $\nu$ on $\Omega$, and the sequence is independent of the algorithm's randomness. For $\xi\sim\nu$, every $x\in\mathbb{R}^d$, and every $j\in[B]$, the vector $g(x,\xi)$ is Bochner integrable, the squared norm $\|\Pi_j(g(x,\xi)-\nabla f(x))\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= \nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|\Pi_j(g(x,\xi)-\nabla f(x))\|^2\bigr] &\leq \sigma_j^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable and $\sum_{j\in[B]}\|\Pi_j\nabla f(\bar{x})\|$ must be integrable under the joint law of the samples and the algorithm's randomness. Under this law, the required accuracy is
+\[
+\mathbb{E}\left[\sum_{j\in[B]}\|\Pi_j\nabla f(\bar{x})\|\right]\leq\varepsilon.
+\]
+\end{document}

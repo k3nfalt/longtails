@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.StronglyConvexDueling",
+  "searched_at": "2026-11-20T09:48:00.992605+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{72 \\cdot d^{2} \\cdot \\left(\\frac{4}{\\mu}\\right)^{2 \\cdot k} \\cdot \\left(\\max\\left\\{ 1, \\frac{8 \\cdot G}{r} \\right\\}\\right)^{4 \\cdot k + 2}}{c^{2} \\cdot \\mu \\cdot \\varepsilon} + \\frac{10368 \\cdot \\left(d \\cdot M \\cdot L\\right)^{2} \\cdot \\left(\\frac{4}{\\mu}\\right)^{4 \\cdot k} \\cdot \\left(\\max\\left\\{ 1, \\frac{8 \\cdot G}{r} \\right\\}\\right)^{8 \\cdot k}}{\\left(c^{2} \\cdot \\mu \\cdot \\varepsilon\\right)^{2}} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StronglyConvexDueling.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈72 * ↑p.d ^ 2 * (4 / p.μ) ^ (2 * p.k) * max 1 (8 * p.G / p.r) ^ (4 * p.k + 2) / (p.c ^ 2 * p.μ * p.ε) +\n      10368 * (↑p.d * p.M * p.L) ^ 2 * (4 / p.μ) ^ (4 * p.k) * max 1 (8 * p.G / p.r) ^ (8 * p.k) /\n        (p.c ^ 2 * p.μ * p.ε) ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{72 \\cdot d^{2} \\cdot \\left(\\frac{4}{\\mu}\\right)^{2 \\cdot k} \\cdot \\left(\\max\\left\\{ 1, \\frac{8 \\cdot G}{r} \\right\\}\\right)^{4 \\cdot k + 2}}{c^{2} \\cdot \\mu \\cdot \\varepsilon} + \\frac{10368 \\cdot \\left(d \\cdot M \\cdot L\\right)^{2} \\cdot \\left(\\frac{4}{\\mu}\\right)^{4 \\cdot k} \\cdot \\left(\\max\\left\\{ 1, \\frac{8 \\cdot G}{r} \\right\\}\\right)^{8 \\cdot k}}{\\left(c^{2} \\cdot \\mu \\cdot \\varepsilon\\right)^{2}} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StronglyConvexDueling.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈72 * ↑p.d ^ 2 * (4 / p.μ) ^ (2 * p.k) * max 1 (8 * p.G / p.r) ^ (4 * p.k + 2) / (p.c ^ 2 * p.μ * p.ε) +\n      10368 * (↑p.d * p.M * p.L) ^ 2 * (4 / p.μ) ^ (4 * p.k) * max 1 (8 * p.G / p.r) ^ (8 * p.k) /\n        (p.c ^ 2 * p.μ * p.ε) ^ 2⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.LocalReferenceDueling",
+      "namespace": "LongTails.Setups.StronglyConvexDueling",
+      "setup": "LongTails.Setups.StronglyConvexDueling",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StronglyConvexDueling.spec LongTails.Theorems.LocalReferenceDueling.budget",
+      "theorem": "LongTails.Theorems.LocalReferenceDueling.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LocalReferenceDueling",
+      "theorem": "LongTails.Theorems.LocalReferenceDueling.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "The strong-convexity inequality with μ > 0 implies convexity on the ball.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, Objective.strongly_convex and spec.valid"
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The objective is continuously differentiable on ℝᵈ. On the closed unit ball it is μ-strongly convex and G-Lipschitz, and its gradient is L-Lipschitz. The minimizer is taken over the ball and may lie on its boundary.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, Objective.differentiable, Objective.continuous_gradient, Objective.strongly_convex, Objective.lipschitz, Objective.smooth and spec.successful"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each call compares two feasible points x and y and returns one bit. Conditional on the query and past observations, the probability of true is (1 + ρ(f(x) − f(y)))/2. Each call uses a fresh independent seed with the same law. The algorithm receives the comparison bit alone.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, score, spec.Query, spec.Reply and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "Queries and output lie in the closed Euclidean unit ball of ℝᵈ, with public integer d ≥ 1.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, Point, Ball, Params.nonzero, spec.Query, spec.Output and spec.publicInput"
+      },
+      {
+        "label": "other",
+        "details": "The hidden transfer function ρ is odd, nondecreasing, continuously differentiable and bounded by 1 in absolute value. For |t| ≤ r it satisfies c|t|ᵏ ≤ ρ′(t) ≤ M. Thus k = 0 gives a positive local slope floor, while k > 0 allows the slope to vanish at a tie. The algorithm knows d, k and the positive parameters μ, L, G, r, c, M and ε. The objective and transfer function are hidden.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, Params, Transfer, spec.Public, spec.publicInput, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The algorithm returns a measurable feasible point X. For a minimizer u over the closed unit ball, the objective gap f(X) − f(u) must be integrable.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, spec.Output and spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "The required bound is E[f(X) − f(u)] ≤ ε under the joint law of the algorithm and oracle seeds, with a fixed upper bound on the number of comparison calls.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean, spec.successful. LongTails/Template.lean, OracleTemplate.Convergence and OracleTemplate.executeWithTrace"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The learner observes only binary comparisons through an unknown transfer function. Its local derivative bound specifies how weak the comparison signal may become near equal objective values."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.LocalReferenceDueling.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LocalReferenceDueling",
+          "theorem": "LongTails.Theorems.LocalReferenceDueling.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "setup": "LongTails.Setups.DistributedAggregateSmoothNonconvex",
+  "searched_at": "2026-11-20T09:46:24.063454+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left(1 + \\left\\lceil \\frac{2^{19} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+}\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\max\\left\\{ \\frac{2^{18} \\cdot \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot \\sigma\\left(i\\right)^{2}\\right)}{n^{2} \\cdot \\varepsilon^{2}}, 0 \\right\\} + 2 \\cdot \\left(l + b \\cdot \\left(64 + d \\cdot \\left(5 + \\left\\lceil\\log_{2}\\left(n \\cdot \\left(d + 1\\right) + 1\\right)\\right\\rceil_{+}\\right)\\right)\\right)\\right)",
+        "type": "LongTails.Setups.DistributedAggregateSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  ↑(2 * (1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊)) *\n    (Finset.univ.sup p.h + ((2 ^ 18 * ∑ i, ↑(p.h i) * p.σ i ^ 2) / (↑↑p.n ^ 2 * p.ε ^ 2)).toNNReal +\n      2 * (p.l + p.b * ↑(DistributedTemplate.clockBits + p.d * (5 + (↑p.n * (p.d + 1)).size))))"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(1 + \\left\\lceil \\frac{2^{19} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+}\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\max\\left\\{ \\frac{2^{18} \\cdot \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot \\sigma\\left(i\\right)^{2}\\right)}{n^{2} \\cdot \\varepsilon^{2}}, 0 \\right\\} + 2 \\cdot \\left(l + b \\cdot \\left(64 + d \\cdot \\left(5 + \\left\\lceil\\log_{2}\\left(n \\cdot \\left(d + 1\\right) + 1\\right)\\right\\rceil_{+}\\right)\\right)\\right)\\right)",
+          "type": "LongTails.Setups.DistributedAggregateSmoothNonconvex.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  ↑(2 * (1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊)) *\n    (Finset.univ.sup p.h + ((2 ^ 18 * ∑ i, ↑(p.h i) * p.σ i ^ 2) / (↑↑p.n ^ 2 * p.ε ^ 2)).toNNReal +\n      2 * (p.l + p.b * ↑(DistributedTemplate.clockBits + p.d * (5 + (↑p.n * (p.d + 1)).size))))"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.MultiscaleAggregateStationarity",
+      "namespace": "LongTails.Setups.DistributedAggregateSmoothNonconvex",
+      "setup": "LongTails.Setups.DistributedAggregateSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedAggregateSmoothNonconvex.spec\n  LongTails.Theorems.MultiscaleAggregateStationarity.budget",
+      "theorem": "LongTails.Theorems.MultiscaleAggregateStationarity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MultiscaleAggregateStationarity",
+      "theorem": "LongTails.Theorems.MultiscaleAggregateStationarity.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "F may be nonconvex. It has a global lower bound a with F(x₀) − a ≤ Δ, where Δ ≥ 0 and L > 0. A minimizer need not exist.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is the uniform average F(x) = (1/n) Σᵢ fᵢ(x) of n ≥ 1 differentiable worker objectives. The L-Lipschitz gradient condition applies to F. Component gradients may vary arbitrarily across workers.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, Functions, objective and spec.admissible. LongTails/Setups/FiniteSumSmoothAndConvex.lean, objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A completed evaluation at worker i returns the query point x and a jointly measurable local gradient estimate gᵢ(x,ξ) with mean ∇fᵢ(x). Each completion uses the next sample in that worker’s stream.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, system and spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient. LongTails/Setups/StarNetwork.lean, computation.answer."
+      },
+      {
+        "label": "other",
+        "details": "A timed communication oracle carries finite bit strings between a central node and each worker. An m-bit payload takes l + b(m + 64) time. Each directed link permits one outstanding message, and distinct links can operate concurrently. Worker i can have one evaluation pending, with completion time hᵢ > 0 unless aborted. The central node has no gradient oracle.",
+        "evidence": "LongTails/Setups/StarNetwork.lean, computation, communication and system. LongTails/TemplateDistributed.lean, clockBits and step. LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, system and spec.valid."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every i and x, E‖gᵢ(x,ξ) − ∇fᵢ(x)‖² ≤ σᵢ², with σᵢ ≥ 0. Samples are IID within worker i with law μᵢ. The entire sample streams are independent across workers, whose marginal laws may differ.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, spec.valid and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries and outputs belong to Euclidean ℝᵈ with its ℓ₂ norm, where d is a public natural number.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, Params.d, Point, spec.Output and spec.publicInput."
+      },
+      {
+        "label": "other",
+        "details": "The algorithm knows d, n, x₀, L, Δ, ε, every hᵢ and σᵢ, the latency l ≥ 0, the time per bit b ≥ 0, and the measurable sample space. The component functions, stochastic gradient maps and sample laws belong to the hidden instance and oracle.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, Params, spec.Public, spec.publicInput, spec.Instance and spec.admissible. LongTails/TemplateDistributed.lean, Time and TimedConvergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The output X is a measurable point read from the algorithm’s designated root at the prescribed deadline. The stationarity criterion uses the first power of the aggregate gradient norm, E‖∇F(X)‖ ≤ ε, with ε > 0.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, spec.Output, spec.valid and spec.successful. LongTails/TemplateDistributed.lean, execute and TimedConvergence."
+      },
+      {
+        "label": "expected",
+        "details": "The gradient norm must be integrable under the product law of the algorithm and oracle seeds. The accuracy bound is in expectation at a fixed elapsed-time budget. Execution must also have finitely many events almost surely up to that deadline.",
+        "evidence": "LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, spec.successful. LongTails/TemplateDistributed.lean, law, FiniteEvents and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The benchmark couples smoothness of the aggregate objective with worker-specific sampling times and variances. Its fixed deadline charges latency and every transmitted bit on concurrent directed star links."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MultiscaleAggregateStationarity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MultiscaleAggregateStationarity",
+          "theorem": "LongTails.Theorems.MultiscaleAggregateStationarity.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

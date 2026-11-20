@@ -1,0 +1,42 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient stochastic-gradient budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BlockHeterogeneousNonconvex.lean}{block-heterogeneous nonconvex optimization}.}\label{tab:BlockHeterogeneousNonconvex}
+\parbox{\linewidth}{\footnotesize Let $P_j$ project onto coordinate block $j$ of $\mathbb R^d$. The differentiable objective satisfies $f(x_0)-\inf f\le\Delta$ and, for all $x,h$, $|f(x+h)-f(x)-\langle\nabla f(x),h\rangle|\le\tfrac12\sum_{j=1}^B L_j\|P_jh\|_2^2$, with $L_j>0$. Each call returns a jointly measurable, integrable full gradient estimate $g(x,\xi)$ from a fresh IID sample, with $\mathbb E g(x,\xi)=\nabla f(x)$ and $\mathbb E\|P_j(g(x,\xi)-\nabla f(x))\|_2^2\le\sigma_j^2$, $\sigma_j\ge0$. The target is $\mathbb E\sum_j\|P_j\nabla f(\hat x)\|_2\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BlockHeterogeneousSgdUpperBound.lean}{Block\allowbreak Heterogeneous\allowbreak Sgd\allowbreak Upper\allowbreak Bound} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BlockHeterogeneousSgdUpperBound.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{\|L\|_1\Delta}{\varepsilon^2}+\dfrac{\Delta S^3}{\varepsilon^4}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Scalar-step SGD \citep{canGhadimiLan2013}\newline Derived bound
+& $\mathcal{O}\!\left(1+\dfrac{B L_{\max}\Delta}{\varepsilon^2}+\dfrac{B^2 L_{\max}\|\sigma\|_2^2\Delta}{\varepsilon^4}\right)$
+& \textbf{(1)} replaces $B L_{\max}$ by $\sum_jL_j$ and $B^2 L_{\max}\|\sigma\|_2^2$ by $S^3$. For $B=1$, the rates match.
+& \textbf{(1)} needs individual block parameters. \textbf{(2)} uses aggregate smoothness and variance bounds and controls the expected squared Euclidean gradient norm. \\
+\midrule
+\textbf{(3)} SignSGD \citep{bssTaoYuZhang2026v1}\newline Singleton blocks
+& $\mathcal{O}\!\left(1+a(1+r^2)\right)$ including batches, with $L_\infty=\|L\|_1$ on the overlap.
+& \textbf{(1)} covers arbitrary blocks. For even $B$, take half the coordinates at $(L_j,\sigma_j)=(1,1)$ and half at $(B^{-3},B)$. With $\Delta=\varepsilon=1$, \textbf{(1)} costs $\mathcal{O}(B^3)$ versus $\mathcal{O}(B^5)$ for \textbf{(3)}.
+& \textbf{(1)} needs individual $L_j,\sigma_j$. \textbf{(3)} uses $L_\infty,\|\sigma\|_1$ and permits general $\ell_\infty$-smooth objectives. \\
+\midrule
+\textbf{(4)} AdaGrad \citep{bhnJiang2025}\newline Singleton blocks
+& $\mathcal{O}\!\left(1+a(1+r^2)H+r^4H^2\right)$
+& \textbf{(1)} replaces $\|L\|_1\|\sigma\|_1^2$ by $S^3$, removes the $r^4$ term and logarithms, and covers arbitrary blocks. The noise coefficients coincide for proportional profiles.
+& \textbf{(1)} tunes with $L_j,\sigma_j,\Delta,\varepsilon$. The updates in \textbf{(4)} use no noise bounds. The smaller coefficient compares proved upper bounds only. \\
+\midrule
+\textbf{(5)} LANTON \citep{bhnHao2026v2}\newline Euclidean-layer specialization
+& $\mathcal{O}\!\left(1+aJ+ar^2J^2+r^4/a\right)$ with two samples per step, $\Delta=f(x_0)-\inf f>0$, and $\sigma_j=\bar\sigma_j$.
+& \textbf{(1)} needs only block variances. On the overlap, $S^3\le\|L\|_1\|\bar\sigma\|_1^2$, without logarithms or $r^4/a$. \textbf{(5)} requires block-separable gradients and almost-sure noise bounds above and away from zero in noisy layers.
+& \textbf{(1)} gives expected accuracy for Euclidean blocks. \textbf{(5)} bounds the time-average of gradient norms with probability at least $1-\delta$ and permits general layer norms. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $L_{\max}=\max_j L_j$, $a=\|L\|_1\Delta/\varepsilon^2$, $r=\|\sigma\|_1/\varepsilon$, $S=\sum_j(L_j\sigma_j^2)^{1/3}$.
+For \textbf{(4)}, $K=1+a(1+r^2)+r^4$ and $H=1+\log(1+d^2 K[\|\sigma\|_\infty^2+K^2 L_{\max}\Delta])$ for damping $1/(2d)$.
+For \textbf{(5)}, $\bar\sigma_j$ bounds the block noise norm almost surely and $J=1+\log((1+a(1+r^2)+r^4/a)/\delta)$, $0<\delta<1$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
