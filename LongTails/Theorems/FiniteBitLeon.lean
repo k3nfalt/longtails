@@ -9,7 +9,11 @@ open MeasureTheory DistributedTemplate
 open LongTails.Setups.BandwidthHeterogeneousSmoothNonconvex
 open LongTails.Algorithms.LeonProtocol (algorithm)
 
-noncomputable def budget (p : Params) : Time := 8 * (1 + ⌈2^19 * p.L * p.Δ / p.ε^2⌉₊ : ℕ) * (Finset.univ.sup p.h + (∑ i, p.h i) * (2^18 * p.σ^2 / ((p.n : ℝ)^2 * p.ε^2)).toNNReal + 2 * (p.l + p.b * (64 + ((p.d + p.n - 1) / p.n) * (8 + Nat.log2 ((p.n : ℕ) * (p.d + 1))) : ℕ)))
+noncomputable def budget (p : Params) : Time :=
+  let K := 1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊
+  let B := (2 ^ 18 * p.σ ^ 2 / ((p.n : ℝ) ^ 2 * p.ε ^ 2)).toNNReal
+  let C := p.l + p.b * (64 + ((p.d + p.n - 1) / p.n) * (8 + Nat.log2 ((p.n : ℕ) * (p.d + 1))) : ℕ)
+  8 * K * (Finset.univ.sup p.h + (∑ i, p.h i) * B + 2 * C)
 
 theorem result : DistributedTemplate.TimedConvergence LongTails.Setups.BandwidthHeterogeneousSmoothNonconvex.spec budget := by
   refine ⟨fun p => algorithm p (budget p), ?_⟩

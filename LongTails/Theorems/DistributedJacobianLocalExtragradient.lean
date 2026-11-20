@@ -13,17 +13,16 @@ open LongTails.Proofs.DistributedJacobianStrongGrowthBudgetCharacterization
 noncomputable def budget (p : Params) : Time :=
   let κ := p.L / p.μ
   let G := 2 + p.ρ / 8 + p.ρ ^ 2 / 128
+  let C (x : ℝ) := p.h * ((p.l : ℝ) + p.β * (64 + p.d * Real.log x))
   if p.R ≤ p.ε then 0
   else if 64 * κ * G ≤ (p.n : ℝ) then
     let T := min ⌊κ⌋₊ ⌊Real.log ((p.n : ℝ) / (64 * κ)) / Real.log G⌋₊
     let q := 1 + 32 * p.ρ * p.M * p.R * G ^ T / p.μ
     (65536 * (
-      ((p.τ : ℝ) * p.ρ * κ ^ 2 + p.h *
-        ((p.l : ℝ) + p.β * (64 + p.d * Real.log (2 * (p.n : ℝ))))) *
+      ((p.τ : ℝ) * p.ρ * κ ^ 2 + C (2 * p.n)) *
         (1 + Real.log (p.d * q)) +
       (p.τ : ℝ) * κ * Real.log (p.R / p.ε) +
-      p.h * ((p.l : ℝ) + p.β *
-        (64 + p.d * Real.log (2 + (p.n : ℝ) * p.d * p.R / (p.ε * q)))) *
+      C (2 + (p.n : ℝ) * p.d * p.R / (p.ε * q)) *
         (κ / T * max (Real.log (2 * p.R / (p.ε * q))) 0))).toNNReal
   else p.τ * ⌈p.ρ * κ ^ 2 * Real.log (p.R ^ 2 / p.ε ^ 2)⌉₊
 

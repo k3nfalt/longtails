@@ -15,7 +15,15 @@ open MeasureTheory DistributedTemplate
 open LongTails.Setups.DistributedHessianLipschitzNonconvex
 open LongTails.Algorithms.DistributedNormalizedTuning
 
-noncomputable def budget (p : Params) : Time := Real.toNNReal (2 ^ 32 * (1 + p.L * p.Δ / p.ε ^ 2) * ((p.l : ℝ) + ((Finset.univ.sup p.h : DistributedTemplate.Time) : ℝ) * (1 + p.σ ^ 2 / (p.n * p.ε ^ 2)) + (p.b : ℝ) * (2 + Real.log (1 + (1 + p.L * p.Δ / p.ε ^ 2) * Real.sqrt p.d) + Real.log (1 + ((p.d : ℝ) ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + p.d * min (p.σ ^ 2 / p.ε ^ 2) (p.n : ℝ)) / Real.sqrt p.n)) * (1 + p.d / (p.n : ℝ) ^ (1 / 3 : ℝ)) + p.d * (p.b : ℝ) * (1 + Real.log (1 + (1 + p.L * p.Δ / p.ε ^ 2) * Real.sqrt p.d)) * min 1 (Real.sqrt (p.Q * p.ε) / p.L) + Real.sqrt (p.d * ((Finset.univ.sup p.h : DistributedTemplate.Time) : ℝ) * p.σ ^ 2 * (p.b : ℝ) * (1 + Real.log (1 + ((p.d : ℝ) ^ 2 * (1 + p.L * p.Δ / p.ε ^ 2) + p.d * min (p.σ ^ 2 / p.ε ^ 2) (p.n : ℝ)) / Real.sqrt p.n)) / (p.n * p.ε ^ 2))))
+noncomputable def budget (p : Params) : Time :=
+  let K := 1 + p.L * p.Δ / p.ε ^ 2
+  let H : ℝ := (Finset.univ.sup p.h : Time)
+  let s := Real.log (1 + K * Real.sqrt p.d)
+  let t := Real.log (1 + ((p.d : ℝ) ^ 2 * K + p.d * min (p.σ ^ 2 / p.ε ^ 2) (p.n : ℝ)) / Real.sqrt p.n)
+  Real.toNNReal (2 ^ 32 * K * ((p.l : ℝ) + H * (1 + p.σ ^ 2 / (p.n * p.ε ^ 2)) +
+    (p.b : ℝ) * (2 + s + t) * (1 + p.d / (p.n : ℝ) ^ (1 / 3 : ℝ)) +
+    p.d * (p.b : ℝ) * (1 + s) * min 1 (Real.sqrt (p.Q * p.ε) / p.L) +
+    Real.sqrt (p.d * H * p.σ ^ 2 * (p.b : ℝ) * (1 + t) / (p.n * p.ε ^ 2))))
 
 theorem result : DistributedTemplate.TimedConvergence LongTails.Setups.DistributedHessianLipschitzNonconvex.spec budget := by
   refine ⟨fun p => LongTails.Algorithms.DistributedNormalizedTraining.algorithm p (budget p), ?_⟩

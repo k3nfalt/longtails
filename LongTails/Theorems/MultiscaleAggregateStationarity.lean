@@ -15,7 +15,11 @@ open LongTails.Algorithms.MultiscaleAggregate
 open LongTails.Proofs.MultiscaleAggregateExecution
 open LongTails.Proofs.MultiscaleAggregateAccuracy
 
-noncomputable def budget (p : Params) : Time := (2 * (1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊) : ℕ) * (Finset.univ.sup p.h + Real.toNNReal (2 ^ 18 * (∑ i, (p.h i : ℝ) * p.σ i ^ 2) / ((p.n : ℝ) ^ 2 * p.ε ^ 2)) + 2 * (p.l + p.b * (clockBits + p.d * (5 + Nat.size ((p.n : ℕ) * (p.d + 1))) : ℕ)))
+noncomputable def budget (p : Params) : Time :=
+  let K := 1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊
+  let V := Real.toNNReal (2 ^ 18 * (∑ i, (p.h i : ℝ) * p.σ i ^ 2) / ((p.n : ℝ) ^ 2 * p.ε ^ 2))
+  let C := p.l + p.b * (clockBits + p.d * (5 + Nat.size ((p.n : ℕ) * (p.d + 1))) : ℕ)
+  (2 * K : ℕ) * (Finset.univ.sup p.h + V + 2 * C)
 
 theorem result : DistributedTemplate.TimedConvergence LongTails.Setups.DistributedAggregateSmoothNonconvex.spec budget := by
   refine ⟨fun p => algorithm p (budget p), ?_⟩

@@ -18,14 +18,15 @@ noncomputable def budget (p : Params) : Time := by
       ∑ i, min (p.L i) (t * p.h i) = (p.n : ℝ) * p.μ then h.choose else 0
   let u (i : Fin p.n) := min (p.L i) (c * p.h i)
   let S := ∑ i, (u i / p.h i) * u i
+  let M := Finset.univ.sup' Finset.univ_nonempty (fun i => u i * p.L i)
+  let A := 2 * (∑ i, (p.h i : ℝ)⁻¹) * M / S
+  let w := Nat.size ⌈2 + p.d + A +
+    (p.R ^ 2 + (p.σ * Finset.univ.sup' Finset.univ_nonempty u / M) ^ 2) / p.ε⌉₊
   exact (2048 * (p.σ ^ 2 / (S * p.ε) +
-    2 * (∑ i, (p.h i : ℝ)⁻¹) * Finset.univ.sup' Finset.univ_nonempty (fun i => u i * p.L i) / S *
+    A *
     (1 + Real.log (1 + p.R ^ 2 / p.ε)) *
     (((Finset.univ.sup p.h : Time) : ℝ) + p.l + p.b * (64 + 1024 * (p.d : ℝ) *
-      Nat.size ⌈2 + p.d +
-        2 * (∑ i, (p.h i : ℝ)⁻¹) * Finset.univ.sup' Finset.univ_nonempty (fun i => u i * p.L i) / S +
-        (p.R ^ 2 + (p.σ * Finset.univ.sup' Finset.univ_nonempty u /
-          Finset.univ.sup' Finset.univ_nonempty (fun i => u i * p.L i)) ^ 2) / p.ε⌉₊)))).toNNReal
+      w)))).toNNReal
 
 theorem result : TimedConvergence LongTails.Setups.DistributedWeakInterpolation.spec budget := by
   refine ⟨fun p => algorithm p (budget p), ?_⟩

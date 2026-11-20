@@ -13,7 +13,8 @@ noncomputable def budget (p : Params) : Time :=
   let S := max 1 ⌈(512 * p.σ / p.ε) ^ 2⌉₊
   let J := min (Nat.log2 K) (Nat.log 4 (S / (1 + Nat.log 4 S)))
   let c := fun i => 2 * p.h i + 2 * p.l + p.b * (129 + 3 * p.d * (14 + 4 * Nat.log2 (2 + p.d + K + S)) : ℕ)
-  let B := fun (m : ℕ) => 4 * Finset.univ.inf' Finset.univ_nonempty (fun i => max (c i) ((m : Time) / ∑ u, if c u ≤ c i then (c u)⁻¹ else 0))
+  let r (i : Fin p.n) := ∑ u, if c u ≤ c i then (c u)⁻¹ else 0
+  let B := fun (m : ℕ) => 4 * Finset.univ.inf' Finset.univ_nonempty (fun i => max (c i) ((m : Time) / r i))
   B S + K * (Finset.range (J + 1)).sup (fun j => B (2 * (J + 1) * 4 ^ j + if j = J then S else 0) / 2 ^ j)
 
 theorem result : DistributedTemplate.TimedConvergence LongTails.Setups.DistributedMeanSquaredSmooth.spec budget := by

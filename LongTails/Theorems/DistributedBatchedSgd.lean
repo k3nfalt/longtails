@@ -12,7 +12,12 @@ open MeasureTheory DistributedTemplate
 open LongTails.Setups.DistributedSmoothNonconvex
 open LongTails.Algorithms.DistributedBatchedSgd
 
-noncomputable def budget (p : Params) : Time := 262144 * (1 + ⌈p.L * p.Δ / p.ε⌉₊ : ℕ) * (sInf (Set.range (fun i : Fin p.n => p.h i + (1 + ⌈p.σ ^ 2 / p.ε⌉₊ : ℕ) / (∑ j, if p.h j ≤ p.h i then (p.h j)⁻¹ else 0))) + p.l + p.b * (p.d * (1 + Nat.log2 (2 + p.d + ⌈p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊)) + clockBits : ℕ))
+noncomputable def budget (p : Params) : Time :=
+  let K := ⌈p.L * p.Δ / p.ε⌉₊
+  let B := ⌈p.σ ^ 2 / p.ε⌉₊
+  let r (i : Fin p.n) := ∑ j, if p.h j ≤ p.h i then (p.h j)⁻¹ else 0
+  let C := p.b * (p.d * (1 + Nat.log2 (2 + p.d + K + B)) + clockBits : ℕ)
+  262144 * (1 + K : ℕ) * (sInf (Set.range (fun i => p.h i + (1 + B : ℕ) / r i)) + p.l + C)
 
 theorem result : TimedConvergence LongTails.Setups.DistributedSmoothNonconvex.spec budget := by
   refine ⟨fun p => algorithm p (withBudget p (budget p)), ?_⟩

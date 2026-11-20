@@ -14,10 +14,12 @@ noncomputable def budget (p : Params) : Time :=
   let α (S : Finset (Fin p.n)) : Time :=
     ⨅ C : {C : Finset (Fin p.n) // (S ∩ C).Nonempty ∧ (S \ C).Nonempty},
       ∑ e : Link p, if (e.val.1 ∈ C.val ↔ e.val.2 ∈ C.val) then 0 else p.b e.val.1 e.val.2
+  let m := Fintype.card (Link p)
+  let P : Time := 16 * (p.d * (w + t) + t * (m + 1) * p.n : ℕ)
   (⌈32 * p.L * p.Δ / p.ε⌉₊ - 1 : ℕ) * ⨅ S : {S : Finset (Fin p.n) // S.Nonempty},
     ((B + S.val.card : ℕ) : Time) / (∑ i ∈ S.val, (p.h i)⁻¹) +
       if S.val.card ≤ 1 then 0 else
-        16 * (p.d * (w + t) + t * (Fintype.card (Link p) + 1) * p.n : ℕ) / α S.val
+        (P : Time) / α S.val
 
 theorem result : DistributedTemplate.TimedConvergence
     LongTails.Setups.GraphBandwidthSmoothNonconvex.spec budget := by
