@@ -10,6 +10,8 @@ More than 100 new results so far—and more to come.</h3>
   <a href="https://arxiv.org/abs/2611.13872"><img src="https://img.shields.io/badge/arXiv-2611.13872-b31b1b" alt="arXiv:2611.13872"></a>
 </p>
 
+<p><img src="server/new-badge-bottom-14px.png" width="42" height="36" align="middle" alt="New"> Our framework now supports <strong>Federated Learning</strong> and <strong>Distributed Optimization</strong> in centralized and decentralized settings (e.g., <a href="https://k3nfalt.github.io/longtails/#DistributedWeakInterpolation">weighted SGD with heterogeneous worker objectives</a>, <a href="https://k3nfalt.github.io/longtails/#DistributedMeanSquaredSmooth">pipelined SGD with a central coordinator</a>, and <a href="https://k3nfalt.github.io/longtails/#GraphBandwidthSmoothNonconvex">GRACE SGD on a bandwidth-limited worker graph</a>).</p>
+
 <p><img src="server/new-badge-bottom-14px.png" width="42" height="36" align="middle" alt="New"> Our framework now supports <strong>Lower Bounds</strong> (e.g., <a href="https://k3nfalt.github.io/longtails/#GeneralizedSmoothConvexFull">(L₀,L₁)-smoothness</a>, <a href="https://k3nfalt.github.io/longtails/#PolynomialMixingHeavyTailedConvex">polynomial mixing</a>, <a href="https://k3nfalt.github.io/longtails/#StretchedExponentialMarkovConvex">Markov noise</a>).</p>
 
 ## Preliminaries: Setup and Complexity
