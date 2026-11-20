@@ -1,0 +1,108 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Graph Quantized Minibatch SGD}
+We consider minimizing a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ with $L$-Lipschitz gradient, where $d\geq0$ and $L>0$. A given starting point $x^0$ satisfies $f(x^0)-a\leq\Delta$ for a global lower bound $a$ and $\Delta\geq0$. Workers communicate over a connected graph with heterogeneous computation times and edge bandwidths. Their oracles return independent, identically distributed unbiased stochastic gradients with variance at most $\sigma^2$, where $\sigma\geq0$. We analyze quantized minibatch SGD with a uniformly sampled iterate. For $\varepsilon>0$, the goal is a measurable output $\bar{x}$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|^2\leq\varepsilon$, with expectation over sampling and algorithm randomness.
+
+The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+where $d\in\mathbb{Z}_{\geq0}$ and $\|\cdot\|$ is the Euclidean norm. There are $n\geq1$ workers, indexed by $V=\{1,\ldots,n\}$, and a simple undirected graph $G=(V,\mathcal{E})$. Worker $i$ has computation time $h_i>0$ per stochastic gradient. The bandwidth parameters satisfy $b_{ij}\geq0$ for all $i,j$. The algorithm receives $d,n$, the measurable sample space $\Omega$, $G$, $(b_{ij})$, $(h_i)$, $L$, $\Delta$, $\sigma$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere, and there exists $a\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\|&\leq L\|x-y\|,
+&&x,y\in\mathbb{R}^d,\\
+a&\leq f(x),
+&&x\in\mathbb{R}^d,\\
+f(x^0)-a&\leq\Delta.
+\end{aligned}
+\]
+Here $L>0$, $\Delta\geq0$, $\sigma\geq0$, and $\varepsilon>0$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradients and sampling]
+There exist a probability measure $\mu$ on $\Omega$ and a jointly measurable map $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ such that, for every $x\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)]&=\nabla f(x),\\
+\mathbb{E}_{\xi\sim\mu}
+ \bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+The vector $g(x,\cdot)$ is Bochner integrable, and its squared error is integrable, under $\mu$. Under a joint law $Q$, worker $i$ has a measurable sequence $(\xi_{i,r})_{r\geq0}$ of independent samples with common law $\mu$. These entire sequences are independent across workers. Algorithm randomness is independent of the sample array.
+\end{assumption}
+
+\begin{assumption}[Computation and graph communication]
+The graph $G$ is connected, and each edge satisfies
+\[
+b_{ij}=b_{ji}>0,
+\qquad \{i,j\}\in\mathcal{E}.
+\]
+A computation request at worker $i$ specifies any point $x\in\mathbb{R}^d$ and an integer batch size $m\geq1$. If $u$ samples have already been consumed there, the request takes time $mh_i$ and returns the list
+\[
+\bigl(g(x,\xi_{i,u}),\ldots,g(x,\xi_{i,u+m-1})\bigr).
+\]
+Each worker has at most one outstanding computation; requests submitted while it is busy are ignored. Different workers may compute concurrently.
+
+Communication transmits finite bit strings along edges. A payload of $\ell$ bits carries an additional $64$ bits and takes time $(\ell+64)/b_{ij}$ from $i$ to $j$. Each directed edge has its own serial queue: transmission starts at the later of its submission time and the preceding transmission's completion time. Opposite directions and different edges may operate concurrently, including during computation. Self-messages take zero time, and messages to other nonneighbors are discarded. Delivered messages identify their sender. A designated root is one of the $n$ workers and supplies the output.
+\end{assumption}
+
+Our result is algorithm-specific: we analyze quantized minibatch SGD. Its tuning consists of an integer $K\geq1$, batch sizes $m_i\in\mathbb{Z}_{\geq0}$ with $B=\sum_{i=1}^n m_i>0$, a step size $\eta>0$, an integer quantization width $w\geq1$, and a radius function $R:\mathbb{R}^d\to(0,\infty)$. These choices depend only on the algorithm inputs.
+
+To define the quantizer at $x$, let
+\[
+\begin{aligned}
+M&=2^w-1,
+&\delta_x&=\frac{2R(x)}{M},\\
+z_x(v)&=
+\begin{cases}
+v,&\|v\|\leq R(x),\\
+\dfrac{R(x)}{\|v\|}v,&\|v\|>R(x).
+\end{cases}
+\end{aligned}
+\]
+For each coordinate $r\in\{1,\ldots,d\}$, set
+\[
+\begin{aligned}
+c_r(x,v)
+ &=\min\!\left\{M,\max\!\left\{0,
+ \left\lfloor\frac{(z_x(v))_r}{\delta_x}
+                    +\frac{M}{2}\right\rfloor\right\}\right\},\\
+\bigl(\mathcal{Q}_x(v)\bigr)_r
+ &=\delta_x\left(c_r(x,v)-\frac{M}{2}\right).
+\end{aligned}
+\]
+Thus clipping precedes coordinatewise quantization. Starting from the given $x^0$, define the local averages and iterates by
+\[
+\begin{aligned}
+v_i^k
+ &=\frac{1}{m_i}\sum_{j=0}^{m_i-1}
+       g\bigl(x^k,\xi_{i,km_i+j}\bigr),
+ &&m_i>0,\\
+v_i^k&=0,
+ &&m_i=0,\\
+x^{k+1}
+ &=x^k-\eta\mathcal{Q}_{x^k}\left(
+       \sum_{i=1}^n\frac{m_i}{B}
+            \mathcal{Q}_{x^k}(v_i^k)\right).
+\end{aligned}
+\]
+Both the local averages and their weighted aggregate are quantized with the same quantizer at the current iterate.
+
+The algorithm selects $J$ uniformly from $\{0,\ldots,K-1\}$ using its own randomness, independently of the sample array. The sampled output is $x^J$. The distributed realization must satisfy the following restrictions for every sample array and every realization of the algorithm randomness. At every deadline and every intermediate stage, the root's output is either $x^0$ or $x^J$. Worker $i$ has consumed at most $Jm_i$ samples. Whenever it has an outstanding computation, there is an integer $l<J$ such that it has consumed exactly $lm_i$ samples and the outstanding request is the batch of size $m_i$ at $x^l$. There must also exist a finite deterministic completion deadline, uniform over sample arrays and algorithm randomness, at which the process terminates with root output $x^J$ and exactly $Jm_i$ samples consumed at each worker. These restrictions apply for every stochastic-gradient map and sample-array law, rather than only for a particular objective.
+
+A budget $T\geq0$ measures elapsed time under the computation and communication costs above. At every deadline $t\leq T$, the distributed process must terminate after finitely many events almost surely. Let $P$ be the joint law of the independent algorithm randomness and sample array, and let $\bar{x}$ be the root's output at deadline $T$. The output must be measurable, its squared gradient norm must be integrable under $P$, and the accuracy requirement is
+\[
+\mathbb{E}_{P}\bigl[\|\nabla f(\bar{x})\|^2\bigr]
+\leq\varepsilon.
+\]
+\end{document}

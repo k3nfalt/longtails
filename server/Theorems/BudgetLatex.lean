@@ -95,6 +95,8 @@ private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
     withBindingBodyUnusedName' args.back! none fun n body => do
       let domain ← if args[0]!.isConstOf ``Real then pure "\\mathbb{R}" else pure (← latexPP args[0]!).latex.1
       return .ofString ("\\exists " ++ symbol n.toString ++ "\\in " ++ domain ++ ",\\;" ++ (← latexPP body).latex.1)
+  | ``Iff => binary args " \\leftrightarrow " 20 .none
+  | ``LT.lt => binary args " < " 50 .none
   | ``And => binary args " \\land " 35 .right
   | ``Exists.choose =>
     return .atomString ("\\operatorname{choose}\\left(" ++ (← latexPP args.back!).latex.1 ++ "\\right)")
@@ -112,6 +114,48 @@ private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
     return .ofString ("\\begin{cases} " ++ (← latexPP args[3]!).latex.1 ++
       " & " ++ (← latexPP args[1]!).latex.1 ++ " \\\\ " ++
       (← latexPP args[4]!).latex.1 ++ " & \\mathrm{otherwise} \\end{cases}")
+  | ``iInf =>
+    let fn ← ensureLam args.back! none
+    let domain := fn.bindingDomain!
+    guard (domain.isAppOfArity ``Subtype 2)
+    let predicate := domain.getAppArgs.back!
+    let index ← getUnusedName fn.bindingName! fn.bindingBody!
+    withLocalDeclD index domain fun x => do
+      let body := fn.bindingBody!.instantiate1 x
+      let value ← mkAppM ``Subtype.val #[x]
+      let condition ← latexPP (mkApp predicate value).headBeta
+      let base ← latexPP domain.getAppArgs[0]!
+      return .ofString ("\\inf_{\\substack{" ++ symbol index.toString ++ "\\in " ++
+        base.latex.1 ++ "\\\\ " ++ condition.latex.1 ++ "}}\\left(" ++
+        (← latexPP body).latex.1 ++ "\\right)")
+  | ``Subtype.val => latexPP args.back!
+  | ``Fin => return .ofString ("\\{0,\\ldots," ++
+      (← latexPP args.back!).latex.1 ++ "-1\\}")
+  | ``Finset => return .ofString ("\\mathcal{P}\\left(" ++
+      (← latexPP args.back!).latex.1 ++ "\\right)")
+  | ``Prod => binary args " \\times " 70 .none
+  | ``Prod.fst | ``Prod.snd =>
+    return .atomString ((← latexPP args.back!).latex.1 ++
+      (if name == ``Prod.fst then "_{1}" else "_{2}"))
+  | ``Membership.mem =>
+    binary #[args.back!, args[args.size - 2]!] " \\in " 50 .none
+  | ``Inter.inter => binary args " \\cap " 70 .left
+  | ``SDiff.sdiff => binary args " \\setminus " 70 .left
+  | ``Finset.Nonempty =>
+    return .ofString ((← latexPP args.back!).latex.1 ++ " \\ne \\varnothing")
+  | ``Fintype.card => return .ofString ("\\left|" ++
+      (← latexPP args[0]!).latex.1 ++ "\\right|")
+  | `LongTails.Algorithms.GraceGraph.Link => latexPP (← whnf e)
+  | ``Subtype =>
+    let predicate ← ensureLam args.back! none
+    withBindingBodyUnusedName predicate fun index body => do
+      return .ofString ("\\left\\{ " ++ symbol index.toString ++ "\\in " ++
+        (← latexPP args[0]!).latex.1 ++ " \\mid " ++
+        (← latexPP body).latex.1 ++ " \\right\\}")
+  | `SimpleGraph.Adj =>
+    return .ofString ((← latexPP args[args.size - 3]!).latex.1 ++ "\\left(" ++
+      (← latexPP args[args.size - 2]!).latex.1 ++ ", " ++
+      (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``OfNat.ofNat => latexPP args[1]!
   | ``Nat.cast | ``NatCast.natCast | ``PNat.val => latexPP args.back!
   | ``NNReal.toReal => latexPP args.back!
@@ -172,9 +216,16 @@ private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
       return .ofString ("\\inf_{0\\le " ++ symbol index.toString ++ "<" ++
         bound.latex.1 ++ "}\\left(" ++ (← latexPP body).latex.1 ++ "\\right)")
   | ``Finset.sum | ``Finset.prod =>
-    guard (args[args.size - 2]!.getAppFn.constName! == ``Finset.univ)
+    let set := args[args.size - 2]!
     let fn ← ensureLam args.back! none
-    guard (fn.bindingDomain!.isAppOfArity ``Fin 1)
+    if !set.getAppFn.isConstOf ``Finset.univ || !(fn.bindingDomain!.isAppOfArity ``Fin 1) then
+      let domain ← if set.getAppFn.isConstOf ``Finset.univ then
+          latexPP fn.bindingDomain!
+        else latexPP set
+      return ← withBindingBodyUnusedName fn fun index body => do
+        let op := if name == ``Finset.sum then "\\sum" else "\\prod"
+        return .ofString ("\\left(" ++ op ++ "_{" ++ symbol index.toString ++ "\\in " ++
+          domain.latex.1 ++ "} " ++ (← latexPP body).latex.1 ++ "\\right)")
     let bound ← latexPP fn.bindingDomain!.getAppArgs.back!
     withBindingBodyUnusedName fn fun index body => do
       let op := if name == ``Finset.sum then "\\sum" else "\\prod"

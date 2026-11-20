@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds (sufficient budgets) for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GraphBandwidthSmoothNonconvex.lean}{GraphBandwidthSmoothNonconvex}.}\label{tab:GraphBandwidthSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize Differentiable $L$-smooth $f:\mathbb R^d\to\mathbb R$, bounded below by $a$, with $f(x_0)-a\le\Delta$; $L,\varepsilon>0$, $\Delta,\sigma\ge0$. A jointly measurable, unbiased stochastic gradient has variance at most $\sigma^2$; samples are IID within workers and independent across workers. The connected graph has symmetric full-duplex FIFO links of bandwidth $b_e>0$ bits/s, zero latency, and per-bit time $1/b_e$. Worker $i$ takes $h_i>0$ seconds per sample, with one outstanding computation batch; different workers and directed links operate concurrently. Local operations are free. The setup restricts algorithms to quantized minibatch SGD with a uniform iterate selector. Target: $\int\|\nabla f(x_J(\omega))\|^2\,dP(\omega)\le\varepsilon$, where $P$ is the joint sample and algorithm law, for the actual execution at the deadline.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GraceSgd.lean}{Grace\allowbreak Sgd} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GraceSgd.md}{(review)}
+& Elapsed-time upper bound (bits/s):\par
+$\displaystyle\mathcal{O}\!\left(\begin{gathered}
+\frac{L\Delta}{\varepsilon}\min_{\varnothing\ne S\subseteq V}\\
+\Bigl[C(S)+\mathbf1_{|S|\ge2}\frac{d\ell+|E|n\log(2+\sigma^2/\varepsilon)}{\alpha(S)}\Bigr]
+\end{gathered}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Grace SGD \citep{bhTyurinLeonV1}, v1, Thms.~1.5, F.1
+& Elapsed-time upper bound (real coordinates/s):\par
+$\mathcal{O}\!\left(\frac{L\Delta}{\varepsilon}\min_{\substack{1\le k\le n,\;1\le p\le k\\1\le m\le |S_{k,p}|}}\left[\frac d{\bar w_k}+C(S_{k,p,m})\right]\right)$.
+& \textbf{(1)}: Finite binary packets with explicit headers and fill time replace exact-real transmission. Matches computation dependence; subset selection includes every Gomory--Hu prefix. No established total-time gain.
+& \textbf{(1)}: Under equal numerical bandwidths, adds $\ell$ on the $d$ term and $|E|n\log(2+\sigma^2/\varepsilon)/\alpha(S)$ per round. Needs exact offline selection instead of polynomial preprocessing. \\
+\midrule
+\textbf{(3)} Derived bound: Grace routing \citep{bhTyurinLeonV1}, Thm.~F.1, with clipped-grid quantization
+& Elapsed-time upper bound (bits/s):\par
+$\displaystyle\mathcal{O}\!\left(\begin{gathered}
+\frac{L\Delta}{\varepsilon}\min_{\varnothing\ne S\subseteq V}\\
+\Bigl[C(S)+\mathbf1_{|S|\ge2}\frac{d\ell+|E|n\log(2+\sigma^2/\varepsilon)}{\alpha(S)}\Bigr]
+\end{gathered}\right)$\par
+Common-grid clipping with radius growing in $\|x-x_0\|$; packet headers and fill included.
+& \textbf{(1)}: Matches the derived finite-bit rate under the same assumptions; formalizes the actual execution and its packet costs. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $V$: workers, $n=|V|$; $E$: undirected edges; $d$: dimension; $\Delta$: initial gap bound; $\sigma^2$: variance bound; $h_i$: seconds per sample. $C(S)=(\sigma^2/\varepsilon+|S|)/(\sum_{i\in S}h_i^{-1})$; $\ell=\log(2+d+L\Delta/\varepsilon+\sigma^2/\varepsilon)$. $\alpha(S)$: minimum total bandwidth of a cut separating $S$; the communication summand is omitted for $|S|=1$. $\mathbf1$: indicator. For \textbf{(2)}, $\bar w_1\le\cdots\le\bar w_{n-1}$ are Gomory--Hu tree edge weights, $\bar w_n=\infty$; $S_{k,p}$ are the components after deleting the $k-1$ smallest edges; $S_{k,p,m}$ comprises its $m$ fastest workers. Bandwidths in \textbf{(2)} count exact real coordinates rather than bits.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage

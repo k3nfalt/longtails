@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class TheoremDescriptionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        names = ("DistributedBatchedSgd", "GdConvex")
+        names = ("DistributedBatchedSgd", "GdConvex", "GraceSgd")
         subprocess.run(
             [
                 "lake",
@@ -46,6 +46,15 @@ class TheoremDescriptionTests(unittest.TestCase):
         ordinary = self.rows["GdConvex"]
         self.assertEqual(ordinary["kind"], "upper")
         self.assertEqual(ordinary["budget"]["oracle"], 0)
+
+    def test_graph_cut_budget(self):
+        row = self.rows["GraceSgd"]
+        self.assertEqual(row["kind"], "timed")
+        latex = row["budget"]["latex"]
+        for notation in (r"\inf", r"\sum", r"\cap", r"\setminus", r"\leftrightarrow"):
+            self.assertIn(notation, latex)
+        self.assertNotIn(r"\operatorname{Lean}", latex)
+        self.assertNotIn("Link", latex)
 
     def test_timed_website(self):
         timed = self.rows["DistributedBatchedSgd"].copy()
