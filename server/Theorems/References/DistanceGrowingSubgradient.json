@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.DistanceGrowingSubgradient",
+  "searched_at": "2026-11-20T09:47:42.020422+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & G \\cdot R \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil \\frac{1024 \\cdot R^{2} \\cdot \\left(G^{2} + B^{2} \\cdot R^{2}\\right) \\cdot \\log\\left(\\frac{8}{\\delta}\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "oracle": 0,
+        "type": "LongTails.Setups.DistanceGrowingSubgradient.spec.Params → ℕ",
+        "value": "fun p =>\n  if p.G * p.R ≤ p.ε then 0 else 2 * ⌈1024 * p.R ^ 2 * (p.G ^ 2 + p.B ^ 2 * p.R ^ 2) * Real.log (8 / p.δ) / p.ε ^ 2⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & G \\cdot R \\leq \\varepsilon \\\\ 2 \\cdot \\left\\lceil \\frac{1024 \\cdot R^{2} \\cdot \\left(G^{2} + B^{2} \\cdot R^{2}\\right) \\cdot \\log\\left(\\frac{8}{\\delta}\\right)}{\\varepsilon^{2}} \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "oracle": 0,
+          "type": "LongTails.Setups.DistanceGrowingSubgradient.spec.Params → ℕ",
+          "value": "fun p =>\n  if p.G * p.R ≤ p.ε then 0 else 2 * ⌈1024 * p.R ^ 2 * (p.G ^ 2 + p.B ^ 2 * p.R ^ 2) * Real.log (8 / p.δ) / p.ε ^ 2⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.DistanceGrowingSubgradientUpperBound",
+      "namespace": "LongTails.Setups.DistanceGrowingSubgradient",
+      "setup": "LongTails.Setups.DistanceGrowingSubgradient",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.DistanceGrowingSubgradient.spec\n  LongTails.Theorems.DistanceGrowingSubgradientUpperBound.budget",
+      "theorem": "LongTails.Theorems.DistanceGrowingSubgradientUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistanceGrowingSubgradientUpperBound",
+      "theorem": "LongTails.Theorems.DistanceGrowingSubgradientUpperBound.result",
+      "references": "- Yair Carmon and Oliver Hinder. [The Price of Adaptivity in Stochastic Convex Optimization](https://arxiv.org/html/2402.10898v1). 2024 (COLT, full proof in arXiv v1). Complexity: $O(R^2 M_R^2\\log(2/\\delta)/\\varepsilon^2)$ total oracle calls for averaged clipped SGD when $0<\\varepsilon<GR$, with one stochastic subgradient and one projection onto $K_R=\\mathrm{domain}\\cap\\overline B(x_0,R)$ per step. Here $M_R=\\sqrt{G^2+B^2R^2}$ bounds the root second moment at every query in $K_R$.\n- Daniela Angela Parletta, Andrea Paudice, Massimiliano Pontil, and Saverio Salzo. [High Probability Bounds for Stochastic Subgradient Schemes with Heavy Tailed Noise](https://doi.org/10.1137/22M1536558). 2024 (journal version, first preprint 2022). Complexity: $O(R^2 M_R^2\\log(2/\\delta)/\\varepsilon^2)$ total oracle calls for the averaged clipped projected subgradient method on $K_R$ when $0<\\varepsilon<GR$, with one stochastic subgradient and one projection onto $K_R$ per step. The diameter is at most $2R$, and $M_R$ bounds both the Lipschitz constant on $K_R$ and the oracle standard deviation there.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Minimize a measurable real-valued objective f over a closed convex set C. The objective is convex on C and may be nonsmooth. The public point x₀ belongs to C, and some constrained minimizer x⋆ satisfies ‖x₀−x⋆‖ ≤ R. The instance supplies f and C privately.",
+        "evidence": "LongTails/Setups/DistanceGrowingSubgradient.lean, spec.Instance and spec.admissible. LongTails/Setups/TerminalClippingConvex.lean, Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A subgradient query at x returns g(x,ξ). For every x in C, its mean s(x) satisfies f(y) ≥ f(x) + ⟨s(x),y−x⟩ for all y in C. The oracle uses independent sample coordinates with a common hidden law. The reply reveals the vector alone.",
+        "evidence": "LongTails/Setups/DistanceGrowingSubgradient.lean, spec.admissible and spec.Reply. LongTails/Setups/TerminalClippingConvex.lean, Query.subgradient and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      },
+      {
+        "label": "other",
+        "details": "A projection query at any z returns the exact Euclidean projection onto C. Projection and stochastic subgradient queries each consume one call from the same fixed budget. The target setup allows unrestricted algorithms.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, Query.projection and the projection variational inequality in spec.admissible. LongTails/Setups/DistanceGrowingSubgradient.lean, spec. LongTails/Template.lean, Setup.numOracles, Setup.allowedAlgorithm and executeWithTrace."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For every x in C, the uncentered second moment satisfies E‖g(x,ξ)‖² ≤ G² + B²‖x−x₀‖². This permits heavy tails and allows both the mean subgradient norm and the noise scale to grow with distance from x₀. The public bounds B and G may each be zero.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, final moment condition in spec.admissible. LongTails/Setups/DistanceGrowingSubgradient.lean, spec.publicInput and spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝᵈ. The algorithm knows d, x₀, B, G, δ, R and ε. The radius R > 0 bounds the initial distance to a minimizer and places no diameter bound on C.",
+        "evidence": "LongTails/Setups/TerminalClippingConvex.lean, Vector, Public and the minimizer condition in spec.admissible. LongTails/Setups/DistanceGrowingSubgradient.lean, Public, spec.publicInput and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The algorithm returns a measurable vector X. The accuracy event is f(X)−f(x⋆) ≤ ε for a constrained minimizer x⋆ and public ε > 0. Any algorithm output meeting this criterion is permitted, including an average of feasible iterates.",
+        "evidence": "LongTails/Setups/DistanceGrowingSubgradient.lean, spec.Output, spec.successful and spec.valid. LongTails/Setups/TerminalClippingConvex.lean, spec.successful. LongTails/Template.lean, Setup.allowedAlgorithm."
+      },
+      {
+        "label": "feasibility",
+        "details": "X must belong to C for every seed realization, including realizations on which the objective gap exceeds ε.",
+        "evidence": "LongTails/Setups/DistanceGrowingSubgradient.lean, spec.successful. LongTails/Setups/TerminalClippingConvex.lean, the universal feasibility clause in spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "The probability of f(X)−f(x⋆) > ε is at most the public δ, where 0 < δ < 1. Probability is taken over the product of the algorithm seed law and the oracle sample-sequence law.",
+        "evidence": "LongTails/Setups/DistanceGrowingSubgradient.lean, spec.valid and spec.successful. LongTails/Setups/TerminalClippingConvex.lean, spec.successful. LongTails/Template.lean, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The stochastic subgradient’s second-moment bound grows quadratically with distance from the public starting point on a potentially unbounded feasible set. The algorithm has a radius bound to a solution and pays for each projection onto the original feasible set."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistanceGrowingSubgradientUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistanceGrowingSubgradientUpperBound",
+          "theorem": "LongTails.Theorems.DistanceGrowingSubgradientUpperBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Interpolation with Distance-Growing Subgradients}
+We minimize an expected loss $f$ on Euclidean space $\mathbb{R}^d$ of dimension $d\geq 2$. The smooth convex sample losses share a minimizer $x^\star$ and have the same gradient at the given starting point $x^0$. The oracle returns a sample gradient using a fresh independent draw, or the query point itself for a projection query. The gradient's second moment is bounded by an affine function of squared distance from $x^0$. For tolerance $\varepsilon>0$ and failure probability $\delta\in(0,1/8]$, the goal is a measurable output $\bar{x}$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives $d,x^0,B,G,R,\varepsilon,\delta$, where $B\geq 0$ and $G>0$ control the second moment, $R>0$ bounds the initial distance to a common minimizer, and $65536\varepsilon\leq GR$. At call $k=0,1,\ldots$, the oracle uses a sample $Z_k$ from a sequence of independent, identically distributed random variables with law $\nu$ on a measurable space $\mathcal{Z}$. The sequence is independent of the algorithm's randomness.
+
+Our assumptions:
+\begin{assumption}[Interpolating sample losses]
+For each $k$ and $z\in\mathcal{Z}$, the loss $\ell_{k,z}:\mathbb{R}^d\to\mathbb{R}$ is convex and $C^\infty$. There exist $x^\star,g_0\in\mathbb{R}^d$ with $\|x^0-x^\star\|\leq R$ such that, for every $k$ and $z$,
+\[
+\begin{aligned}
+\ell_{k,z}(x^\star)&=\min_{x\in\mathbb{R}^d}\ell_{k,z}(x),\\
+\nabla\ell_{k,z}(x^0)&=g_0.
+\end{aligned}
+\]
+For every $k$ and $x$, $\ell_{k,Z_k}(x)$ is integrable and the measurable convex objective satisfies
+\[
+f(x)=\mathbb{E}[\ell_{k,Z_k}(x)].
+\]
+In particular, $x^\star$ minimizes $f$.
+\end{assumption}
+
+\begin{assumption}[Distance-dependent second moment]
+The subgradient reply at $x$ on call $k$ is $g(x,Z_k)$, where $g:\mathbb{R}^d\times\mathcal{Z}\to\mathbb{R}^d$ is jointly measurable and $g(x,z)=\nabla\ell_{k,z}(x)$ for every $k,x,z$. For each $x$ and $Z\sim\nu$, the vector $g(x,Z)$ is Bochner integrable and $\|g(x,Z)\|^2$ is integrable. For all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+f(x)-f(y)&\leq\langle\mathbb{E}[g(x,Z)],x-y\rangle,\\
+\mathbb{E}[\|g(x,Z)\|^2]&\leq B^2\|x-x^0\|^2+G^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Both query types accept any $x\in\mathbb{R}^d$ and count toward the same call budget. After the allotted calls, the output $\bar{x}$ must be a measurable $\mathbb{R}^d$-valued random variable satisfying
+\[
+P\bigl(f(\bar{x})-f(x^\star)\leq\varepsilon\bigr)\geq 1-\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

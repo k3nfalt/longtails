@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Mean-Squared Smooth Nonconvex Optimization}
+We seek a stationary point of a differentiable, possibly nonconvex objective $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d\geq 0$, given a starting point with bounded objective gap above a global lower bound. Workers on a star network have independent sample streams. Each completed query returns unbiased stochastic gradients at two points using one fresh sample. The gradients have bounded variance and are Lipschitz in mean square. Given $\varepsilon>0$, the goal is to return $\bar{x}\in\mathbb{R}^d$ by an elapsed-time deadline with $\mathbb{E}\|\nabla f(\bar{x})\|^2\leq\varepsilon^2$, averaging over the samples and algorithm randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives the dimension $d$, the number of workers $n\geq 1$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the bounds $L>0$, $\Delta\geq 0$, and $\sigma\geq 0$, the tolerance $\varepsilon$, and the timing parameters $(h_i)_{i=1}^n$, $\ell$, and $b$ described below. All norms are Euclidean.
+
+Our assumptions:
+\begin{assumption}[Objective and initial gap]
+The function $f$ is differentiable everywhere. There exists $a\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+a &\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-a &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Worker sampling]
+For each worker $i\in\{1,\ldots,n\}$, the samples $(\xi_{i,k})_{k\geq 0}$ are measurable, independent, and identically distributed with law $\mu_i$ on $\Omega$. The worker streams are mutually independent, and the algorithm's randomness is independent of the full sample array. On its $(k+1)$st completed query, worker $i$ returns, for any requested $x,y\in\mathbb{R}^d$, the pair
+\[
+\bigl(g_i(x,\xi_{i,k}),g_i(y,\xi_{i,k})\bigr).
+\]
+\end{assumption}
+
+\begin{assumption}[Gradient moments and mean-squared smoothness]
+Each $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For every $x,y\in\mathbb{R}^d$ and $\xi\sim\mu_i$, the vector $g_i(x,\xi)$ is Bochner integrable, both squared norms below are integrable, and
+\[
+\begin{aligned}
+\mathbb{E}[g_i(x,\xi)] &= \nabla f(x),\\
+\mathbb{E}\|g_i(x,\xi)-\nabla f(x)\|^2 &\leq \sigma^2,\\
+\mathbb{E}\|g_i(x,\xi)-g_i(y,\xi)\|^2 &\leq L^2\|x-y\|^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The star has one communication-only hub and $n$ computing workers. A paired query at worker $i$ takes $2h_i$ units of time, where $h_i>0$. Each worker can have one query in progress. It may abort that query without consuming a sample. Further evaluation requests while the worker is busy are ignored.
+
+Messages travel between the hub and a worker in either direction. A payload of $m\geq 0$ bits is transmitted with 64 appended zero bits and takes $\ell+b(m+64)$ units of time, where $\ell\geq 0$ is the latency and $b\geq 0$ is the time per transmitted bit. The recipient receives the sender's identity and the transmitted bits. Each directed link carries at most one message at a time and ignores new submissions while occupied. Distinct directed links can operate concurrently, including opposite directions on the same edge. Computations at different workers can overlap with one another and with communication.
+
+Let $T\geq 0$ be the elapsed-time budget. Almost surely, every deadline $t\in[0,T]$ must be reached with only finitely many events. At time $T$, the algorithm's designated output node must return a measurable point $\bar{x}$ with integrable squared gradient norm satisfying
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}

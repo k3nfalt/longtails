@@ -1,0 +1,23 @@
+\begin{table}[tp]
+\centering
+\caption{\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalCorruptedFirstOrderNonconvex.lean}{Lower bounds for finding a stationary point with corrupted first-order replies}}\label{tab:HighDimensionalCorruptedFirstOrderNonconvex}
+\parbox{\linewidth}{\footnotesize Let $f:\mathbb R^d\to\mathbb R$ have $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$, with $L,\varepsilon>0$. Assume $T\ge 2^{26}$ and $d\ge 2^{32}(1+\lfloor T/2^{25}\rfloor)^4$. A randomized algorithm may query anywhere. Along every history, all replies except at most $k$ at query points $x$ have the form $(v,g(x))$, where $|v-f(x)|\le\varepsilon^2/(128L)$ and a fixed $g$ satisfies $\|g(x)-\nabla f(x)\|\le\varepsilon/8$ everywhere. The target is $\Pr^*(\|\nabla f(x_{\rm out})\|>\varepsilon)\le\delta$ for prescribed $0\le\delta\le1/4$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CorruptedFirstOrderLowerBound.lean}{Corrupted\allowbreak First\allowbreak Order\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CorruptedFirstOrderLowerBound.md}{(review)} & Lower bound: $\Omega(k+L\Delta/\varepsilon^2)$ joint value--gradient calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep[Thm.~2]{sncCarmon2020v3}\newline Randomized, exact oracle, $k=0$ & Lower bound: $\Omega(L\Delta/\varepsilon^2)$ all-derivative calls. & \textbf{(1)} extends \textbf{(2)} by prefixing $k$ uninformative replies, formalizing the clean-rate extension. The additive $k$ dominates when $k\gg T$. & \textbf{(1)} needs quartic dimension versus $d\gtrsim T^2\log T$ in \textbf{(2)}. It covers first-order access and failure at the returned point. \textbf{(2)} covers all derivatives and all iterates through the budget. \\
+\midrule
+\textbf{(3)} \citep[Thm.~1]{sncCarmon2020v3}\newline Deterministic, exact oracle, $k=0$ & Lower bound: $\Omega(L\Delta/\varepsilon^2)$ all-derivative calls. & \textbf{(1)} extends hardness to randomized algorithms and matches \textbf{(3)} on the clean deterministic restriction. & \textbf{(1)} needs quartic dimension. For deterministic algorithms, prefixing \textbf{(3)} with $k$ uninformative replies already gives the derived bound $\Omega(k+L\Delta/\varepsilon^2)$ in dimension $d\gtrsim T$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=L\Delta/\varepsilon^2$; $\Pr^*$ denotes outer probability; $\Omega$ denotes a necessary budget up to a universal factor.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

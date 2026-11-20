@@ -1,0 +1,102 @@
+{
+  "setup": "LongTails.Setups.DistributedMeanSquaredSmooth",
+  "searched_at": "2026-11-20T09:46:33.628420+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &B\\left(S\\right) + K \\cdot \\left(\\max_{0\\le j<J + 1} \\frac{B\\left(2 \\cdot \\left(J + 1\\right) \\cdot 4^{j} + \\begin{cases} S & j = J \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}{2^{j}}\\right) \\\\ &\\text{where}\\quad K = \\max\\left\\{ 1, \\left\\lceil \\frac{524288 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} S = \\max\\left\\{ 1, \\left\\lceil \\left(\\frac{512 \\cdot \\sigma}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} J = \\min\\left\\{ \\log_{2}\\left(K\\right), \\operatorname{Nat.log}_{4}\\left(\\frac{S}{1 + \\operatorname{Nat.log}_{4}\\left(S\\right)}\\right) \\right\\} \\\\ &\\phantom{\\text{where}\\quad} c\\left(i\\right) = 2 \\cdot h\\left(i\\right) + 2 \\cdot l + b \\cdot \\left(129 + 3 \\cdot d \\cdot \\left(14 + 4 \\cdot \\log_{2}\\left(2 + d + K + S\\right)\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} B\\left(m\\right) = 4 \\cdot \\left(\\min_{0\\le i<n} \\max\\left\\{ c\\left(i\\right), \\frac{m}{\\left(\\sum_{u=0}^{n-1} \\begin{cases} \\frac{1}{c\\left(u\\right)} & c\\left(u\\right) \\leq c\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)} \\right\\}\\right)\\end{aligned}",
+        "type": "LongTails.Setups.DistributedMeanSquaredSmooth.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  have K := max 1 ⌈524288 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have S := max 1 ⌈(512 * p.σ / p.ε) ^ 2⌉₊;\n  have J := min K.log2 (Nat.log 4 (S / (1 + Nat.log 4 S)));\n  have c := fun i => 2 * p.h i + 2 * p.l + p.b * ↑(129 + 3 * p.d * (14 + 4 * (2 + p.d + K + S).log2));\n  have B := fun m => 4 * Finset.univ.inf' ⋯ fun i => max (c i) (↑m / ∑ u, if c u ≤ c i then (c u)⁻¹ else 0);\n  B S + ↑K * (Finset.range (J + 1)).sup fun j => B (2 * (J + 1) * 4 ^ j + if j = J then S else 0) / 2 ^ j"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &B\\left(S\\right) + K \\cdot \\left(\\max_{0\\le j<J + 1} \\frac{B\\left(2 \\cdot \\left(J + 1\\right) \\cdot 4^{j} + \\begin{cases} S & j = J \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}{2^{j}}\\right) \\\\ &\\text{where}\\quad K = \\max\\left\\{ 1, \\left\\lceil \\frac{524288 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} S = \\max\\left\\{ 1, \\left\\lceil \\left(\\frac{512 \\cdot \\sigma}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} J = \\min\\left\\{ \\log_{2}\\left(K\\right), \\operatorname{Nat.log}_{4}\\left(\\frac{S}{1 + \\operatorname{Nat.log}_{4}\\left(S\\right)}\\right) \\right\\} \\\\ &\\phantom{\\text{where}\\quad} c\\left(i\\right) = 2 \\cdot h\\left(i\\right) + 2 \\cdot l + b \\cdot \\left(129 + 3 \\cdot d \\cdot \\left(14 + 4 \\cdot \\log_{2}\\left(2 + d + K + S\\right)\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} B\\left(m\\right) = 4 \\cdot \\left(\\min_{0\\le i<n} \\max\\left\\{ c\\left(i\\right), \\frac{m}{\\left(\\sum_{u=0}^{n-1} \\begin{cases} \\frac{1}{c\\left(u\\right)} & c\\left(u\\right) \\leq c\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)} \\right\\}\\right)\\end{aligned}",
+          "type": "LongTails.Setups.DistributedMeanSquaredSmooth.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  have K := max 1 ⌈524288 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have S := max 1 ⌈(512 * p.σ / p.ε) ^ 2⌉₊;\n  have J := min K.log2 (Nat.log 4 (S / (1 + Nat.log 4 S)));\n  have c := fun i => 2 * p.h i + 2 * p.l + p.b * ↑(129 + 3 * p.d * (14 + 4 * (2 + p.d + K + S).log2));\n  have B := fun m => 4 * Finset.univ.inf' ⋯ fun i => max (c i) (↑m / ∑ u, if c u ≤ c i then (c u)⁻¹ else 0);\n  B S + ↑K * (Finset.range (J + 1)).sup fun j => B (2 * (J + 1) * 4 ^ j + if j = J then S else 0) / 2 ^ j"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.MultilevelPipelineStationarity",
+      "namespace": "LongTails.Setups.DistributedMeanSquaredSmooth",
+      "setup": "LongTails.Setups.DistributedMeanSquaredSmooth",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedMeanSquaredSmooth.spec\n  LongTails.Theorems.MultilevelPipelineStationarity.budget",
+      "theorem": "LongTails.Theorems.MultilevelPipelineStationarity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.MultilevelPipelineStationarity",
+      "theorem": "LongTails.Theorems.MultilevelPipelineStationarity.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective is differentiable on all of ℝᵈ and may be nonconvex. It has a global lower bound a with f(x₀) − a ≤ Δ, where Δ ≥ 0. The infimum need not be attained.",
+        "evidence": "LongTails/Setups/DistributedMeanSquaredSmooth.lean, spec.Instance, spec.valid and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Worker i takes a pair (x,y) and returns (gᵢ(x,ξ), gᵢ(y,ξ)) using the same fresh sample for both evaluations. Each estimate is unbiased for the gradient of the common objective. Samples are IID within a worker and streams are independent across workers. Each worker may have its own sampling law μᵢ.",
+        "evidence": "LongTails/Setups/DistributedMeanSquaredSmooth.lean, Query, system and spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.unbiased. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every worker i and point x, E‖gᵢ(x,ξ) − ∇f(x)‖² ≤ σ², with a common public σ ≥ 0.",
+        "evidence": "LongTails/Setups/DistributedMeanSquaredSmooth.lean, spec.publicInput, spec.valid and spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.variance_integrable and IsStochasticGradient.variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The query points and output belong to ℝᵈ with its Euclidean norm. The dimension d is public.",
+        "evidence": "LongTails/Setups/DistributedSmoothNonconvex.lean, Params.d and Point. LongTails/Setups/DistributedMeanSquaredSmooth.lean, Point, Query, spec.Output and spec.publicInput."
+      },
+      {
+        "label": "other",
+        "details": "Each worker satisfies the same-sample mean-squared smoothness bound E‖gᵢ(x,ξ) − gᵢ(y,ξ)‖² ≤ L²‖x − y‖² for every x,y. The timed star has a noncomputing center and n ≥ 1 workers. A paired evaluation takes 2hᵢ time, with one pending computation per worker. Each directed center–worker link carries one message at a time. A k-bit payload takes l + b(k + 64) time, and distinct directed links and worker computations can operate concurrently. All parameters are public, including x₀, L > 0, Δ, σ, ε > 0, hᵢ > 0, l ≥ 0 and b ≥ 0. The objective, oracle maps and sampling laws are instance data.",
+        "evidence": "LongTails/Setups/DistributedMeanSquaredSmooth.lean, system, spec.publicInput, spec.valid and spec.admissible. LongTails/Setups/DistributedSmoothNonconvex.lean, Params. LongTails/Setups/StarNetwork.lean, computation and communication. LongTails/TemplateDistributed.lean, Time, clockBits and step."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The algorithm returns one measurable point X from its designated root's state at the prescribed elapsed-time deadline. The squared Euclidean gradient norm ‖∇f(X)‖² must be integrable.",
+        "evidence": "LongTails/Setups/DistributedMeanSquaredSmooth.lean, spec.Output and spec.successful. LongTails/TemplateDistributed.lean, execute and TimedConvergence."
+      },
+      {
+        "label": "expected",
+        "details": "E‖∇f(X)‖² ≤ ε² under the product law of the algorithm seed and the oracle seed. The deadline is fixed by the public parameters, and execution must have finitely many events through that deadline almost surely.",
+        "evidence": "LongTails/Setups/DistributedMeanSquaredSmooth.lean, spec.successful. LongTails/TemplateDistributed.lean, law, FiniteEvents and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The benchmark combines same-sample two-point stochastic gradients and per-worker mean-squared smoothness with a fixed elapsed-time guarantee on a star network. Worker speeds, concurrent directed links, message latency and individual transmitted bits all enter the cost model."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.MultilevelPipelineStationarity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.MultilevelPipelineStationarity",
+          "theorem": "LongTails.Theorems.MultilevelPipelineStationarity.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -36,9 +36,26 @@ private def symbol (s : String) : String :=
   | .mdata _ e => latexPP e
   | _ => failure
 
-@[latex_pp letE] def letPrinter : LatexPrinter
-  | .letE _ _ value body _ => latexPP (body.instantiate1 value)
-  | _ => failure
+private partial def definitionLatex (lhs : String) (value : Expr) : LatexPrinterM String := do
+  if value.isLambda then
+    withBindingBodyUnusedName value fun arg body =>
+      definitionLatex (lhs ++ "\\left(" ++ symbol arg.toString ++ "\\right)") body
+  else
+    return lhs ++ " = " ++ (← latexPP value).latex.1
+
+private partial def letBlock (e : Expr) (defs : Array String) : LatexPrinterM LatexData := do
+  match e.consumeMData with
+  | .letE name type value body _ =>
+    let name ← withReader (fun cfg => { cfg with allowShadowing := false }) (getUnusedName name body)
+    let definition ← definitionLatex (symbol name.toString) value
+    withLetDecl name type value fun x => letBlock (body.instantiate1 x) (defs.push definition)
+  | _ =>
+    let main ← latexPP e
+    return .ofString ("\\begin{aligned} &" ++ main.latex.1 ++
+      " \\\\ &\\text{where}\\quad " ++ String.intercalate " \\\\ &\\phantom{\\text{where}\\quad} " defs.toList ++
+      "\\end{aligned}")
+
+@[latex_pp letE] def letPrinter : LatexPrinter := fun e => letBlock e #[]
 
 private def sized (data : LatexData) : LatexData :=
   match data with
@@ -70,9 +87,27 @@ private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
     for arg in e.getAppArgs do
       result := result ++ "\\left(" ++ (← latexPP arg).latex.1 ++ "\\right)"
     return .atomString result
-  let name := e.getAppFn.constName!
+  if e.getAppFn.isLambda then return ← latexPP e.headBeta
+  let .const name _ := e.getAppFn | failure
   let args := e.getAppArgs
   match name with
+  | ``Exists =>
+    withBindingBodyUnusedName' args.back! none fun n body => do
+      let domain ← if args[0]!.isConstOf ``Real then pure "\\mathbb{R}" else pure (← latexPP args[0]!).latex.1
+      return .ofString ("\\exists " ++ symbol n.toString ++ "\\in " ++ domain ++ ",\\;" ++ (← latexPP body).latex.1)
+  | ``And => binary args " \\land " 35 .right
+  | ``Exists.choose =>
+    return .atomString ("\\operatorname{choose}\\left(" ++ (← latexPP args.back!).latex.1 ++ "\\right)")
+  | ``dite =>
+    let cond := (← latexPP args[1]!).latex.1
+    withBindingBodyUnusedName args[3]! fun h yes => do
+      withBindingBodyUnusedName args[4]! fun hn no => do
+        let otherwise := if args[4]!.bindingBody!.hasLooseBVar 0 then
+            symbol hn.toString ++ " : \\neg\\left(" ++ cond ++ "\\right)"
+          else "\\mathrm{otherwise}"
+        return .ofString ("\\begin{cases} " ++ (← latexPP yes).latex.1 ++ " & " ++
+          symbol h.toString ++ " : " ++ cond ++ " \\\\ " ++ (← latexPP no).latex.1 ++
+          " & " ++ otherwise ++ " \\end{cases}")
   | ``ite =>
     return .ofString ("\\begin{cases} " ++ (← latexPP args[3]!).latex.1 ++
       " & " ++ (← latexPP args[1]!).latex.1 ++ " \\\\ " ++
@@ -107,13 +142,16 @@ private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
       (← latexPP args.back!).latex.1 ++ "\\right)")
   | ``Nat.size => return .ofString ("\\left\\lceil\\log_{2}\\left(" ++
       (← latexPP args.back!).latex.1 ++ " + 1\\right)\\right\\rceil_{+}")
-  | ``Finset.sup | ``Finset.inf' =>
+  | ``Finset.sup | ``Finset.sup' | ``Finset.inf' =>
     let offset := if name == ``Finset.sup then 2 else 3
-    guard (args[args.size - offset]!.getAppFn.constName! == ``Finset.univ)
+    let set := args[args.size - offset]!
+    let isRange := set.isAppOfArity ``Finset.range 1
+    guard (isRange || set.getAppFn.isConstOf ``Finset.univ)
     let fn ← ensureLam args.back! none
     let domain := fn.bindingDomain!
-    let op := if name == ``Finset.sup then "\\max" else "\\min"
-    let bound ← if domain.isAppOfArity ``Fin 1 then
+    let op := if name == ``Finset.inf' then "\\min" else "\\max"
+    let bound ← if isRange then pure (some (← latexPP set.appArg!).latex.1)
+      else if domain.isAppOfArity ``Fin 1 then
         pure (some (← latexPP domain.getAppArgs.back!).latex.1)
       else pure none
     let domainLatex ← if bound.isNone then pure (← latexPP domain).latex.1 else pure ""
@@ -187,7 +225,7 @@ private def namedApplication (e : Expr) : LatexPrinterM LatexData := do
 def budgetLatex (value : Expr) : MetaM String := do
   lambdaTelescope value fun _ body => do
     let result ← run_latexPP body {}
-    if (result.splitOn "\\text").length > 1 || (result.splitOn "\\operatorname{Lean}").length > 1 then
+    if result.contains "\\operatorname{Lean}" then
       throwError "Unsupported budget notation in LeanTeX: {result}"
     return result
 

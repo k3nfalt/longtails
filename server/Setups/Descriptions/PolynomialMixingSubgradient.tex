@@ -1,0 +1,50 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Polynomially Mixing Subgradients}
+We minimize a function $f:\mathbb{R}^d\to\mathbb{R}$ that is convex on a closed Euclidean ball $D$ and attains its minimum there at $x^\star$, where $d$ is a positive integer. At each query $x\in D$, the oracle returns a vector driven by the next observation of a stationary, polynomially absolutely regular process. At each fixed $x$, the reply has a uniformly bounded $p$th moment for $1<p\leq2$, and its stationary mean is a subgradient relative to $D$. For tolerance $\varepsilon>0$ and failure probability $\delta$, the goal is a measurable output $\bar{x}\in D$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+With $\|\cdot\|$ denoting the Euclidean norm, the constrained problem is
+\[
+\min_{x\in D} f(x),\qquad D=\{x\in\mathbb{R}^d:\|x\|\leq R\}.
+\]
+The algorithm receives $d,R,G,p,\beta,\tau,\varepsilon,\delta$, where $R>0$ is the radius, $G>0$ is the moment bound in norm units, and $\beta>0$ and $\tau\geq1$ are the mixing exponent and time scale. The accuracy parameters satisfy $0<\varepsilon\leq GR/8$ and $0<\delta\leq1/32$.
+
+Our assumptions:
+\begin{assumption}[Convexity and attainment]
+For all $x,y\in D$ and $s\in[0,1]$,
+\[
+f((1-s)x+sy)\leq(1-s)f(x)+sf(y).
+\]
+There exists $x^\star\in D$ such that $f(x^\star)\leq f(x)$ for every $x\in D$.
+\end{assumption}
+
+\begin{assumption}[Polynomial absolute regularity]
+Let $Z=(Z_k)_{k\geq0}$ be the real-valued oracle process, with path law $Q$ on $\mathbb{R}^{\mathbb{N}_0}$. Write $H_n=(Z_0,\ldots,Z_n)$ for the past and $F_j=(Z_{j+k})_{k\geq0}$ for the future starting at $j$. The process is stationary, so $\mathcal{L}(F_j)=Q$ for every $j\geq0$. For all integers $n,t\geq0$,
+\[
+\bigl\|\mathcal{L}(H_n,F_{n+t})-\mathcal{L}(H_n)\otimes Q\bigr\|_{\mathrm{TV}}
+\leq (1+t/\tau)^{-\beta},
+\]
+where $\|\mu-\nu\|_{\mathrm{TV}}=\sup_B|\mu(B)-\nu(B)|$ with the supremum over measurable sets $B$.
+\end{assumption}
+
+\begin{assumption}[Stationary subgradients and moments]
+At query $x\in D$ on call $k$, indexed from zero, the oracle returns $g(x,Z_k)$ for a jointly measurable map $g:D\times\mathbb{R}\to\mathbb{R}^d$. Let $\pi=\mathcal{L}(Z_0)$. For each $x\in D$, $g(x,\cdot)$ is Bochner integrable under $\pi$, and $\|g(x,\cdot)\|^p$ is integrable under $\pi$. With $m(x)=\mathbb{E}_{z\sim\pi}[g(x,z)]$, we require, for all $x,y\in D$,
+\[
+\begin{aligned}
+\mathbb{E}_{z\sim\pi}\bigl[\|g(x,z)\|^p\bigr]&\leq G^p,\\
+f(x)+\langle m(x),y-x\rangle&\leq f(y).
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the algorithm must return a measurable $D$-valued output $\bar{x}$ satisfying
+\[
+\mathbb{P}\bigl(f(\bar{x})-f(x^\star)\leq\varepsilon\bigr)\geq1-\delta,
+\]
+where the probability is over the oracle process and the independent randomness of the algorithm.
+\end{document}

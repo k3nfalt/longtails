@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Convex Minimization with Distance-Dependent Subgradient Moments}
+We minimize a real-valued function $f$ that is convex on a closed convex set $C$ in $d$-dimensional Euclidean space. A given $x^0\in C$ lies within distance $R>0$ of a minimizer $x^\star$ on $C$. The oracle returns either an exact projection onto $C$ or a random vector drawn using a fresh independent sample. At each $x\in C$, this vector has a subgradient mean relative to $C$ and second moment at most $B^2\|x-x^0\|^2+G^2$, where $B,G\geq 0$. For $\varepsilon>0$ and $0<\delta<1$, the goal is a measurable output $\bar{x}\in C$ satisfying $f(\bar{x})-f(x^\star)\leq\varepsilon$ with probability at least $1-\delta$.
+
+The optimization problem is
+\[
+\min_{x\in C} f(x).
+\]
+The algorithm receives the dimension $d\in\{0,1,2,\ldots\}$, the starting point $x^0$, and the parameters $B,G,R,\varepsilon,\delta$. Both query types accept any point in $\mathbb{R}^d$ and share a single call budget.
+
+Our assumptions:
+\begin{assumption}[Convexity and initial distance]
+The function $f:\mathbb{R}^d\to\mathbb{R}$ is Borel measurable. On the closed convex set $C\subseteq\mathbb{R}^d$, it satisfies
+\[
+f((1-t)x+ty)\leq (1-t)f(x)+tf(y)
+\]
+for every $x,y\in C$ and $t\in[0,1]$. The point $x^0$ belongs to $C$, and there exists $x^\star\in\operatorname*{arg\,min}_{x\in C} f(x)$ such that $\|x^0-x^\star\|\leq R$.
+\end{assumption}
+
+\begin{assumption}[Subgradient mean and second moment]
+Let $(\xi_k)_{k\geq 0}$ be independent measurable samples with common law $\nu$ on a measurable space $\Omega$, independent of the algorithm's randomness. A subgradient query at $x$ on call $k$ returns $g(x,\xi_k)$, where $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For each $x\in C$ and $\xi\sim\nu$, the vector $g(x,\xi)$ is Bochner integrable and $\|g(x,\xi)\|^2$ is integrable. Writing $m(x)=\mathbb{E}_{\xi\sim\nu}[g(x,\xi)]$, we require
+\[
+\begin{aligned}
+f(y)&\geq f(x)+\langle m(x),y-x\rangle &&(y\in C),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)\|^2\bigr]&\leq B^2\|x-x^0\|^2+G^2.
+\end{aligned}
+\]
+\end{assumption}
+
+A projection query at $z\in\mathbb{R}^d$ returns the Euclidean projection $\Pi_C(z)$. This map is measurable, takes values in $C$, and satisfies
+\[
+\langle z-\Pi_C(z),u-\Pi_C(z)\rangle\leq 0
+\qquad (u\in C).
+\]
+After the allotted calls, the output $\bar{x}$ must be measurable and belong to $C$ for every realization. Under the joint law $P$ of the samples and the algorithm's randomness, it must satisfy
+\[
+P\bigl(f(\bar{x})-f(x^\star)>\varepsilon\bigr)\leq\delta.
+\]
+\end{document}

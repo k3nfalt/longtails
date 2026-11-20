@@ -1,0 +1,52 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Weak Minty Root Finding}
+We seek a zero of a Lipschitz operator $F:E\to E$ on a separable real Hilbert space $E$. A zero within a prescribed distance of the given starting point satisfies the weak Minty condition. At each query $x\in E$, the oracle uses a fresh independent sample to return an unbiased estimate of $F(x)$ with uniformly bounded variance. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in E$ with integrable residual norm satisfying $\mathbb{E}\|F(\bar{x})\|\leq\varepsilon$, where the expectation includes both oracle and algorithm randomness.
+
+The root-finding problem is
+\[
+\text{find }x\in E\text{ such that }F(x)=0.
+\]
+The algorithm receives $E$ with its Borel $\sigma$-algebra, the measurable sample space $\Omega$, the starting point $x^0\in E$, and the parameters $L,\rho,\sigma,R,\varepsilon$, whose ranges are
+\[
+L>0,\qquad 0\leq\rho\leq\frac{1}{20L},\qquad \sigma\geq 0,\qquad R\geq 0,\qquad \varepsilon>0.
+\]
+
+Our assumptions:
+\begin{assumption}[Lipschitz continuity]
+For every $x,y\in E$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty condition]
+There exists $x^\star\in E$ with $F(x^\star)=0$ and $\|x^0-x^\star\|\leq R$ such that
+\[
+\langle F(x),x-x^\star\rangle\geq-\rho\|F(x)\|^2
+\qquad\text{for every }x\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic operator oracle]
+On call $k$, a query at any $x\in E$ returns $g(x,\xi_k)$, where $g:E\times\Omega\to E$ is jointly measurable. The samples $(\xi_k)_{k\geq 0}$ are independent random variables with common law $\mu$ on $\Omega$, and the sequence is independent of the algorithm's randomness. For each $x\in E$ and $\xi\sim\mu$, the vector $g(x,\xi)$ is Bochner integrable, the squared error $\|g(x,\xi)-F(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu}[g(x,\xi)] &= F(x),\\
+\mathbb{E}_{\xi\sim\mu}\bigl[\|g(x,\xi)-F(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must satisfy
+\[
+\|F(\bar{x})\|\in L^1(P),\qquad
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

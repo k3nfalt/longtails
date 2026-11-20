@@ -1,0 +1,40 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FullRangeCohypomonotoneInclusion.lean}{full-range stochastic cohypomonotone inclusions}.}\label{tab:FullRangeCohypomonotoneInclusion}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real inner-product space, $F$ is $L$-Lipschitz ($L>0$), $G$ is maximal monotone, and $F+G$ is $\rho$-cohypomonotone with $0\le\rho L<1$. Some zero $x^\star$ of $F+G$ satisfies $\|x_0-x^\star\|\le R$. Each call gives an exact resolvent of $G$ or a jointly measurable, unbiased sample of $F$ with variance at most $\sigma^2$ using IID randomness. The target is a measurable pair $(x,u)$ with $u\in G(x)$ for every seed and $\mathbb E\|F(x)+u\|\le\varepsilon$, $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/FullRangeCohypomonotoneMlmc.lean}{Full\allowbreak Range\allowbreak Cohypomonotone\allowbreak Mlmc} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/FullRangeCohypomonotoneMlmc.md}{(review)}
+& $\mathcal{O}\!\left(\dfrac{1+a/\tau+b}{\tau^2}\,\ell^7\!\left(\dfrac{1+a+b}{\tau}\right)\right)$ deterministic calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} Inexact Halpern \citep[Cor.~4.1]{cohypAKWv3}
+& $\mathcal{O}(K^4\ell^2(K)/\tau^2)$ for the last-iterate resolvent residual $\|z-J_{\eta(F+G)}z\|/\eta$ in root mean square.
+& \textbf{(1)}: For fixed $L,R,\rho$ and $\sigma>0$, the cost drops from fourth to second order in $1/\varepsilon$, up to logarithms as $\varepsilon\downarrow0$, with an explicit graph certificate throughout $\rho L<1$.
+& \textbf{(1)} bounds the mean norm. \textbf{(2)} controls the second moment of its resolvent residual for maximally $\rho$-cohypomonotone $F+G$. \\
+\midrule
+\textbf{(3)} RAIN$^{++}$ \citep[Thm.~5.4 and Prop.~5.3]{tailChenLuoV4}
+& $\widetilde{\mathcal{O}}(1+a+b)$ expected samples, including conversion from saddle-envelope to original gradient accuracy.
+& \textbf{(1)} extends \textbf{(3)} from unconstrained saddle-gradient operators ($G=0$, $\rho L\le1/2$) to composite inclusions with $\rho L<1$. On the overlap, polynomial rates match and \textbf{(1)} fixes the budget per seed.
+& \\
+\midrule
+\textbf{(4)} Regularized prox-extragradient \citep{frciRegularized}
+& $\mathcal{O}\!\left(\dfrac{1+a+b}{\delta^8}\,\ell^4\!\left(\dfrac{1+a}{\delta}\right)\right)$
+& \textbf{(1)} extends $\rho L<1/2$ to $\rho L<1$. As $\rho L\uparrow1/2$, its condition factors stay bounded while \textbf{(4)} grows at least as $\delta^{-8}$.
+& \textbf{(1)} has a seventh-power logarithm involving noise. \textbf{(4)} has a fourth-power logarithm independent of noise. \\
+\midrule
+\textbf{(5)} Multistep anchored method \citep{frciMultistep}
+& $\mathcal{O}\!\left(1+\left\lceil a/\tau\right\rceil\ell(1/\tau)/\tau\right)$ exact calls.
+& \textbf{(1)} allows finite-variance samples where \textbf{(5)} requires exact $F$.
+& With exact $F$ and $a\ge1$, \textbf{(1)} pays $a/\tau^3$ times a seventh-power logarithm. \textbf{(5)} pays $a\,\ell(1/\tau)/\tau^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $a=LR/\varepsilon$, $b=\sigma^2/\varepsilon^2$, $\tau=1-\rho L$, $\delta=1-2\rho L$, $\ell(t)=1+\log t$ for $t\ge1$. In \textbf{(2)}, $J_{\eta H}=(I+\eta H)^{-1}$, $\eta=(\rho+1/L)/2$, $K=1+L(R+\sigma)/(\tau\varepsilon)$. In \textbf{(3)}, $\widetilde{\mathcal{O}}$ suppresses polylogarithmic factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

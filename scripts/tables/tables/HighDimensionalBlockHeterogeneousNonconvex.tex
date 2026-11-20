@@ -1,0 +1,35 @@
+\begin{table}[tp]
+\centering
+\caption{\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalBlockHeterogeneousNonconvex.lean}{High-dimensional block-heterogeneous nonconvex optimization}: lower bounds on necessary gradient calls.}\label{tab:HighDimensionalBlockHeterogeneousNonconvex}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$ with $B\ge1$ coordinate blocks, $f(x_0)-\inf f\le\Delta$ and $|f(x+h)-f(x)-\langle\nabla f(x),h\rangle|\le\frac12\sum_j L_j\|P_jh\|_2^2$ for all $x,h$. Each call returns a jointly measurable, unbiased gradient estimate $g(x,\xi)$ using a fresh i.i.d.\ real sample, with $\mathbb E\|P_j(g(x,\xi)-\nabla f(x))\|_2^2\le\sigma_j^2$. The target is $\mathbb E\sum_j\|P_j\nabla f(\hat x)\|_2\le\varepsilon$. For \textbf{(1)}, each block satisfies $2^{57}\varepsilon^2\le L_j\Delta$ and $d_j\ge2^{40}(1+BD+V)^4$, with $\varepsilon,L_j>0$ and $\sigma_j\ge0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/BlockHeterogeneousLowerBound.lean}{Block\allowbreak Heterogeneous\allowbreak Lower\allowbreak Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/BlockHeterogeneousLowerBound.md}{(review)}
+& $\Omega\!\left(\dfrac{\|L\|_1\Delta}{\varepsilon^2}+\dfrac{S^3\Delta}{\varepsilon^4}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{hdabcArjevaniV2}, Thm.~3 and Sec.~1.3
+& $\Omega\!\left(\max_j\dfrac{L_j\Delta}{\varepsilon^2}\!\left(1+\dfrac{\sigma_j^2}{\varepsilon^2}\right)\right)$. Derived bound, one active high-dimensional block.
+& \textbf{(1)}: Equal $L_j,\sigma_j$ amplify the deterministic term by $B$ and the noise term by $B^3$ over \textbf{(2)}. Same order when one block dominates the sums.
+& \textbf{(1)} needs the accuracy and dimension conditions in every block. \textbf{(2)} needs sufficient dimension and $\varepsilon\lesssim\sqrt{L_j\Delta}$ only in the active block. \\
+\midrule
+\textbf{(3)} \citep{pmlr-v291-jiang25c}, Thm.~5
+& $\Omega(\|L\|_1\Delta/\varepsilon^2)$. Deterministic algorithms, exact gradients, scalar blocks.
+& \textbf{(1)} retains the noiseless order for every randomized algorithm on high-dimensional blocks. With noise, its additional term dominates when $S^3>\varepsilon^2\|L\|_1$.
+& \textbf{(1)} requires large blocks and small $\varepsilon$ in every block. Its noiseless prefactor is $2^{-57}$, versus $1$ in \textbf{(3)} for the strict target $\|\nabla f\|_1<\varepsilon$. \\
+\midrule
+\textbf{(4)} AdaGrad \citep{pmlr-v291-jiang25c}, Thm.~4
+& $\Omega\!\big((D+V)\log(1+D+V)\big)$ as $\varepsilon\downarrow0$ at fixed problem parameters. Scalar blocks, $\delta=0$, best queried iterate.
+& \textbf{(1)} establishes the same polynomial dependence for arbitrary randomized algorithms and outputs on high-dimensional blocks, matching the block-SGD upper bound there up to constants.
+& \textbf{(1)} excludes scalar blocks. The AdaGrad-specific lower bound in \textbf{(4)} has an additional logarithmic factor. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $P_j$ projects onto block $j$ of dimension $d_j$; $\|L\|_1=\sum_j L_j$, $S=\sum_j(L_j\sigma_j^2)^{1/3}$, $D=\|L\|_1\Delta/\varepsilon^2$, $V=S^3\Delta/\varepsilon^4$. In \textbf{(4)}, $\delta$ is the AdaGrad denominator offset.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

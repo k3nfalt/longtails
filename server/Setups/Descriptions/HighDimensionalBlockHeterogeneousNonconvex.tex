@@ -1,0 +1,52 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Blockwise Stochastic Stationarity}
+We seek a stationary point of a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in dimension $d$. Its linearization error admits a quadratic bound with a separate coefficient for each coordinate block, and its value at a given starting point lies within a prescribed gap of a global lower bound. Each block has a prescribed minimum dimension. At any query point, the oracle returns an unbiased gradient estimate from a fresh independent real sample, with bounded mean squared error in each block. For tolerance $\varepsilon>0$, the goal is a measurable output whose sum of Euclidean block-gradient norms has expectation at most $\varepsilon$ over algorithm and oracle randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+A map $b:\{1,\ldots,d\}\to\{1,\ldots,B\}$ assigns each coordinate to a block. Write $I_j=\{i:b(i)=j\}$ and let $\Pi_j$ be the orthogonal projection onto the coordinates in $I_j$. The algorithm receives the integers $d,B\geq 1$, the map $b$, the block parameters $L_j>0$ and $\sigma_j\geq 0$ for $1\leq j\leq B$, the gap bound $\Delta>0$, the tolerance $\varepsilon$, and the starting point $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Scale and block dimensions]
+Write $S=\sum_{i=1}^B L_i$ and $T=\sum_{i=1}^B (L_i\sigma_i^2)^{1/3}$. Every block $j$ satisfies
+\[
+\begin{aligned}
+L_j\Delta &\geq 2^{57}\varepsilon^2,\\
+|I_j| &\geq 2^{40}\left(1+\frac{B S\Delta}{\varepsilon^2}+\frac{T^3\Delta}{\varepsilon^4}\right)^4.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Blockwise quadratic bound and initial gap]
+The function $f$ is differentiable throughout $\mathbb{R}^d$. For all $x,h\in\mathbb{R}^d$,
+\[
+\left|f(x+h)-f(x)-\langle\nabla f(x),h\rangle\right|
+\leq \frac{1}{2}\sum_{j=1}^B L_j\|\Pi_j h\|_2^2.
+\]
+There exists $\ell\in\mathbb{R}$ such that $f(x)\geq\ell$ for every $x\in\mathbb{R}^d$ and $f(x^0)-\ell\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+At each query $x\in\mathbb{R}^d$, the oracle returns $g(x,\xi_k)$, where $k$ indexes the call and $g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$ is jointly Borel measurable. The real random variables $(\xi_k)_{k\geq 1}$ are independent with common law $\nu$, and the sequence is independent of the algorithm's randomness. For $\xi\sim\nu$, write $e(x,\xi)=g(x,\xi)-\nabla f(x)$. At every $x$, the vector $g(x,\xi)$ is Bochner integrable, each $\|\Pi_j e(x,\xi)\|_2^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= \nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|\Pi_j e(x,\xi)\|_2^2\bigr] &\leq \sigma_j^2,
+\qquad 1\leq j\leq B.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}\in\mathbb{R}^d$ must be measurable under the joint law $P$ of the algorithm's randomness and the oracle samples. The stationarity measure $\sum_{j=1}^B\|\Pi_j\nabla f(\bar{x})\|_2$ must be integrable under $P$ and satisfy
+\[
+\mathbb{E}_P\left[\sum_{j=1}^B\|\Pi_j\nabla f(\bar{x})\|_2\right]\leq\varepsilon.
+\]
+\end{document}

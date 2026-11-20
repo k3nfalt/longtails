@@ -1,0 +1,54 @@
+\begin{table}[tp]
+\centering
+\caption{Expected stationarity on a single \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/MarkovSmoothNonconvex.lean}{MarkovSmoothNonconvex} trajectory. The necessary and sufficient budgets differ by $\log(\sigma^2/\varepsilon^2)$.}\label{tab:MarkovSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize $f:\mathbb R^d\to\mathbb R$ has $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. Each call returns one vector $g(x,Z_t)$ from a stationary chain on a measurable space, with $\sup_z\|P^t(z,\cdot)-\pi\|_{\rm TV}\le2e^{-t/\tau}$. The jointly measurable oracle satisfies $\mathbb E_\pi g(x,Z)=\nabla f(x)$ and $\mathbb E_\pi\|g(x,Z)-\nabla f(x)\|^2\le\sigma^2$ for every $x$. All parameters are public. For $L,\varepsilon>0$, $\tau\ge1$, $\sigma\ge4096\varepsilon$, $L\Delta\ge2^{26}\varepsilon^2$ and $d\ge2^{40}(1+\tau AV)^4$, the target is $\mathbb E\|\nabla f(X)\|\le\varepsilon$ over the stream and algorithm randomness.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MarkovNonconvexStationarityLowerBound.lean}{Markov\allowbreak{}Nonconvex\allowbreak{}Stationarity\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MarkovNonconvexStationarityLowerBound.md}{(review)} & \textit{Lower bound (necessary)}\newline $\Omega(\tau AV)$ & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MarkovNonconvexStationarity.lean}{Markov\allowbreak{}Nonconvex\allowbreak{}Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MarkovNonconvexStationarity.md}{(review)} & \textit{Upper bound (sufficient)}\newline $\mathcal{O}(\tau AV\log V)$, including discarded replies & & \\
+\midrule[1.2pt]
+\multicolumn{4}{@{}l}{\textit{Prior lower bounds (necessary budgets)}}\\
+\textbf{(3)} \citep[Thm.~3.1, smooth case]{NEURIPS2025_1cdbce34} & $\Omega(h[A+V\min\{V,A\}])$ & \textbf{(1)} covers all randomized adaptive algorithms. For the lazy-cycle construction, $h\asymp\sqrt{\tau}$. The gain is a factor $\asymp\sqrt{\tau}$ for $V\ge A$, and $\asymp\sqrt{\tau}\min\{V,A/V\}$ for $V<A$. & \textbf{(1)} requires quartic dimension. \textbf{(3)} concerns finite chains with bounded hitting time and zero-respecting queries. The cycle conversion is specific to those hard instances. \\
+\midrule
+\textbf{(4)} \citep[Thm.~3.1]{pmlr-v267-sun25u} & $\Omega(hV[1+\min\{V,A\}])$ & \textbf{(1)} covers arbitrary randomized adaptive queries and unqueried outputs. \textbf{(4)} appends a lazy cycle to a countable chain. Its hitting-time bound alone gives no common TV scale. & \textbf{(1)} requires quartic dimension. \textbf{(4)} uses a hitting-time bound on countable chains and zero-respecting algorithms. \\
+\midrule
+\textbf{(5)} \citep[Thm.~3, Eq.~(23)]{hnnlArjevani2023V2} & $\Omega(AV)$, IID samples, $\varepsilon\le c\sqrt{L\Delta}$ & \textbf{(1)} strengthens the IID lower bound by a factor $\tau$ for $\tau>1$ on the Markov class, retaining unrestricted randomized algorithms. & \textbf{(1)} needs $\sigma\ge4096\varepsilon$ and dimension quartic in the budget scale. Its explicit failure threshold has prefactor $2^{-56}$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=L\Delta/\varepsilon^2$, $V=\sigma^2/\varepsilon^2$, $h$ is the hitting-time parameter, $t_{\rm mix}$ is the $1/4$-TV mixing time, $\pi_{\min}=\min_z\pi(z)$ on a finite chain, $\bar L$ is the mean-squared smoothness constant, and $c$ is universal.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\clearpage
+\begin{table}[tp]
+\centering
+\parbox{\linewidth}{\footnotesize\textbf{Table~\ref{tab:MarkovSmoothNonconvex}, continued.}}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Prior upper bounds (sufficient budgets)}}\\
+\textbf{(6)} Derived bound \citep[Lem.~1, Eq.~(6)]{NEURIPS2023_8c3e38ce} & $\mathcal{O}(A+\tau AV)$, fixed minibatches & \textbf{(2)} allows noise unbounded across states. \textbf{(6)} requires $\|g(x,z)-\nabla f(x)\|\le\sigma$ for every state. & \textbf{(2)} costs a factor $\log V$ more on the overlap, requires stationary initialization, and controls only the expected norm. \textbf{(6)} gives $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$. \\
+\midrule
+\textbf{(7)} \citep[Cor.~2, $\delta=0$]{NEURIPS2023_8c3e38ce} & $\mathcal{O}(\tau AV\log^2 V)$ expected gradient evaluations. The uncapped stream advance has infinite mean. & \textbf{(2)} replaces a statewise noise bound by stationary variance and gives a deterministic budget for all transitions. & \textbf{(2)} requires the stated noise, gap and dimension regime and controls only the expected norm. \textbf{(7)} guarantees $\mathbb E\|\nabla f(X)\|^2\le\varepsilon^2$. \\
+\midrule
+\textbf{(8)} Derived bound \citep[Lem.~4.1(1)]{NEURIPS2025_1cdbce34} & $\mathcal{O}(A+t_{\rm mix}AV/\sqrt{\pi_{\min}})$, finite-chain minibatches & \textbf{(2)} covers general state spaces. For $t_{\rm mix}\asymp\tau$, it replaces $\pi_{\min}^{-1/2}$ by $\log V$, saving calls when $\pi_{\min}^{-1/2}\gg\log V$. & \textbf{(2)} needs a stationary start. For $t_{\rm mix}\asymp\tau$, it costs more when $\pi_{\min}^{-1/2}\ll\log V$. \\
+\midrule
+\textbf{(9)} MaC-SPIDER \citep[Thm.~4.4]{NEURIPS2025_1cdbce34} & $\mathcal{O}\!\left(\dfrac{t_{\rm mix}}{\sqrt{\pi_{\min}}}\left[\dfrac{\max\{\sigma,\sigma^2\}}{\varepsilon^2}\right.\right.$\newline $\left.\left.{}+\dfrac{\bar L\Delta(1+\sigma^2)}{\varepsilon^3}\right]\right)$ & \textbf{(2)} permits general state spaces and needs only smoothness of $f$. \textbf{(9)} requires finite states, mean-squared smoothness and gradient differences across query points using shared samples. & For fixed remaining parameters and small $\varepsilon\le1$, \textbf{(9)} achieves $\varepsilon^{-3}$ on its subclass. \textbf{(2)} has $\varepsilon^{-4}\log V$ dependence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=L\Delta/\varepsilon^2$, $V=\sigma^2/\varepsilon^2$, $h$ is the hitting-time parameter, $t_{\rm mix}$ is the $1/4$-TV mixing time, $\pi_{\min}=\min_z\pi(z)$ on a finite chain, $\bar L$ is the mean-squared smoothness constant, and $c$ is universal.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

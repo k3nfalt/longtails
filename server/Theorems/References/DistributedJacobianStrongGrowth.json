@@ -1,0 +1,102 @@
+{
+  "setup": "LongTails.Setups.DistributedJacobianStrongGrowth",
+  "searched_at": "2026-11-20T09:46:33.916859+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &\\begin{cases} 0 & R \\leq \\varepsilon \\\\ \\begin{cases} \\begin{aligned} &\\max\\left\\{ 65536 \\cdot \\left(\\left(\\tau \\cdot \\rho \\cdot \\kappa^{2} + h \\cdot \\left(l + \\beta \\cdot \\left(64 + d \\cdot \\log\\left(2 \\cdot n\\right)\\right)\\right)\\right) \\cdot \\left(1 + \\log\\left(d \\cdot q\\right)\\right) + \\tau \\cdot \\kappa \\cdot \\log\\left(\\frac{R}{\\varepsilon}\\right) + h \\cdot \\left(l + \\beta \\cdot \\left(64 + d \\cdot \\log\\left(2 + \\frac{n \\cdot d \\cdot R}{\\varepsilon \\cdot q}\\right)\\right)\\right) \\cdot \\left(\\frac{\\kappa}{T} \\cdot \\max\\left\\{ \\log\\left(\\frac{2 \\cdot R}{\\varepsilon \\cdot q}\\right), 0 \\right\\}\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad T = \\min\\left\\{ \\left\\lfloor \\kappa \\right\\rfloor_{+}, \\left\\lfloor \\frac{\\log\\left(\\frac{n}{64 \\cdot \\kappa}\\right)}{\\log\\left(G\\right)} \\right\\rfloor_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} q = 1 + \\frac{32 \\cdot \\rho \\cdot M \\cdot R \\cdot G^{T}}{\\mu}\\end{aligned} & 64 \\cdot \\kappa \\cdot G \\leq n \\\\ \\tau \\cdot \\left\\lceil \\rho \\cdot \\kappa^{2} \\cdot \\log\\left(\\frac{R^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases} & \\mathrm{otherwise} \\end{cases} \\\\ &\\text{where}\\quad \\kappa = \\frac{L}{\\mu} \\\\ &\\phantom{\\text{where}\\quad} G = 2 + \\frac{\\rho}{8} + \\frac{\\rho^{2}}{128}\\end{aligned}",
+        "type": "LongTails.Setups.DistributedJacobianStrongGrowth.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  have κ := p.L / p.μ;\n  have G := 2 + p.ρ / 8 + p.ρ ^ 2 / 128;\n  if p.R ≤ p.ε then 0\n  else\n    if 64 * κ * G ≤ ↑↑p.n then\n      have T := min ⌊κ⌋₊ ⌊Real.log (↑↑p.n / (64 * κ)) / Real.log G⌋₊;\n      have q := 1 + 32 * p.ρ * p.M * p.R * G ^ T / p.μ;\n      (65536 *\n          ((↑p.τ * p.ρ * κ ^ 2 + ↑p.h * (↑p.l + ↑p.β * (64 + ↑p.d * Real.log (2 * ↑↑p.n)))) *\n                (1 + Real.log (↑p.d * q)) +\n              ↑p.τ * κ * Real.log (p.R / p.ε) +\n            ↑p.h * (↑p.l + ↑p.β * (64 + ↑p.d * Real.log (2 + ↑↑p.n * ↑p.d * p.R / (p.ε * q)))) *\n              (κ / ↑T * max (Real.log (2 * p.R / (p.ε * q))) 0))).toNNReal\n    else p.τ * ↑⌈p.ρ * κ ^ 2 * Real.log (p.R ^ 2 / p.ε ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &\\begin{cases} 0 & R \\leq \\varepsilon \\\\ \\begin{cases} \\begin{aligned} &\\max\\left\\{ 65536 \\cdot \\left(\\left(\\tau \\cdot \\rho \\cdot \\kappa^{2} + h \\cdot \\left(l + \\beta \\cdot \\left(64 + d \\cdot \\log\\left(2 \\cdot n\\right)\\right)\\right)\\right) \\cdot \\left(1 + \\log\\left(d \\cdot q\\right)\\right) + \\tau \\cdot \\kappa \\cdot \\log\\left(\\frac{R}{\\varepsilon}\\right) + h \\cdot \\left(l + \\beta \\cdot \\left(64 + d \\cdot \\log\\left(2 + \\frac{n \\cdot d \\cdot R}{\\varepsilon \\cdot q}\\right)\\right)\\right) \\cdot \\left(\\frac{\\kappa}{T} \\cdot \\max\\left\\{ \\log\\left(\\frac{2 \\cdot R}{\\varepsilon \\cdot q}\\right), 0 \\right\\}\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad T = \\min\\left\\{ \\left\\lfloor \\kappa \\right\\rfloor_{+}, \\left\\lfloor \\frac{\\log\\left(\\frac{n}{64 \\cdot \\kappa}\\right)}{\\log\\left(G\\right)} \\right\\rfloor_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} q = 1 + \\frac{32 \\cdot \\rho \\cdot M \\cdot R \\cdot G^{T}}{\\mu}\\end{aligned} & 64 \\cdot \\kappa \\cdot G \\leq n \\\\ \\tau \\cdot \\left\\lceil \\rho \\cdot \\kappa^{2} \\cdot \\log\\left(\\frac{R^{2}}{\\varepsilon^{2}}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases} & \\mathrm{otherwise} \\end{cases} \\\\ &\\text{where}\\quad \\kappa = \\frac{L}{\\mu} \\\\ &\\phantom{\\text{where}\\quad} G = 2 + \\frac{\\rho}{8} + \\frac{\\rho^{2}}{128}\\end{aligned}",
+          "type": "LongTails.Setups.DistributedJacobianStrongGrowth.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  have κ := p.L / p.μ;\n  have G := 2 + p.ρ / 8 + p.ρ ^ 2 / 128;\n  if p.R ≤ p.ε then 0\n  else\n    if 64 * κ * G ≤ ↑↑p.n then\n      have T := min ⌊κ⌋₊ ⌊Real.log (↑↑p.n / (64 * κ)) / Real.log G⌋₊;\n      have q := 1 + 32 * p.ρ * p.M * p.R * G ^ T / p.μ;\n      (65536 *\n          ((↑p.τ * p.ρ * κ ^ 2 + ↑p.h * (↑p.l + ↑p.β * (64 + ↑p.d * Real.log (2 * ↑↑p.n)))) *\n                (1 + Real.log (↑p.d * q)) +\n              ↑p.τ * κ * Real.log (p.R / p.ε) +\n            ↑p.h * (↑p.l + ↑p.β * (64 + ↑p.d * Real.log (2 + ↑↑p.n * ↑p.d * p.R / (p.ε * q)))) *\n              (κ / ↑T * max (Real.log (2 * p.R / (p.ε * q))) 0))).toNNReal\n    else p.τ * ↑⌈p.ρ * κ ^ 2 * Real.log (p.R ^ 2 / p.ε ^ 2)⌉₊"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedJacobianLocalExtragradient",
+      "namespace": "LongTails.Setups.DistributedJacobianStrongGrowth",
+      "setup": "LongTails.Setups.DistributedJacobianStrongGrowth",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedJacobianStrongGrowth.spec\n  LongTails.Theorems.DistributedJacobianLocalExtragradient.budget",
+      "theorem": "LongTails.Theorems.DistributedJacobianLocalExtragradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistributedJacobianLocalExtragradient",
+      "theorem": "LongTails.Theorems.DistributedJacobianLocalExtragradient.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained operator root finding. The hidden operator F has a zero x⋆ and satisfies the one-point strong monotonicity condition ⟨F(x), x−x⋆⟩ ≥ μ‖x−x⋆‖² for every x. This makes the zero unique. The public starting point satisfies ‖x₀−x⋆‖ ≤ R.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, Problem, problemAssumptions, valid, and spec.publicInput."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Worker i queries a point x and receives a stochastic operator value gᵢ(x,ω) with mean F(x). The sampling maps may differ across workers. Worker i uses draw nk+i for its zero-indexed kth reply, giving fresh independent draws across workers and calls. Queries return only the sampled vector. The operator, Jacobian, root, worker maps, and sampling law are hidden.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, Problem, Sampling.iid, computation.answer, oracleAssumptions, and spec. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "relative_error",
+        "details": "Each worker satisfies the strong-growth bound E‖gᵢ(x,ω)‖² ≤ ρ‖F(x)‖², with public ρ ≥ 1. By unbiasedness this is equivalent to E‖gᵢ(x,ω)−F(x)‖² ≤ (ρ−1)‖F(x)‖². Every worker therefore returns zero almost surely at x⋆.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, oracleAssumptions, problemAssumptions, valid, and spec.publicInput."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, operator values, and outputs lie in Euclidean ℝᵈ with public d ≥ 1.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, Point, valid, and spec."
+      },
+      {
+        "label": "other",
+        "details": "The mean operator is globally L-Lipschitz and Fréchet differentiable, with ‖J(x)−J(y)‖op ≤ M‖x−y‖, 0 < μ ≤ L, and M ≥ 0. These constants and the rooted tree of n ≥ 1 workers and depth at most h are public. Each worker can have one computation pending, taking τ > 0 elapsed time. Each directed tree edge can have one message pending. A b-bit payload takes l + β(b+64) time per hop, with l, β ≥ 0. Distinct workers and directed edges can operate concurrently.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, Params, valid, problemAssumptions, adjacent, computation, communication, and spec.publicInput. LongTails/TemplateDistributed.lean, Time, clockBits, OracleState, and step."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The point X returned from the algorithm’s root worker at the prescribed elapsed-time deadline must satisfy E‖X−x⋆‖² ≤ ε² for the public tolerance ε > 0.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, valid and spec.successful. LongTails/TemplateDistributed.lean, execute and TimedConvergence."
+      },
+      {
+        "label": "expected",
+        "details": "The output must be measurable and its squared distance to the root integrable. The expectation uses the product law of the algorithm and oracle seeds. Execution must also have finitely many events almost surely for every deadline up to the stated time budget.",
+        "evidence": "LongTails/Setups/DistributedJacobianStrongGrowth.lean, spec.successful. LongTails/TemplateDistributed.lean, law, FiniteEvents, and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines one-point strongly monotone root finding, a Lipschitz Jacobian of the mean operator, and worker-specific stochastic observations with relative second-moment error. Its performance criterion charges elapsed time for concurrent samples and finite-bit messages on a specified tree."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistributedJacobianLocalExtragradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistributedJacobianLocalExtragradient",
+          "theorem": "LongTails.Theorems.DistributedJacobianLocalExtragradient.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

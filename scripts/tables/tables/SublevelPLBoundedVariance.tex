@@ -27,6 +27,25 @@
 & $\begin{aligned}\mathcal{O}\!\biggl(1+&\frac{Lh}{\mu}\log\!\left(e+\frac{Lh}{\mu\beta}\right)\\[-2pt]&+\frac{L\sigma^2}{\mu^2\varepsilon}a\log^2\!\left(e+\frac{\Delta}{\varepsilon a}\right)\biggr)\end{aligned}$ gradient samples for gap $\le\varepsilon$ with probability $1-\beta$. Assumes $f-f_\star\le\|\nabla f\|^2/(2\mu)$ and smoothness on $Q=\{x:\operatorname{dist}(x,\{f\le f_\star+2\Delta\})\le\sqrt{\Delta/L}/20\}$; displayed cost specializes to finite variance.
 & \textbf{(1)}: Scope: covers sublevel exponents $1\le\alpha<2$ beyond classical PL. Establishes unconditional expectation, which \textbf{(4)} does not imply without failure-event control.
 & \textbf{(1)}: Global rather than $Q$-local smoothness; finite variance rather than heavier tails; expectation rather than high probability. On globally smooth PL instances with $\Delta>0$, $\alpha=2-h^{-1}$ and\par $\tau=\Delta^{1-\alpha/2}(2\mu)^{-\alpha/2}$, cost becomes $\begin{aligned}\mathcal{O}\!\bigl((&L/\mu\\&+L\sigma^2/(\mu^2\varepsilon))h^2\\&\cdot\log^2\!\bigl(e+L\Delta/(\mu\varepsilon)\bigr)\bigr)\end{aligned}$: extra polylogarithmic factors. \\
+\midrule
+\textbf{(5)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SublevelPLWeightedGradient.lean}{Sublevel\allowbreak PL\allowbreak Weighted\allowbreak Gradient} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SublevelPLWeightedGradient.md}{(review)}
+& $\mathcal{O}\!\left(1+cD[1+c\sigma^2(\tau/\varepsilon)^{2/\alpha}]\right)$ gradient samples across all batches.
+& & \\
+\midrule
+\textbf{(6)} Derived bound: SGD, \citep{splFatkhullin2022v1,splMasiha2026v3}, Cor.~1 / Rem.~4.2
+& $\mathcal{O}_{\alpha}\!\left(D[1+\sigma^2(\tau/\varepsilon)^{2/\alpha}]\right)$ gradient samples under assumed containment, in the range of \textbf{(2)}.
+& \textbf{(5)}: Matches the fixed-$\alpha$ rate without assumed containment. Relative to \textbf{(1)}, removes $\ell$ from the deterministic term and $\ell^2$ from the noise term. Tuning and stopping are independent of $\Delta$.
+& \textbf{(5)}: Uses batches tuned to $L,\tau,\alpha,\sigma,\varepsilon$ instead of single-sample steps. \\
+\midrule
+\textbf{(7)} GD, \citep{splMasiha2026v3}, Prop.~3.2
+& $\mathcal{O}_{\alpha}(1+D)$ exact gradients for $\sigma=0$ and $\varepsilon\le\Delta$.
+& \textbf{(5)}: Matches \textbf{(7)} for fixed $\alpha$ at $\sigma=0$. Extends to bounded variance, attaining the minimax order for fixed $\alpha$, unrestricted dimension and $\varepsilon\le c_\alpha\min\{\Delta,L^{\alpha/(2-\alpha)}\tau^{2/(2-\alpha)}\}$ ($c_\alpha>0$, Thm.~4.1).
+& \\
+\midrule
+\textbf{(8)} Local SARAH, \citep{splMasihaLocal2026v2}, Thm.~3.2
+& $\mathcal{O}(\varepsilon^{-2/\alpha})$ conditional expected gradient evaluations, including paired calls and batches, under the local assumptions of \textbf{(3)}, $x_0\in\mathcal U_0$, $\varepsilon\le s/2$.
+& \textbf{(5)}: Controls the unconditional expected global gap without paired samples or mean-square oracle smoothness. \textbf{(8)} controls the expected local gap conditional on containment, an event of probability $\ge1-\delta$.
+& \textbf{(5)}: Requires global smoothness. Different PL regions and accuracy criteria preclude a total-cost comparison. \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]\footnotesize

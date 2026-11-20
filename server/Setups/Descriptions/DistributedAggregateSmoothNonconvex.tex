@@ -1,0 +1,55 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Nonconvex Finite-Sum Optimization}
+We seek a stationary point of a possibly nonconvex objective $F$ on $\mathbb{R}^d$, the mean of $n\geq 1$ differentiable worker objectives in dimension $d\geq 0$. The aggregate gradient is Lipschitz, and the gap from the given starting value to a global lower bound is bounded. Each worker returns an unbiased estimate of its own gradient with bounded variance, using independent samples across evaluations and workers. Workers communicate through a central node. For a tolerance $\varepsilon>0$, the goal is to return $\bar{x}\in\mathbb{R}^d$ within an elapsed-time budget with $\mathbb{E}\|\nabla F(\bar{x})\|\leq\varepsilon$, averaging over sampling and algorithm randomness.
+
+Write $f_i:\mathbb{R}^d\to\mathbb{R}$ for the objective at worker $i\in\{1,\ldots,n\}$ and use the Euclidean norm throughout. The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} F(x),
+\qquad F(x)=\frac{1}{n}\sum_{i=1}^n f_i(x).
+\]
+The algorithm receives $d$, $n$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the smoothness and gap bounds $L>0$ and $\Delta\geq 0$, the noise bounds $\sigma_i\geq 0$, the tolerance $\varepsilon$, and the timing parameters $h_i>0$, $\ell\geq 0$, and $b\geq 0$.
+
+Our assumptions:
+\begin{assumption}[Aggregate smoothness and initial gap]
+Each $f_i$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$,
+\[
+\|\nabla F(x)-\nabla F(y)\|\leq L\|x-y\|.
+\]
+There exists $F_{\mathrm{low}}\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+F_{\mathrm{low}}&\leq F(x) &&\text{for every }x\in\mathbb{R}^d,\\
+F(x^0)-F_{\mathrm{low}}&\leq\Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Worker sampling and gradient estimates]
+Worker $i$ has a sequence $(\xi_{i,k})_{k\geq 0}$ of measurable i.i.d. samples with law $\mu_i$ on $\Omega$. The worker sequences are mutually independent, and the algorithm's randomness is independent of the entire sample array. On its $k$th completed evaluation, indexed from zero, worker $i$ returns the query point $x$ and the vector $g_i(x,\xi_{i,k})$, where $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For each $x\in\mathbb{R}^d$ and $\xi\sim\mu_i$, the vector $g_i(x,\xi)$ is Bochner integrable, its squared error is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\mu_i}[g_i(x,\xi)]&=\nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\mu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr]&\leq\sigma_i^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Star network and timing]
+The center communicates with each of the $n$ workers in both directions. Only workers perform gradient evaluations. An evaluation at worker $i$ takes time $h_i$ and may be aborted. While an evaluation is pending, the worker ignores new evaluation requests. Each directed link carries at most one message at a time and ignores send requests while occupied. Computations at different workers and transmissions on distinct directed links may proceed concurrently, and communication may overlap computation. A payload of $m\geq 0$ bits is transmitted with 64 trailing zero bits and arrives with the sender's identity after time
+\[
+\ell+b(m+64),
+\]
+where $\ell$ is the latency and $b$ is the time per transmitted bit.
+\end{assumption}
+
+Let $T\geq 0$ be the elapsed-time budget. Almost surely, every deadline $t\in[0,T]$ must be reached with only finitely many events through that deadline. At time $T$, the algorithm's designated output node must provide a measurable point $\bar{x}$ with integrable gradient norm satisfying
+\[
+\mathbb{E}\bigl[\|\nabla F(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

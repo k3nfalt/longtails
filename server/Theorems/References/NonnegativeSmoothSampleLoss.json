@@ -1,0 +1,94 @@
+{
+  "setup": "LongTails.Setups.NonnegativeSmoothSampleLoss",
+  "searched_at": "2026-11-20T09:48:12.014623+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 8192 \\cdot \\left(\\sqrt{1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}}\\right)^{3} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.NonnegativeSmoothSampleLoss.spec.Params → ℕ",
+        "value": "fun q => ⌈8192 * √(1 + q.L * q.Δ / q.ε ^ 2) ^ 3⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 8192 \\cdot \\left(\\sqrt{1 + \\frac{L \\cdot \\Delta}{\\varepsilon^{2}}}\\right)^{3} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.NonnegativeSmoothSampleLoss.spec.Params → ℕ",
+          "value": "fun q => ⌈8192 * √(1 + q.L * q.Δ / q.ε ^ 2) ^ 3⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.NonnegativeSampleStationarity",
+      "namespace": "LongTails.Setups.NonnegativeSmoothSampleLoss",
+      "setup": "LongTails.Setups.NonnegativeSmoothSampleLoss",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.NonnegativeSmoothSampleLoss.spec\n  LongTails.Theorems.NonnegativeSampleStationarity.budget",
+      "theorem": "LongTails.Theorems.NonnegativeSampleStationarity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.NonnegativeSampleStationarity",
+      "theorem": "LongTails.Theorems.NonnegativeSampleStationarity.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective is the population loss f(x) = E[ℓω(x)] on a second-countable real Hilbert space. Both the sample losses and their expectation may be nonconvex. The public inputs include the initial point x₀, the common smoothness bound L > 0, the bound Δ ≥ 0 on f(x₀), and the target ε > 0.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, Params and spec.{Public, publicInput, valid, admissible}"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call at (x,y) returns (∇ℓω(x), ∇ℓω(y)) for the same hidden sample ω. Calls use independent draws from a common hidden law. The reply contains only the two gradients, and the cost counts each pair as one call.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.{Query, Reply, admissible}. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID.{independent, marginal}"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "other",
+        "details": "Every sample loss is globally nonnegative and has an L-Lipschitz gradient. These assumptions imply ‖∇ℓω(x)‖² ≤ 2Lℓω(x), so the gradient second moment is bounded by 2Lf(x) at each x and by 2LΔ at initialization. This bound can grow with the objective value. Individual samples may have different minimizers.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.admissible, clauses for nonnegativity, HasGradientAt, the sample-gradient Lipschitz bound, the expectation defining f, and f(x₀) ≤ Δ"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns a measurable point X in the Hilbert space. Its population-gradient norm must be integrable and satisfy E[‖∇f(X)‖] ≤ ε.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.{Output, successful}"
+      },
+      {
+        "label": "expected",
+        "details": "The expectation averages over both the algorithm seed and the independent oracle sample stream under a fixed cap on paired calls.",
+        "evidence": "LongTails/Setups/NonnegativeSmoothSampleLoss.lean, spec.successful. LongTails/Template.lean, OracleTemplate.{Convergence, executeWithTrace}"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation combines same-sample gradient pairs with a loss-dependent noise bound derived from sample nonnegativity and smoothness. The public initial-loss bound controls the initial noise scale while allowing variance to grow elsewhere."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.NonnegativeSampleStationarity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.NonnegativeSampleStationarity",
+          "theorem": "LongTails.Theorems.NonnegativeSampleStationarity.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

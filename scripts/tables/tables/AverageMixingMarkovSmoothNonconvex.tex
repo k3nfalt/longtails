@@ -1,0 +1,39 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for stationarity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/AverageMixingMarkovSmoothNonconvex.lean}{stationary-average Markov mixing}: sufficient oracle budgets.}\label{tab:AverageMixingMarkovSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize
+The possibly nonconvex $f:\mathbb R^d\to\mathbb R$ has $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$. Each call returns $g(x,Z_t)$ from one stationary real-valued Markov chain with kernel $P$ and law $\pi$, where $\int\!\|P^t(z,\cdot)-\pi\|_{\rm TV}\,\pi(dz)\le 2e^{-t/\tau}$ for every $t$. The jointly measurable oracle satisfies $\mathbb E_\pi g(x,Z)=\nabla f(x)$ and $\mathbb E_\pi\|g(x,Z)-\nabla f(x)\|^2\le\sigma^2$ at every fixed $x$. The parameters $L,\varepsilon>0$, $\Delta,\sigma\ge0$ and $\tau\ge1$ are known. The target is $\mathbb E\|\nabla f(X)\|\le\varepsilon$ over the trajectory and algorithm randomness.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/AverageMixingMarkovSmoothNonconvex.lean}{Average\allowbreak Mixing\allowbreak Markov\allowbreak Smooth\allowbreak Nonconvex} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/AverageMixingMarkovSmoothNonconvex.md}{(review)}
+& $\mathcal{O}\!\left(\tau(1+D)(1+S)\log(2+S)\right)$ calls, including discarded transitions. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: blocking \citep[Lem.~4.1]{ammsYu1994} and normalized minibatch descent \citep[Lem.~2]{shncscCutkosky2020}
+& $\mathcal{O}\!\left(\tau(1+D)(1+S)\log(2+DS)\right)$ calls for $S\ge1$.
+& \textbf{(1)} removes $D$ from the logarithm. For $S=1$, $D\to\infty$, the cost falls from $\mathcal{O}(\tau D\log D)$ to $\mathcal{O}(\tau D)$. The factor diverges when $D=(2+S)^{\omega(1)}$. & \\
+\midrule
+\textbf{(3)} Markov\allowbreak Nonconvex\allowbreak Stationarity \citep{ammsLongTailsMarkov}
+& $\mathcal{O}(\tau DS\log S)$ calls under uniform mixing, $S\ge 4096^2$, $D\ge2^{26}$ and $d\ge2^{40}(1+\tau DS)^4$.
+& \textbf{(1)} matches \textbf{(3)} on the overlap and allows stationary-average mixing, every dimension and all $D,S\ge0$. & \\
+\midrule
+\textbf{(4)} Derived bound: minibatch GD \citep[Lem.~1]{ammsBeznosikov2023}
+& $\mathcal{O}(1+D+\tau DS)$ calls under uniform mixing at scale $\tau$ and $\|g(x,z)-\nabla f(x)\|\le\sigma$ for every $x,z$.
+& \textbf{(1)} needs only stationary-average mixing and stationary variance.
+& \textbf{(1)} bounds the mean norm. \textbf{(4)} also bounds its second moment by $\varepsilon^2$. For $D\ge1$, \textbf{(1)} costs an extra factor of order $\log(2+S)$ when $S\ge1$, or $\tau$ when $S\le1/\tau$. \\
+\midrule
+\textbf{(5)} MaC-SPIDER \citep[Thm.~4.4]{ammsSunWei2025}
+& $\mathcal{O}\!\left(\dfrac{\tau_{\rm mix}\bar L\Delta(1+\sigma^2)}{\sqrt{\pi_{\min}}\,\varepsilon^3}\right)$ state samples for $\varepsilon\le\min\{1,\bar L\Delta\}$, with up to two gradient evaluations per sample.
+& \textbf{(1)} allows real-valued chains and needs only objective smoothness. \textbf{(5)} requires a finite ergodic chain, mean-square smoothness and access to gradients at two points per state.
+& For fixed positive parameters as $\varepsilon\to0$, \textbf{(5)} gives $\mathcal{O}(\varepsilon^{-3})$ on its subclass with shared-state access. \textbf{(1)} gives $\mathcal{O}(\varepsilon^{-4}\log(1/\varepsilon))$ with fresh-state calls. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $D=L\Delta/\varepsilon^2$, $S=\sigma^2/\varepsilon^2$; $\rm TV$ denotes total variation, $\tau_{\rm mix}$ the worst-start $1/4$-mixing time, $\pi_{\min}$ the least stationary state mass, and $\bar L$ the root-mean-square Lipschitz constant of the sample gradient.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,38 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient comparison budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/StronglyConvexDueling.lean}{strongly convex optimization with dueling feedback}.}\label{tab:StronglyConvexDueling}
+\parbox{\linewidth}{\footnotesize On the closed Euclidean unit ball $B\subset\mathbb R^d$, $f\in C^1(\mathbb R^d)$ is $\mu$-strongly convex, $L$-smooth and $G$-Lipschitz. Each pair $x,y\in B$ yields one sign from a jointly measurable oracle with fresh IID noise and mean $\rho(f(x)-f(y))$. The unknown odd, nondecreasing $C^1$ link satisfies $|\rho|\le1$ and $c|t|^k\le\rho'(t)\le M$ for $|t|\le r$. The parameters are public, with $d\ge1$, integer $k\ge0$ and $\mu,L,G,r,c,M,\varepsilon>0$. The target is $\mathbb E[f(\hat x)-\min_B f]\le\varepsilon$ for a measurable $\hat x\in B$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/LocalReferenceDueling.lean}{Local\allowbreak Reference\allowbreak Dueling} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/LocalReferenceDueling.md}{(review)}
+& $\mathcal{O}\!\left(1+\dfrac{d^2 C^2}{s^2\mu\varepsilon}+\dfrac{d^2 M^2 L^2}{s^4\mu^2\varepsilon^2}\right)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Epoch-PDD \citep[Thm.~4]{pmlr-v267-saha25a}
+& Derived bound on $B$ for expected gap, using tolerance $\varepsilon/2$ and $\delta=\varepsilon/(4G)$:
+$\mathcal{O}\!\left(K+\dfrac{d}{c^2}\left(\dfrac{aLd}{\mu\varepsilon}\right)^{2k+2}\log(eK/\delta)\right)$.
+Here $0<\delta<1$ and $\varepsilon/2<5L\min\{4d,2\sqrt d\,r/G\}$.
+& \textbf{(1)}: For fixed $k\ge1$ and sufficiently small $\varepsilon$ with other parameters fixed, fixed-distance opponents reduce $d^{2k+3}/\varepsilon^{2k+2}$ to $d^2/\varepsilon^2$ (at $k=1$, $d^5/\varepsilon^4$ before logs). At $k=0$, the leading polynomial cost improves for $d\gg(M/c)^2$. All queries stay feasible, even for constrained boundary minima.
+& \textbf{(1)}: Weighted-average expectation only. \textbf{(2)} gives a high-probability final epoch point on general bounded domains containing a global minimizer, with exterior queries allowed. \textbf{(1)} needs an odd $C^1$ link and $M$; its accuracy term carries $C^{8k}\mu^{-(4k+2)}$ versus $\mu^{-(2k+2)}$. \\
+\midrule
+\textbf{(3)} NC-SMD \citep[Thms.~4, 13]{ftdKumagai2017v2}
+& Derived bound on $B$ with full-range slope bounds ($k=0$):
+$\mathcal{O}\!\big((A+H)\log(e+A+H)$ $+AH+GM_0/(m\varepsilon)\big)$.
+& \textbf{(1)}: Removes the accuracy logarithm at fixed parameters. Allows $C^1$ objectives and locally controlled flat links. For $\rho=\tanh$, $r=1$ and $\max_B f-\min_B f\asymp G$, dependence on large $G$ is polynomial versus exponential.
+& \textbf{(1)}: The $\varepsilon^{-2}$ coefficient can be larger for small $G$ and large $ML/(c\mu)$. \textbf{(3)} also bounds online regret on compact convex domains with a barrier, assuming $C^2$ objectives and a thrice differentiable link with positive, nonincreasing slope on the positive gap range. \\
+\midrule
+\textbf{(4)} Coordinate descent \citep[Thm.~2]{ftdJamieson2012v1}
+& $\mathcal{O}\!\big(d^{2k+3}\varepsilon^{-2(k+1)}$ $\mathrm{polylog}(d,1/\varepsilon,1/\delta)\big)$ for fixed class and oracle parameters, margin exponent $\kappa=k+2$, confidence $1-\delta$.
+& \textbf{(1)}: Covers constrained minima with in-ball comparisons. Rates are not directly comparable: \textbf{(4)} assumes unconstrained optimization on $\mathbb R^d$.
+& \textbf{(1)} needs a fixed link. \textbf{(4)} requires only a lower margin on the probability of a correct comparison. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $C=\max\{1,8G/r\}$, $s=c(\mu/(4C^2))^k$, $K=1+\max\{0,\lceil\log_2(4L/\varepsilon)\rceil\}$, and $a>0$ is a universal constant. Over the attained gap range, $m\le\rho'\le M_0$ and $|\rho''|\le B_2$ in \textbf{(3)}. $A=d^2/(m\varepsilon)^2$ and $H=1+[B_2G^2+(G+1)M_0L]/(m\mu)$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

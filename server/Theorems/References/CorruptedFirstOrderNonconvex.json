@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.CorruptedFirstOrderNonconvex",
+  "searched_at": "2026-11-20T09:46:23.081537+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 5 \\cdot k + 4",
+        "oracle": 0,
+        "type": "LongTails.Setups.CorruptedFirstOrderNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌈16 * p.L * p.Δ / p.ε ^ 2⌉₊ + 5 * p.k + 4"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{16 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} + 5 \\cdot k + 4",
+          "oracle": 0,
+          "type": "LongTails.Setups.CorruptedFirstOrderNonconvex.spec.Params → ℕ",
+          "value": "fun p => ⌈16 * p.L * p.Δ / p.ε ^ 2⌉₊ + 5 * p.k + 4"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.CorruptedFirstOrderDescent",
+      "namespace": "LongTails.Setups.CorruptedFirstOrderNonconvex",
+      "setup": "LongTails.Setups.CorruptedFirstOrderNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.CorruptedFirstOrderNonconvex.spec\n  LongTails.Theorems.CorruptedFirstOrderDescent.budget",
+      "theorem": "LongTails.Theorems.CorruptedFirstOrderDescent.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.CorruptedFirstOrderDescent",
+      "theorem": "LongTails.Theorems.CorruptedFirstOrderDescent.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable, possibly nonconvex function on ℝᵈ with globally L-Lipschitz gradient, L > 0. A global lower bound b satisfies f(x₀) − b ≤ Δ. The starting point x₀ and gap bound Δ ≥ 0 are public, while b and f are hidden.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — Space, Params, spec.Public, spec.Instance, spec.publicInput, spec.valid, spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "One query at x returns a pair (v,u). On a clean call, |v − f(x)| ≤ ε²/(128L). Clean values at repeated queries to x may differ.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — spec.Query, spec.Reply, accurate, spec.admissible"
+      },
+      {
+        "label": "inexact_gradient",
+        "details": "The same call returns a vector u. On every clean call at x, u equals the same hidden g(x), with ‖g(x) − ∇f(x)‖ ≤ ε/8.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — spec.Reply, accurate, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "biased_oracle",
+        "details": "The hidden field g may have a persistent additive error. Repeating a clean query returns exactly the same gradient vector, and neither clean reply component has a centering assumption.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — accurate, spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain, gradient vectors and output all use the Euclidean norm on ℝᵈ, with public d ∈ ℕ.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — Space, Params.d, spec.Query, spec.Reply, spec.Output"
+      },
+      {
+        "label": "other",
+        "details": "Every reachable query history has at most k replies violating either clean condition. A reply violating both counts once. Corruption locations may depend on the history, and corruption magnitudes are unrestricted. The algorithm knows k, d, L, Δ, ε, x₀ and the failure tolerance. It receives no flag identifying corrupted calls.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — Params, Reachable, errors, accurate, spec.publicInput, spec.Reply, spec.admissible. LongTails/Template.lean — Oracle.answer"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "Return one point x satisfying ‖∇f(x)‖ ≤ ε for public ε > 0. The criterion uses the true gradient at the returned point.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — spec.Output, spec.valid, spec.successful"
+      },
+      {
+        "label": "high_probability",
+        "details": "The probability that the returned point violates the gradient-norm bound is at most the public failure tolerance δ ∈ [0,1/4], under the product law of the algorithm seed and the oracle seed sequence. The endpoint δ = 0 requires almost-sure success.",
+        "evidence": "LongTails/Setups/CorruptedFirstOrderNonconvex.lean — Params.failure, spec.successful. LongTails/Template.lean — Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The oracle combines inexact function values and a repeatable biased gradient field with a single pathwise budget for arbitrarily corrupted joint replies."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.CorruptedFirstOrderDescent.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.CorruptedFirstOrderDescent",
+          "theorem": "LongTails.Theorems.CorruptedFirstOrderDescent.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

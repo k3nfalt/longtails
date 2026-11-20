@@ -58,7 +58,7 @@ private partial def statementBudgets (type : Expr) : MetaM (Array Json) := do
         for i in [:count] do
           let index := mkApp3 (mkConst ``Fin.mk) (mkNatLit count) (mkNatLit i)
             (← mkDecideProof (← mkAppM ``LT.lt #[mkNatLit i, mkNatLit count]))
-          let (component, _) ← simp (mkApp body index) (← Simp.mkContext {} #[← getSimpTheorems]) #[← Simp.getSimprocs]
+          let (component, _) ← simp (mkApp body index) (← Simp.mkContext { zeta := false } #[← getSimpTheorems]) #[← Simp.getSimprocs]
           let component ← mkLambdaFVars params component.expr
           rows := rows.push <| Json.mkObj [
             ("oracle", toJson i),

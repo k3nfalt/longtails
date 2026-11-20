@@ -1,0 +1,57 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Stationarity with Corrupted First-Order Queries}
+We seek an approximate stationary point of a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d$. Its gradient is $L$-Lipschitz for $L>0$, and its value at a given starting point lies within $\Delta\geq 0$ of a global lower bound. For a tolerance $\varepsilon>0$, the oracle returns an approximate function value and a fixed gradient approximation at the query point, except on at most $k$ calls in any possible history, where $k$ is a nonnegative integer. The goal is an output $\bar{x}\in\mathbb{R}^d$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ with failure probability at most $\delta\in[0,1/4]$.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm $\|\cdot\|$. The algorithm receives the dimension $d\in\{0,1,\ldots\}$, the starting point $x^0\in\mathbb{R}^d$, and the parameters $L,\Delta,\varepsilon,k,\delta$.
+
+Our assumptions:
+\begin{assumption}[Smoothness]
+The function $f$ is Fr\'echet differentiable everywhere and satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+There exists $\ell\in\mathbb{R}$ such that
+\[
+\begin{aligned}
+\ell &\leq f(x) &&\text{for every }x\in\mathbb{R}^d,\\
+f(x^0)-\ell &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Corrupted first-order replies]
+There exists a fixed map $g:\mathbb{R}^d\to\mathbb{R}^d$ satisfying
+\[
+\|g(x)-\nabla f(x)\|\leq \varepsilon/8,
+\qquad x\in\mathbb{R}^d.
+\]
+At any query point $x\in\mathbb{R}^d$, the oracle returns a pair $(v,u)\in\mathbb{R}\times\mathbb{R}^d$. A reply is accurate when both conditions hold:
+\[
+\begin{aligned}
+|v-f(x)| &\leq \frac{\varepsilon^2}{128L},\\
+u &= g(x).
+\end{aligned}
+\]
+Every finite history obtainable from any sequence of queries and any choices of oracle randomness contains at most $k$ inaccurate replies. These replies may be arbitrary.
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy
+\[
+P\bigl(\|\nabla f(\bar{x})\|>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the algorithm and oracle randomness, which are independent of one another.
+\end{document}

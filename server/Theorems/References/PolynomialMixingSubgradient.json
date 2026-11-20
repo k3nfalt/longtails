@@ -1,0 +1,138 @@
+{
+  "setup": "LongTails.Setups.PolynomialMixingSubgradient",
+  "searched_at": "2026-11-20T09:47:49.392328+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\tau \\cdot \\left(\\left(\\frac{G \\cdot R}{8 \\cdot \\varepsilon}\\right)^{\\frac{p}{p - 1} \\cdot \\left(1 + \\frac{1}{\\beta}\\right)} \\cdot \\log\\left(\\frac{1}{\\delta} \\cdot \\frac{1}{4}\\right) + \\left(16 \\cdot \\delta\\right)^{-\\frac{1}{\\beta}}\\right)}{8 \\cdot \\left(1 + 2 \\cdot \\beta\\right)} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.PolynomialMixingSubgradient.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌊q.τ * ((q.G * q.R / (8 * q.ε)) ^ (q.p / (q.p - 1) * (1 + q.β⁻¹)) * Real.log (q.δ⁻¹ * 4⁻¹) + (16 * q.δ) ^ (-q.β⁻¹)) /\n      (8 * (1 + 2 * q.β))⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\tau \\cdot \\left(\\left(\\frac{G \\cdot R}{8 \\cdot \\varepsilon}\\right)^{\\frac{p}{p - 1} \\cdot \\left(1 + \\frac{1}{\\beta}\\right)} \\cdot \\log\\left(\\frac{1}{\\delta} \\cdot \\frac{1}{4}\\right) + \\left(16 \\cdot \\delta\\right)^{-\\frac{1}{\\beta}}\\right)}{8 \\cdot \\left(1 + 2 \\cdot \\beta\\right)} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.PolynomialMixingSubgradient.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌊q.τ * ((q.G * q.R / (8 * q.ε)) ^ (q.p / (q.p - 1) * (1 + q.β⁻¹)) * Real.log (q.δ⁻¹ * 4⁻¹) + (16 * q.δ) ^ (-q.β⁻¹)) /\n      (8 * (1 + 2 * q.β))⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.PolynomialMixingConfidenceLowerBound",
+      "namespace": "LongTails.Setups.PolynomialMixingSubgradient",
+      "setup": "LongTails.Setups.PolynomialMixingSubgradient",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.PolynomialMixingSubgradient.spec\n  LongTails.Theorems.PolynomialMixingConfidenceLowerBound.budget",
+      "theorem": "LongTails.Theorems.PolynomialMixingConfidenceLowerBound.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\tau \\cdot \\left(32 \\cdot \\log\\left(\\frac{8}{\\delta}\\right)\\right)^{2} \\cdot \\left(\\left(\\frac{2^{24} \\cdot G \\cdot R}{\\varepsilon}\\right)^{\\frac{p}{p - 1} \\cdot \\left(1 + \\frac{1}{\\beta}\\right)} + \\left(\\frac{\\left(32 \\cdot \\log\\left(\\frac{8}{\\delta}\\right)\\right)^{2}}{\\delta}\\right)^{\\frac{1}{\\beta}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.PolynomialMixingSubgradient.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈q.τ * (32 * Real.log (8 / q.δ)) ^ 2 *\n      ((2 ^ 24 * q.G * q.R / q.ε) ^ (q.p / (q.p - 1) * (1 + q.β⁻¹)) + ((32 * Real.log (8 / q.δ)) ^ 2 / q.δ) ^ q.β⁻¹)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\tau \\cdot \\left(32 \\cdot \\log\\left(\\frac{8}{\\delta}\\right)\\right)^{2} \\cdot \\left(\\left(\\frac{2^{24} \\cdot G \\cdot R}{\\varepsilon}\\right)^{\\frac{p}{p - 1} \\cdot \\left(1 + \\frac{1}{\\beta}\\right)} + \\left(\\frac{\\left(32 \\cdot \\log\\left(\\frac{8}{\\delta}\\right)\\right)^{2}}{\\delta}\\right)^{\\frac{1}{\\beta}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.PolynomialMixingSubgradient.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈q.τ * (32 * Real.log (8 / q.δ)) ^ 2 *\n      ((2 ^ 24 * q.G * q.R / q.ε) ^ (q.p / (q.p - 1) * (1 + q.β⁻¹)) + ((32 * Real.log (8 / q.δ)) ^ 2 / q.δ) ^ q.β⁻¹)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.PolynomialMixingConfidenceUpperBound",
+      "namespace": "LongTails.Setups.PolynomialMixingSubgradient",
+      "setup": "LongTails.Setups.PolynomialMixingSubgradient",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.PolynomialMixingSubgradient.spec\n  LongTails.Theorems.PolynomialMixingConfidenceUpperBound.budget",
+      "theorem": "LongTails.Theorems.PolynomialMixingConfidenceUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.PolynomialMixingConfidenceLowerBound",
+      "theorem": "LongTails.Theorems.PolynomialMixingConfidenceLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.PolynomialMixingConfidenceUpperBound",
+      "theorem": "LongTails.Theorems.PolynomialMixingConfidenceUpperBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "The objective is convex on the closed Euclidean ball of radius R and attains its minimum there. The class permits nonsmooth objectives.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, Domain and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "At a feasible query x, call k returns only the vector g(x,Zₖ). For each fixed x, its mean under the stationary marginal π satisfies the subgradient inequality against every feasible y. This marginal condition allows the conditional mean at an adaptive query to differ from a subgradient. Each call consumes the next path coordinate, including calls whose replies are discarded.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, spec.Query, spec.Reply, spec.admissible and SubgradientOracle.support. LongTails/Template.lean, executeWithTrace and _run"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "heavy_tailed_noise",
+        "details": "For each feasible x, Eπ[‖g(x,Z)‖ᵖ] ≤ Gᵖ with G>0 and 1<p≤2. The bound controls the full reply under the stationary marginal. For p<2 it permits infinite variance.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, SubgradientOracle.momentIntegrable, SubgradientOracle.moment, spec.valid and spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries and outputs lie in the origin-centered closed ball of radius R>0 in Euclidean d-space, with d a positive integer. All parameters (d,R,G,p,β,τ,ε,δ) are public. The objective, reply map g and path law are hidden.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, Params, Space, Domain, spec.Public, spec.publicInput, spec.Instance, spec.Output and spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "The real-valued seed path is stationary and absolutely regular. For every n and lag t, the total variation distance between the joint law of (Z₀,…,Zₙ) and the entire tail starting at Zₙ₊ₜ, taken together, and the product of their marginal laws is at most (1+t/τ)^(−β), with β>0 and τ≥1. This condition applies to general stationary processes and permits non-Markov dependence.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, past, future, AbsolutelyRegular, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The algorithm returns a measurable feasible point x̂ satisfying f(x̂)−minₓ∈Domain f(x) ≤ ε on the success event, with 0<ε≤GR/8. Any measurable output computed from the final state is eligible.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, spec.Output, spec.valid and spec.successful. LongTails/Template.lean, Algorithm.output and execute"
+      },
+      {
+        "label": "high_probability",
+        "details": "The success event has probability at least 1−δ for every admissible objective and oracle, with 0<δ≤1/32. Probability is over the oracle path and the independently drawn algorithm seed at a fixed call budget.",
+        "evidence": "LongTails/Setups/PolynomialMixingSubgradient.lean, spec.valid and spec.successful. LongTails/Template.lean, Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a marginal p-moment subgradient oracle with a single polynomially absolutely regular sample path. Adaptive queries couple the chosen point to the next seed, and the fixed-budget guarantee must control the resulting objective gap at the requested confidence."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.PolynomialMixingConfidenceLowerBound.result",
+        "LongTails.Theorems.PolynomialMixingConfidenceUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.PolynomialMixingConfidenceLowerBound",
+          "theorem": "LongTails.Theorems.PolynomialMixingConfidenceLowerBound.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.PolynomialMixingConfidenceUpperBound",
+          "theorem": "LongTails.Theorems.PolynomialMixingConfidenceUpperBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

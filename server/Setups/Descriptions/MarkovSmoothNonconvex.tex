@@ -1,0 +1,61 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Nonconvex Stationarity with Markovian Gradients}
+We seek an approximate stationary point of a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d$. Its gradient is Lipschitz, and the objective gap at a given starting point is bounded. Each oracle call returns a stochastic gradient evaluated at the query point and the current state of a stationary, uniformly exponentially mixing Markov chain. At each fixed point, the estimate is unbiased under the stationary law and has bounded variance. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ satisfying $\mathbb{E}\|\nabla f(\bar{x})\|\leq\varepsilon$, averaging over the chain and the algorithm's randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+Write $\|\cdot\|$ for the Euclidean norm. The algorithm receives the dimension $d\in\mathbb{N}$, the starting point $x^0\in\mathbb{R}^d$, and the real parameters $L,\Delta,\sigma,\tau,\varepsilon$. These satisfy $L>0$, $\varepsilon>0$, $\tau\geq 1$, and
+\[
+\begin{aligned}
+\sigma &\geq 4096\varepsilon,\\
+L\Delta &\geq 2^{26}\varepsilon^2,\\
+d &\geq 2^{40}\left(1+\frac{\tau L\Delta\sigma^2}{\varepsilon^4}\right)^4.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable on $\mathbb{R}^d$. For all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f(x)-\nabla f(y)\| &\leq L\|x-y\|,\\
+f(x^0)-f(x) &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Stationary Markov sampling]
+The oracle uses successive states $Z_0,Z_1,\ldots$ of a Markov chain on a measurable space $(\mathcal Z,\mathcal F)$ with transition kernel $\kappa$ and initial law $\pi$. The law $\pi$ is invariant: for every $A\in\mathcal F$,
+\[
+\mathbb{E}_{Z\sim\pi}[\kappa(Z,A)]=\pi(A).
+\]
+For every $z\in\mathcal Z$ and integer $t\geq 0$, the $t$-step transition law satisfies the total variation bound
+\[
+\sup_{A\in\mathcal F}\big|\kappa^t(z,A)-\pi(A)\big|
+\leq 2\exp(-t/\tau).
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient moments]
+On call $k=0,1,\ldots$, a query at any $x\in\mathbb{R}^d$ returns $g(x,Z_k)$, where $g:\mathbb{R}^d\times\mathcal Z\to\mathbb{R}^d$ is jointly measurable. For each fixed $x$ and $Z\sim\pi$, the vector $g(x,Z)$ is Bochner integrable, the squared error $\|g(x,Z)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\pi}[g(x,Z)] &= \nabla f(x),\\
+\mathbb{E}_{Z\sim\pi}\big[\|g(x,Z)-\nabla f(x)\|^2\big] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+Let $P$ be the joint law of the Markov chain and the algorithm's independent randomness. After the allotted oracle calls, the output $\bar{x}$ must be measurable, with $\|\nabla f(\bar{x})\|$ integrable under $P$, and must satisfy
+\[
+\mathbb{E}_{P}\big[\|\nabla f(\bar{x})\|\big]\leq\varepsilon.
+\]
+\end{document}

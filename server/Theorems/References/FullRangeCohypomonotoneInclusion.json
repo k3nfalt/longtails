@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.FullRangeCohypomonotoneInclusion",
+  "searched_at": "2026-11-20T09:46:54.352882+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{2^{79} \\cdot \\left(1 + \\frac{L \\cdot R}{\\left(1 - \\rho \\cdot L\\right) \\cdot \\varepsilon} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right)}{\\left(1 - \\rho \\cdot L\\right)^{2}} \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) + \\log\\left(\\frac{2}{1 - \\rho \\cdot L}\\right)\\right)^{7} \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FullRangeCohypomonotoneInclusion.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 79 * (1 + q.L * q.R / ((1 - q.ρ * q.L) * q.ε) + q.σ ^ 2 / q.ε ^ 2) / (1 - q.ρ * q.L) ^ 2 *\n      (1 + Real.log (2 + q.L * q.R / q.ε + q.σ ^ 2 / q.ε ^ 2) + Real.log (2 / (1 - q.ρ * q.L))) ^ 7⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{2^{79} \\cdot \\left(1 + \\frac{L \\cdot R}{\\left(1 - \\rho \\cdot L\\right) \\cdot \\varepsilon} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right)}{\\left(1 - \\rho \\cdot L\\right)^{2}} \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R}{\\varepsilon} + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) + \\log\\left(\\frac{2}{1 - \\rho \\cdot L}\\right)\\right)^{7} \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FullRangeCohypomonotoneInclusion.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈2 ^ 79 * (1 + q.L * q.R / ((1 - q.ρ * q.L) * q.ε) + q.σ ^ 2 / q.ε ^ 2) / (1 - q.ρ * q.L) ^ 2 *\n      (1 + Real.log (2 + q.L * q.R / q.ε + q.σ ^ 2 / q.ε ^ 2) + Real.log (2 / (1 - q.ρ * q.L))) ^ 7⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.FullRangeCohypomonotoneMlmc",
+      "namespace": "LongTails.Setups.FullRangeCohypomonotoneInclusion",
+      "setup": "LongTails.Setups.FullRangeCohypomonotoneInclusion",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FullRangeCohypomonotoneInclusion.spec\n  LongTails.Theorems.FullRangeCohypomonotoneMlmc.budget",
+      "theorem": "LongTails.Theorems.FullRangeCohypomonotoneMlmc.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.FullRangeCohypomonotoneMlmc",
+      "theorem": "LongTails.Theorems.FullRangeCohypomonotoneMlmc.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "composite",
+        "details": "Find an approximate zero of F+A, where F:E→E is L-Lipschitz and A:E⇉E is monotone with an everywhere-defined resolvent for each positive stepsize.",
+        "evidence": "LongTails/Setups/FullRangeCohypomonotoneInclusion.lean, spec.Instance and spec.admissible. LongTails/Setups/StochasticCohypomonotoneInclusion.lean, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The problem is a cohypomonotone operator inclusion. For u∈(F+A)(x) and v∈(F+A)(y), ⟨u−v,x−y⟩ ≥ −ρ‖u−v‖² throughout the range 0≤ρL<1.",
+        "evidence": "LongTails/Setups/FullRangeCohypomonotoneInclusion.lean, spec.valid and spec.admissible. LongTails/Setups/StochasticCohypomonotoneInclusion.lean, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "proximal",
+        "details": "A query (γ,z) with γ>0 returns the exact resolvent y=(I+γA)⁻¹z, giving the graph witness (z−y)/γ∈A(y). Stochastic evaluations and resolvent evaluations each consume one call from the same fixed budget.",
+        "evidence": "LongTails/Setups/FullRangeCohypomonotoneInclusion.lean, spec.Query and spec.Reply. LongTails/Setups/StochasticCohypomonotoneInclusion.lean, reply and spec.admissible. LongTails/Template.lean, Setup.numOracles and executeWithTrace."
+      },
+      {
+        "label": "other",
+        "details": "A query at x returns one vector g(x,ξ) from an unbiased stochastic operator oracle for F. Each call uses a fresh seed. The query interface gives the algorithm neither the seed nor a way to reuse it at another point.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean, reply and spec.admissible. LongTails/Setups/StochasticGeneralizedMonotone.lean, IsStochasticOperator. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The seeds are independent with common law p. At every x, Eₚ[g(x,ξ)]=F(x) and Eₚ‖g(x,ξ)−F(x)‖²≤σ². The Lipschitz bound applies to the mean operator F.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean, spec.admissible. LongTails/Setups/StochasticGeneralizedMonotone.lean, IsStochasticOperator.unbiased and IsStochasticOperator.variance. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID.independent and IID.marginal."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space equipped with its Borel σ-algebra.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean, Params.innerE, Params.finiteE and Params.borelE."
+      },
+      {
+        "label": "other",
+        "details": "The spaces, starting point x₀ and parameters L>0, 0≤ρ<1/L, R≥0, σ≥0 and ε>0 are public. The operators F and A are hidden. Some solution x⋆ satisfies −F(x⋆)∈A(x⋆) and ‖x₀−x⋆‖≤R.",
+        "evidence": "LongTails/Setups/FullRangeCohypomonotoneInclusion.lean, spec.Public, spec.publicInput, spec.Instance and spec.valid. LongTails/Setups/StochasticCohypomonotoneInclusion.lean, Params and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "feasibility",
+        "details": "The measurable output is a pair (x,a). Its second component must satisfy a∈A(x) for every outcome.",
+        "evidence": "LongTails/Setups/FullRangeCohypomonotoneInclusion.lean, spec.Output and spec.successful. LongTails/Setups/StochasticCohypomonotoneInclusion.lean, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The residual norm ‖F(x)+a‖ of the returned pair must be integrable and satisfy E‖F(x)+a‖≤ε. The expectation uses the joint law of the algorithm and oracle seeds.",
+        "evidence": "LongTails/Setups/StochasticCohypomonotoneInclusion.lean, spec.successful. LongTails/Template.lean, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines negative comonotonicity of the sum up to ρL<1 with noisy access to F and exact resolvent access to A. Accuracy is measured using the graph element that the algorithm actually returns."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.FullRangeCohypomonotoneMlmc.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.FullRangeCohypomonotoneMlmc",
+          "theorem": "LongTails.Theorems.FullRangeCohypomonotoneMlmc.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

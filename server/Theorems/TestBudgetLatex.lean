@@ -184,3 +184,26 @@ run_cmd liftTermElabM do
   let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
   unless result == "\\left|s\\right|" do
     throwError "Unexpected cardinality budget: {result}"
+
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (n : ℕ) =>
+    let S := n + 1
+    let B := fun (j : ℕ) => S + j
+    (Finset.range S).sup B)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\begin{aligned} &\\left(\\max_{0\\le j<S} B\\left(j\\right)\\right)" ++
+      " \\\\ &\\text{where}\\quad S = n + 1 \\\\ &\\phantom{\\text{where}\\quad} B\\left(j\\right) = S + j\\end{aligned}" do
+    throwError "Unexpected local definitions: {result}"
+
+open scoped Classical in
+set_option hygiene false in
+run_cmd liftTermElabM do
+  let value ← elabTerm (← `(fun (r : ℝ) =>
+    let c : ℝ := if h : ∃ t : ℝ, 0 ≤ t ∧ t = r then h.choose else 0
+    c + 1)) none
+  let result ← TheoremDescriptions.budgetLatex (← instantiateMVars value)
+  unless result == "\\begin{aligned} &c + 1 \\\\ &\\text{where}\\quad c = \\begin{cases} " ++
+      "\\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land t = r" ++
+      " \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\end{aligned}" do
+    throwError "Unexpected choice definition: {result}"

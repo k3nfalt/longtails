@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/CorruptedFirstOrderNonconvex.lean}{nonconvex stationarity under adaptive corruption}.}\label{tab:CorruptedFirstOrderNonconvex}
+\parbox{\linewidth}{\footnotesize Let $f:\mathbb R^d\to\mathbb R$ have $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$, with $L,\varepsilon>0$ and $\Delta\ge0$. A clean reply at $x$ gives a value within $\varepsilon^2/(128L)$ of $f(x)$ and a fixed vector $g(x)$ satisfying $\|g(x)-\nabla f(x)\|\le\varepsilon/8$. On every reachable history, at most $k$ replies may be replaced adaptively by arbitrary pairs. The target is $\Pr(\|\nabla f(x_{\rm out})\|>\varepsilon)\le\delta$ for $0\le\delta\le1/4$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/CorruptedFirstOrderDescent.lean}{Corrupted\allowbreak First\allowbreak Order\allowbreak Descent} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/CorruptedFirstOrderDescent.md}{(review)}
+& $\mathcal{O}(1+k+L\Delta/\varepsilon^2)$ joint value--gradient calls & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound: majority-vote gradient descent \citep[\S1.2.3]{nsscNesterov2018}
+& $\mathcal{O}((k+1)(1+L\Delta/\varepsilon^2))$ gradient calls, including $2k+1$ per vote
+& \textbf{(1)}: Additive dependence on $k$ saves a factor of order $\min\{k+1,T\}$ for $k,T\ge1$. At $k\asymp T\ge1$, $\mathcal{O}(T^2)$ falls to $\mathcal{O}(T)$. Rates match at $k=0$.
+& \textbf{(1)} needs accurate function values in addition to gradients. \\
+\midrule
+\textbf{(3)} Stochastic line search \citep[Thm.~6, corrupted value oracle]{cfodScheinbergXie2025v1}
+& High-probability hitting time above the oracle noise floor. Each trial uses one gradient and two value calls. Rates are incomparable across fault models.
+& \textbf{(1)} returns an $\varepsilon$-stationary point for every admissible fault pattern. \textbf{(3)} bounds the time to visit one under probabilistic faults with bounded value errors.
+& \textbf{(1)} needs a known fault cap $k$ and repeatable clean gradients. \textbf{(3)} allows stochastic gradients without a fault cap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $T=L\Delta/\varepsilon^2$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

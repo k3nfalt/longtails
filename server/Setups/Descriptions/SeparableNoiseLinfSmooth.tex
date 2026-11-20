@@ -1,0 +1,40 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stochastic Stationarity with Coordinatewise Noise}
+We seek a stationary point of a differentiable, possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in dimension $d$. Its gradient is Lipschitz from $\ell_\infty$ to $\ell_1$, and the given starting point has bounded objective gap above the infimum. At each query, the oracle uses a fresh independent sample to return an unbiased gradient estimate with a uniform bound on the sum of its coordinate standard deviations. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ satisfying $\mathbb{E}[\|\nabla f(\bar{x})\|_1]\leq\varepsilon$, where the expectation includes both algorithm and oracle randomness.
+
+Write $f_\star$ for the finite value of the optimization problem
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives the dimension $d\in\{0,1,\ldots\}$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the smoothness constant $L>0$, the noise bound $S\geq 0$, the initial gap bound $\Delta\geq 0$, and the tolerance $\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable everywhere. For every $x,y\in\mathbb{R}^d$ and every $r\in\mathbb{R}$ satisfying $|x_i-y_i|\leq r$ for all $i=1,\ldots,d$, its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|_1\leq Lr.
+\]
+The starting point satisfies $f(x^0)-f_\star\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Sampling and coordinatewise noise]
+At call $k\geq 0$ with query $x\in\mathbb{R}^d$, the oracle returns $g(x,\xi_k)$, where $g:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. The samples $(\xi_k)_{k\geq 0}$ are independent measurable random variables with common law $\nu$ on $\Omega$, and the entire sequence is independent of the algorithm's randomness. For each fixed $x$ and $\xi\sim\nu$, the vector $g(x,\xi)$ is Bochner integrable and each coordinate error $e_i(x,\xi)=g_i(x,\xi)-\partial_i f(x)$ is square integrable. Their moments satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= \nabla f(x),\\
+\sum_{i=1}^d \sqrt{\mathbb{E}_{\xi\sim\nu}[e_i(x,\xi)^2]} &\leq S.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its gradient norm $\|\nabla f(\bar{x})\|_1$ must be integrable, and it must satisfy
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|_1\bigr]\leq\varepsilon.
+\]
+\end{document}

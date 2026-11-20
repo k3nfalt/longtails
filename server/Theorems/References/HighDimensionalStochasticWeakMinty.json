@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalStochasticWeakMinty",
+  "searched_at": "2026-11-20T09:46:16.800474+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{L^{2} \\cdot R^{2} \\cdot \\left(\\varepsilon^{2} + \\sigma^{2}\\right)}{2^{19} \\cdot \\varepsilon^{4}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalStochasticWeakMinty.spec.Params → ℕ",
+        "value": "fun q => ⌊q.L ^ 2 * q.R ^ 2 * (q.ε ^ 2 + q.σ ^ 2) / (2 ^ 19 * q.ε ^ 4)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{L^{2} \\cdot R^{2} \\cdot \\left(\\varepsilon^{2} + \\sigma^{2}\\right)}{2^{19} \\cdot \\varepsilon^{4}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalStochasticWeakMinty.spec.Params → ℕ",
+          "value": "fun q => ⌊q.L ^ 2 * q.R ^ 2 * (q.ε ^ 2 + q.σ ^ 2) / (2 ^ 19 * q.ε ^ 4)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.StochasticWeakMintyLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalStochasticWeakMinty",
+      "setup": "LongTails.Setups.HighDimensionalStochasticWeakMinty",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalStochasticWeakMinty.spec\n  LongTails.Theorems.StochasticWeakMintyLowerBound.budget",
+      "theorem": "LongTails.Theorems.StochasticWeakMintyLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.StochasticWeakMintyLowerBound",
+      "theorem": "LongTails.Theorems.StochasticWeakMintyLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Find an approximate zero of a globally L-Lipschitz operator F from ℝᵈ to ℝᵈ that admits a weak Minty solution. The public input consists of d, L, ρ, σ, R, ε, and x₀. The operator and its solution are hidden.",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticWeakMinty.lean, Params and spec.{Public,publicInput,Instance}. LongTails/Setups/StochasticWeakMinty.lean, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each call at an adaptively chosen x returns one vector g(x,ξ) with E[g(x,ξ)] = F(x). Each call uses a fresh independent real-valued seed from the same hidden law, including repeated calls at the same x. Only the vector is returned. The algorithm may use independent internal randomness.",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticWeakMinty.lean, toGeneral and spec.{Query,Reply}. LongTails/Setups/StochasticWeakMinty.lean, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID. LongTails/Template.lean, Algorithm and Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every x, E‖g(x,ξ)−F(x)‖² ≤ σ², with σ ≥ 0. The sample map is jointly measurable, and both the sample vector and its squared error are integrable at each x.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝᵈ. The parameter regime requires 0 < ε ≤ LR/2¹⁰ and d ≥ (LR/ε)⁶(1 + σ²/ε²).",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticWeakMinty.lean, toGeneral and spec.valid. LongTails/Setups/StochasticWeakMinty.lean, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "A single zero x⋆ satisfies ‖x⋆−x₀‖ ≤ R and ⟨F(x),x−x⋆⟩ ≥ −ρ‖F(x)‖² for every x. The parameters satisfy L > 0, R ≥ 0, and 0 ≤ ρ ≤ 1/(20L). The Lipschitz bound applies to the mean operator F.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.valid and spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "E‖F(X)‖ ≤ ε, with the first power of the Euclidean norm and expectation over both algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/StochasticWeakMinty.lean, spec.successful. LongTails/Template.lean, Convergence."
+      },
+      {
+        "label": "other",
+        "details": "Return a point X in ℝᵈ whose operator residual ‖F(X)‖ is integrable. The algorithm may compute X from its final state without having queried X.",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticWeakMinty.lean, spec.Output and spec.successful. LongTails/Setups/StochasticWeakMinty.lean, spec.successful. LongTails/Template.lean, Algorithm.output and _run."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a weak Minty condition at one zero with a dimension threshold that grows with the initial radius, noise level, and requested accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.StochasticWeakMintyLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.StochasticWeakMintyLowerBound",
+          "theorem": "LongTails.Theorems.StochasticWeakMintyLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

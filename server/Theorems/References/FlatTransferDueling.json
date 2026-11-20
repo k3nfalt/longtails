@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.FlatTransferDueling",
+  "searched_at": "2026-11-20T09:46:59.130880+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{d^{2}}{65536 \\cdot \\left(2 \\cdot j + 1\\right)^{2} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FlatTransferDueling.spec.Params → ℕ",
+        "value": "fun p => ⌊↑p.d ^ 2 / (65536 * (2 * ↑p.j + 1) ^ 2 * p.ε ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{d^{2}}{65536 \\cdot \\left(2 \\cdot j + 1\\right)^{2} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FlatTransferDueling.spec.Params → ℕ",
+          "value": "fun p => ⌊↑p.d ^ 2 / (65536 * (2 * ↑p.j + 1) ^ 2 * p.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.LocalReferenceDuelingLowerBound",
+      "namespace": "LongTails.Setups.FlatTransferDueling",
+      "setup": "LongTails.Setups.FlatTransferDueling",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.FlatTransferDueling.spec\n  LongTails.Theorems.LocalReferenceDuelingLowerBound.budget",
+      "theorem": "LongTails.Theorems.LocalReferenceDuelingLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.LocalReferenceDuelingLowerBound",
+      "theorem": "LongTails.Theorems.LocalReferenceDuelingLowerBound.result",
+      "references": "- Wataru Kumagai. [Regret Analysis for Continuous Dueling Bandit](https://proceedings.neurips.cc/paper/2017/file/58e4d44e550d0f7ee0a23d6b02d9b0db-Paper.pdf). 2017. Complexity: $\\Omega(d^2/\\varepsilon^2)$ pairwise comparisons are necessary for expected objective gap at most $\\varepsilon$, for $0<\\varepsilon<0.004$, under a fixed budget and a Gaussian comparison link with variance $2$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Strong convexity implies convexity on the feasible ball.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean: Ball, Objective.strongly_convex. LongTails/Setups/FlatTransferDueling.lean: model.μ."
+      },
+      {
+        "label": "strongly_convex",
+        "details": "The hidden objective is continuously differentiable on ℝᵈ. On the closed unit ball it is 1/2-strongly convex and 4-Lipschitz, and its gradient is 2-Lipschitz.",
+        "evidence": "LongTails/Setups/FlatTransferDueling.lean: model, spec.admissible. LongTails/Setups/StronglyConvexDueling.lean: Objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One call compares any ordered pair (x,y) in the ball and returns one bit. Given the pair and the preceding transcript, the probability of true is (1+ρ(f(x)−f(y)))/2. Each call uses a fresh i.i.d. seed. The algorithm may choose both points adaptively.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean: score, spec.Query, spec.Reply, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID. LongTails/Template.lean: Algorithm.query, Algorithm.update, Convergence."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The feasible set for query points and outputs is the closed Euclidean unit ball centered at zero in public dimension d≥1.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean: Point, Ball, spec.Query, spec.Output. LongTails/Setups/FlatTransferDueling.lean: Params.nonzero, model, spec.publicInput."
+      },
+      {
+        "label": "other",
+        "details": "The hidden transfer ρ is odd, nondecreasing, continuously differentiable, and bounded by |ρ|≤1 globally. For public k=2j with integer j≥0 and |t|≤1, it satisfies ((2j+1)/8)|t|^(2j)≤ρ′(t)≤(2j+1)/4. Thus j>0 permits a zero slope at the origin, while j=0 requires ρ′(0)≥1/8. The algorithm knows these bounds and ε.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean: Transfer, spec.admissible. LongTails/Setups/FlatTransferDueling.lean: Params, model, spec.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The algorithm returns a measurable ball-valued point X. For a minimizer u over the ball, the loss is f(X)−f(u), with target 0<ε≤1/64.",
+        "evidence": "LongTails/Setups/FlatTransferDueling.lean: spec.valid, spec.successful. LongTails/Setups/StronglyConvexDueling.lean: spec.Output, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The output gap must be integrable and satisfy E[f(X)−f(u)]≤ε under the joint law of the algorithm seed and oracle seeds.",
+        "evidence": "LongTails/Setups/StronglyConvexDueling.lean: spec.successful. LongTails/Template.lean: Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The comparison oracle reveals a single bit through a hidden transfer whose local derivative bounds depend on the public exponent 2j. This controls how informative comparisons can be for nearly equal objective values."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.LocalReferenceDuelingLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.LocalReferenceDuelingLowerBound",
+          "theorem": "LongTails.Theorems.LocalReferenceDuelingLowerBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

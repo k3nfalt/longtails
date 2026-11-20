@@ -1,0 +1,44 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedJacobianStrongGrowth.lean}{distributed root finding under strong growth}.}\label{tab:DistributedJacobianStrongGrowth}
+\parbox{\linewidth}{\footnotesize The $L$-Lipschitz map $F:\mathbb R^d\to\mathbb R^d$ has an $M$-Lipschitz Jacobian, $F(x^\star)=0$, $\|x_0-x^\star\|\le R$, and $\langle F(x),x-x^\star\rangle\ge\mu\|x-x^\star\|^2$ with $0<\mu\le L$. On fresh IID samples, each worker's jointly measurable oracle satisfies $\mathbb E g_i(x)=F(x)$ and $\mathbb E\|g_i(x)\|^2\le\rho\|F(x)\|^2$, $\rho\ge1$. The $n$ workers form a rooted tree of depth at most $h$. Each worker handles one call at a time, taking $\tau>0$; each directed edge carries one message at a time, taking $\lambda+\beta b$ for $b$ bits. Distinct workers and directed edges can operate concurrently. The target is $\mathbb E\|\hat x-x^\star\|^2\le\varepsilon^2$ under the execution law.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedJacobianLocalExtragradient.lean}{Distributed\allowbreak Jacobian\allowbreak Local\allowbreak Extragradient} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedJacobianLocalExtragradient.md}{(review)}
+& Elapsed-time upper bound. $0$ if $R\le\varepsilon$. For $R>\varepsilon$:\newline
+$n<64\kappa G$: $\mathcal{O}(\tau(1+\rho\kappa^2 J))$.\newline
+$n\ge64\kappa G$:
+$\begin{aligned}[t]
+\mathcal{O}\big(&(\tau\rho\kappa^2+C(n))H+\tau\kappa J\\
+ &+C(ndu)(\kappa/T)[\log(2u)]_+\big).
+\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Serial extragradient \citep[Prop.~F.4]{djNovoselov2026v1}
+& Pairwise strongly monotone. One worker, elapsed time $\mathcal{O}(\tau\rho\kappa(1+J))$.
+& \textbf{(1)}: On the overlap, $\mathcal{O}(\tau\kappa J)$ versus $\mathcal{O}(\tau\rho\kappa J)$ when $n\ge64\kappa G$, $J\gtrsim\rho\kappa T H$ and $C(ndR/\varepsilon)\lesssim T\tau$. Also covers quasi-strong monotonicity.
+& \textbf{(1)} needs a Lipschitz Jacobian. For $n<64\kappa G$ and $J\ge1$, its bound costs a factor $\kappa$ more. Startup can also dominate. \\
+\midrule
+\textbf{(3)} Common-query minibatch extragradient \citep[Eq.~(34)]{djNovoselov2026v1}
+& Pairwise strongly monotone. $\mathcal{O}(\kappa\max\{1,\rho/n\}(1+J))$ exact-vector rounds, one call per worker per round. No finite-bit time bound.
+& \textbf{(1)}: On a depth-$h$ tree, local steps cut the latency term by $T$ when $h\lambda\asymp T\tau$, $\beta d\log(ndR/\varepsilon)\lesssim\lambda$, $n\ge64\kappa G^T$ and $J\gtrsim\rho\kappa T H$. Gain over the cheaper of \textbf{(2)}, \textbf{(3)} is then of order $\min\{\rho,T\}$ against uncharged bits.
+& \textbf{(1)} adds Jacobian regularity and startup cost. Depth $T$ grows at most logarithmically in $n$: at $\rho=20$, $T=10$ requires $n\gtrsim4\cdot10^{10}\kappa$. \\
+\midrule
+\textbf{(4)} LESGD \citep[Thm.~1]{djWangKale2026v1}
+& Expected restricted gap of averaged iterates for Lipschitz monotone operators with uniformly bounded variance.
+& \textbf{(1)}, \textbf{(4)}: Rates are not comparable across the distance and restricted-gap targets and noise models. & \\
+\midrule
+\textbf{(5)} LIPPAX \citep[Thm.~4]{djWangKale2026v1}
+& Expected restricted gap under monotonicity, Lipschitz continuity, bounded variance, a globally bounded operator and a quadratic Taylor remainder bound.
+& \textbf{(1)}, \textbf{(5)}: Rates are not comparable across these operator classes and accuracy targets. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\kappa=L/\mu$, $J=\log(R/\varepsilon)$ for $R>\varepsilon$, $G=2+\rho/8+\rho^2/128$, $C(s)=h(\lambda+\beta d\log(2+s))$. In the parallel branch, $T=\min\{\lfloor\kappa\rfloor,\lfloor\log(n/(64\kappa))/\log G\rfloor\}$ is the local step count, $q=1+32\rho MRG^T/\mu$, $u=R/(\varepsilon q)$, $H=1+\log(dq)$, and $[a]_+=\max\{a,0\}$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

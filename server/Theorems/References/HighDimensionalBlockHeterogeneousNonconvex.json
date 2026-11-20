@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalBlockHeterogeneousNonconvex",
+  "searched_at": "2026-11-20T09:46:04.967594+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\frac{\\left(\\sum_{j=0}^{B-1} L\\left(j\\right)\\right) \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\left(\\left(\\sum_{j=0}^{B-1} \\left(L\\left(j\\right) \\cdot \\sigma\\left(j\\right)^{2}\\right)^{\\frac{1}{3}}\\right)\\right)^{3} \\cdot \\Delta}{\\varepsilon^{4}}}{2^{57}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalBlockHeterogeneousNonconvex.spec.Params → ℕ",
+        "value": "fun q => ⌊((∑ j, q.L j) * q.Δ / q.ε ^ 2 + (∑ j, (q.L j * q.σ j ^ 2) ^ 3⁻¹) ^ 3 * q.Δ / q.ε ^ 4) / 2 ^ 57⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\frac{\\left(\\sum_{j=0}^{B-1} L\\left(j\\right)\\right) \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\left(\\left(\\sum_{j=0}^{B-1} \\left(L\\left(j\\right) \\cdot \\sigma\\left(j\\right)^{2}\\right)^{\\frac{1}{3}}\\right)\\right)^{3} \\cdot \\Delta}{\\varepsilon^{4}}}{2^{57}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalBlockHeterogeneousNonconvex.spec.Params → ℕ",
+          "value": "fun q => ⌊((∑ j, q.L j) * q.Δ / q.ε ^ 2 + (∑ j, (q.L j * q.σ j ^ 2) ^ 3⁻¹) ^ 3 * q.Δ / q.ε ^ 4) / 2 ^ 57⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.BlockHeterogeneousLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalBlockHeterogeneousNonconvex",
+      "setup": "LongTails.Setups.HighDimensionalBlockHeterogeneousNonconvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalBlockHeterogeneousNonconvex.spec\n  LongTails.Theorems.BlockHeterogeneousLowerBound.budget",
+      "theorem": "LongTails.Theorems.BlockHeterogeneousLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.BlockHeterogeneousLowerBound",
+      "theorem": "LongTails.Theorems.BlockHeterogeneousLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable function on Euclidean space. The two-sided quadratic Taylor remainder bound permits negative curvature. The objective has a global lower bound ℓ satisfying f(x₀) − ℓ ≤ Δ.",
+        "evidence": "LongTails/Setups/BlockHeterogeneousNonconvex.lean, spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "One call at an adaptively chosen x returns the full vector g(x, ξ), including every block, with E[g(x, ξ)] = ∇f(x). Each call uses a fresh i.i.d. real seed. Blocks within a reply may be dependent. All parameters d, B, blk, L, σ, Δ, ε and x₀ are public. The objective, oracle map and seed law are hidden.",
+        "evidence": "LongTails/Setups/HighDimensionalBlockHeterogeneousNonconvex.lean, Params, toGeneral and spec.publicInput. LongTails/Setups/BlockHeterogeneousNonconvex.lean, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every x and block j, E‖Pⱼ(g(x, ξ) − ∇f(x))‖₂² ≤ σⱼ², where Pⱼ is the orthogonal projection onto the coordinates assigned to j. Each σⱼ is nonnegative and may vanish.",
+        "evidence": "LongTails/Setups/BlockHeterogeneousNonconvex.lean, blockProj and spec.admissible. LongTails/Setups/HighDimensionalBlockHeterogeneousNonconvex.lean, spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is ℝᵈ with B > 0 coordinate blocks. Writing S = Σᵢ Lᵢ and H = Σᵢ(Lᵢσᵢ²)^(1/3), every individual block must contain at least 2⁴⁰(1 + BSΔ/ε² + H³Δ/ε⁴)⁴ coordinates.",
+        "evidence": "LongTails/Setups/HighDimensionalBlockHeterogeneousNonconvex.lean, Params.blk, spec.Instance and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The block smoothness constants control simultaneous displacements. For every x and h, |f(x+h) − f(x) − ⟨∇f(x),h⟩| ≤ ½ Σⱼ Lⱼ‖Pⱼh‖₂². Every Lⱼ is positive, ε > 0, and 2⁵⁷ε² ≤ LⱼΔ for every block.",
+        "evidence": "LongTails/Setups/BlockHeterogeneousNonconvex.lean, spec.admissible. LongTails/Setups/HighDimensionalBlockHeterogeneousNonconvex.lean, spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "At the algorithm’s output X, the stationarity measure is Σⱼ‖Pⱼ∇f(X)‖₂, the sum of unsquared Euclidean block norms. X may be any output point in ℝᵈ.",
+        "evidence": "LongTails/Setups/BlockHeterogeneousNonconvex.lean, spec.Output and spec.successful. LongTails/Template.lean, Algorithm.output."
+      },
+      {
+        "label": "expected",
+        "details": "X must be measurable, the stationarity measure must be integrable, and E[Σⱼ‖Pⱼ∇f(X)‖₂] ≤ ε under the joint law of algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/BlockHeterogeneousNonconvex.lean, spec.successful. LongTails/Template.lean, Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup pairs a separate curvature and noise bound for each public block with a sum-of-block-norms stationarity criterion. It also imposes a parameter-dependent minimum dimension on every block."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.BlockHeterogeneousLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.BlockHeterogeneousLowerBound",
+          "theorem": "LongTails.Theorems.BlockHeterogeneousLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

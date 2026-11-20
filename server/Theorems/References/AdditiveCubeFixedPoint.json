@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.AdditiveCubeFixedPoint",
+  "searched_at": "2026-11-20T09:46:39.845149+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{cases} 0 & R \\leq \\varepsilon \\\\ \\left\\lceil 4096 \\cdot \\frac{R}{\\varepsilon} \\cdot \\left(1 + 2097152 \\cdot \\log\\left(2 \\cdot d\\right) \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{2}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+        "oracle": 0,
+        "type": "LongTails.Setups.AdditiveCubeFixedPoint.spec.Params → ℕ",
+        "value": "fun p => if ↑p.R ≤ p.ε then 0 else ⌈4096 * (↑p.R / p.ε) * (1 + 2097152 * Real.log (2 * ↑p.d) * (p.σ / p.ε) ^ 2)⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{cases} 0 & R \\leq \\varepsilon \\\\ \\left\\lceil 4096 \\cdot \\frac{R}{\\varepsilon} \\cdot \\left(1 + 2097152 \\cdot \\log\\left(2 \\cdot d\\right) \\cdot \\left(\\frac{\\sigma}{\\varepsilon}\\right)^{2}\\right) \\right\\rceil_{+} & \\mathrm{otherwise} \\end{cases}",
+          "oracle": 0,
+          "type": "LongTails.Setups.AdditiveCubeFixedPoint.spec.Params → ℕ",
+          "value": "fun p => if ↑p.R ≤ p.ε then 0 else ⌈4096 * (↑p.R / p.ε) * (1 + 2097152 * Real.log (2 * ↑p.d) * (p.σ / p.ε) ^ 2)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.AdditiveCubeFixedPoint",
+      "namespace": "LongTails.Setups.AdditiveCubeFixedPoint",
+      "setup": "LongTails.Setups.AdditiveCubeFixedPoint",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.AdditiveCubeFixedPoint.spec LongTails.Theorems.AdditiveCubeFixedPoint.budget",
+      "theorem": "LongTails.Theorems.AdditiveCubeFixedPoint.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.AdditiveCubeFixedPoint",
+      "theorem": "LongTails.Theorems.AdditiveCubeFixedPoint.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Find an approximate fixed point of an unknown nonexpansive self-map T of the cube [−R,R]^d.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: Cube, spec.Instance, spec.admissible, spec.successful"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One call at a cube point x returns the full vector T(x) + Zₖ. Each call uses a fresh noise draw, including repeated queries at the same point. Replies lie in ℝᵈ and may fall outside the cube. The algorithm knows d, R, σ and ε. It accesses T through replies, and the noise law is hidden.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: Params, spec.Public, spec.publicInput, spec.Query, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The additive noise satisfies E[Zₖ] = 0 and E[‖Zₖ‖∞²] ≤ σ². The second moment controls the maximum over coordinates inside the expectation.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: spec.admissible"
+      },
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The cube is the closed sup-norm ball of radius R centered at zero. Nonexpansiveness means ‖T(x) − T(y)‖∞ ≤ ‖x − y‖∞ throughout the cube.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: Point, Cube, spec.admissible"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The dimension d is a public positive integer. The radius R and tolerance ε are positive, and the noise bound σ is nonnegative.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: Params, Point, spec.publicInput, spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "The noise vectors are independent across calls and have a common, query-independent distribution. Coordinates within one draw may be dependent.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID.independent, IID.marginal"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "E[‖T(X) − X‖∞] ≤ ε under the product law of the algorithm seed and oracle noise sequence, with a fixed cap on the total number of calls.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: spec.successful. LongTails/Template.lean: executeWithTrace, Convergence"
+      },
+      {
+        "label": "other",
+        "details": "Return a measurable cube-valued output X with integrable fixed-point residual ‖T(X) − X‖∞. Accuracy uses the first power of this residual.",
+        "evidence": "LongTails/Setups/AdditiveCubeFixedPoint.lean: spec.Output, spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "This stochastic fixed-point formulation combines sup-norm nonexpansiveness on a cube with query-independent additive vector noise controlled in the same norm. It measures the expected residual under a fixed oracle budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.AdditiveCubeFixedPoint.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.AdditiveCubeFixedPoint",
+          "theorem": "LongTails.Theorems.AdditiveCubeFixedPoint.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

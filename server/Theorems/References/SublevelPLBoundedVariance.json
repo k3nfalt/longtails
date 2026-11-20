@@ -1,8 +1,30 @@
 {
   "setup": "LongTails.Setups.SublevelPLBoundedVariance",
-  "searched_at": "2026-11-14T08:47:24.594458+00:00",
+  "searched_at": "2026-11-20T09:48:42.595291+00:00",
   "none_means": "No qualifying prior reference verified; not a proof of novelty.",
   "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{110000 \\cdot L \\cdot \\varepsilon \\cdot \\left(\\frac{\\tau}{\\varepsilon}\\right)^{\\frac{2}{\\alpha}}}{2 - \\alpha} \\cdot \\left(1 + \\frac{\\sigma^{2} \\cdot \\left(\\frac{\\tau}{\\varepsilon}\\right)^{\\frac{2}{\\alpha}}}{2 - \\alpha}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.SublevelPLBoundedVariance.spec.Params → ℕ",
+        "value": "fun p =>\n  ⌈110000 * p.L * p.ε * (p.τ / p.ε) ^ (2 / p.α) / (2 - p.α) * (1 + p.σ ^ 2 * (p.τ / p.ε) ^ (2 / p.α) / (2 - p.α))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{110000 \\cdot L \\cdot \\varepsilon \\cdot \\left(\\frac{\\tau}{\\varepsilon}\\right)^{\\frac{2}{\\alpha}}}{2 - \\alpha} \\cdot \\left(1 + \\frac{\\sigma^{2} \\cdot \\left(\\frac{\\tau}{\\varepsilon}\\right)^{\\frac{2}{\\alpha}}}{2 - \\alpha}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.SublevelPLBoundedVariance.spec.Params → ℕ",
+          "value": "fun p =>\n  ⌈110000 * p.L * p.ε * (p.τ / p.ε) ^ (2 / p.α) / (2 - p.α) * (1 + p.σ ^ 2 * (p.τ / p.ε) ^ (2 / p.α) / (2 - p.α))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.SublevelPLWeightedGradient",
+      "namespace": "LongTails.Setups.SublevelPLBoundedVariance",
+      "setup": "LongTails.Setups.SublevelPLBoundedVariance",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SublevelPLBoundedVariance.spec\n  OracleTemplate.SublevelPLWeightedGradient.budget",
+      "theorem": "OracleTemplate.SublevelPLWeightedGradient.result"
+    },
     {
       "budget": {
         "latex": "\\left(\\left\\lceil \\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} \\right\\rceil_{+} + 1\\right) \\cdot \\left(\\left(6 + \\left\\lceil \\log_{2}\\left(\\frac{32 \\cdot \\left(\\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} + 2\\right) \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\right) \\cdot \\left(1 + \\left\\lceil \\left(1152 + 16 \\cdot \\left(6 + \\left\\lceil \\log_{2}\\left(\\frac{32 \\cdot \\left(\\frac{32 \\cdot \\alpha}{7 \\cdot \\left(2 - \\alpha\\right)} \\cdot L \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\left(\\frac{\\varepsilon}{4}\\right)^{\\frac{\\alpha - 2}{\\alpha}} + 2\\right) \\cdot \\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right) \\cdot \\left(\\frac{19 \\cdot \\alpha}{2 - \\alpha} \\cdot \\tau^{\\frac{2}{\\alpha}} \\cdot \\sigma^{2} \\cdot \\varepsilon^{-\\frac{2}{\\alpha}} + \\frac{2 \\cdot \\sigma^{2}}{L \\cdot \\varepsilon}\\right) \\right\\rceil_{+}\\right)\\right)",
@@ -28,6 +50,12 @@
   ],
   "results": [
     {
+      "module": "LongTails.Theorems.SublevelPLWeightedGradient",
+      "theorem": "OracleTemplate.SublevelPLWeightedGradient.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
       "module": "LongTails.Theorems.SublevelPLRobustBatchedGd",
       "theorem": "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result",
       "references": "None",
@@ -38,54 +66,60 @@
     "problem_class": [
       {
         "label": "nonconvex",
-        "details": "Unconstrained minimization of a differentiable, bounded-below function with globally L-Lipschitz gradient. Convexity is not required; nonconvex objectives are permitted.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.admissible."
+        "details": "Unconstrained minimization of a differentiable, lower-bounded function with globally L-Lipschitz gradient, L > 0. The objective may be nonconvex. The public starting point x₀ satisfies f(x₀) − inf f ≤ Δ for public Δ ≥ 0.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, Public and spec.Instance, valid, admissible"
       },
       {
         "label": "pl",
-        "details": "Sublevel α-gradient dominance: f(x)−inf f ≤ τ‖∇f(x)‖^α whenever f(x)≤f(x0), with 1≤α<2 and τ>0. The initial gap is at most Δ≥0.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.valid and spec.admissible."
+        "details": "For public τ > 0 and 1 ≤ α < 2, every x in the initial sublevel set {x | f(x) ≤ f(x₀)} satisfies f(x) − inf f ≤ τ‖∇f(x)‖^α. The gap is relative to the global infimum.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, Public and spec.valid, admissible"
       }
     ],
     "oracle": [
       {
         "label": "stochastic_gradient",
-        "details": "Each call at x returns g(x,ξ) using fresh iid randomness, with E[g(x,ξ)]=∇f(x). Only gradient samples are returned; function values and shared-sample evaluations across different points are not supplied. E, L, τ, α, σ, Δ, ε, and x0 are public; f, g, the sampling law, and Ω are hidden.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: Public, Params, spec.publicInput, and spec.admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID; LongTails/Template.lean: Convergence."
+        "details": "Each call at x returns one vector g(x,ξ) with mean ∇f(x). The seed is fresh and independent across calls, including repeated calls at x. The algorithm receives the vector alone. The objective, seed space, sampling law, and map g are hidden.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, Params and spec.publicInput, Query, Reply, admissible; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID"
       }
     ],
     "distinctive_assumptions": [
       {
         "label": "bounded_variance",
-        "details": "Uniform second-moment noise bound E‖g(x,ξ)−∇f(x)‖²≤σ² for every x, with σ≥0. No stronger tail or samplewise smoothness condition is imposed.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.valid and spec.admissible variance integrability and variance inequalities."
+        "details": "The public σ ≥ 0 uniformly bounds the root mean squared oracle error: E‖g(x,ξ) − ∇f(x)‖² ≤ σ² for every x in the entire space.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, Public.σ and spec.valid, admissible"
       },
       {
         "label": "finite_dimensional",
-        "details": "E is a finite-dimensional real inner-product space with its Borel measurable structure; no dimension bound is specified.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: Public.normedE, Public.innerE, Public.finiteE, Public.measurableE, and Public.borelE."
+        "details": "The public ambient space E is a finite-dimensional real inner-product space with its Borel measurable structure.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, Public.innerE, Public.finiteE, Public.borelE"
+      },
+      {
+        "label": "other",
+        "details": "Gradient dominance holds only at objective values at or below f(x₀). Queries may range over all of E, and the setup supplies neither a sublevel membership oracle nor a promise that stochastic iterates stay in the sublevel set.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, spec.Query, Reply, admissible; LongTails/Template.lean, Setup.allowedAlgorithm"
       }
     ],
     "accuracy": [
       {
         "label": "objective_gap",
-        "details": "Return an E-valued point X whose objective gap f(X)−inf_y f(y) is integrable and at most ε in expectation, with ε>0. No distance or gradient-norm requirement is imposed.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.successful and spec.valid."
+        "details": "The algorithm returns a point X ∈ E. Its accuracy is measured by the global objective gap f(X) − inf f, with no prescribed iterate-selection rule.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, spec.Output and successful; LongTails/Template.lean, Algorithm.output"
       },
       {
         "label": "expected",
-        "details": "E[f(X)−inf f]≤ε over the joint algorithm and oracle randomness, under the supplied fixed cap on total stochastic-gradient calls.",
-        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean: spec.successful; LongTails/Template.lean: executeWithTrace and Convergence."
+        "details": "The output gap must be integrable and satisfy E[f(X) − inf f] ≤ ε for public ε > 0. Expectation includes both oracle and algorithm randomness. Each supplied budget caps the number of individual oracle calls on every run.",
+        "evidence": "LongTails/Setups/SublevelPLBoundedVariance.lean, Public.ε and spec.valid, successful; LongTails/Template.lean, executeWithTrace and Convergence"
       }
     ],
     "setup_category": {
       "label": "non_standard",
-      "reason": "The combination of global smoothness, α-gradient dominance restricted to the initial sublevel set for α<2, gradient-only bounded-variance access, and unconditional expected objective accuracy is a meaningful localized variant requiring control of excursions outside that sublevel set."
+      "reason": "The α-gradient dominance condition applies only on the initial sublevel set, while gradient queries are unrestricted. The expected global objective gap therefore includes outcomes of stochastic trajectories that leave the region where gradient dominance is guaranteed."
     },
     "schema_version": 2,
     "proof_status": {
       "status": "exported_theorem",
       "theorems": [
+        "OracleTemplate.SublevelPLWeightedGradient.result",
         "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result"
       ],
       "verification": "not_checked_by_catalog"
@@ -93,6 +127,11 @@
     "literature_status": {
       "status": "unresolved_comparison",
       "results": [
+        {
+          "module": "LongTails.Theorems.SublevelPLWeightedGradient",
+          "theorem": "OracleTemplate.SublevelPLWeightedGradient.result",
+          "match_status": "none"
+        },
         {
           "module": "LongTails.Theorems.SublevelPLRobustBatchedGd",
           "theorem": "OracleTemplate.SublevelRobustGradient.SublevelPLRobustBatchedGd.result",

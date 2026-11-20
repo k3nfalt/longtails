@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Minimization under Weak Interpolation}
+We minimize the average of smooth convex worker objectives on the Euclidean space $\mathbb{R}^d$ of dimension $d\geq 0$. Their common minimizer set $S$ is nonempty, the given starting point lies within a known radius of $S$, and the average satisfies quadratic growth relative to $S$. Workers communicate through a hub and return unbiased local stochastic gradients with bounded variance, using independent samples within and across workers. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}$ whose expected squared Euclidean distance to $S$ is at most $\varepsilon$ by the elapsed-time deadline.
+
+Let $n\geq 1$ be the number of workers, with local objectives $f_i:\mathbb{R}^d\to\mathbb{R}$ for $i=1,\ldots,n$. Write $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$. The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} F(x).
+\]
+The algorithm receives $d$, $n$, the measurable sample space $\Omega$, the worker computation times $h_i>0$, the latency $\ell\geq 0$, the time per bit $b\geq 0$, the smoothness constants $L_i\geq 0$, the growth constant $\mu>0$, the radius $R\geq 0$, the noise bound $\sigma\geq 0$, the tolerance $\varepsilon$, and the starting point $x^0\in\mathbb{R}^d$. The parameters satisfy $n\mu\leq\sum_{i=1}^n L_i$.
+
+Our assumptions:
+\begin{assumption}[Local convexity and smoothness]
+Each $f_i$ is convex and differentiable on $\mathbb{R}^d$, with
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|\leq L_i\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Common minimizers and quadratic growth]
+Let $S=\bigcap_{i=1}^n\operatorname*{arg\,min}_{x\in\mathbb{R}^d}f_i(x)$ and write $\operatorname{dist}(x,S)=\inf_{z\in S}\|x-z\|$. There exists $x^\star\in S$ such that
+\[
+\begin{aligned}
+\|x^0-x^\star\|&\leq R,\\
+F(x)-F(x^\star)&\geq \frac{\mu}{2}\operatorname{dist}(x,S)^2
+\qquad\text{for all }x\in\mathbb{R}^d.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Local stochastic gradients]
+Worker $i$ has a sequence $(\xi_{i,k})_{k\geq 0}$ of measurable i.i.d. samples with law $\nu_i$ on $\Omega$. The worker sequences are mutually independent, and the entire sample array is independent of the algorithm's randomness. At any query point $x\in\mathbb{R}^d$, the worker returns $x$ and $g_i(x,\xi_{i,k})$, where $k$ counts its previously completed evaluations. The map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For each $x$ and $\xi\sim\nu_i$, the vector $g_i(x,\xi)$ is Bochner integrable and its squared error is integrable, with
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu_i}[g_i(x,\xi)]&=\nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\nu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr]&\leq\sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The star network consists of the $n$ computing workers and one communication hub. An evaluation at worker $i$ takes time $h_i$. Each worker can have one evaluation in progress and may abort it without consuming a sample. An evaluation request made while the worker is busy is ignored. Messages travel only between the hub and a worker. A payload of $m$ bits is transmitted with 64 appended zero bits and takes time
+\[
+\ell+b(m+64).
+\]
+The recipient receives the sender's identity and the transmitted bits. Each directed link carries at most one message at a time and ignores submissions while occupied. Distinct directed links, including opposite directions of the same connection, can operate concurrently with one another and with worker computations.
+
+For an elapsed-time budget $T\geq 0$, almost surely the algorithm must process finitely many events at every deadline $t\in[0,T]$. At time $T$, its designated output node must produce a measurable point $\bar{x}\in\mathbb{R}^d$ with integrable squared distance to $S$ satisfying
+\[
+\mathbb{E}\bigl[\operatorname{dist}(\bar{x},S)^2\bigr]\leq\varepsilon,
+\]
+where the expectation is over the algorithm's randomness and the worker sample array.
+\end{document}

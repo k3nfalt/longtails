@@ -1,0 +1,53 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedComponentSmoothNonconvex.lean}{distributed component-smooth nonconvex stationarity}.}\label{tab:DistributedComponentSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $F=n^{-1}\sum_i f_i$ is bounded below, $F(x_0)-\inf F\le\Delta$, and $\nabla f_i$ is $L_i$-Lipschitz. Worker $i$ has a jointly measurable unbiased gradient oracle with variance at most $\sigma_i^2$. Samples are IID within workers and independent across workers. Workers compute in parallel, one batch per worker at a time, at $h_i>0$ time per sample. Computation and communication can overlap. The complete multiport network serves each directed link in FIFO order. An $m$-bit message takes $\ell+bm$ time. Here $n\ge1$, $L_i,\sigma_i,\Delta,\ell,b\ge0$, and $\varepsilon>0$. By the deadline, the execution returns a measurable $X$ with $\mathbb E_{\rm exec}\|\nabla F(X)\|^2\le\varepsilon^2$ and almost surely completes only finitely many events.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/MultirateDistributedStationarity.lean}{Multirate\allowbreak Distributed\allowbreak Stationarity} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/MultirateDistributedStationarity.md}{(review)}
+& $\begin{aligned}[t]
+\mathcal{O}\Big(&H+\tfrac{\overline{\sigma^2 h}}{n\varepsilon^2}+r C(d,r)\\
+ &+q\,\overline{Lh}+\tfrac{q}{n\varepsilon^2}\big(\overline{\sigma\sqrt{Lh}}\big)^2\Big)
+\end{aligned}$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} FiniteBit\allowbreak Leon \citep{dcsnFiniteBitLeon}
+& $\begin{aligned}[t]\mathcal{O}\big((1+qL_F)\big[&H+v\bar h\\[-2pt] &+C(\lceil d/n\rceil,1)\big]\big)\end{aligned}$
+& \textbf{(1)}: On the same network with $L_i=L\asymp L_F$, $\sigma_i=\sigma$, recurring compute time falls from $H+v\bar h$ to $\bar h+v(\overline{\sqrt h})^2$. Also weights each worker's variance separately.
+& \textbf{(1)} needs local smoothness. Curvature cancellation can give $L_F\ll\bar L$. Each link carries $d$ coordinates instead of $\lceil d/n\rceil$, with an additional $\log r$ in the bits per coordinate. \\
+\midrule
+\textbf{(3)} Malenia SGD \citep[Thm.~A.4]{dcsnMalenia}
+& $\mathcal{O}\big(qL_F(H+v\bar h)\big)$, free communication
+& \textbf{(1)}: For $L_i=L\asymp L_F$, $\sigma_i=\sigma$, $qL\ge1$, $\ell=b=0$, pays $H+v\bar h$ once. Recurring time replaces $H$ by $\bar h$ and the noise coefficient $\bar h$ by $(\overline{\sqrt h})^2$. At $\sigma=0$ the recurring gain is $H/\bar h$.
+& \textbf{(1)} needs $h_i,L_i,\sigma_i$ for scheduling. \textbf{(3)} uses global smoothness and a common variance bound without knowing worker speeds. \\
+\midrule
+\textbf{(4)} Ringleader ASGD \citep[\S5.2]{dcsnRingleader}
+& $\mathcal{O}\big(qL_{\rm RL}(H+v\bar h)\big)$, fixed speeds, free communication
+& \textbf{(1)}: With $2^{J-g}$ workers of time $4^g$ per group $g=0,\ldots,J$, $L_i=\sigma_i=\Delta=1$, $L_F\asymp1$, $\varepsilon=n^{-2}$, $d\le n$, $\ell=b=0$, total time is $\mathcal{O}(n^7\log^2 n)$ versus $\mathcal{O}(n^8)$ for \textbf{(3)}, \textbf{(4)}. Fixed $\ell,b$ add only $\mathcal{O}(n^5\log n)$ to \textbf{(1)} here.
+& \textbf{(1)} needs individual smoothness, noise and timing parameters. \textbf{(4)} uses aggregate smoothness $L_{\rm RL}$ and schedules workers without knowing their speeds. \\
+\midrule
+\textbf{(5)} Modified Ringleader ASGD \citep[App.~C.3]{dcsnRingleader}
+& Fixed-speed specialization, free communication: $\mathcal{O}\big((1+qL_{\rm RL})(H+v\bar h)\big)$
+& \textbf{(1)}: With fixed $h_i$, $L_i=L\asymp L_F$, $\sigma_i=\sigma$, $\ell=b=0$, recurring compute time uses $\bar h+v(\overline{\sqrt h})^2$ instead of $H+v\bar h$.
+& \textbf{(1)} requires known, fixed $h_i$. \textbf{(5)} also gives a deadline under unknown, time-varying worker speeds. \\
+\midrule
+\textbf{(6)} Rescaled ASGD \citep[Cor.~4.2]{dcsnRescaled}
+& $\begin{aligned}[t]
+\mathcal{O}\Big(&qL_F(H+v\bar h)\\
+ &+q L_{\max}\tfrac{H}{h_{\rm harm}}
+ \Big[\rho H+\tfrac{\bar h\sqrt{\sigma^2+\zeta^2}}{\varepsilon}\Big]\Big)
+\end{aligned}$\par Free communication
+& \textbf{(1)} drops pairwise harmonic periods and the bound $\|\nabla f_i\|^2\le\zeta^2+\rho^2\|\nabla F\|^2$. On that overlap with $L_i=L\asymp L_F$, $\sigma_i=\sigma$, $\ell=b=0$, recurring time falls to $\bar h+v(\overline{\sqrt h})^2$, removing the staleness penalties.
+& \textbf{(1)} needs individual $L_i,\sigma_i$ in addition to worker times. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\bar a=n^{-1}\sum_i a_i$ for worker-indexed expressions, $H=\max_i h_i$, $h_{\rm harm}=1/\overline{(1/h)}$, $q=\Delta/\varepsilon^2$, $r=1+q\bar L$, $v=\sigma^2/(n\varepsilon^2)$ for common variance bound $\sigma^2$.
+$C(k,s)=\ell+b[1+k(1+\log(n(d+1)s))]$. $L_F$ is global smoothness, $L_{\max}=\max_i L_i$, and $L_{\rm RL}$ is the mixed-point smoothness constant, $L_F\le L_{\rm RL}\le\sqrt{\overline{L^2}}$. Pairwise harmonic periods satisfy $\max(h_i,h_j)/\min(h_i,h_j)\in\mathbb N$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
