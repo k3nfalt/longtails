@@ -1,0 +1,102 @@
+{
+  "setup": "LongTails.Setups.GraphBandwidthSmoothNonconvex",
+  "searched_at": "2026-11-20T14:12:35.999290+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &\\left(\\left\\lceil \\frac{32 \\cdot L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} - 1\\right) \\cdot \\inf_{\\substack{S\\in \\mathcal{P}\\left(\\{0,\\ldots,n-1\\}\\right)\\\\ S \\ne \\varnothing}}\\left(\\frac{B + \\left|S\\right|}{\\left(\\sum_{i\\in S} \\frac{1}{h\\left(i\\right)}\\right)} + \\begin{cases} 0 & \\left|S\\right| \\leq 1 \\\\ \\frac{16 \\cdot \\left(d \\cdot \\left(w + t\\right) + t \\cdot \\left(\\left|\\left\\{ e\\in \\{0,\\ldots,n-1\\} \\times \\{0,\\ldots,n-1\\} \\mid e_{1} < e_{2} \\land G\\left(e_{1}, e_{2}\\right) \\right\\}\\right| + 1\\right) \\cdot n\\right)}{\\alpha\\left(S\\right)} & \\mathrm{otherwise} \\end{cases}\\right) \\\\ &\\text{where}\\quad B = \\max\\left\\{ 1, \\left\\lceil \\frac{256 \\cdot \\sigma^{2}}{\\varepsilon} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} t = 64 + \\left\\lceil\\log_{2}\\left(B + 1\\right)\\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} w = 32 + 4 \\cdot \\log_{2}\\left(2 + d + \\left\\lceil \\frac{2 \\cdot L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) \\\\ &\\phantom{\\text{where}\\quad} \\alpha\\left(S\\right) = \\inf_{\\substack{C\\in \\mathcal{P}\\left(\\{0,\\ldots,n-1\\}\\right)\\\\ S \\cap C \\ne \\varnothing \\land S \\setminus C \\ne \\varnothing}}\\left(\\left(\\sum_{e\\in \\left\\{ e\\in \\{0,\\ldots,n-1\\} \\times \\{0,\\ldots,n-1\\} \\mid e_{1} < e_{2} \\land G\\left(e_{1}, e_{2}\\right) \\right\\}} \\begin{cases} 0 & e_{1} \\in C \\leftrightarrow e_{2} \\in C \\\\ b\\left(e_{1}\\right)\\left(e_{2}\\right) & \\mathrm{otherwise} \\end{cases}\\right)\\right)\\end{aligned}",
+        "type": "LongTails.Setups.GraphBandwidthSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  have B := max 1 ⌈256 * p.σ ^ 2 / p.ε⌉₊;\n  have t := DistributedTemplate.clockBits + B.size;\n  have w := 32 + 4 * (2 + p.d + ⌈2 * p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊).log2;\n  have α := fun S => ⨅ C, ∑ e, if (↑e).1 ∈ ↑C ↔ (↑e).2 ∈ ↑C then 0 else p.b (↑e).1 (↑e).2;\n  ↑(⌈32 * p.L * p.Δ / p.ε⌉₊ - 1) *\n    ⨅ S,\n      ↑(B + (↑S).card) / ∑ i ∈ ↑S, (p.h i)⁻¹ +\n        if (↑S).card ≤ 1 then 0\n        else 16 * ↑(p.d * (w + t) + t * (Fintype.card (LongTails.Algorithms.GraceGraph.Link p) + 1) * ↑p.n) / α ↑S"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &\\left(\\left\\lceil \\frac{32 \\cdot L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} - 1\\right) \\cdot \\inf_{\\substack{S\\in \\mathcal{P}\\left(\\{0,\\ldots,n-1\\}\\right)\\\\ S \\ne \\varnothing}}\\left(\\frac{B + \\left|S\\right|}{\\left(\\sum_{i\\in S} \\frac{1}{h\\left(i\\right)}\\right)} + \\begin{cases} 0 & \\left|S\\right| \\leq 1 \\\\ \\frac{16 \\cdot \\left(d \\cdot \\left(w + t\\right) + t \\cdot \\left(\\left|\\left\\{ e\\in \\{0,\\ldots,n-1\\} \\times \\{0,\\ldots,n-1\\} \\mid e_{1} < e_{2} \\land G\\left(e_{1}, e_{2}\\right) \\right\\}\\right| + 1\\right) \\cdot n\\right)}{\\alpha\\left(S\\right)} & \\mathrm{otherwise} \\end{cases}\\right) \\\\ &\\text{where}\\quad B = \\max\\left\\{ 1, \\left\\lceil \\frac{256 \\cdot \\sigma^{2}}{\\varepsilon} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} t = 64 + \\left\\lceil\\log_{2}\\left(B + 1\\right)\\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} w = 32 + 4 \\cdot \\log_{2}\\left(2 + d + \\left\\lceil \\frac{2 \\cdot L \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+} + \\left\\lceil \\frac{\\sigma^{2}}{\\varepsilon} \\right\\rceil_{+}\\right) \\\\ &\\phantom{\\text{where}\\quad} \\alpha\\left(S\\right) = \\inf_{\\substack{C\\in \\mathcal{P}\\left(\\{0,\\ldots,n-1\\}\\right)\\\\ S \\cap C \\ne \\varnothing \\land S \\setminus C \\ne \\varnothing}}\\left(\\left(\\sum_{e\\in \\left\\{ e\\in \\{0,\\ldots,n-1\\} \\times \\{0,\\ldots,n-1\\} \\mid e_{1} < e_{2} \\land G\\left(e_{1}, e_{2}\\right) \\right\\}} \\begin{cases} 0 & e_{1} \\in C \\leftrightarrow e_{2} \\in C \\\\ b\\left(e_{1}\\right)\\left(e_{2}\\right) & \\mathrm{otherwise} \\end{cases}\\right)\\right)\\end{aligned}",
+          "type": "LongTails.Setups.GraphBandwidthSmoothNonconvex.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  have B := max 1 ⌈256 * p.σ ^ 2 / p.ε⌉₊;\n  have t := DistributedTemplate.clockBits + B.size;\n  have w := 32 + 4 * (2 + p.d + ⌈2 * p.L * p.Δ / p.ε⌉₊ + ⌈p.σ ^ 2 / p.ε⌉₊).log2;\n  have α := fun S => ⨅ C, ∑ e, if (↑e).1 ∈ ↑C ↔ (↑e).2 ∈ ↑C then 0 else p.b (↑e).1 (↑e).2;\n  ↑(⌈32 * p.L * p.Δ / p.ε⌉₊ - 1) *\n    ⨅ S,\n      ↑(B + (↑S).card) / ∑ i ∈ ↑S, (p.h i)⁻¹ +\n        if (↑S).card ≤ 1 then 0\n        else 16 * ↑(p.d * (w + t) + t * (Fintype.card (LongTails.Algorithms.GraceGraph.Link p) + 1) * ↑p.n) / α ↑S"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.GraceSgd",
+      "namespace": "LongTails.Setups.GraphBandwidthSmoothNonconvex",
+      "setup": "LongTails.Setups.GraphBandwidthSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.GraphBandwidthSmoothNonconvex.spec\n  LongTails.Theorems.GraceSgd.budget",
+      "theorem": "LongTails.Theorems.GraceSgd.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GraceSgd",
+      "theorem": "LongTails.Theorems.GraceSgd.result",
+      "references": "- Alexander Tyurin. [Optimality in Decentralized Optimization under Bandwidth Constraints](https://arxiv.org/html/2603.20735v1). 2026 (preprint v1, 21 March). Complexity: $O\\!\\left(\\frac{L\\Delta}{\\varepsilon}\\min_{1\\le k\\le n}\\min_{1\\le p\\le k}\\min_{1\\le m\\le |S_{k,p}|}\\left[\\frac{d}{\\bar w_k}+\\frac{m+\\sigma^2/\\varepsilon}{\\sum_{i=1}^{m}h_{\\pi_i(S_{k,p})}^{-1}}\\right]\\right)$ elapsed time for Grace SGD to obtain $\\mathbb E\\|\\nabla f(\\bar x)\\|^2\\le\\varepsilon$, for $0<\\varepsilon\\le L\\Delta$. Here $\\bar w_k$ are sorted Gomory–Hu tree weights, $\\bar w_n=\\infty$, $S_{k,p}$ are components after deleting the first $k-1$ tree edges, and $\\pi(S)$ sorts workers by increasing $h_i$. The communication analysis measures bandwidth in real coordinates per unit time; local preprocessing and arithmetic have negligible cost.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a differentiable function f on R^d. The gradient is globally L-Lipschitz, and some global lower bound a satisfies f(x₀)−a≤Δ. Convexity is not required. Parameters satisfy L>0, Δ≥0, σ≥0, and ε>0.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: spec.Instance, spec.valid, and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "All workers access the same jointly measurable stochastic gradient g(x,ξ), with E[g(x,ξ)]=∇f(x) and E‖g(x,ξ)−∇f(x)‖²≤σ². Samples are IID within each worker and independent across workers, with common marginal μ. A query (x,m) returns m gradients and occupies worker i for m h_i time; each worker permits one pending computation.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: system and spec.admissible; LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean: ComputeQuery and computation; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient; LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean: IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "The unbiased gradient noise has uniformly bounded second central moment σ². No almost-sure noise bound, exponential-tail assumption, or sample-gradient smoothness is imposed.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: spec.admissible; LongTails/Setups/StochasticSmoothAndConvex.lean: IsStochasticGradient.unbiased, variance_integrable, and variance."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is EuclideanSpace R (Fin d), with d any natural number and the Euclidean norm.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: Params.x₀, Params.base, and Point; LongTails/Setups/DistributedSmoothNonconvex.lean: Point."
+      },
+      {
+        "label": "other",
+        "details": "Elapsed-time distributed model with n≥1 workers, positive heterogeneous gradient times h_i, and a connected graph with positive symmetric edge bandwidths b_ij. A directed link serializes finite-bit messages, taking message length divided by b_ij, with no additional latency. Different links and workers can operate concurrently. Every transmitted message receives a 64-bit clock overhead. Allowed algorithms realize fixed-batch minibatch SGD with local and aggregate clipping and quantization, and a uniformly selected iterate. All Params are public, including G, b, h, L, Δ, σ, ε, and x₀; f, g, and the sampling laws are hidden.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: communication, SgdTuning, SgdTuning.quantize, SgdTuning.iterate, IsQuantizedMinibatchSgd, and spec; LongTails/TemplateDistributed.lean: clockBits, step, and TimedConvergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm_squared",
+        "details": "The measurable output must have integrable squared gradient norm and satisfy E‖∇f(output)‖²≤ε. The criterion uses ε directly, not ε². The allowed algorithm terminates with X_J at its root, where J is uniform on {0,…,K−1}.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: spec.successful and IsQuantizedMinibatchSgd."
+      },
+      {
+        "label": "expected",
+        "details": "The stationarity guarantee is in expectation over algorithm randomization and oracle samples under their product law, at the supplied fixed elapsed-time budget. TimedConvergence additionally requires almost-sure finiteness of execution events through that deadline.",
+        "evidence": "LongTails/Setups/GraphBandwidthSmoothNonconvex.lean: spec.successful; LongTails/TemplateDistributed.lean: law and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The smooth nonconvex stochastic objective and expected stationarity criterion are standard, but the setup additionally specifies heterogeneous computation times, queued per-bit graph communication, clock overhead, and a restricted quantized minibatch algorithm class under an elapsed-time budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.GraceSgd.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GraceSgd",
+          "theorem": "LongTails.Theorems.GraceSgd.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}
