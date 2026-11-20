@@ -194,24 +194,27 @@ lemma configured_iterations (hε : 0 < p.ε) :
     exact_mod_cast (le_max_right 1 ⌈16 * p.L * p.Δ / p.ε⌉₊)
   exact (div_le_iff₀ hε).mp (hc.trans hm)
 
-lemma configured_variance (hh : ∀ i, 0 < p.h i) (hε : 0 < p.ε) :
-    4 * p.σ ^ 2 / totalBatch p (config p) ≤ p.ε / 64 := by
-  have hbatch := configured_batch_large hh
-  have hpos : 0 < totalBatch p (config p) := by
+lemma variance_of_batch {B : ℕ} (hbatch : targetBatch p ≤ B) (hε : 0 < p.ε) :
+    4 * p.σ ^ 2 / B ≤ p.ε / 64 := by
+  have hpos : 0 < B := by
     have hone : 1 ≤ targetBatch p := le_max_left _ _
     omega
   have hc := Nat.le_ceil (256 * p.σ ^ 2 / p.ε)
-  have hm : (⌈256 * p.σ ^ 2 / p.ε⌉₊ : ℝ) ≤ totalBatch p (config p) := by
+  have hm : (⌈256 * p.σ ^ 2 / p.ε⌉₊ : ℝ) ≤ B := by
     exact_mod_cast ((le_max_right 1 ⌈256 * p.σ ^ 2 / p.ε⌉₊).trans hbatch)
   have hmul := (div_le_iff₀ hε).mp (hc.trans hm)
-  apply (div_le_iff₀ (by exact_mod_cast hpos : (0 : ℝ) < totalBatch p (config p))).mpr
+  apply (div_le_iff₀ (by exact_mod_cast hpos : (0 : ℝ) < B)).mpr
   nlinarith
 
-lemma configured_tuning (hh : ∀ i, 0 < p.h i)
+lemma configured_variance (hh : ∀ i, 0 < p.h i) (hε : 0 < p.ε) :
+    4 * p.σ ^ 2 / totalBatch p (config p) ≤ p.ε / 64 :=
+  variance_of_batch (configured_batch_large hh) hε
+
+lemma tuning_of_batch {B : ℕ} (hlarge : targetBatch p ≤ B)
     (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε) :
     let K : ℕ := iterations p
     let M : ℝ := (2 ^ ((config p).width : ℕ) - 1 : ℕ)
-    let a := 4 * p.σ ^ 2 / totalBatch p (config p) + p.ε / 256 +
+    let a := 4 * p.σ ^ 2 / B + p.ε / 256 +
       40 * p.d * (32 * p.L * p.Δ + 4 * p.ε + 4096 * p.σ ^ 4 / p.ε) / M ^ 2
     let c := 640 * p.d * p.L ^ 2 / M ^ 2
     8 * (K : ℝ) ^ 2 * c ≤ p.L ^ 2 ∧
@@ -224,10 +227,9 @@ lemma configured_tuning (hh : ∀ i, 0 < p.h i)
     dsimp [M]
     exact_mod_cast levels_pos (config p)
   have hM2 : 0 < M ^ 2 := sq_pos_of_pos hM
-  have hB : (totalBatch p (config p) : ℝ) ≠ 0 := by
-    have hlarge := configured_batch_large hh
+  have hB : (B : ℝ) ≠ 0 := by
     have htarget : 1 ≤ targetBatch p := le_max_left _ _
-    have hpos : 0 < totalBatch p (config p) := by omega
+    have hpos : 0 < B := by omega
     exact_mod_cast (Nat.ne_of_gt hpos)
   have hd : (0 : ℝ) ≤ p.d := Nat.cast_nonneg _
   have hlevels := configured_levels hL.le hΔ hε
@@ -247,17 +249,28 @@ lemma configured_tuning (hh : ∀ i, 0 < p.h i)
     rw [heq]
     simpa only [mul_one] using mul_le_mul_of_nonneg_left hratio (sq_nonneg p.L)
   · have heq : a + 4 * c * K * p.Δ / p.L =
-        4 * p.σ ^ 2 / totalBatch p (config p) + p.ε / 256 + p.ε * ((p.d : ℝ) * V / M ^ 2) := by
+        4 * p.σ ^ 2 / B + p.ε / 256 + p.ε * ((p.d : ℝ) * V / M ^ 2) := by
       dsimp [a, c, V]
       field_simp [ne_of_gt hL, ne_of_gt hε, ne_of_gt hM, hB]
       ring
     rw [heq]
-    have hvar := configured_variance hh hε
+    have hvar := variance_of_batch hlarge hε
     have hscaled := mul_le_mul_of_nonneg_left hquant hε.le
     linarith
   · have hi := configured_iterations hε
     have hgap : 0 ≤ p.L * p.Δ := mul_nonneg hL.le hΔ
     linarith
+
+lemma configured_tuning (hh : ∀ i, 0 < p.h i)
+    (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε) :
+    let K : ℕ := iterations p
+    let M : ℝ := (2 ^ ((config p).width : ℕ) - 1 : ℕ)
+    let a := 4 * p.σ ^ 2 / totalBatch p (config p) + p.ε / 256 +
+      40 * p.d * (32 * p.L * p.Δ + 4 * p.ε + 4096 * p.σ ^ 4 / p.ε) / M ^ 2
+    let c := 640 * p.d * p.L ^ 2 / M ^ 2
+    8 * (K : ℝ) ^ 2 * c ≤ p.L ^ 2 ∧
+      a + 4 * c * K * p.Δ / p.L ≤ p.ε / 4 ∧ 4 * p.L * p.Δ ≤ K * p.ε :=
+  tuning_of_batch (configured_batch_large hh) hL hΔ hε
 
 lemma spacing_pos (cfg : Config p) (hL : 0 ≤ p.L) (hε : 0 < p.ε) (x : Point p) :
     0 < spacing p cfg x := by
@@ -1177,6 +1190,30 @@ lemma output_accuracy_of_tuning (cfg : Config p) (P : Measure (Samples p))
   have hscaled := mul_le_mul_of_nonneg_left hsum (one_div_pos.mpr hK).le
   simpa only [one_div_mul_cancel (ne_of_gt hK), ← mul_assoc, one_mul] using hscaled
 
+lemma output_accuracy_of_batch (cfg : Config p) (P : Measure (Samples p)) [IsProbabilityMeasure P]
+    (μ : Fin p.n → ProbabilityMeasure p.Ω)
+    (hworkers : iIndepFun (fun i (samples : Samples p) => samples i) P)
+    (hIID : ∀ i, LongTails.Setups.StochasticGeneralizedSmoothAndConvex.IID
+      (fun k (samples : Samples p) => samples i k) (μ i : Measure _) P)
+    (g : Fin p.n → Point p → p.Ω → Point p) (f : Point p → ℝ)
+    (hsg : ∀ i, LongTails.Setups.StochasticSmoothAndConvex.IsStochasticGradient
+      (Point p) p.Ω (μ i) f (g i) p.σ)
+    (hK : cfg.iterations = iterations p) (hwidth : cfg.width = (config p).width)
+    (hlarge : targetBatch p ≤ totalBatch p cfg) (hL : 0 < p.L) (hΔ : 0 ≤ p.Δ) (hε : 0 < p.ε)
+    (hg : ∀ x, HasGradientAt f (gradient f x) x)
+    (hlip : ∀ x y, ‖gradient f x - gradient f y‖ ≤ p.L * ‖x - y‖)
+    (lower : ℝ) (hlower : ∀ x, lower ≤ f x) (hgap : f p.x0 - lower ≤ p.Δ) :
+    let Q := (PMF.uniformOfFintype (Fin cfg.iterations)).toMeasure.prod P
+    Measurable (output p cfg g) ∧
+      Integrable (fun seed => ‖gradient f (output p cfg g seed)‖ ^ 2) Q ∧
+      (∫ seed, ‖gradient f (output p cfg g seed)‖ ^ 2 ∂Q) ≤ p.ε := by
+  have hB : 0 < totalBatch p cfg := (Nat.zero_lt_one.trans_le (le_max_left 1 _)).trans_le hlarge
+  apply output_accuracy_of_tuning cfg P μ hworkers hIID g f hsg hL hΔ hε hB hg hlip lower hlower hgap
+  all_goals simp only [hK, hwidth]
+  · exact (tuning_of_batch hlarge hL hΔ hε).1
+  · exact (tuning_of_batch hlarge hL hΔ hε).2.1
+  · exact (tuning_of_batch hlarge hL hΔ hε).2.2
+
 lemma configured_output_accuracy (P : Measure (Samples p)) [IsProbabilityMeasure P]
     (μ : Fin p.n → ProbabilityMeasure p.Ω)
     (hworkers : iIndepFun (fun i (samples : Samples p) => samples i) P)
@@ -1193,12 +1230,7 @@ lemma configured_output_accuracy (P : Measure (Samples p)) [IsProbabilityMeasure
     Measurable (output p (config p) g) ∧
       Integrable (fun seed => ‖gradient f (output p (config p) g seed)‖ ^ 2) Q ∧
       (∫ seed, ‖gradient f (output p (config p) g seed)‖ ^ 2 ∂Q) ≤ p.ε := by
-  have hB : 0 < totalBatch p (config p) := by
-    have hlarge := configured_batch_large hh
-    have htarget : 1 ≤ targetBatch p := le_max_left _ _
-    omega
-  obtain ⟨hsmall, hbase, hbudget⟩ := configured_tuning hh hL hΔ hε
-  exact output_accuracy_of_tuning (config p) P μ hworkers hIID g f hsg hL hΔ hε hB
-    hg hlip lower hlower hgap hsmall hbase hbudget
+  exact output_accuracy_of_batch (config p) P μ hworkers hIID g f hsg rfl rfl
+    (configured_batch_large hh) hL hΔ hε hg hlip lower hlower hgap
 
 end LongTails.Proofs.DistributedBatchedSgd
