@@ -26,7 +26,7 @@ lemma rounding_expected (hp : spec.valid p) {d : ℝ} (hd : d ≤ scale p^2) :
     _ ≤ 64*tolerance p*scale p*2 := by gcongr; linarith
     _ = _ := by unfold tolerance; field_simp; ring
 
-lemma radius_control (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (hk : k ≤ rounds p) :
+lemma radius_control (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (hk : k ≤ rounds p) :
     (∫ s, ‖iterate p T g s k-z‖^2 ∂P) ≤ scale p^2 := by
   let E := fun j => ∫ s, ‖iterate p T g s j-z‖^2 ∂P
   have h : ∀ j ≤ rounds p, E j ≤ p.R^2+(j : ℝ)*((phase p : ℝ)+1)*p.ε := by
@@ -56,7 +56,7 @@ lemma radius_control (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k :
       linarith only [hstep,hcoarse,hround,hsmall,hb]
   exact (h k hk).trans (coarse_radius D.valid hk)
 
-lemma accuracy (D : Data p f g z P ν) (T : DistributedTemplate.Time) :
+lemma accuracy_of_bounds (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) :
     ∫ s, infDist (output p T g s) (solutions p f)^2 ∂P ≤ p.ε := by
   let E j := ∫ s, infDist (iterate p T g s j) (solutions p f)^2 ∂P
   let I := information p
@@ -126,5 +126,9 @@ lemma accuracy (D : Data p f g z P ν) (T : DistributedTemplate.Time) :
   change E (2*H) ≤ p.ε
   rw [two_mul]
   linarith only [c,hs,he',heps]
+
+lemma accuracy (D : Data p f g z P ν) (T : DistributedTemplate.Time) :
+    ∫ s, infDist (output p T g s) (solutions p f)^2 ∂P ≤ p.ε :=
+  accuracy_of_bounds D.bounds T
 
 end LongTails.Proofs.WeightedInterpolationConvergence

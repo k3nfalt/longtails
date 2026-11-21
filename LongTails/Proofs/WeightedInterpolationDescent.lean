@@ -37,7 +37,7 @@ lemma rounding_cost {e B d δ : ℝ} (he : 0 < e) (hB : 0 < B) (heb : e ≤ B)
       have hh : (8*s+6*s^2)+(20+32*s+14*s^2) ≤ 64*(1+s^2) := by nlinarith [sq_nonneg (s-1)]
       linarith only [mul_le_mul_of_nonneg_left hh (mul_nonneg he.le hB.le)]
 
-lemma fixed_descent (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x y : Point p)
+lemma fixed_descent (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x y : Point p)
     (hy : y ∈ solutions p f) (hd : ‖x-y‖ ≤ ‖x-z‖) :
     ∫ s, ‖x-estimate p T k g x s-y‖^2 ∂P ≤ ‖x-y‖^2 -
       stepSize p k*(surrogate p f x-surrogate p f y) +
@@ -48,8 +48,7 @@ lemma fixed_descent (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : 
   have hstep := step_bounds D.valid k
   have hdet := deterministic_step (smoothness_pos D.valid) hstep.1 hstep.2
     (surrogate_support (weight_nonneg D.valid) D.convex D.differentiable x y)
-    (direction_sq (weight_nonneg D.valid) D.differentiable D.lipschitz (smoothness_pos D.valid)
-      (smooth_majorant D.valid) hy x)
+    (D.directionBound y hy x)
   change ‖v‖^2 ≤ _ at hdet
   have hmin := surrogate_min (weight_nonneg D.valid) hy x
   have hv : ‖v‖ ≤ ‖x-z‖ := by
