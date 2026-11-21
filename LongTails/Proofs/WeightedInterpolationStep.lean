@@ -32,7 +32,40 @@ structure Data (p : Params) (f : Functions p) (g : LocalOracle p) (z : Point p)
 variable {f : Functions p} {g : LocalOracle p} {z : Point p}
     {P : Measure (Samples p)} [IsProbabilityMeasure P] {ν : Fin p.n → ProbabilityMeasure p.Ω}
 
-lemma fixed_noise (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x v : Point p) :
+structure Certificate (p : Params) (f : Functions p) (g : LocalOracle p) (z : Point p)
+    (P : Measure (Samples p)) (ν : Fin p.n → ProbabilityMeasure p.Ω) : Prop where
+  valid : spec.valid p
+  convex : ∀ i, ConvexOn ℝ Set.univ (f i)
+  differentiable : ∀ i x, HasGradientAt (f i) (gradient (f i) x) x
+  solution : z ∈ solutions p f
+  initial : ‖p.x0 - z‖ ≤ p.R
+  workers : iIndepFun (fun i (s : Samples p) => s i) P
+  samples : ∀ i, IID (fun j (s : Samples p) => s i j) (ν i : Measure _) P
+  stochastic : ∀ i, IsStochasticGradient (Point p) p.Ω (ν i) (f i) (g i) p.σ
+  radius : ∀ k i x, ‖localMean p k f x i‖ ≤ ‖x-p.x0‖ + p.R
+  gradient_sq : ∀ y ∈ solutions p f, ∀ x,
+    ‖direction p f x‖^2 ≤ 2*smoothness p*(surrogate p f x-surrogate p f y)
+  weighted_growth : ∀ x, information p * (Metric.infDist x (solutions p f)^2 / 2) ≤
+    ∑ i, weights p i * (f i x-f i z)
+
+omit [IsProbabilityMeasure P] in
+lemma Data.certificate (D : Data p f g z P ν) : Certificate p f g z P ν where
+  valid := D.valid
+  convex := D.convex
+  differentiable := D.differentiable
+  solution := D.solution
+  initial := D.initial
+  workers := D.workers
+  samples := D.samples
+  stochastic := D.stochastic
+  radius k i x := local_radius D.valid k i f (D.lipschitz i) D.solution D.initial x
+  gradient_sq y hy x := direction_sq (weight_nonneg D.valid) D.differentiable D.lipschitz
+    (smoothness_pos D.valid) (smooth_majorant D.valid) hy x
+  weighted_growth x := WeakInterpolationGeometry.weighted_growth D.differentiable D.lipschitz
+    D.solution x (D.growth x) (threshold_spec D.valid).1
+    (fun i => by exact_mod_cast D.valid.1 i) (threshold_spec D.valid).2
+
+lemma fixed_noise_certified (D : Certificate p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x v : Point p) :
     let u := stepSize p k • direction p f x
     let δ := errorRadius p T x
     let e := tolerance p
@@ -53,7 +86,7 @@ lemma fixed_noise (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : �
   have he := tolerance_pos D.valid
   have hn := noise_nonneg D.valid
   have hδ : 0 ≤ δ := Real.sqrt_nonneg _
-  have hlocal (i : Fin p.n) := local_radius D.valid k i f (D.lipschitz i) D.solution D.initial x
+  have hlocal (i : Fin p.n) := D.radius k i x
   have hm (i : Fin p.n) := bias_margin D.valid x (m i) (hlocal i)
   have hmessage i := message_moments D.valid T k g f x P ν D.samples D.stochastic i (hm i).1
   have hM (i : Fin p.n) : V i ≤ noiseRadius p ^ 2 := by
@@ -93,5 +126,14 @@ lemma fixed_noise (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : �
   change _ ≤ ‖v‖^2 + 2*‖v‖*(e + 3*δ) + 4*stepSize p k^2*p.σ^2*information p/(batchTime p : ℝ) +
     12*δ^2 + 2*(e+δ)^2
   linear_combination hd + 2 * hv
+
+lemma fixed_noise (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x v : Point p) :
+    let u := stepSize p k • direction p f x
+    let δ := errorRadius p T x
+    let e := tolerance p
+    ∫ s, ‖v - (estimate p T k g x s - u)‖^2 ∂P ≤
+      ‖v‖^2 + 2*‖v‖*(e + 3*δ) + 4 * stepSize p k ^ 2 * p.σ^2 * information p / (batchTime p : ℝ) +
+      12*δ^2 + 2*(e+δ)^2 :=
+  fixed_noise_certified D.certificate T k x v
 
 end LongTails.Proofs.WeightedInterpolationStep
