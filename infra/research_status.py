@@ -16,6 +16,7 @@ def pane_state(screen):
         for i, line in enumerate(lines)
         if line.lstrip().startswith(("›", "❯"))
         and not line.lstrip().startswith("› Message from @")
+        and line.strip() != "❯ /model"
     ]
     prompt = prompts[-1] if prompts else len(lines)
     start = prompts[-2] + 1 if len(prompts) >= 2 else 0

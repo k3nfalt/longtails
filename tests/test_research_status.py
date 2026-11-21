@@ -38,6 +38,10 @@ class ResearchStatusTests(unittest.TestCase):
             ),
             ("› Ask Codex to do anything", "unknown"),
             ("✔ Goal achieved\n✻ Brewed for 2m\n────\n❯\n────", "goal achieved"),
+            (
+                "✔ Goal achieved\n❯ /model\n⎿ Kept model\n✔ Update installed\n────\n❯",
+                "goal achieved",
+            ),
             ("✔ Goal achieved\n❯ new request\n● reply\n────\n❯", "unknown"),
             ("✔ Goal achieved\n────\n❯\n────\n⏵ esc to interrupt", "working"),
             (
