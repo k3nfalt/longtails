@@ -59,6 +59,15 @@ def pane_state(screen):
     return "waiting for input" if menu else "unknown"
 
 
+def weekly_limit_note(screen):
+    matches = re.findall(
+        r"⚠️?\s*weekly\s+limit:\s*only\s+(100|[0-9]{1,2})%\s+left\b",
+        screen,
+        re.IGNORECASE,
+    )
+    return f"  weekly limit: {matches[-1]}% left" if matches else ""
+
+
 def inspect_panes():
     if not shutil.which("tmux"):
         print("tmux unavailable")
@@ -86,6 +95,7 @@ def inspect_panes():
         ):
             continue
         found = True
+        note = ""
         if dead == "1":
             state = "exited"
         else:
@@ -96,13 +106,15 @@ def inspect_panes():
                 errors="replace",
             )
             state = pane_state(view.stdout) if view.returncode == 0 else "unknown"
+            if view.returncode == 0:
+                note = weekly_limit_note(view.stdout)
             if foreground in {"sh", "bash", "zsh", "fish", "dash"}:
                 ps = subprocess.run(
                     ["ps", "-t", tty, "-o", "comm="], capture_output=True, text=True
                 )
                 if ps.returncode == 0 and ps.stdout.split() == [foreground]:
                     state = "shell only"
-        print(f"{target}  {window}  {state}")
+        print(f"{target}  {window}  {state}{note}")
     if not found:
         print("no research panes")
     return 0

@@ -1,6 +1,6 @@
 import unittest
 
-from infra.research_status import destinations, pane_state
+from infra.research_status import destinations, pane_state, weekly_limit_note
 
 
 class ResearchStatusTests(unittest.TestCase):
@@ -10,6 +10,15 @@ class ResearchStatusTests(unittest.TestCase):
                 ["--server", "ssh", "host-a", "--server", "custom-ssh", "host-b:/work"]
             ),
             [("ssh", "host-a"), ("custom-ssh", "host-b")],
+        )
+
+    def test_weekly_limit(self):
+        self.assertEqual(weekly_limit_note("⚠ session limit: only 1% left"), "")
+        self.assertEqual(
+            weekly_limit_note(
+                "⚠ weekly limit: only 10% left\n⚠️ weekly limit: only\n1% left"
+            ),
+            "  weekly limit: 1% left",
         )
 
     def test_visible_status(self):
