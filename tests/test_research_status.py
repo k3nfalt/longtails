@@ -1,9 +1,17 @@
 import unittest
 
-from infra.research_status import pane_state
+from infra.research_status import destinations, pane_state
 
 
 class ResearchStatusTests(unittest.TestCase):
+    def test_mixed_transports(self):
+        self.assertEqual(
+            destinations(
+                ["--server", "ssh", "host-a", "--server", "custom-ssh", "host-b:/work"]
+            ),
+            [("ssh", "host-a"), ("custom-ssh", "host-b")],
+        )
+
     def test_visible_status(self):
         error = (
             "■ stream disconnected before completion: Transport error:\n  network error"
@@ -19,6 +27,15 @@ class ResearchStatusTests(unittest.TestCase):
             ("Goal achieved in an earlier session.\n›", "unknown"),
             ("›\n  GPT · workspace\n  ← for agents · Goal achieved", "goal achieved"),
             ("›\n  Goal paused", "goal paused"),
+            ("• Working (esc to interrupt)\n" + error + "\n›", "disconnected"),
+            (
+                "✻ Waiting for 1 background agent to finish\n✔ Goal achieved\n❯",
+                "goal achieved",
+            ),
+            (
+                "✻ Waiting for 1 background agent to finish\n❯ new request\n● reply\n❯",
+                "unknown",
+            ),
             ("› Ask Codex to do anything", "unknown"),
             ("✔ Goal achieved\n✻ Brewed for 2m\n────\n❯\n────", "goal achieved"),
             ("✔ Goal achieved\n❯ new request\n● reply\n────\n❯", "unknown"),
@@ -30,7 +47,7 @@ class ResearchStatusTests(unittest.TestCase):
         ]
         cases.append(
             (
-                "✻ Waiting for 1 background agent to finish\n2 background task updates waiting\n"
+                "✻ Waiting for 1 background agent to finish\n› Message from @worker: update\n2 background task updates waiting\n"
                 "❯ 1. Stop and wait for limit to reset\nEnter to confirm · Esc to cancel",
                 "working (background)",
             )
