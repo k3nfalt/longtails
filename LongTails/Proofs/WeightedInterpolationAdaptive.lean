@@ -31,19 +31,19 @@ lemma estimate_finite (T : DistributedTemplate.Time) (k : ℕ) (g : LocalOracle 
   DistributedBatchedSgd.finite_range_estimate (rawConfig p T) (scaled p g k) (fun _ => x) Set.finite_range_const 0
 
 omit [IsProbabilityMeasure P] in
-lemma estimate_measurable (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) :
+lemma estimate_measurable (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) :
     Measurable (Function.uncurry (estimate p T k g)) :=
   DistributedBatchedSgd.measurable_estimate (rawConfig p T) (scaled p g k)
     (measurable_scaled g (fun i => (D.stochastic i).measurable) k) 0
 
-lemma fixed_integrable (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ)
+lemma fixed_integrable (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ)
     (x : Point p) (M : Point p → ℝ) (hM : Measurable M) :
     Integrable (fun s => M (x-estimate p T k g x s)) P := by
   have hm : Measurable (estimate p T k g x) := (estimate_measurable D T k).comp (f := fun s : Samples p => (x,s)) measurable_prodMk_left
   exact DistributedBatchedSgd.integrable_finite_range P _ (hM.comp (measurable_const.sub hm))
     (finite_comp _ (fun y => M (x-y)) (estimate_finite T k g x))
 
-lemma fixed_distance (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x : Point p) :
+lemma fixed_distance (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x : Point p) :
     ∫ s, infDist (x-estimate p T k g x s) (solutions p f)^2 ∂P ≤
       (1-stepSize p k*information p/2)*infDist x (solutions p f)^2+
       varianceTerm p k+perturbation p z x := by
@@ -52,11 +52,7 @@ lemma fixed_distance (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k :
   have hmin := infDist_le_dist_of_mem (x := x) D.solution
   rw [dist_eq_norm,hd] at hmin
   have hh := fixed_descent D T k x y hy hmin
-  have hg := weighted_growth D.differentiable D.lipschitz D.solution x (D.growth x)
-    (threshold_spec D.valid).1 (fun i => by exact_mod_cast D.valid.1 i) (threshold_spec D.valid).2
-  change information p * _ ≤ ∑ i, weights p i * _ at hg
-  simp only [mul_sub, Finset.sum_sub_distrib] at hg
-  change information p * _ ≤ surrogate p f x-surrogate p f z at hg
+  have hg := D.growth x
   have heq : surrogate p f z = surrogate p f y := le_antisymm
     (surrogate_min (weight_nonneg D.valid) D.solution _) (surrogate_min (weight_nonneg D.valid) hy _)
   rw [heq] at hg
@@ -78,7 +74,7 @@ private lemma integrate_affine {Ω : Type*} [MeasurableSpace Ω] (μ : Measure �
     integral_div]
   simp
 
-lemma adaptive (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (M : Point p → ℝ)
+lemma adaptive (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (M : Point p → ℝ)
     (hM : Measurable M) (hn : ∀ x, 0 ≤ M x) (a : ℝ)
     (hb : ∀ x, ∫ s, M (x-estimate p T k g x s) ∂P ≤
       a*M x+varianceTerm p k+perturbation p z x) :
