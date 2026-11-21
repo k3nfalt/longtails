@@ -1,0 +1,20 @@
+# How many exact operator evaluations does Minty root finding need?
+
+Let $F:\mathbb R^d\to\mathbb R^d$ have a zero $z$ within distance $R$ of $x_0$, with $\langle F(x),x-z\rangle\ge0$ everywhere. An oracle returns $F(x)$ at any query point. The algorithm knows $d,x_0,R,L_0,L_1,\varepsilon$. It has to return a point with integrable residual and $\mathbb E\|F(X)\|\le\varepsilon$. The sole regularity assumption on the continuous operator is
+
+$$
+\|F(x)-F(y)\|\le \bigl(L_0+L_1\max_{u\in[x,y]}\|F(u)\|\bigr)\|x-y\|,
+\qquad L_0>0,\quad L_1\ge0.
+$$
+
+This is the symmetric generalized Lipschitz assumption with exponent one, combined with the classical Minty condition (weak Minty with parameter zero). The one-point inequality permits rotational dynamics. For example, in any even dimension take an orthogonal skew-symmetric matrix $J$ and $F(x)=e^{a\|v\|}Jv$ with $v=x-z$ and $a>0$. The Minty inner product vanishes. The derivative norm is at most $e^{a\|v\|}(1+a\|v\|)\le 1+2a\|F(x)\|$, which gives the segment inequality by integration. The symmetric part of the derivative has eigenvalues of both signs at every nonzero $v$, and the derivative grows unboundedly. A dense orthogonal change of basis couples the coordinates. The theorem applies to general operators, including ones that do not arise from scalar objectives. [Formal setup](../Setups/GeneralizedLipschitzMinty.lean) · [Choudhury and Loizou, Assumption 1.1 and Section 1, NeurIPS 2025](https://arxiv.org/html/2510.22421v1)
+
+## Algorithm and guarantee
+
+Put $T=R(L_0/\varepsilon+L_1)$. Extragradient returns an iterate with residual at most $\varepsilon$ using $2(1+\lceil32T^2\rceil)$ oracle calls in every finite dimension. At $x$, query $v=F(x)$ and set $\eta=1/[4(L_0+L_1\|v\|)]$ while $\|v\|>\varepsilon$, or zero once the target is met. Query $F(y)$ at $y=x-\eta v$ and update to $x-\eta F(y)$. The final iterate therefore retains the first successful point. The budget counts both calls in every cycle, including cycles at a frozen point. The bound holds for every seed and hence also for the expected norm under the template's joint law. [Algorithm and output](../Algorithms/GeneralizedMintyExtragradient.lean) · [Execution and descent proof](../Proofs/GeneralizedMintyDescent.lean) · [Upper theorem](GeneralizedMintyExtragradient.lean)
+
+Segment regularity bounds the change of the operator along the predictor step. Substituting the Minty inequality at $y$ in the correction-step expansion shows that each unsuccessful cycle spends at least $1/[32(L_0/\varepsilon+L_1)^2]$ of the initial squared distance. Choudhury and Loizou's Theorem 3.6 already gives this polynomial order under monotonicity. Their proof in Appendix D.3.1, equations (54)–(56), and D.3.2 only needs Minty at the chosen zero for this estimate. Their separate weak-Minty Theorem 3.8 has an exponential distance factor even at parameter zero. We credit the sharper proof for the upper rate. [NeurIPS paper](https://proceedings.nips.cc/paper_files/paper/2025/hash/6699e1ef78e8e2e12ee3ca5fec34b28e-Abstract-Conference.html) · [Theorems and proofs](https://arxiv.org/html/2510.22421v1)
+
+## What the matching lower bound adds
+
+For $m=\lfloor(T/1024)^2\rfloor$, every randomized algorithm fails on some fixed admissible instance at each budget through $m$ if $T\ge1024$, $32\log(1+L_1\varepsilon/L_0)\le L_1R$, and $d\ge8192(1+m)^3$. The companion construction proves that even the $(L_1R)^2$ cost is necessary. The resulting high-dimensional order is $\Theta(T^2)$ with no logarithmic gap. For example, fix $R=L_0=\varepsilon=1$ and let $L_1$ grow. This gives quadratic complexity, whereas Rudomanov et al. obtain order $1+L_1^{6/5}$ up to logarithms for monotone operators. The lower theorem concerns the unrestricted Minty operator problem. Hardness for gradient fields, game gradients, smaller dimensions and the full coarse-accuracy range are separate questions. [Lower theorem and proof mechanism](GeneralizedMintyLowerBound.md) · [Rudomanov et al., arXiv:2611.20296v1, Sections 3 and 4.9](https://arxiv.org/html/2611.20296v1)
