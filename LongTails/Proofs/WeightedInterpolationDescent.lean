@@ -37,7 +37,7 @@ lemma rounding_cost {e B d δ : ℝ} (he : 0 < e) (hB : 0 < B) (heb : e ≤ B)
       have hh : (8*s+6*s^2)+(20+32*s+14*s^2) ≤ 64*(1+s^2) := by nlinarith [sq_nonneg (s-1)]
       linarith only [mul_le_mul_of_nonneg_left hh (mul_nonneg he.le hB.le)]
 
-lemma fixed_descent (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x y : Point p)
+lemma fixed_descent_of_model (D : Model p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x y : Point p)
     (hy : y ∈ solutions p f) (hd : ‖x-y‖ ≤ ‖x-z‖) :
     ∫ s, ‖x-estimate p T k g x s-y‖^2 ∂P ≤ ‖x-y‖^2 -
       stepSize p k*(surrogate p f x-surrogate p f y) +
@@ -48,8 +48,7 @@ lemma fixed_descent (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : 
   have hstep := step_bounds D.valid k
   have hdet := deterministic_step (smoothness_pos D.valid) hstep.1 hstep.2
     (surrogate_support (weight_nonneg D.valid) D.convex D.differentiable x y)
-    (direction_sq (weight_nonneg D.valid) D.differentiable D.lipschitz (smoothness_pos D.valid)
-      (smooth_majorant D.valid) hy x)
+    (D.selfBound x y hy)
   change ‖v‖^2 ≤ _ at hdet
   have hmin := surrogate_min (weight_nonneg D.valid) hy x
   have hv : ‖v‖ ≤ ‖x-z‖ := by
@@ -69,10 +68,18 @@ lemma fixed_descent (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : 
   have hδ : 0 ≤ errorRadius p T x := Real.sqrt_nonneg _
   have hr := rounding_cost he hB.1 heb (norm_nonneg (x-z)) hδ (grid_error D.valid T x z D.initial)
   have hv' := mul_le_mul_of_nonneg_right hv (show 0 ≤ 2*(tolerance p+3*errorRadius p T x) by positivity)
-  have hh := fixed_noise D T k x v
+  have hh := fixed_noise_of_model D T k x v
   dsimp only at hh
   have heq s : x-estimate p T k g x s-y = v-(estimate p T k g x s-u) := by dsimp [v]; abel
   simp_rw [heq]
   linarith only [hh,hdet,hr,hv']
+
+lemma fixed_descent (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x y : Point p)
+    (hy : y ∈ solutions p f) (hd : ‖x-y‖ ≤ ‖x-z‖) :
+    ∫ s, ‖x-estimate p T k g x s-y‖^2 ∂P ≤ ‖x-y‖^2 -
+      stepSize p k*(surrogate p f x-surrogate p f y) +
+      4*stepSize p k^2*p.σ^2*information p/(batchTime p : ℝ) +
+      64*tolerance p*scale p*(1+‖x-z‖^2/scale p^2) :=
+  fixed_descent_of_model D.model T k x y hy hd
 
 end LongTails.Proofs.WeightedInterpolationDescent
