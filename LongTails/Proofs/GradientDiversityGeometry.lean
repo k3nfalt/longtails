@@ -65,23 +65,31 @@ lemma upper (x y : Point p) :
     (∑ i : Fin p.n, gain p i * ⟪gradient (f i) x, y-x⟫) + W.smoothness (schedule p) / 2 * ‖y-x‖^2
   linear_combination hw + hs + (‖y-x‖^2 / 2) * hb
 
-lemma growth {z : Point p} (hz : z ∈ solutions p f) (x : Point p)
+lemma growth_at {M : ℝ} (hM : ∀ i, curvature p i ^ 2 ≤ M) {z : Point p} (hz : z ∈ solutions p f) (x : Point p)
     (hq : p.μ / 2 * infDist x (solutions p f)^2 ≤ objective p f x - objective p f z) :
-    W.information (schedule p) *
-      (infDist x (LongTails.Setups.DistributedWeakInterpolation.solutions (schedule p) f)^2 / 2) ≤
-      surrogate (schedule p) f x-surrogate (schedule p) f z := by
-  have he (y : Point p) : surrogate (schedule p) f y = p.μ * DistributedGrowthGeometry.surrogate p f y := by
+    W.information (scheduleAt p M) *
+      (infDist x (LongTails.Setups.DistributedWeakInterpolation.solutions (scheduleAt p M) f)^2 / 2) ≤
+      surrogate (scheduleAt p M) f x-surrogate (scheduleAt p M) f z := by
+  have he (y : Point p) : surrogate (scheduleAt p M) f y = p.μ * DistributedGrowthGeometry.surrogate p f y := by
     unfold surrogate DistributedGrowthGeometry.surrogate
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro i _
-    rw [weights_eq H.valid]
+    rw [weights_eq_at H.valid hM]
     unfold gain curvature weight
     ring
-  rw [← common_solutions H, information_eq H.valid, he, he]
+  have hsol : solutions p f = LongTails.Setups.DistributedWeakInterpolation.solutions (scheduleAt p M) f := common_solutions H
+  rw [← hsol, information_eq_at H.valid hM, he, he]
   have h := mul_le_mul_of_nonneg_left hq (StrongGrowthWeights.information_pos H.valid).le
   have hg := DistributedGrowthGeometry.weighted_gap H hz x
   nlinarith only [mul_le_mul_of_nonneg_left (h.trans hg) H.valid.2.1.le]
+
+lemma growth {z : Point p} (hz : z ∈ solutions p f) (x : Point p)
+    (hq : p.μ / 2 * infDist x (solutions p f)^2 ≤ objective p f x - objective p f z) :
+    W.information (schedule p) *
+      (infDist x (LongTails.Setups.DistributedWeakInterpolation.solutions (schedule p) f)^2 / 2) ≤
+      surrogate (schedule p) f x-surrogate (schedule p) f z :=
+  growth_at H (cap_enough H.valid) hz x hq
 
 lemma local_upper (i : Fin p.n) (x y : Point p) :
     f i y ≤ f i x + ⟪gradient (f i) x, y-x⟫ + (p.n * p.L)/2 * ‖y-x‖^2 := by

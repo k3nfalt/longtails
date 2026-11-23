@@ -71,13 +71,13 @@ lemma surrogate_support (hw : ∀ i, 0 ≤ weights p i)
   simpa only [surrogate, direction, sum_inner, real_inner_smul_left, mul_sub,
     Finset.sum_sub_distrib] using hs
 
-lemma surrogate_upper (hw : ∀ i, 0 ≤ weights p i)
+lemma surrogate_upper_of_caps {L : Fin p.n → ℝ} (hw : ∀ i, 0 ≤ weights p i)
     (hg : ∀ i x, HasGradientAt (f i) (gradient (f i) x) x)
-    (hlip : ∀ i x y, ‖gradient (f i) x - gradient (f i) y‖ ≤ p.L i * ‖x - y‖)
-    {C : ℝ} (hC : ∑ i, weights p i * p.L i ≤ C) (x y : Point p) :
+    (hlip : ∀ i x y, ‖gradient (f i) x - gradient (f i) y‖ ≤ L i * ‖x - y‖)
+    {C : ℝ} (hC : ∑ i, weights p i * L i ≤ C) (x y : Point p) :
     surrogate p f y ≤ surrogate p f x + ⟪direction p f x, y - x⟫ + C * (‖y - x‖ ^ 2 / 2) := by
   have hi (i : Fin p.n) : f i y ≤ f i x + ⟪gradient (f i) x, y - x⟫ +
-      p.L i * (‖y - x‖ ^ 2 / 2) := by
+      L i * (‖y - x‖ ^ 2 / 2) := by
     linarith [OracleTemplate.Gradient.smooth_upper_bound (hg i) (hlip i) x y]
   have hs := Finset.sum_le_sum (s := Finset.univ)
     (fun i _ => mul_le_mul_of_nonneg_left (hi i) (hw i))
@@ -86,6 +86,13 @@ lemma surrogate_upper (hw : ∀ i, 0 ≤ weights p i)
   rw [sum_inner]
   simp only [real_inner_smul_left]
   linarith [mul_le_mul_of_nonneg_right hC (show 0 ≤ ‖y - x‖ ^ 2 / 2 by positivity)]
+
+lemma surrogate_upper (hw : ∀ i, 0 ≤ weights p i)
+    (hg : ∀ i x, HasGradientAt (f i) (gradient (f i) x) x)
+    (hlip : ∀ i x y, ‖gradient (f i) x - gradient (f i) y‖ ≤ p.L i * ‖x - y‖)
+    {C : ℝ} (hC : ∑ i, weights p i * p.L i ≤ C) (x y : Point p) :
+    surrogate p f y ≤ surrogate p f x + ⟪direction p f x, y - x⟫ + C * (‖y - x‖ ^ 2 / 2) :=
+  surrogate_upper_of_caps hw hg hlip hC x y
 
 lemma surrogate_min (hw : ∀ i, 0 ≤ weights p i) {z : Point p} (hz : z ∈ solutions p f)
     (y : Point p) : surrogate p f z ≤ surrogate p f y :=

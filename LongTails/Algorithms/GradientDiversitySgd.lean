@@ -21,22 +21,26 @@ noncomputable def spread (p : Params) : ℝ := min (p.n : ℝ) (1 + Real.sqrt (p
 noncomputable def scale (p : Params) : ℝ :=
   p.L * max (largest p * spread p) (p.n * gain p (peak p) / speed p)
 
-noncomputable def capacity (p : Params) (i : Fin p.n) : ℝ :=
-  if i = peak p then scale p / curvature p i else curvature p i
+noncomputable def capacityAt (p : Params) (M : ℝ) (i : Fin p.n) : ℝ :=
+  if i = peak p then M / curvature p i else curvature p i
 
-noncomputable def schedule (p : Params) : LongTails.Setups.DistributedWeakInterpolation.Params where
+noncomputable def scheduleAt (p : Params) (M : ℝ) : LongTails.Setups.DistributedWeakInterpolation.Params where
   d := p.d
   n := p.n
   Ω := p.Ω
   h := p.h
   l := p.l
   b := p.b
-  L := capacity p
+  L := capacityAt p M
   μ := p.μ
   R := p.R
   σ := p.σ
   ε := p.ε
   x0 := p.x0
+
+noncomputable def capacity (p : Params) := capacityAt p (scale p)
+
+noncomputable def schedule (p : Params) := scheduleAt p (scale p)
 
 noncomputable def algorithm (p : Params) (T : DistributedTemplate.Time) :=
   WeightedInterpolationSgd.algorithm (schedule p) T

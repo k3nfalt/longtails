@@ -47,6 +47,27 @@ lemma radius (H : Geometry p f) (hz : z ∈ solutions p f) (hR : ‖p.x0-z‖ �
 lemma peak_eq (p : Params) : gain p (peak p) = Finset.univ.sup' Finset.univ_nonempty (gain p) :=
   le_antisymm (Finset.le_sup' _ (Finset.mem_univ _)) (Finset.sup'_le _ _ fun i _ => le_peak p i)
 
+lemma runtime_at (hp : spec.valid p) {M : ℝ} (hM : ∀ i, curvature p i ^ 2 ≤ M) (T : Time)
+    (hT : let I := ∑ i, curvature p i ^ 2 / p.h i
+          let A := 2 * speed p * M / I
+          let w := Nat.size ⌈2 + p.d + A + (p.R^2 + (p.σ * largest p / M)^2)/p.ε⌉₊
+          2048 * (p.σ^2/(I*p.ε) + A * (1 + Real.log (1+p.R^2/p.ε)) *
+            (((Finset.univ.sup p.h : Time) : ℝ) + p.l + p.b*(64 + 1024*(p.d : ℝ)*w))) ≤ (T : ℝ)) :
+    Algorithms.DistributedBatchedSgd.timeBudget (Algorithms.WeightedInterpolationSgd.transport (scheduleAt p M))
+      (Algorithms.WeightedInterpolationSgd.config (scheduleAt p M) T) = T := by
+  apply WeightedInterpolationRuntime.time_suffices (schedule_valid_at hp hM)
+  have hI : W.information (scheduleAt p M) = ∑ i, curvature p i ^ 2 / p.h i := by
+    unfold LongTails.Algorithms.WeakInterpolationDesign.information
+    simp_rw [weights_eq_at hp hM, tuned_at hp hM]
+    exact Finset.sum_congr rfl (fun i _ => by unfold gain; ring)
+  have hn : W.noiseRadius (scheduleAt p M) = p.σ * largest p / M := by
+    unfold LongTails.Algorithms.WeakInterpolationDesign.noiseRadius
+    rw [largest_eq_at hp hM, funext (tuned_at hp hM)]
+    rfl
+  unfold WeightedInterpolationCost.magnitude WeightedInterpolationCost.condition WeightedInterpolationCost.burn
+  rw [hI, smooth_eq_at hp hM, hn]
+  exact hT
+
 lemma runtime (hp : spec.valid p) (T : Time)
     (hT : let I := ∑ i, curvature p i ^ 2 / p.h i
           let A := 2 * speed p * scale p / I
@@ -54,19 +75,47 @@ lemma runtime (hp : spec.valid p) (T : Time)
           2048 * (p.σ^2/(I*p.ε) + A * (1 + Real.log (1+p.R^2/p.ε)) *
             (((Finset.univ.sup p.h : Time) : ℝ) + p.l + p.b*(64 + 1024*(p.d : ℝ)*w))) ≤ (T : ℝ)) :
     Algorithms.DistributedBatchedSgd.timeBudget (Algorithms.WeightedInterpolationSgd.transport (schedule p))
-      (Algorithms.WeightedInterpolationSgd.config (schedule p) T) = T := by
-  apply WeightedInterpolationRuntime.time_suffices (schedule_valid hp)
-  have hI : W.information (schedule p) = ∑ i, curvature p i ^ 2 / p.h i := by
-    unfold LongTails.Algorithms.WeakInterpolationDesign.information
-    simp_rw [weights_eq hp, tuned hp]
-    exact Finset.sum_congr rfl (fun i _ => by unfold gain; ring)
-  have hn : W.noiseRadius (schedule p) = p.σ * largest p / scale p := by
-    unfold LongTails.Algorithms.WeakInterpolationDesign.noiseRadius
-    rw [largest_eq hp, funext (tuned hp)]
-    rfl
-  unfold WeightedInterpolationCost.magnitude WeightedInterpolationCost.condition WeightedInterpolationCost.burn
-  rw [hI, smooth_eq hp, hn]
-  exact hT
+      (Algorithms.WeightedInterpolationSgd.config (schedule p) T) = T :=
+  runtime_at hp (cap_enough hp) T hT
+
+lemma executed_of_bounds {M : ℝ} (G : Geometry p f) (T : Time)
+    (ht : Algorithms.DistributedBatchedSgd.timeBudget (Algorithms.WeightedInterpolationSgd.transport (scheduleAt p M))
+      (Algorithms.WeightedInterpolationSgd.config (scheduleAt p M) T) = T)
+    {g : Fin p.n → Point p → p.Ω → Point p} {P : ProbabilityMeasure (Samples p)}
+    {ν : Fin p.n → ProbabilityMeasure p.Ω}
+    (D : WeightedInterpolationStep.Bounds (scheduleAt p M) f g z (P : Measure (Samples p)) ν) :
+    let O := Setups.DistributedWeakInterpolation.system (scheduleAt p M) g P
+    let A := Algorithms.WeightedInterpolationSgd.algorithm (scheduleAt p M) T
+    (∀ᵐ seed ∂(law O A : Measure _), FiniteEvents O A T seed) ∧
+    spec.successful p f (fun seed => execute O A T seed.1 seed.2) (law O A) := by
+  have heq : solutions p f = Setups.DistributedWeakInterpolation.solutions (scheduleAt p M) f := common_solutions G
+  have hex s := WeightedInterpolationExecution.executed (p := scheduleAt p M) T g P s ht
+  refine ⟨Filter.Eventually.of_forall (fun seed => ?_), ?_⟩
+  · exact (hex seed.2).1
+  · let out := Algorithms.WeightedInterpolationSgd.output (scheduleAt p M) T g
+    have hout : Measurable out := WeightedInterpolationSampling.iterate_measurable (p := scheduleAt p M) _ _ (fun i => (D.stochastic i).measurable) _
+    let loss := fun x => Metric.infDist x (solutions p f)^2
+    have hloss : Measurable loss := ((Metric.continuous_infDist_pt _).pow 2).measurable
+    have hint : Integrable (fun s => loss (out s)) (P : Measure (Samples p)) :=
+      DistributedBatchedSgd.integrable_finite_range _ _ (hloss.comp hout)
+        (WeightedInterpolationAdaptive.finite_comp out loss (WeightedInterpolationSampling.iterate_finite (p := scheduleAt p M) _ _ _))
+    have hacc := WeightedInterpolationConvergence.accuracy_of_bounds D T
+    rw [← heq] at hacc
+    have H : MeasurePreserving Prod.snd ((Measure.dirac ()).prod (P : Measure (Samples p))) (P : Measure (Samples p)) :=
+      measurePreserving_snd
+    have hlaw : ProbabilityTheory.HasLaw Prod.snd (P : Measure (Samples p)) ((Measure.dirac ()).prod (P : Measure (Samples p))) :=
+      ⟨H.measurable.aemeasurable,H.map_eq⟩
+    let actual := fun seed : Unit × Samples p =>
+      execute (Setups.DistributedWeakInterpolation.system (scheduleAt p M) g P)
+        (Algorithms.WeightedInterpolationSgd.algorithm (scheduleAt p M) T) T seed.1 seed.2
+    have he : actual = out ∘ Prod.snd := by
+      funext seed
+      exact (hex seed.2).2
+    let Q := (Measure.dirac ()).prod (P : Measure (Samples p))
+    change Measurable actual ∧ Integrable (fun s => loss (actual s)) Q ∧ (∫ s, loss (actual s) ∂Q) ≤ p.ε
+    rw [he]
+    exact ⟨hout.comp measurable_snd, hlaw.integrable_comp hint,
+      (hlaw.integral_comp hint.aestronglyMeasurable).trans_le hacc⟩
 
 lemma success (hp : spec.valid p) (T : Time)
     (ht : Algorithms.DistributedBatchedSgd.timeBudget (Algorithms.WeightedInterpolationSgd.transport (schedule p))
@@ -96,31 +145,6 @@ lemma success (hp : spec.valid p) (T : Time)
     · exact hw
     · exact fun i => (hi i).1
     · exact fun i => (hi i).2
-  have hex s := WeightedInterpolationExecution.executed (p := schedule p) T g P s ht
-  refine ⟨Filter.Eventually.of_forall (fun seed => ?_), ?_⟩
-  · exact (hex seed.2).1
-  · let out := output p T g
-    have hout : Measurable out := WeightedInterpolationSampling.iterate_measurable (p := schedule p) _ _ (fun i => ((hi i).2).measurable) _
-    let loss := fun x => Metric.infDist x (solutions p f)^2
-    have hloss : Measurable loss := ((Metric.continuous_infDist_pt _).pow 2).measurable
-    have hint : Integrable (fun s => loss (out s)) (P : Measure (Samples p)) :=
-      DistributedBatchedSgd.integrable_finite_range _ _ (hloss.comp hout)
-        (WeightedInterpolationAdaptive.finite_comp out loss (WeightedInterpolationSampling.iterate_finite (p := schedule p) _ _ _))
-    have hacc := WeightedInterpolationConvergence.accuracy_of_bounds D T
-    rw [← heq] at hacc
-    have H : MeasurePreserving Prod.snd ((Measure.dirac ()).prod (P : Measure (Samples p))) (P : Measure (Samples p)) :=
-      measurePreserving_snd
-    have hlaw : ProbabilityTheory.HasLaw Prod.snd (P : Measure (Samples p)) ((Measure.dirac ()).prod (P : Measure (Samples p))) :=
-      ⟨H.measurable.aemeasurable,H.map_eq⟩
-    let actual := fun seed : Unit × Samples p => execute (Setups.DistributedWeakInterpolation.system (schedule p) g P) (algorithm p T)
-        T seed.1 seed.2
-    have he : actual = out ∘ Prod.snd := by
-      funext seed
-      exact (hex seed.2).2
-    let Q := (Measure.dirac ()).prod (P : Measure (Samples p))
-    change Measurable actual ∧ Integrable (fun s => loss (actual s)) Q ∧ (∫ s, loss (actual s) ∂Q) ≤ p.ε
-    rw [he]
-    exact ⟨hout.comp measurable_snd, hlaw.integrable_comp hint,
-      (hlaw.integral_comp hint.aestronglyMeasurable).trans_le hacc⟩
+  exact executed_of_bounds G T ht D
 
 end LongTails.Proofs.GradientDiversityConvergence

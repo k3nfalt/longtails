@@ -97,25 +97,30 @@ lemma cap_enough (hp : spec.valid p) (i : Fin p.n) : curvature p i ^ 2 ≤ scale
   exact (show curvature p i ^ 2 ≤ curvature p i * (p.L * spread p) by
     simpa only [sq] using mul_le_mul_of_nonneg_left h₁ (curv_pos hp i).le).trans (scale_signal hp i)
 
-lemma capacity_ge (hp : spec.valid p) (i : Fin p.n) : curvature p i ≤ capacity p i := by
-  unfold capacity
-  split_ifs
-  · exact (le_div_iff₀ (curv_pos hp i)).mpr (by simpa [sq] using cap_enough hp i)
-  · exact le_rfl
-
 lemma curv_sum (hp : spec.valid p) : ∑ i, curvature p i = (p.n : ℝ) * p.μ := by
   simp only [curvature, ← Finset.mul_sum, StrongGrowthWeights.signal_sum hp, mul_comm]
 
-lemma schedule_valid (hp : spec.valid p) : LongTails.Setups.DistributedWeakInterpolation.spec.valid
-    (schedule p) :=
-  ⟨hp.1, fun i => (curv_pos hp i).le.trans (capacity_ge hp i), hp.2.1,
-   (curv_sum hp).symm.le.trans (Finset.sum_le_sum (fun i _ => capacity_ge hp i)),
+section
+
+variable (hp : spec.valid p) {M : ℝ} (hM : ∀ i, curvature p i ^ 2 ≤ M)
+include hp hM
+
+lemma capacity_ge_at (i : Fin p.n) : curvature p i ≤ capacityAt p M i := by
+  unfold capacityAt
+  split_ifs
+  · exact (le_div_iff₀ (curv_pos hp i)).mpr (by simpa [sq] using hM i)
+  · exact le_rfl
+
+lemma schedule_valid_at : LongTails.Setups.DistributedWeakInterpolation.spec.valid
+    (scheduleAt p M) :=
+  ⟨hp.1, fun i => (curv_pos hp i).le.trans (capacity_ge_at hp hM i), hp.2.1,
+   (curv_sum hp).symm.le.trans (Finset.sum_le_sum (fun i _ => capacity_ge_at hp hM i)),
    hp.2.2.2.2.1, hp.2.2.2.2.2.1, hp.2.2.2.2.2.2⟩
 
-lemma tuned (hp : spec.valid p) (i : Fin p.n) : W.profile (schedule p) i = curvature p i := by
+lemma tuned_at (i : Fin p.n) : W.profile (scheduleAt p M) i = curvature p i := by
   let u := curvature p
-  let f := fun t i => min (capacity p i) (t * (p.h i : ℝ))
-  let a := W.threshold (schedule p)
+  let f := fun t i => min (capacityAt p M i) (t * (p.h i : ℝ))
+  let a := W.threshold (scheduleAt p M)
   let b := gain p (peak p)
   have hb (j : Fin p.n) : f b j = u j := by
     have hw := (div_le_iff₀ (StrongGrowthWeights.speed hp j)).mp (le_peak p j)
@@ -123,11 +128,11 @@ lemma tuned (hp : spec.valid p) (i : Fin p.n) : W.profile (schedule p) i = curva
     · subst j
       have e : b * (p.h (peak p) : ℝ) = curvature p (peak p) := by
         dsimp [b, gain]; field_simp [(StrongGrowthWeights.speed hp _).ne']
-      exact show min _ _ = _ by rw [e, min_eq_right (capacity_ge hp _)]
-    · simpa [f, capacity, hj, u] using min_eq_left hw
+      exact show min _ _ = _ by rw [e, min_eq_right (capacity_ge_at hp hM _)]
+    · simpa [f, capacityAt, hj, u] using min_eq_left hw
   have he : ∑ j, f a j = ∑ j, f b j := by
     simp_rw [hb]
-    exact (WeakInterpolationDesign.threshold_spec (schedule_valid hp)).2.trans (curv_sum hp).symm
+    exact (WeakInterpolationDesign.threshold_spec (schedule_valid_at hp hM)).2.trans (curv_sum hp).symm
   have hm {s t : ℝ} (h : s ≤ t) (j : Fin p.n) : f s j ≤ f t j :=
     min_le_min_left _ (mul_le_mul_of_nonneg_right h (p.h j).coe_nonneg)
   change f a i = u i
@@ -136,38 +141,62 @@ lemma tuned (hp : spec.valid p) (i : Fin p.n) : W.profile (schedule p) i = curva
   · exact ((Finset.sum_eq_sum_iff_of_le (fun j _ => hm h j)).mp he) i (Finset.mem_univ _)
   · exact (((Finset.sum_eq_sum_iff_of_le (fun j _ => hm h j)).mp he.symm) i (Finset.mem_univ _)).symm
 
-lemma weights_eq (hp : spec.valid p) (i : Fin p.n) : W.weights (schedule p) i = gain p i := by
-  change W.profile (schedule p) i / _ = _
-  rw [tuned hp]; rfl
+lemma weights_eq_at (i : Fin p.n) : W.weights (scheduleAt p M) i = gain p i := by
+  change W.profile (scheduleAt p M) i / _ = _
+  rw [tuned_at hp hM]; rfl
 
-lemma information_eq (hp : spec.valid p) :
-    W.information (schedule p) = p.μ^2 * information p := by
+lemma information_eq_at :
+    W.information (scheduleAt p M) = p.μ^2 * information p := by
   unfold LongTails.Algorithms.WeakInterpolationDesign.information LongTails.Algorithms.StrongGrowthWeights.information
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro i _
-  rw [weights_eq hp, tuned hp]
+  rw [weights_eq_at hp hM, tuned_at hp hM]
   unfold gain curvature weight
   ring
 
-lemma largest_eq (hp : spec.valid p) : W.largestCurvature (schedule p) = scale p := by
+lemma largest_eq_at : W.largestCurvature (scheduleAt p M) = M := by
   unfold LongTails.Algorithms.WeakInterpolationDesign.largestCurvature
-  change Finset.univ.sup' Finset.univ_nonempty (fun i : Fin p.n => W.profile (schedule p) i * capacity p i) = _
-  simp_rw [tuned hp]
-  have he : curvature p (peak p) * capacity p (peak p) = scale p := by
-    simp [capacity]
+  change Finset.univ.sup' Finset.univ_nonempty (fun i : Fin p.n => W.profile (scheduleAt p M) i * capacityAt p M i) = _
+  simp_rw [tuned_at hp hM]
+  have he : curvature p (peak p) * capacityAt p M (peak p) = M := by
+    simp [capacityAt]
     field_simp [(curv_pos hp _).ne']
   apply le_antisymm
   · apply Finset.sup'_le
     intro i _
     by_cases h : i = peak p
     · simpa [h] using he.le
-    · simpa [capacity, h, sq] using cap_enough hp i
-  · rw [← he]
-    exact Finset.le_sup' (fun i => curvature p i * capacity p i) (Finset.mem_univ _)
+    · simpa [capacityAt, h, sq] using hM i
+  · exact he.ge.trans (Finset.le_sup' (fun i => curvature p i * capacityAt p M i) (Finset.mem_univ _))
 
-lemma smooth_eq (hp : spec.valid p) : W.smoothness (schedule p) = 2 * speed p * scale p := by
+lemma smooth_eq_at : W.smoothness (scheduleAt p M) = 2 * speed p * M := by
   unfold LongTails.Algorithms.WeakInterpolationDesign.smoothness
-  rw [largest_eq hp]; rfl
+  rw [largest_eq_at hp hM]; rfl
+
+end
+
+lemma capacity_ge (hp : spec.valid p) (i : Fin p.n) : curvature p i ≤ capacity p i :=
+  capacity_ge_at hp (cap_enough hp) i
+
+lemma schedule_valid (hp : spec.valid p) : LongTails.Setups.DistributedWeakInterpolation.spec.valid
+    (schedule p) :=
+  schedule_valid_at hp (cap_enough hp)
+
+lemma tuned (hp : spec.valid p) (i : Fin p.n) : W.profile (schedule p) i = curvature p i :=
+  tuned_at hp (cap_enough hp) i
+
+lemma weights_eq (hp : spec.valid p) (i : Fin p.n) : W.weights (schedule p) i = gain p i :=
+  weights_eq_at hp (cap_enough hp) i
+
+lemma information_eq (hp : spec.valid p) :
+    W.information (schedule p) = p.μ^2 * information p :=
+  information_eq_at hp (cap_enough hp)
+
+lemma largest_eq (hp : spec.valid p) : W.largestCurvature (schedule p) = scale p :=
+  largest_eq_at hp (cap_enough hp)
+
+lemma smooth_eq (hp : spec.valid p) : W.smoothness (schedule p) = 2 * speed p * scale p :=
+  smooth_eq_at hp (cap_enough hp)
 
 end LongTails.Proofs.GradientDiversitySchedule
