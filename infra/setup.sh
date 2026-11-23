@@ -37,14 +37,14 @@ if (( ${#packages[@]} )); then
     "${apt[@]}" install -y "${packages[@]}"
 fi
 
+installer_dir=$(mktemp -d)
+trap 'rm -rf -- "$installer_dir"' EXIT
 elan_bin="${ELAN_HOME:-$HOME/.elan}/bin"
 if [[ ! -x "$elan_bin/elan" ]]; then
     if [[ "$(uname -s):$(uname -m)" != Linux:x86_64 ]]; then
         printf 'Automatic Elan installation requires x86-64 Linux. Install Elan and rerun this script.\n' >&2
         exit 1
     fi
-    installer_dir=$(mktemp -d)
-    trap 'rm -rf -- "$installer_dir"' EXIT
     curl --fail --silent --show-error --location \
         'https://github.com/leanprover/elan/releases/download/v4.2.2/elan-x86_64-unknown-linux-gnu.tar.gz' \
         --output "$installer_dir/elan.tar.gz"
@@ -59,6 +59,15 @@ if [[ "$(ruff --version 2>/dev/null || true)" != "ruff $ruff_version" ]]; then
     PIPX_BIN_DIR="$HOME/.local/bin" pipx install --force "ruff==$ruff_version"
 fi
 ruff --version
+
+if ! command -v codex >/dev/null; then
+    curl --fail --silent --show-error --location \
+        'https://github.com/openai/codex/releases/latest/download/install.sh' \
+        --output "$installer_dir/codex-install.sh"
+    CODEX_NON_INTERACTIVE=1 CODEX_INSTALLER_USE_RELEASES_OPENAI_COM=0 \
+        sh "$installer_dir/codex-install.sh"
+fi
+codex --version
 
 toolchain=$(<lean-toolchain)
 "$elan_bin/elan" toolchain install "$toolchain"
