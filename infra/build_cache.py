@@ -119,12 +119,23 @@ def find_cache(root):
         for release in releases:
             if release["draft"] or not release["tag_name"].startswith("nightly-"):
                 continue
-            for asset in release["assets"]:
+            names = {a["name"] for a in release["assets"] if a["state"] == "uploaded"}
+            for name in sorted(names):
                 match = re.fullmatch(
-                    r"lean-build-Linux-X64-([0-9a-f]{40})\.tar\.gz", asset["name"]
+                    r"(lean-build-Linux-X64-([0-9a-f]{40})\.tar\.gz)"
+                    r"(?:\.part001-of-([0-9]{3}))?",
+                    name,
                 )
-                if match and compatible(root, match[1]):
-                    return release["tag_name"], asset["name"]
+                if not match:
+                    continue
+                parts = [name]
+                if match[3]:
+                    parts = [
+                        f"{match[1]}.part{i:03d}-of-{match[3]}"
+                        for i in range(1, int(match[3]) + 1)
+                    ]
+                if parts and names.issuperset(parts) and compatible(root, match[2]):
+                    return release["tag_name"], parts
         page += 1
 
 
@@ -137,18 +148,16 @@ def restore_cache(root):
         if cache is None:
             print("No compatible nightly cache found; building normally.", flush=True)
             return
-        tag, name = cache
+        tag, names = cache
         print(f"Restoring nightly cache from {tag}...", flush=True)
-        url = (
-            f"https://github.com/{REPOSITORY}/releases/download/"
-            f"{quote(tag, safe='')}/{name}"
-        )
+        url = f"https://github.com/{REPOSITORY}/releases/download/{quote(tag, safe='')}"
         (root / ".lake").mkdir(exist_ok=True)
         with tempfile.NamedTemporaryFile(
             prefix="cache-", suffix=".tar.gz", dir=root / ".lake"
         ) as archive:
-            with open_url(url) as response:
-                download_cache(response, archive)
+            for name in names:
+                with open_url(f"{url}/{name}") as response:
+                    download_cache(response, archive)
             archive.flush()
             print("Extracting cache...", flush=True)
             unpack_cache(archive.name, root)

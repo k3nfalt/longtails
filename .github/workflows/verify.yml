@@ -76,15 +76,15 @@ jobs:
       - name: Archive verified Lean build
         if: inputs.upload-build
         run: |
-          tar -czf "$RUNNER_TEMP/lean-build.tar.gz" \
-            .lake/build lean-toolchain lake-manifest.json lakefile.toml
+          tar -czf - .lake/build lean-toolchain lake-manifest.json lakefile.toml |
+            split -b 1G --numeric-suffixes=1 -a 3 - "$RUNNER_TEMP/lean-build.tar.gz.part"
 
       - name: Upload verified Lean build
         if: inputs.upload-build
         uses: actions/upload-artifact@v4
         with:
           name: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
-          path: ${{ runner.temp }}/lean-build.tar.gz
+          path: ${{ runner.temp }}/lean-build.tar.gz.part*
           if-no-files-found: error
           compression-level: 0
           retention-days: 14

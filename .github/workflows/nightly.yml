@@ -70,30 +70,26 @@ jobs:
 
       - name: Publish anonymous build download
         if: steps.nightly.outputs.tag != ''
-        uses: actions/github-script@v7
+        shell: bash
+        working-directory: ${{ runner.temp }}/nightly-build
         env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           NIGHTLY_TAG: ${{ steps.nightly.outputs.tag }}
-        with:
-          script: |
-            const fs = require('fs');
-            const repo = context.repo;
-            const tag = process.env.NIGHTLY_TAG;
-            let release;
-            try {
-              release = (await github.rest.repos.getReleaseByTag({...repo, tag})).data;
-            } catch (error) {
-              if (error.status !== 404) throw error;
-              release = (await github.rest.repos.createRelease({
-                ...repo, tag_name: tag, name: tag, prerelease: true,
-                make_latest: 'false',
-                body: `Verified Lean build for ${context.sha}.`,
-              })).data;
-            }
-            const name = `lean-build-Linux-X64-${context.sha}.tar.gz`;
-            if (!release.assets.some(asset => asset.name === name)) {
-              await github.rest.repos.uploadReleaseAsset({
-                ...repo, release_id: release.id, name,
-                data: fs.readFileSync(`${process.env.RUNNER_TEMP}/nightly-build/lean-build.tar.gz`),
-                headers: {'content-type': 'application/gzip'},
-              });
-            }
+        run: |
+          if ! gh release view "$NIGHTLY_TAG" >/dev/null; then
+            gh release create "$NIGHTLY_TAG" --verify-tag --prerelease --latest=false \
+              --title "$NIGHTLY_TAG" --notes "Verified Lean build for $GITHUB_SHA."
+          fi
+          parts=(lean-build.tar.gz.part*)
+          printf -v total '%03d' "${#parts[@]}"
+          prefix="lean-build-Linux-X64-$GITHUB_SHA.tar.gz.part"
+          assets=$(gh release view "$NIGHTLY_TAG" --json assets --jq '.assets[].name')
+          if grep -Fxq "${prefix}${total}-of-${total}" <<< "$assets"; then
+            exit 0
+          fi
+          for part in "${parts[@]}"; do
+            name="${prefix}${part##*.part}-of-${total}"
+            mv "$part" "$name"
+            gh release upload "$NIGHTLY_TAG" "$name" --clobber
+          done
