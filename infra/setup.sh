@@ -13,28 +13,18 @@ command -v cc >/dev/null && command -v make >/dev/null || packages+=(build-essen
 command -v curl >/dev/null || packages+=(curl)
 command -v git >/dev/null || packages+=(git)
 command -v python3 >/dev/null || packages+=(python3)
-command -v pipx >/dev/null || packages+=(pipx)
 command -v tar >/dev/null || packages+=(tar)
 command -v zstd >/dev/null || packages+=(zstd)
-command -v gh >/dev/null || packages+=(gh)
 command -v openssl >/dev/null || packages+=(openssl)
 [[ -s /etc/ssl/certs/ca-certificates.crt ]] || packages+=(ca-certificates)
 
 if (( ${#packages[@]} )); then
-    if ! command -v apt-get >/dev/null; then
+    if (( EUID != 0 )) || ! command -v apt-get >/dev/null; then
         printf 'Install these system packages before retrying: %s\n' "${packages[*]}" >&2
         exit 1
     fi
-    apt=(apt-get)
-    if (( EUID != 0 )); then
-        if ! command -v sudo >/dev/null; then
-            printf 'Installing system packages requires root or sudo: %s\n' "${packages[*]}" >&2
-            exit 1
-        fi
-        apt=(sudo apt-get)
-    fi
-    "${apt[@]}" update
-    "${apt[@]}" install -y "${packages[@]}"
+    apt-get update
+    apt-get install -y "${packages[@]}"
 fi
 
 installer_dir=$(mktemp -d)
@@ -53,10 +43,26 @@ if [[ ! -x "$elan_bin/elan" ]]; then
 fi
 export PATH="$elan_bin:$PATH"
 
-ruff_version=0.17.0
 export PATH="$HOME/.local/bin:$PATH"
+mkdir -p "$HOME/.local/bin"
+if ! command -v gh >/dev/null; then
+    case "$(uname -s):$(uname -m)" in
+        Linux:x86_64) gh_arch=amd64 ;;
+        Linux:aarch64) gh_arch=arm64 ;;
+        *) printf 'Install GitHub CLI for this platform and rerun setup.\n' >&2; exit 1 ;;
+    esac
+    gh_package="gh_2.105.0_linux_$gh_arch"
+    curl -fsSL "https://github.com/cli/cli/releases/download/v2.105.0/$gh_package.tar.gz" \
+        -o "$installer_dir/gh.tar.gz"
+    tar -xzf "$installer_dir/gh.tar.gz" -C "$installer_dir" "$gh_package/bin/gh"
+    install -m 755 "$installer_dir/$gh_package/bin/gh" "$HOME/.local/bin/gh"
+fi
+
+ruff_version=0.17.0
 if [[ "$(ruff --version 2>/dev/null || true)" != "ruff $ruff_version" ]]; then
-    PIPX_BIN_DIR="$HOME/.local/bin" pipx install --force "ruff==$ruff_version"
+    curl -fsSL "https://github.com/astral-sh/ruff/releases/download/$ruff_version/ruff-installer.sh" \
+        -o "$installer_dir/ruff-install.sh"
+    RUFF_UNMANAGED_INSTALL="$HOME/.local/bin" sh "$installer_dir/ruff-install.sh"
 fi
 ruff --version
 
