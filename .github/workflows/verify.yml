@@ -42,7 +42,7 @@ jobs:
       - name: Install Ruff
         run: |
           python3 -m venv "$RUNNER_TEMP/lint-venv"
-          "$RUNNER_TEMP/lint-venv/bin/python" -m pip install ruff==0.14.0
+          "$RUNNER_TEMP/lint-venv/bin/python" -m pip install ruff==0.17.0
           echo "$RUNNER_TEMP/lint-venv/bin" >> "$GITHUB_PATH"
 
       - name: Lint

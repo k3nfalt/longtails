@@ -13,6 +13,7 @@ command -v cc >/dev/null && command -v make >/dev/null || packages+=(build-essen
 command -v curl >/dev/null || packages+=(curl)
 command -v git >/dev/null || packages+=(git)
 command -v python3 >/dev/null || packages+=(python3)
+command -v pipx >/dev/null || packages+=(pipx)
 command -v tar >/dev/null || packages+=(tar)
 command -v zstd >/dev/null || packages+=(zstd)
 command -v gh >/dev/null || packages+=(gh)
@@ -52,6 +53,13 @@ if [[ ! -x "$elan_bin/elan" ]]; then
 fi
 export PATH="$elan_bin:$PATH"
 
+ruff_version=0.17.0
+export PATH="$HOME/.local/bin:$PATH"
+if [[ "$(ruff --version 2>/dev/null || true)" != "ruff $ruff_version" ]]; then
+    PIPX_BIN_DIR="$HOME/.local/bin" pipx install --force "ruff==$ruff_version"
+fi
+ruff --version
+
 toolchain=$(<lean-toolchain)
 "$elan_bin/elan" toolchain install "$toolchain"
 lake --version
@@ -67,9 +75,11 @@ done
 zsh_dir="${ZDOTDIR:-$HOME}"
 path_line='case ":$PATH:" in *":${ELAN_HOME:-$HOME/.elan}/bin:"*) ;; *) export PATH="${ELAN_HOME:-$HOME/.elan}/bin:$PATH" ;; esac'
 for profile in "$bash_login" "$HOME/.bashrc" "$zsh_dir/.zprofile" "$zsh_dir/.zshrc"; do
-    if ! grep -Fxq -- "$path_line" "$profile" 2>/dev/null; then
-        printf '\n%s\n' "$path_line" >> "$profile"
-    fi
+    for line in "$path_line" 'case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac'; do
+        if ! grep -Fxq -- "$line" "$profile" 2>/dev/null; then
+            printf '\n%s\n' "$line" >> "$profile"
+        fi
+    done
 done
 
-printf 'LongTails dependencies are installed. Open a new shell and run ./build.sh to build the project.\n'
+printf 'LongTails dependencies are installed. Open a new shell and run ./build.sh --cache to build from the latest compatible nightly.\n'
