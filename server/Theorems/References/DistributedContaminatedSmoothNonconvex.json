@@ -1,0 +1,112 @@
+{
+  "setup": "LongTails.Setups.DistributedContaminatedSmoothNonconvex",
+  "searched_at": "2026-11-23T17:44:04.632242+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &2^{34} \\cdot \\left(K + q \\cdot \\min\\left\\{ K, q \\right\\}\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\max\\left\\{ \\frac{2^{18} \\cdot \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot \\sigma\\left(i\\right)^{2}\\right)}{n^{2} \\cdot \\varepsilon^{2}}, 0 \\right\\}\\right) + 512 \\cdot K \\cdot \\left(\\left(1 + \\log_{2}\\left(n\\right)\\right) \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + \\frac{d + n - 1}{n} \\cdot \\left(8 + \\log_{2}\\left(n \\cdot \\left(d + 1\\right)\\right)\\right)\\right)\\right) \\\\ &\\text{where}\\quad K = 1 + \\left\\lceil \\frac{2^{19} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} q = 4 + \\left\\lceil \\log\\left(\\frac{1}{failure}\\right) \\right\\rceil_{+}\\end{aligned}",
+        "type": "LongTails.Setups.DistributedContaminatedSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  have K := 1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have q := 4 + ⌈Real.log (1 / p.failure)⌉₊;\n  2 ^ 34 * ↑(K + q * min K q) *\n      (Finset.univ.sup p.h + ((2 ^ 18 * ∑ i, ↑(p.h i) * p.σ i ^ 2) / (↑↑p.n ^ 2 * p.ε ^ 2)).toNNReal) +\n    512 * ↑K *\n      (↑(1 + (↑p.n).log2) * Finset.univ.sup p.h + p.l +\n        p.b * ↑(64 + (p.d + ↑p.n - 1) / ↑p.n * (8 + (↑p.n * (p.d + 1)).log2)))"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &2^{34} \\cdot \\left(K + q \\cdot \\min\\left\\{ K, q \\right\\}\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\max\\left\\{ \\frac{2^{18} \\cdot \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot \\sigma\\left(i\\right)^{2}\\right)}{n^{2} \\cdot \\varepsilon^{2}}, 0 \\right\\}\\right) + 512 \\cdot K \\cdot \\left(\\left(1 + \\log_{2}\\left(n\\right)\\right) \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + \\frac{d + n - 1}{n} \\cdot \\left(8 + \\log_{2}\\left(n \\cdot \\left(d + 1\\right)\\right)\\right)\\right)\\right) \\\\ &\\text{where}\\quad K = 1 + \\left\\lceil \\frac{2^{19} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} q = 4 + \\left\\lceil \\log\\left(\\frac{1}{failure}\\right) \\right\\rceil_{+}\\end{aligned}",
+          "type": "LongTails.Setups.DistributedContaminatedSmoothNonconvex.Params → DistributedTemplate.Time",
+          "value": "fun p =>\n  have K := 1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have q := 4 + ⌈Real.log (1 / p.failure)⌉₊;\n  2 ^ 34 * ↑(K + q * min K q) *\n      (Finset.univ.sup p.h + ((2 ^ 18 * ∑ i, ↑(p.h i) * p.σ i ^ 2) / (↑↑p.n ^ 2 * p.ε ^ 2)).toNNReal) +\n    512 * ↑K *\n      (↑(1 + (↑p.n).log2) * Finset.univ.sup p.h + p.l +\n        p.b * ↑(64 + (p.d + ↑p.n - 1) / ↑p.n * (8 + (↑p.n * (p.d + 1)).log2)))"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.ContaminatedParallelStationarity",
+      "namespace": "LongTails.Setups.DistributedContaminatedSmoothNonconvex",
+      "setup": "LongTails.Setups.DistributedContaminatedSmoothNonconvex",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedContaminatedSmoothNonconvex.spec\n  LongTails.Theorems.ContaminatedParallelStationarity.budget",
+      "theorem": "LongTails.Theorems.ContaminatedParallelStationarity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ContaminatedParallelStationarity",
+      "theorem": "LongTails.Theorems.ContaminatedParallelStationarity.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The aggregate objective F may be nonconvex. Its gradient is L-Lipschitz for public L > 0, and it has a global lower bound a satisfying F(x₀) − a ≤ Δ for public Δ ≥ 0. Each worker objective is differentiable. The Lipschitz condition applies only to the aggregate gradient.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, spec.valid and spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "F(x) = (1/n) ∑ᵢ fᵢ(x), with one local objective per worker and n ≥ 1.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, Functions and objective. LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, Params.n, Functions and objective. LongTails/Setups/FiniteSumSmoothAndConvex.lean, objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Worker i queries a point x and a positive batch size m. After m hᵢ time it receives m individual vectors gᵢ(x, ξ) from consecutive fresh samples of its mixture stream. The reply contains no indicator identifying clean samples.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, spec.ComputeQuery, spec.ComputeReply and spec.admissible. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, ComputeQuery, ComputeReply and computation."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every x, the clean law μᵢ gives E[gᵢ(x, ξ)] = ∇fᵢ(x) and E‖gᵢ(x, ξ) − ∇fᵢ(x)‖² ≤ σᵢ². Each σᵢ ≥ 0 is public. These moment bounds apply to the clean component of each mixture.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, spec.publicInput, spec.valid and spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.unbiased and IsStochasticGradient.variance."
+      },
+      {
+        "label": "biased_oracle",
+        "details": "Worker i draws IID samples from (1 − ηᵢ)μᵢ + ηᵢνᵢ, with independent streams across workers. The contaminating law νᵢ is arbitrary, so the observed gradient can be biased or lack a finite mean. The public rates satisfy 0 ≤ ηᵢ ≤ 1/16 and 2¹⁸ ∑ᵢ σᵢ√ηᵢ ≤ nε. The component functions, oracle maps and sampling laws are hidden.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, Params, mixture, spec.publicInput, spec.Instance, spec.valid and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The decision space is ℝᵈ with the Euclidean norm. The dimension d and starting point x₀ are public.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, Point and spec.publicInput. LongTails/Setups/DistributedAggregateSmoothNonconvex.lean, Params.d, Params.x0 and Point."
+      },
+      {
+        "label": "other",
+        "details": "The budget measures elapsed time. Workers compute concurrently, with at most one pending batch per worker and public per-sample times hᵢ > 0. Every ordered worker pair has its own serial message queue, so distinct links can operate concurrently. A k-bit payload occupies its link for ℓ + b(k + 64), including the clock overhead, with public ℓ, b ≥ 0.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, network, spec.publicInput and spec.admissible. LongTails/Setups/BandwidthHeterogeneousSmoothNonconvex.lean, computation, Mail and communication. LongTails/TemplateDistributed.lean, clockBits, step and TimedConvergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The designated root returns a single measurable point X at the prescribed deadline. The stationarity criterion is ‖∇F(X)‖ ≤ ε for the clean aggregate objective and public ε > 0.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, spec.Output, spec.valid and spec.successful. LongTails/TemplateDistributed.lean, execute and TimedConvergence."
+      },
+      {
+        "label": "high_probability",
+        "details": "Pr(‖∇F(X)‖ > ε) ≤ failure, with public 0 < failure < 1. Probability is taken over the product of the algorithm seed law and the joint worker-sample law.",
+        "evidence": "LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean, Params.failure, spec.publicInput, spec.valid and spec.successful. LongTails/TemplateDistributed.lean, law and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines worker-specific sample contamination and aggregate-only smoothness with a high-probability stationarity target under a fixed elapsed-time budget. Both heterogeneous sampling times and concurrent, bit-priced communication enter that budget."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ContaminatedParallelStationarity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ContaminatedParallelStationarity",
+          "theorem": "LongTails.Theorems.ContaminatedParallelStationarity.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

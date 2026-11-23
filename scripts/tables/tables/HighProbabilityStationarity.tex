@@ -1,0 +1,43 @@
+\begin{table}[tp]
+\centering
+\caption{High-probability stationarity under bounded variance (\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighProbabilityStationarity.lean}{setup}).}\label{tab:HighProbabilityStationarity}
+\parbox{\linewidth}{\footnotesize Let $f$ be differentiable and bounded below on a complete, second-countable real inner-product space with its Borel $\sigma$-algebra. Assume $\nabla f$ is $L$-Lipschitz and $f(x_0)-\inf f\le\Delta$. The jointly measurable stochastic-gradient oracle uses IID samples, with mean $\nabla f(x)$ and mean squared error at most $\sigma^2$ at each $x$. The target is one measurable point $\hat x$ satisfying $\Pr(\|\nabla f(\hat x)\|\le\varepsilon)\ge1-\delta$, where $L,\varepsilon>0$, $\Delta,\sigma\ge0$, and $0<\delta\le1/4$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HighProbabilityStationarityUpperBound.lean}{High\allowbreak{}Probability\allowbreak{}Stationarity\allowbreak{}Upper\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HighProbabilityStationarityUpperBound.md}{(review)}
+& Sufficient budget 
+$\mathcal{O}(M+V\ell\log^3(2+\ell)+\ell\sqrt{L\Delta}/\varepsilon)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound, retuned minibatch NSGD with median-of-means selection \citep{dcsnHublerV3}, Thm.~4
+& $\mathcal{O}(\ell M+\ell\sqrt{L\Delta}/\varepsilon+V\ell^2)$
+& \textbf{(1)}: For $E=\mathbb R^d$, replaces $\ell M$ by $M$. When $M\ge\max\{V\ell\log^3(2+\ell),\,\ell\sqrt{L\Delta}/\varepsilon\}$, the budget improves from $\mathcal{O}(\ell M)$ to $\mathcal{O}(M)$. Elsewhere the bound is at most the same order.
+& \\
+\midrule
+\textbf{(3)} Derived bound, retuned minibatch NSGD \citep{dcsnHublerV3}, Thm.~4
+& $\mathcal{O}(V+\ell M+\ell\sqrt{L\Delta}/\varepsilon)$\newline
+Mean gradient norm across iterates $\le\varepsilon$
+& \textbf{(1)}: For $E=\mathbb R^d$, returns a single point with the stated probability. Replaces $\ell M$ by $M$.
+& \textbf{(1)}: Extra confidence overhead $V\ell\log^3(2+\ell)$ for the single-point output. \\
+\midrule
+\textbf{(4)} 2-RSG \citep{hpsGhadimiLan2013}, arXiv Thm.~2.4(b)
+& $\mathcal{O}(\ell(1+M)+\ell^2\sigma^2/(\delta\varepsilon^2))$
+& \textbf{(1)}: For $E=\mathbb R^d$, replaces $\ell M$ by $M$ and the polynomial confidence term by $V\ell\log^3(2+\ell)$, which is smaller at high confidence for fixed $\sigma/\varepsilon>0$.
+& \textbf{(1)}: Adds $\ell\sqrt{L\Delta}/\varepsilon$ and incurs $\ell\log^3(2+\ell)$ overhead even for $\sigma\lesssim\varepsilon$. \\
+\midrule
+\textbf{(5)} SGD \citep{hpsLiuEtAl2023}, Thm.~4.1(1)
+& $\mathcal{O}(1+M+\sigma^2\ell/\varepsilon^2)$\newline
+Mean squared gradient norm across iterates $\le\varepsilon^2$
+& \textbf{(1)}: Allows infinite dimension, unattained infima and finite-variance noise. \textbf{(5)} assumes $E=\mathbb R^d$, an attained minimum and a $\sigma$-sub-Gaussian error norm. \textbf{(1)} returns one point with the stated probability.
+& \textbf{(1)}: On this overlap, its bound has $V\ell\log^3(2+\ell)$ instead of $\sigma^2\ell/\varepsilon^2$, plus $\ell\sqrt{L\Delta}/\varepsilon$. The output guarantees differ. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $E$ is the domain space, $\ell=\log(1/\delta)$, $V=1+\sigma^2/\varepsilon^2$, and $M=VL\Delta/\varepsilon^2$. Costs count individual stochastic-gradient calls.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

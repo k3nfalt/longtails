@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.HessianLipschitzPL",
+  "searched_at": "2026-11-23T17:44:11.043273+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 53 \\cdot \\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}} + 5 \\cdot \\log\\left(1 + \\log\\left(1 + \\frac{\\mu^{3}}{H^{2} \\cdot \\varepsilon}\\right)\\right) + 4 \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HessianLipschitzPL.spec.Params → ℕ",
+        "value": "fun p => ⌈53 * (p.H ^ 2 * p.Δ / p.μ ^ 3) ^ 4⁻¹ + 5 * Real.log (1 + Real.log (1 + p.μ ^ 3 / (p.H ^ 2 * p.ε))) + 4⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 53 \\cdot \\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}} + 5 \\cdot \\log\\left(1 + \\log\\left(1 + \\frac{\\mu^{3}}{H^{2} \\cdot \\varepsilon}\\right)\\right) + 4 \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HessianLipschitzPL.spec.Params → ℕ",
+          "value": "fun p => ⌈53 * (p.H ^ 2 * p.Δ / p.μ ^ 3) ^ 4⁻¹ + 5 * Real.log (1 + Real.log (1 + p.μ ^ 3 / (p.H ^ 2 * p.ε))) + 4⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.HessianLipschitzPLCubicNewton",
+      "namespace": "LongTails.Setups.HessianLipschitzPL",
+      "setup": "LongTails.Setups.HessianLipschitzPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.HessianLipschitzPL.spec\n  LongTails.Theorems.HessianLipschitzPLCubicNewton.budget",
+      "theorem": "LongTails.Theorems.HessianLipschitzPLCubicNewton.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HessianLipschitzPLCubicNewton",
+      "theorem": "LongTails.Theorems.HessianLipschitzPLCubicNewton.result",
+      "references": "- Yurii Nesterov and B. T. Polyak. [Cubic regularization of Newton method and its global performance](https://doi.org/10.1007/s10107-006-0706-8). 2006 ([April 2003 preprint](https://dial.uclouvain.be/pr/boreal/en/object/boreal%3A4920/datastream/PDF_01/view)). Complexity: $O\\!\\left(1+(H^2\\Delta/\\mu^3)^{1/4}+\\log\\!\\left(1+\\log\\!\\left(1+\\mu^3/(H^2\\varepsilon)\\right)\\right)\\right)$ joint value, gradient, and Hessian oracle calls for cubic-regularized Newton with known $H$ to attain $f(x_k)-f^*\\le\\varepsilon$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The unconstrained objective may be nonconvex. The Hessian can have negative eigenvalues away from minimizers.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.Instance and spec.admissible"
+      },
+      {
+        "label": "pl",
+        "details": "The minimum f* is attained, and the global Polyak–Łojasiewicz inequality ‖∇f(x)‖² ≥ 2μ(f(x) − f*) holds for every x, with μ > 0.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.admissible and spec.valid"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "The gradient component equals ∇f(x) for every query history and oracle seed.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.admissible"
+      },
+      {
+        "label": "function_value",
+        "details": "A query at x returns the exact value f(x) together with the gradient and Hessian in one call.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.Query, spec.Reply and spec.admissible"
+      },
+      {
+        "label": "other",
+        "details": "The same reply supplies the full exact Hessian D(∇f)(x) as a continuous linear operator on E.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.Reply and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The domain is a finite-dimensional real inner-product space equipped with a measurable space.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, Public.innerE, Public.finiteE and Public.measurableE"
+      },
+      {
+        "label": "other",
+        "details": "The gradient is differentiable everywhere, and ‖∇²f(x) − ∇²f(y)‖op ≤ H‖x − y‖ globally. The algorithm receives E, H > 0 and x₀. The PL constant μ > 0, the bound Δ ≥ 0 on f(x₀) − f*, and the tolerance ε > 0 are hidden from the algorithm and may determine its call budget.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, Public, Params, spec.publicInput, spec.valid and spec.admissible. LongTails/Template.lean, Convergence"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The algorithm returns a measurable point X in E. Its objective gap f(X) − f* must be integrable.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.Output and spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "After the fixed oracle-call budget, the returned point must satisfy E[f(X) − f*] ≤ ε under the joint seed law.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.successful. LongTails/Template.lean, Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Finite-dimensional minimization under global gradient dominance and a Lipschitz Hessian, with exact second-order queries and objective-gap accuracy, is an established second-order optimization benchmark."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HessianLipschitzPLCubicNewton.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HessianLipschitzPLCubicNewton",
+          "theorem": "LongTails.Theorems.HessianLipschitzPLCubicNewton.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

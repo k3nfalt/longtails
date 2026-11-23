@@ -1,0 +1,117 @@
+{
+  "setup": "LongTails.Setups.DistributedOptimumHeterogeneity",
+  "searched_at": "2026-11-23T17:44:29.858368+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 24576 \\cdot \\frac{\\sigma^{2} \\cdot V\\left(w\\right)}{\\varepsilon^{2}} + 8192 \\cdot \\kappa \\cdot \\left(1 + \\log\\left(1 + \\left(\\frac{R}{\\varepsilon}\\right)^{2}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot q\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad S\\left(w\\right) = \\left(\\max_{0\\le j<n} n \\cdot \\mu \\cdot w\\left(j\\right) - \\left(\\sum_{i=0}^{n-1} L\\left(i\\right) \\cdot \\max\\left\\{ w\\left(j\\right) - w\\left(i\\right), 0 \\right\\}\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} W\\left(w\\right) = 0 \\leq \\left(\\min_{0\\le a<n} w\\left(a\\right)\\right) \\land 1 \\leq S\\left(w\\right) \\land 4096 \\cdot n \\cdot \\zeta^{2} \\cdot \\left(\\sum_{i=0}^{n-1} \\left(w\\left(i\\right) - \\frac{\\left(\\sum_{j=0}^{n-1} w\\left(j\\right)\\right)}{n}\\right)^{2}\\right) \\leq \\varepsilon^{2} \\\\ &\\phantom{\\text{where}\\quad} V\\left(v\\right) = \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot v\\left(i\\right)^{2}\\right) \\\\ &\\phantom{\\text{where}\\quad} w = \\operatorname{argmin}\\left(W, V\\right) \\\\ &\\phantom{\\text{where}\\quad} u\\left(i\\right) = h\\left(i\\right) \\cdot w\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} \\kappa = 2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M \\\\ &\\phantom{\\text{where}\\quad} G = \\frac{\\left(\\max_{0\\le i<n} u\\left(i\\right)\\right) \\cdot \\left(\\sigma + \\sqrt{n} \\cdot \\zeta\\right)}{M} \\\\ &\\phantom{\\text{where}\\quad} q = \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + \\kappa + \\left(\\frac{R + G}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\end{aligned}",
+        "type": "LongTails.Setups.DistributedOptimumHeterogeneity.Params → NNReal",
+        "value": "fun p =>\n  have S := fun w => Finset.univ.sup' ⋯ fun j => ↑↑p.n * p.μ * w j - ∑ i, p.L i * max (w j - w i) 0;\n  have W := fun w =>\n    0 ≤ Finset.univ.inf' ⋯ w ∧ 1 ≤ S w ∧ 4096 * ↑↑p.n * p.ζ ^ 2 * ∑ i, (w i - (∑ j, w j) / ↑↑p.n) ^ 2 ≤ p.ε ^ 2;\n  have V := fun v => ∑ i, ↑(p.h i) * v i ^ 2;\n  have w := LongTails.Theorems.DistributedOptimumHeterogeneity.argmin W V;\n  have u := fun i => ↑(p.h i) * w i;\n  have M := Finset.univ.sup' ⋯ fun i => u i * p.L i;\n  have κ := (2 * ∑ i, (↑(p.h i))⁻¹) * M;\n  have G := Finset.univ.sup' ⋯ u * (p.σ + √↑↑p.n * p.ζ) / M;\n  have q := ⌈2 + ↑p.d + κ + ((p.R + G) / p.ε) ^ 2⌉₊.size;\n  (24576 * (p.σ ^ 2 * V w / p.ε ^ 2) +\n      8192 * κ * (1 + Real.log (1 + (p.R / p.ε) ^ 2)) *\n        (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * ↑q))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &\\max\\left\\{ 24576 \\cdot \\frac{\\sigma^{2} \\cdot V\\left(w\\right)}{\\varepsilon^{2}} + 8192 \\cdot \\kappa \\cdot \\left(1 + \\log\\left(1 + \\left(\\frac{R}{\\varepsilon}\\right)^{2}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot q\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad S\\left(w\\right) = \\left(\\max_{0\\le j<n} n \\cdot \\mu \\cdot w\\left(j\\right) - \\left(\\sum_{i=0}^{n-1} L\\left(i\\right) \\cdot \\max\\left\\{ w\\left(j\\right) - w\\left(i\\right), 0 \\right\\}\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} W\\left(w\\right) = 0 \\leq \\left(\\min_{0\\le a<n} w\\left(a\\right)\\right) \\land 1 \\leq S\\left(w\\right) \\land 4096 \\cdot n \\cdot \\zeta^{2} \\cdot \\left(\\sum_{i=0}^{n-1} \\left(w\\left(i\\right) - \\frac{\\left(\\sum_{j=0}^{n-1} w\\left(j\\right)\\right)}{n}\\right)^{2}\\right) \\leq \\varepsilon^{2} \\\\ &\\phantom{\\text{where}\\quad} V\\left(v\\right) = \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot v\\left(i\\right)^{2}\\right) \\\\ &\\phantom{\\text{where}\\quad} w = \\operatorname{argmin}\\left(W, V\\right) \\\\ &\\phantom{\\text{where}\\quad} u\\left(i\\right) = h\\left(i\\right) \\cdot w\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} \\kappa = 2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M \\\\ &\\phantom{\\text{where}\\quad} G = \\frac{\\left(\\max_{0\\le i<n} u\\left(i\\right)\\right) \\cdot \\left(\\sigma + \\sqrt{n} \\cdot \\zeta\\right)}{M} \\\\ &\\phantom{\\text{where}\\quad} q = \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + \\kappa + \\left(\\frac{R + G}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\end{aligned}",
+          "type": "LongTails.Setups.DistributedOptimumHeterogeneity.Params → NNReal",
+          "value": "fun p =>\n  have S := fun w => Finset.univ.sup' ⋯ fun j => ↑↑p.n * p.μ * w j - ∑ i, p.L i * max (w j - w i) 0;\n  have W := fun w =>\n    0 ≤ Finset.univ.inf' ⋯ w ∧ 1 ≤ S w ∧ 4096 * ↑↑p.n * p.ζ ^ 2 * ∑ i, (w i - (∑ j, w j) / ↑↑p.n) ^ 2 ≤ p.ε ^ 2;\n  have V := fun v => ∑ i, ↑(p.h i) * v i ^ 2;\n  have w := LongTails.Theorems.DistributedOptimumHeterogeneity.argmin W V;\n  have u := fun i => ↑(p.h i) * w i;\n  have M := Finset.univ.sup' ⋯ fun i => u i * p.L i;\n  have κ := (2 * ∑ i, (↑(p.h i))⁻¹) * M;\n  have G := Finset.univ.sup' ⋯ u * (p.σ + √↑↑p.n * p.ζ) / M;\n  have q := ⌈2 + ↑p.d + κ + ((p.R + G) / p.ε) ^ 2⌉₊.size;\n  (24576 * (p.σ ^ 2 * V w / p.ε ^ 2) +\n      8192 * κ * (1 + Real.log (1 + (p.R / p.ε) ^ 2)) *\n        (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * ↑q))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedOptimumHeterogeneity",
+      "namespace": "LongTails.Setups.DistributedOptimumHeterogeneity",
+      "setup": "LongTails.Setups.DistributedOptimumHeterogeneity",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedOptimumHeterogeneity.spec\n  LongTails.Theorems.DistributedOptimumHeterogeneity.budget",
+      "theorem": "LongTails.Theorems.DistributedOptimumHeterogeneity.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistributedOptimumHeterogeneity",
+      "theorem": "LongTails.Theorems.DistributedOptimumHeterogeneity.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Each local objective f_i is differentiable and convex on ℝᵈ, with L_i-Lipschitz gradient. The public constants satisfy L_i ≥ 0, μ > 0, and nμ ≤ ∑ᵢ L_i.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, spec.admissible and spec.valid. LongTails/Setups/DistributedWeakInterpolation.lean, spec.valid."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is F(x) = (1/n)∑ᵢ f_i(x), with one local function per computing worker and n ≥ 1. The solution set X* is argmin F.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, objective and solutions. LongTails/Setups/DistributedWeakInterpolation.lean, Params.n, Functions, and objective."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "A completed evaluation at worker i returns the query point x and a stochastic gradient g_i(x,ξ) with mean ∇f_i(x). Each worker draws from its own IID stream, and the streams are mutually independent. All parameters are public, including x₀, R, ε, μ, (L_i), σ, ζ, and the timing parameters. The local functions, gradient maps, sampling laws, and witnessing minimizer are instance data.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, Params, spec.publicInput, and spec.admissible. LongTails/Setups/DistributedWeakInterpolation.lean, Params and system. LongTails/Setups/StarNetwork.lean, computation. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.unbiased."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "At that same minimizer z, (1/n)∑ᵢ ‖∇f_i(z)‖² ≤ ζ², with ζ ≥ 0. Since ∇F(z) = 0, this bounds the mean squared deviation of the local gradients from the global gradient at z. Positive ζ permits nonzero local gradients there.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, Params.ζ, solutions, spec.valid, and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every worker i and query x, E‖g_i(x,ξ) − ∇f_i(x)‖² ≤ σ² with σ ≥ 0. Each gradient map is jointly measurable, and the gradient sample and its squared error are integrable at each x.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient. LongTails/Setups/DistributedWeakInterpolation.lean, spec.valid."
+      },
+      {
+        "label": "quadratic_growth",
+        "details": "There exists z ∈ X* within distance R ≥ 0 of x₀, and F(x) − F(z) ≥ (μ/2) dist(x,X*)² for every x. The growth condition applies to the average objective and permits multiple minimizers.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, solutions and spec.admissible. LongTails/Setups/DistributedWeakInterpolation.lean, spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Query points, gradients, and the output belong to ℝᵈ with the Euclidean norm, for public d ∈ ℕ.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, Params.d and Point. LongTails/Setups/DistributedOptimumHeterogeneity.lean, Point and spec.Output."
+      },
+      {
+        "label": "other",
+        "details": "A star connects n computing workers to a coordinator with no gradient oracle. Worker i takes h_i > 0 per completed sample and can abort a pending evaluation. A message with k payload bits takes ℓ + b(k + 64) time, with ℓ,b ≥ 0. Each worker has one computation slot and each directed link has one message slot. Distinct links and worker computations can operate concurrently.",
+        "evidence": "LongTails/Setups/DistributedWeakInterpolation.lean, system and spec.valid. LongTails/Setups/StarNetwork.lean, computation and communication. LongTails/TemplateDistributed.lean, clockBits and step."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "The designated root outputs a measurable point X at the elapsed-time deadline. The error is dist(X,X*)², measured to the entire minimizer set.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, solutions and spec.successful. LongTails/TemplateDistributed.lean, execute and TimedConvergence."
+      },
+      {
+        "label": "expected",
+        "details": "The squared distance must be integrable and satisfy E[dist(X,X*)²] ≤ ε² for public ε > 0. The expectation uses the joint law of the algorithm and oracle seeds. The deadline is fixed by the public parameters, and execution must have finitely many events almost surely through that deadline.",
+        "evidence": "LongTails/Setups/DistributedOptimumHeterogeneity.lean, spec.successful. LongTails/Setups/DistributedWeakInterpolation.lean, spec.valid. LongTails/TemplateDistributed.lean, law, FiniteEvents, and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup couples quadratic growth of the average objective and a local-gradient heterogeneity bound at one minimizer with a fixed elapsed-time guarantee on a star. Worker-specific sampling times, concurrent links, message latency, and payload length all enter the cost of reaching the expected squared-distance target."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistributedOptimumHeterogeneity.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistributedOptimumHeterogeneity",
+          "theorem": "LongTails.Theorems.DistributedOptimumHeterogeneity.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

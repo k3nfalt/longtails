@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Minimization with Optimum Heterogeneity}
+Workers on a star network minimize the average of smooth convex functions on $\mathbb{R}^d$, where $d$ is a nonnegative integer. The average satisfies quadratic growth relative to its minimizer set. At one minimizer near the given starting point, the mean squared norm of the local gradients is bounded. Each worker returns an unbiased stochastic gradient of its own function with bounded variance, using independent samples across workers and evaluations. For a tolerance $\varepsilon>0$, the goal is to return a point whose expected squared Euclidean distance to the minimizer set is at most $\varepsilon^2$ within an elapsed-time budget.
+
+Let $n\geq 1$ be the number of workers, with local objectives $f_i:\mathbb{R}^d\to\mathbb{R}$ for $i=1,\ldots,n$. Define $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$. The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} F(x).
+\]
+Write $S=\operatorname*{arg\,min}_{x\in\mathbb{R}^d}F(x)$ and $\operatorname{dist}(x,S)=\inf_{z\in S}\|x-z\|$, where $\|\cdot\|$ is the Euclidean norm.
+
+Our assumptions:
+\begin{assumption}[Local convexity and smoothness]
+Each $f_i$ is convex and differentiable on $\mathbb{R}^d$. For some $L_i\geq 0$, its gradient satisfies
+\[
+\|\nabla f_i(x)-\nabla f_i(y)\|\leq L_i\|x-y\|,
+\qquad x,y\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Quadratic growth and optimum heterogeneity]
+Let $x^0\in\mathbb{R}^d$ be the given starting point, let $R,\zeta\geq 0$, and let $0<\mu\leq n^{-1}\sum_{i=1}^n L_i$. There exists $x^\star\in S$ such that
+\[
+\begin{aligned}
+\|x^0-x^\star\| &\leq R,\\
+\frac{1}{n}\sum_{i=1}^n\|\nabla f_i(x^\star)\|^2 &\leq \zeta^2.
+\end{aligned}
+\]
+For every $x\in\mathbb{R}^d$, the average objective satisfies
+\[
+F(x)-F(x^\star)\geq \frac{\mu}{2}\operatorname{dist}(x,S)^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Local stochastic gradients]
+Worker $i$ has a jointly measurable map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$, where $\Omega$ is a measurable sample space. Its successive completed evaluations use a sequence $(\xi_{i,k})_{k\geq 1}$ of independent measurable samples with common probability law $\nu_i$ on $\Omega$. The worker sequences are mutually independent, and the algorithm's randomness is independent of the full sample array. At the $k$th completion, a query at $x\in\mathbb{R}^d$ returns $(x,g_i(x,\xi_{i,k}))$.
+
+For each $i$ and $x$, under $\xi\sim\nu_i$ the vector $g_i(x,\xi)$ is Bochner integrable and its squared error $\|g_i(x,\xi)-\nabla f_i(x)\|^2$ is integrable. For a common $\sigma\geq 0$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu_i}[g_i(x,\xi)] &= \nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\nu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The star has a central communication node and $n$ gradient workers. An evaluation at worker $i$ takes $h_i>0$ units of time. Each worker handles one evaluation at a time, ignores new evaluation requests while busy, and can abort a pending evaluation without consuming a sample. Messages travel only between the center and a worker. A payload of $m$ bits, with $m$ a nonnegative integer, is transmitted with 64 appended zero bits and takes time
+\[
+\ell+b(m+64),
+\]
+where $\ell\geq 0$ is the latency and $b\geq 0$ is the time per bit. The recipient receives the sender's identity and the transmitted bits. Each directed link carries one message at a time and ignores submissions while occupied. Distinct directed links, including opposite directions on the same edge, can operate concurrently with one another and with worker computations. Nodes may schedule wake-ups and observe time through 64-bit clock readings.
+
+The algorithm receives $d$, $n$, the measurable sample space $\Omega$, $x^0$, $(L_i,h_i)_{i=1}^n$, $\mu$, $R$, $\zeta$, $\sigma$, $\varepsilon$, $\ell$, and $b$. Let $T\geq 0$ be the elapsed-time budget and let $P$ be the joint law of the algorithm's randomness and the sample array. With $P$-probability one, the algorithm must process only finitely many events at every deadline $t\in[0,T]$. At time $T$, its designated output node must return a measurable point $\bar{x}\in\mathbb{R}^d$ with integrable squared distance to $S$ satisfying
+\[
+\mathbb{E}_P\bigl[\operatorname{dist}(\bar{x},S)^2\bigr]\leq\varepsilon^2.
+\]
+\end{document}

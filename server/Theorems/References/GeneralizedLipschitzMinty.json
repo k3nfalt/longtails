@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.GeneralizedLipschitzMinty",
+  "searched_at": "2026-11-23T17:44:31.228964+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left(1 + \\left\\lceil 32 \\cdot \\left(R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)\\right)^{2} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedLipschitzMinty.spec.Params → ℕ",
+        "value": "fun p => 2 * (1 + ⌈32 * (p.R * (p.L0 / p.ε + p.L1)) ^ 2⌉₊)"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left(1 + \\left\\lceil 32 \\cdot \\left(R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)\\right)^{2} \\right\\rceil_{+}\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.GeneralizedLipschitzMinty.spec.Params → ℕ",
+          "value": "fun p => 2 * (1 + ⌈32 * (p.R * (p.L0 / p.ε + p.L1)) ^ 2⌉₊)"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.GeneralizedMintyExtragradient",
+      "namespace": "LongTails.Setups.GeneralizedLipschitzMinty",
+      "setup": "LongTails.Setups.GeneralizedLipschitzMinty",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedLipschitzMinty.spec\n  LongTails.Theorems.GeneralizedMintyExtragradient.budget",
+      "theorem": "LongTails.Theorems.GeneralizedMintyExtragradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GeneralizedMintyExtragradient",
+      "theorem": "LongTails.Theorems.GeneralizedMintyExtragradient.result",
+      "references": "- Sayantan Choudhury and Nicolas Loizou. [Extragradient Method for $(L_0,L_1)$-Lipschitz Root-finding Problems](https://arxiv.org/html/2510.22421v1). NeurIPS 2025. Complexity: $O(1+R^2(L_0/\\varepsilon+L_1)^2)$ exact operator calls for adaptive extragradient to return a queried iterate with $\\|F(x)\\|\\le\\varepsilon$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained operator root finding. The continuous map F from ℝᵈ to ℝᵈ has a root z satisfying the Minty condition ⟨F(x), x−z⟩ ≥ 0 for every x.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One query at any x returns the full vector F(x) exactly for every query history and oracle seed.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.Query, spec.Reply and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x and y, ‖F(x)−F(y)‖ ≤ (L₀+L₁ max_{u∈[x,y]} ‖F(u)‖)‖x−y‖. Continuity ensures the segment maximum exists. The constants L₀ > 0 and L₁ ≥ 0 are public.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean, SegmentSmooth. LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.admissible, spec.valid and spec.publicInput"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, replies and outputs lie in the full Euclidean space ℝᵈ with public dimension d.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, Params.d, spec.Query, spec.Reply, spec.Output and spec.publicInput"
+      },
+      {
+        "label": "other",
+        "details": "The public starting point x₀ and radius R ≥ 0 satisfy ‖x₀−z‖ ≤ R for the same hidden root z that satisfies the Minty condition.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, Params, spec.publicInput, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The residual must be integrable and satisfy 𝔼[‖F(X)‖] ≤ ε under the product law of the algorithm and oracle seeds.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.successful. LongTails/Template.lean, OracleTemplate.Convergence"
+      },
+      {
+        "label": "other",
+        "details": "The output is one point X in ℝᵈ. Its residual is the Euclidean operator norm ‖F(X)‖ to the first power, with public tolerance ε > 0.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.Output, spec.successful, spec.valid and spec.publicInput"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a Minty inequality about one hidden root with a Lipschitz bound that varies with the operator norm along each segment."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.GeneralizedMintyExtragradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GeneralizedMintyExtragradient",
+          "theorem": "LongTails.Theorems.GeneralizedMintyExtragradient.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

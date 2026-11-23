@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary component-oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean}{convex finite sums with mean-square Lipschitz Hessians}}\label{tab:ConvexFiniteSumMeanSquareHessian}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $F=n^{-1}\sum_i f_i$ is convex, each $f_i$ is $C^2$, and $n^{-1}\sum_i\|\nabla^2f_i(x)-\nabla^2f_i(y)\|^2\le H^2\|x-y\|^2$ for all $x,y$. Some minimizer $x^\star$ satisfies $\|x^\star\|\le R$. Take $n\ge1$, $H\ge0$, $R,\varepsilon>0$, and $d\ge 2^{170}n^3(1+\lceil(S/\sqrt n)^{2/7}\rceil)^{12}$. A query $(i,x)$ returns the exact value, gradient, and full Hessian of $f_i$ at $x$. The target is $\int (F(\hat x(\omega))-F(x^\star))\,dP(\omega)\le\varepsilon$ for a measurable output with integrable gap under the run law $P$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ConvexFiniteSumMeanSquareHessianLowerBound.lean}{Convex\allowbreak{}Finite\allowbreak{}Sum\allowbreak{}Mean\allowbreak{}Square\allowbreak{}Hessian\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ConvexFiniteSumMeanSquareHessianLowerBound.md}{(review)}
+& Necessary budget $\Omega(n+n^{6/7}S^{2/7})$ component calls under a fixed cap & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{cfmsTsedenovKovalev2026v1}, Thm.~2
+& Necessary budget $\Omega(n+n^{6/7}S^{2/7})$ expected component calls
+& \textbf{(1)}: Matches the order and removes the linear-span and IID uniform-index restrictions. Allows adaptive indices, arbitrary probes, and unrestricted full-Hessian use.
+& \textbf{(1)}: Fixed caps versus expected work. Requires much higher dimension than $d\asymp (S/\sqrt n)^{2/7}$ for the accuracy term when $S$ exceeds a universal multiple of $\sqrt n$. \\
+\midrule
+\textbf{(3)} \citep{fstZhang2026v1}, Thm.~4.1. Convex components with individually $H$-Lipschitz Hessians.
+& Necessary budget $\Omega(n+n^{5/7}S^{2/7})$ component calls, including full batches
+& \textbf{(1)}: Covers adaptive indices and arbitrary probes beyond periodic full batches, uniform sampling, and zero-respecting queries. The larger accuracy term applies to the broader mean-square class.
+& \textbf{(1)}: The lower bound does not extend to individually Lipschitz Hessians. Expected gap versus failure with probability $13/16$ for the accuracy term ($H>0$, at least $n$ iterations). \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $S=HR^3/\varepsilon$. Hessian norms are operator norms.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

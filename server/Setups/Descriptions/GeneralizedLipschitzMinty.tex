@@ -1,0 +1,40 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Generalized Lipschitz Minty Root Finding}
+We seek a zero of a continuous operator $F:\mathbb{R}^d\to\mathbb{R}^d$ in Euclidean dimension $d\geq 0$. On each segment, $F$ is Lipschitz with constant $L_0+L_1 M$, where $L_0>0$, $L_1\geq 0$, and $M$ is the maximum of $\|F\|$ on that segment. A given starting point $x^0$ lies within distance $R\geq 0$ of a zero $x^\star$ satisfying $\langle F(x),x-x^\star\rangle\geq 0$ for every $x\in\mathbb{R}^d$. The oracle returns $F(x)$ at $x$. For $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with $\mathbb{E}\|F(\bar{x})\|\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+In terms of the Euclidean residual norm, the problem is
+\[
+\min_{x\in\mathbb{R}^d}\|F(x)\|.
+\]
+The algorithm receives $d\in\{0,1,2,\ldots\}$, $L_0$, $L_1$, $R$, $\varepsilon$, and $x^0\in\mathbb{R}^d$, and may query any point in $\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Generalized Lipschitz continuity]
+The operator $F$ is continuous. For every $x,y\in\mathbb{R}^d$, let $M_{x,y}$ denote the maximum operator value in norm along the segment from $x$ to $y$. Then
+\[
+\begin{aligned}
+M_{x,y} &= \max_{t\in[0,1]}\|F(x+t(y-x))\|,\\
+\|F(x)-F(y)\| &\leq (L_0+L_1 M_{x,y})\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Minty zero and initial distance]
+There exists $x^\star\in\mathbb{R}^d$ such that $F(x^\star)=0$, $\|x^0-x^\star\|\leq R$, and
+\[
+\langle F(x),x-x^\star\rangle\geq 0
+\qquad\text{for every }x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+After the allotted oracle calls, the residual norm $\|F(\bar{x})\|$ must be integrable under the law $P$ of the algorithm's randomness and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

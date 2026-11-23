@@ -1,0 +1,119 @@
+{
+  "setup": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian",
+  "searched_at": "2026-11-23T17:44:10.313487+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{n \\cdot \\left(1 + \\left(\\frac{H \\cdot R^{3}}{\\sqrt{n} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}}\\right)}{2^{16}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian.spec.Params → ℕ",
+        "value": "fun p => ⌊↑p.n * (1 + (p.H * p.R ^ 3 / (√↑p.n * p.ε)) ^ (2 / 7)) / 2 ^ 16⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{n \\cdot \\left(1 + \\left(\\frac{H \\cdot R^{3}}{\\sqrt{n} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}}\\right)}{2^{16}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian.spec.Params → ℕ",
+          "value": "fun p => ⌊↑p.n * (1 + (p.H * p.R ^ 3 / (√↑p.n * p.ε)) ^ (2 / 7)) / 2 ^ 16⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound",
+      "namespace": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian",
+      "setup": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.ConvexFiniteSumMeanSquareHessian.spec\n  LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.budget",
+      "theorem": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound",
+      "theorem": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.result",
+      "references": "- Artem Tsedenov and Dmitry Kovalev. [An Optimal Second-Order Algorithm for Finite-Sum Optimization under Average Smoothness and Convexity](https://arxiv.org/pdf/2610.10495v1). 2026 (arXiv v1). Complexity: $\\Omega\\!\\left(n+n^{6/7}(HR^3/\\varepsilon)^{2/7}\\right)$ component second-order oracle calls in expectation for stochastic second-order span methods initialized at zero with independently and uniformly sampled indices, for $H,R,\\varepsilon>0$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "The objective is convex on all of ℝᵈ. Individual components may be nonconvex.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, spec.admissible requires ConvexOn ℝ Set.univ (objective I)."
+      },
+      {
+        "label": "finite_sum",
+        "details": "The objective is the equally weighted mean F(x) = (1/n)∑ᵢ fᵢ(x) of n twice continuously differentiable components.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, Instance.f, objective, and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "component_gradient",
+        "details": "The gradient is the exact gradient of the selected component. The reply is independent of oracle seed and query history.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, spec.admissible specifies O.answer for every history, seed, i, and x."
+      },
+      {
+        "label": "function_value",
+        "details": "A single query at an algorithm-chosen index i and point x returns fᵢ(x), ∇fᵢ(x), and ∇²fᵢ(x) together.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, spec.Query, Reply, and spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The second-order part of the reply is the full exact component Hessian as a linear operator on ℝᵈ.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, Reply and the fderiv ℝ (gradient (I.f i)) x field of the answer in spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y, (1/n)∑ᵢ ‖∇²fᵢ(x)−∇²fᵢ(y)‖op² ≤ H²‖x−y‖₂². The square is taken before averaging over components.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, Reply and the summed squared-norm inequality in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain is Euclidean ℝᵈ with d ≥ 2¹⁷⁰ n³(1+K)¹², where K = ⌈(HR³/(√n ε))^(2/7)⌉.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, Point and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The algorithm knows n, d, H, R, and ε, with n ≥ 1, H ≥ 0, R > 0, and ε > 0. The component functions and a global minimizer x⋆ with ‖x⋆‖₂ ≤ R belong to the hidden instance. Algorithms may use private randomness and choose queries adaptively, without a span restriction.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, Params, Instance, spec.publicInput, spec.valid, and spec.admissible. LongTails/Template.lean, Algorithm and Setup.allowedAlgorithm."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point X must be measurable, its objective gap must be integrable, and E[F(X)−F(x⋆)] ≤ ε.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "The guarantee averages the output gap over the execution law. With exact replies at every query, algorithm randomization can still affect the output.",
+        "evidence": "LongTails/Setups/ConvexFiniteSumMeanSquareHessian.lean, spec.successful and spec.admissible. LongTails/Template.lean, Algorithm.law and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines convexity of the average with mean-square Lipschitz continuity of component Hessians, access to a full Hessian at any chosen component, and a dimension threshold tied to accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound",
+          "theorem": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedMeanStrongGrowth.lean}{distributed mean strong growth}}\label{tab:DistributedMeanStrongGrowth}
+\parbox{\linewidth}{\footnotesize On \(\mathbb R^d\), the \(n\) local losses \(f_i\) are differentiable and convex. Their mean \(F\) is \(L\)-smooth and satisfies \(\mu\)-quadratic growth to \(\mathcal S=\arg\min F\), with \(0<\mu\le L\) and \(\operatorname{dist}(x_0,\mathcal S)\le R\). Mean strong growth is \(\sum_i\|\nabla f_i(x)\|^2\le n\rho\|\nabla F(x)\|^2\) for \(\rho\ge1\). Jointly measurable unbiased stochastic gradients have variance at most \(\sigma^2\), with IID samples within workers and independent streams across workers. Workers compute in parallel, one gradient at a time, taking \(h_i>0\) per gradient. Only hub--worker links carry messages, at most one in flight per directed link, with latency \(\ell\) and time \(b\) per bit. The output satisfies \(\mathbb E[\operatorname{dist}(X,\mathcal S)^2]\le\varepsilon\) for \(\varepsilon>0\).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedStrongGrowthTime.lean}{Distributed\allowbreak{}Strong\allowbreak{}Growth\allowbreak{}Time} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedStrongGrowthTime.md}{(review)} & \(\mathcal{O}\bigl(\sigma^2/(\mu^2 I\varepsilon)+A_n J B_n\bigr)\) & & \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedGradientDiversity.lean}{Distributed\allowbreak{}Gradient\allowbreak{}Diversity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedGradientDiversity.md}{(review)} & \(\mathcal{O}\bigl(\sigma^2/(\mu^2 I\varepsilon)+A_D J B_D\bigr)\) & & \\
+\midrule[1.2pt]
+\textbf{(3)} Malenia SGD \citep[Thm.~F.2]{dwiTyurin2026v1}
+& \(\displaystyle\mathcal{O}\biggl(\biggl[\frac{HL}{\mu}+\frac{\sigma^2\sum_i h_i}{n^2\mu^2\varepsilon}\biggr]J\biggr)\)
+& \textbf{(1)}, \textbf{(2)}: At \(\ell=b=0\), reduce the noise term by a factor \(I(\sum_i h_i)J/n^2\). The speed factor is strict for unequal speeds and \(\rho<n\sum_i h_i^2/(\sum_i h_i)^2\). With fixed \(n>2\), times \(1,\ldots,1,H\), \(\rho=2\), \(\varepsilon=H^{-2}\), and other parameters fixed, \(\mathcal{O}(H^3\log H)\to\mathcal{O}(H^2)\). Covers Remark~2.4's pointwise condition under convexity and quadratic growth. For \(m\) unit-time workers plus times \(1,\ldots,m\), \(\rho=2\), \(\varepsilon=m^{-11/4}\), and other parameters fixed, \textbf{(2)} gives \(\mathcal{O}(m^{11/4}/\log m)\) versus \(\mathcal{O}(m^{11/4}\log m)\).
+& \textbf{(1)}, \textbf{(2)}: Need \(\rho\) and known \(h_i\). The common comparison uses aggregate PL from convex quadratic growth. At \(\ell=b=0\), the noiseless term costs at least \(n\) times more for \textbf{(1)}. At equal speeds and \(\rho=2\), \textbf{(2)} narrows the overhead from order \(n\) to \(\sqrt n\) when rounds dominate. \\
+\midrule
+\textbf{(4)} Rennala SGD \citep[Thm.~3.8]{dwiTyurin2026v1}
+& \(\mathcal{O}\biggl(J\min\limits_{1\le m\le n}\allowbreak\frac{mL_{\max}/\mu_{\rm loc}+\sigma^2/(\varepsilon\mu_{\rm loc}^2)}{\sum_{i\le m}h_{(i)}^{-1}}\biggr)\)
+& \textbf{(1)}, \textbf{(2)}: Scope extends to workers without individual smoothness assumptions, local PL, or identical minimizer sets. Compare only with these three restrictions and \(\ell=b=0\).
+& \textbf{(1)}, \textbf{(2)}: Require bounded mean strong growth. On identical losses with \(\rho=1\) and free communication, \textbf{(1)} pays at least an \(n\)-fold noiseless overhead. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} \(H=\max_i h_i\), \(S=\sum_i h_i^{-1}\), and \(J=1+\log(1+R^2/\varepsilon)\).
+The profile \(u\) minimizes \(\sum_i u_i^2/h_i\) subject to \(\sum_i u_i=n\) and \(\sum_i u_i^2\le n\rho\).
+Set \(I=\sum_i u_i^2/h_i\), \(U=\max_i u_i\), \(W=\max_i u_i/h_i\),
+\(D=\max\{\min(n,1+\sqrt{n(\rho-1)}),\,nW/(US)\}\),
+\(A_q=qLUS/(\mu I)\), and
+\(B_q=H+\ell+b[1+d\log(2+d+A_q+(R^2+\sigma^2/(q^2L^2))/\varepsilon)]\).
+Here \(h_{(i)}\) are the times in increasing order, \(L_{\max}\) is the maximum local smoothness constant, and \(\mu_{\rm loc}\) is the common local PL constant.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

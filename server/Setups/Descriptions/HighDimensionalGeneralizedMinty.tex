@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Minty Root Finding}
+We seek a zero of a continuous operator $F:\mathbb{R}^d\to\mathbb{R}^d$ in high dimension $d$. On each segment, the Lipschitz constant of $F$ is at most $L_0+L_1 M$ whenever $M$ bounds its Euclidean norm there, with $L_0>0$ and $L_1\geq0$. A given starting point $x^0$ lies within distance $R\geq0$ of a zero $z$ satisfying $\langle F(x),x-z\rangle\geq0$ for all $x\in\mathbb{R}^d$. The oracle returns $F(x)$ at $x$. For tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable residual norm and $\mathbb{E}\|F(\bar{x})\|\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The residual minimization problem is
+\[
+\min_{x\in\mathbb{R}^d}\|F(x)\|.
+\]
+The norm and inner product are Euclidean. The algorithm receives $d\in\mathbb{N}$, $L_0$, $L_1$, $R$, $\varepsilon$, and $x^0\in\mathbb{R}^d$, and may query any point of $\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[High-dimensional regime]
+With $T=R(L_0/\varepsilon+L_1)$, the parameters satisfy
+\[
+\begin{aligned}
+T &\geq 1024,\\
+L_1 R &\geq 32\log(1+L_1\varepsilon/L_0),\\
+d &\geq 8192\left(1+\left\lfloor (T/1024)^2\right\rfloor\right)^3.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Generalized Lipschitz continuity]
+The operator $F$ is continuous. For every $x,y\in\mathbb{R}^d$, let
+\[
+M_{x,y}=\max_{0\leq t\leq 1}\|F(x+t(y-x))\|.
+\]
+Then
+\[
+\|F(x)-F(y)\|\leq (L_0+L_1 M_{x,y})\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Minty zero]
+There exists $z\in\mathbb{R}^d$ such that $F(z)=0$, $\|x^0-z\|\leq R$, and
+\[
+\langle F(x),x-z\rangle\geq 0\qquad\text{for every }x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+After the allotted oracle calls, the residual norm $\|F(\bar{x})\|$ must be integrable and satisfy
+\[
+\mathbb{E}\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

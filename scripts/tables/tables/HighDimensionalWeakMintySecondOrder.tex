@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean}{high-dimensional second-order weak-Minty problems}.}\label{tab:HighDimensionalWeakMintySecondOrder}
+\parbox{\linewidth}{\footnotesize
+Let $F:\mathbb{R}^d\to\mathbb{R}^d$ be differentiable and $L_1$-Lipschitz with $L_2$-Lipschitz Jacobian $J$. Some zero $x_\star$ satisfies $\|x_0-x_\star\|\le R$ and $\langle F(x),x-x_\star\rangle\ge-(\rho/2)\|F(x)\|^2$ for every $x$. Assume $L_1,L_2,R,\varepsilon>0$, $0\le\rho L_1\le1$, $M\ge2^{15}$, and $d\ge M^3$. Randomized adaptive algorithms may query any point, with each call returning exact $F(x)$ or exact $J(x)$. The target is an integrable residual with $\mathbb{E}\|F(\widehat x)\|\le\varepsilon$ over the algorithm's random seed.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SecondOrderWeakMintyLowerBound.lean}{Second\allowbreak{}Order\allowbreak{}Weak\allowbreak{}Minty\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SecondOrderWeakMintyLowerBound.md}{(review)}
+& Lower bound $\Omega(\min\{L_2R^2/\varepsilon,L_1^2R^2/\varepsilon^2\})$. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{gjmeZhangEtAl2026v2}, Thm.~3.3 ($p=2$)
+& Lower bound $\Omega((L_2D^2/\varepsilon)^{2/5})$ joint $(F,J)$ queries for $Q\ge2$. Against $N$ randomized queries, dimension of order $N^3\log(N+2)$ suffices.
+& \textbf{(1)}: Hardness with nonmonotone Minty instances and unrestricted query locations. Rates are not comparable. \textbf{(2)} assumes monotonicity on a compact convex domain and targets tangent residual $\le\varepsilon$ with probability $\ge2/3$.
+& \\
+\midrule
+\textbf{(3)} \citep{hdwmEuclidean2026}
+& Lower bound $\Omega(\min\{L_1^2R^2/\varepsilon^2,d^{1/3}\})$ value calls. Requires $d\ge257$, $28\varepsilon\le L_1R$, and $0\le\rho L_1\le1/10$.
+& \textbf{(1)}: Hardness persists for $C^{1,1}$ operators when algorithms can also query the full Jacobian. Rates are not comparable across oracle models.
+& \textbf{(1)}: Requires $d\ge M^3$ and $M\ge2^{15}$, while \textbf{(3)} covers smaller dimensions and assumes only Lipschitz continuity. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $M=\min\{L_2R^2/\varepsilon,L_1^2R^2/\varepsilon^2\}$, $Q=L_2D^2/\varepsilon$, $D$ is the domain diameter bound.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

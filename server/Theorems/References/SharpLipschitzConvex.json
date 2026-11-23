@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.SharpLipschitzConvex",
+  "searched_at": "2026-11-23T17:47:23.503292+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil \\frac{4 \\cdot L^{2}}{\\mu^{2}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{\\mu \\cdot D}{\\varepsilon} \\right\\rceil_{+}\\right) + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.SharpLipschitzConvex.spec.Params → ℕ",
+        "value": "fun p => ⌈4 * p.L ^ 2 / p.μ ^ 2⌉₊ * (Nat.clog 2 ⌈p.μ * p.D / p.ε⌉₊ + 1)"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil \\frac{4 \\cdot L^{2}}{\\mu^{2}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{\\mu \\cdot D}{\\varepsilon} \\right\\rceil_{+}\\right) + 1\\right)",
+          "oracle": 0,
+          "type": "LongTails.Setups.SharpLipschitzConvex.spec.Params → ℕ",
+          "value": "fun p => ⌈4 * p.L ^ 2 / p.μ ^ 2⌉₊ * (Nat.clog 2 ⌈p.μ * p.D / p.ε⌉₊ + 1)"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient",
+      "namespace": "LongTails.Setups.SharpLipschitzConvex",
+      "setup": "LongTails.Setups.SharpLipschitzConvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.SharpLipschitzConvex.spec\n  LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.budget",
+      "theorem": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient",
+      "theorem": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.result",
+      "references": "- B. T. Polyak. [Minimization of Unsmooth Functionals](https://doi.org/10.1016/0041-5553(69)90061-5). 1969. Complexity: $O((L/\\mu)^2[1+\\max\\{0,\\log(\\mu D/\\varepsilon)\\}])$ value-and-subgradient calls for the best queried objective gap to reach $\\varepsilon$, using Polyak steps with known minimum value.\n- Tianbao Yang and Qihang Lin. [RSG: Beating Subgradient Method without Smoothness and Strong Convexity](https://jmlr.csail.mit.edu/papers/volume19/17-016/17-016.pdf). 2018. Complexity: $O((L/\\mu)^2[1+\\max\\{0,\\log(\\Delta/\\varepsilon)\\}])$ subgradient calls for restarted subgradient descent from a certified gap bound $\\Delta$. From radius $D$, one initial averaged subgradient stage costs $O((L/\\mu)^2)$ calls and certifies $\\Delta=\\mu D$.\n- S. S. Ablaev, F. S. Stonyakin, M. S. Alkousa, and A. V. Gasnikov. [Adaptive Subgradient Methods for Mathematical Programming Problems with Quasi-Convex Functions](https://doi.org/10.21538/0134-4889-2023-29-3-7-25). 2023. Complexity: $O((L/\\mu)^2[1+\\max\\{0,\\log(\\mu D/\\varepsilon)\\}])$ value-and-subgradient calls for the restarted normalized subgradient method to return a point with objective gap at most $\\varepsilon$ in the unconstrained specialization.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a globally L-Lipschitz convex function on Euclidean space. The minimum is attained.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "Each query at x returns the exact value f(x) together with a subgradient in one call.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.Reply and IsSubgradientOracle"
+      },
+      {
+        "label": "other",
+        "details": "The vector reply is an exact subgradient from a fixed selection g. At every x it satisfies f(y) ≥ f(x) + ⟨g(x), y − x⟩ for all y. The reply is independent of history and seed.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, IsSubgradientOracle and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "sharpness",
+        "details": "Global weak sharp minima with public modulus 0 < μ ≤ L. For every x there is a minimizer z with μ‖x − z‖ ≤ f(x) − f(z). The minimizing set may contain multiple points.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.valid, spec.admissible and spec.publicInput"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The domain and output space are ℝᵈ with the Euclidean norm, and d is public.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, Params, spec.Instance, spec.Output and spec.publicInput"
+      },
+      {
+        "label": "other",
+        "details": "The public starting point x₀ is within a known radius D > 0 of some minimizer. L and ε > 0 are also public. The objective, its minimum value, and a minimizing point are hidden.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, Params, spec.publicInput, spec.Instance, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The output is a point X in ℝᵈ. Its error is f(X) − f(x⋆) for a global minimizer x⋆.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.Output and spec.successful"
+      },
+      {
+        "label": "expected",
+        "details": "The output gap must be integrable and satisfy E[f(X) − f(x⋆)] ≤ ε under the execution law.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.successful; LongTails/Template.lean, OracleTemplate.Convergence"
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "This is the established weak sharp minima formulation for Lipschitz convex optimization with an exact value-and-subgradient oracle and a known initial distance bound."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient",
+          "theorem": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

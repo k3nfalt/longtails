@@ -1,0 +1,54 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Sharp Lipschitz Convex Minimization}
+We minimize a convex Lipschitz function $f:\mathbb{R}^d\to\mathbb{R}$ in high dimension $d$. Its objective gap grows at least linearly with Euclidean distance to the minimizer set. A given starting point $x^0$ lies within a prescribed radius of a minimizer $x^\star$. At each query $x$, the oracle returns $f(x)$ and a subgradient selected by a fixed function of $x$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable objective gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+Write $X^\star$ for the set of global minimizers and $\|\cdot\|$ for the Euclidean norm. The algorithm receives the dimension $d\in\mathbb{N}$, the Lipschitz constant $L$, the sharpness constant $\mu$, the initial radius $D$, the tolerance $\varepsilon$, and the starting point $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Parameter regime and dimension]
+The parameters satisfy $\mu>0$, $L\geq96\mu$, $D>0$, and $0<\varepsilon\leq\mu D$. With $\kappa=L/\mu$ and $r=\mu D/\varepsilon$, the dimension satisfies
+\[
+d\geq 2^{10}\bigl(1+\kappa^2(1+\log r)\bigr)^6(\kappa r)^2,
+\]
+where $\log$ denotes the natural logarithm.
+\end{assumption}
+
+\begin{assumption}[Convexity and Lipschitz continuity]
+For all $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq (1-t)f(x)+tf(y),\\
+|f(x)-f(y)|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and sharpness]
+There exists $x^\star\in X^\star$ with $\|x^0-x^\star\|\leq D$. For every $x\in\mathbb{R}^d$ there exists $z\in X^\star$ such that
+\[
+f(x)-f(z)\geq\mu\|x-z\|.
+\]
+\end{assumption}
+
+At any query $x\in\mathbb{R}^d$, the oracle returns $(f(x),g(x))$, where the fixed map $g:\mathbb{R}^d\to\mathbb{R}^d$ satisfies
+\[
+f(y)\geq f(x)+\langle g(x),y-x\rangle
+\qquad\text{for all }x,y\in\mathbb{R}^d.
+\]
+After the allotted oracle calls, the output $\bar{x}$ must satisfy
+\[
+f(\bar{x})-f(x^\star)\in L^1(P),\qquad
+\mathbb{E}_{P}[f(\bar{x})-f(x^\star)]\leq\varepsilon,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

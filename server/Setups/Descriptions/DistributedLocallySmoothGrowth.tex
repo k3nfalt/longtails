@@ -1,0 +1,60 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Minimization Under Strong Growth}
+We minimize the mean of $n\geq 1$ smooth convex functions on $\mathbb{R}^d$, where $d$ is a nonnegative integer. The mean has quadratic growth away from its minimizer set, and the average squared norm of the local gradients is bounded by a multiple of the squared norm of the mean gradient. A given starting point lies within a prescribed radius of a minimizer. On a star network, each worker returns an unbiased local stochastic gradient with bounded variance using an independent sample stream. Given $\varepsilon>0$, the goal is a measurable output whose expected squared Euclidean distance to the minimizer set is at most $\varepsilon$ by an elapsed-time deadline.
+
+Write $f_i:\mathbb{R}^d\to\mathbb{R}$ for the objective at worker $i\in\{1,\ldots,n\}$ and define $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$. The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} F(x).
+\]
+Let $S=\operatorname*{arg\,min}_{x\in\mathbb{R}^d}F(x)$ and write $\operatorname{dist}(x,S)=\inf_{z\in S}\|x-z\|$, using the Euclidean norm throughout.
+
+Our assumptions:
+\begin{assumption}[Local and mean smoothness]
+Each $f_i$ is convex and differentiable on $\mathbb{R}^d$. With local constants $L_i\geq 0$ and quadratic growth parameter $\mu>0$, set $L=\max\{\mu,\max_{1\leq i\leq n}L_i\}$. For all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla f_i(x)-\nabla f_i(y)\| &\leq L_i\|x-y\| &&(1\leq i\leq n),\\
+\|\nabla F(x)-\nabla F(y)\| &\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Strong growth of local gradients]
+For some $\rho\geq 1$ and every $x\in\mathbb{R}^d$,
+\[
+\frac{1}{n}\sum_{i=1}^n\|\nabla f_i(x)\|^2\leq \rho\|\nabla F(x)\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Quadratic growth and initial distance]
+For the given $x^0\in\mathbb{R}^d$ and $R\geq 0$, there exists $x^\star\in S$ such that $\|x^0-x^\star\|\leq R$ and
+\[
+F(x)-F(x^\star)\geq \frac{\mu}{2}\operatorname{dist}(x,S)^2
+\qquad (x\in\mathbb{R}^d).
+\]
+\end{assumption}
+
+\begin{assumption}[Local stochastic gradients]
+On a common measurable sample space $\Omega$, worker $i$ has a stream of measurable, independent samples $(\xi_{i,k})_{k\geq 0}$ with common law $\nu_i$. The streams are mutually independent, and the algorithm's randomness is independent of the entire sample array. At its $k$th completed evaluation, counting from zero, worker $i$ returns the query point $x\in\mathbb{R}^d$ and $g_i(x,\xi_{i,k})$, where $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ is jointly measurable. For every $i$ and $x$, the gradient estimate is Bochner integrable and its squared error is integrable under $\nu_i$. For a common $\sigma\geq 0$, they satisfy
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu_i}[g_i(x,\xi)] &= \nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\nu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+The star has one central communication node and $n$ computing workers. Worker $i$ takes $h_i>0$ time per evaluation. It can abort a pending evaluation without consuming a sample and ignores new evaluation requests while busy. Messages travel in either direction between the center and a worker. A payload of $m\geq 0$ bits carries an additional $64$ zero bits, so its transmission takes $\ell+b(m+64)$ time, with latency $\ell\geq 0$ and time per bit $b\geq 0$. The recipient receives the sender's identity and the transmitted bits. Each directed link carries one message at a time and ignores submissions while occupied. Distinct directed links can operate concurrently with one another and with worker computations.
+
+The algorithm receives $d,n,\Omega$ with its measurable structure, $(h_i)_{i=1}^n,\ell,b,(L_i)_{i=1}^n,\mu,\rho,R,\sigma,\varepsilon$, and $x^0$. For an elapsed-time budget $T\geq 0$, almost surely the protocol must finish processing events in finitely many steps at every deadline $t\in[0,T]$. At time $T$, the algorithm's designated output node must produce a measurable $\bar{x}\in\mathbb{R}^d$ with integrable squared distance to $S$ satisfying
+\[
+\mathbb{E}\bigl[\operatorname{dist}(\bar{x},S)^2\bigr]\leq\varepsilon,
+\]
+where the expectation is over the algorithm's randomness and the workers' samples.
+\end{document}

@@ -1,0 +1,42 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Finite-Dimensional Weak Minty Root Finding}
+We seek an approximate zero of a Lipschitz operator $F:\mathbb{R}^d\to\mathbb{R}^d$ in dimension $d\geq 1$. A given starting point $x^0\in\mathbb{R}^d$ lies within a prescribed radius of a zero $x^\star$ at which $F$ satisfies the weak Minty condition. The oracle returns $F(x)$ at any query point $x\in\mathbb{R}^d$. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable Euclidean residual norm satisfying $\mathbb{E}[\|F(\bar{x})\|]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The underlying equation is
+\[
+F(x)=0,\qquad x\in\mathbb{R}^d.
+\]
+We use the Euclidean inner product and its induced norm. The algorithm receives $d$, $x^0$, the Lipschitz constant $L$, the weak Minty parameter $\rho$, the radius $R$, and the tolerance $\varepsilon$, with
+\[
+d\in\{1,2,\ldots\},\qquad L>0,\qquad
+0\leq\rho\leq\frac{1}{20L},\qquad 0<\varepsilon<LR.
+\]
+
+Our assumptions:
+\begin{assumption}[Lipschitz continuity]
+For all $x,y\in\mathbb{R}^d$,
+\[
+\|F(x)-F(y)\|\leq L\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty condition at a nearby zero]
+There exists $x^\star\in\mathbb{R}^d$ with $F(x^\star)=0$ and $\|x^\star-x^0\|\leq R$ such that, for every $x\in\mathbb{R}^d$,
+\[
+\langle F(x),x-x^\star\rangle\geq-\rho\|F(x)\|^2.
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must satisfy
+\[
+\|F(\bar{x})\|\in L^1(P),\qquad
+\mathbb{E}_{P}[\|F(\bar{x})\|]\leq\varepsilon,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

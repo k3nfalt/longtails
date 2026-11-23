@@ -1,0 +1,40 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Hessian-Lipschitz PL Minimization}
+We consider minimizing a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in dimension $d$. Its Hessian is $H$-Lipschitz, and it satisfies the Polyak--{\L}ojasiewicz inequality with constant $\mu>0$. The objective gap from the origin to a global minimizer $x^\star$ is at most $\Delta$, with $H>0$ and $2^{160}\leq H^2\Delta/\mu^3\leq d$. At each query point, the oracle returns the exact value, gradient, and Hessian of $f$. For a tolerance $0<\varepsilon\leq\Delta/32$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives $d\in\mathbb{N}$ and the real parameters $H,\mu,\Delta,\varepsilon$. The starting point is fixed at $x^0=0$. We use the Euclidean norm $\|\cdot\|$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$.
+
+Our assumptions:
+\begin{assumption}[Lipschitz Hessian]
+The function $f$ and its gradient are Fr\'echet differentiable everywhere. At each $x\in\mathbb{R}^d$, the Hessian $\nabla^2 f(x)$ is a linear operator on $\mathbb{R}^d$, and for every $x,y\in\mathbb{R}^d$,
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}\leq H\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial gap and gradient dominance]
+There exists a global minimizer $x^\star\in\mathbb{R}^d$ such that
+\[
+\begin{aligned}
+f(x^0)-f(x^\star)&\leq\Delta,\\
+2\mu\bigl(f(x)-f(x^\star)\bigr)&\leq\|\nabla f(x)\|^2
+\qquad\text{for every }x\in\mathbb{R}^d.
+\end{aligned}
+\]
+\end{assumption}
+
+A query at any $x\in\mathbb{R}^d$ returns $(f(x),\nabla f(x),\nabla^2 f(x))$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, the gap $f(\bar{x})-f(x^\star)$ must be integrable, and its expectation must satisfy
+\[
+\mathbb{E}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

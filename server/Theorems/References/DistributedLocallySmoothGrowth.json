@@ -1,0 +1,117 @@
+{
+  "setup": "LongTails.Setups.DistributedLocallySmoothGrowth",
+  "searched_at": "2026-11-23T17:44:06.604112+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} a\\left(i\\right) = \\mu \\cdot u\\left(t\\right)\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{a\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} a\\left(i\\right) \\cdot \\max\\left\\{ a\\left(i\\right), L\\left(i\\right) \\right\\}\\right) \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M}{I} \\\\ &\\phantom{\\text{where}\\quad} w = 1 + 2 \\cdot \\log\\left(4 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot \\left(\\max_{0\\le i<n} a\\left(i\\right)\\right)}{M}\\right)^{2}}{\\varepsilon}\\right)\\end{aligned}",
+        "type": "LongTails.Setups.DistributedLocallySmoothGrowth.Params → NNReal",
+        "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have a := fun i => p.μ * u t i;\n  have I := ∑ i, a i ^ 2 / ↑(p.h i);\n  have M := Finset.univ.sup' ⋯ fun i => a i * max (a i) (p.L i);\n  have A := (2 * ∑ i, (↑(p.h i))⁻¹) * M / I;\n  have w := 1 + 2 * Real.log (4 + ↑p.d + A + (p.R ^ 2 + (p.σ * Finset.univ.sup' ⋯ a / M) ^ 2) / p.ε);\n  (2048 *\n      (p.σ ^ 2 / (I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * w)))).toNNReal"
+      },
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} a\\left(i\\right) = \\mu \\cdot u\\left(t\\right)\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{a\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} a\\left(i\\right) \\cdot \\max\\left\\{ a\\left(i\\right), L\\left(i\\right) \\right\\}\\right) \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M}{I} \\\\ &\\phantom{\\text{where}\\quad} w = 1 + 2 \\cdot \\log\\left(4 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot \\left(\\max_{0\\le i<n} a\\left(i\\right)\\right)}{M}\\right)^{2}}{\\varepsilon}\\right)\\end{aligned}",
+          "type": "LongTails.Setups.DistributedLocallySmoothGrowth.Params → NNReal",
+          "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have a := fun i => p.μ * u t i;\n  have I := ∑ i, a i ^ 2 / ↑(p.h i);\n  have M := Finset.univ.sup' ⋯ fun i => a i * max (a i) (p.L i);\n  have A := (2 * ∑ i, (↑(p.h i))⁻¹) * M / I;\n  have w := 1 + 2 * Real.log (4 + ↑p.d + A + (p.R ^ 2 + (p.σ * Finset.univ.sup' ⋯ a / M) ^ 2) / p.ε);\n  (2048 *\n      (p.σ ^ 2 / (I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * w)))).toNNReal"
+        }
+      ],
+      "kind": "timed",
+      "module": "LongTails.Theorems.DistributedLocallySmoothGrowth",
+      "namespace": "LongTails.Setups.DistributedLocallySmoothGrowth",
+      "setup": "LongTails.Setups.DistributedLocallySmoothGrowth",
+      "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedLocallySmoothGrowth.spec\n  LongTails.Theorems.DistributedLocallySmoothGrowth.budget",
+      "theorem": "LongTails.Theorems.DistributedLocallySmoothGrowth.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DistributedLocallySmoothGrowth",
+      "theorem": "LongTails.Theorems.DistributedLocallySmoothGrowth.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Each fᵢ is convex and differentiable on all of ℝᵈ with an Lᵢ-Lipschitz gradient, where Lᵢ ≥ 0. The mean F is convex and its gradient satisfies the public Lipschitz bound max(μ, maxᵢ Lᵢ).",
+        "evidence": "LongTails/Setups/DistributedLocallySmoothGrowth.lean, aggregate, spec.valid and spec.admissible. LongTails/Setups/DistributedMeanStrongGrowth.lean, spec.admissible."
+      },
+      {
+        "label": "finite_sum",
+        "details": "Minimize F(x) = (1/n)∑ᵢ fᵢ(x) over ℝᵈ, with n ≥ 1 and one local objective per computing worker.",
+        "evidence": "LongTails/Setups/DistributedMeanStrongGrowth.lean, Point, Functions and objective. LongTails/Setups/DistributedLocallySmoothGrowth.lean, aggregate and spec.Instance."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "At x, worker i returns gᵢ(x,ξ) with mean ∇fᵢ(x). Completed queries use successive samples from that worker’s IID stream with law νᵢ. The streams are independent across workers. All setup parameters are public, including x₀, the Lᵢ, μ, ρ, R, σ, ε and the timing parameters. The local functions, gradient estimators and sampling laws are instance or oracle data.",
+        "evidence": "LongTails/Setups/DistributedLocallySmoothGrowth.lean, Params, spec.Public and spec.publicInput. LongTails/Setups/DistributedMeanStrongGrowth.lean, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient. LongTails/Setups/StarNetwork.lean, computation."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "gradient_similarity",
+        "details": "For every x, (1/n)∑ᵢ ‖∇fᵢ(x)‖² ≤ ρ‖∇F(x)‖², with ρ ≥ 1. This bounds heterogeneity among the local mean gradients. At every minimizer of F, all local mean gradients vanish, while individual stochastic replies can still have positive variance.",
+        "evidence": "LongTails/Setups/DistributedLocallySmoothGrowth.lean, aggregate and spec.admissible. LongTails/Setups/DistributedMeanStrongGrowth.lean, spec.valid and spec.admissible."
+      },
+      {
+        "label": "bounded_variance",
+        "details": "For every worker i and point x, Eξ‖gᵢ(x,ξ)−∇fᵢ(x)‖² ≤ σ² with σ ≥ 0. This bound also applies at minimizers.",
+        "evidence": "LongTails/Setups/DistributedMeanStrongGrowth.lean, spec.valid and spec.admissible. LongTails/Setups/StochasticSmoothAndConvex.lean, IsStochasticGradient.variance."
+      },
+      {
+        "label": "quadratic_growth",
+        "details": "For S = argmin F, there exists z ∈ S with ‖x₀−z‖ ≤ R, and F(x)−F(z) ≥ (μ/2)dist(x,S)² for every x, with μ > 0 and R ≥ 0. S may have multiple points.",
+        "evidence": "LongTails/Setups/DistributedMeanStrongGrowth.lean, solutions, spec.valid and spec.admissible, applied by LongTails/Setups/DistributedLocallySmoothGrowth.lean, aggregate and spec."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The query points, local gradient replies and output belong to ℝᵈ with the Euclidean norm, for public d ∈ ℕ.",
+        "evidence": "LongTails/Setups/DistributedMeanStrongGrowth.lean, Params.d, Point, spec.ComputeQuery, spec.ComputeReply and spec.Output. LongTails/Setups/DistributedLocallySmoothGrowth.lean, aggregate and Point."
+      },
+      {
+        "label": "other",
+        "details": "Elapsed time is measured on a star with a hub and n computing workers. Worker i takes hᵢ > 0 per completed gradient and can have one evaluation pending. A directed hub–worker link carries one pending message at a time. Sending k payload bits costs ℓ + b(k+64), with ℓ,b ≥ 0. Distinct directed links and worker computations can operate concurrently.",
+        "evidence": "LongTails/Setups/DistributedMeanStrongGrowth.lean, spec.valid and spec.admissible. LongTails/Setups/StarNetwork.lean, computation, communication and system. LongTails/TemplateDistributed.lean, clockBits, step and TimedConvergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "distance_to_solution",
+        "details": "At the prescribed elapsed-time deadline, the algorithm returns one point X from its designated root. The error is dist(X,argmin F)².",
+        "evidence": "LongTails/Setups/DistributedLocallySmoothGrowth.lean, spec.successful. LongTails/Setups/DistributedMeanStrongGrowth.lean, solutions and spec.successful. LongTails/TemplateDistributed.lean, execute."
+      },
+      {
+        "label": "expected",
+        "details": "X must be measurable, its squared distance to the solution set must be integrable, and E[dist(X,argmin F)²] ≤ ε for ε > 0 under the product law of algorithm and oracle seeds. Execution must have finitely many events almost surely up to the deadline.",
+        "evidence": "LongTails/Setups/DistributedMeanStrongGrowth.lean, spec.valid and spec.successful. LongTails/TemplateDistributed.lean, law, FiniteEvents and TimedConvergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines quadratic growth of the mean objective, a strong-growth bound on local mean gradients, and persistent within-worker sampling noise. Its performance criterion charges heterogeneous computation times, message latency and transmitted bits on concurrent star links."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DistributedLocallySmoothGrowth.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DistributedLocallySmoothGrowth",
+          "theorem": "LongTails.Theorems.DistributedLocallySmoothGrowth.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

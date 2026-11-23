@@ -1,0 +1,133 @@
+{
+  "setup": "LongTails.Setups.FiniteDimensionalWeakMinty",
+  "searched_at": "2026-11-23T17:44:25.074626+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "2 \\cdot \\left\\lceil 1024 \\cdot d \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+        "value": "fun p => 2 * ⌈1024 * ↑p.d * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "2 \\cdot \\left\\lceil 1024 \\cdot d \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+          "value": "fun p => 2 * ⌈1024 * ↑p.d * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.DimensionAdaptiveMinty",
+      "namespace": "LongTails.Setups.FiniteDimensionalWeakMinty",
+      "setup": "LongTails.Setups.FiniteDimensionalWeakMinty",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteDimensionalWeakMinty.spec\n  LongTails.Theorems.DimensionAdaptiveMinty.budget",
+      "theorem": "LongTails.Theorems.DimensionAdaptiveMinty.result"
+    },
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{d}{2^{22}} \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+        "value": "fun p => ⌊↑p.d / 2 ^ 22 * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{d}{2^{22}} \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+          "value": "fun p => ⌊↑p.d / 2 ^ 22 * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound",
+      "namespace": "LongTails.Setups.FiniteDimensionalWeakMinty",
+      "setup": "LongTails.Setups.FiniteDimensionalWeakMinty",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.FiniteDimensionalWeakMinty.spec\n  LongTails.Theorems.DimensionAdaptiveMintyLowerBound.budget",
+      "theorem": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.DimensionAdaptiveMinty",
+      "theorem": "LongTails.Theorems.DimensionAdaptiveMinty.result",
+      "references": "None",
+      "match_status": "none"
+    },
+    {
+      "module": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound",
+      "theorem": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained root finding for a globally L-Lipschitz operator F on ℝᵈ. The operator may be nonmonotone and satisfies a weak Minty inequality relative to a root.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One query at any x ∈ ℝᵈ returns the full vector F(x) exactly for every history and oracle seed. The algorithm receives d, L, ρ, x₀, R, and ε as public inputs. It accesses F through queries, and the witnessing root is hidden.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean, Params and spec.Public, spec.publicInput, spec.Query, spec.Reply, spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The domain and codomain are Euclidean ℝᵈ for every integer d ≥ 1. The valid parameter range is L > 0, 0 ≤ ρ ≤ 1/(20L), and 0 < ε < LR.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean, spec.Instance; LongTails/Setups/FiniteDimensionalWeakMinty.lean, spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "A single root x⋆ satisfies F(x⋆) = 0, ‖x⋆ − x₀‖ ≤ R, and ⟨F(x), x − x⋆⟩ ≥ −ρ‖F(x)‖² for every x ∈ ℝᵈ.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean, spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The residual norm must be integrable and satisfy 𝔼‖F(X)‖ ≤ ε under the product law of the algorithm and oracle seeds. The query budget is fixed, and the algorithm may randomize.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean, spec.successful; LongTails/Template.lean, executeWithTrace and Convergence"
+      },
+      {
+        "label": "other",
+        "details": "The algorithm outputs a point X ∈ ℝᵈ. Accuracy is measured by the unsquared Euclidean residual norm ‖F(X)‖. The output may be any point, including one the algorithm has not queried.",
+        "evidence": "LongTails/Setups/EuclideanWeakMinty.lean, spec.Output and spec.successful; LongTails/Template.lean, Algorithm.output"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The weak Minty condition allows the operator to point away from the witnessing root, with the inner-product violation bounded by ρ times the squared residual norm."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.DimensionAdaptiveMinty.result",
+        "LongTails.Theorems.DimensionAdaptiveMintyLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.DimensionAdaptiveMinty",
+          "theorem": "LongTails.Theorems.DimensionAdaptiveMinty.result",
+          "match_status": "none"
+        },
+        {
+          "module": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound",
+          "theorem": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

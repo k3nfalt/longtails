@@ -1,0 +1,45 @@
+\begin{table}[tp]
+\centering
+\caption{Sufficient budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/BroxGeneralNormConstrainedPL.lean}{general-norm constrained PL minimization}.}\label{tab:BroxGeneralNormConstrainedPL}
+\parbox{\linewidth}{\footnotesize In a finite-dimensional real normed space, $C$ is closed and convex and $x_0\in C$. The objective is bounded below on $C$ and differentiable at each point of $C$, with $L$-Lipschitz derivative in the dual norm. On $C$, $\mu(f(x)-f_\star)\le s(x)^2/2$. The oracles give exact gradients and exact local LMOs with arbitrary tie-breaking. For $L,\mu,r,\varepsilon>0$, the target, guaranteed almost surely, is $x\in C$ with $f(x)-f_\star\le\varepsilon$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/WarmHalvingBroxGeneralNorm.lean}{Warm\allowbreak{}Halving\allowbreak{}Brox\allowbreak{}General\allowbreak{}Norm} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/WarmHalvingBroxGeneralNorm.md}{(review)}
+& $\mathcal{O}\bigl(1+H(\Delta)+\frac{\log_+(\Delta/\varepsilon)}{\log(1+\mu/L)}\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{rqGeneralNormBrox2026v1}, Thm.~30 and Cor.~31
+& $\mathcal{O}\bigl(1+H(\Delta_0)+\frac{\log(\Delta_0/\varepsilon)}{\log(1+\mu/L)}\bigr)$
+& \textbf{(1)}: Matches the known rate in Lean for $0<\varepsilon<\Delta_0$. Requires differentiability only at points of $C$, covers all $\varepsilon>0$, and certifies the fixed-budget output.
+& \textbf{(1)}: One extra local-LMO call in the allowance, plus rounding. \\
+\midrule
+\textbf{(3)} \citep{garberHazanLocalOracle2015v6}, Alg.~2, Lemmas~1--2, exact local oracle
+& $\mathcal{O}\bigl(1+\frac L\mu\log_+(D/\varepsilon)\bigr)$
+& \textbf{(1)}: Extends the Euclidean strongly convex polytope guarantee with vertex start to normal-cone PL without attainment. The strongly convex rate transfers to general norms. With $\Delta=D$ and $\mu\le L$, matches the leading order without knowing $\mu,D$.
+& \textbf{(1)}: On the overlap, needs $r$, adds $H(\Delta)$, and has a larger leading constant in the logarithmic accuracy term. \\
+\midrule
+\textbf{(4)} \citep{kvBrox2026v2}, Thm.~3.3
+& $\mathcal{O}\bigl(1+\frac L\mu\log(D/\varepsilon)\bigr)$
+& \textbf{(1)}: Extends Euclidean strong convexity with neighborhood differentiability, attainment and $0<\mu\le L$ to general-norm PL. For $0<\varepsilon<D$, matches the leading rate on the overlap with $\Delta=D$, without knowing $\mu,D$.
+& \textbf{(1)}: Needs $r$ and adds $H(\Delta)$ on the overlap. No squared-distance guarantee. \\
+\midrule
+\textbf{(5)} \citep{kvBrox2026v2}, Thm.~3.6, strongly convex case
+& $\mathcal{O}\bigl(1+\frac{\log_+(\Delta_0/\varepsilon)}{\log(1+\xi^2\mu/L)}\bigr)$ accepted steps. No total-call bound.
+& \textbf{(1)}: Counts all trials on the globally smooth Euclidean strongly convex overlap with attainment. Extends to general norms and normal-cone PL with smoothness on $C$.
+& \textbf{(1)}: Needs $r$ on the overlap. \\
+\midrule
+\textbf{(6)} \citep{kvBrox2026v2}, Thm.~D.16, $\gamma=1/L$
+& $\mathcal{O}\bigl(1+\frac{\log_+(\Delta_0/\varepsilon)}{-\log(1-\mu/L)}\bigr)$, with one gradient, local LMO and projection per step.
+& \textbf{(1)}: General norms and normal-cone PL extend Euclidean projected-gradient PL with attainment and neighborhood smoothness. On the overlap, removes projections.
+& \textbf{(1)}: Needs $r$ on the overlap. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $f_\star=\inf_C f$, $\Delta_0=f(x_0)-f_\star$, and $\Delta,D\ge\Delta_0$ are gap bounds ($D>0$ is supplied to the method). $s(x)=\inf_{n\in N_C(x)}\|\nabla f(x)+n\|_*$, with $N_C(x)$ the normal cone. A local LMO minimizes a linear form on $C$ intersected with the closed query ball. Costs sum gradient and local-LMO calls unless indicated. $r$ is the initial radius cap, $\xi\in(0,1)$ the backtracking factor, and $\log_+ t=\max\{0,\log t\}$ with $\log_+0=0$. $H(a)=\log(1+a/(Lr^2))+\log_+(r^2L(1+L/\mu)/\varepsilon)$. In \textbf{(3)}--\textbf{(5)}, $\mu$ is the strong-convexity modulus. In \textbf{(6)}, $\mu$ is the projected PL modulus, with $0<\mu\le L$ for a positive initial gap. The quotient is zero at $\mu=L$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

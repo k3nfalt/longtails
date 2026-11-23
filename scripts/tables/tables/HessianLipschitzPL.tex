@@ -1,0 +1,30 @@
+\begin{table}[tp]
+\centering
+\caption{Cubic Newton under \texorpdfstring{Polyak--\L{}ojasiewicz}{Polyak--Lojasiewicz} gradient domination (\protect\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HessianLipschitzPL.lean}{HessianLipschitzPL}).}\label{tab:HessianLipschitzPL}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $f$ is twice differentiable with an $H$-Lipschitz Hessian in operator norm and an attained minimum $f_\star$. Assume $f(x_0)-f_\star\le\Delta$, $2\mu(f-f_\star)\le\|\nabla f\|^2$ globally, $H,\mu,\varepsilon>0$, and $\Delta\ge0$. Budgets count exact $(f,\nabla f,\nabla^2 f)$ calls sufficient for an objective gap at most $\varepsilon$ (in expectation in the setup, achieved deterministically here).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HessianLipschitzPLCubicNewton.lean}{Hessian\allowbreak{}Lipschitz\allowbreak{}PL\allowbreak{}Cubic\allowbreak{}Newton} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HessianLipschitzPLCubicNewton.md}{(review)}
+& Sufficient budget $\mathcal{O}(1+(H^2\Delta/\mu^3)^{1/4}+B)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Cubic Newton \citep{hlplNP2006CORE}, CORE preprint Thm.~7
+& $\mathcal{O}((1+A^{1/4})\log(2+A)+B)$
+& \textbf{(1)}: Drops the stated global-phase logarithm, a factor of order $\log A$ in the budgets when $A\ge2$ and $B=\mathcal{O}(A^{1/4})$. Formalizes the sharpened count from (4.17).
+& \\
+\midrule
+\textbf{(3)} Cubic Newton \citep{hlplCDJv5}, App.~F.2, $\mu$-strongly convex with exact derivatives
+& $\mathcal{O}((1+A^{1/4})\log(2+A)+B)$
+& \textbf{(1)}: Drops the global-phase logarithm on the strongly convex overlap. Covers nonconvex PL objectives and nonisolated minimizers, as does \textbf{(2)}.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $f_\star=\min f$, $A=H^2\Delta/\mu^3$, and $B=\log(1+\log(1+\mu^3/(H^2\varepsilon)))$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

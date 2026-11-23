@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalGeneralizedMinty",
+  "searched_at": "2026-11-23T17:45:21.106061+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\left(\\frac{R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)}{1024}\\right)^{2} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalGeneralizedMinty.spec.Params → ℕ",
+        "value": "fun p => ⌊(p.R * (p.L0 / p.ε + p.L1) / 1024) ^ 2⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\left(\\frac{R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)}{1024}\\right)^{2} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalGeneralizedMinty.spec.Params → ℕ",
+          "value": "fun p => ⌊(p.R * (p.L0 / p.ε + p.L1) / 1024) ^ 2⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.GeneralizedMintyLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalGeneralizedMinty",
+      "setup": "LongTails.Setups.HighDimensionalGeneralizedMinty",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalGeneralizedMinty.spec\n  LongTails.Theorems.GeneralizedMintyLowerBound.budget",
+      "theorem": "LongTails.Theorems.GeneralizedMintyLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.GeneralizedMintyLowerBound",
+      "theorem": "LongTails.Theorems.GeneralizedMintyLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained operator root-finding in ℝᵈ under a Minty condition. The continuous operator F has a zero z with ‖x₀−z‖ ≤ R and ⟨F(x),x−z⟩ ≥ 0 for every x.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.Instance and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "One call at any x ∈ ℝᵈ returns the exact vector F(x) for every history and seed. The algorithm knows d, L₀, L₁, R, ε, and x₀. The operator and the witnessing zero are hidden. Adaptive randomized algorithms are allowed.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, Params and spec.{Public,publicInput,Query,Reply,admissible}. LongTails/Template.lean, Algorithm and Setup.allowedAlgorithm."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "For every x,y and every upper bound M on ‖F‖ along [x,y], the operator satisfies ‖F(x)−F(y)‖ ≤ (L₀+L₁M)‖x−y‖, with L₀ > 0 and L₁ ≥ 0.",
+        "evidence": "LongTails/Setups/MirrorGeneralizedSmooth.lean, SegmentSmooth. LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.admissible and spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The space is Euclidean ℝᵈ. With T = R(L₀/ε+L₁), the dimension satisfies d ≥ 8192(1+⌊(T/1024)²⌋)³.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, Params and spec.Instance. LongTails/Setups/HighDimensionalGeneralizedMinty.lean, spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The parameter regime requires R ≥ 0, ε > 0, T ≥ 1024, and 32 log(1+L₁ε/L₀) ≤ L₁R.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.valid. LongTails/Setups/HighDimensionalGeneralizedMinty.lean, spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The residual must be integrable and satisfy E[‖F(X)‖] ≤ ε under the execution law.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.successful. LongTails/Template.lean, Convergence."
+      },
+      {
+        "label": "other",
+        "details": "The algorithm returns a single point X ∈ ℝᵈ. Accuracy is measured by the Euclidean operator residual ‖F(X)‖ to the first power. X may be any output point, including one the algorithm did not query.",
+        "evidence": "LongTails/Setups/GeneralizedLipschitzMinty.lean, spec.Output and spec.successful. LongTails/Template.lean, Algorithm.output."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a Minty zero with norm-dependent segment smoothness and imposes an explicit high-dimensional regime tied to the accuracy, smoothness parameters, and initial radius."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.GeneralizedMintyLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.GeneralizedMintyLowerBound",
+          "theorem": "LongTails.Theorems.GeneralizedMintyLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

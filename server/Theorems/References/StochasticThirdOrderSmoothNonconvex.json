@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex",
+  "searched_at": "2026-11-23T17:45:46.053758+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 100000 \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + \\frac{L_1 \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot \\sigma^{2}}{\\varepsilon^{3}} \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈100000 *\n      (1 + q.σ ^ 2 / q.ε ^ 2 + q.L₁ * q.Δ / q.ε ^ 2 +\n        q.Δ * q.σ ^ 2 / q.ε ^ 3 * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 100000 \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + \\frac{L_1 \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot \\sigma^{2}}{\\varepsilon^{3}} \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌈100000 *\n      (1 + q.σ ^ 2 / q.ε ^ 2 + q.L₁ * q.Δ / q.ε ^ 2 +\n        q.Δ * q.σ ^ 2 / q.ε ^ 3 * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound",
+      "namespace": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex",
+      "setup": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticThirdOrderSmoothNonconvex.spec\n  LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.budget",
+      "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound",
+      "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a real-valued objective that may be nonconvex. The public starting point and gap bound satisfy f(x₀) − inf f ≤ Δ, with Δ ≥ 0. The infimum need not be attained.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.Instance, spec.valid and the inequality ∀ x, f q.x0 − f x ≤ q.Δ in spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at x returns one vector g(x, ξ) with mean ∇f(x). Each call uses a fresh independent seed with the same law, including repeated calls at x. The parameters E, Ω, x₀, L₁, L₂, L₃, σ, Δ and ε are public. The objective, response map and sampling law are hidden. The oracle exposes only the returned vector.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, Params, spec.Public, spec.publicInput, spec.Query, spec.Reply and spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "At every x, the centered squared error is integrable and E‖g(x, ξ) − ∇f(x)‖² ≤ σ². The public bound permits σ = 0.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.valid and the centered second-moment conditions in spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real inner-product space with its induced norm and Borel measurable structure.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, Params.innerE, Params.normedE, Params.finiteE and Params.borelE."
+      },
+      {
+        "label": "other",
+        "details": "The objective is C³. Its gradient, Hessian and third derivative are globally Lipschitz with respective public bounds L₁, L₂ and L₃, all strictly positive. The derivative bounds use induced operator norms. These smoothness conditions apply to f alone.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.valid and the ContDiff and three Lipschitz conditions in spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns a measurable point X in E with integrable gradient norm. The criterion uses the first power of ‖∇f(X)‖.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.Output and spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E‖∇f(X)‖ ≤ ε for the public tolerance ε > 0. The expectation covers both the algorithm seed and the oracle seeds. The oracle-call budget is a fixed cap on each run.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.valid and spec.successful. LongTails/Template.lean, OracleTemplate.Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The formulation pairs a gradient-only, bounded-variance oracle with separate global controls on the Hessian and third derivative of the objective. Those higher-order bounds are available to the algorithm even though each query reveals only one noisy gradient."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound",
+          "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

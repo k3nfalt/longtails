@@ -1,0 +1,44 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Sharp Lipschitz Convex Minimization}
+We minimize a convex, $L$-Lipschitz function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d\geq 0$. Its objective gap is at least $\mu$ times the distance to the minimizer set, where $0<\mu\leq L$. A given starting point $x^0$ lies within distance $D>0$ of a minimizer $x^\star$. At each point $x$, the oracle returns $f(x)$ and a fixed choice of subgradient. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable gap and $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} f(x).
+\]
+Write $X^\star=\operatorname*{arg\,min}_{x\in\mathbb{R}^d} f(x)$ for the minimizer set and $\|\cdot\|$ for the Euclidean norm. The algorithm receives the nonnegative integer $d$, the constants $L,\mu,D,\varepsilon$, and $x^0\in\mathbb{R}^d$.
+
+Our assumptions:
+\begin{assumption}[Convexity and Lipschitz continuity]
+For every $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+\begin{aligned}
+f((1-t)x+ty)&\leq (1-t)f(x)+t f(y),\\
+|f(x)-f(y)|&\leq L\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Initial distance and sharpness]
+There exists $x^\star\in X^\star$ with $\|x^0-x^\star\|\leq D$. For each $x\in\mathbb{R}^d$, there exists $z\in X^\star$ such that
+\[
+f(x)-f(z)\geq\mu\|x-z\|.
+\]
+\end{assumption}
+
+At any query point $x\in\mathbb{R}^d$, the oracle returns $(f(x),g(x))$, where $g:\mathbb{R}^d\to\mathbb{R}^d$ is a fixed selection satisfying the subgradient inequality
+\[
+f(y)\geq f(x)+\langle g(x),y-x\rangle,
+\qquad x,y\in\mathbb{R}^d.
+\]
+After the allotted oracle calls, the output must have an integrable objective gap satisfying
+\[
+\mathbb{E}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

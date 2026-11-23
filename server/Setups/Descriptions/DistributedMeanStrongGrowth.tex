@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Minimization Under Strong Growth}
+We minimize the mean of differentiable convex functions on $\mathbb{R}^d$, where $d$ is a nonnegative integer. The mean has a Lipschitz gradient and satisfies quadratic growth away from its minimizer set. The average squared norm of the local gradients is bounded by a constant times the squared norm of the mean gradient. A given starting point lies within a prescribed radius of a minimizer. On a star network, each worker returns an unbiased stochastic local gradient with bounded variance using independent samples. By the elapsed-time deadline, the output must have expected squared distance to the minimizer set at most $\varepsilon$, for a given tolerance $\varepsilon>0$.
+
+For $n\geq 1$ workers with local objectives $f_i:\mathbb{R}^d\to\mathbb{R}$, define $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$. The problem is
+\[
+\min_{x\in\mathbb{R}^d} F(x).
+\]
+Write $S=\operatorname*{arg\,min}_{x\in\mathbb{R}^d}F(x)$ and $\operatorname{dist}(x,S)=\inf_{z\in S}\|x-z\|$, using the Euclidean norm. The algorithm receives $d$, $n$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the network parameters $(h_i)_{i=1}^n,\ell,b$, and the constants $L,\mu,\rho,R,\sigma,\varepsilon$.
+
+Our assumptions:
+\begin{assumption}[Local convexity and mean smoothness]
+Each $f_i$ is convex and differentiable on $\mathbb{R}^d$. For every $x,y\in\mathbb{R}^d$,
+\[
+\|\nabla F(x)-\nabla F(y)\|\leq L\|x-y\|.
+\]
+\end{assumption}
+
+\begin{assumption}[Strong growth of local gradients]
+For $\rho\geq 1$ and every $x\in\mathbb{R}^d$,
+\[
+\frac{1}{n}\sum_{i=1}^n\|\nabla f_i(x)\|^2
+\leq \rho\|\nabla F(x)\|^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Quadratic growth and initial distance]
+For $0<\mu\leq L$ and $R\geq 0$, there exists $x^\star\in S$ such that $\|x^0-x^\star\|\leq R$ and, for every $x\in\mathbb{R}^d$,
+\[
+F(x)-F(x^\star)\geq \frac{\mu}{2}\operatorname{dist}(x,S)^2.
+\]
+\end{assumption}
+
+\begin{assumption}[Stochastic local gradients]
+Worker $i$ has a jointly measurable map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ and a sequence of measurable samples $(\xi_{i,k})_{k\geq 0}$ that are independent with common probability law $\nu_i$. The sequences are independent across workers, and the algorithm's randomness is independent of the entire sample array. At any query point $x\in\mathbb{R}^d$, the worker's $(k+1)$st completed evaluation returns $(x,g_i(x,\xi_{i,k}))$. For $\xi\sim\nu_i$, the vector $g_i(x,\xi)$ is Bochner integrable and its squared error is integrable. For every $i$ and $x$, with $\sigma\geq 0$,
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu_i}[g_i(x,\xi)] &= \nabla f_i(x),\\
+\mathbb{E}_{\xi\sim\nu_i}\bigl[\|g_i(x,\xi)-\nabla f_i(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+A central node connects to each worker, and only the workers evaluate stochastic gradients. An evaluation at worker $i$ takes $h_i>0$ time. Each worker handles one evaluation at a time, ignores new evaluation requests while busy, and can abort a pending evaluation without consuming a sample. Messages travel in either direction along a star edge. A payload of $m\geq 0$ bits is transmitted with 64 trailing zero bits and takes $\ell+b(m+64)$ time, where $\ell\geq 0$ is the latency and $b\geq 0$ is the time per bit. The recipient receives the sender's identity and the transmitted bits. Each directed link carries one message at a time and ignores submissions while occupied. Distinct directed links can operate concurrently, including opposite directions on the same edge, and communication can overlap with computation.
+
+Let $T\geq 0$ be the elapsed-time budget. Almost surely over the samples and the algorithm's randomness, only finitely many events may occur for every deadline $t\in[0,T]$. At time $T$, the algorithm's designated output node must produce a measurable point $\bar{x}\in\mathbb{R}^d$ with integrable squared distance to $S$ satisfying
+\[
+\mathbb{E}\bigl[\operatorname{dist}(\bar{x},S)^2\bigr]\leq\varepsilon.
+\]
+\end{document}

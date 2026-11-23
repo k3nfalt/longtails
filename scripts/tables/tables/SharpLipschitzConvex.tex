@@ -1,0 +1,36 @@
+\begin{table}[tp]
+\centering
+\caption{Oracle budgets for \protect\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/SharpLipschitzConvex.lean}{sharp Lipschitz convex minimization}.}\label{tab:SharpLipschitzConvex}
+\parbox{\linewidth}{\footnotesize Convex, $L$-Lipschitz $f\colon\mathbb R^d\to\mathbb R$ with $\operatorname{dist}(x_0,X^*)\le D$ and global weak sharpness $f(x)-f^*\ge\mu\operatorname{dist}(x,X^*)$, where $0<\mu\le L$ and $D>0$. Each oracle reply gives the exact value and a subgradient. The target is $\mathbb E[f(\hat x)-f^*]\le\varepsilon$ for $\varepsilon>0$. The displayed upper bounds give this gap guarantee deterministically.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SharpLipschitzConvexRestartedSubgradient.lean}{Sharp\allowbreak{}Lipschitz\allowbreak{}Convex\allowbreak{}Restarted\allowbreak{}Subgradient} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SharpLipschitzConvexRestartedSubgradient.md}{(review)}
+& Sufficient budget  $\mathcal{O}(\kappa^2(1+\log_+(\mu D/\varepsilon)))$ joint calls
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} RSG \citep{sharpYangLin2018v14}, Cor.~7 ($\theta=1$)
+& Sufficient budget  $\mathcal{O}(\kappa^2(1+\log(LD/\varepsilon)))$ subgradient calls for $\varepsilon<LD$, with $\varepsilon_0=LD$ ($0$ if $\varepsilon\ge LD$).
+& \textbf{(1)}: Distance-based tuning replaces $LD$ by $\mu D$ in the log, saving up to $\mathcal{O}(\kappa^2\log\kappa)$ for $\mu^2D/L<\varepsilon<LD$. At $\varepsilon=\mu D$ and $\kappa>1$, $\mathcal{O}(\kappa^2)$ versus $\mathcal{O}(\kappa^2(1+\log\kappa))$. Same order for $\varepsilon\le\mu^2D/L$. With $D=\varepsilon_0/\mu$, \textbf{(1)} formalizes the known rate.
+& \textbf{(1)}: Needs global sharpness. \textbf{(2)} needs it only where $f-f^*\le\varepsilon/2$. \\
+\midrule
+\textbf{(3)} GeomGD \citep{sharpWang2025v1}, Thm.~1 ($h(t)=\mu t$, $\mu\le L/\sqrt{2}$)
+& Sufficient budget  $\mathcal{O}(\kappa^2(1+\log(LD/\varepsilon)))$ subgradient calls for $\varepsilon<LD$ via Lipschitz continuity ($0$ if $\varepsilon\ge LD$).
+& \textbf{(1)}: For $\mu\le L/\sqrt{2}$ and $\mu^2D/L<\varepsilon<LD$, the objective-gap budget replaces $LD$ by $\mu D$ in the log. Same order for $\varepsilon\le\mu^2D/L$.
+& \textbf{(1)}: Needs global sharpness. \textbf{(3)} needs it only within distance $D$ of $X^*$ and gives last-iterate accuracy. \\
+\midrule
+\textbf{(4)} Derived bound from \textbf{(3)} with one final averaged subgradient phase ($\mu\le L/\sqrt{2}$)
+& Sufficient budget  $\mathcal{O}(\kappa^2(1+\log_+(\mu D/\varepsilon)))$ subgradient calls, including the final phase.
+& \textbf{(1)}: Matches the known rate on $\mu\le L/\sqrt{2}$.
+& \textbf{(1)}: Needs global sharpness. \textbf{(4)} needs it only within distance $D$ of $X^*$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $X^*=\arg\min f$, $f^*=\min f$, $\kappa=L/\mu$, $\log_+(t)=\max\{0,\log t\}$, and $\varepsilon_0$ is a known upper bound on $f(x_0)-f^*$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

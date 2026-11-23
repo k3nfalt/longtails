@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalHighProbabilityStationarity",
+  "searched_at": "2026-11-23T17:45:28.204381+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) + \\sigma^{2} \\cdot \\log\\left(\\frac{1}{\\delta} \\cdot \\frac{1}{4}\\right)}{2^{54} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalHighProbabilityStationarity.spec.Params → ℕ",
+        "value": "fun q => ⌊(q.L * q.Δ * (1 + q.σ ^ 2 / q.ε ^ 2) + q.σ ^ 2 * Real.log (q.δ⁻¹ * 4⁻¹)) / (2 ^ 54 * q.ε ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) + \\sigma^{2} \\cdot \\log\\left(\\frac{1}{\\delta} \\cdot \\frac{1}{4}\\right)}{2^{54} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalHighProbabilityStationarity.spec.Params → ℕ",
+          "value": "fun q => ⌊(q.L * q.Δ * (1 + q.σ ^ 2 / q.ε ^ 2) + q.σ ^ 2 * Real.log (q.δ⁻¹ * 4⁻¹)) / (2 ^ 54 * q.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.HighProbabilityStationarityLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalHighProbabilityStationarity",
+      "setup": "LongTails.Setups.HighDimensionalHighProbabilityStationarity",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalHighProbabilityStationarity.spec\n  LongTails.Theorems.HighProbabilityStationarityLowerBound.budget",
+      "theorem": "LongTails.Theorems.HighProbabilityStationarityLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HighProbabilityStationarityLowerBound",
+      "theorem": "LongTails.Theorems.HighProbabilityStationarityLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective f on ℝᵈ may be nonconvex. Its gradient is globally L-Lipschitz, its infimum f⋆ is finite, and f(x₀) − f⋆ ≤ Δ. The infimum need not be attained.",
+        "evidence": "LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean, toGeneral and spec.admissible. LongTails/Setups/HighProbabilityStationarity.lean, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each call at an adaptively chosen x returns only g(x, ξ) for a fresh i.i.d. real seed ξ. The jointly measurable map g satisfies E[g(x, ξ)] = ∇f(x). The algorithm knows d, L, σ, Δ, ε, δ, and x₀. It accesses the hidden objective through oracle replies, with g and the seed law also hidden.",
+        "evidence": "LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean, Params, toGeneral, spec.publicInput, spec.Query, and spec.Reply. LongTails/Setups/HighProbabilityStationarity.lean, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "For every x, E[‖g(x, ξ) − ∇f(x)‖²] ≤ σ², with σ ≥ 0. This second-moment condition permits heavy-tailed errors and includes σ = 0.",
+        "evidence": "LongTails/Setups/HighProbabilityStationarity.lean, spec.admissible. LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean, spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, replies, and outputs lie in Euclidean ℝᵈ. The regime requires L > 0, ε > 0, 2⁵⁴ε² ≤ LΔ, and d ≥ 2⁴⁰[1 + (LΔ/ε²)(1 + σ²/ε²)]⁴. The dimension threshold is independent of δ.",
+        "evidence": "LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean, toGeneral, spec.Query, spec.Reply, spec.Output, and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns one measurable point X in ℝᵈ. Success is evaluated at that output by the unsquared Euclidean gradient norm ‖∇f(X)‖ ≤ ε.",
+        "evidence": "LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean, spec.Output and spec.successful. LongTails/Setups/HighProbabilityStationarity.lean, spec.successful."
+      },
+      {
+        "label": "high_probability",
+        "details": "With a fixed oracle-call budget, the output must satisfy P(‖∇f(X)‖ ≤ ε) ≥ 1 − δ for every admissible instance, where 0 < δ ≤ 1/4. The probability includes the independent algorithm and oracle randomness.",
+        "evidence": "LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean, spec.valid and spec.successful. LongTails/Setups/HighProbabilityStationarity.lean, spec.successful. LongTails/Template.lean, executeWithTrace and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "classical",
+      "reason": "Finding an ε-stationary point of a smooth, lower-bounded objective with an unbiased, bounded-variance stochastic gradient is a standard oracle-complexity benchmark. This formulation specifies the output confidence and the dimension regime for a randomized lower bound."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HighProbabilityStationarityLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HighProbabilityStationarityLowerBound",
+          "theorem": "LongTails.Theorems.HighProbabilityStationarityLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalWeakMintySecondOrder",
+  "searched_at": "2026-11-23T17:45:38.331577+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}}{2^{15}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalWeakMintySecondOrder.spec.Params → ℕ",
+        "value": "fun q => ⌊min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2) / 2 ^ 15⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}}{2^{15}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalWeakMintySecondOrder.spec.Params → ℕ",
+          "value": "fun q => ⌊min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2) / 2 ^ 15⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.SecondOrderWeakMintyLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalWeakMintySecondOrder",
+      "setup": "LongTails.Setups.HighDimensionalWeakMintySecondOrder",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalWeakMintySecondOrder.spec\n  LongTails.Theorems.SecondOrderWeakMintyLowerBound.budget",
+      "theorem": "LongTails.Theorems.SecondOrderWeakMintyLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SecondOrderWeakMintyLowerBound",
+      "theorem": "LongTails.Theorems.SecondOrderWeakMintyLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained root finding for a differentiable operator F: ℝᵈ → ℝᵈ satisfying a global weak Minty inequality at a root. F may be nonmonotone.",
+        "evidence": "LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "At any x ∈ ℝᵈ, one call returns either the exact vector F(x) or the exact full Jacobian DF(x), as selected by the algorithm. Both query types use the same budget. Replies are independent of history and seed.",
+        "evidence": "LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean, spec.Query, spec.Reply and spec.admissible. LongTails/Template.lean, Setup.numOracles and executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The ambient space is Euclidean ℝᵈ. With M = min{L₂R²/ε, L₁²R²/ε²}, the parameter regime requires M ≥ 2¹⁵ and d ≥ M³.",
+        "evidence": "LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean, spec.Instance and spec.valid"
+      },
+      {
+        "label": "other",
+        "details": "F is globally L₁-Lipschitz and DF is globally L₂-Lipschitz in operator norm. A hidden root x⋆ satisfies ‖x₀ − x⋆‖ ≤ R and ⟨F(x), x − x⋆⟩ ≥ −(ρ/2)‖F(x)‖² for every x. The parameters d, x₀, L₁, L₂, ρ, R and ε are public, with L₁, L₂, R, ε > 0 and 0 ≤ ρ ≤ 1/L₁.",
+        "evidence": "LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean, Params, spec.publicInput, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The residual norm must be integrable and satisfy 𝔼[‖F(X)‖] ≤ ε. The algorithm may randomize its queries and output.",
+        "evidence": "LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean, spec.successful. LongTails/Template.lean, Algorithm.initial, Algorithm.law and Convergence"
+      },
+      {
+        "label": "other",
+        "details": "The criterion uses the unsquared Euclidean residual norm ‖F(X)‖ at the returned point X ∈ ℝᵈ. The algorithm may return a point it never queried.",
+        "evidence": "LongTails/Setups/HighDimensionalWeakMintySecondOrder.lean, spec.Output and spec.successful. LongTails/Template.lean, Algorithm.output and Setup.allowedAlgorithm"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a weak Minty condition at one root with separate access to operator values and full Jacobians. Its high-dimensional regime ties the ambient dimension to both smoothness constants, the initial radius and the residual tolerance."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SecondOrderWeakMintyLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SecondOrderWeakMintyLowerBound",
+          "theorem": "LongTails.Theorems.SecondOrderWeakMintyLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

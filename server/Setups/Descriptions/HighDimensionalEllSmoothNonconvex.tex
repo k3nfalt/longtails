@@ -1,0 +1,50 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional $\ell$-Smooth Nonconvex Optimization}
+We seek an approximate stationary point of a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in high dimension $d$. Its Hessian exists everywhere and has operator norm bounded by $\ell(\|\nabla f(x)\|)$ at each point $x$, where $\ell:\mathbb{R}\to\mathbb{R}$ is positive and nondecreasing on $[0,\infty)$ with subquadratic growth. A given starting point $x^0\in\mathbb{R}^d$ has objective value within $\Delta\geq 0$ of the infimum. The oracle returns $(f(x),\nabla f(x))$ at $x$. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ with $\mathbb{E}[\|\nabla f(\bar{x})\|]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+We use the Euclidean norm $\|\cdot\|$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$. The algorithm receives $d$, $\ell$, the growth exponent $\rho\in[0,2)$, $\Delta$, $\varepsilon$, and $x^0$.
+
+Our assumptions:
+\begin{assumption}[Smoothness profile]
+For $0\leq u\leq v$, the profile satisfies $0<\ell(u)\leq\ell(v)$. Its growth on positive arguments satisfies
+\[
+\frac{\ell(v)}{v^\rho}\leq\frac{\ell(u)}{u^\rho},\qquad 0<u\leq v.
+\]
+\end{assumption}
+
+\begin{assumption}[Curvature and initial gap]
+The function $f$ and its gradient are Fr\'echet differentiable everywhere. For every $x\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|\nabla^2 f(x)\|_{\mathrm{op}} &\leq \ell(\|\nabla f(x)\|),\\
+f(x^0)-f(x) &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Accuracy and dimension regime]
+Let $s=(2-\rho)\Delta\ell(\varepsilon)/(2^{27}\varepsilon^2)$. The tolerance and the dimension $d\in\mathbb{N}$ satisfy
+\[
+\begin{aligned}
+s &\geq 1,\\
+d &\geq 2^{56}(\lfloor s\rfloor+1)^6
+\left(\frac{\ell(\varepsilon)}{\ell(0)}\right)^4.
+\end{aligned}
+\]
+\end{assumption}
+
+Queries may be made at any point of $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}$ must be measurable, and its gradient norm must be integrable and satisfy
+\[
+\mathbb{E}\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

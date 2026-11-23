@@ -1,0 +1,25 @@
+\begin{table}[tp]
+\centering
+\caption{Stationarity under \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/EllSmoothNonconvex.lean}{$\ell$-smoothness}.}\label{tab:EllSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize Let $f:\mathbb R^d\to\mathbb R$ have a differentiable gradient with $\|\nabla^2 f(x)\|\le\ell(\|\nabla f(x)\|)$ and $f(x_0)-\inf f\le\Delta$. The profile $\ell$ is nondecreasing on $[0,\infty)$, positive on $(0,\infty)$, and $\ell(u)/u^\rho$ is nonincreasing for $u>0$ for some $\rho\in[0,2]$. Each query returns $(f(x),\nabla f(x))$ exactly. The target is $\mathbb E\|\nabla f(\hat x)\|\le\varepsilon$ for $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/EllSmoothNonconvexUpperBound.lean}{Ell\allowbreak{}Smooth\allowbreak{}Nonconvex\allowbreak{}Upper\allowbreak{}Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/EllSmoothNonconvexUpperBound.md}{(review)} & $\mathcal{O}(1+\Delta\ell(\varepsilon)/\varepsilon^2)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} GD \citep{ellncTyurin2025v2}, Thm.~5.1. Derived bound on common regular profiles. & $\mathcal{O}(1+\Delta\ell(\varepsilon)/\varepsilon^2)$ & \textbf{(1)}: Matches the known rate on locally Lipschitz profiles with $\ell(0)>0$. Formalizes GD with a closed-form step and frozen last iterate. Allows discontinuous profiles and $\ell(0)=0$. & \textbf{(1)}: Requires order-$\rho$ regularity with $\rho\le2$. \\
+\midrule
+\textbf{(3)} GD \citep{ellncVankov2025v3}, Thm.~3.1, $a=1$. $C^2$ objectives with $\ell(u)=L_0+L_1u$. & $\mathcal{O}(1+L_0\Delta/\varepsilon^2+L_1\Delta/\varepsilon)$ & \textbf{(1)}: Matches the known rate for $C^2$ objectives with affine $\ell$. Also covers nonaffine profiles and differentiable gradients without Hessian continuity. & \textbf{(1)}: Larger budget constants on the affine overlap. \\
+\midrule
+\textbf{(4)} Fixed-step GD \citep{ellncLi2023v2}, Thm.~5.2. Continuous $\ell>0$ with $\ell(u)/u^2\to0$ as $u\to\infty$. & $\mathcal{O}(1+\Delta\ell(2G)/\varepsilon^2)$ & \textbf{(1)}: Uses $\ell(\varepsilon)$ in place of $\ell(2G)$ on common subquadratic profiles. Saves calls when $\ell(2G)\gg\ell(\varepsilon)$ and $\Delta\ell(2G)/\varepsilon^2\gg1$, a gain also available from \textbf{(2)}. Allows quadratic growth. & \textbf{(1)}: Requires an everywhere differentiable gradient and order-$\rho$ regularity. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} All bounds are sufficient budgets in exact gradient evaluations, counted once per query. $L_0,L_1$ are the nonnegative affine-profile coefficients. $G=\sup\{u\ge0:u^2\le 2\Delta\ell(2u)\}$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
