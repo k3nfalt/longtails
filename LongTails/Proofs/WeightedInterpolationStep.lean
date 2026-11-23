@@ -29,10 +29,47 @@ structure Data (p : Params) (f : Functions p) (g : LocalOracle p) (z : Point p)
   samples : ∀ i, IID (fun j (s : Samples p) => s i j) (ν i : Measure _) P
   stochastic : ∀ i, IsStochasticGradient (Point p) p.Ω (ν i) (f i) (g i) p.σ
 
+structure Bounds (p : Params) (f : Functions p) (g : LocalOracle p) (z : Point p)
+    (P : Measure (Samples p)) (ν : Fin p.n → ProbabilityMeasure p.Ω) : Prop where
+  valid : spec.valid p
+  convex : ∀ i, ConvexOn ℝ Set.univ (f i)
+  differentiable : ∀ i x, HasGradientAt (f i) (gradient (f i) x) x
+  solution : z ∈ solutions p f
+  initial : ‖p.x0 - z‖ ≤ p.R
+  localMeanBound : ∀ k i x, ‖localMean p k f x i‖ ≤ ‖x-p.x0‖ + p.R
+  directionBound : ∀ y ∈ solutions p f, ∀ x, ‖direction p f x‖^2 ≤
+    2*smoothness p*(surrogate p f x-surrogate p f y)
+  growth : ∀ x, information p * (Metric.infDist x (solutions p f)^2 / 2) ≤
+    surrogate p f x - surrogate p f z
+  workers : iIndepFun (fun i (s : Samples p) => s i) P
+  samples : ∀ i, IID (fun j (s : Samples p) => s i j) (ν i : Measure _) P
+  stochastic : ∀ i, IsStochasticGradient (Point p) p.Ω (ν i) (f i) (g i) p.σ
+
 variable {f : Functions p} {g : LocalOracle p} {z : Point p}
     {P : Measure (Samples p)} [IsProbabilityMeasure P] {ν : Fin p.n → ProbabilityMeasure p.Ω}
 
-lemma fixed_noise (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x v : Point p) :
+omit [IsProbabilityMeasure P] in
+lemma Data.bounds (D : Data p f g z P ν) : Bounds p f g z P ν where
+  valid := D.valid
+  convex := D.convex
+  differentiable := D.differentiable
+  solution := D.solution
+  initial := D.initial
+  localMeanBound k i x := local_radius D.valid k i f (D.lipschitz i) D.solution D.initial x
+  directionBound y hy x := direction_sq (weight_nonneg D.valid) D.differentiable D.lipschitz
+    (smoothness_pos D.valid) (smooth_majorant D.valid) hy x
+  growth x := by
+    have h := weighted_growth D.differentiable D.lipschitz D.solution x (D.growth x)
+      (threshold_spec D.valid).1 (fun i => by exact_mod_cast D.valid.1 i) (threshold_spec D.valid).2
+    change information p * _ ≤ ∑ i, weights p i * _ at h
+    simpa only [surrogate, mul_sub, Finset.sum_sub_distrib] using h
+  workers := D.workers
+  samples := D.samples
+  stochastic := D.stochastic
+
+instance : Coe (Data p f g z P ν) (Bounds p f g z P ν) := ⟨Data.bounds⟩
+
+lemma fixed_noise (D : Bounds p f g z P ν) (T : DistributedTemplate.Time) (k : ℕ) (x v : Point p) :
     let u := stepSize p k • direction p f x
     let δ := errorRadius p T x
     let e := tolerance p
@@ -53,7 +90,7 @@ lemma fixed_noise (D : Data p f g z P ν) (T : DistributedTemplate.Time) (k : �
   have he := tolerance_pos D.valid
   have hn := noise_nonneg D.valid
   have hδ : 0 ≤ δ := Real.sqrt_nonneg _
-  have hlocal (i : Fin p.n) := local_radius D.valid k i f (D.lipschitz i) D.solution D.initial x
+  have hlocal (i : Fin p.n) := D.localMeanBound k i x
   have hm (i : Fin p.n) := bias_margin D.valid x (m i) (hlocal i)
   have hmessage i := message_moments D.valid T k g f x P ν D.samples D.stochastic i (hm i).1
   have hM (i : Fin p.n) : V i ≤ noiseRadius p ^ 2 := by
