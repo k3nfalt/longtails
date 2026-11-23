@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Constrained Polyak--\L{}ojasiewicz Minimization}
+We consider minimizing a possibly nonconvex function $f:E\to\mathbb{R}$ over a closed convex set $C$ in a finite-dimensional real normed space $E$. On $C$, the objective is bounded below, has a Lipschitz derivative, and satisfies a constrained Polyak--\L{}ojasiewicz inequality. A given feasible point has bounded initial objective gap. At feasible points, one oracle returns the exact derivative and another returns a minimizer of a supplied linear functional over the intersection of $C$ with a query ball centered at the point. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in C$ satisfying $f(\bar{x})-\inf_{z\in C}f(z)\leq\varepsilon$ almost surely.
+
+Write $f_\star$ for the value of the problem
+\[
+\inf_{x\in C} f(x).
+\]
+The algorithm receives only $E$, the smoothness constant $L>0$, a radius parameter $r>0$, and the starting point $x^0$. The Polyak--\L{}ojasiewicz constant $\mu>0$, the initial gap bound $\Delta\in\mathbb{R}$, and $\varepsilon$ may enter the oracle-call budgets. Write $E^*$ for the continuous dual of $E$ and $\|\cdot\|_{\mathrm{op}}$ for its induced operator norm.
+
+Our assumptions:
+\begin{assumption}[Feasibility and initial gap]
+The set $C$ is closed and convex, $x^0\in C$, and
+\[
+ f_\star> -\infty,\qquad f(x^0)-f_\star\leq\Delta.
+\]
+\end{assumption}
+
+\begin{assumption}[Smoothness on the feasible set]
+The function $f$ is Fr\'echet differentiable at every $x\in C$. Its derivative $Df(x)\in E^*$ satisfies
+\[
+\|Df(y)-Df(x)\|_{\mathrm{op}}\leq L\|y-x\|,\qquad x,y\in C.
+\]
+\end{assumption}
+
+\begin{assumption}[Constrained Polyak--\L{}ojasiewicz inequality]
+For $x\in C$, define the normal cone and stationarity residual by
+\[
+\begin{aligned}
+N_C(x)&=\{n\in E^*: n(z-x)\leq 0\text{ for all }z\in C\},\\
+s_C(x)&=\inf_{n\in N_C(x)}\|Df(x)+n\|_{\mathrm{op}}.
+\end{aligned}
+\]
+The objective satisfies
+\[
+\mu\bigl(f(x)-f_\star\bigr)\leq \tfrac12 s_C(x)^2,\qquad x\in C.
+\]
+\end{assumption}
+
+Derivative calls and local linear minimization calls are counted separately. The derivative oracle returns $Df(x)$ at $x\in C$. A local linear minimization query specifies a center $x\in C$, any radius $\rho\geq 0$, and a functional $g\in E^*$. The oracle returns a point
+\[
+v\in\operatorname*{arg\,min}_{z\in C,\ \|z-x\|\leq\rho} g(z).
+\]
+After the allotted calls, the output must satisfy
+\[
+\bar{x}\in C\quad\text{and}\quad f(\bar{x})-f_\star\leq\varepsilon
+\quad P\text{-a.s.},
+\]
+where $P$ is the joint law of the independent algorithm and oracle randomness.
+\end{document}

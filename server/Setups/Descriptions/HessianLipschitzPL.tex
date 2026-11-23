@@ -1,0 +1,40 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Hessian-Lipschitz Minimization Under Gradient Dominance}
+We minimize a twice differentiable function $f:E\to\mathbb{R}$ on a finite-dimensional real inner product space $E$. Its Hessian is $H$-Lipschitz for $H>0$, and $f$ satisfies the Polyak--{\L}ojasiewicz inequality with constant $\mu>0$. The given starting point $x^0\in E$ has objective gap at most $\Delta\geq 0$ relative to a global minimizer $x^\star$. At any $x\in E$, the oracle returns $(f(x),\nabla f(x),\nabla^2 f(x))$. For $\varepsilon>0$, the goal is a measurable output $\bar{x}\in E$ with integrable gap satisfying $\mathbb{E}[f(\bar{x})-f(x^\star)]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+The optimization problem is
+\[
+\min_{x\in E} f(x).
+\]
+The algorithm receives only $E$, $H$, and $x^0$. The parameters $\mu$, $\Delta$, and $\varepsilon$ may enter only the oracle-call budget. We use the inner product norm on $E$ and the induced operator norm $\|\cdot\|_{\mathrm{op}}$ on linear maps from $E$ to $E$.
+
+Our assumptions:
+\begin{assumption}[Lipschitz Hessian]
+The function $f$ and its gradient are Fr\'echet differentiable everywhere on $E$. The Hessian satisfies
+\[
+\|\nabla^2 f(x)-\nabla^2 f(y)\|_{\mathrm{op}}\leq H\|x-y\|,
+\qquad x,y\in E.
+\]
+\end{assumption}
+
+\begin{assumption}[Gradient dominance and initial gap]
+There exists a global minimizer $x^\star\in E$ such that
+\[
+\begin{aligned}
+2\mu\bigl(f(x)-f(x^\star)\bigr)&\leq \|\nabla f(x)\|^2 &&\text{for every }x\in E,\\
+f(x^0)-f(x^\star)&\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output must satisfy the expected objective-gap criterion
+\[
+\mathbb{E}\bigl[f(\bar{x})-f(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

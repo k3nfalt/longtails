@@ -1,0 +1,50 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Second-Order Convex Finite-Sum Minimization}
+We minimize a convex function $F$ on $\mathbb{R}^d$, the average of $n$ twice continuously differentiable components. Their Hessians are Lipschitz in root mean square with constant $H\geq 0$, and a global minimizer $x^\star$ satisfies $\|x^\star\|\leq R$ for a radius $R>0$. The oracle returns the value, gradient, and Hessian of a chosen component at a queried point. For a tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ with integrable objective gap satisfying $\mathbb{E}[F(\bar{x})-F(x^\star)]\leq\varepsilon$, where the expectation is over the algorithm's randomness.
+
+Writing $f_i:\mathbb{R}^d\to\mathbb{R}$ for component $i$, define $F(x)=\frac{1}{n}\sum_{i=1}^n f_i(x)$. The optimization problem is
+\[
+\min_{x\in\mathbb{R}^d} F(x).
+\]
+The algorithm receives $n,d,H,R,\varepsilon$. The component count $n$ and dimension $d$ are positive integers in the regime
+\[
+\begin{aligned}
+K &= \left\lceil\left(\frac{H R^3}{\sqrt{n}\,\varepsilon}\right)^{2/7}\right\rceil,\\
+d &\geq 2^{170} n^3 (1+K)^{12}.
+\end{aligned}
+\]
+We use the Euclidean norm $\|\cdot\|$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$.
+
+Our assumptions:
+\begin{assumption}[Convexity and minimizer radius]
+For all $x,y\in\mathbb{R}^d$ and $t\in[0,1]$,
+\[
+F((1-t)x+ty)\leq (1-t)F(x)+tF(y).
+\]
+There exists $x^\star\in\mathbb{R}^d$ with $\|x^\star\|\leq R$ such that $F(x^\star)\leq F(x)$ for every $x\in\mathbb{R}^d$.
+\end{assumption}
+
+\begin{assumption}[Mean-square Hessian regularity]
+Each $f_i$ is twice continuously differentiable. For all $x,y\in\mathbb{R}^d$,
+\[
+\frac{1}{n}\sum_{i=1}^n
+\bigl\|\nabla^2 f_i(x)-\nabla^2 f_i(y)\bigr\|_{\mathrm{op}}^2
+\leq H^2\|x-y\|^2.
+\]
+\end{assumption}
+
+A query specifies any $i\in\{1,\ldots,n\}$ and $x\in\mathbb{R}^d$ and returns the exact triple
+\[
+\bigl(f_i(x),\nabla f_i(x),\nabla^2 f_i(x)\bigr).
+\]
+After the allotted oracle calls, the output $\bar{x}$ must be measurable, its objective gap must be integrable, and it must satisfy
+\[
+\mathbb{E}\bigl[F(\bar{x})-F(x^\star)\bigr]\leq\varepsilon.
+\]
+\end{document}

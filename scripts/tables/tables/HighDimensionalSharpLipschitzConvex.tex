@@ -1,0 +1,25 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalSharpLipschitzConvex.lean}{high-dimensional sharp Lipschitz convex minimization}.}\label{tab:HighDimensionalSharpLipschitzConvex}
+\parbox{\linewidth}{\footnotesize Let $f:\mathbb R^d\to\mathbb R$ be convex and $L$-Lipschitz, with a minimizer within $D>0$ of $x_0$ and global sharpness $f(x)-f_\star\ge\mu\,\operatorname{dist}(x,\arg\min f)$ for $\mu>0$. Each call returns the exact value and a fixed subgradient at the query. The target is an integrable gap with $\mathbb E[f(\hat x)-f_\star]\le\varepsilon$, over algorithm randomness. The setup requires $\kappa\ge96$, $0<\varepsilon\le\mu D$, and $d\ge 2^{10}(1+A)^6(LD/\varepsilon)^2$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SharpLipschitzConvexLowerBound.lean}{Sharp\allowbreak{}Lipschitz\allowbreak{}Convex\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SharpLipschitzConvexLowerBound.md}{(review)} &
+Lower bound $\Omega(\kappa^2(1+\log(\mu D/\varepsilon)))$ necessary calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} Subgradient-span lower bound \citep{hdsWang2025v1}, Cor.~1, $\theta=1$ &
+$\Omega(\kappa^2\log(\mu D/\varepsilon))$ necessary calls for deterministic gap $\le\varepsilon$, with $0<\varepsilon<\mu D$, $\kappa>1$ and $d\ge N_\varepsilon+1$. &
+\textbf{(1)}: Arbitrary adaptive queries and outputs, including randomized methods with expected-gap accuracy. Matches the logarithmic order on globally sharp instances for $\varepsilon\le\mu D/e$ in the shared high-dimensional regime. &
+\textbf{(1)}: Much larger dimension threshold and smaller leading lower-bound constant. \textbf{(2)} also covers $1<\kappa<96$ and requires sharpness only within distance $D$ of the minimizer set. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $f_\star=\min f$, $\kappa=L/\mu$, $A=\kappa^2(1+\log(\mu D/\varepsilon))$, and $N_\varepsilon=\lceil 2\log(\mu D/\varepsilon)/[-\log(1-\kappa^{-2})]\rceil$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

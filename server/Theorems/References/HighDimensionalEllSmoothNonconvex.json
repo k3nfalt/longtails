@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalEllSmoothNonconvex",
+  "searched_at": "2026-11-23T17:45:45.122241+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\left(2 - \\rho\\right) \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{2^{27} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalEllSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌊(2 - p.ρ) * p.Δ * p.ℓ p.ε / (2 ^ 27 * p.ε ^ 2)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\left(2 - \\rho\\right) \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{2^{27} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalEllSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => ⌊(2 - p.ρ) * p.Δ * p.ℓ p.ε / (2 ^ 27 * p.ε ^ 2)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.EllSmoothNonconvexLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalEllSmoothNonconvex",
+      "setup": "LongTails.Setups.HighDimensionalEllSmoothNonconvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalEllSmoothNonconvex.spec\n  LongTails.Theorems.EllSmoothNonconvexLowerBound.budget",
+      "theorem": "LongTails.Theorems.EllSmoothNonconvexLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.EllSmoothNonconvexLowerBound",
+      "theorem": "LongTails.Theorems.EllSmoothNonconvexLowerBound.result",
+      "references": "- Yanpeng Liang and Luo Luo. [On the Complexity of Finding Stationary Points in Stochastic $(L_0,L_1)$-Smooth Nonconvex Optimization](https://arxiv.org/html/2610.21692v1). 2026, arXiv v1. Complexity: $\\Omega(A+B)$ exact-gradient oracle calls for randomized methods to attain $\\mathbb E\\|\\nabla f(X)\\|\\le\\varepsilon$ in the zero-noise case, where $\\ell(u)=L_0+L_1u$, $A=L_0\\Delta/\\varepsilon^2$, and $B=L_1\\Delta/\\varepsilon$. The regime is $L_0,L_1>0$ and $\\varepsilon\\le c\\min\\{\\sqrt{L_0\\Delta},L_1\\Delta\\}$ for a universal $c>0$. A sufficient dimension is $d\\gtrsim\\max\\{A^2\\log(2+A),\\;Br^2\\log^2(er)\\log(2+B)\\}$ with $r=\\max\\{1,L_1\\varepsilon/L_0\\}$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization of a possibly nonconvex function f on Euclidean ℝᵈ. The initial gap satisfies f(x₀) − inf f ≤ Δ.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, Point, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Each query at x returns the exact Euclidean gradient ∇f(x) together with f(x), independently of the history and oracle seed. All parameters (d, ℓ, ρ, Δ, ε, x₀) are public. The objective f is the hidden instance.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, Params, spec.Public, spec.publicInput, spec.Instance, spec.Reply and spec.admissible"
+      },
+      {
+        "label": "function_value",
+        "details": "The same oracle call returns the exact scalar f(x) at no additional query cost.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, spec.Reply and spec.admissible"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient exists and is differentiable everywhere, with ‖D∇f(x)‖op ≤ ℓ(‖∇f(x)‖). The profile ℓ is nondecreasing on [0,∞), ℓ(0)>0, and ℓ(u)/u^ρ is nonincreasing for u>0, with 0≤ρ<2.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, Regular, spec.valid and spec.admissible. LongTails/Setups/HighDimensionalEllSmoothNonconvex.lean, spec.valid"
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The space is Euclidean ℝᵈ. For K=(2−ρ)Δℓ(ε)/(2²⁷ε²), validity requires ε>0, K≥1 and d≥2⁵⁶(⌊K⌋+1)⁶(ℓ(ε)/ℓ(0))⁴.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, Point and spec.valid. LongTails/Setups/HighDimensionalEllSmoothNonconvex.lean, spec.valid"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The criterion uses the Euclidean gradient norm to the first power at the single returned point X. X may be any point computed from the algorithm state, including a point that was never queried.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, spec.Output and spec.successful. LongTails/Template.lean, Algorithm.output and _run"
+      },
+      {
+        "label": "expected",
+        "details": "X must be measurable, ‖∇f(X)‖ must be integrable, and E[‖∇f(X)‖]≤ε. The algorithm may randomize despite the exact oracle replies.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean, spec.successful and spec.admissible. LongTails/Template.lean, Algorithm.Seed, Algorithm.law and Setup.allowedAlgorithm"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The curvature bound depends on the gradient norm through a public function ℓ with a subquadratic growth restriction. The admissible dimension threshold also depends on the ratio ℓ(ε)/ℓ(0) and the initial gap."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.EllSmoothNonconvexLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.EllSmoothNonconvexLowerBound",
+          "theorem": "LongTails.Theorems.EllSmoothNonconvexLowerBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

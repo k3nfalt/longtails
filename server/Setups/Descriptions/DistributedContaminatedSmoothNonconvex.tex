@@ -1,0 +1,57 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Distributed Stationarity Under Gradient Contamination}
+We seek a stationary point of a possibly nonconvex objective $F$ on $\mathbb{R}^d$, where $d$ is a nonnegative integer. The objective averages differentiable worker losses, has a Lipschitz gradient, and has a bounded initial gap above a global lower bound. Workers communicate over directed links and return batches of local gradient estimates from independent sample streams. Each stream consists of independent draws from a worker-specific mixture of a clean law yielding unbiased estimates with bounded variance and an arbitrary contaminating law. For tolerance $\varepsilon>0$ and failure probability $\delta\in(0,1)$, the goal is a measurable output $\bar{x}$ with $\|\nabla F(\bar{x})\|\leq\varepsilon$ with probability at least $1-\delta$ by the allotted time.
+
+For $n\geq 1$ workers with local losses $f_i:\mathbb{R}^d\to\mathbb{R}$, write $F(x)=n^{-1}\sum_{i=1}^n f_i(x)$. The optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} F(x).
+\]
+We use the Euclidean norm. The algorithm receives $d$, $n$, the measurable sample space $\Omega$, the starting point $x^0\in\mathbb{R}^d$, the smoothness and gap bounds $L$ and $\Delta$, the worker noise and contamination bounds $(\sigma_i,\eta_i)_{i=1}^n$, the computation times $(h_i)_{i=1}^n$, the link latency $\ell$ and per-bit time $b$, and the targets $\varepsilon$ and $\delta$.
+
+Our assumptions:
+\begin{assumption}[Aggregate smoothness and initial gap]
+Each $f_i$ is differentiable everywhere. For some global lower bound $a\in\mathbb{R}$, the constants $L>0$ and $\Delta\geq 0$ satisfy
+\[
+\begin{aligned}
+\|\nabla F(x)-\nabla F(y)\| &\leq L\|x-y\| &&\text{for all }x,y\in\mathbb{R}^d,\\
+a &\leq F(x) &&\text{for all }x\in\mathbb{R}^d,\\
+F(x^0)-a &\leq \Delta.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Clean local gradients]
+Worker $i$ has a jointly measurable map $g_i:\mathbb{R}^d\times\Omega\to\mathbb{R}^d$ and a clean probability law $\mu_i$ on $\Omega$. For each $x\in\mathbb{R}^d$ and $Z\sim\mu_i$, the vector $g_i(x,Z)$ is Bochner integrable, its squared error is integrable, and, with $\sigma_i\geq 0$,
+\[
+\begin{aligned}
+\mathbb{E}_{Z\sim\mu_i}[g_i(x,Z)] &= \nabla f_i(x),\\
+\mathbb{E}_{Z\sim\mu_i}\bigl[\|g_i(x,Z)-\nabla f_i(x)\|^2\bigr] &\leq \sigma_i^2.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Contaminated sampling]
+The sample streams $(Z_{i,k})_{k\geq 0}$ are independent across workers and independent of the algorithm's randomness. Within stream $i$, the samples are measurable and i.i.d. with law $(1-\eta_i)\mu_i+\eta_i\nu_i$, where $\nu_i$ is an arbitrary probability law on $\Omega$. The contamination fractions and target tolerance satisfy
+\[
+0\leq\eta_i\leq\tfrac{1}{16}\quad (1\leq i\leq n),
+\qquad
+2^{18}\sum_{i=1}^n\sigma_i\sqrt{\eta_i}\leq n\varepsilon.
+\]
+\end{assumption}
+
+A computation query at worker $i$ specifies a point $x\in\mathbb{R}^d$ and a positive integer batch size $m$. If $k$ samples have already been used, the reply is the ordered list $(g_i(x,Z_{i,k+j}))_{j=0}^{m-1}$, available after $m h_i$ units of time, where $h_i>0$. Each worker handles one batch at a time and ignores further computation requests while a batch is pending. Different workers can compute concurrently.
+
+Every ordered pair of workers, including a worker paired with itself, has a directed link. A message with a payload of $q\geq 0$ bits is padded with $64$ zero bits and occupies its link for $\ell+b(q+64)$ units of time, where $\ell,b\geq 0$. The recipient receives the sender's identity and the padded bit string. Messages on each link are served in submission order. Distinct links can transmit concurrently, and communication can overlap computation.
+
+For an elapsed-time budget $T\geq 0$, almost surely only finitely many events may occur at every deadline up to and including $T$. The designated root worker's output $\bar{x}\in\mathbb{R}^d$ at time $T$ must be measurable and satisfy
+\[
+P\bigl(\|\nabla F(\bar{x})\|>\varepsilon\bigr)\leq\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the worker sample streams.
+\end{document}

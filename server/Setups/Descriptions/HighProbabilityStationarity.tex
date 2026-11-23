@@ -1,0 +1,41 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Probability Stationarity in Stochastic Optimization}
+We seek an approximately stationary point of a possibly nonconvex function $f:E\to\mathbb{R}$ on a separable real Hilbert space $E$. Its gradient is Lipschitz, and the objective gap at a given starting point is bounded relative to the finite infimum of $f$. At each query, the oracle uses a fresh independent sample from a common distribution to return an unbiased gradient estimate with uniformly bounded variance. For tolerance $\varepsilon>0$ and failure probability $0<\delta\leq 1/4$, the goal is a measurable output $\bar{x}\in E$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ with probability at least $1-\delta$.
+
+The underlying optimization problem is
+\[
+\inf_{x\in E} f(x).
+\]
+Equip $E$ with its Borel $\sigma$-algebra and write $\|\cdot\|$ for its Hilbert norm. The algorithm receives $E$, the measurable sample space $\Omega$, the starting point $x^0\in E$, the smoothness constant $L>0$, the noise bound $\sigma\geq 0$, the initial gap bound $\Delta\geq 0$, and the accuracy parameters $\varepsilon$ and $\delta$.
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is Fr\'echet differentiable on $E$, and its gradient satisfies
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|,\qquad x,y\in E.
+\]
+The infimum $f_\star=\inf_{x\in E}f(x)$ is finite and satisfies $f(x^0)-f_\star\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+On call $k$, a query at any $x\in E$ returns $g(x,\xi_k)$, where $g:E\times\Omega\to E$ is jointly measurable. The samples $(\xi_k)_{k\geq 0}$ are independent random variables with common law $\nu$ on $\Omega$, and the sample sequence is independent of the algorithm's randomness. For every $x\in E$ and $\xi\sim\nu$, the estimate $g(x,\xi)$ is Bochner integrable, its squared error $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= \nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+P\bigl(\|\nabla f(\bar{x})\|\leq\varepsilon\bigr)\geq 1-\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

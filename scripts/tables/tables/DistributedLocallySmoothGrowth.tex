@@ -1,0 +1,46 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedLocallySmoothGrowth.lean}{distributed locally smooth strong growth}.}\label{tab:DistributedLocallySmoothGrowth}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, each $f_i$ is convex with public gradient Lipschitz bound $L_i$. The mean $F=n^{-1}\sum_i f_i$ is $\bar L$-smooth and satisfies $F(x)-\min F\ge(\mu/2)\operatorname{dist}(x,X_*)^2$ and $n^{-1}\sum_i\|\nabla f_i(x)\|^2\le\rho\|\nabla F(x)\|^2$, with $\mu>0$ and $\rho\ge1$. A minimizer lies within $R$ of $x_0$. Jointly measurable worker gradients are unbiased with variance at most $\sigma^2$, with IID samples within workers and independence across workers. In the finite-bit coordinator star, each worker handles one gradient at a time in $h_i>0$ time and each directed link handles one packet at a time at latency $\ell$ and cost $b$ per bit. Distinct workers and directed links can run concurrently. The target is $\mathbb E\operatorname{dist}(X,X_*)^2\le\varepsilon$ for the returned point.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedLocallySmoothGrowth.lean}{Distributed\allowbreak{}Locally\allowbreak{}Smooth\allowbreak{}Growth} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedLocallySmoothGrowth.md}{(review)}
+& Sufficient time $\mathcal{O}\bigl(\sigma^2/(I\varepsilon)+A_1D\,C_1\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Gradient diversity \citep{dlsgGradientDiversity}
+& Sufficient time $\mathcal{O}\bigl(\sigma^2/(I\varepsilon)+A_2D\,C_2\bigr)$
+& \textbf{(1)}: Same statistical term. At equal speeds with $L_i=L=\bar L$ and $\rho=2$, $\Theta(\sqrt n)$ fewer rounds. In family (a), total time $\mathcal{O}(n\log n)$ versus $\mathcal{O}(n^{3/2}\log n)$.
+& \textbf{(1)}: Needs public $L_i$. Loose caps can worsen the deadline when a tighter aggregate $L$ is known. The noise-dependent packet radius can grow. \\
+\midrule
+\textbf{(3)} Strong-growth schedule \citep{dlsgStrongGrowthTime}
+& Sufficient time $\mathcal{O}\bigl(\sigma^2/(I\varepsilon)+A_3D\,C_3\bigr)$
+& \textbf{(1)}: Same statistical term. A factor $n$ fewer rounds at equal speeds with $L_i=L=\bar L$. In family (a), total time $\mathcal{O}(n\log n)$ versus $\mathcal{O}(n^2\log n)$.
+& \textbf{(1)}: Needs public $L_i$. Loose caps can worsen the deadline when a tighter aggregate $L$ is known. The noise-dependent packet radius can grow. \\
+\midrule
+\textbf{(4)} Malenia SGD \citep[Thm.~F.2]{dwiTyurin2026v1}, free communication, aggregate PL
+& Sufficient time $\mathcal{O}\bigl(D[H\bar L/\mu+\sigma^2\sum_i h_i/(n^2\mu^2\varepsilon)]\bigr)$ on convex quadratic growth, which implies PL.
+& \textbf{(1)}: With free communication, equal speeds remove $D$ from the statistical term. In family (b), total time is $\mathcal{O}(m^\gamma/\log m)$ versus $\mathcal{O}(m^\gamma\log m)$ for $5/4<\gamma<7/4$. Covers priced finite-bit links.
+& \textbf{(1)}: Requires strong growth and known $\rho,L_i$. In family (b) with $0<\gamma<5/4$, its bound is $\mathcal{O}(m^{5/4})$ versus $\mathcal{O}(m^\gamma\log m)$ with free communication. \\
+\midrule
+\textbf{(5)} Fast-subset Malenia, derived bound from \citep[Thm.~F.2]{dwiTyurin2026v1}, free communication
+& Sufficient time $\mathcal{O}(\sqrt n\log n)$ in family (a), using the $3n/4$ unit-time workers. The subset mean shares $X_*$ and has quadratic growth of order $\mu$.
+& \textbf{(1)}: No established improvement with free communication.
+& \textbf{(1)}: $\mathcal{O}(n\log n)$ versus $\mathcal{O}(\sqrt n\log n)$ in family (a), even with free communication. The subset alignment reduction applies when the retained worker fraction exceeds $(\rho-1)/\rho$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $X_*=\arg\min F$, $\bar L=\max(\mu,\max_i L_i)$, $L$ is the public aggregate smoothness bound in \textbf{(2)} and \textbf{(3)}, $H=\max_i h_i$, $S=\sum_i h_i^{-1}$, and $D=1+\log(1+R^2/\varepsilon)$. The profile $u$ minimizes $\sum_i u_i^2/h_i$ subject to $\sum_i u_i=n$ and $\sum_i u_i^2\le n\rho$. Put $a_i=\mu u_i$, $I=\sum_i a_i^2/h_i$, $U=\max_i a_i$, and $\beta=\min(n,1+\sqrt{n(\rho-1)})$.
+For $j=1,2,3$, set $A_j=SM_j/I$ and
+$C_j=H+\ell+b[1+d\log(2+d+A_j+(R^2+(\sigma U/M_j)^2)/\varepsilon)]$,
+where $M_1=\max_i a_i\max(a_i,L_i)$,
+$M_2=L\max(\beta U,n\max_i(a_i/h_i)/S)$, and $M_3=nLU$.
+\textup{(a)} $n=4m$, with $3m$ times $1$ and $m$ times $n$, $\rho=2$, $L_i=L=4\mu$, $\varepsilon=n^{-3/2}$.
+\textup{(b)} $n=2m$, with $m$ times $m^{3/4}$ and the remaining times $1,\ldots,m$, $\rho=2$, $L_i=8\mu$, $\varepsilon=m^{-\gamma}$. Other parameters are fixed and positive in these examples, except that free communication means $\ell=b=0$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

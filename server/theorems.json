@@ -417,6 +417,29 @@
     "theorem": "OracleTemplate.BoundedScalarConvex.result"
   },
   {
+    "budget": null,
+    "budgets": [
+      {
+        "latex": "\\begin{aligned} &K \\\\ &\\text{where}\\quad K = \\left\\lfloor \\log_{4}\\left(1 + \\frac{6 \\cdot \\Delta}{L \\cdot r^{2}}\\right) \\right\\rfloor_{+} + \\left\\lceil \\log_{1 + \\frac{\\mu}{25 \\cdot L}}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\end{aligned}",
+        "oracle": 0,
+        "type": "LongTails.Setups.BroxGeneralNormConstrainedPL.spec.Params → ℕ",
+        "value": "fun p =>\n  have K := ⌊Real.logb 4 (1 + 6 * p.Δ / (p.L * p.r ^ 2))⌋₊ + ⌈Real.logb (1 + p.μ / (25 * p.L)) (p.Δ / p.ε)⌉₊;\n  K"
+      },
+      {
+        "latex": "\\begin{aligned} &2 \\cdot K + \\left\\lceil \\log_{4}\\left(\\frac{r^{2} \\cdot \\left(\\frac{8 \\cdot L^{2}}{\\mu} + 6 \\cdot L\\right)}{\\varepsilon}\\right) \\right\\rceil_{+} \\\\ &\\text{where}\\quad K = \\left\\lfloor \\log_{4}\\left(1 + \\frac{6 \\cdot \\Delta}{L \\cdot r^{2}}\\right) \\right\\rfloor_{+} + \\left\\lceil \\log_{1 + \\frac{\\mu}{25 \\cdot L}}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\end{aligned}",
+        "oracle": 1,
+        "type": "LongTails.Setups.BroxGeneralNormConstrainedPL.spec.Params → ℕ",
+        "value": "fun p =>\n  have K := ⌊Real.logb 4 (1 + 6 * p.Δ / (p.L * p.r ^ 2))⌋₊ + ⌈Real.logb (1 + p.μ / (25 * p.L)) (p.Δ / p.ε)⌉₊;\n  2 * K + ⌈Real.logb 4 (p.r ^ 2 * (8 * p.L ^ 2 / p.μ + 6 * p.L) / p.ε)⌉₊"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.WarmHalvingBroxGeneralNorm",
+    "namespace": "LongTails.Setups.BroxGeneralNormConstrainedPL",
+    "setup": "LongTails.Setups.BroxGeneralNormConstrainedPL",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.BroxGeneralNormConstrainedPL.spec OracleTemplate.WarmHalvingBrox.budget",
+    "theorem": "OracleTemplate.WarmHalvingBrox.result"
+  },
+  {
     "budget": {
       "latex": "\\left\\lceil 2^{40} \\cdot \\left(1 + \\frac{m}{s} + \\left(1 + \\frac{\\sqrt{m} \\cdot \\sqrt{\\sqrt{m}}}{s}\\right) \\cdot \\sqrt{\\frac{\\delta}{\\mu}}\\right) \\cdot \\left(1 + \\log\\left(2 + m + \\frac{\\delta}{\\mu}\\right)\\right) \\cdot \\left(1 + \\log\\left(2 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+}",
       "oracle": 0,
@@ -932,6 +955,28 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lfloor \\frac{n \\cdot \\left(1 + \\left(\\frac{H \\cdot R^{3}}{\\sqrt{n} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}}\\right)}{2^{16}} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian.spec.Params → ℕ",
+      "value": "fun p => ⌊↑p.n * (1 + (p.H * p.R ^ 3 / (√↑p.n * p.ε)) ^ (2 / 7)) / 2 ^ 16⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{n \\cdot \\left(1 + \\left(\\frac{H \\cdot R^{3}}{\\sqrt{n} \\cdot \\varepsilon}\\right)^{\\frac{2}{7}}\\right)}{2^{16}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian.spec.Params → ℕ",
+        "value": "fun p => ⌊↑p.n * (1 + (p.H * p.R ^ 3 / (√↑p.n * p.ε)) ^ (2 / 7)) / 2 ^ 16⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound",
+    "namespace": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian",
+    "setup": "LongTails.Setups.ConvexFiniteSumMeanSquareHessian",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.ConvexFiniteSumMeanSquareHessian.spec\n  LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.budget",
+    "theorem": "LongTails.Theorems.ConvexFiniteSumMeanSquareHessianLowerBound.result"
+  },
+  {
+    "budget": {
       "latex": "2 \\cdot \\left(\\sum_{i=0}^{d-1} \\max\\left\\{ 1, \\left\\lceil \\sqrt{\\frac{L\\left(i\\right)}{\\mu}} \\right\\rceil_{+} \\right\\}\\right) \\cdot \\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{2 \\cdot \\Delta}{\\varepsilon} \\right\\rceil_{+}\\right)",
       "oracle": 0,
       "type": "LongTails.Setups.CoordinateSmoothStronglyConvex.spec.Params → ℕ",
@@ -1214,6 +1259,26 @@
   },
   {
     "budget": {
+      "latex": "\\begin{aligned} &2^{34} \\cdot \\left(K + q \\cdot \\min\\left\\{ K, q \\right\\}\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\max\\left\\{ \\frac{2^{18} \\cdot \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot \\sigma\\left(i\\right)^{2}\\right)}{n^{2} \\cdot \\varepsilon^{2}}, 0 \\right\\}\\right) + 512 \\cdot K \\cdot \\left(\\left(1 + \\log_{2}\\left(n\\right)\\right) \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + \\frac{d + n - 1}{n} \\cdot \\left(8 + \\log_{2}\\left(n \\cdot \\left(d + 1\\right)\\right)\\right)\\right)\\right) \\\\ &\\text{where}\\quad K = 1 + \\left\\lceil \\frac{2^{19} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} q = 4 + \\left\\lceil \\log\\left(\\frac{1}{failure}\\right) \\right\\rceil_{+}\\end{aligned}",
+      "type": "LongTails.Setups.DistributedContaminatedSmoothNonconvex.Params → DistributedTemplate.Time",
+      "value": "fun p =>\n  have K := 1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have q := 4 + ⌈Real.log (1 / p.failure)⌉₊;\n  2 ^ 34 * ↑(K + q * min K q) *\n      (Finset.univ.sup p.h + ((2 ^ 18 * ∑ i, ↑(p.h i) * p.σ i ^ 2) / (↑↑p.n ^ 2 * p.ε ^ 2)).toNNReal) +\n    512 * ↑K *\n      (↑(1 + (↑p.n).log2) * Finset.univ.sup p.h + p.l +\n        p.b * ↑(64 + (p.d + ↑p.n - 1) / ↑p.n * (8 + (↑p.n * (p.d + 1)).log2)))"
+    },
+    "budgets": [
+      {
+        "latex": "\\begin{aligned} &2^{34} \\cdot \\left(K + q \\cdot \\min\\left\\{ K, q \\right\\}\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + \\max\\left\\{ \\frac{2^{18} \\cdot \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot \\sigma\\left(i\\right)^{2}\\right)}{n^{2} \\cdot \\varepsilon^{2}}, 0 \\right\\}\\right) + 512 \\cdot K \\cdot \\left(\\left(1 + \\log_{2}\\left(n\\right)\\right) \\cdot \\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + \\frac{d + n - 1}{n} \\cdot \\left(8 + \\log_{2}\\left(n \\cdot \\left(d + 1\\right)\\right)\\right)\\right)\\right) \\\\ &\\text{where}\\quad K = 1 + \\left\\lceil \\frac{2^{19} \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\\\ &\\phantom{\\text{where}\\quad} q = 4 + \\left\\lceil \\log\\left(\\frac{1}{failure}\\right) \\right\\rceil_{+}\\end{aligned}",
+        "type": "LongTails.Setups.DistributedContaminatedSmoothNonconvex.Params → DistributedTemplate.Time",
+        "value": "fun p =>\n  have K := 1 + ⌈2 ^ 19 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have q := 4 + ⌈Real.log (1 / p.failure)⌉₊;\n  2 ^ 34 * ↑(K + q * min K q) *\n      (Finset.univ.sup p.h + ((2 ^ 18 * ∑ i, ↑(p.h i) * p.σ i ^ 2) / (↑↑p.n ^ 2 * p.ε ^ 2)).toNNReal) +\n    512 * ↑K *\n      (↑(1 + (↑p.n).log2) * Finset.univ.sup p.h + p.l +\n        p.b * ↑(64 + (p.d + ↑p.n - 1) / ↑p.n * (8 + (↑p.n * (p.d + 1)).log2)))"
+      }
+    ],
+    "kind": "timed",
+    "module": "LongTails.Theorems.ContaminatedParallelStationarity",
+    "namespace": "LongTails.Setups.DistributedContaminatedSmoothNonconvex",
+    "setup": "LongTails.Setups.DistributedContaminatedSmoothNonconvex",
+    "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedContaminatedSmoothNonconvex.spec\n  LongTails.Theorems.ContaminatedParallelStationarity.budget",
+    "theorem": "LongTails.Theorems.ContaminatedParallelStationarity.result"
+  },
+  {
+    "budget": {
       "latex": "\\begin{cases} 0 & \\min\\left\\{ 2 \\cdot \\min\\left\\{ L, Lhat \\right\\} \\cdot \\Delta, G^{2} \\right\\} \\leq \\varepsilon^{2} \\\\ \\left(\\min_{c\\in \\operatorname{SearchSpace}\\left(\\operatorname{effectiveParameters}\\left(p\\right)\\right)} \\operatorname{iterationCount}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + 64 \\cdot b\\right) + b \\cdot \\left(\\operatorname{initialPayload}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) + \\left(\\operatorname{iterationCount}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right) - 1\\right) \\cdot \\operatorname{roundPayload}\\left(\\operatorname{effectiveParameters}\\left(p\\right), c\\right)\\right)\\right) & \\mathrm{otherwise} \\end{cases}",
       "type": "LongTails.Setups.DistributedFreeBroadcastSmoothNonconvex.Params → DistributedTemplate.Time",
       "value": "fun p =>\n  if min (2 * min p.L p.Lhat * p.Δ) (p.G ^ 2) ≤ p.ε ^ 2 then 0\n  else\n    Finset.univ.inf' ⋯ fun c =>\n      ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.iterationCount\n              (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c) *\n          (Finset.univ.sup p.h + p.l + 64 * p.b) +\n        p.b *\n          (↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.initialPayload\n                (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c) +\n            ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.iterationCount\n                    (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c -\n                  1) *\n              ↑(LongTails.Theorems.DashaFreeBroadcastDeterministic.roundPayload\n                  (LongTails.Theorems.DashaFreeBroadcastDeterministic.effectiveParameters p) c))"
@@ -1314,6 +1379,26 @@
   },
   {
     "budget": {
+      "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} a\\left(i\\right) = \\mu \\cdot u\\left(t\\right)\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{a\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} a\\left(i\\right) \\cdot \\max\\left\\{ a\\left(i\\right), L\\left(i\\right) \\right\\}\\right) \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M}{I} \\\\ &\\phantom{\\text{where}\\quad} w = 1 + 2 \\cdot \\log\\left(4 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot \\left(\\max_{0\\le i<n} a\\left(i\\right)\\right)}{M}\\right)^{2}}{\\varepsilon}\\right)\\end{aligned}",
+      "type": "LongTails.Setups.DistributedLocallySmoothGrowth.Params → NNReal",
+      "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have a := fun i => p.μ * u t i;\n  have I := ∑ i, a i ^ 2 / ↑(p.h i);\n  have M := Finset.univ.sup' ⋯ fun i => a i * max (a i) (p.L i);\n  have A := (2 * ∑ i, (↑(p.h i))⁻¹) * M / I;\n  have w := 1 + 2 * Real.log (4 + ↑p.d + A + (p.R ^ 2 + (p.σ * Finset.univ.sup' ⋯ a / M) ^ 2) / p.ε);\n  (2048 *\n      (p.σ ^ 2 / (I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * w)))).toNNReal"
+    },
+    "budgets": [
+      {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} a\\left(i\\right) = \\mu \\cdot u\\left(t\\right)\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{a\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} a\\left(i\\right) \\cdot \\max\\left\\{ a\\left(i\\right), L\\left(i\\right) \\right\\}\\right) \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M}{I} \\\\ &\\phantom{\\text{where}\\quad} w = 1 + 2 \\cdot \\log\\left(4 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot \\left(\\max_{0\\le i<n} a\\left(i\\right)\\right)}{M}\\right)^{2}}{\\varepsilon}\\right)\\end{aligned}",
+        "type": "LongTails.Setups.DistributedLocallySmoothGrowth.Params → NNReal",
+        "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have a := fun i => p.μ * u t i;\n  have I := ∑ i, a i ^ 2 / ↑(p.h i);\n  have M := Finset.univ.sup' ⋯ fun i => a i * max (a i) (p.L i);\n  have A := (2 * ∑ i, (↑(p.h i))⁻¹) * M / I;\n  have w := 1 + 2 * Real.log (4 + ↑p.d + A + (p.R ^ 2 + (p.σ * Finset.univ.sup' ⋯ a / M) ^ 2) / p.ε);\n  (2048 *\n      (p.σ ^ 2 / (I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * w)))).toNNReal"
+      }
+    ],
+    "kind": "timed",
+    "module": "LongTails.Theorems.DistributedLocallySmoothGrowth",
+    "namespace": "LongTails.Setups.DistributedLocallySmoothGrowth",
+    "setup": "LongTails.Setups.DistributedLocallySmoothGrowth",
+    "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedLocallySmoothGrowth.spec\n  LongTails.Theorems.DistributedLocallySmoothGrowth.budget",
+    "theorem": "LongTails.Theorems.DistributedLocallySmoothGrowth.result"
+  },
+  {
+    "budget": {
       "latex": "\\begin{aligned} &B\\left(S\\right) + K \\cdot \\left(\\max_{0\\le j<J + 1} \\frac{B\\left(2 \\cdot \\left(J + 1\\right) \\cdot 4^{j} + \\begin{cases} S & j = J \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right)}{2^{j}}\\right) \\\\ &\\text{where}\\quad K = \\max\\left\\{ 1, \\left\\lceil \\frac{524288 \\cdot L \\cdot \\Delta}{\\varepsilon^{2}} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} S = \\max\\left\\{ 1, \\left\\lceil \\left(\\frac{512 \\cdot \\sigma}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} J = \\min\\left\\{ \\log_{2}\\left(K\\right), \\operatorname{Nat.log}_{4}\\left(\\frac{S}{1 + \\operatorname{Nat.log}_{4}\\left(S\\right)}\\right) \\right\\} \\\\ &\\phantom{\\text{where}\\quad} c\\left(i\\right) = 2 \\cdot h\\left(i\\right) + 2 \\cdot l + b \\cdot \\left(129 + 3 \\cdot d \\cdot \\left(14 + 4 \\cdot \\log_{2}\\left(2 + d + K + S\\right)\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} r\\left(i\\right) = \\left(\\sum_{u=0}^{n-1} \\begin{cases} \\frac{1}{c\\left(u\\right)} & c\\left(u\\right) \\leq c\\left(i\\right) \\\\ 0 & \\mathrm{otherwise} \\end{cases}\\right) \\\\ &\\phantom{\\text{where}\\quad} B\\left(m\\right) = 4 \\cdot \\left(\\min_{0\\le i<n} \\max\\left\\{ c\\left(i\\right), \\frac{m}{r\\left(i\\right)} \\right\\}\\right)\\end{aligned}",
       "type": "LongTails.Setups.DistributedMeanSquaredSmooth.Params → DistributedTemplate.Time",
       "value": "fun p =>\n  have K := max 1 ⌈524288 * p.L * p.Δ / p.ε ^ 2⌉₊;\n  have S := max 1 ⌈(512 * p.σ / p.ε) ^ 2⌉₊;\n  have J := min K.log2 (Nat.log 4 (S / (1 + Nat.log 4 S)));\n  have c := fun i => 2 * p.h i + 2 * p.l + p.b * ↑(129 + 3 * p.d * (14 + 4 * (2 + p.d + K + S).log2));\n  have r := fun i => ∑ u, if c u ≤ c i then (c u)⁻¹ else 0;\n  have B := fun m => 4 * Finset.univ.inf' ⋯ fun i => max (c i) (↑m / r i);\n  B S + ↑K * (Finset.range (J + 1)).sup fun j => B (2 * (J + 1) * 4 ^ j + if j = J then S else 0) / 2 ^ j"
@@ -1331,6 +1416,66 @@
     "setup": "LongTails.Setups.DistributedMeanSquaredSmooth",
     "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedMeanSquaredSmooth.spec\n  LongTails.Theorems.MultilevelPipelineStationarity.budget",
     "theorem": "LongTails.Theorems.MultilevelPipelineStationarity.result"
+  },
+  {
+    "budget": {
+      "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} a\\left(i\\right) = \\mu \\cdot u\\left(t\\right)\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{a\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} S = \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} U = \\left(\\max_{0\\le i<n} a\\left(i\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} M = L \\cdot \\max\\left\\{ U \\cdot \\min\\left\\{ n, 1 + \\sqrt{n \\cdot \\left(\\rho - 1\\right)} \\right\\}, \\frac{n \\cdot \\left(\\max_{0\\le i<n} \\frac{a\\left(i\\right)}{h\\left(i\\right)}\\right)}{S} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{2 \\cdot S \\cdot M}{I} \\\\ &\\phantom{\\text{where}\\quad} w = \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot U}{M}\\right)^{2}}{\\varepsilon} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\end{aligned}",
+      "type": "LongTails.Setups.DistributedMeanStrongGrowth.Params → NNReal",
+      "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have a := fun i => p.μ * u t i;\n  have I := ∑ i, a i ^ 2 / ↑(p.h i);\n  have S := ∑ i, (↑(p.h i))⁻¹;\n  have U := Finset.univ.sup' ⋯ a;\n  have M :=\n    p.L * max (U * min (↑↑p.n) (1 + √(↑↑p.n * (p.ρ - 1)))) ((↑↑p.n * Finset.univ.sup' ⋯ fun i => a i / ↑(p.h i)) / S);\n  have A := 2 * S * M / I;\n  have w := ⌈2 + ↑p.d + A + (p.R ^ 2 + (p.σ * U / M) ^ 2) / p.ε⌉₊.size;\n  (2048 *\n      (p.σ ^ 2 / (I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * ↑w)))).toNNReal"
+    },
+    "budgets": [
+      {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} a\\left(i\\right) = \\mu \\cdot u\\left(t\\right)\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{a\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} S = \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} U = \\left(\\max_{0\\le i<n} a\\left(i\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} M = L \\cdot \\max\\left\\{ U \\cdot \\min\\left\\{ n, 1 + \\sqrt{n \\cdot \\left(\\rho - 1\\right)} \\right\\}, \\frac{n \\cdot \\left(\\max_{0\\le i<n} \\frac{a\\left(i\\right)}{h\\left(i\\right)}\\right)}{S} \\right\\} \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{2 \\cdot S \\cdot M}{I} \\\\ &\\phantom{\\text{where}\\quad} w = \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma \\cdot U}{M}\\right)^{2}}{\\varepsilon} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\end{aligned}",
+        "type": "LongTails.Setups.DistributedMeanStrongGrowth.Params → NNReal",
+        "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have a := fun i => p.μ * u t i;\n  have I := ∑ i, a i ^ 2 / ↑(p.h i);\n  have S := ∑ i, (↑(p.h i))⁻¹;\n  have U := Finset.univ.sup' ⋯ a;\n  have M :=\n    p.L * max (U * min (↑↑p.n) (1 + √(↑↑p.n * (p.ρ - 1)))) ((↑↑p.n * Finset.univ.sup' ⋯ fun i => a i / ↑(p.h i)) / S);\n  have A := 2 * S * M / I;\n  have w := ⌈2 + ↑p.d + A + (p.R ^ 2 + (p.σ * U / M) ^ 2) / p.ε⌉₊.size;\n  (2048 *\n      (p.σ ^ 2 / (I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * ↑w)))).toNNReal"
+      }
+    ],
+    "kind": "timed",
+    "module": "LongTails.Theorems.DistributedGradientDiversity",
+    "namespace": "LongTails.Setups.DistributedMeanStrongGrowth",
+    "setup": "LongTails.Setups.DistributedMeanStrongGrowth",
+    "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedMeanStrongGrowth.spec\n  LongTails.Theorems.DistributedGradientDiversity.budget",
+    "theorem": "LongTails.Theorems.DistributedGradientDiversity.result"
+  },
+  {
+    "budget": {
+      "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{\\mu^{2} \\cdot I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 4096 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{u\\left(t\\right)\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{6 \\cdot n \\cdot L \\cdot \\left(\\max_{0\\le i<n} u\\left(t\\right)\\left(i\\right)\\right) \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right)}{\\mu \\cdot I} \\\\ &\\phantom{\\text{where}\\quad} w = \\log\\left(3 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma}{3 \\cdot n \\cdot L}\\right)^{2}}{\\varepsilon}\\right)\\end{aligned}",
+      "type": "LongTails.Setups.DistributedMeanStrongGrowth.Params → NNReal",
+      "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have I := ∑ i, u t i ^ 2 / ↑(p.h i);\n  have A := (6 * ↑↑p.n * p.L * Finset.univ.sup' ⋯ (u t) * ∑ i, (↑(p.h i))⁻¹) / (p.μ * I);\n  have w := Real.log (3 + ↑p.d + A + (p.R ^ 2 + (p.σ / (3 * ↑↑p.n * p.L)) ^ 2) / p.ε);\n  (2048 *\n      (p.σ ^ 2 / (p.μ ^ 2 * I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 4096 * ↑p.d * w)))).toNNReal"
+    },
+    "budgets": [
+      {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 2048 \\cdot \\left(\\frac{\\sigma^{2}}{\\mu^{2} \\cdot I \\cdot \\varepsilon} + A \\cdot \\left(1 + \\log\\left(1 + \\frac{R^{2}}{\\varepsilon}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 4096 \\cdot d \\cdot w\\right)\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad v\\left(t\\right)\\left(i\\right) = \\frac{h\\left(i\\right)}{\\left(1 - t\\right) \\cdot h\\left(i\\right) + t} \\\\ &\\phantom{\\text{where}\\quad} u\\left(t\\right)\\left(i\\right) = \\frac{n \\cdot v\\left(t\\right)\\left(i\\right)}{\\left(\\sum_{j=0}^{n-1} v\\left(t\\right)\\left(j\\right)\\right)} \\\\ &\\phantom{\\text{where}\\quad} t = \\begin{cases} \\operatorname{choose}\\left(h\\right) & h : \\exists t\\in \\mathbb{R},\\;0 \\leq t \\land \\min\\left\\{ 1 - t, n \\cdot \\rho - \\left(\\sum_{i=0}^{n-1} u\\left(t\\right)\\left(i\\right)^{2}\\right) \\right\\} = 0 \\\\ 0 & \\mathrm{otherwise} \\end{cases} \\\\ &\\phantom{\\text{where}\\quad} I = \\left(\\sum_{i=0}^{n-1} \\frac{u\\left(t\\right)\\left(i\\right)^{2}}{h\\left(i\\right)}\\right) \\\\ &\\phantom{\\text{where}\\quad} A = \\frac{6 \\cdot n \\cdot L \\cdot \\left(\\max_{0\\le i<n} u\\left(t\\right)\\left(i\\right)\\right) \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right)}{\\mu \\cdot I} \\\\ &\\phantom{\\text{where}\\quad} w = \\log\\left(3 + d + A + \\frac{R^{2} + \\left(\\frac{\\sigma}{3 \\cdot n \\cdot L}\\right)^{2}}{\\varepsilon}\\right)\\end{aligned}",
+        "type": "LongTails.Setups.DistributedMeanStrongGrowth.Params → NNReal",
+        "value": "fun p =>\n  have v := fun t i => ↑(p.h i) / ((1 - t) * ↑(p.h i) + t);\n  have u := fun t i => ↑↑p.n * v t i / ∑ j, v t j;\n  have t := if h : ∃ t, 0 ≤ t ∧ min (1 - t) (↑↑p.n * p.ρ - ∑ i, u t i ^ 2) = 0 then h.choose else 0;\n  have I := ∑ i, u t i ^ 2 / ↑(p.h i);\n  have A := (6 * ↑↑p.n * p.L * Finset.univ.sup' ⋯ (u t) * ∑ i, (↑(p.h i))⁻¹) / (p.μ * I);\n  have w := Real.log (3 + ↑p.d + A + (p.R ^ 2 + (p.σ / (3 * ↑↑p.n * p.L)) ^ 2) / p.ε);\n  (2048 *\n      (p.σ ^ 2 / (p.μ ^ 2 * I * p.ε) +\n        A * (1 + Real.log (1 + p.R ^ 2 / p.ε)) *\n          (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 4096 * ↑p.d * w)))).toNNReal"
+      }
+    ],
+    "kind": "timed",
+    "module": "LongTails.Theorems.DistributedStrongGrowthTime",
+    "namespace": "LongTails.Setups.DistributedMeanStrongGrowth",
+    "setup": "LongTails.Setups.DistributedMeanStrongGrowth",
+    "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedMeanStrongGrowth.spec\n  LongTails.Theorems.DistributedStrongGrowthTime.budget",
+    "theorem": "LongTails.Theorems.DistributedStrongGrowthTime.result"
+  },
+  {
+    "budget": {
+      "latex": "\\begin{aligned} &\\max\\left\\{ 24576 \\cdot \\frac{\\sigma^{2} \\cdot V\\left(w\\right)}{\\varepsilon^{2}} + 8192 \\cdot \\kappa \\cdot \\left(1 + \\log\\left(1 + \\left(\\frac{R}{\\varepsilon}\\right)^{2}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot q\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad S\\left(w\\right) = \\left(\\max_{0\\le j<n} n \\cdot \\mu \\cdot w\\left(j\\right) - \\left(\\sum_{i=0}^{n-1} L\\left(i\\right) \\cdot \\max\\left\\{ w\\left(j\\right) - w\\left(i\\right), 0 \\right\\}\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} W\\left(w\\right) = 0 \\leq \\left(\\min_{0\\le a<n} w\\left(a\\right)\\right) \\land 1 \\leq S\\left(w\\right) \\land 4096 \\cdot n \\cdot \\zeta^{2} \\cdot \\left(\\sum_{i=0}^{n-1} \\left(w\\left(i\\right) - \\frac{\\left(\\sum_{j=0}^{n-1} w\\left(j\\right)\\right)}{n}\\right)^{2}\\right) \\leq \\varepsilon^{2} \\\\ &\\phantom{\\text{where}\\quad} V\\left(v\\right) = \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot v\\left(i\\right)^{2}\\right) \\\\ &\\phantom{\\text{where}\\quad} w = \\operatorname{argmin}\\left(W, V\\right) \\\\ &\\phantom{\\text{where}\\quad} u\\left(i\\right) = h\\left(i\\right) \\cdot w\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} \\kappa = 2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M \\\\ &\\phantom{\\text{where}\\quad} G = \\frac{\\left(\\max_{0\\le i<n} u\\left(i\\right)\\right) \\cdot \\left(\\sigma + \\sqrt{n} \\cdot \\zeta\\right)}{M} \\\\ &\\phantom{\\text{where}\\quad} q = \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + \\kappa + \\left(\\frac{R + G}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\end{aligned}",
+      "type": "LongTails.Setups.DistributedOptimumHeterogeneity.Params → NNReal",
+      "value": "fun p =>\n  have S := fun w => Finset.univ.sup' ⋯ fun j => ↑↑p.n * p.μ * w j - ∑ i, p.L i * max (w j - w i) 0;\n  have W := fun w =>\n    0 ≤ Finset.univ.inf' ⋯ w ∧ 1 ≤ S w ∧ 4096 * ↑↑p.n * p.ζ ^ 2 * ∑ i, (w i - (∑ j, w j) / ↑↑p.n) ^ 2 ≤ p.ε ^ 2;\n  have V := fun v => ∑ i, ↑(p.h i) * v i ^ 2;\n  have w := LongTails.Theorems.DistributedOptimumHeterogeneity.argmin W V;\n  have u := fun i => ↑(p.h i) * w i;\n  have M := Finset.univ.sup' ⋯ fun i => u i * p.L i;\n  have κ := (2 * ∑ i, (↑(p.h i))⁻¹) * M;\n  have G := Finset.univ.sup' ⋯ u * (p.σ + √↑↑p.n * p.ζ) / M;\n  have q := ⌈2 + ↑p.d + κ + ((p.R + G) / p.ε) ^ 2⌉₊.size;\n  (24576 * (p.σ ^ 2 * V w / p.ε ^ 2) +\n      8192 * κ * (1 + Real.log (1 + (p.R / p.ε) ^ 2)) *\n        (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * ↑q))).toNNReal"
+    },
+    "budgets": [
+      {
+        "latex": "\\begin{aligned} &\\max\\left\\{ 24576 \\cdot \\frac{\\sigma^{2} \\cdot V\\left(w\\right)}{\\varepsilon^{2}} + 8192 \\cdot \\kappa \\cdot \\left(1 + \\log\\left(1 + \\left(\\frac{R}{\\varepsilon}\\right)^{2}\\right)\\right) \\cdot \\left(\\left(\\max_{0\\le a<n} h\\left(a\\right)\\right) + l + b \\cdot \\left(64 + 1024 \\cdot d \\cdot q\\right)\\right), 0 \\right\\} \\\\ &\\text{where}\\quad S\\left(w\\right) = \\left(\\max_{0\\le j<n} n \\cdot \\mu \\cdot w\\left(j\\right) - \\left(\\sum_{i=0}^{n-1} L\\left(i\\right) \\cdot \\max\\left\\{ w\\left(j\\right) - w\\left(i\\right), 0 \\right\\}\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} W\\left(w\\right) = 0 \\leq \\left(\\min_{0\\le a<n} w\\left(a\\right)\\right) \\land 1 \\leq S\\left(w\\right) \\land 4096 \\cdot n \\cdot \\zeta^{2} \\cdot \\left(\\sum_{i=0}^{n-1} \\left(w\\left(i\\right) - \\frac{\\left(\\sum_{j=0}^{n-1} w\\left(j\\right)\\right)}{n}\\right)^{2}\\right) \\leq \\varepsilon^{2} \\\\ &\\phantom{\\text{where}\\quad} V\\left(v\\right) = \\left(\\sum_{i=0}^{n-1} h\\left(i\\right) \\cdot v\\left(i\\right)^{2}\\right) \\\\ &\\phantom{\\text{where}\\quad} w = \\operatorname{argmin}\\left(W, V\\right) \\\\ &\\phantom{\\text{where}\\quad} u\\left(i\\right) = h\\left(i\\right) \\cdot w\\left(i\\right) \\\\ &\\phantom{\\text{where}\\quad} M = \\left(\\max_{0\\le i<n} u\\left(i\\right) \\cdot L\\left(i\\right)\\right) \\\\ &\\phantom{\\text{where}\\quad} \\kappa = 2 \\cdot \\left(\\sum_{i=0}^{n-1} \\frac{1}{h\\left(i\\right)}\\right) \\cdot M \\\\ &\\phantom{\\text{where}\\quad} G = \\frac{\\left(\\max_{0\\le i<n} u\\left(i\\right)\\right) \\cdot \\left(\\sigma + \\sqrt{n} \\cdot \\zeta\\right)}{M} \\\\ &\\phantom{\\text{where}\\quad} q = \\left\\lceil\\log_{2}\\left(\\left\\lceil 2 + d + \\kappa + \\left(\\frac{R + G}{\\varepsilon}\\right)^{2} \\right\\rceil_{+} + 1\\right)\\right\\rceil_{+}\\end{aligned}",
+        "type": "LongTails.Setups.DistributedOptimumHeterogeneity.Params → NNReal",
+        "value": "fun p =>\n  have S := fun w => Finset.univ.sup' ⋯ fun j => ↑↑p.n * p.μ * w j - ∑ i, p.L i * max (w j - w i) 0;\n  have W := fun w =>\n    0 ≤ Finset.univ.inf' ⋯ w ∧ 1 ≤ S w ∧ 4096 * ↑↑p.n * p.ζ ^ 2 * ∑ i, (w i - (∑ j, w j) / ↑↑p.n) ^ 2 ≤ p.ε ^ 2;\n  have V := fun v => ∑ i, ↑(p.h i) * v i ^ 2;\n  have w := LongTails.Theorems.DistributedOptimumHeterogeneity.argmin W V;\n  have u := fun i => ↑(p.h i) * w i;\n  have M := Finset.univ.sup' ⋯ fun i => u i * p.L i;\n  have κ := (2 * ∑ i, (↑(p.h i))⁻¹) * M;\n  have G := Finset.univ.sup' ⋯ u * (p.σ + √↑↑p.n * p.ζ) / M;\n  have q := ⌈2 + ↑p.d + κ + ((p.R + G) / p.ε) ^ 2⌉₊.size;\n  (24576 * (p.σ ^ 2 * V w / p.ε ^ 2) +\n      8192 * κ * (1 + Real.log (1 + (p.R / p.ε) ^ 2)) *\n        (↑(Finset.univ.sup p.h) + ↑p.l + ↑p.b * (64 + 1024 * ↑p.d * ↑q))).toNNReal"
+      }
+    ],
+    "kind": "timed",
+    "module": "LongTails.Theorems.DistributedOptimumHeterogeneity",
+    "namespace": "LongTails.Setups.DistributedOptimumHeterogeneity",
+    "setup": "LongTails.Setups.DistributedOptimumHeterogeneity",
+    "statement": "DistributedTemplate.TimedConvergence LongTails.Setups.DistributedOptimumHeterogeneity.spec\n  LongTails.Theorems.DistributedOptimumHeterogeneity.budget",
+    "theorem": "LongTails.Theorems.DistributedOptimumHeterogeneity.result"
   },
   {
     "budget": {
@@ -1393,6 +1538,28 @@
     "setup": "LongTails.Setups.DouglasRachfordSmoothConvex",
     "statement": "OracleTemplate.Convergence LongTails.Setups.DouglasRachfordSmoothConvex.spec OracleTemplate.DouglasRachford.budget",
     "theorem": "OracleTemplate.DouglasRachford.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{16 \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1",
+      "oracle": 0,
+      "type": "LongTails.Setups.EllSmoothNonconvex.spec.Params → ℕ",
+      "value": "fun p => ⌊16 * p.Δ * p.ℓ p.ε / p.ε ^ 2⌋₊ + 1"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{16 \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.EllSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌊16 * p.Δ * p.ℓ p.ε / p.ε ^ 2⌋₊ + 1"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.EllSmoothNonconvexUpperBound",
+    "namespace": "LongTails.Setups.EllSmoothNonconvex",
+    "setup": "LongTails.Setups.EllSmoothNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.EllSmoothNonconvex.spec OracleTemplate.EllSmoothNonconvexUpperBound.budget",
+    "theorem": "OracleTemplate.EllSmoothNonconvexUpperBound.result"
   },
   {
     "budget": {
@@ -1547,6 +1714,50 @@
     "setup": "LongTails.Setups.FeasibleHessianGapComposite",
     "statement": "OracleTemplate.Convergence LongTails.Setups.FeasibleHessianGapComposite.spec\n  OracleTemplate.FeasibleGapAccelerated.budget",
     "theorem": "OracleTemplate.FeasibleGapAccelerated.result"
+  },
+  {
+    "budget": {
+      "latex": "2 \\cdot \\left\\lceil 1024 \\cdot d \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+      "value": "fun p => 2 * ⌈1024 * ↑p.d * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "2 \\cdot \\left\\lceil 1024 \\cdot d \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+        "value": "fun p => 2 * ⌈1024 * ↑p.d * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌉₊"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.DimensionAdaptiveMinty",
+    "namespace": "LongTails.Setups.FiniteDimensionalWeakMinty",
+    "setup": "LongTails.Setups.FiniteDimensionalWeakMinty",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.FiniteDimensionalWeakMinty.spec\n  LongTails.Theorems.DimensionAdaptiveMinty.budget",
+    "theorem": "LongTails.Theorems.DimensionAdaptiveMinty.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{d}{2^{22}} \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+      "value": "fun p => ⌊↑p.d / 2 ^ 22 * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{d}{2^{22}} \\cdot \\log\\left(1 + \\frac{\\left(L \\cdot R\\right)^{2}}{d \\cdot \\varepsilon^{2}}\\right) \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.FiniteDimensionalWeakMinty.spec.Params → ℕ",
+        "value": "fun p => ⌊↑p.d / 2 ^ 22 * Real.log (1 + (p.L * p.R) ^ 2 / (↑p.d * p.ε ^ 2))⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound",
+    "namespace": "LongTails.Setups.FiniteDimensionalWeakMinty",
+    "setup": "LongTails.Setups.FiniteDimensionalWeakMinty",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.FiniteDimensionalWeakMinty.spec\n  LongTails.Theorems.DimensionAdaptiveMintyLowerBound.budget",
+    "theorem": "LongTails.Theorems.DimensionAdaptiveMintyLowerBound.result"
   },
   {
     "budget": {
@@ -2054,6 +2265,28 @@
     "setup": "LongTails.Setups.GeneralizedAffineHessianVector",
     "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedAffineHessianVector.spec\n  OracleTemplate.HystereticAffineHessianTransport.budget",
     "theorem": "OracleTemplate.HystereticAffineHessianTransport.result"
+  },
+  {
+    "budget": {
+      "latex": "2 \\cdot \\left(1 + \\left\\lceil 32 \\cdot \\left(R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)\\right)^{2} \\right\\rceil_{+}\\right)",
+      "oracle": 0,
+      "type": "LongTails.Setups.GeneralizedLipschitzMinty.spec.Params → ℕ",
+      "value": "fun p => 2 * (1 + ⌈32 * (p.R * (p.L0 / p.ε + p.L1)) ^ 2⌉₊)"
+    },
+    "budgets": [
+      {
+        "latex": "2 \\cdot \\left(1 + \\left\\lceil 32 \\cdot \\left(R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)\\right)^{2} \\right\\rceil_{+}\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.GeneralizedLipschitzMinty.spec.Params → ℕ",
+        "value": "fun p => 2 * (1 + ⌈32 * (p.R * (p.L0 / p.ε + p.L1)) ^ 2⌉₊)"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.GeneralizedMintyExtragradient",
+    "namespace": "LongTails.Setups.GeneralizedLipschitzMinty",
+    "setup": "LongTails.Setups.GeneralizedLipschitzMinty",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.GeneralizedLipschitzMinty.spec\n  LongTails.Theorems.GeneralizedMintyExtragradient.budget",
+    "theorem": "LongTails.Theorems.GeneralizedMintyExtragradient.result"
   },
   {
     "budget": {
@@ -2627,6 +2860,28 @@
     "theorem": "OracleTemplate.RestartedScheduleGD.FractalChebyshevGdStationarity.result"
   },
   {
+    "budget": {
+      "latex": "\\left\\lceil 53 \\cdot \\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}} + 5 \\cdot \\log\\left(1 + \\log\\left(1 + \\frac{\\mu^{3}}{H^{2} \\cdot \\varepsilon}\\right)\\right) + 4 \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HessianLipschitzPL.spec.Params → ℕ",
+      "value": "fun p => ⌈53 * (p.H ^ 2 * p.Δ / p.μ ^ 3) ^ 4⁻¹ + 5 * Real.log (1 + Real.log (1 + p.μ ^ 3 / (p.H ^ 2 * p.ε))) + 4⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 53 \\cdot \\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}} + 5 \\cdot \\log\\left(1 + \\log\\left(1 + \\frac{\\mu^{3}}{H^{2} \\cdot \\varepsilon}\\right)\\right) + 4 \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HessianLipschitzPL.spec.Params → ℕ",
+        "value": "fun p => ⌈53 * (p.H ^ 2 * p.Δ / p.μ ^ 3) ^ 4⁻¹ + 5 * Real.log (1 + Real.log (1 + p.μ ^ 3 / (p.H ^ 2 * p.ε))) + 4⌉₊"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.HessianLipschitzPLCubicNewton",
+    "namespace": "LongTails.Setups.HessianLipschitzPL",
+    "setup": "LongTails.Setups.HessianLipschitzPL",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.HessianLipschitzPL.spec\n  LongTails.Theorems.HessianLipschitzPLCubicNewton.budget",
+    "theorem": "LongTails.Theorems.HessianLipschitzPLCubicNewton.result"
+  },
+  {
     "budget": null,
     "budgets": [
       {
@@ -2896,6 +3151,94 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lfloor \\frac{\\left(2 - \\rho\\right) \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{2^{27} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalEllSmoothNonconvex.spec.Params → ℕ",
+      "value": "fun p => ⌊(2 - p.ρ) * p.Δ * p.ℓ p.ε / (2 ^ 27 * p.ε ^ 2)⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\left(2 - \\rho\\right) \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{2^{27} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalEllSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌊(2 - p.ρ) * p.Δ * p.ℓ p.ε / (2 ^ 27 * p.ε ^ 2)⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.EllSmoothNonconvexLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalEllSmoothNonconvex",
+    "setup": "LongTails.Setups.HighDimensionalEllSmoothNonconvex",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalEllSmoothNonconvex.spec\n  LongTails.Theorems.EllSmoothNonconvexLowerBound.budget",
+    "theorem": "LongTails.Theorems.EllSmoothNonconvexLowerBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\left(\\frac{R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)}{1024}\\right)^{2} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalGeneralizedMinty.spec.Params → ℕ",
+      "value": "fun p => ⌊(p.R * (p.L0 / p.ε + p.L1) / 1024) ^ 2⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\left(\\frac{R \\cdot \\left(\\frac{L0}{\\varepsilon} + L1\\right)}{1024}\\right)^{2} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalGeneralizedMinty.spec.Params → ℕ",
+        "value": "fun p => ⌊(p.R * (p.L0 / p.ε + p.L1) / 1024) ^ 2⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.GeneralizedMintyLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalGeneralizedMinty",
+    "setup": "LongTails.Setups.HighDimensionalGeneralizedMinty",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalGeneralizedMinty.spec\n  LongTails.Theorems.GeneralizedMintyLowerBound.budget",
+    "theorem": "LongTails.Theorems.GeneralizedMintyLowerBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{\\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}}}{2^{39}} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalHessianLipschitzPL.spec.Params → ℕ",
+      "value": "fun q => ⌊(q.H ^ 2 * q.Δ / q.μ ^ 3) ^ 4⁻¹ / 2 ^ 39⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}}}{2^{39}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalHessianLipschitzPL.spec.Params → ℕ",
+        "value": "fun q => ⌊(q.H ^ 2 * q.Δ / q.μ ^ 3) ^ 4⁻¹ / 2 ^ 39⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.HessianLipschitzPLLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalHessianLipschitzPL",
+    "setup": "LongTails.Setups.HighDimensionalHessianLipschitzPL",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalHessianLipschitzPL.spec\n  LongTails.Theorems.HessianLipschitzPLLowerBound.budget",
+    "theorem": "LongTails.Theorems.HessianLipschitzPLLowerBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) + \\sigma^{2} \\cdot \\log\\left(\\frac{1}{\\delta} \\cdot \\frac{1}{4}\\right)}{2^{54} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalHighProbabilityStationarity.spec.Params → ℕ",
+      "value": "fun q => ⌊(q.L * q.Δ * (1 + q.σ ^ 2 / q.ε ^ 2) + q.σ ^ 2 * Real.log (q.δ⁻¹ * 4⁻¹)) / (2 ^ 54 * q.ε ^ 2)⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) + \\sigma^{2} \\cdot \\log\\left(\\frac{1}{\\delta} \\cdot \\frac{1}{4}\\right)}{2^{54} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalHighProbabilityStationarity.spec.Params → ℕ",
+        "value": "fun q => ⌊(q.L * q.Δ * (1 + q.σ ^ 2 / q.ε ^ 2) + q.σ ^ 2 * Real.log (q.δ⁻¹ * 4⁻¹)) / (2 ^ 54 * q.ε ^ 2)⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.HighProbabilityStationarityLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalHighProbabilityStationarity",
+    "setup": "LongTails.Setups.HighDimensionalHighProbabilityStationarity",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalHighProbabilityStationarity.spec\n  LongTails.Theorems.HighProbabilityStationarityLowerBound.budget",
+    "theorem": "LongTails.Theorems.HighProbabilityStationarityLowerBound.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lfloor \\frac{L \\cdot \\Delta \\cdot \\left(1 + \\frac{S^{2}}{\\varepsilon^{2}}\\right)}{2^{60} \\cdot \\varepsilon^{2}} \\right\\rfloor_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth.spec.Params → ℕ",
@@ -2915,6 +3258,50 @@
     "setup": "LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth",
     "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalSeparableNoiseLinfSmooth.spec\n  LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.budget",
     "theorem": "LongTails.Theorems.SeparableNoiseLinfSmoothLowerBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{\\left(\\frac{L}{\\mu}\\right)^{2} \\cdot \\left(1 + \\log\\left(\\frac{\\mu \\cdot D}{\\varepsilon}\\right)\\right)}{4608} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalSharpLipschitzConvex.spec.Params → ℕ",
+      "value": "fun p => ⌊(p.L / p.μ) ^ 2 * (1 + Real.log (p.μ * p.D / p.ε)) / 4608⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\left(\\frac{L}{\\mu}\\right)^{2} \\cdot \\left(1 + \\log\\left(\\frac{\\mu \\cdot D}{\\varepsilon}\\right)\\right)}{4608} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalSharpLipschitzConvex.spec.Params → ℕ",
+        "value": "fun p => ⌊(p.L / p.μ) ^ 2 * (1 + Real.log (p.μ * p.D / p.ε)) / 4608⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.SharpLipschitzConvexLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalSharpLipschitzConvex",
+    "setup": "LongTails.Setups.HighDimensionalSharpLipschitzConvex",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalSharpLipschitzConvex.spec\n  LongTails.Theorems.SharpLipschitzConvexLowerBound.budget",
+    "theorem": "LongTails.Theorems.SharpLipschitzConvexLowerBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{\\Delta \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\} \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right)}{2^{174} \\cdot \\varepsilon} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌊q.Δ * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)) * (1 + q.σ ^ 2 / q.ε ^ 2) / (2 ^ 174 * q.ε)⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\Delta \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\} \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right)}{2^{174} \\cdot \\varepsilon} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌊q.Δ * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)) * (1 + q.σ ^ 2 / q.ε ^ 2) / (2 ^ 174 * q.ε)⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex",
+    "setup": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex.spec\n  LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.budget",
+    "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.result"
   },
   {
     "budget": {
@@ -2981,6 +3368,50 @@
     "setup": "LongTails.Setups.HighDimensionalStrongQuasar",
     "statement": "OracleTemplate.Convergence LongTails.Setups.HighDimensionalStrongQuasar.spec\n  LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.budget",
     "theorem": "LongTails.Theorems.HighDimensionalStrongQuasarUpperBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lfloor \\frac{\\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}}{2^{15}} \\right\\rfloor_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighDimensionalWeakMintySecondOrder.spec.Params → ℕ",
+      "value": "fun q => ⌊min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2) / 2 ^ 15⌋₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lfloor \\frac{\\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}}{2^{15}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalWeakMintySecondOrder.spec.Params → ℕ",
+        "value": "fun q => ⌊min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2) / 2 ^ 15⌋₊"
+      }
+    ],
+    "kind": "lower",
+    "module": "LongTails.Theorems.SecondOrderWeakMintyLowerBound",
+    "namespace": "LongTails.Setups.HighDimensionalWeakMintySecondOrder",
+    "setup": "LongTails.Setups.HighDimensionalWeakMintySecondOrder",
+    "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalWeakMintySecondOrder.spec\n  LongTails.Theorems.SecondOrderWeakMintyLowerBound.budget",
+    "theorem": "LongTails.Theorems.SecondOrderWeakMintyLowerBound.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 2^{71} \\cdot \\left(\\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\log\\left(\\frac{16}{\\delta}\\right) \\cdot \\left(\\log\\left(2 + \\log\\left(\\frac{16}{\\delta}\\right)\\right)\\right)^{3}\\right) + \\frac{\\sqrt{L \\cdot \\Delta} \\cdot \\log\\left(\\frac{16}{\\delta}\\right)}{\\varepsilon}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.HighProbabilityStationarity.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈2 ^ 71 *\n      ((1 + q.σ ^ 2 / q.ε ^ 2) * (q.L * q.Δ / q.ε ^ 2 + Real.log (16 / q.δ) * Real.log (2 + Real.log (16 / q.δ)) ^ 3) +\n        √(q.L * q.Δ) * Real.log (16 / q.δ) / q.ε)⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 2^{71} \\cdot \\left(\\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right) \\cdot \\left(\\frac{L \\cdot \\Delta}{\\varepsilon^{2}} + \\log\\left(\\frac{16}{\\delta}\\right) \\cdot \\left(\\log\\left(2 + \\log\\left(\\frac{16}{\\delta}\\right)\\right)\\right)^{3}\\right) + \\frac{\\sqrt{L \\cdot \\Delta} \\cdot \\log\\left(\\frac{16}{\\delta}\\right)}{\\varepsilon}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighProbabilityStationarity.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈2 ^ 71 *\n      ((1 + q.σ ^ 2 / q.ε ^ 2) * (q.L * q.Δ / q.ε ^ 2 + Real.log (16 / q.δ) * Real.log (2 + Real.log (16 / q.δ)) ^ 3) +\n        √(q.L * q.Δ) * Real.log (16 / q.δ) / q.ε)⌉₊"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.HighProbabilityStationarityUpperBound",
+    "namespace": "LongTails.Setups.HighProbabilityStationarity",
+    "setup": "LongTails.Setups.HighProbabilityStationarity",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.HighProbabilityStationarity.spec\n  LongTails.Theorems.HighProbabilityStationarityUpperBound.budget",
+    "theorem": "LongTails.Theorems.HighProbabilityStationarityUpperBound.result"
   },
   {
     "budget": {
@@ -4546,6 +4977,28 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil \\frac{4 \\cdot L^{2}}{\\mu^{2}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{\\mu \\cdot D}{\\varepsilon} \\right\\rceil_{+}\\right) + 1\\right)",
+      "oracle": 0,
+      "type": "LongTails.Setups.SharpLipschitzConvex.spec.Params → ℕ",
+      "value": "fun p => ⌈4 * p.L ^ 2 / p.μ ^ 2⌉₊ * (Nat.clog 2 ⌈p.μ * p.D / p.ε⌉₊ + 1)"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil \\frac{4 \\cdot L^{2}}{\\mu^{2}} \\right\\rceil_{+} \\cdot \\left(\\operatorname{clog}_{2}\\left(\\left\\lceil \\frac{\\mu \\cdot D}{\\varepsilon} \\right\\rceil_{+}\\right) + 1\\right)",
+        "oracle": 0,
+        "type": "LongTails.Setups.SharpLipschitzConvex.spec.Params → ℕ",
+        "value": "fun p => ⌈4 * p.L ^ 2 / p.μ ^ 2⌉₊ * (Nat.clog 2 ⌈p.μ * p.D / p.ε⌉₊ + 1)"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient",
+    "namespace": "LongTails.Setups.SharpLipschitzConvex",
+    "setup": "LongTails.Setups.SharpLipschitzConvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.SharpLipschitzConvex.spec\n  LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.budget",
+    "theorem": "LongTails.Theorems.SharpLipschitzConvexRestartedSubgradient.result"
+  },
+  {
+    "budget": {
       "latex": "\\left\\lceil 32768 \\cdot \\left(33 \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)^{16} \\cdot \\left(1 + \\log\\left(33 \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)\\right) \\cdot \\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)^{\\frac{1}{2} + \\frac{\\log\\left(16384 \\cdot \\left(1 + \\log\\left(33 \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)\\right)\\right)}{32 \\cdot \\log\\left(32 \\cdot \\left(1 + \\log\\left(2 + \\frac{L \\cdot R^{2}}{\\varepsilon}\\right)\\right)\\right)}} \\right\\rceil_{+}",
       "oracle": 0,
       "type": "LongTails.Setups.SharpRelativeErrorSmoothConvex.spec.Params → ℕ",
@@ -5524,6 +5977,28 @@
   },
   {
     "budget": {
+      "latex": "\\left\\lceil 100000 \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + \\frac{L_1 \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot \\sigma^{2}}{\\varepsilon^{3}} \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+      "value": "fun q =>\n  ⌈100000 *\n      (1 + q.σ ^ 2 / q.ε ^ 2 + q.L₁ * q.Δ / q.ε ^ 2 +\n        q.Δ * q.σ ^ 2 / q.ε ^ 3 * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 100000 \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}} + \\frac{L_1 \\cdot \\Delta}{\\varepsilon^{2}} + \\frac{\\Delta \\cdot \\sigma^{2}}{\\varepsilon^{3}} \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌈100000 *\n      (1 + q.σ ^ 2 / q.ε ^ 2 + q.L₁ * q.Δ / q.ε ^ 2 +\n        q.Δ * q.σ ^ 2 / q.ε ^ 3 * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)))⌉₊"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound",
+    "namespace": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex",
+    "setup": "LongTails.Setups.StochasticThirdOrderSmoothNonconvex",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.StochasticThirdOrderSmoothNonconvex.spec\n  LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.budget",
+    "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticUpperBound.result"
+  },
+  {
+    "budget": {
       "latex": "4 \\cdot \\left\\lceil \\frac{2^{18} \\cdot L^{2}}{\\mu x \\cdot \\mu y} \\cdot \\left(3 + \\frac{2^{24} \\cdot L \\cdot \\sigma^{2}}{\\mu x \\cdot \\mu y \\cdot \\varepsilon}\\right) \\cdot \\left(2 + \\log\\left(1 + \\frac{\\Delta}{\\varepsilon}\\right)\\right) \\right\\rceil_{+} + 2",
       "oracle": 0,
       "type": "LongTails.Setups.StochasticTwoSidedPL.spec.Params → ℕ",
@@ -6119,6 +6594,28 @@
     "setup": "LongTails.Setups.WeakMintySecondOrder",
     "statement": "OracleTemplate.Convergence LongTails.Setups.WeakMintySecondOrder.spec\n  OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.budget",
     "theorem": "OracleTemplate.WeakMintyHybrid.FullRangeSecondOrderWeakMinty.result"
+  },
+  {
+    "budget": {
+      "latex": "\\left\\lceil 2^{27} \\cdot \\left(1 + \\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}\\right) \\right\\rceil_{+}",
+      "oracle": 0,
+      "type": "LongTails.Setups.WeakMintySecondOrderExpected.spec.Params → ℕ",
+      "value": "fun q => ⌈2 ^ 27 * (1 + min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2))⌉₊"
+    },
+    "budgets": [
+      {
+        "latex": "\\left\\lceil 2^{27} \\cdot \\left(1 + \\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.WeakMintySecondOrderExpected.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 27 * (1 + min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2))⌉₊"
+      }
+    ],
+    "kind": "upper",
+    "module": "LongTails.Theorems.SecondOrderWeakMintyUpperBound",
+    "namespace": "LongTails.Setups.WeakMintySecondOrderExpected",
+    "setup": "LongTails.Setups.WeakMintySecondOrderExpected",
+    "statement": "OracleTemplate.Convergence LongTails.Setups.WeakMintySecondOrderExpected.spec\n  OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.budget",
+    "theorem": "OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.result"
   },
   {
     "budget": {

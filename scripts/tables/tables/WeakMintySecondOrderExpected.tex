@@ -1,0 +1,35 @@
+\begin{table}[tp]
+\centering
+\caption{Residual complexity for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/WeakMintySecondOrderExpected.lean}{second-order weak-Minty problems}.}\label{tab:WeakMintySecondOrderExpected}
+\parbox{\linewidth}{\footnotesize On a finite-dimensional real inner-product space, $F$ is $L_1$-Lipschitz and its Jacobian is $L_2$-Lipschitz, with $L_1,L_2>0$. A root $x^\star$ satisfies $\|x_0-x^\star\|\le R$ and $\langle F(x),x-x^\star\rangle\ge-(\rho/2)\|F(x)\|^2$ for all $x$, with $\rho\ge0$ and $\rho L_1\le1$. Queries return exact values or full Jacobians. The target is an integrable residual with $\int\|F(x_{\rm out}(\omega))\|\,dP(\omega)\le\varepsilon$, where $P$ is the execution law and $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/SecondOrderWeakMintyUpperBound.lean}{Second\allowbreak{}Order\allowbreak{}Weak\allowbreak{}Minty\allowbreak{}Upper\allowbreak{}Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/SecondOrderWeakMintyUpperBound.md}{(review)}
+& Sufficient budget $\mathcal{O}(1+\min\{L_2R^2/\varepsilon,L_1^2R^2/\varepsilon^2\})$ in combined calls. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{wmsoPethick2025}, Cor.~6.3
+& Sufficient budget $\mathcal{O}(1+L_1^2R^2/\varepsilon^2)$ in value calls on $A=0$, $\rho L_1\le1$, at squared tolerance $\varepsilon^2$.
+& \textbf{(1)}: Uses the $L_2R^2/\varepsilon$ term for $\varepsilon<\tau$, reducing the leading term by $\tau/\varepsilon$. Matches the rate for $\varepsilon\ge\tau$.
+& \textbf{(1)}: Needs Lipschitz Jacobians, full-Jacobian calls and an exact cubic-subproblem root. \textbf{(2)} also handles $\rho L_1<2$ and maximally monotone $A$. \\
+\midrule
+\textbf{(3)} Full\allowbreak{}Range\allowbreak{}Second\allowbreak{}Order\allowbreak{}Weak\allowbreak{}Minty \citep{wmExpectedFullRange85dcf517}
+& Sufficient budget $\mathcal{O}\bigl((1+L_2R^2/\varepsilon)(1+\log(1/\delta))/\delta^5\bigr)$ in combined calls for $\rho L_1<2$.
+& \textbf{(1)}: On $\delta\ge1/2$, replaces $L_2R^2/\varepsilon$ by $L_1^2R^2/\varepsilon^2$ for $\varepsilon>\tau$, a leading-term factor $\varepsilon/\tau$. Matches the rate otherwise. One hybrid attains the rates of \textbf{(2)} and \textbf{(3)} without an explicit switch.
+& \textbf{(1)}: Narrows $\rho L_1$ to $\le1$. Its stated expected-residual criterion is weaker than the almost-sure criterion of \textbf{(3)}. \\
+\midrule
+\textbf{(4)} Second-order HOEG+ \citep{wmsoVyas2023v1}, Thm.~B.1 with $p=q=2$
+& Sufficient budget $\mathcal{O}(1+L_2R^2/\varepsilon)$ in combined calls with fixed slack in $\rho\sqrt{D L_2/2}<15/16$.
+& \textbf{(1)}: Drops trajectory smallness, as in \textbf{(3)}. On common instances, replaces $L_2R^2/\varepsilon$ by $L_1^2R^2/\varepsilon^2$ for $\varepsilon>\tau$ and matches the rate otherwise.
+& \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $\tau=L_1^2/L_2$, $\delta=1-\rho L_1/2$, $A$ is the additive operator in \textbf{(2)}, and $D=\max_k L_1\|z_k-x^\star\|$ is the trajectory scale in \textbf{(4)}. Combined calls count each value or full-Jacobian query once.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

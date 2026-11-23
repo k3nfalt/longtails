@@ -1,0 +1,109 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalSharpLipschitzConvex",
+  "searched_at": "2026-11-23T17:46:01.462799+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\left(\\frac{L}{\\mu}\\right)^{2} \\cdot \\left(1 + \\log\\left(\\frac{\\mu \\cdot D}{\\varepsilon}\\right)\\right)}{4608} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalSharpLipschitzConvex.spec.Params → ℕ",
+        "value": "fun p => ⌊(p.L / p.μ) ^ 2 * (1 + Real.log (p.μ * p.D / p.ε)) / 4608⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\left(\\frac{L}{\\mu}\\right)^{2} \\cdot \\left(1 + \\log\\left(\\frac{\\mu \\cdot D}{\\varepsilon}\\right)\\right)}{4608} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalSharpLipschitzConvex.spec.Params → ℕ",
+          "value": "fun p => ⌊(p.L / p.μ) ^ 2 * (1 + Real.log (p.μ * p.D / p.ε)) / 4608⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.SharpLipschitzConvexLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalSharpLipschitzConvex",
+      "setup": "LongTails.Setups.HighDimensionalSharpLipschitzConvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalSharpLipschitzConvex.spec\n  LongTails.Theorems.SharpLipschitzConvexLowerBound.budget",
+      "theorem": "LongTails.Theorems.SharpLipschitzConvexLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SharpLipschitzConvexLowerBound",
+      "theorem": "LongTails.Theorems.SharpLipschitzConvexLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "convex",
+        "details": "Unconstrained minimization of a globally convex function f on Euclidean ℝᵈ. The objective is globally L-Lipschitz and attains its minimum.",
+        "evidence": "LongTails/Setups/HighDimensionalSharpLipschitzConvex.lean, spec.Instance and spec.admissible. LongTails/Setups/SharpLipschitzConvex.lean, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "function_value",
+        "details": "One query at any x ∈ ℝᵈ returns the exact value f(x) together with one subgradient. The pair costs one oracle call.",
+        "evidence": "LongTails/Setups/HighDimensionalSharpLipschitzConvex.lean, spec.Query and spec.Reply. LongTails/Setups/SharpLipschitzConvex.lean, IsSubgradientOracle."
+      },
+      {
+        "label": "other",
+        "details": "The vector reply is a fixed selection g(x) ∈ ∂f(x), satisfying f(y) ≥ f(x) + ⟨g(x), y − x⟩ for every y. Its value depends only on x, for every query history and oracle seed.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, IsSubgradientOracle and spec.admissible."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "sharpness",
+        "details": "Writing X⋆ = argmin f and f⋆ = min f, global linear growth holds: f(x) − f⋆ ≥ μ dist(x, X⋆) for every x. The witnessing minimizer may depend on x.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.admissible, the condition ∀ x, ∃ z, IsMinOn f Set.univ z ∧ p.μ * ‖x - z‖ ≤ f x - f z."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The Euclidean dimension satisfies d ≥ 2¹⁰ [1 + (L/μ)²(1 + log(μD/ε))]⁶ (LD/ε)², with natural logarithm.",
+        "evidence": "LongTails/Setups/HighDimensionalSharpLipschitzConvex.lean, spec.Instance and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The algorithm knows d, L, μ, D, ε, and x₀. Some minimizer lies within distance D of x₀. The regime is μ > 0, L ≥ 96μ, D > 0, and 0 < ε ≤ μD. The objective, a minimizer, and the minimum value are absent from the public input.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, Params and spec.admissible. LongTails/Setups/HighDimensionalSharpLipschitzConvex.lean, spec.Public, spec.publicInput and spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "Accuracy concerns the objective gap f(x̂) − f⋆ at the returned point x̂ ∈ ℝᵈ. The algorithm may return a point of its choice after using its oracle budget.",
+        "evidence": "LongTails/Setups/HighDimensionalSharpLipschitzConvex.lean, spec.Output and spec.successful. LongTails/Setups/SharpLipschitzConvex.lean, spec.successful. LongTails/Template.lean, Algorithm.output and executeWithTrace."
+      },
+      {
+        "label": "expected",
+        "details": "The returned objective gap must be integrable and satisfy E[f(x̂) − f⋆] ≤ ε under the product law of the algorithm and oracle seeds. Algorithms may randomize, and the oracle reply at each fixed query is seed-independent.",
+        "evidence": "LongTails/Setups/SharpLipschitzConvex.lean, spec.successful and IsSubgradientOracle. LongTails/Template.lean, Algorithm.law and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup specializes sharp Lipschitz convex minimization to an explicit high-dimensional regime in which the required dimension grows jointly with L/μ and the requested accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.SharpLipschitzConvexLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SharpLipschitzConvexLowerBound",
+          "theorem": "LongTails.Theorems.SharpLipschitzConvexLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

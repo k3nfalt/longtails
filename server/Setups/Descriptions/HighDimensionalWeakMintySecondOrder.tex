@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Weak Minty Root Finding}
+We seek an approximate zero of a Lipschitz map $F:\mathbb{R}^d\to\mathbb{R}^d$ with a Lipschitz Jacobian, where $d$ is the dimension. A given starting point lies within a prescribed radius of a zero $x^\star$ satisfying the weak Minty inequality $\langle F(x),x-x^\star\rangle\geq-(\rho/2)\|F(x)\|^2$ at every point $x$, with $\rho\geq0$. At each query point, the oracle returns either the exact value of $F$ or its exact Jacobian, as requested. For a tolerance $\varepsilon>0$, the goal is an output $\bar{x}\in\mathbb{R}^d$ with integrable residual norm satisfying $\mathbb{E}\|F(\bar{x})\|\leq\varepsilon$ over the algorithm's randomness.
+
+In residual form, the problem is
+\[
+\min_{x\in\mathbb{R}^d}\|F(x)\|.
+\]
+We use the Euclidean norm and inner product, and $\|\cdot\|_{\mathrm{op}}$ denotes the induced operator norm. The algorithm receives the dimension $d\in\mathbb{N}$, starting point $x^0\in\mathbb{R}^d$, Lipschitz bounds $L_1,L_2>0$, weak Minty parameter $\rho\in[0,1/L_1]$, radius $R>0$, and tolerance $\varepsilon$. These parameters lie in the regime
+\[
+M=\min\left\{\frac{L_2R^2}{\varepsilon},\frac{L_1^2R^2}{\varepsilon^2}\right\},
+\qquad 2^{15}\leq M,
+\qquad M^3\leq d.
+\]
+
+Our assumptions:
+\begin{assumption}[Lipschitz map and Jacobian]
+The map $F$ is Fr\'echet differentiable everywhere. Its Jacobian $J(x)$ is a linear map from $\mathbb{R}^d$ to $\mathbb{R}^d$. For all $x,y\in\mathbb{R}^d$,
+\[
+\begin{aligned}
+\|F(x)-F(y)\| &\leq L_1\|x-y\|,\\
+\|J(x)-J(y)\|_{\mathrm{op}} &\leq L_2\|x-y\|.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Weak Minty zero and initial distance]
+There exists $x^\star\in\mathbb{R}^d$ with $F(x^\star)=0$ and $\|x^0-x^\star\|\leq R$ such that, for every $x\in\mathbb{R}^d$,
+\[
+\langle F(x),x-x^\star\rangle\geq-\frac{\rho}{2}\|F(x)\|^2.
+\]
+\end{assumption}
+
+At any $x\in\mathbb{R}^d$, a value query returns $(F(x),0)$ and a Jacobian query returns $(0,J(x))$. Both query types count toward a single call budget. After the allotted calls, the output $\bar{x}\in\mathbb{R}^d$ must have $P$-integrable residual norm and satisfy
+\[
+\mathbb{E}_{P}\bigl[\|F(\bar{x})\|\bigr]\leq\varepsilon,
+\]
+where $P$ is the law of the algorithm's randomness.
+\end{document}

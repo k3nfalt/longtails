@@ -1,0 +1,47 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{High-Dimensional Stationarity with High Probability}
+We seek an approximately stationary point of a possibly nonconvex function $f:\mathbb{R}^d\to\mathbb{R}$ in high dimension $d$. Its gradient is $L$-Lipschitz for $L>0$, and the objective value at a given starting point $x^0$ is within $\Delta$ of the finite infimum. At each query, the oracle uses a fresh independent sample to return an unbiased gradient estimate with mean squared error at most $\sigma^2$, where $\sigma\geq 0$. Given a tolerance $\varepsilon>0$ and a failure probability $0<\delta\leq 1/4$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ satisfying $\|\nabla f(\bar{x})\|\leq\varepsilon$ with probability at least $1-\delta$.
+
+Write $f_\star$ for the value of the optimization problem
+\[
+\inf_{x\in\mathbb{R}^d} f(x),
+\]
+and use the Euclidean norm throughout. The algorithm receives $d$, $L$, $\sigma$, $\Delta$, $\varepsilon$, $\delta$, and $x^0$. The gap bound $\Delta$ and the dimension $d\in\mathbb{N}$ lie in the regime
+\[
+\begin{aligned}
+L\Delta &\geq 2^{54}\varepsilon^2,\\
+d &\geq 2^{40}\left(1+\frac{L\Delta}{\varepsilon^2}\left(1+\frac{\sigma^2}{\varepsilon^2}\right)\right)^4.
+\end{aligned}
+\]
+
+Our assumptions:
+\begin{assumption}[Smoothness and initial gap]
+The function $f$ is differentiable on $\mathbb{R}^d$, and for all $x,y\in\mathbb{R}^d$,
+\[
+\|\nabla f(x)-\nabla f(y)\|\leq L\|x-y\|.
+\]
+Its infimum $f_\star$ is finite and satisfies $f(x^0)-f_\star\leq\Delta$.
+\end{assumption}
+
+\begin{assumption}[Stochastic gradient oracle]
+On call $k$ at any $x\in\mathbb{R}^d$, the oracle returns $g(x,\xi_k)$, where $g:\mathbb{R}^d\times\mathbb{R}\to\mathbb{R}^d$ is jointly measurable. The real-valued samples $(\xi_k)_{k\geq 0}$ are independent with common law $\nu$, and the sequence is independent of the algorithm's randomness. For each $x\in\mathbb{R}^d$ and $\xi\sim\nu$, the vector $g(x,\xi)$ is Bochner integrable, the squared error $\|g(x,\xi)-\nabla f(x)\|^2$ is integrable, and
+\[
+\begin{aligned}
+\mathbb{E}_{\xi\sim\nu}[g(x,\xi)] &= \nabla f(x),\\
+\mathbb{E}_{\xi\sim\nu}\bigl[\|g(x,\xi)-\nabla f(x)\|^2\bigr] &\leq \sigma^2.
+\end{aligned}
+\]
+\end{assumption}
+
+After the allotted oracle calls, the output $\bar{x}$ must be measurable and satisfy
+\[
+P\bigl(\|\nabla f(\bar{x})\|\leq\varepsilon\bigr)\geq 1-\delta,
+\]
+where $P$ is the joint law of the algorithm's randomness and the oracle samples.
+\end{document}

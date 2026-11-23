@@ -1,0 +1,35 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalStochasticThirdOrderSmoothNonconvex.lean}{high-dimensional stochastic third-order smooth nonconvex optimization}.}\label{tab:HighDimensionalStochasticThirdOrderSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $f\in C^3$ has $L_j$-Lipschitz $\nabla^j f$ for $j=1,2,3$, with $L_j>0$ and $f(x_0)-\inf f\le\Delta$. Each query returns one jointly measurable, unbiased gradient sample with variance at most $\sigma^2$, using fresh IID real seeds. For $\sigma\ge0$ and $\varepsilon>0$, success requires a measurable output $\widehat x$ with $\mathbb E\|\nabla f(\widehat x)\|\le\varepsilon$. In \textbf{(1)}, $A\ge 2^{70}$ and $d\ge 2^{140}(1+B)^4$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ThirdOrderSmoothStochasticLowerBound.lean}{Third\allowbreak{}Order\allowbreak{}Smooth\allowbreak{}Stochastic\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ThirdOrderSmoothStochasticLowerBound.md}{(review)}. Lower bound.
+& $\Omega(B)$ gradient calls, with necessary budget $1+\lfloor B/2^{174}\rfloor$. & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{hdThirdArjevaniCOLT2020}, Thm.~3 (arXiv v1). Lower bound for zero-respecting methods, $p=3$ with only stochastic gradients.
+& $\Omega(A\sigma^2/\varepsilon^2)$ calls for $\varepsilon\le c\sigma$ and constant-probability stationarity.
+& \textbf{(1)}: Machine-checked extension to arbitrary randomized queries, anticipated in footnote~3. Matches the rate at $\varepsilon\le c\sigma$ up to accuracy rescaling. Also covers $\sigma<\varepsilon$.
+& \textbf{(1)}: Quartic dimension requirement versus a $\Theta(A)$ construction, and a small leading constant. \textbf{(2)} also treats finite higher-derivative variances and general $p$. \\
+\midrule
+\textbf{(3)} \citep{hnnlArjevani2023V2}, Thm.~3, (23), $K=1$. Lower bound with gradient Lipschitzness alone, without prescribed $L_2,L_3$.
+& $\Omega(\Delta L_1\sigma^2/\varepsilon^4)$ calls for $\sigma>0$, $\varepsilon\le c\sqrt{\Delta L_1}$. Each call gives a value and stochastic gradient.
+& \textbf{(1)}: Hardness with prescribed $L_2,L_3$. Same rate expression when $L_1/\varepsilon$ attains the minimum and $\varepsilon\le c\sigma$. The bounds are otherwise incomparable on the smoother class.
+& \textbf{(1)}: Larger dimension requirement in the matching-rate regime. \textbf{(3)} uses $\widetilde{\mathcal{O}}(\Delta^2 L_1^2\sigma^2/\varepsilon^6)$ dimensions. \\
+\midrule
+\textbf{(4)} \citep{hdThirdCarmon2021II}, Thm.~2, $p=3$. Lower bound for deterministic first-order methods at $\sigma=0$.
+& $\Omega\!\left(\frac{\Delta\min\{L_1^{1/5}L_2^{2/5},L_1^{2/5}L_3^{1/5}\}}{\varepsilon^{8/5}}\right)$ exact value--gradient calls. Requires $\varepsilon\le\min\{L_1^2/L_2,\sqrt{L_1^3/L_3}\}$.
+& \textbf{(1)}: Covers randomized queries.
+& \textbf{(1)}: At $\sigma=0$, for fixed positive smoothness constants and gap as $\varepsilon\to0$, the necessary budget scales as $\varepsilon^{-4/3}$ versus $\varepsilon^{-8/5}$ for deterministic methods in \textbf{(4)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=(\Delta/\varepsilon)\min\{L_1/\varepsilon,\sqrt{L_2/\varepsilon},(L_3/\varepsilon)^{1/3}\}$, $B=A(1+\sigma^2/\varepsilon^2)$, and $c>0$ denotes a source-specific universal constant. $\widetilde{\mathcal{O}}$ suppresses logarithmic factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

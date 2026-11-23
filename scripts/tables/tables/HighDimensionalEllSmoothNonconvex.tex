@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalEllSmoothNonconvex.lean}{high-dimensional $\ell$-smooth nonconvex optimization}.}\label{tab:HighDimensionalEllSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize The objective $f:\mathbb R^d\to\mathbb R$ is twice differentiable with $f(x^0)-\inf f\le\Delta$ and $\|\nabla^2 f(x)\|\le\ell(\|\nabla f(x)\|)$. The profile $\ell$ is nondecreasing on $[0,\infty)$, $\ell(0)>0$, and $\ell(u)/u^\rho$ is nonincreasing for $u>0$, with $0\le\rho<2$. For $\varepsilon>0$, assume $N\ge1$ and $d\ge 2^{56}(N+1)^6(\ell(\varepsilon)/\ell(0))^4$. Randomized algorithms know the setup parameters and can query exact $(f,\nabla f)$ anywhere. The target is $\mathbb E\|\nabla f(\hat x)\|\le\varepsilon$ over the algorithm's seed, with measurable output and integrable gradient norm.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/EllSmoothNonconvexLowerBound.lean}{Ell\allowbreak{}Smooth\allowbreak{}Nonconvex\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/EllSmoothNonconvexLowerBound.md}{(review)}
+& Necessary budget $\Omega\!\left((2-\rho)\dfrac{\Delta\ell(\varepsilon)}{\varepsilon^2}\right)$
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{hdellLiangLuo2026v2}, Thm.~4.5, $\sigma=0$.\newline Derived bound via Young's inequality for $1<\rho<2$.
+& $\Omega\!\left(\dfrac{L_0\Delta}{\varepsilon^2}+\dfrac{L'_1\Delta}{\varepsilon}\right)$ gradient calls. Local gradient-difference condition with intercept $\asymp L_0$, slope $\asymp L'_1$. Requires $\varepsilon\lesssim\sqrt{L_0\Delta}+L'_1\Delta$.
+& \textbf{(1)}: For $1<\rho<2$ and $r\ge1$, the necessary-budget expressions differ by a factor of order $(2-\rho)r^{(\rho-1)/\rho}$. At $\rho=3/2$, $r=10^6$, they are $\Omega(10^6L_0\Delta/\varepsilon^2)$ and $\Omega(10^4L_0\Delta/\varepsilon^2)$, respectively. Applies even with exact values.
+& \textbf{(1)}: Factor $2-\rho$ degrades near $2$. More restrictive dimension requirement in the gain regime, with sixth-power dependence on $N$. \\
+\midrule
+\textbf{(3)} \citep{sncCarmon2020v3}, Thm.~2, $p=1$.\newline Special case: globally $L_0$-Lipschitz gradient.
+& $\Omega(L_0\Delta/\varepsilon^2)$ all-derivative oracle calls. Constant-probability failure implies expected-norm failure after constant rescaling of $\varepsilon$.
+& \textbf{(1)}: Extends to gradient-dependent curvature. On the power profile the necessary-budget factor is of order $(2-\rho)(1+r)$, giving a gain when this factor is large. Matches the smooth rate at $\rho=0$.
+& \textbf{(1)}: Covers only value and gradient access. On constant profiles the dimension requirement grows as $(N+1)^6$ versus quadratic up to a logarithm in $L_0\Delta/\varepsilon^2$. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $N=\lfloor(2-\rho)\Delta\ell(\varepsilon)/(2^{27}\varepsilon^2)\rfloor$. For the power profile $\ell(u)=L_0+L_\rho u^\rho$, $L_0=\ell(0)$ for $\rho>0$, $r=L_\rho\varepsilon^\rho/L_0$, and $L'_1=L_\rho^{1/\rho}L_0^{(\rho-1)/\rho}$. In the globally smooth case $L_0=\ell(0)$. The symbols $\lesssim$ and $\asymp$ suppress universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

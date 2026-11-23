@@ -1,0 +1,47 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\begin{document}
+\section*{Stationarity in $\ell$-Smooth Nonconvex Minimization}
+We seek an approximately stationary point of a possibly nonconvex, twice differentiable function $f:\mathbb{R}^d\to\mathbb{R}$ in Euclidean dimension $d\geq 0$. The Hessian operator norm is bounded by $\ell(\|\nabla f(x)\|)$ at each point $x$, where $\ell:\mathbb{R}\to\mathbb{R}$ is nondecreasing on nonnegative arguments, positive on positive arguments, and grows at most quadratically under scaling. The given starting point $x^0\in\mathbb{R}^d$ has objective gap at most $\Delta\geq 0$ above the infimum. The oracle returns $(f(x),\nabla f(x))$ at $x$. For tolerance $\varepsilon>0$, the goal is a measurable output $\bar{x}\in\mathbb{R}^d$ satisfying $\mathbb{E}[\|\nabla f(\bar{x})\|]\leq\varepsilon$ over the algorithm's randomness.
+
+The underlying optimization problem is
+\[
+\inf_{x\in\mathbb{R}^d} f(x).
+\]
+The algorithm receives the integer dimension $d$, the function $\ell$, its growth exponent $\rho\in[0,2]$, the gap bound $\Delta$, the tolerance $\varepsilon$, and the starting point $x^0$. We use the Euclidean norm $\|\cdot\|$ and its induced operator norm $\|\cdot\|_{\mathrm{op}}$.
+
+Our assumptions:
+\begin{assumption}[Growth of the smoothness function]
+The function $\ell$ satisfies
+\[
+\begin{aligned}
+\ell(u)&\leq\ell(v) &&(0\leq u\leq v),\\
+\ell(v)u^\rho&\leq\ell(u)v^\rho &&(0<u\leq v),\\
+\ell(u)&>0 &&(u>0).
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{assumption}[Gradient-dependent curvature]
+The function $f$ and its gradient are Fr\'echet differentiable throughout $\mathbb{R}^d$, and the Hessian satisfies
+\[
+\|\nabla^2 f(x)\|_{\mathrm{op}}\leq\ell(\|\nabla f(x)\|),\qquad x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+\begin{assumption}[Initial objective gap]
+The starting point satisfies
+\[
+f(x^0)-f(x)\leq\Delta,\qquad x\in\mathbb{R}^d.
+\]
+\end{assumption}
+
+Queries may be made anywhere in $\mathbb{R}^d$. After the allotted oracle calls, the output $\bar{x}$ must be measurable and its gradient norm integrable under $P$, the law of the algorithm's randomness. The accuracy criterion is
+\[
+\mathbb{E}_P\bigl[\|\nabla f(\bar{x})\|\bigr]\leq\varepsilon.
+\]
+\end{document}

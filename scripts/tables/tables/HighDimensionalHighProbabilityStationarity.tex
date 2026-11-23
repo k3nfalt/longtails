@@ -1,0 +1,28 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalHighProbabilityStationarity.lean}{high-dimensional high-probability stationarity}}\label{tab:HighDimensionalHighProbabilityStationarity}
+\parbox{\linewidth}{\footnotesize
+Let $f\colon\mathbb R^d\to\mathbb R$ have an $L$-Lipschitz gradient and $f(x_0)-\inf f\le\Delta$, with $L>0$ and $\varepsilon>0$. The jointly measurable stochastic gradient uses IID real seeds, is unbiased, and has variance at most $\sigma^2$ ($\sigma\ge0$). The target for a measurable output $\hat x$ is $\Pr(\|\nabla f(\hat x)\|\le\varepsilon)\ge1-\delta$. The setup requires $0<\delta\le1/4$, $L\Delta\ge 2^{54}\varepsilon^2$, and $d\ge 2^{40}(1+B)^4$.}
+\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HighProbabilityStationarityLowerBound.lean}{High\allowbreak{}Probability\allowbreak{}Stationarity\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HighProbabilityStationarityLowerBound.md}{(review)}
+& Lower bound: $\Omega\bigl(B+\tfrac{\sigma^2}{\varepsilon^2}\ell\bigr)$ stochastic gradient calls
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} Derived bound \citep{hnnlArjevani2023V2,sncCarmon2020v3}, Thm.~3, Eq.~(23) ($K=1$), and Thm.~2 ($p=1$), respectively
+& Lower bound: $\Omega(B)$ calls at $\delta<1/2$, $\varepsilon\le c\sqrt{L\Delta}$. The probability bounds in the proofs give the common criterion. The noiseless term holds even with values and all derivatives, and the noisy term with values and stochastic gradients.
+& \textbf{(1)}: Adds $\sigma^2\ell/\varepsilon^2$ to the necessary budget. It exceeds $B$ for $\sigma>0$ and $\ell>L\Delta/\varepsilon^2+L\Delta/\sigma^2$. At $\sigma=\varepsilon$, this means $\delta<\tfrac14 e^{-2L\Delta/\varepsilon^2}$. Formalizes the probability lower bound for arbitrary randomized algorithms.
+& \textbf{(1)}: Requires $\delta\le1/4$ and a larger dimension threshold. In \textbf{(2)}, dimension $\widetilde{\mathcal{O}}((L\Delta/\varepsilon^2)^2(1+\sigma^2/\varepsilon^2))$ suffices. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $B=\frac{L\Delta}{\varepsilon^2}(1+\frac{\sigma^2}{\varepsilon^2})$, $\ell=\log(1/(4\delta))$, $c>0$ is a universal constant, and $\widetilde{\mathcal{O}}$ suppresses logarithmic factors.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,120 @@
+{
+  "setup": "LongTails.Setups.BroxGeneralNormConstrainedPL",
+  "searched_at": "2026-11-23T17:44:18.584614+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": null,
+      "budgets": [
+        {
+          "latex": "\\begin{aligned} &K \\\\ &\\text{where}\\quad K = \\left\\lfloor \\log_{4}\\left(1 + \\frac{6 \\cdot \\Delta}{L \\cdot r^{2}}\\right) \\right\\rfloor_{+} + \\left\\lceil \\log_{1 + \\frac{\\mu}{25 \\cdot L}}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\end{aligned}",
+          "oracle": 0,
+          "type": "LongTails.Setups.BroxGeneralNormConstrainedPL.spec.Params → ℕ",
+          "value": "fun p =>\n  have K := ⌊Real.logb 4 (1 + 6 * p.Δ / (p.L * p.r ^ 2))⌋₊ + ⌈Real.logb (1 + p.μ / (25 * p.L)) (p.Δ / p.ε)⌉₊;\n  K"
+        },
+        {
+          "latex": "\\begin{aligned} &2 \\cdot K + \\left\\lceil \\log_{4}\\left(\\frac{r^{2} \\cdot \\left(\\frac{8 \\cdot L^{2}}{\\mu} + 6 \\cdot L\\right)}{\\varepsilon}\\right) \\right\\rceil_{+} \\\\ &\\text{where}\\quad K = \\left\\lfloor \\log_{4}\\left(1 + \\frac{6 \\cdot \\Delta}{L \\cdot r^{2}}\\right) \\right\\rfloor_{+} + \\left\\lceil \\log_{1 + \\frac{\\mu}{25 \\cdot L}}\\left(\\frac{\\Delta}{\\varepsilon}\\right) \\right\\rceil_{+}\\end{aligned}",
+          "oracle": 1,
+          "type": "LongTails.Setups.BroxGeneralNormConstrainedPL.spec.Params → ℕ",
+          "value": "fun p =>\n  have K := ⌊Real.logb 4 (1 + 6 * p.Δ / (p.L * p.r ^ 2))⌋₊ + ⌈Real.logb (1 + p.μ / (25 * p.L)) (p.Δ / p.ε)⌉₊;\n  2 * K + ⌈Real.logb 4 (p.r ^ 2 * (8 * p.L ^ 2 / p.μ + 6 * p.L) / p.ε)⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.WarmHalvingBroxGeneralNorm",
+      "namespace": "LongTails.Setups.BroxGeneralNormConstrainedPL",
+      "setup": "LongTails.Setups.BroxGeneralNormConstrainedPL",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.BroxGeneralNormConstrainedPL.spec OracleTemplate.WarmHalvingBrox.budget",
+      "theorem": "OracleTemplate.WarmHalvingBrox.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.WarmHalvingBroxGeneralNorm",
+      "theorem": "OracleTemplate.WarmHalvingBrox.result",
+      "references": "- Peter Richtárik and Xun Qian. [Broximal Gradient Descent in General Norms: Convergence without Fejér Monotonicity](https://arxiv.org/abs/2611.24645v1). 2026 (arXiv v1). Complexity: warm-started radius halving reaches objective gap $\\varepsilon$ in $O(K)$ exact gradient calls and $O(K+\\log_4^+(r^2(8L^2/\\mu+6L)/\\varepsilon))$ local linear minimization calls, including rejected trials. For initial gap $\\Delta_0=f(x_0)-\\inf_C f>\\varepsilon>0$, $K=\\lfloor\\log_4(1+6\\Delta_0/(Lr^2))\\rfloor+\\lceil\\log(\\Delta_0/\\varepsilon)/\\log(1+\\mu/(25L))\\rceil$, and $\\log_4^+(t)=\\max\\{0,\\log_4 t\\}$. If $\\Delta_0\\le\\varepsilon$, the initial point already meets the target.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The objective may be nonconvex. It is bounded below on a nonempty closed convex feasible set C, differentiable at every point of C, and satisfies ‖Df(y)−Df(x)‖_* ≤ L‖y−x‖ for x,y ∈ C.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "For every x ∈ C, 2μ(f(x)−inf_C f) ≤ (inf_{n ∈ N_C(x)} ‖Df(x)+n‖_*)², where N_C(x) consists of the dual functionals n satisfying n(z−x) ≤ 0 for all z ∈ C.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, normalCone, stationarity, optimalValue, and spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "At any feasible query x, oracle 0 returns the exact Fréchet derivative Df(x) as a continuous linear functional for every history and seed.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, BroxReply and spec.admissible, oracle 0."
+      },
+      {
+        "label": "linear_minimization",
+        "details": "Given x ∈ C, any radius ρ ≥ 0, and any dual functional g, oracle 1 returns an exact minimizer of g over C ∩ {z : ‖z−x‖ ≤ ρ}. Ties may be resolved using the history and seed.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, BroxQuery and spec.admissible, oracle 1."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "non_euclidean_geometry",
+        "details": "The norm on E is arbitrary. It defines the local oracle balls, and its dual norm measures both gradient variation and the normal-cone residual.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, Public.normedE, stationarity, and spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "E is a finite-dimensional real normed space of arbitrary dimension.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, Public.E, Public.spaceE, and Public.finiteE."
+      },
+      {
+        "label": "other",
+        "details": "The algorithm receives E, L > 0, r > 0, and the feasible starting point x₀. The PL modulus μ > 0, initial gap bound Δ ≥ f(x₀)−inf_C f, and target ε > 0 enter the oracle budgets but are hidden from the algorithm.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, Public, Params, spec.publicInput, spec.valid, and spec.admissible. LongTails/Template.lean, Convergence."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point x must satisfy f(x)−inf_C f ≤ ε.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, optimalValue and spec.successful."
+      },
+      {
+        "label": "feasibility",
+        "details": "The same returned point must belong to C.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, spec.successful."
+      },
+      {
+        "label": "almost_sure",
+        "details": "Feasibility and the objective-gap bound must hold jointly with probability one under the product of the algorithm and oracle seed laws at the prescribed per-oracle budgets.",
+        "evidence": "LongTails/Setups/BroxGeneralNormConstrainedPL.lean, spec.successful. LongTails/Template.lean, executeWithTrace and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a constrained PL inequality on the dual normal-cone residual with exact linear minimization over variable-radius feasible balls in an arbitrary norm. Gradient calls and local minimization calls have separate budgets, and the algorithm receives neither the PL modulus nor the initial gap bound."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.WarmHalvingBrox.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.WarmHalvingBroxGeneralNorm",
+          "theorem": "OracleTemplate.WarmHalvingBrox.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

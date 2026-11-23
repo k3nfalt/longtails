@@ -58,6 +58,54 @@ if ! command -v gh >/dev/null; then
     install -m 755 "$installer_dir/$gh_package/bin/gh" "$HOME/.local/bin/gh"
 fi
 
+if ! pandoc --citeproc --version >/dev/null 2>&1; then
+    case "$(uname -s):$(uname -m)" in
+        Linux:x86_64) pandoc_arch=amd64 ;;
+        Linux:aarch64) pandoc_arch=arm64 ;;
+        *) printf 'Install Pandoc for this platform and rerun setup.\n' >&2; exit 1 ;;
+    esac
+    pandoc_version=3.6.4
+    curl -fsSL "https://github.com/jgm/pandoc/releases/download/$pandoc_version/pandoc-$pandoc_version-linux-$pandoc_arch.tar.gz" \
+        -o "$installer_dir/pandoc.tar.gz"
+    tar -xzf "$installer_dir/pandoc.tar.gz" -C "$installer_dir" "pandoc-$pandoc_version/bin/pandoc"
+    install -m 755 "$installer_dir/pandoc-$pandoc_version/bin/pandoc" "$HOME/.local/bin/pandoc"
+fi
+
+tex_commands=(latexmk pdflatex bibtex kpsewhich)
+tex_files=(amsmath.sty amssymb.sty array.sty booktabs.sty tabularx.sty threeparttable.sty
+    textcomp.sty natbib.sty hyperref.sty changepage.sty plain.bst)
+tex_ready() {
+    local item
+    for item in "${tex_commands[@]}"; do command -v "$item" >/dev/null || return 1; done
+    for item in "${tex_files[@]}"; do kpsewhich "$item" >/dev/null || return 1; done
+}
+if ! tex_ready; then
+    case "$(uname -s):$(uname -m)" in
+        Linux:x86_64) tiny_arch=x86_64; tex_arch=x86_64-linux ;;
+        Linux:aarch64) tiny_arch=arm64; tex_arch=aarch64-linux ;;
+        *) printf 'Install TeX Live for this platform and rerun setup.\n' >&2; exit 1 ;;
+    esac
+    tex_root="$HOME/.local/share/longtails/TinyTeX"
+    tex_bin="$tex_root/bin/$tex_arch"
+    if [[ ! -x "$tex_bin/tlmgr" ]]; then
+        curl -fsSL --retry 3 "https://github.com/rstudio/tinytex-releases/releases/download/daily/TinyTeX-1-linux-$tiny_arch.tar.xz" \
+            -o "$installer_dir/tinytex.tar.xz"
+        tar -xJf "$installer_dir/tinytex.tar.xz" -C "$installer_dir"
+        mkdir -p "$(dirname "$tex_root")"
+        mv "$installer_dir/.TinyTeX" "$tex_root"
+    fi
+    export PATH="$tex_bin:$PATH"
+    if ! tex_ready; then
+        tlmgr install latexmk bibtex latex amsmath amsfonts tools booktabs threeparttable natbib hyperref changepage
+    fi
+    tex_ready
+    for item in "${tex_commands[@]}"; do
+        ln -sfn "$tex_bin/$item" "$HOME/.local/bin/$item"
+    done
+fi
+
+npm ci --prefix server
+
 ruff_version=0.17.0
 if [[ "$(ruff --version 2>/dev/null || true)" != "ruff $ruff_version" ]]; then
     curl -fsSL "https://github.com/astral-sh/ruff/releases/download/$ruff_version/ruff-installer.sh" \
@@ -76,7 +124,9 @@ fi
 codex --version
 
 toolchain=$(<lean-toolchain)
-"$elan_bin/elan" toolchain install "$toolchain"
+if ! "$elan_bin/elan" toolchain list | grep -Fx -- "$toolchain" >/dev/null; then
+    "$elan_bin/elan" toolchain install "$toolchain"
+fi
 lake --version
 lake exe cache get
 

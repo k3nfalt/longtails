@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex",
+  "searched_at": "2026-11-23T17:45:46.057314+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\Delta \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\} \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right)}{2^{174} \\cdot \\varepsilon} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun q =>\n  ⌊q.Δ * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)) * (1 + q.σ ^ 2 / q.ε ^ 2) / (2 ^ 174 * q.ε)⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\Delta \\cdot \\min\\left\\{ \\frac{L_1}{\\varepsilon}, \\min\\left\\{ \\sqrt{\\frac{L_2}{\\varepsilon}}, \\left(\\frac{L_3}{\\varepsilon}\\right)^{\\frac{1}{3}} \\right\\} \\right\\} \\cdot \\left(1 + \\frac{\\sigma^{2}}{\\varepsilon^{2}}\\right)}{2^{174} \\cdot \\varepsilon} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun q =>\n  ⌊q.Δ * min (q.L₁ / q.ε) (min (√(q.L₂ / q.ε)) ((q.L₃ / q.ε) ^ 3⁻¹)) * (1 + q.σ ^ 2 / q.ε ^ 2) / (2 ^ 174 * q.ε)⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex",
+      "setup": "LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalStochasticThirdOrderSmoothNonconvex.spec\n  LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.budget",
+      "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound",
+      "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.result",
+      "references": "- Yossi Arjevani, Yair Carmon, John C. Duchi, Dylan J. Foster, Ayush Sekhari, and Karthik Sridharan. [Second-Order Information in Non-Convex Stochastic Optimization: Power and Limitations](https://proceedings.mlr.press/v125/arjevani20a/arjevani20a.pdf). 2020. Complexity: $\\Omega(B\\max\\{1,\\sigma^2/\\epsilon^2\\})$ stochastic gradient calls for zero-respecting algorithms to attain $\\mathbb E\\|\\nabla f(\\hat x)\\|\\le\\epsilon$, where $B=(\\Delta/\\epsilon)\\min_{j=1,2,3}(L_j/\\epsilon)^{1/j}$. The hard instance has dimension $\\Theta(B)$ for $B$ above a universal constant.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization permits nonconvex objectives on ℝᵈ. The starting point satisfies f(x₀) − inf f ≤ Δ, and the objective need not attain its infimum.",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticThirdOrderSmoothNonconvex.lean, spec.Instance and toGeneral. LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "stochastic_gradient",
+        "details": "Each query x returns one vector g(x,ξ) from a fresh i.i.d. real seed, with E[g(x,ξ)] = ∇f(x). The algorithm sees the reply alone and may choose its next query adaptively. All parameters d, L₁, L₂, L₃, σ, Δ, ε and x₀ are public. The objective, estimator and seed law are hidden.",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticThirdOrderSmoothNonconvex.lean, Params, toGeneral, spec.publicInput and spec.Reply. LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.admissible. LongTails/Setups/StochasticGeneralizedSmoothAndConvex.lean, IID. LongTails/Template.lean, Algorithm.query and Algorithm.update."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "bounded_variance",
+        "details": "At every x, E‖g(x,ξ) − ∇f(x)‖² ≤ σ², including σ = 0. The estimator is jointly measurable, and the bound requires only a second moment of the error.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.admissible. LongTails/Setups/HighDimensionalStochasticThirdOrderSmoothNonconvex.lean, spec.valid."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "The space is Euclidean ℝᵈ. Writing B = (Δ/ε) min{L₁/ε, √(L₂/ε), (L₃/ε)^(1/3)}, validity requires ε > 0, B ≥ 2⁷⁰ and d ≥ 2¹⁴⁰[1 + B(1 + σ²/ε²)]⁴.",
+        "evidence": "LongTails/Setups/HighDimensionalStochasticThirdOrderSmoothNonconvex.lean, toGeneral.E and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The objective is C³. Its gradient, Hessian and third derivative are globally Lipschitz with respective positive constants L₁, L₂ and L₃, using operator norms for the higher derivatives. These smoothness conditions apply to f.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.admissible, ContDiff and the three derivative-difference inequalities. LongTails/Setups/HighDimensionalStochasticThirdOrderSmoothNonconvex.lean, spec.valid."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The algorithm returns one measurable point x̂ ∈ ℝᵈ. The stationarity criterion uses the first power of ‖∇f(x̂)‖, and x̂ may be any point produced from the final algorithm state.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.successful. LongTails/Template.lean, Algorithm.output and executeWithTrace."
+      },
+      {
+        "label": "expected",
+        "details": "The gradient norm at the output must be integrable and satisfy E‖∇f(x̂)‖ ≤ ε under the joint law of the independent algorithm and oracle randomness, with a fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/StochasticThirdOrderSmoothNonconvex.lean, spec.successful. LongTails/Template.lean, Convergence and executeWithTrace."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup specializes stochastic first-order stationarity to objectives with three simultaneous derivative Lipschitz bounds and imposes a dimension threshold that depends explicitly on smoothness, initial gap, noise and accuracy."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound",
+          "theorem": "LongTails.Theorems.ThirdOrderSmoothStochasticLowerBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

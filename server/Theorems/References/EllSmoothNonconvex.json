@@ -1,0 +1,104 @@
+{
+  "setup": "LongTails.Setups.EllSmoothNonconvex",
+  "searched_at": "2026-11-23T17:44:22.436531+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{16 \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1",
+        "oracle": 0,
+        "type": "LongTails.Setups.EllSmoothNonconvex.spec.Params → ℕ",
+        "value": "fun p => ⌊16 * p.Δ * p.ℓ p.ε / p.ε ^ 2⌋₊ + 1"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{16 \\cdot \\Delta \\cdot ℓ\\left(\\varepsilon\\right)}{\\varepsilon^{2}} \\right\\rfloor_{+} + 1",
+          "oracle": 0,
+          "type": "LongTails.Setups.EllSmoothNonconvex.spec.Params → ℕ",
+          "value": "fun p => ⌊16 * p.Δ * p.ℓ p.ε / p.ε ^ 2⌋₊ + 1"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.EllSmoothNonconvexUpperBound",
+      "namespace": "LongTails.Setups.EllSmoothNonconvex",
+      "setup": "LongTails.Setups.EllSmoothNonconvex",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.EllSmoothNonconvex.spec OracleTemplate.EllSmoothNonconvexUpperBound.budget",
+      "theorem": "OracleTemplate.EllSmoothNonconvexUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.EllSmoothNonconvexUpperBound",
+      "theorem": "OracleTemplate.EllSmoothNonconvexUpperBound.result",
+      "references": "- Alexander Tyurin. [Toward a Unified Theory of Gradient Descent under Generalized Smoothness](https://proceedings.mlr.press/v267/tyurin25a.html). 2025. Complexity: $O(1+\\Delta\\,\\ell(2\\varepsilon)/\\varepsilon^2)=O(1+\\Delta\\,\\ell(\\varepsilon)/\\varepsilon^2)$ exact gradient calls for gradient descent with the integral step size to return a queried point with $\\|\\nabla f(x)\\|\\le\\varepsilon$, for $0\\le\\rho\\le2$.",
+      "match_status": "match"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "Unconstrained minimization permits nonconvex objectives on ℝᵈ. The public starting point x₀ and gap bound Δ ≥ 0 satisfy f(x₀) − inf f ≤ Δ.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: Point, spec.Instance, spec.publicInput, spec.valid, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "Every query at x returns the full gradient ∇f(x) exactly, for every history and seed.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: spec.Query, spec.Reply, spec.admissible."
+      },
+      {
+        "label": "function_value",
+        "details": "The same query returns the exact objective value f(x) alongside the gradient for a single oracle call.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: spec.Reply, spec.admissible. LongTails/Template.lean: OracleTemplate._run."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "generalized_smoothness",
+        "details": "The gradient is differentiable everywhere and ‖D∇f(x)‖op ≤ ℓ(‖∇f(x)‖). The public function ℓ is nondecreasing on [0,∞) and positive on (0,∞). For the public exponent ρ ∈ [0,2], ℓ(v) ≤ ℓ(u)(v/u)^ρ whenever 0 < u ≤ v.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: Params, Regular, spec.publicInput, spec.valid, spec.admissible."
+      },
+      {
+        "label": "finite_dimensional",
+        "details": "Queries, gradients, the starting point, and the output belong to real Euclidean space of public dimension d.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: Params.d, Params.x0, Point, spec.Query, spec.Reply, spec.Output, spec.publicInput."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "gradient_norm",
+        "details": "The returned point X must be measurable and ‖∇f(X)‖ integrable. The criterion uses the first power of the Euclidean gradient norm.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: spec.Output, spec.successful."
+      },
+      {
+        "label": "expected",
+        "details": "E[‖∇f(X)‖] ≤ ε for the public tolerance ε > 0, under the product law of the algorithm and oracle seeds.",
+        "evidence": "LongTails/Setups/EllSmoothNonconvex.lean: spec.publicInput, spec.valid, spec.successful. LongTails/Template.lean: OracleTemplate.Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The Hessian bound varies with the current gradient norm through a public function ℓ whose growth can be as fast as quadratic."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.EllSmoothNonconvexUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "match",
+      "results": [
+        {
+          "module": "LongTails.Theorems.EllSmoothNonconvexUpperBound",
+          "theorem": "OracleTemplate.EllSmoothNonconvexUpperBound.result",
+          "match_status": "match"
+        }
+      ]
+    }
+  }
+}

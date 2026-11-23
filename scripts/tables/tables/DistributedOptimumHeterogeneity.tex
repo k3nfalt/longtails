@@ -1,0 +1,41 @@
+\begin{table}[tp]
+\centering
+\caption{Elapsed-time upper bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedOptimumHeterogeneity.lean}{Distributed optimum heterogeneity}}\label{tab:DistributedOptimumHeterogeneity}
+\parbox{\linewidth}{\footnotesize Each $f_i$ is convex and $L_i$-smooth on $\mathbb R^d$. The mean $F$ has quadratic growth $\mu>0$ relative to $S=\arg\min F$, with $n\mu\le\sum_i L_i$. Some $z\in S$ satisfies $\|x_0-z\|\le R$ and $n^{-1}\sum_i\|\nabla f_i(z)\|^2\le\zeta^2$. Jointly measurable unbiased gradients have variance at most $\sigma^2$, with IID samples per worker and independent streams. On the coordinator star, each worker has one computation slot ($h_i>0$ per call) and each directed link has one message slot ($\ell+bB$ for $B$ bits). Slots operate concurrently. The target is $\mathbb E[\operatorname{dist}(x_{\rm out},S)^2]\le\varepsilon^2$, with $\varepsilon>0$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DistributedOptimumHeterogeneity.lean}{Distributed\allowbreak{}Optimum\allowbreak{}Heterogeneity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DistributedOptimumHeterogeneity.md}{(review)}
+& $\mathcal{O}\bigl(\frac{\sigma^2\sum_i h_i w_i^2}{\varepsilon^2}+\kappa D[H+\ell+b(1+dq)]\bigr)$ & & \\
+\midrule[1.2pt]
+\textbf{(2)} Malenia SGD \citep{dwiTyurin2026v1}, Thm.~F.2 ($\ell=b=0$)
+& $\mathcal{O}\bigl(D[H\bar L/\mu+\frac{\sigma^2\sum_i h_i}{(n\mu\varepsilon)^2}]\bigr)$
+& \textbf{(1)}: At $\ell=b=0$, removes $D$ from the noise term and reduces its coefficient when binding caps admit beneficial nonuniform weights. For the worker profile below, $\mathcal{O}(N^4/\log N)$ versus $\mathcal{O}(N^4\log^2 N)$. Take $J=\lfloor N^{3/4}\rfloor$ and $\delta=N^{-10}$. There are $N$ workers of each type $(h,L)=(1,1),(1,\delta)$. For each $1\le j\le J$ add one $(j,1)$ and $\lceil\log N\rceil$ workers of type $(j,\delta)$. Set $n\mu=J$, $R=\sigma=1$, $\varepsilon=N^{-2}$, and $\zeta=\varepsilon N^{-3/16}$. Includes star communication costs.
+& \textbf{(1)}: Needs $\zeta$, every $L_i$ and exact $h_i$. At $\ell=b=0$, uniform weights can inflate startup by up to $H/\min_i h_i$ compared with the displayed bound. \\
+\midrule
+\textbf{(3)} Weighted interpolation \citep{dohWeightedInterpolation2026}
+& $\mathcal{O}\bigl(\frac{\sigma^2\sum_i h_i w_i^2}{\varepsilon^2}+\kappa D[H+\ell+b(1+dq)]\bigr)$ at $\zeta=0$
+& \textbf{(1)}: Matches the rate with a common minimizer ($\zeta=0$). Extends capped weighting to bounded offsets, allowing different or nonexistent local minimizers.
+& \\
+\midrule
+\textbf{(4)} Rennala SGD \citep{dwiTyurin2026v1}, Thm.~3.8 ($\ell=b=0$)
+& $\mathcal{O}\bigl(D\min_{1\le m\le n}\frac{mL_{\max}/\mu+\sigma^2/(\mu^2\varepsilon^2)}{\sum_{i\le m}h_{(i)}^{-1}}\bigr)$
+& \textbf{(1)}: Needs quadratic growth only for the mean. \textbf{(4)} requires identical minimizer sets and per-worker Polyak--{\L}ojasiewicz inequalities with constant $\mu$.
+& \textbf{(1)}: On that subclass at $\ell=b=0$, uncapped weights can give arithmetic-mean noise dependence where \textbf{(4)} achieves harmonic dependence. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $H=\max_i h_i$, $\bar L=n^{-1}\sum_i L_i$, $L_{\max}=\max_i L_i$, $h_{(i)}$ are the increasing computation times, and $D=\log(2+R^2/\varepsilon^2)$. 
+The weights $w$ minimize $\sum_i h_i v_i^2$ over $v\ge0$ with
+$\min_{0\le a_i\le L_i,\ \sum_i a_i\ge n\mu}v^\top a\ge1$ and
+$64\zeta\sqrt{n}\,\|v-\bar v\mathbf 1\|\le\varepsilon$, where $\bar v=n^{-1}\sum_i v_i$.
+$M=\max_i h_iw_iL_i$, $\kappa=M\sum_i h_i^{-1}$,
+$G=(\sigma+\sqrt n\,\zeta)\max_i(h_iw_i)/M$, and
+$q=\log(2+d+\kappa+(R+G)^2/\varepsilon^2)$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

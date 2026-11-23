@@ -1,0 +1,99 @@
+{
+  "setup": "LongTails.Setups.WeakMintySecondOrderExpected",
+  "searched_at": "2026-11-23T17:47:18.453231+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lceil 2^{27} \\cdot \\left(1 + \\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}\\right) \\right\\rceil_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.WeakMintySecondOrderExpected.spec.Params → ℕ",
+        "value": "fun q => ⌈2 ^ 27 * (1 + min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2))⌉₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lceil 2^{27} \\cdot \\left(1 + \\min\\left\\{ \\frac{L_2 \\cdot R^{2}}{\\varepsilon}, \\frac{L_1^{2} \\cdot R^{2}}{\\varepsilon^{2}} \\right\\}\\right) \\right\\rceil_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.WeakMintySecondOrderExpected.spec.Params → ℕ",
+          "value": "fun q => ⌈2 ^ 27 * (1 + min (q.L₂ * q.R ^ 2 / q.ε) (q.L₁ ^ 2 * q.R ^ 2 / q.ε ^ 2))⌉₊"
+        }
+      ],
+      "kind": "upper",
+      "module": "LongTails.Theorems.SecondOrderWeakMintyUpperBound",
+      "namespace": "LongTails.Setups.WeakMintySecondOrderExpected",
+      "setup": "LongTails.Setups.WeakMintySecondOrderExpected",
+      "statement": "OracleTemplate.Convergence LongTails.Setups.WeakMintySecondOrderExpected.spec\n  OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.budget",
+      "theorem": "OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.SecondOrderWeakMintyUpperBound",
+      "theorem": "OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.result",
+      "references": "- Abhijeet Vyas and Brian Bullins. [Beyond first-order methods for non-convex non-concave min-max optimization](https://arxiv.org/html/2304.08389v1). 2023 (arXiv v1). Complexity: $O(1+L_2R^2/\\varepsilon)$ total operator-value and full-Jacobian calls for second-order HOEG+ to return a best half-step with $\\|F\\|\\le\\varepsilon$, in the regime $\\rho\\sqrt{L_2D}\\le c$, where $D=L_1\\max_k\\|z_{k+1/2}-x^\\star\\|$ and $c>0$ is a sufficiently small universal constant. First-order HOEG+ uses $O(1+L_1^2R^2/\\varepsilon^2)$ operator-value calls when $\\rho L_1\\le c$.",
+      "match_status": "related"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "other",
+        "details": "Unconstrained root finding for a possibly nonmonotone operator $F:E\\to E$. A root $x^\\star$ satisfies the global weak Minty inequality $\\langle F(x),x-x^\\star\\rangle\\ge -(\\rho/2)\\|F(x)\\|^2$ for every $x\\in E$.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrderExpected.lean, spec.Instance and spec.admissible"
+      }
+    ],
+    "oracle": [
+      {
+        "label": "other",
+        "details": "Each call requests either the exact operator value $F(x)$ or the exact full Fréchet derivative $J(x)=DF(x)$. Both query types draw on one shared budget. Replies are exact for every history and seed.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrderExpected.lean, spec.Query, spec.Reply and spec.admissible. LongTails/Template.lean, Setup.numOracles and executeWithTrace"
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "$E$ is a finite-dimensional real inner-product space with its induced norm.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrderExpected.lean, Public.linearE and Public.finiteE"
+      },
+      {
+        "label": "other",
+        "details": "$F$ is globally $L_1$-Lipschitz and $DF$ is globally $L_2$-Lipschitz in operator norm. The public data include $L_1,L_2>0$, $\\rho\\ge0$ with $\\rho L_1\\le1$, $\\varepsilon>0$, and $x_0$. The hidden radius $R\\ge0$ bounds the distance from $x_0$ to the same root that witnesses the weak Minty inequality.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrderExpected.lean, Public, Params.R, spec.publicInput, spec.valid and spec.admissible"
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "expected",
+        "details": "The residual must be integrable and satisfy $\\mathbb E\\|F(X)\\|\\le\\varepsilon$ under the joint seed law after execution with the fixed oracle budget.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrderExpected.lean, spec.successful. LongTails/Template.lean, Convergence and executeWithTrace"
+      },
+      {
+        "label": "other",
+        "details": "The output is one point $X\\in E$. Its error is the unsquared operator residual $\\|F(X)\\|$.",
+        "evidence": "LongTails/Setups/WeakMintySecondOrderExpected.lean, spec.Output and spec.successful"
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup combines a residual-squared weak Minty condition at one root with Lipschitz control of both the operator and its Jacobian. It measures expected residual norm under a shared budget for separately requested values and full derivatives."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "related",
+      "results": [
+        {
+          "module": "LongTails.Theorems.SecondOrderWeakMintyUpperBound",
+          "theorem": "OracleTemplate.WeakMintyHybrid.SecondOrderWeakMintyUpperBound.result",
+          "match_status": "related"
+        }
+      ]
+    }
+  }
+}

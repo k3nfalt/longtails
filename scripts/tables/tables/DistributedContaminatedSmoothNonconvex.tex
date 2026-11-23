@@ -1,0 +1,27 @@
+\begin{table}[tp]
+\centering
+\caption{Stationarity under \protect\href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/DistributedContaminatedSmoothNonconvex.lean}{distributed Huber contamination}}\label{tab:DistributedContaminatedSmoothNonconvex}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $F=n^{-1}\sum_i f_i$ averages differentiable local objectives, has $L$-Lipschitz gradient and initial gap at most $\Delta$. Honest workers sample independently across workers and IID locally from $(1-\eta_i)\mu_i+\eta_i\nu_i$, with arbitrary $\nu_i$ and $0\le\eta_i\le1/16$. Under $\mu_i$ the jointly measurable gradient oracle is unbiased for $\nabla f_i$ with variance at most $\sigma_i^2$. All setup parameters are public. Each worker has one batch in flight and pays $h_i>0$ per sample. The complete directed network allows concurrent links and serializes messages per link, with cost $\ell+bm$ for $m$ bits. The target is one measurable $X$ with $\Pr(\|\nabla F(X)\|>\varepsilon)\le\delta$, where $0<\delta<1$, $\varepsilon>0$ and $\varepsilon\ge2^{18}n^{-1}\sum_i\sigma_i\sqrt{\eta_i}$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/ContaminatedParallelStationarity.lean}{Contaminated\allowbreak{}Parallel\allowbreak{}Stationarity} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/ContaminatedParallelStationarity.md}{(review)} & Elapsed-time upper bound \(\mathcal{O}\!\left(\begin{aligned}[t] &(K+q\min\{K,q\})(H+S)\\ &+K[(1+\log n)H+C]\end{aligned}\right)\) &  &  \\
+\midrule[1.2pt]
+\textbf{(2)} FiniteBitLeon \citep{dcsnFiniteBitLeon} & Time $\mathcal{O}(K(H+S+C))$ for $\mathbb E\|\nabla F(X)\|^2\le\varepsilon^2$. & \textbf{(1)} handles Huber contamination and heterogeneous variances. On the clean common-variance restriction, gives high probability at the same time order for $q\le\sqrt K$ and fixed $n$. & \textbf{(1)} adds $KH\log n$ pilot time on the clean overlap and gives no expected squared-norm guarantee. \\
+\midrule
+\textbf{(3)} Leon SGD \citep[Thm.~1.7]{bhTyurinLeonV1} & Time $\mathcal{O}(K\max\{d/\bar w,H,S\})$ for $\mathbb E\|\nabla F(X)\|^2\le\varepsilon^2$. & \textbf{(1)} handles contamination and heterogeneous variances with tunable high probability. \textbf{(3)} needs clean samples with a common variance bound. Time bounds are incomparable across network models. & \textbf{(1)} requires a complete network. \textbf{(3)} uses a bandwidth graph. \\
+\midrule
+\textbf{(4)} Derived bound, robust minibatch descent & $\mathcal{O}(K[1+(\sigma_1^2/\varepsilon^2)\log(K/\delta)])$ samples, $n=1$. Union bound with robust mean error $\mathcal{O}(\sigma_1\sqrt{\eta_1}+\sigma_1\sqrt{\log(K/\delta)/N})$ above a sufficient contamination floor. & \textbf{(1)} uses $\mathcal{O}(K(1+\sigma_1^2/\varepsilon^2))$ samples for $q\le\sqrt K$, removing $\log(K/\delta)$ from the noise term. The total improves when that term dominates. &  \\
+\midrule
+\textbf{(5)} Derived bound, retuned NSGD \citep[Thm.~4]{dcsnHublerV3} & $\mathcal{O}(Kq(1+\sigma_1^2/\varepsilon^2))$ samples, clean $n=1$, for high-probability average gradient norm $\le\varepsilon$. & \textbf{(1)} uses $\mathcal{O}(K(1+\sigma_1^2/\varepsilon^2))$ samples for $q\le\sqrt K$ and returns a certified point. \textbf{(5)} needs bounded conditional mean estimation error, which contamination can invalidate. & \textbf{(1)} gives no trajectory-average guarantee. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $K=1+L\Delta/\varepsilon^2$, $q=1+\log(1/\delta)$, $H=\max_i h_i$, $S=\sum_i h_i\sigma_i^2/(n^2\varepsilon^2)$ ($\sigma_i=\sigma$ in \textbf{(2)} and \textbf{(3)}), $C=\ell+b[1+\lceil d/n\rceil\log(2+nd)]$. $\bar w$ is minimum cut bandwidth in coordinates per unit time. $N$ is the robust mean batch size.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

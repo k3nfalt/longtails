@@ -1,0 +1,114 @@
+{
+  "setup": "LongTails.Setups.HighDimensionalHessianLipschitzPL",
+  "searched_at": "2026-11-23T17:45:14.698615+00:00",
+  "none_means": "No qualifying prior reference verified; not a proof of novelty.",
+  "proved_results": [
+    {
+      "budget": {
+        "latex": "\\left\\lfloor \\frac{\\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}}}{2^{39}} \\right\\rfloor_{+}",
+        "oracle": 0,
+        "type": "LongTails.Setups.HighDimensionalHessianLipschitzPL.spec.Params → ℕ",
+        "value": "fun q => ⌊(q.H ^ 2 * q.Δ / q.μ ^ 3) ^ 4⁻¹ / 2 ^ 39⌋₊"
+      },
+      "budgets": [
+        {
+          "latex": "\\left\\lfloor \\frac{\\left(\\frac{H^{2} \\cdot \\Delta}{\\mu^{3}}\\right)^{\\frac{1}{4}}}{2^{39}} \\right\\rfloor_{+}",
+          "oracle": 0,
+          "type": "LongTails.Setups.HighDimensionalHessianLipschitzPL.spec.Params → ℕ",
+          "value": "fun q => ⌊(q.H ^ 2 * q.Δ / q.μ ^ 3) ^ 4⁻¹ / 2 ^ 39⌋₊"
+        }
+      ],
+      "kind": "lower",
+      "module": "LongTails.Theorems.HessianLipschitzPLLowerBound",
+      "namespace": "LongTails.Setups.HighDimensionalHessianLipschitzPL",
+      "setup": "LongTails.Setups.HighDimensionalHessianLipschitzPL",
+      "statement": "OracleTemplate.NonConvergence LongTails.Setups.HighDimensionalHessianLipschitzPL.spec\n  LongTails.Theorems.HessianLipschitzPLLowerBound.budget",
+      "theorem": "LongTails.Theorems.HessianLipschitzPLLowerBound.result"
+    }
+  ],
+  "results": [
+    {
+      "module": "LongTails.Theorems.HessianLipschitzPLLowerBound",
+      "theorem": "LongTails.Theorems.HessianLipschitzPLLowerBound.result",
+      "references": "None",
+      "match_status": "none"
+    }
+  ],
+  "catalog": {
+    "problem_class": [
+      {
+        "label": "nonconvex",
+        "details": "The class permits nonconvex objectives. The Hessian may be indefinite away from a minimizer while the global PL inequality holds.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.admissible, as used by LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, spec.admissible."
+      },
+      {
+        "label": "pl",
+        "details": "The objective attains its minimum f⋆ and satisfies the global Polyak–Łojasiewicz inequality 2μ(f(x) − f⋆) ≤ ‖∇f(x)‖² for every x ∈ ℝᵈ.",
+        "evidence": "LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, spec.admissible and toGeneral. LongTails/Setups/HessianLipschitzPL.lean, spec.admissible."
+      }
+    ],
+    "oracle": [
+      {
+        "label": "exact_gradient",
+        "details": "The second component is the full Euclidean gradient at the query point.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.admissible, O.answer equality."
+      },
+      {
+        "label": "function_value",
+        "details": "A single query at any x ∈ ℝᵈ returns the exact triple (f(x), ∇f(x), ∇²f(x)) for every history and oracle seed.",
+        "evidence": "LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, spec.Query and spec.Reply. LongTails/Setups/HessianLipschitzPL.lean, spec.admissible."
+      },
+      {
+        "label": "other",
+        "details": "The third component is the full Hessian as a linear operator on ℝᵈ, available in the same call.",
+        "evidence": "LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, spec.Reply. LongTails/Setups/HessianLipschitzPL.lean, spec.admissible, fderiv ℝ (gradient f) x."
+      }
+    ],
+    "distinctive_assumptions": [
+      {
+        "label": "finite_dimensional",
+        "details": "The domain is Euclidean ℝᵈ with x₀ = 0. The public dimension satisfies 2¹⁶⁰ ≤ H²Δ/μ³ ≤ d.",
+        "evidence": "LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, toGeneral, spec.publicInput and spec.valid."
+      },
+      {
+        "label": "other",
+        "details": "The gradient is differentiable and ‖∇²f(x) − ∇²f(y)‖op ≤ H‖x − y‖ globally. The initial gap satisfies f(0) − f⋆ ≤ Δ. All five parameters d, H, μ, Δ, ε are public, with H, μ, ε > 0 and 32ε ≤ Δ.",
+        "evidence": "LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, Params, toGeneral, spec.publicInput and spec.valid. LongTails/Setups/HessianLipschitzPL.lean, spec.admissible."
+      }
+    ],
+    "accuracy": [
+      {
+        "label": "objective_gap",
+        "details": "The returned point X ∈ ℝᵈ is assessed by its objective gap f(X) − f⋆. It may be any point output from the algorithm’s state.",
+        "evidence": "LongTails/Setups/HighDimensionalHessianLipschitzPL.lean, spec.Output and spec.successful. LongTails/Setups/HessianLipschitzPL.lean, spec.successful. LongTails/Template.lean, Algorithm.output."
+      },
+      {
+        "label": "expected",
+        "details": "The output must be measurable, its objective gap integrable, and 𝔼[f(X) − f⋆] ≤ ε. The algorithm may randomize under the fixed oracle-call budget.",
+        "evidence": "LongTails/Setups/HessianLipschitzPL.lean, spec.successful. LongTails/Template.lean, Algorithm.law, executeWithTrace and Convergence."
+      }
+    ],
+    "setup_category": {
+      "label": "non_standard",
+      "reason": "The setup couples global PL geometry and a Lipschitz Hessian with full second-order access in the specific high-dimensional regime 2¹⁶⁰ ≤ H²Δ/μ³ ≤ d."
+    },
+    "schema_version": 2,
+    "proof_status": {
+      "status": "exported_theorem",
+      "theorems": [
+        "LongTails.Theorems.HessianLipschitzPLLowerBound.result"
+      ],
+      "verification": "not_checked_by_catalog"
+    },
+    "literature_status": {
+      "status": "unresolved_comparison",
+      "results": [
+        {
+          "module": "LongTails.Theorems.HessianLipschitzPLLowerBound",
+          "theorem": "LongTails.Theorems.HessianLipschitzPLLowerBound.result",
+          "match_status": "none"
+        }
+      ]
+    }
+  }
+}

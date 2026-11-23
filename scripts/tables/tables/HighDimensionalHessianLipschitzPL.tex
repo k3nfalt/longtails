@@ -1,0 +1,25 @@
+\begin{table}[tp]
+\centering
+\caption{Necessary oracle budgets for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/HighDimensionalHessianLipschitzPL.lean}{high-dimensional Hessian-Lipschitz PL minimization}.}\label{tab:HighDimensionalHessianLipschitzPL}
+\parbox{\linewidth}{\footnotesize On $\mathbb R^d$, $f$ has an $H$-Lipschitz Hessian in operator norm, an attained minimum $f_\star$, initial gap $f(0)-f_\star\leq\Delta$, and satisfies $2\mu(f(x)-f_\star)\leq\|\nabla f(x)\|^2$ globally. All parameters are public. Each joint query returns exact $(f,\nabla f,\nabla^2 f)$ at one point. The target is a measurable output $X$ with integrable gap and $\int(f(X)-f_\star)\,dP\leq\varepsilon$ under the algorithm's seed law $P$. Here $H,\mu,\varepsilon>0$, $32\varepsilon\leq\Delta$, and $2^{160}\leq A\leq d$.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/HessianLipschitzPLLowerBound.lean}{Hessian\allowbreak{}Lipschitz\allowbreak{}PL\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/HessianLipschitzPLLowerBound.md}{(review)} & Lower bound $\Omega((H^2\Delta/\mu^3)^{1/4})$ joint calls, randomized & & \\
+\midrule[1.2pt]
+\textbf{(2)} \citep{hdHessianPLKornowskiShamirV2}, Thm.~1 ($k=2$), strongly convex subclass & Lower bound $\Omega((HD/\mu)^{2/7}+ \log(1+\log_+(\mu^3/(H^2\varepsilon))))$ joint calls, deterministic & \textbf{(1)}: Covers nonconvex PL objectives and randomized algorithms. At $D\leq\sqrt{2\Delta/\mu}$, the polynomial term in \textbf{(2)} is at most order $A^{1/7}$ versus $A^{1/4}$ in \textbf{(1)}. Distance control alone does not certify the gap cap. & \textbf{(1)}: No doubly logarithmic accuracy term in the regime of \textbf{(2)}, which requires $D>C\max\{\mu/H,(\mu/H)^{5/12}\}$ and $\varepsilon<c\mu^3/H^2$. \\
+\midrule
+\textbf{(3)} \citep{smoothPLYue2023v2}, Thm.~3, $L$-smooth PL & Lower bound $\Omega((L/\mu)\log(\Delta/\varepsilon))$ gradient calls, deterministic & \textbf{(1)}: Second-order hardness for randomized algorithms without a gradient-Lipschitz bound. Rates are incomparable: the hard instance in \textbf{(3)} is not twice differentiable. & \textbf{(1)}: No accuracy logarithm. \textbf{(3)} applies for sufficiently large $L/\mu$ and $\varepsilon\leq\Delta/16$. \\
+\midrule
+\textbf{(4)} \citep{sncCarmon2020v3}, Thm.~2 ($p=2$), smooth nonconvex stationarity & Lower bound $\Omega(\Delta\sqrt H\,\varepsilon_g^{-3/2})$ all-derivative calls, randomized & \textbf{(1)}: Globally PL hard instances for objective-gap accuracy. At $\varepsilon_g^2\asymp\mu\Delta$ the formulas have the same order. The rates are incomparable because the hard instances in \textbf{(4)} fail PL and the targets differ. & \textbf{(1)}: Larger required dimension at that scaling, $d\geq A$ versus order $A^{1/2}\log A$ in \textbf{(4)}. \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $A=H^2\Delta/\mu^3$; $D$ bounds initial distance to a minimizer; $L$ is the gradient Lipschitz constant; $\varepsilon_g$ targets $\|\nabla f\|\leq\varepsilon_g$; $\log_+ t=\max\{0,\log t\}$; $c,C$ are positive universal constants.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,31 @@
+\begin{table}[tp]
+\centering
+\caption{Exact-oracle residual bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/FiniteDimensionalWeakMinty.lean}{finite-dimensional weak-Minty problems}.}\label{tab:FiniteDimensionalWeakMinty}
+\parbox{\linewidth}{\footnotesize An exact query returns $F(x)$ for an $L$-Lipschitz map $F:\mathbb R^d\to\mathbb R^d$, $d\ge1$, $L>0$. Some root $z$ satisfies $\|z-x_0\|\le R$ and $\langle F(x),x-z\rangle\ge-\rho\|F(x)\|^2$ for all $x$, with $0\le\rho L\le1/20$. The target is an integrable residual with $\int\|F(\hat x(\omega))\|\,dP(\omega)\le\varepsilon$ for $0<\varepsilon<LR$, where $P$ is the execution law. Rows (1) and (2) match in order for this oracle and criterion.}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DimensionAdaptiveMintyLowerBound.lean}{Dimension\allowbreak{}Adaptive\allowbreak{}Minty\allowbreak{}Lower\allowbreak{}Bound} \textbf{(Ours)} $(\star\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DimensionAdaptiveMintyLowerBound.md}{(review)} & Necessary budget $\Omega(H)$ for randomized adaptive queries. Hard instances satisfy plain Minty. &  &  \\
+\midrule
+\textbf{(2)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/DimensionAdaptiveMinty.lean}{Dimension\allowbreak{}Adaptive\allowbreak{}Minty} \textbf{(Ours)} $(\star\star)$ \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/DimensionAdaptiveMinty.md}{(review)} & Sufficient budget $\mathcal{O}(H)$, counting two evaluations per step. &  &  \\
+\midrule[1.2pt]
+\textbf{(3)} Upper bound. Derived bound using EG+ and look-ahead centroid cuts \citep{ewmDDJ2021Verified,fdwmAnagnostidesV4} & Sufficient budget $\mathcal{O}(\min\{t^2,d(1+\log t)\})$. Same residual target and weak-Minty range. & \textbf{(2)}: At $d\asymp t^2/\log t$, $\mathcal{O}(t^2\log\log t/\log t)$ instead of $\mathcal{O}(t^2)$. The maximum order gain is $\log t/\log\log t$ as $t\to\infty$. Same order for $d\le t^{2-\delta}$ with fixed $\delta>0$. & \\
+\midrule
+\textbf{(4)} Upper bound. EG+ \citep[Thm.~3.2]{ewmDDJ2021Verified} & Sufficient budget $\mathcal{O}(t^2/(1-8\rho L))$ for $\rho L<1/8$. & \textbf{(2)}: On the common range, bound improves by order $t^2/H$ when $d\le t^2$, with a growing gain for $d=o(t^2)$. Matches the known rate for $d\ge t^2$. & \textbf{(2)}: Smaller $\rho L$ range, requires global Minty inequality and exact centroid integration for cuts. EG+ uses linear arithmetic per step. \\
+\midrule
+\textbf{(5)} Lower bound. Lipschitz Minty \citep{hdwmEuclidean2026} & Necessary budget $\Omega(\min\{t^2,d^{1/3}\})$ for randomized adaptive queries. & \textbf{(1)}: All $d\ge1$, $t>1$ instead of $d\ge257$, $t\ge28$. On overlap, improves by order $H/d^{1/3}$ for $d\le t^2$ and $t^2/d^{1/3}$ for $t^2\le d\le t^6$. Same order for $d\ge t^6$. & \textbf{(1)}: Smaller leading constant. Its stated failure budget reaches one call only when $H\ge2^{22}$. \\
+\midrule
+\textbf{(6)} Lower bound. Biaffine saddle gradients \citep[Thm.~4]{ewmYoonRyu2021Verified} & Necessary budget $\Omega(t)$ for deterministic queries in dimension $d\gtrsim t$. & \textbf{(1)}: Covers randomized adaptive queries and all dimensions on the broader Minty class, with $\Omega(t^2)$ for $d\ge t^2$. The rates concern different classes. & \textbf{(1)}: The hard fields are outside the saddle-gradient subclass. \\
+\midrule
+\textbf{(7)} Lower bound. Compact-interval Minty gap \citep[Cor.~6.9]{fdwmAnagnostidesV4} & Necessary budget $\Omega(\eta^{-1/4})$ for gap $\eta$, at constant success probability, on $[0,1]$ with $L=\mathcal{O}(\eta^{1/2})$ and $\sup_x\|F(x)\|=\mathcal{O}(\eta^{3/4})$. & \textbf{(1)}: Rates are incomparable because the compact-domain guarantee concerns a global Minty gap. & \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} $t=LR/\varepsilon$, $H=d\log(1+t^2/d)$. Gap $\eta$ means $\langle F(y),y-\hat x\rangle\ge-\eta$ for all feasible $y$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

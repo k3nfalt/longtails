@@ -1,0 +1,37 @@
+\begin{table}[tp]
+\centering
+\caption{Exact operator-call bounds for \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Setups/GeneralizedLipschitzMinty.lean}{generalized Lipschitz Minty problems}.}\label{tab:GeneralizedLipschitzMinty}
+\parbox{\linewidth}{\footnotesize A continuous \(F:\mathbb R^d\to\mathbb R^d\) satisfies
+\(\|F(x)-F(y)\|\le (L_0+L_1\max_{u\in[x,y]}\|F(u)\|)\|x-y\|\) for all \(x,y\), with \(L_0>0\) and \(L_1\ge0\). A root \(z\) satisfies \(\|x_0-z\|\le R\) and \(\langle F(x),x-z\rangle\ge0\) for all \(x\). Calls return exact \(F(x)\). The target is \(\int\|F(\widehat x(\omega))\|\,dP(\omega)\le\varepsilon\), with an integrable residual and \(\varepsilon>0\). The displayed budgets suffice for deterministic residual at most \(\varepsilon\).}\par\smallskip
+\begin{threeparttable}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Result} & \textbf{Oracle complexity} & \textbf{Novelty} & \textbf{Limitations} \\
+\midrule
+\textbf{(1)} \href{https://github.com/k3nfalt/longtails/blob/main/LongTails/Theorems/GeneralizedMintyExtragradient.lean}{Generalized\allowbreak{}Minty\allowbreak{}Extra\allowbreak{}gradient} \textbf{(Ours)} \href{https://github.com/k3nfalt/longtails/blob/main/scripts/reviews/GeneralizedMintyExtragradient.md}{(review)}
+& Sufficient budget \(\mathcal{O}(1+(L_0R/\varepsilon)^2+(L_1R)^2)\)
+& & \\
+\midrule[1.2pt]
+\textbf{(2)} EG \citep{glmChoudhuryLoizou2025Minty}, Thm.~3.6, derived bound under Minty
+& \(\mathcal{O}(1+(L_0R/\varepsilon)^2+(L_1R)^2)\)
+& \textbf{(1)}: Matches and formalizes the known rate. \textbf{(2)} assumes monotonicity but uses only the Minty inequality at the predictor.
+& \textbf{(1)}: Roughly triple the leading budget constant. Freezing needs \(\varepsilon\) in the updates. Tracking the best iterate in \textbf{(2)} uses existing calls. \\
+\midrule
+\textbf{(3)} EG \citep{glmChoudhuryLoizou2025Minty}, Thm.~3.8 at \(\rho=0\)
+& \(\mathcal{O}\bigl(1+(L_0R/\varepsilon)^2(1+L_1R e^{L_1R})^2\bigr)\)
+& \textbf{(1)}: Polynomial instead of exponential dependence on \(L_1R\) at \(\rho=0\). Total bound improves for \(L_1R\gg1\) and \(Ae^L_1R\gg1\). \textbf{(2)} already gives the polynomial bound.
+& \textbf{(1)}: Requires Minty. \textbf{(3)} also permits positive weak-Minty relaxation under condition~(17). \\
+\midrule
+\textbf{(4)} EG+ \citep{ewmDDJ2021Verified}, Thm.~3.2 at \(L_1=0,\ \rho=0\)
+& \(\mathcal{O}(1+(L_0R/\varepsilon)^2)\)
+& \textbf{(1)}: Matches the rate for \(L_1=0\) and covers \(L_1>0\), as does \textbf{(2)}.
+& \textbf{(1)}: No uniform-sample squared-residual guarantee over predictor iterates. \textbf{(4)} also covers weak Minty for \(0<\rho<1/(4L_0)\) at \(L_1=0\). \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]\footnotesize
+\item[] \textbf{Abbr:} \([x,y]\) is the line segment from \(x\) to \(y\), \(P\) is the execution law, and \(\rho\) is the cited paper's weak-Minty relaxation parameter.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
