@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Run one command with a fresh GitHub App installation token for LongTails.
+"""Run one command with a fresh GitHub App installation token for one repository.
 Requires Python 3 and openssl; no pip packages or sudo.
 Key defaults to ~/.config/auto-math-bot/private-key.pem.
 Override with AUTO_MATH_BOT_KEY. Use an HTTPS Git remote.
-Set AUTO_MATH_BOT_INSTALLATION_ID to the installation ID for k3nfalt.
+Set AUTO_MATH_BOT_INSTALLATION_ID to the installation with access to the repository.
+Set AUTO_MATH_BOT_REPOSITORY to its name without the owner (default: longtails).
 Call this wrapper for EACH GitHub operation during long Codex runs.
 Monitoring workflows requires Actions read permission; dispatch, rerun, and cancel
 require Actions write permission.
@@ -65,7 +66,9 @@ def installation_token(actions_permission=None):
         f"https://api.github.com/app/installations/{installation_id}/access_tokens",
         data=json.dumps(
             {
-                "repositories": ["longtails"],
+                "repositories": [
+                    os.environ.get("AUTO_MATH_BOT_REPOSITORY", "longtails")
+                ],
                 "permissions": permissions,
             }
         ).encode(),

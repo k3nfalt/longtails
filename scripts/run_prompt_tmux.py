@@ -165,6 +165,8 @@ Environment:
         tmux.extend(("-e", f"AUTO_MATH_BOT_KEY={key}"))
     if installation_id := os.environ.get("AUTO_MATH_BOT_INSTALLATION_ID"):
         tmux.extend(("-e", f"AUTO_MATH_BOT_INSTALLATION_ID={installation_id}"))
+    if repository := os.environ.get("AUTO_MATH_BOT_REPOSITORY"):
+        tmux.extend(("-e", f"AUTO_MATH_BOT_REPOSITORY={repository}"))
     if args.openrouter:
         tmux.extend(("-e", f"OPENROUTER_API_KEY={os.environ['OPENROUTER_API_KEY']}"))
         if args.agent == "claude":
