@@ -1,0 +1,29 @@
+# Finite-radius gradient descent on the two-sample convolutional logistic loss
+
+How many gradient evaluations does ordinary full-batch GD need to classify both examples in Tyurin’s two-sample construction? The construction isolates the effect of a nonlinear parameterization. A two-tap trainable filter and a trainable linear readout give a bilinear score. The two inputs are the constant vector and the same vector with a single coordinate increased by $\mu$. Their labels are opposite. The defect can occupy any cyclic position in dimension $d$. Each score couples the filter weights to the entire readout, even though the gradient dynamics admit a lower-dimensional description. [Setup](../Setups/FiniteLogisticTwoTap.lean)
+
+**Guarantee.** Suppose $d\ge3$, $0<\mu\le 1/10$ and $0<\rho<1$. Initialize both layers jointly in a uniformly random direction at a prescribed radius
+
+\[
+0< r \le 2^{-24}\sqrt{\mu}\,\rho^{3/2}/d^2.
+\]
+
+Use the fixed step $\eta=2^{-40}/\sqrt d$ on the average of the two logistic losses. With probability at least $1-\rho$, the returned iterate has both signed scores strictly positive within
+
+\[
+2\left\lceil 2^{53}\frac{\sqrt d}{\mu}\log\frac1r\right\rceil
+\]
+
+indexed sample queries. Each query returns a signed score and its gradient at the requested weights. The algorithm evaluates both examples at the same weights, takes the exact logistic gradient step and freezes the first separator. The budget charges both queries in every pair, including after freezing. Randomness enters only at initialization. [Theorem](FiniteLogisticTwoTapGradientDescent.lean) · [Algorithm](../Algorithms/FiniteLogisticTwoTap.lean) · [Logistic gradient identity](../Proofs/FiniteLogisticTwoTapGeometry.lean)
+
+At the largest permitted radius the logarithm is exactly $24\log 2+2\log d+\tfrac12\log(1/\mu)+\tfrac32\log(1/\rho)$. For inverse-polynomial radii in these parameters, GD retains the $\sqrt d/\mu$ dependence up to logarithms. Much smaller radii incur the full initialization delay. Confidence and radius are linked by the displayed hypothesis. The result leaves fixed unit radius, arbitrary data, quantitative positive margin, and convergence of the loss to zero open. The universal step constant is conservative.
+
+**Why the perceptron proof does not transfer.** Tyurin’s Equation (3) assigns a sigmoid weight to each sample. Section 2, Theorem 2.1 takes a large-initialization limit. Section 5, Theorem 5.1 proves a high-probability bound for the separately defined, Gaussian-perturbed quadratic perceptron with violation-priority updates. A positive rescaling of the parameters preserves signs and the homogeneous perceptron directions, but changes both sigmoid weights. In particular, the eigenrelations of Proposition 5.3 and Equation (3) give a common invariant ray on which the first score stays zero under deterministic logistic GD at every finite radius. The sphere assumption controls the probability of starting near such exceptional directions. Theorem 5.2 compares against the classical perceptron, with its own update and initialization. The present guarantee concerns the trajectory of logistic GD on the nonlinear model. [Tyurin, ICML 2026, arXiv v2](https://arxiv.org/abs/2512.11587v2)
+
+**Proof.** The sum of the signed sample matrices has two equally fast growing modes in the linearized discrete dynamics. A cubic bound on the nonlinear remainder controls all warm-up steps. Gaussian interval estimates give simultaneous lower bounds on two projections of the initial direction. The resulting alignment supplies a sign condition for the slow-mode product and an invariant set of inequalities for three coupled coordinates. Alignment alone allows the first example to remain misclassified. [Warm-up](../Proofs/FiniteLogisticPerceptronWarmup.lean) · [Gaussian bounds](../Proofs/TwoTapGaussianBounds.lean) · [Entry into the invariant set](../Proofs/FiniteLogisticTwoTapEntry.lean)
+
+In coordinates $p,q,u$ for the symmetric filter, uniform readout and centered defect readout, the first signed score is $\sqrt{2d}\,pq$. Orient the weights so $p>0$. While $q\le0$, the sum $p+q+u$ grows geometrically. Once it reaches $4096/\sqrt d$, the drift of $q$ forces a crossing in $O(1/(\eta\mu))$ further steps. Controlling $7(p+u)/\sqrt d-q$ throughout this phase bounds the size of the crossing step. The sigmoid derivative bound then shows the second score stays positive at the first strictly positive first score. This discrete overshoot estimate is essential to the output guarantee. [Phase estimates](../Proofs/FiniteLogisticTwoTapPhase.lean) · [Hitting time](../Proofs/FiniteLogisticTwoTapHittingTime.lean)
+
+Kumar and Haupt study early directional convergence of gradient flow for small initializations of two-homogeneous models. Their subsequent post-escape comparison tracks a limiting flow trajectory under a second-order KKT hypothesis. Applying either analysis here still requires controlling the limiting trajectory’s signs, the discrete GD trajectory over the full hitting horizon, and its first crossing. The present proof gives explicit dimension, perturbation, radius and failure-probability dependence for this particular data family. [Kumar and Haupt, TMLR 2024, Section 5](https://openreview.net/pdf?id=hfrPag75Y0) · [Kumar and Haupt, JMLR, Theorem 4 and Remark 13](https://www.jmlr.org/papers/volume26/25-1089/25-1089.pdf)
+
+The repository’s finite-scale convolutional SGD theorem uses single-sample updates, validation and restarts. Its derivative-separability hypothesis requires a nonzero shift difference for each relevant input. The constant reference sample in Tyurin’s pair has zero shift difference. Both its assumption and its sampling rule prevent direct application to this full-batch trajectory. [Finite-scale convolutional SGD](FiniteScaleConvolutionalSgd.lean)
