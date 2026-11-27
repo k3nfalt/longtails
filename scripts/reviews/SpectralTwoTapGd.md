@@ -1,0 +1,38 @@
+# SpectralTwoTapGd: what is actually new?
+
+[`SpectralTwoTapGd.result`](../../LongTails/Theorems/SpectralTwoTapGd.lean) proves the following for constant-step full-batch GD ([algorithm](../../LongTails/Algorithms/SpectralTwoTapGd.lean)) on the two-tap convolutional logistic model ([setup](../../LongTails/Setups/SpectralTwoTapLogistic.lean)): suppose the data admit the `geometry` certificate. That certificate includes a validated enclosure of GD's own trajectory from `start` through iterate `K+T−1`. Then every training margin is strictly positive at iterate `K + 2⌈2d/W⌉`.
+
+**Bound in the setup's parameters.** The bound is
+
+  `K + 2⌈2d/W⌉` full gradients, which is `n(K + 2⌈2d/W⌉)` sample-gradient contributions.
+
+Here `n` is the number of samples and `K` is a user-supplied "opening" iteration. `d > 0` bounds the negative score of a designated row at the reference opening, and `W ∈ (0, 4d]` is the signed two-step linearized work, `⟨J,(I+M)η(−∇F)⟩`, at a chosen Hessian centre. None of `K, d, W` is a problem parameter such as a margin γ, a radius, or `η`. They are values read from a certificate, and the certificate only exists after the trajectory up to the deadline has been enclosed numerically. The budget gives no rate in terms of γ, `n`, `D` or `η`.
+
+**What the hypotheses do.** `Source.encloses X (K+T)` puts every actual iterate `z_t` with `t < K+T` inside a ball around `q.point t`. This is proved in `SpectralTwoTapSeparation.enclosure`. The quantity `center + affine T + correction T` is the reference state `q.point K` propagated by the exact GD map, evaluated along reference points. `loss i ≤ 3·base i/4` and the designated-row inequality therefore certify a positive score at an enclosed endpoint ball (`prediction_error`, `hrow`). The spectral persistence test lower-bounds only the frozen affine part. The nonlinear remainder is measured along the reference trajectory, not bounded a priori.
+
+| Previous result (source and theorem) | Previous complexity → This result | Complexity improvement | Setup / assumptions improved | Adaptivity / output improved | Extra assumptions / tradeoffs |
+|---|---|---|---|---|---|
+| Novikoff (1962) perceptron convergence theorem. *Special-case baseline: linear model; the two-tap model represents exactly the linear classifiers.* | `⌈R²/γ²⌉` updates, with `R = maxᵢ‖xᵢ‖` and γ = max normalized margin; batch version ≤ `⌈R²/γ²⌉` full passes → `K + 2⌈2d/W⌉` full gradients | Not comparable: the selected bound has no expression in `R, γ` | None. Separable data are needed either way, and the selected theorem additionally requires the certificate | None. Both give a strict separator at a stated step | Certificate must enclose the entire GD trajectory to the deadline; the result is restricted to the two-tap model and to fixed-step GD |
+| Zhang, Wu, Lin, Bartlett, [arXiv 2504.04105](https://arxiv.org/abs/2504.04105) (Apr 2025; JMLR 27, 2026), main theorem for adaptive-step GD plus Ω(1/γ²) lower bound (exact theorem numbers not checked) | `O(1/γ²)` full gradients to separate linearly separable data (normalized `‖xᵢ‖ ≤ 1`), minimax optimal among first-order batch methods → `K + 2⌈2d/W⌉` | Not comparable. On the problem "find a strict separator from full gradients", the baseline gives a γ-explicit optimal rate; the selected result gives none | None | Baseline needs risk-adaptive steps; the selected result uses a constant step | Selected scope is narrower (one fixed method and one parameterization), and its guarantee is a posteriori |
+| Tyurin, [ICML 2026 / arXiv 2512.11587](https://proceedings.mlr.press/v306/tyurin26a.html), Thms 5.1–5.2. *Special case: two constructed images.* | `Õ(√D)` steps for the quadratic perceptron vs `Ω(D)` for linear → no `D`-explicit bound | Not comparable | Two hand-built images → arbitrary `n` images, but only under the trajectory certificate | None | No a priori speedup over plain GD is proved; the plain-GD comparisons in the note are numerical only |
+| Repository: [`TwoSampleQuadraticPerceptronAcceleration`](../../LongTails/Theorems/TwoSampleQuadraticPerceptronAcceleration.lean), [`ManySampleConvolutionalPerceptronAcceleration`](../../LongTails/Theorems/ManySampleConvolutionalPerceptronAcceleration.lean) | Explicit budgets in margins, contrasts, and sample counts → certificate-valued budget | Not comparable | Their structural feature-separation hypotheses → certificate hypotheses. The certificate hypotheses are not a natural data class | Deterministic start here, versus random small initialization in the two-sample result | Loses a priori predictive content |
+
+**Standard-reduction check.** Given an enclosure ball around the iterate at time `K+T`, positivity of every score on that ball implies `correct` through the Lipschitz/quadratic score bound `scoreError`. The theorem is this soundness argument, with the endpoint score split into a spectrally bounded affine part and a measured remainder. That split is a new way of organizing the check, but it is not a new optimization mechanism, and it adds no predictive power because the enclosure already covers the whole horizon. The proof ancestry is finite-dimensional spectral decomposition, the identity `x^j = ∫ j(j−1)t^{j−2}(x−t)_+ dt`, and validated propagation of defects. These supply the affine lower bound and the error control. No complexity bound comes from them.
+
+**Search coverage.** Searched on 2026-11-27: perceptron and logistic-GD separation times (Novikoff; Wu et al. 2024; Zhang et al. 2025/26), Tyurin's ICML 2026 paper, and validated-numerics certification of training trajectories. I found no prior paper with this exact certificate theorem. I did not open the full texts of Zhang et al. or of the 2026 Muşat–Boumal and Wen–Wen–Teng preprints cited by the note. The note's CIFAR numbers, its plain-GD "cannot fit before" enclosures, and its FP32 tables were not reproduced; none of them is part of the Lean statement. The note calls the conditions "independently computable responses" and calls the result "a data-dependent explanation of the acceleration". The formal hypothesis, however, includes a certified enclosure of the prefix itself, which the note concedes may cost more than running GD.
+
+## Conclusion
+
+**No optimization advantage is established: the theorem certifies, after the fact, that a numerically enclosed GD run separates the data at a stated step.** The strongest relevant baseline for "find a strict linear separator with full gradients" is adaptive-step GD (Zhang–Wu–Lin–Bartlett), with an optimal `O(1/γ²)` bound. Novikoff's perceptron gives `R²/γ²`.
+
+| | Bound |
+|---|---|
+| Baseline | `O(1/γ²)` full gradients, for any separable data |
+| This result | `K + 2⌈2d/W⌉` full gradients, with `K, d, W` read from a certificate |
+
+The two bounds cannot be compared. `K, d, W` have no expression in γ, `n`, `D` or `η`. The hypotheses require a validated enclosure of the actual GD iterates up to the deadline, so the conclusion follows from checking scores on an enclosed endpoint ball. No regime is identified where two-tap GD provably beats plain or adaptive GD; the note's speedups are numerical experiments, not part of the theorem.
+
+What is established is a sound, formally checked certificate format that splits the endpoint margin into a signed spectral affine part and a measured nonlinear part. That format may be useful for explaining experiments, but I found no prior paper with this exact certificate, so priority for the format is plausible though unproven. The contribution that can be claimed is a verified a-posteriori separation certificate for one fixed method, not a new complexity bound or a meaningful new problem class.
+
+**Verdict: NO IMPROVEMENT**
+**Confidence: medium**
